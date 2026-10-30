@@ -11,6 +11,11 @@ Fuse two animals into one science-grounded creature. Drop two animal photos onto
 
 Every result shows how it was made, and every generated image is labelled as a generated fusion.
 
+Beyond the core flow:
+
+- **Anatomy controls:** pin any body part (head, body, limbs, covering, tail) to parent A or B, or leave it on Auto for the model.
+- **Field cards:** turn a Result into a field-guide specimen card (invented binomial, habitat, diet, the parents' recorded size ranges, provenance) and download it as a PNG.
+
 - **Frontend:** React 18, TypeScript, Vite, React Flow (`@xyflow/react`), Zustand. One stylesheet: `frontend/src/styles/theme.css`.
 - **Backend:** Python, FastAPI (`backend/app/main.py:create_app`). It runs locally with uvicorn and on Modal (`backend/app/modal_app.py`).
 - **Models:** Meta Model API (Muse Spark for vision and planning, Muse Image for generation), behind adapters.
