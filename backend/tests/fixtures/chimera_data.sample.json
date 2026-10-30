@@ -1,0 +1,72 @@
+{
+  "meta": {
+    "version": "sample-1",
+    "description": "Small structural sample of chimera_data.json for tests and offline dev. Lists use | separators; ranges stay strings.",
+    "counts": "animals:10|tier2_animals:6|hybrids:3|rules:10"
+  },
+  "animals": [
+    {"id": "lion", "common_name": "Lion", "scientific_name": "Panthera leo", "aliases": "African lion", "genus": "Panthera", "family": "Felidae", "class": "Mammalia", "body_plan": "quadruped", "covering": "fur", "habitat": "savanna|grassland", "realm": "terrestrial", "diet": "carnivore", "locomotion": "walking|running", "limb_count": "4", "notable_features": "mane in males|retractable claws|tufted tail"},
+    {"id": "tiger", "common_name": "Tiger", "scientific_name": "Panthera tigris", "aliases": "Bengal tiger|Siberian tiger", "genus": "Panthera", "family": "Felidae", "class": "Mammalia", "body_plan": "quadruped", "covering": "fur", "habitat": "forest|grassland|mangrove", "realm": "terrestrial", "diet": "carnivore", "locomotion": "walking|running|swimming", "limb_count": "4", "notable_features": "vertical stripes|white spots behind ears"},
+    {"id": "red_fox", "common_name": "Red fox", "scientific_name": "Vulpes vulpes", "aliases": "fox", "genus": "Vulpes", "family": "Canidae", "class": "Mammalia", "body_plan": "quadruped", "covering": "fur", "habitat": "forest|grassland|urban", "realm": "terrestrial", "diet": "omnivore", "locomotion": "walking|running", "limb_count": "4", "notable_features": "bushy white-tipped tail|large ears"},
+    {"id": "scarlet_macaw", "common_name": "Scarlet macaw", "scientific_name": "Ara macao", "aliases": "macaw", "genus": "Ara", "family": "Psittacidae", "class": "Aves", "body_plan": "avian", "covering": "feathers", "habitat": "rainforest", "realm": "terrestrial", "diet": "herbivore", "locomotion": "flying|climbing", "limb_count": "4", "notable_features": "hooked beak|zygodactyl feet|long tail"},
+    {"id": "green_iguana", "common_name": "Green iguana", "scientific_name": "Iguana iguana", "aliases": "iguana", "genus": "Iguana", "family": "Iguanidae", "class": "Reptilia", "body_plan": "quadruped", "covering": "scales", "habitat": "rainforest|riverbank", "realm": "terrestrial", "diet": "herbivore", "locomotion": "walking|climbing|swimming", "limb_count": "4", "notable_features": "dewlap|dorsal spines|parietal eye"},
+    {"id": "bottlenose_dolphin", "common_name": "Bottlenose dolphin", "scientific_name": "Tursiops truncatus", "aliases": "dolphin", "genus": "Tursiops", "family": "Delphinidae", "class": "Mammalia", "body_plan": "aquatic", "covering": "skin", "habitat": "ocean|coastal", "realm": "marine", "diet": "carnivore", "locomotion": "swimming", "limb_count": "2", "notable_features": "rostrum|dorsal fin|echolocation melon"},
+    {"id": "common_octopus", "common_name": "Common octopus", "scientific_name": "Octopus vulgaris", "aliases": "octopus", "genus": "Octopus", "family": "Octopodidae", "class": "Cephalopoda", "body_plan": "cephalopod", "covering": "skin", "habitat": "reef|ocean floor", "realm": "marine", "diet": "carnivore", "locomotion": "crawling|jet propulsion", "limb_count": "8", "notable_features": "eight arms|chromatophores|no skeleton"},
+    {"id": "emperor_penguin", "common_name": "Emperor penguin", "scientific_name": "Aptenodytes forsteri", "aliases": "penguin", "genus": "Aptenodytes", "family": "Spheniscidae", "class": "Aves", "body_plan": "avian", "covering": "feathers", "habitat": "sea ice|ocean", "realm": "marine", "diet": "carnivore", "locomotion": "walking|swimming", "limb_count": "4", "notable_features": "flipper wings|countershading"},
+    {"id": "flamingo", "common_name": "Greater flamingo", "scientific_name": "Phoenicopterus roseus", "aliases": "flamingo", "genus": "Phoenicopterus", "family": "Phoenicopteridae", "class": "Aves", "body_plan": "avian", "covering": "feathers", "habitat": "wetland|lagoon", "realm": "terrestrial", "diet": "filter feeder", "locomotion": "walking|flying|wading", "limb_count": "4", "notable_features": "bent filter-feeding bill|long legs"},
+    {"id": "green_sea_turtle", "common_name": "Green sea turtle", "scientific_name": "Chelonia mydas", "aliases": "sea turtle", "genus": "Chelonia", "family": "Cheloniidae", "class": "Reptilia", "body_plan": "quadruped", "covering": "scales|shell", "habitat": "ocean|seagrass", "realm": "marine", "diet": "herbivore", "locomotion": "swimming", "limb_count": "4", "notable_features": "carapace|paddle flippers"}
+  ],
+  "tier2_animals": [
+    {"id": "dyeing_poison_frog", "common_name": "Dyeing poison frog", "scientific_name": "Dendrobates tinctorius", "genus": "Dendrobates", "class": "Amphibia", "body_plan": "quadruped"},
+    {"id": "blue_whale", "common_name": "Blue whale", "scientific_name": "Balaenoptera musculus", "genus": "Balaenoptera", "class": "Mammalia", "body_plan": "aquatic"},
+    {"id": "false_killer_whale", "common_name": "False killer whale", "scientific_name": "Pseudorca crassidens", "genus": "Pseudorca", "class": "Mammalia", "body_plan": "aquatic"},
+    {"id": "snow_leopard", "common_name": "Snow leopard", "scientific_name": "Panthera uncia", "genus": "Panthera", "class": "Mammalia", "body_plan": "quadruped"},
+    {"id": "bald_eagle", "common_name": "Bald eagle", "scientific_name": "Haliaeetus leucocephalus", "genus": "Haliaeetus", "class": "Aves", "body_plan": "avian"},
+    {"id": "axolotl", "common_name": "Axolotl", "scientific_name": "Ambystoma mexicanum", "genus": "Ambystoma", "class": "Amphibia", "body_plan": "quadruped"}
+  ],
+  "measurements": [
+    {"animal_id": "lion", "body_mass_kg": "126-272", "body_length_m": "1.4-2.5"},
+    {"animal_id": "tiger", "body_mass_kg": "65-306", "body_length_m": "1.5-2.9"},
+    {"animal_id": "red_fox", "body_mass_kg": "2.2-14", "body_length_m": "0.45-0.9"},
+    {"animal_id": "scarlet_macaw", "body_mass_kg": "0.9-1.4", "body_length_m": "0.81-0.96"},
+    {"animal_id": "green_iguana", "body_mass_kg": "1.2-9", "body_length_m": "1.2-2"},
+    {"animal_id": "bottlenose_dolphin", "body_mass_kg": "150-650", "body_length_m": "2-4"},
+    {"animal_id": "common_octopus", "body_mass_kg": "3-10", "body_length_m": "0.25-1.3"},
+    {"animal_id": "emperor_penguin", "body_mass_kg": "22-45", "body_length_m": "1-1.3"},
+    {"animal_id": "flamingo", "body_mass_kg": "2-4", "body_length_m": "1.1-1.5"},
+    {"animal_id": "green_sea_turtle", "body_mass_kg": "68-190", "body_length_m": "0.78-1.12"}
+  ],
+  "hybrids": [
+    {"id": "liger", "name": "Liger", "parent_a": "lion", "parent_b": "tiger", "cross": "male lion x female tiger", "occurs_in": "captivity", "fertility": "males sterile|females occasionally fertile", "notes": "Often larger than either parent because of imprinted growth genes.", "documented": "yes"},
+    {"id": "tigon", "name": "Tigon", "parent_a": "tiger", "parent_b": "lion", "cross": "male tiger x female lion", "occurs_in": "captivity", "fertility": "males sterile|females occasionally fertile", "notes": "Usually similar in size to the parents; shows both stripes and spots.", "documented": "yes"},
+    {"id": "wholphin", "name": "Wholphin", "parent_a": "false_killer_whale", "parent_b": "bottlenose_dolphin", "cross": "false killer whale x bottlenose dolphin", "occurs_in": "captivity|wild (reported)", "fertility": "female produced offspring", "notes": "Intermediate tooth count between the parents.", "documented": "yes"}
+  ],
+  "mythology": [
+    {"id": "griffin", "name": "Griffin", "parts": "eagle head|eagle wings|lion body", "origin": "Ancient Near East|Greece"},
+    {"id": "hippocampus", "name": "Hippocampus", "parts": "horse forequarters|fish tail", "origin": "Greece"}
+  ],
+  "rules": [
+    {"id": "R-A1-01", "category": "anatomy", "check": "body_plan_mismatch", "severity": "warning", "rule": "Parents have different body plans; the fused frame must commit to one plan or the creature cannot move."},
+    {"id": "R-A1-02", "category": "anatomy", "check": "limb_count_mismatch", "severity": "warning", "rule": "Parents have different limb counts; extra limbs need a skeletal anchor or must be dropped."},
+    {"id": "R-A2-01", "category": "anatomy", "check": "boneless_parent", "severity": "warning", "rule": "One parent has no internal skeleton; boneless parts cannot support a heavy body."},
+    {"id": "R-S1-01", "category": "scale", "check": "mass_ratio", "severity": "warning", "rule": "Parent body masses differ by more than 20x; parts must be rescaled, not transplanted."},
+    {"id": "R-S1-02", "category": "scale", "check": "flight_mass", "severity": "warning", "rule": "A flying body plan over 20 kg cannot fly with wings at bird proportions."},
+    {"id": "R-E1-01", "category": "ecology", "check": "realm_conflict", "severity": "warning", "rule": "One parent is marine and the other terrestrial; breathing and skin must match one environment."},
+    {"id": "R-C1-01", "category": "covering", "check": "covering_conflict", "severity": "info", "rule": "Parents have different body coverings; pick one covering per body region."},
+    {"id": "R-T1-01", "category": "taxonomy", "check": "class_distance", "severity": "info", "rule": "Parents come from different classes; no real hybrid is possible."},
+    {"id": "R-T1-02", "category": "taxonomy", "check": "same_genus", "severity": "info", "rule": "Parents share a genus; a real hybrid may exist and the fusion should stay close to it."},
+    {"id": "R-D1-01", "category": "diet", "check": "diet_conflict", "severity": "info", "rule": "A carnivore head on a filter-feeding or herbivore gut needs a consistent feeding apparatus."}
+  ],
+  "failure_modes": [
+    {"id": "FM-01", "name": "Floating head", "description": "Head pasted onto a body with no neck transition."},
+    {"id": "FM-02", "name": "Texture soup", "description": "Coverings blended everywhere instead of per region."}
+  ],
+  "design_principles": [
+    {"id": "DP-01", "principle": "One body plan, clearly committed."},
+    {"id": "DP-02", "principle": "Each part has one donor and a visible seam that heals naturally."}
+  ],
+  "definitions": {
+    "body_plan": "The overall organisation of the body: quadruped, biped, avian, aquatic, serpentine, cephalopod, insectoid.",
+    "tier2_animals": "Animals with identity data but no detailed anatomy."
+  }
+}

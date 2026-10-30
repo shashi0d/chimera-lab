@@ -1,0 +1,73 @@
+"""Backend executor registry, keyed by node type (mirrors frontend nodes/registry.ts).
+
+Adding a runnable node = one new Executor here (or in its own module imported here).
+"""
+
+from __future__ import annotations
+
+from collections.abc import Awaitable, Callable
+from dataclasses import dataclass
+from typing import Protocol
+
+from app.errors import ChimeraError
+from app.models.schemas import ErrorCode, Graph, GraphNode
+from app.pipeline.context import InputImage, RunContext
+from app.pipeline.steps import compile as compile_step
+from app.pipeline.steps import generate, hybrid_check, identify, load_inputs, match, rules_check, store
+
+StepFn = Callable[[RunContext], Awaitable[str | None]]
+
+
+@dataclass(frozen=True)
+class StepDef:
+    key: str
+    label: str
+    fn: StepFn
+
+
+class Executor(Protocol):
+    def resolve_inputs(self, graph: Graph, node: GraphNode) -> list[InputImage]: ...
+
+    def steps(self) -> list[StepDef]: ...
+
+
+def upstream(graph: Graph, node_id: str, port: str) -> GraphNode | None:
+    for e in graph.edges:
+        if e.target == node_id and e.target_port == port:
+            return next((n for n in graph.nodes if n.id == e.source), None)
+    return None
+
+
+class FusionExecutor:
+    PORTS = ("a", "b")
+
+    def resolve_inputs(self, graph: Graph, node: GraphNode) -> list[InputImage]:
+        inputs: list[InputImage] = []
+        for port in self.PORTS:
+            src = upstream(graph, node.id, port)
+            if src is None or src.type != "image-input":
+                raise ChimeraError(ErrorCode.GRAPH_INVALID, "Connect two images to the Fusion node.",
+                                   details={"missingPort": port})
+            asset_id = src.data.get("assetId")
+            if not asset_id:
+                raise ChimeraError(ErrorCode.GRAPH_INVALID, "An input image has not finished uploading.",
+                                   details={"nodeId": src.id})
+            inputs.append(InputImage(slot=port.upper(), node_id=src.id, asset_id=str(asset_id)))
+        if inputs[0].asset_id == inputs[1].asset_id:
+            raise ChimeraError(ErrorCode.DUPLICATE_INPUTS, "Both inputs are the same image.")
+        return inputs
+
+    def steps(self) -> list[StepDef]:
+        return [
+            StepDef("load_inputs", "Load images", load_inputs.run),
+            StepDef("identify", "Identify animals", identify.run),
+            StepDef("match", "Match field data", match.run),
+            StepDef("hybrid_check", "Check real hybrids", hybrid_check.run),
+            StepDef("rules_check", "Check anatomy rules", rules_check.run),
+            StepDef("compile", "Plan the creature", compile_step.run),
+            StepDef("generate", "Generate image", generate.run),
+            StepDef("store", "Save result", store.run),
+        ]
+
+
+EXECUTORS: dict[str, Executor] = {"fusion": FusionExecutor()}

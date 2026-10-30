@@ -1,0 +1,13 @@
+.venv/
+node_modules/
+__pycache__/
+*.pyc
+.pytest_cache/
+frontend/dist/
+frontend/test-results/
+frontend/playwright-report/
+backend/.localdata/
+.localdata/
+data/chimera_data.json
+.env
+*.log

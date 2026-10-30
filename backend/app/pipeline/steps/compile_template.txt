@@ -1,0 +1,6 @@
+Reference image 1 shows a {a_name}. Use it only for the {a_parts}.
+Reference image 2 shows a {b_name}. Use it only for the {b_parts}.
+Create one new creature with a single, committed {body_plan} body plan.
+Place the {a_name}'s {a_parts} on the {b_name}'s frame so every join heals naturally: no visible seams, no floating parts, no duplicated limbs.
+{constraints}
+Show the full body in a calm three-quarter view on a plain, softly lit background, in the style of a natural history field-guide plate. Photographic realism, accurate anatomy, no text, no labels, no people.
