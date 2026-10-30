@@ -78,9 +78,11 @@ export function ImageInputView({ node, selected, catalog }: NodeViewProps<ImageI
           </div>
         )}
         {d.upload.status === "uploading" ? (
-          <div className="upload-progress" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={pct} aria-label={t.uploading(pct)}>
-            <progress className="upload-progress__bar" max={100} value={pct} />
-            <span className="upload-progress__label">{t.uploading(pct)}</span>
+          <div className="upload-progress">
+            <progress className="upload-progress__bar" max={100} value={pct} aria-label={t.uploading(pct)} />
+            <span className="upload-progress__label" aria-hidden="true">
+              {t.uploading(pct)}
+            </span>
           </div>
         ) : null}
       </div>
