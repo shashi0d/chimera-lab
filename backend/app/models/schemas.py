@@ -186,6 +186,8 @@ class CreatureSpec(ApiModel):
     warnings: list[RuleWarning] = Field(default_factory=list)
     prompt: str
     model: dict[str, str]
+    # F1 anatomy controls: who chose each part ("user" pin or "model" plan).
+    donor_source: dict[str, Literal["user", "model"]] = Field(default_factory=dict)
 
 
 # ---------------------------------------------------------------- runs

@@ -82,6 +82,7 @@ class RunManager:
         node = next(n for n in graph.nodes if n.id == run.node_id)
         ctx = RunContext(run=run, graph=graph, services=self.services, fault=fault)
         ctx.inputs = executor.resolve_inputs(graph, node)
+        ctx.state.update(executor.configure(node))
         token = current_fault.set(fault)
         try:
             task = asyncio.create_task(self._execute(ctx, executor.steps()), name=f"run-{run.id}")

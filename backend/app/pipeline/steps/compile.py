@@ -8,7 +8,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from app.errors import ChimeraError
-from app.models.schemas import CreatureSpec, ErrorCode, FusionPlan, ParentInfo
+from app.models.schemas import CreatureSpec, ErrorCode, FusionPlan, ParentInfo, PartDonors
 from app.pipeline.context import RunContext
 from app.pipeline.retry import call_with_retry
 
@@ -40,24 +40,49 @@ def planning_context(ctx: RunContext) -> dict[str, object]:
         "real_hybrid": ctx.state["real_hybrid"].dump() if ctx.state.get("real_hybrid") else None,
         "rule_warnings": [w.dump() for w in ctx.state.get("warnings", [])],
         "allowed_body_plans": ["quadruped", "biped", "avian", "aquatic", "serpentine", "cephalopod", "insectoid"],
+        # Parts the user pinned to a parent. The plan must keep these exactly.
+        "donor_pins": ctx.state.get("donor_pins", {}),
     }
+
+
+def pinned_plan(ctx: RunContext, pins: dict[str, str], names: dict[str, str]) -> FusionPlan:
+    """Every part pinned by the user: no planning call needed (saves a vision call)."""
+    readings, matches = ctx.state["readings"], ctx.state["matches"]
+    body = pins["body"]
+    match = matches.get(body)
+    plan = (match.facts.get("body_plan") if match else None) or readings[body].body_plan or "quadruped"
+    head, tail = names[pins["head"]].split()[-1], names[body].split()[-1]
+    return FusionPlan(
+        body_plan=plan,
+        part_donors=PartDonors(**pins),
+        rationale="Every part was chosen by you; the body plan follows the body donor.",
+        name_suggestion=f"{head[:3].title()}{tail[-4:].lower()}",
+    )
 
 
 async def run(ctx: RunContext) -> str:
     s = ctx.services.settings
-    plan: FusionPlan = await call_with_retry(
-        lambda: ctx.services.vision.plan_fusion(planning_context(ctx)),
-        timeout=s.identify_timeout_seconds,
-        base_delay=s.retry_base_seconds,
-        max_attempts=s.retry_max_attempts,
-        before_attempt=lambda _n: ctx.use_vision(),
-        can_retry=ctx.can_use_vision,
-    )
     readings, matches = ctx.state["readings"], ctx.state["matches"]
     names = {
         slot: (matches[slot].common_name if matches.get(slot) else readings[slot].common_name) or f"animal {slot}"
         for slot in ("A", "B")
     }
+    pins: dict[str, str] = dict(ctx.state.get("donor_pins", {}))
+    if len(pins) == len(PART_WORDS):
+        plan = pinned_plan(ctx, pins, names)
+    else:
+        plan = await call_with_retry(
+            lambda: ctx.services.vision.plan_fusion(planning_context(ctx)),
+            timeout=s.identify_timeout_seconds,
+            base_delay=s.retry_base_seconds,
+            max_attempts=s.retry_max_attempts,
+            before_attempt=lambda _n: ctx.use_vision(),
+            can_retry=ctx.can_use_vision,
+        )
+        # Pins always win, even if the model disagreed.
+        if pins:
+            plan.part_donors = plan.part_donors.model_copy(update=pins)
+    donor_source = {part: ("user" if part in pins else "model") for part in PART_WORDS}
     constraints = []
     if ctx.state.get("real_hybrid"):
         constraints.append(f"Stay close to the documented {ctx.state['real_hybrid'].name}, a real hybrid of these parents.")
@@ -81,8 +106,10 @@ async def run(ctx: RunContext) -> str:
             warnings=ctx.state.get("warnings", []),
             prompt=prompt,
             model={"vision": ctx.services.vision.model_id, "image": ctx.services.image_gen.model_id},
+            donor_source=donor_source,
         )
     except (KeyError, ValueError) as exc:
         raise ChimeraError(ErrorCode.INTERNAL, "Could not build the creature plan.") from exc
     ctx.state["spec"] = spec
-    return f"{plan.body_plan.capitalize()} body, head from {plan.part_donors.head}"
+    pinned = f", {len(pins)} part{'s' if len(pins) != 1 else ''} chosen by you" if pins else ""
+    return f"{plan.body_plan.capitalize()} body, head from {plan.part_donors.head}{pinned}"

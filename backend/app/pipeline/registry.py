@@ -28,6 +28,10 @@ class StepDef:
 class Executor(Protocol):
     def resolve_inputs(self, graph: Graph, node: GraphNode) -> list[InputImage]: ...
 
+    def configure(self, node: GraphNode) -> dict[str, object]:
+        """Validated node config, copied into the run's state before step 1."""
+        ...
+
     def steps(self) -> list[StepDef]: ...
 
 
@@ -38,8 +42,24 @@ def upstream(graph: Graph, node_id: str, port: str) -> GraphNode | None:
     return None
 
 
+PARTS = ("head", "body", "limbs", "covering", "tail")
+
+
 class FusionExecutor:
     PORTS = ("a", "b")
+
+    def configure(self, node: GraphNode) -> dict[str, object]:
+        donors = node.config.get("donors") or {}
+        if not isinstance(donors, dict):
+            raise ChimeraError(ErrorCode.GRAPH_INVALID, "The Fusion node's anatomy settings are not valid.")
+        pins: dict[str, str] = {}
+        for part, value in donors.items():
+            if part not in PARTS or value not in ("auto", "A", "B"):
+                raise ChimeraError(ErrorCode.GRAPH_INVALID, "The Fusion node's anatomy settings are not valid.",
+                                   details={"part": str(part)})
+            if value != "auto":
+                pins[part] = value
+        return {"donor_pins": pins}
 
     def resolve_inputs(self, graph: Graph, node: GraphNode) -> list[InputImage]:
         inputs: list[InputImage] = []

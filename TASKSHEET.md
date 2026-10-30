@@ -234,8 +234,15 @@ Standard: `docs/UI_STANDARD.md`. Matrix: all states at 1440 in both themes, core
 
 Process as in the original tasksheet (review → 3 to 5 candidates → score → pick → spec → tasks → build → test → close out). Round docs are in `docs/rounds/`.
 
-- [ ] F1-00 ROUND-1.md.
-- [ ] F1-99 Round 1 closed out.
+- [x] F1-00 ROUND-1.md: review, 5 candidates, scores, pick (Anatomy controls), mini-spec.
+- [x] F1-01 Backend: `FusionExecutor.configure()` validates `donors`; pins stored on the run.
+  - Acceptance: bad value → `GRAPH_INVALID`. Tests: `test_anatomy_controls.py`.
+- [x] F1-02 `compile` honours pins, skips the plan call when all are pinned, and records `donorSource`. Mocks respond to pins.
+- [x] F1-03 Fusion config v2 plus `migrate()` (v1 → all Auto, sanitise). Tests: `anatomy.test.tsx`.
+- [x] F1-04 `AnatomyStrip` UI, advisory one-parent hint, Outdated on change, `updateNodeConfig` store API.
+- [x] F1-05 Panel donor attribution (you / model).
+- [x] F1-06 Visual QA round `f1` and baselines re-approved.
+- [x] F1-99 Round 1 closed out (ROUND-1.md "Outcome").
 - [ ] F2-00 ROUND-2.md.
 - [ ] F2-99 Round 2 closed out.
 

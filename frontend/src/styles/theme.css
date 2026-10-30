@@ -1127,6 +1127,8 @@ svg.react-flow__connectionline {
 .donor--a .donor__from { color: var(--port-image); }
 .donor--b { border-color: var(--port-creature); }
 .donor--b .donor__from { color: var(--port-creature); }
+.donor__by { font-family: var(--font-mono); font-size: var(--text-11); color: var(--text-muted); }
+.donor__by--user { color: var(--text); font-weight: var(--weight-semibold); }
 
 .notes { display: flex; flex-direction: column; gap: var(--space-2); }
 .note { display: grid; grid-template-columns: 16px auto 1fr; gap: var(--space-2); align-items: start; font-size: var(--text-13); }
@@ -1385,6 +1387,32 @@ p.image-node__banner { flex-direction: row; align-items: flex-start; }
 }
 .input-slot__select:hover:not(:disabled) { border-color: var(--rule-strong); background: var(--surface); }
 .input-slot__select:disabled { cursor: default; opacity: 1; color: var(--text); }
+/* F1: anatomy pins. Auto = dashed (model decides); A/B use the port colors. */
+.anatomy { margin: 0; padding: 0; border: 0; min-width: 0; display: flex; flex-direction: column; gap: var(--space-1); }
+.anatomy__legend { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 0; font-size: var(--text-12); font-weight: var(--weight-medium); color: var(--text-muted); }
+.anatomy__parts { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--space-1); }
+.anatomy__part {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  min-height: 40px;
+  padding: var(--space-1) 0;
+  border: 1px dashed var(--rule-strong);
+  border-radius: var(--radius-2);
+  background: transparent;
+  color: var(--text-muted);
+  transition: background var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
+}
+.anatomy__part:hover:not(:disabled) { background: var(--bg); border-color: var(--ink-3); }
+.anatomy__name { font-size: var(--text-11); }
+.anatomy__value { font-family: var(--font-mono); font-size: var(--text-12); font-weight: var(--weight-medium); }
+.anatomy__part--a { border-style: solid; border-color: var(--port-image); background: var(--lapis-soft); color: var(--text); }
+.anatomy__part--a .anatomy__value { color: var(--port-image); }
+.anatomy__part--b { border-style: solid; border-color: var(--port-creature); background: var(--moss-soft); color: var(--text); }
+.anatomy__part--b .anatomy__value { color: var(--port-creature); }
+.anatomy:disabled .anatomy__part { cursor: default; opacity: 0.75; }
+.node__hint--warn .icon { color: var(--ochre-ink); }
 .fusion-node__messages { display: flex; flex-direction: column; gap: var(--space-2); }
 .fusion-node__messages:empty { display: none; }
 .fusion-node__fuse { min-width: 112px; }

@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { uuid } from "../api/session";
 import { downstreamIds } from "./queries";
-import { CURRENT_SCHEMA_VERSION, type GraphDoc, type GraphEdge, type GraphNode, type NodeData, type Position } from "./types";
+import { CURRENT_SCHEMA_VERSION, type GraphDoc, type GraphEdge, type GraphNode, type NodeConfig, type NodeData, type Position } from "./types";
 
 const HISTORY_LIMIT = 100;
 
@@ -29,6 +29,8 @@ export interface GraphState {
   moveNode(id: string, position: Position, opts?: { commit?: boolean }): void;
   /** Data updates (upload progress, run ids) are not undo steps unless asked. */
   updateNodeData<D extends NodeData>(id: string, updater: (data: D) => D, opts?: { history?: boolean }): void;
+  /** Config edits are user actions: one undo step each. */
+  updateNodeConfig<C extends NodeConfig>(id: string, updater: (config: C) => C): void;
   addEdge(edge: Omit<GraphEdge, "id"> & { id?: string }): GraphEdge;
   removeEdges(ids: string[]): void;
   setSelection(ids: string[]): void;
@@ -122,6 +124,10 @@ export const useGraph = create<GraphState>()((set, get) => {
       });
       if (opts?.history) commit(apply);
       else set((st) => ({ ...apply(st), revision: st.revision + 1 }));
+    },
+
+    updateNodeConfig(id, updater) {
+      commit((s) => ({ nodes: s.nodes.map((n) => (n.id === id ? { ...n, config: updater(n.config as never) } : n)) }));
     },
 
     addEdge(partial) {

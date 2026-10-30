@@ -63,3 +63,22 @@ test("refused connection: wrong port type shakes and explains", async ({ page })
   await from.dragTo(to);
   await expect(page.getByText(/Those ports don't fit/)).toBeVisible();
 });
+
+test("F1 anatomy: pin parts, fuse, panel credits you", async ({ page }) => {
+  await openApp(page);
+  await addImages(page, ["common_octopus", "scarlet_macaw"]);
+  await page.getByRole("button", { name: "Head from Auto (model decides)" }).click(); // → A
+  await page.getByRole("button", { name: "Head from A" }).click(); // → B
+  await page.getByRole("button", { name: "Covering from Auto (model decides)" }).click(); // → A
+  await fuse(page);
+  await waitForResult(page);
+  await page.getByRole("button", { name: "How this was made" }).click();
+  const head = page.locator(".donor").filter({ hasText: "Head" });
+  await expect(head).toContainText("B");
+  await expect(head).toContainText("you");
+  await expect(page.locator(".donor").filter({ hasText: "Body" })).toContainText("model");
+  await page.keyboard.press("Escape");
+  // changing a pin outdates the result
+  await page.getByRole("button", { name: "Tail from Auto (model decides)" }).click();
+  await expect(page.locator(".node--result .node__status")).toHaveText(/Outdated/);
+});

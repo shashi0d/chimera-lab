@@ -98,6 +98,7 @@ describe("How this was made panel (TASKSHEET 7.4)", () => {
               warnings: [{ ruleId: "R-S1-01", message: "Masses differ.", severity: "warning" }],
               prompt: "Reference image 1 shows a lion.",
               model: { vision: "mock-muse-spark", image: "mock-muse-image" },
+              donorSource: { head: "user", body: "model", limbs: "model", covering: "model", tail: "model" },
             },
           },
         ],

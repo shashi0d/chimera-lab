@@ -109,6 +109,9 @@ export function ResultPanel({ node }: NodePanelProps<ResultConfig, ResultData>) 
             <li key={k} className={`donor donor--${spec.partDonors[k].toLowerCase()}`}>
               <span className="donor__part">{t.donors[k]}</span>
               <span className="donor__from">{spec.partDonors[k]}</span>
+              {spec.donorSource?.[k] ? (
+                <span className={`donor__by donor__by--${spec.donorSource[k]}`}>{spec.donorSource[k] === "user" ? t.byYou : t.byModel}</span>
+              ) : null}
             </li>
           ))}
         </ul>

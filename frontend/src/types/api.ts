@@ -117,6 +117,9 @@ export interface CreatureSpec {
   model: {
     [k: string]: string;
   };
+  donorSource: {
+    [k: string]: "user" | "model";
+  };
 }
 /**
  * This interface was referenced by `ChimeraApi`'s JSON-Schema

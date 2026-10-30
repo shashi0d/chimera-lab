@@ -71,6 +71,7 @@ const spec = (over: Partial<CreatureSpec> = {}): CreatureSpec => ({
   warnings: [],
   prompt: "Reference image 1 shows a lion.",
   model: { vision: "v", image: "i" },
+  donorSource: {},
   ...over,
 });
 const version = (n: number, s = spec()) => ({ runId: `run${n}`, assetId: `ast${n}`, creatureId: `c${n}`, imageUrl: `/assets/ast${n}/content`, spec: s, createdAt: "" });

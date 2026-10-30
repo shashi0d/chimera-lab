@@ -11,6 +11,7 @@ from __future__ import annotations
 import asyncio
 import hashlib
 import io
+import re
 
 from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageOps
 
@@ -38,11 +39,21 @@ def _blob_mask(size: int, seed: int) -> Image.Image:
     return mask.filter(ImageFilter.GaussianBlur(size * 0.05))
 
 
+HEAD_RE = re.compile(r"Reference image (\d) shows [^.]*\. Use it only for the [^.]*\bhead\b")
+
+
+def head_donor_index(prompt: str) -> int:
+    """Which reference the prompt assigns the head to (the real model reads the same sentence)."""
+    m = HEAD_RE.search(prompt)
+    return int(m.group(1)) - 1 if m else 0
+
+
 def render_plate(prompt: str, refs: list[bytes]) -> bytes:
     seed = int(hashlib.sha256(b"".join(hashlib.sha256(r).digest() for r in refs)).hexdigest()[:8], 16)
     inner = SIZE
-    a = _square(refs[0], inner)
-    b = _square(refs[1] if len(refs) > 1 else refs[0], inner)
+    h = head_donor_index(prompt) if len(refs) > 1 else 0
+    a = _square(refs[h], inner)  # head donor
+    b = _square(refs[1 - h] if len(refs) > 1 else refs[0], inner)  # body donor
     body = ImageOps.autocontrast(b, cutoff=1)
     head = ImageOps.autocontrast(a, cutoff=1)
     fused = Image.composite(head, body, _blob_mask(inner, seed))
@@ -64,7 +75,7 @@ class MockImageGen:
 
     async def generate(self, prompt: str, reference_images: list[bytes], aspect: str | None) -> GeneratedImage:
         fault = current_fault.get()
-        seed = int(hashlib.sha256(b"".join(reference_images)).hexdigest()[:4], 16)
+        seed = int(hashlib.sha256(b"".join(reference_images) + prompt.encode()).hexdigest()[:4], 16)
         if self.delay_scale > 0:
             await asyncio.sleep((2.0 + (seed % 2000) / 1000) * self.delay_scale)
         if fault == "server_error":

@@ -81,3 +81,12 @@ PV1-04: the step log outweighed the creature. On success the Fusion node shows t
 
 **D-026 Screenshots are quantized to 256-color PNGs.**
 Each round is about 18MB raw, about 6MB quantized (`scripts/shrink_shots.py`). Visual baselines stay full-color.
+
+**D-027 F1 pick: anatomy controls (part donor pins).**
+It scored highest (27/30). It turns Fuse into a design tool and exercises node config, node version migration (fusion v1 → v2) and user constraints flowing through the planning model. Verify and the field card were deferred (ROUND-1.md).
+
+**D-028 Graph store gains `updateNodeConfig`, and visual baselines are re-approved for F1.**
+Config edits are user actions, so each is one undo step (unlike data updates). The baselines changed on purpose, because the Fusion node now shows the anatomy strip.
+
+**D-029 The mock generator reads part assignment from the prompt.**
+This keeps the `ImageGenAdapter` interface unchanged (prompt + references), as the real model sees the same input. The mock parses which reference the prompt gives the head to, so pins visibly change the mock plate.

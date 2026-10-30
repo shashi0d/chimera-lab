@@ -105,11 +105,13 @@ class MockVision:
     async def plan_fusion(self, context: dict[str, Any]) -> FusionPlan:
         await self._delay(0.6)
         readings = context["readings"]
-        a, b = readings["A"], readings["B"]
-        body_plan = b.get("bodyPlan") or a.get("bodyPlan") or "quadruped"
-        donors = PartDonors(head="A", body="B", limbs="B", covering="A", tail="A")
-        a_name = (a.get("commonName") or "animal A").split()[-1]
-        b_name = (b.get("commonName") or "animal B").split()[-1]
+        pins = context.get("donor_pins") or {}
+        donors = PartDonors(**{"head": "A", "body": "B", "limbs": "B", "covering": "A", "tail": "A", **pins})
+        body_reading = readings[donors.body]
+        other = readings["A" if donors.body == "B" else "B"]
+        body_plan = body_reading.get("bodyPlan") or other.get("bodyPlan") or "quadruped"
+        a_name = (readings[donors.head].get("commonName") or "animal").split()[-1]
+        b_name = (body_reading.get("commonName") or "animal").split()[-1]
         return FusionPlan(
             body_plan=body_plan,
             part_donors=donors,

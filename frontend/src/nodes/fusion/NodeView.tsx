@@ -17,6 +17,7 @@ import type { ImageInputData } from "../image-input/types";
 import { usePreview } from "../image-input/usePreview";
 import { displayName } from "../result/types";
 import type { NodeViewProps } from "../types";
+import { AnatomyStrip } from "./AnatomyStrip";
 import { FUSION_INPUTS, FUSION_OUTPUTS } from "./ports";
 import type { FusionConfig, FusionData } from "./types";
 
@@ -232,6 +233,7 @@ export function FusionView({ node, selected, issues, catalog }: NodeViewProps<Fu
   const now = useNow(active, 500);
   const elapsed = run ? now - Date.parse(run.createdAt) : 0;
   const blocking = issues.filter((i) => i.severity === "block");
+  const advisory = issues.filter((i) => i.severity === "warn");
   const stale = Boolean(node.data.stale);
   const status = fusionStatus(run, starting, stale, blocking.length > 0);
   const runError = run && (run.status === "failed" || run.status === "interrupted") ? run.error : null;
@@ -302,11 +304,16 @@ export function FusionView({ node, selected, issues, catalog }: NodeViewProps<Fu
         <InputSlot fusionId={node.id} port="a" readOnly={readOnly || active} />
         <InputSlot fusionId={node.id} port="b" readOnly={readOnly || active} />
       </div>
+      <AnatomyStrip nodeId={node.id} config={node.config} disabled={readOnly || active} />
       {run ? run.status === "succeeded" && !active ? <RunSummary run={run} now={now} /> : <StepList steps={run.steps} now={now} /> : null}
       <div className="fusion-node__messages" aria-live="polite">
         {!active && blocking[0] ? (
           <p id={`${node.id}-hint`} className="node__hint">
             <Icon name="info" size={14} /> {blocking[0].message}
+          </p>
+        ) : !active && advisory[0] ? (
+          <p className="node__hint node__hint--warn">
+            <Icon name="alert" size={14} /> {advisory[0].message}
           </p>
         ) : null}
         {stale && !active && run?.status === "succeeded" ? (

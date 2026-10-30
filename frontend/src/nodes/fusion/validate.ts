@@ -3,7 +3,7 @@ import { upstreamNode } from "../../graph/queries";
 import type { GraphNode } from "../../graph/types";
 import type { ImageInputData } from "../image-input/types";
 import type { ValidationContext, ValidationIssue } from "../types";
-import type { FusionConfig, FusionData } from "./types";
+import { PARTS, readDonors, type FusionConfig, type FusionData } from "./types";
 
 const t = copy.nodes.fusion;
 
@@ -28,6 +28,12 @@ export function validateFusion(node: GraphNode<FusionConfig, FusionData>, ctx: V
   const [a, b] = inputs.map((i) => i.node?.data as ImageInputData | undefined);
   if (a?.sha256 && b?.sha256 && (a.sha256 === b.sha256 || a.assetId === b.assetId)) {
     issues.push({ code: "DUPLICATE_INPUTS", message: t.duplicate, severity: "block" });
+  }
+  const donors = readDonors(node.config);
+  for (const slot of ["A", "B"] as const) {
+    if (PARTS.every((p) => donors[p] === slot)) {
+      issues.push({ code: "ONE_PARENT", message: t.oneParent(slot), severity: "warn" });
+    }
   }
   if (ctx.connectivity === "offline") issues.push({ code: "OFFLINE", message: t.offline, severity: "block" });
   else if (ctx.connectivity === "unreachable") issues.push({ code: "UNREACHABLE", message: t.unreachable, severity: "block" });

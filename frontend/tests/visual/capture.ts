@@ -586,6 +586,58 @@ const STATES: State[] = [
       await page.waitForTimeout(250);
     },
   },
+  {
+    name: "80-anatomy-pinned",
+    shows: "F1: parts pinned (Head B, Covering A) before fusing",
+    core: true,
+    async setup(page) {
+      await add(page, ["common_octopus", "scarlet_macaw"]);
+      await page.getByRole("button", { name: "Head from Auto (model decides)" }).click();
+      await page.getByRole("button", { name: "Head from A" }).click();
+      await page.getByRole("button", { name: "Covering from Auto (model decides)" }).click();
+      await quiet(page);
+    },
+  },
+  {
+    name: "81-anatomy-result-panel",
+    shows: "F1: result with pinned parts; panel credits you vs model",
+    core: true,
+    async setup(page) {
+      await add(page, ["common_octopus", "scarlet_macaw"]);
+      await page.getByRole("button", { name: "Head from Auto (model decides)" }).click();
+      await page.getByRole("button", { name: "Head from A" }).click();
+      await page.getByRole("button", { name: "Covering from Auto (model decides)" }).click();
+      await fuse(page);
+      await done(page);
+      await fit(page);
+      await page.getByRole("button", { name: "How this was made" }).click();
+      await page.locator(".side-panel__scroll").evaluate((el) => el.scrollTo(0, (el.querySelector(".donors") as HTMLElement).offsetTop - 120));
+      await quiet(page);
+    },
+  },
+  {
+    name: "82-anatomy-one-parent",
+    shows: "F1: every part pinned to A: advisory hint",
+    async setup(page) {
+      await add(page, ["lion", "tiger"]);
+      for (const part of ["Head", "Body", "Limbs", "Covering", "Tail"]) {
+        await page.getByRole("button", { name: `${part} from Auto (model decides)` }).click();
+      }
+      await quiet(page);
+    },
+  },
+  {
+    name: "83-anatomy-outdated",
+    shows: "F1: pin changed after a result: result outdated",
+    async setup(page) {
+      await add(page, ["red_fox", "green_iguana"]);
+      await fuse(page);
+      await done(page);
+      await page.getByRole("button", { name: "Tail from Auto (model decides)" }).click();
+      await fit(page);
+      await quiet(page);
+    },
+  },
   ...["Add image", "Add fusion node", "Undo", "Fit to view", "Show minimap"].map(
     (label, i): State => ({
       name: `7${i}-focus-${label.toLowerCase().replace(/\s+/g, "-")}`,
