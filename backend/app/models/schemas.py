@@ -14,7 +14,9 @@ from pydantic.alias_generators import to_camel
 
 
 class ApiModel(BaseModel):
-    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
+    model_config = ConfigDict(
+        alias_generator=to_camel, populate_by_name=True, json_schema_serialization_defaults_required=True
+    )
 
     def dump(self) -> dict[str, Any]:
         return self.model_dump(by_alias=True, mode="json")
