@@ -2,7 +2,7 @@
 
 Date: 2026-10-30
 Mode: mock
-Totals: unit 95/95 (frontend) + 27/27 (backend), component 40/40, backend integration 48/48, e2e 37/37 (Playwright, Chromium; includes 4 visual baselines)
+Totals: unit 95/95 (frontend) + 27/27 (backend), component 51/51, backend integration 62/62, e2e 39/39 (Playwright, Chromium; includes 4 visual baselines)
 
 Commands: `cd frontend && npm test`, `.venv/bin/python -m pytest backend`, `cd frontend && npm run e2e`, `scripts/check-css.sh`, `scripts/check-bundle.sh`.
 
@@ -71,11 +71,13 @@ Abbreviations for test files used below:
 | 7.7 | Run in progress when the connection drops: pause, resume, final state | `unit/transport.test.ts`, E2E-R | pass |
 | 7.7 | Server unreachable banner, distinct from offline | `unit/connectivity.test.ts`, SH, E2E-R | pass |
 | 4.4/4.5 | Every mock fault gives the right code and status | BE-R (parametrised), E2E-F | pass |
+| F1 | Pin parts; pins override plan; all pinned skips plan call; invalid config `GRAPH_INVALID`; v1→v2 migration; Outdated on change; one-parent hint; panel credits you/model | `test_anatomy_controls.py`, `component/anatomy.test.tsx`, E2E-H "F1 anatomy" | pass |
+| F2 | Result→card connection; disabled hints; write card; ranges verbatim; server provenance; out of date + rewrite; PNG download (offline, 1600px); NOT_FOUND; timeout; vision budget | `test_field_card.py`, `component/fieldCard.test.tsx`, E2E-H "F2 field card" | pass |
 | P5-05 | CORS allowlist, server size limit, rate limit, no secrets in bundle | `test_graphs_and_security.py`, BE-A, BE-R, `scripts/check-bundle.sh`, `unit/codeRules.test.ts` | pass |
 
 ## Visual QA
 
-- Screenshots captured: 112 (pv-1) + 162 (pv-2) + 66 (pv-3). See [docs/visual-qa/INDEX.md](visual-qa/INDEX.md).
+- Screenshots captured: 112 (pv-1) + 162 (pv-2) + 66 (pv-3) + 36 (f1) + 36 (f2). See [docs/visual-qa/INDEX.md](visual-qa/INDEX.md).
 - Correction rounds: 3 (pv-1 → pv-2 → pv-3).
 - Final rubric scores (lowest per criterion): hierarchy 4, clarity 4, state legibility 4, consistency 4, polish 4, craft 4.
 - Defects fixed / remaining:
@@ -88,8 +90,8 @@ Abbreviations for test files used below:
 
 ## Feature rounds
 
-Round 1: see [docs/rounds/ROUND-1.md](rounds/ROUND-1.md) (in progress).
-Round 2: see [docs/rounds/ROUND-2.md](rounds/ROUND-2.md) (pending).
+Round 1: **Anatomy controls** (pin head, body, limbs, covering or tail to a parent; Fusion config v2 with migration). See [docs/rounds/ROUND-1.md](rounds/ROUND-1.md). Visual round `f1`: 36 shots, no blocker or major defects.
+Round 2: **Field-guide card node** (writes a specimen card with Muse Spark; downloadable PNG; server-written provenance) and registry-level run handlers. See [docs/rounds/ROUND-2.md](rounds/ROUND-2.md). Visual round `f2`: 36 shots including the exported PNG, no blocker or major defects.
 
 ## Known gaps
 
@@ -100,6 +102,7 @@ Round 2: see [docs/rounds/ROUND-2.md](rounds/ROUND-2.md) (pending).
 
 ## Unverified against live services
 
+- Meta Muse Spark card writing (`write_field_card`, F2) and anatomy-pinned planning (F1).
 - Meta Muse Spark / Muse Image adapters (`backend/app/adapters/meta/client.py`): request shapes, endpoint path, model ids and error mapping are tested only against recorded-shape fakes.
 - Supabase storage and DB adapters and `schema.sql`.
 - Modal deployment (`modal_app.py` imports and builds its image definition; not deployed).

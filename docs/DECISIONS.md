@@ -90,3 +90,12 @@ Config edits are user actions, so each is one undo step (unlike data updates). T
 
 **D-029 The mock generator reads part assignment from the prompt.**
 This keeps the `ImageGenAdapter` interface unchanged (prompt + references), as the real model sees the same input. The mock parses which reference the prompt gives the head to, so pins visibly change the mock plate.
+
+**D-030 Run updates are dispatched through the registry (`NodeDefinition.onRunUpdate`).**
+F2 found that the app shell wired the Fusion run handler directly, so any new runnable node would need an `App.tsx` change. `registerRunHandlers()` (in `nodes/registry.ts`) now routes each update to the node type's `onRunUpdate`. The shared run UI (step list, error block, retry countdown) moved to `canvas/RunParts.tsx` for reuse.
+
+**D-031 F2 pick: field-guide card node; provenance is server-written.**
+It scored highest (27/30) and is the first post-v1 node type, which tests `ADDING_A_NODE.md` for real. The card's provenance line is composed by the backend, never the model, so the "not a real animal" fixed point can't be lost to a prompt. Size quotes the parents' recorded ranges verbatim (Section 5.4: no midpoints).
+
+**D-032 `Executor.configure(graph, node)`.**
+The Field card's config comes from upstream (the Result's selected version), so `configure` takes the graph as well as the node.

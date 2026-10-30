@@ -10,7 +10,9 @@ import { Icon } from "../../ui/Icon";
 import { useUi } from "../../ui/uiStore";
 import type { FusionData } from "../fusion/types";
 import type { NodeViewProps } from "../types";
-import { displayName, RESULT_INPUTS, type ResultConfig, type ResultData } from "./types";
+import { findFreeSpot } from "../../canvas/addImages";
+import { createNode } from "../registry";
+import { displayName, RESULT_INPUTS, RESULT_OUTPUTS, type ResultConfig, type ResultData } from "./types";
 
 const t = copy.nodes.result;
 /** Images already revealed this session: the develop effect plays once per version. */
@@ -80,16 +82,32 @@ function Plate({ url, runId, plateNo, name }: { url: string; runId: string; plat
   );
 }
 
+/** F2: add a Field card wired to this Result (or select the existing one). */
+function makeFieldCard(resultId: string): void {
+  const g = useGraph.getState();
+  const existing = g.edges.find((e) => e.source === resultId && g.nodes.find((n) => n.id === e.target)?.type === "field-card");
+  if (existing) {
+    g.setSelection([existing.target]);
+    return;
+  }
+  const res = g.nodes.find((n) => n.id === resultId);
+  const pos = findFreeSpot({ x: (res?.position.x ?? 0) + 360, y: res?.position.y ?? 0 }, 340, 620);
+  const card = createNode("field-card", pos);
+  g.addNodes([card], [{ id: `e-${card.id}`, source: resultId, sourcePort: "out", target: card.id, targetPort: "in" }]);
+  g.setSelection([card.id]);
+}
+
 export function ResultView({ node, selected, catalog }: NodeViewProps<ResultConfig, ResultData>) {
   const { versions, selected: sel } = node.data;
   const active = useUpstreamRunActive(node.id);
   const upstream = useUpstreamRunStatus(node.id);
   const openPanel = useUi((s) => s.openPanel);
   const update = useGraph((s) => s.updateNodeData);
+  const readOnly = useGraph((s) => s.readOnly);
   const idx = Math.min(Math.max(0, sel), versions.length - 1);
   const version = versions[idx];
   const spec = version?.spec;
-  const warnCount = spec ? spec.warnings.filter((w) => w.severity === "warning").length : 0;
+  const warnCount = spec ? (spec.warnings ?? []).filter((w) => w.severity === "warning").length : 0;
   const name = spec ? displayName(spec) : "";
 
   let status: NodeStatus | undefined;
@@ -109,7 +127,8 @@ export function ResultView({ node, selected, catalog }: NodeViewProps<ResultConf
       icon="result"
       status={status}
       inputs={RESULT_INPUTS}
-      outputs={[]}
+      outputs={RESULT_OUTPUTS}
+      toolbar={version && !readOnly ? <IconButton icon="card" label={t.makeCard} onClick={() => makeFieldCard(node.id)} /> : null}
       selected={selected}
       className={[active ? "is-generating" : "", node.data.stale ? "is-stale" : ""].filter(Boolean).join(" ")}
     >

@@ -28,6 +28,7 @@ const PATHS = {
   minus: "M4 10h12",
   replace: "M4 7.5h10l-3-3M16 12.5H6l3 3",
   leaf: "M4 16c0-7 4-11.5 12-12-0.5 8-5 12-12 12zM4 16l6-6",
+  card: "M3.5 4.5h13v11h-13zM6 7.5h3v3H6zM11 8h3.5M11 10.5h3.5M6 13h8.5",
 } as const;
 
 export type IconName = keyof typeof PATHS;

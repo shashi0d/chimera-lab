@@ -60,3 +60,19 @@ Short entries per phase: what was built, what was tested, what was deferred. New
 - **pv-3:** affected states plus a 10-state regression sample. No blockers or majors open; lowest rubric score is 4 on every criterion.
 - **Baselines:** 4 Playwright baselines saved (empty canvas, result + panel, both themes).
 - **Tests:** full e2e 37/37, vitest 135/135, pytest 75/75.
+
+## 2026-10-30: F1 Anatomy controls
+
+- **Built:** part-donor pins on the Fusion node (config v2 with migration). Pins are honoured by planning, and the planning call is skipped when all five are pinned. `donorSource` attributes each part. The mock planner and generator respond to pins.
+- **Tested:** +7 backend, +5 component, +1 e2e.
+- **Visual:** round `f1` (36 shots), no blockers or majors; baselines re-approved (D-028).
+
+## 2026-10-30: F2 Field-guide card
+
+- **Built:**
+  - Field card node: Result output port, "Make field card", backend executor with 3 steps, server-written provenance, verbatim ranges
+  - PNG export
+  - registry-level `onRunUpdate` (D-030)
+- **Tested:** +7 backend, +6 component, +1 e2e (real PNG check).
+- **Visual:** round `f2` (36 shots, including the exported PNG), no blockers or majors.
+- **Totals:** pytest 89, vitest 146, Playwright 39; CSS and bundle checks pass.

@@ -4,6 +4,7 @@ import asyncio
 
 import httpx
 import pytest
+
 from app.main import create_app
 from tests.conftest import IMAGES, fusion_graph, make_settings, start_run, two_assets, upload, wait_run
 

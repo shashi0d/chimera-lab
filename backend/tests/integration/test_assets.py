@@ -4,6 +4,7 @@ import io
 
 import pytest
 from PIL import Image
+
 from tests.conftest import EDGE, IMAGES, upload
 
 
@@ -52,6 +53,7 @@ async def test_too_small(client):
 
 async def test_too_large_enforced_server_side(tmp_path):
     import httpx
+
     from app.main import create_app
     from tests.conftest import make_settings
 

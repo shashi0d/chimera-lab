@@ -1,7 +1,7 @@
 import { defineNode } from "../types";
 import { ResultView } from "./NodeView";
 import { ResultPanel } from "./Panel";
-import { RESULT_INPUTS, type ResultConfig, type ResultData } from "./types";
+import { RESULT_INPUTS, RESULT_OUTPUTS, type ResultConfig, type ResultData } from "./types";
 
 export const resultNode = defineNode<ResultConfig, ResultData>({
   type: "result",
@@ -11,7 +11,7 @@ export const resultNode = defineNode<ResultConfig, ResultData>({
   icon: "result",
   addable: false, // created by the Fusion node when it runs
   inputs: RESULT_INPUTS,
-  outputs: [],
+  outputs: RESULT_OUTPUTS,
   defaultConfig: {},
   defaultData: () => ({ versions: [], selected: 0 }),
   validate: () => [],

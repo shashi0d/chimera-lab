@@ -38,6 +38,13 @@ flowchart LR
 
 ## Node registry (frontend and backend)
 
+Node types as built:
+
+- `image-input`
+- `fusion`: config v2 with anatomy pins (F1)
+- `result`: outputs `creature`
+- `field-card` (F2)
+
 Each node type is defined once (`frontend/src/nodes/types.ts`, `NodeDefinition`), with:
 
 - its `type` and `version`
@@ -47,10 +54,17 @@ Each node type is defined once (`frontend/src/nodes/types.ts`, `NodeDefinition`)
 - a `View` for the canvas, plus an optional side `Panel`
 - whether it is `runnable`
 - an optional `migrate()`
+- an optional `onRunUpdate()`: run updates are routed to it by `registerRunHandlers()`
 
 `nodes/registry.ts` lists the definitions. The canvas builds its React Flow node types, tool rail buttons, validation and side panel from the registry alone. Unknown types fall back to the `unsupported` placeholder.
 
-The backend mirrors this: `pipeline/registry.py` maps a node type to an `Executor` that resolves its inputs from the graph and returns its ordered `StepDef`s. The UI renders whatever steps the run reports, so a new step shows up with no UI change.
+The backend mirrors this: `pipeline/registry.py` maps a node type to an `Executor`. The Executor:
+
+- resolves its inputs from the graph
+- validates its config into run state (`configure(graph, node)`)
+- returns its ordered `StepDef`s
+
+Executors: `fusion` (8 steps) and `field-card` (`load_creature → write_card → store_card`). The UI renders whatever steps the run reports, so a new step shows up with no UI change.
 
 Port data types in v1 are `image` and `creature`. The edge rule (`graph/edgeRules.ts`): the source port's `emits` must be in the target port's `accepts`, the target port must be free (unless `many`), and the edge must not create a cycle.
 

@@ -32,6 +32,7 @@ export interface ChimeraApi {
   CreatureSpec?: CreatureSpec;
   ErrorCode?: ErrorCode;
   ErrorEnvelope?: ErrorEnvelope;
+  FieldCard?: FieldCard;
   Graph?: Graph;
   GraphEdge?: GraphEdge;
   GraphNode?: GraphNode;
@@ -170,6 +171,21 @@ export interface ErrorEnvelope {
   error: ApiError;
 }
 /**
+ * F2: field-guide card text. `provenance` is always written by the server, never the model.
+ *
+ * This interface was referenced by `ChimeraApi`'s JSON-Schema
+ * via the `definition` "FieldCard".
+ */
+export interface FieldCard {
+  commonName: string;
+  binomial: string;
+  habitat: string;
+  diet: string;
+  size: string;
+  behaviour: string;
+  provenance: string;
+}
+/**
  * This interface was referenced by `ChimeraApi`'s JSON-Schema
  * via the `definition` "Graph".
  */
@@ -263,6 +279,7 @@ export interface RunResult {
   creatureId: string;
   imageUrl: string;
   spec: CreatureSpec;
+  card: FieldCard | null;
 }
 /**
  * This interface was referenced by `ChimeraApi`'s JSON-Schema

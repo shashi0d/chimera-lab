@@ -1,0 +1,259 @@
+{
+  "round": "f2",
+  "captured": 36,
+  "failures": [],
+  "shots": [
+    {
+      "file": "docs/visual-qa/f2/1024x768/dark/20-success-real-hybrid.png",
+      "state": "20-success-real-hybrid",
+      "shows": "Success with real-hybrid badge (lion + tiger)",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/f2/1024x768/dark/23-panel-open.png",
+      "state": "23-panel-open",
+      "shows": "How this was made panel (top)",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/f2/1024x768/dark/60-fit-view-many-nodes.png",
+      "state": "60-fit-view-many-nodes",
+      "shows": "Fit view with 7 nodes (two fusions)",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/f2/1024x768/dark/81-anatomy-result-panel.png",
+      "state": "81-anatomy-result-panel",
+      "shows": "F1: result with pinned parts; panel credits you vs model",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/f2/1024x768/dark/90-card-empty.png",
+      "state": "90-card-empty",
+      "shows": "F2: Field card added from a Result, not written yet",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/f2/1024x768/dark/91-card-written.png",
+      "state": "91-card-written",
+      "shows": "F2: written field card with invented binomial, ranges and provenance",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/f2/1024x768/dark/92-card-out-of-date.png",
+      "state": "92-card-out-of-date",
+      "shows": "F2: Result moved to v2; card offers a rewrite",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/f2/1024x768/dark/93-card-error-timeout.png",
+      "state": "93-card-error-timeout",
+      "shows": "F2: writing the card timed out: message + retry",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/f2/1024x768/dark/94-card-exported-png.png",
+      "state": "94-card-exported-png",
+      "shows": "F2: the downloaded field-card PNG itself (1600×1000)",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/f2/1024x768/light/20-success-real-hybrid.png",
+      "state": "20-success-real-hybrid",
+      "shows": "Success with real-hybrid badge (lion + tiger)",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/f2/1024x768/light/23-panel-open.png",
+      "state": "23-panel-open",
+      "shows": "How this was made panel (top)",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/f2/1024x768/light/60-fit-view-many-nodes.png",
+      "state": "60-fit-view-many-nodes",
+      "shows": "Fit view with 7 nodes (two fusions)",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/f2/1024x768/light/81-anatomy-result-panel.png",
+      "state": "81-anatomy-result-panel",
+      "shows": "F1: result with pinned parts; panel credits you vs model",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/f2/1024x768/light/90-card-empty.png",
+      "state": "90-card-empty",
+      "shows": "F2: Field card added from a Result, not written yet",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/f2/1024x768/light/91-card-written.png",
+      "state": "91-card-written",
+      "shows": "F2: written field card with invented binomial, ranges and provenance",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/f2/1024x768/light/92-card-out-of-date.png",
+      "state": "92-card-out-of-date",
+      "shows": "F2: Result moved to v2; card offers a rewrite",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/f2/1024x768/light/93-card-error-timeout.png",
+      "state": "93-card-error-timeout",
+      "shows": "F2: writing the card timed out: message + retry",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/f2/1024x768/light/94-card-exported-png.png",
+      "state": "94-card-exported-png",
+      "shows": "F2: the downloaded field-card PNG itself (1600×1000)",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/f2/1440x900/dark/20-success-real-hybrid.png",
+      "state": "20-success-real-hybrid",
+      "shows": "Success with real-hybrid badge (lion + tiger)",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/f2/1440x900/dark/23-panel-open.png",
+      "state": "23-panel-open",
+      "shows": "How this was made panel (top)",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/f2/1440x900/dark/60-fit-view-many-nodes.png",
+      "state": "60-fit-view-many-nodes",
+      "shows": "Fit view with 7 nodes (two fusions)",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/f2/1440x900/dark/81-anatomy-result-panel.png",
+      "state": "81-anatomy-result-panel",
+      "shows": "F1: result with pinned parts; panel credits you vs model",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/f2/1440x900/dark/90-card-empty.png",
+      "state": "90-card-empty",
+      "shows": "F2: Field card added from a Result, not written yet",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/f2/1440x900/dark/91-card-written.png",
+      "state": "91-card-written",
+      "shows": "F2: written field card with invented binomial, ranges and provenance",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/f2/1440x900/dark/92-card-out-of-date.png",
+      "state": "92-card-out-of-date",
+      "shows": "F2: Result moved to v2; card offers a rewrite",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/f2/1440x900/dark/93-card-error-timeout.png",
+      "state": "93-card-error-timeout",
+      "shows": "F2: writing the card timed out: message + retry",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/f2/1440x900/dark/94-card-exported-png.png",
+      "state": "94-card-exported-png",
+      "shows": "F2: the downloaded field-card PNG itself (1600×1000)",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/f2/1440x900/light/20-success-real-hybrid.png",
+      "state": "20-success-real-hybrid",
+      "shows": "Success with real-hybrid badge (lion + tiger)",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/f2/1440x900/light/23-panel-open.png",
+      "state": "23-panel-open",
+      "shows": "How this was made panel (top)",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/f2/1440x900/light/60-fit-view-many-nodes.png",
+      "state": "60-fit-view-many-nodes",
+      "shows": "Fit view with 7 nodes (two fusions)",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/f2/1440x900/light/81-anatomy-result-panel.png",
+      "state": "81-anatomy-result-panel",
+      "shows": "F1: result with pinned parts; panel credits you vs model",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/f2/1440x900/light/90-card-empty.png",
+      "state": "90-card-empty",
+      "shows": "F2: Field card added from a Result, not written yet",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/f2/1440x900/light/91-card-written.png",
+      "state": "91-card-written",
+      "shows": "F2: written field card with invented binomial, ranges and provenance",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/f2/1440x900/light/92-card-out-of-date.png",
+      "state": "92-card-out-of-date",
+      "shows": "F2: Result moved to v2; card offers a rewrite",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/f2/1440x900/light/93-card-error-timeout.png",
+      "state": "93-card-error-timeout",
+      "shows": "F2: writing the card timed out: message + retry",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/f2/1440x900/light/94-card-exported-png.png",
+      "state": "94-card-exported-png",
+      "shows": "F2: the downloaded field-card PNG itself (1600×1000)",
+      "viewport": "1440x900",
+      "theme": "light"
+    }
+  ]
+}

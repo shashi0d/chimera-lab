@@ -7,7 +7,7 @@ import { useGraph } from "../../src/graph/store";
 import { browserCodec, setImageCodec } from "../../src/nodes/image-input/codec";
 import type { ImageInputData } from "../../src/nodes/image-input/types";
 import { flushUploadQueue } from "../../src/nodes/image-input/uploads";
-import { registerFusionRunHandler } from "../../src/nodes/fusion/actions";
+import { registerRunHandlers } from "../../src/nodes/registry";
 import type { ResultData } from "../../src/nodes/result/types";
 import { restoreGraph, writeRawAutosave } from "../../src/persistence/autosave";
 import { useRuns } from "../../src/runs/store";
@@ -127,7 +127,7 @@ describe("run lifecycle on the canvas (P4)", () => {
   });
 
   it("start creates a Result node; success adds versions; re-run adds version 2", async () => {
-    const stop = registerFusionRunHandler();
+    const stop = registerRunHandlers();
     let onUpdate: (r: Run) => void = () => undefined;
     useRuns.setState({ runs: {}, starting: {}, startErrors: {}, transport: { watch: (_id, cb) => ((onUpdate = cb), { stop: () => undefined }) } });
     await addImageFiles([file("lion.jpg"), file("tiger.jpg")], { x: 0, y: 0 });
@@ -139,19 +139,19 @@ describe("run lifecycle on the canvas (P4)", () => {
       vi.spyOn(api, "startRun").mockResolvedValueOnce(baseRun({ id: `run${n}`, nodeId: fusionId }));
       await useRuns.getState().start(fusionId);
       expect(useGraph.getState().nodes.filter((x) => x.type === "result")).toHaveLength(1);
-      onUpdate(baseRun({ id: `run${n}`, nodeId: fusionId, status: "succeeded", version: 5, result: { assetId: `g${n}`, creatureId: `c${n}`, imageUrl: `/assets/g${n}/content`, spec } }));
+      onUpdate(baseRun({ id: `run${n}`, nodeId: fusionId, status: "succeeded", version: 5, result: { assetId: `g${n}`, creatureId: `c${n}`, imageUrl: `/assets/g${n}/content`, spec, card: null } }));
     }
     const res = useGraph.getState().nodes.find((x) => x.type === "result")?.data as ResultData;
     expect(res.versions.map((v) => v.runId)).toEqual(["run1", "run2"]);
     expect(res.selected).toBe(1);
     // applying the same run twice (e.g. after reload) does not duplicate
-    onUpdate(baseRun({ id: "run2", nodeId: fusionId, status: "succeeded", version: 6, result: { assetId: "g2", creatureId: "c2", imageUrl: "/x", spec } }));
+    onUpdate(baseRun({ id: "run2", nodeId: fusionId, status: "succeeded", version: 6, result: { assetId: "g2", creatureId: "c2", imageUrl: "/x", spec, card: null } }));
     expect((useGraph.getState().nodes.find((x) => x.type === "result")?.data as ResultData).versions).toHaveLength(2);
     stop();
   });
 
   it("NOT_AN_ANIMAL highlights the offending input node", async () => {
-    const stop = registerFusionRunHandler();
+    const stop = registerRunHandlers();
     let onUpdate: (r: Run) => void = () => undefined;
     useRuns.setState({ runs: {}, starting: {}, startErrors: {}, transport: { watch: (_id, cb) => ((onUpdate = cb), { stop: () => undefined }) } });
     await addImageFiles([file("lion.jpg"), file("plant.jpg")], { x: 0, y: 0 });

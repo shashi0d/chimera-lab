@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Canvas } from "../canvas/Canvas";
 import { startConnectivity } from "../connectivity/store";
 import { startUploadQueue } from "../nodes/image-input/uploads";
-import { registerFusionRunHandler } from "../nodes/fusion/actions";
+import { registerRunHandlers } from "../nodes/registry";
 import { restoreGraph, startAutosave } from "../persistence/autosave";
 import { resumeAllRuns, stopAllRuns } from "../runs/store";
 import { useUi } from "../ui/uiStore";
@@ -25,7 +25,7 @@ export function App({ crash = false }: { crash?: boolean }) {
   useEffect(() => {
     const stops: Array<() => void> = [];
     let alive = true;
-    stops.push(registerFusionRunHandler());
+    stops.push(registerRunHandlers());
     stops.push(startConnectivity());
     void restoreGraph().then(() => {
       if (!alive) return;

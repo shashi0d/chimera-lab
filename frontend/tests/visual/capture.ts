@@ -638,6 +638,91 @@ const STATES: State[] = [
       await quiet(page);
     },
   },
+  {
+    name: "90-card-empty",
+    shows: "F2: Field card added from a Result, not written yet",
+    core: true,
+    async setup(page) {
+      await add(page, ["lion", "tiger"]);
+      await fuse(page);
+      await done(page);
+      await page.locator(".node--result").hover();
+      await page.getByRole("button", { name: "Make field card" }).click();
+      await page.waitForTimeout(400);
+      await fit(page);
+      await quiet(page);
+    },
+  },
+  {
+    name: "91-card-written",
+    shows: "F2: written field card with invented binomial, ranges and provenance",
+    core: true,
+    async setup(page) {
+      await add(page, ["lion", "tiger"]);
+      await fuse(page);
+      await done(page);
+      await page.locator(".node--result").hover();
+      await page.getByRole("button", { name: "Make field card" }).click();
+      await page.getByRole("button", { name: "Write card" }).click();
+      await page.locator(".field-card__binomial").waitFor({ timeout: 20_000 });
+      await fit(page);
+      await quiet(page);
+    },
+  },
+  {
+    name: "92-card-out-of-date",
+    shows: "F2: Result moved to v2; card offers a rewrite",
+    async setup(page) {
+      await add(page, ["red_fox", "green_iguana"]);
+      await fuse(page);
+      await done(page);
+      await page.locator(".node--result").hover();
+      await page.getByRole("button", { name: "Make field card" }).click();
+      await page.getByRole("button", { name: "Write card" }).click();
+      await page.locator(".field-card__binomial").waitFor({ timeout: 20_000 });
+      await page.getByRole("button", { name: "Fuse again" }).click();
+      await done(page, 2);
+      await fit(page);
+      await quiet(page);
+    },
+  },
+  {
+    name: "93-card-error-timeout",
+    shows: "F2: writing the card timed out: message + retry",
+    async setup(page) {
+      await add(page, ["lion", "tiger"]);
+      await fuse(page);
+      await done(page);
+      await page.locator(".node--result").hover();
+      await page.getByRole("button", { name: "Make field card" }).click();
+      await hook(page, "setFault", "timeout");
+      await page.getByRole("button", { name: "Write card" }).click();
+      await page.locator(".node--field-card .node__error").waitFor({ timeout: 20_000 });
+      await hook(page, "freezeRuns");
+      await fit(page);
+      await quiet(page);
+    },
+  },
+  {
+    name: "94-card-exported-png",
+    shows: "F2: the downloaded field-card PNG itself (1600×1000)",
+    async setup(page) {
+      await add(page, ["common_octopus", "scarlet_macaw"]);
+      await fuse(page);
+      await done(page);
+      await page.locator(".node--result").hover();
+      await page.getByRole("button", { name: "Make field card" }).click();
+      await page.getByRole("button", { name: "Write card" }).click();
+      await page.locator(".field-card__binomial").waitFor({ timeout: 20_000 });
+      const download = page.waitForEvent("download");
+      await page.getByRole("button", { name: "Download PNG" }).click();
+      const file = await (await download).path();
+      // Show the exported file full-screen so it is captured like any other state.
+      const { readFileSync } = await import("node:fs");
+      const b64 = readFileSync(file).toString("base64");
+      await page.setContent(`<body style="margin:0;background:#888;display:grid;place-items:center;height:100vh"><img src="data:image/png;base64,${b64}" style="max-width:96vw;max-height:96vh"></body>`);
+    },
+  },
   ...["Add image", "Add fusion node", "Undo", "Fit to view", "Show minimap"].map(
     (label, i): State => ({
       name: `7${i}-focus-${label.toLowerCase().replace(/\s+/g, "-")}`,

@@ -67,7 +67,7 @@ async def start_run(
               steps=mgr.new_steps(node.type), created_at=ts, updated_at=ts)
     # Validates inputs (GRAPH_INVALID / DUPLICATE_INPUTS) before anything is stored.
     EXECUTORS[node.type].resolve_inputs(body.graph, node)
-    EXECUTORS[node.type].configure(node)
+    EXECUTORS[node.type].configure(body.graph, node)
     await mgr.save(run)
     await svc.db.put("idempotency", idem_key, {"runId": run.id})
     mgr.start(run, body.graph, node.type, fault)

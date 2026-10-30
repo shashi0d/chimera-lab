@@ -1,5 +1,7 @@
 # Adding a node type
 
+> **Live example:** the Field card node (`frontend/src/nodes/field-card/`, `backend/app/pipeline/steps/field_card.py`, `FieldCardExecutor`) was added in round F2 following this guide. Read it next to the Style walkthrough below.
+
 A worked example adds a **Style** node that takes a creature and re-renders it in a chosen illustration style. It is not shipped; it is here to show the shape of the change. Adding a node touches only:
 
 1. `frontend/src/nodes/style/` (new folder)
@@ -46,10 +48,12 @@ export const styleNode = defineNode<StyleConfig, StyleData>({
       : [{ code: "MISSING_INPUTS", message: "Connect a Result to restyle it.", severity: "block" }],
   View: StyleView,
   runnable: true,
+  // Optional: write run results back into the graph (see nodes/field-card/actions.ts).
+  onRunUpdate: (nodeId, run) => { /* e.g. store run.result in node data */ },
 });
 ```
 
-`nodes/style/NodeView.tsx` composes the shared card. Ports, status, header and hover toolbar come from `NodeCard`. Starting and watching runs come from `useRuns`, exactly as in `nodes/fusion/NodeView.tsx`:
+`nodes/style/NodeView.tsx` composes the shared card and the shared run widgets in `canvas/RunParts.tsx` (`StepList`, `ErrorBlock`, `useCountdown`). Ports, status, header and hover toolbar come from `NodeCard`. Starting and watching runs come from `useRuns`, exactly as in `nodes/fusion/NodeView.tsx`:
 
 ```tsx
 export function StyleView({ node, selected, issues, catalog }: NodeViewProps<StyleConfig, StyleData>) {
@@ -104,6 +108,7 @@ async def run(ctx: RunContext) -> str:
 ```python
 class StyleExecutor:
     def resolve_inputs(self, graph, node): ...  # follow the "in" edge to a result node's latest asset
+    def configure(self, graph, node): ...       # validated config -> run state (e.g. {"style": ...})
     def steps(self):
         return [StepDef("load_inputs", "Load creature", load_creature.run),
                 StepDef("restyle", "Restyle", restyle.run),

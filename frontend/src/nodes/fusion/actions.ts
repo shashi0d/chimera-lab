@@ -2,7 +2,6 @@ import { copy } from "../../copy";
 import { useGraph } from "../../graph/store";
 import type { GraphNode } from "../../graph/types";
 import { upstreamNode } from "../../graph/queries";
-import { onRunUpdate } from "../../runs/store";
 import type { Run } from "../../types/api";
 import type { ImageInputData } from "../image-input/types";
 import { createNode } from "../registry";
@@ -64,10 +63,8 @@ function addVersion(fusionId: string, run: Run): void {
 }
 
 /** Fusion reacts to its runs: Result node + versions on success, input highlighting on failure. */
-export function registerFusionRunHandler(): () => void {
-  return onRunUpdate((nodeId, run) => {
-    const node = useGraph.getState().nodes.find((n) => n.id === nodeId);
-    if (node?.type !== "fusion") return;
+export function handleFusionRun(nodeId: string, run: Run): void {
+  {
     if (run.status === "queued" || run.status === "running") {
       flagInput(nodeId, null, null);
       ensureResultNode(nodeId);
@@ -77,5 +74,5 @@ export function registerFusionRunHandler(): () => void {
       const msg = run.error?.code === "HUMAN_DETECTED" ? copy.nodes.imageInput.highlightHuman : copy.nodes.imageInput.highlight;
       flagInput(nodeId, run.failedInput, msg);
     }
-  });
+  }
 }

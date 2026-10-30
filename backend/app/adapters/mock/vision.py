@@ -17,7 +17,7 @@ from PIL import Image
 
 from app.adapters.base import current_fault
 from app.errors import ChimeraError
-from app.models.schemas import AnimalReading, ErrorCode, FusionPlan, PartDonors
+from app.models.schemas import AnimalReading, ErrorCode, FieldCard, FusionPlan, PartDonors
 
 # (hue degrees, common name, scientific name, body plan, visible parts)
 MOCK_SPECIES: list[tuple[int, str, str, str, list[str]]] = [
@@ -120,4 +120,32 @@ class MockVision:
                 f"and give it the {a_name}'s head and covering as the recognisable signature."
             ),
             name_suggestion=f"{a_name[:3].title()}{b_name[-4:].lower()}",
+        )
+
+    async def write_field_card(self, context: dict[str, Any]) -> FieldCard:
+        await self._delay(0.7)
+        fault = current_fault.get()
+        if fault == "timeout":
+            raise ChimeraError(ErrorCode.UPSTREAM_TIMEOUT)
+        if fault == "rate_limit":
+            raise ChimeraError(ErrorCode.RATE_LIMITED, retry_after_ms=4000)
+        if fault == "server_error":
+            raise ChimeraError(ErrorCode.UPSTREAM_ERROR)
+        parents = context["parents"]
+        donors = context["part_donors"]
+        head = parents[donors["head"]]
+        body = parents[donors["body"]]
+        genus = (head.get("scientific_name") or "Chimaera x").split()[0]
+        epithet = ((body.get("scientific_name") or "x ignota").split() + ["ignota"])[1]
+        habitats = sorted({h for p in parents.values() for h in p.get("habitat", [])})
+        return FieldCard(
+            common_name=context.get("name") or f"{head['common_name']} × {body['common_name']}",
+            binomial=f"{genus} {epithet[:4].lower()}oides",
+            habitat=(", ".join(habitats[:3]) + " (inherited from both parents)") if habitats else "Unknown: neither parent has habitat data.",
+            diet=body.get("diet") or head.get("diet") or "Unknown",
+            size="Unknown for the fusion itself; the parents' recorded ranges bound it.",
+            behaviour=(
+                f"Moves like a {body['common_name'].lower()} and hunts or forages with the senses of a "
+                f"{head['common_name'].lower()}. Mock card: written without a model."
+            ),
         )

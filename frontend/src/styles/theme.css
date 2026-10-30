@@ -1509,7 +1509,24 @@ p.image-node__banner { flex-direction: row; align-items: flex-start; }
 .version-switch__of { color: var(--text-faint); }
 .version-switch__single { font-family: var(--font-mono); font-size: var(--text-13); color: var(--text-faint); padding-left: var(--space-1); }
 
-/* 6g. Placeholders */
+/* 6g. Field card (F2) */
+.node--field-card { width: 340px; }
+.field-card { display: flex; flex-direction: column; gap: var(--space-2); padding: var(--space-3); border: var(--line-ink); border-radius: var(--radius-1); background: var(--folio-raised); }
+.field-card__plate { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border: var(--hairline); border-radius: var(--radius-1); }
+.field-card--skeleton .field-card__plate { display: block; position: relative; }
+.field-card__name { font-family: var(--font-serif); font-size: var(--text-20); font-weight: var(--weight-medium); line-height: var(--leading-tight); overflow-wrap: anywhere; }
+.field-card__binomial { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-2); font-size: var(--text-16); margin-top: calc(-1 * var(--space-1)); }
+.field-card__tag { font-family: var(--font-mono); font-size: var(--text-11); color: var(--lapis); }
+.field-card__rows { display: flex; flex-direction: column; }
+.field-card__row { display: grid; grid-template-columns: 72px 1fr; gap: var(--space-2); padding: var(--space-1) 0; border-top: var(--hairline); font-size: var(--text-12); }
+.field-card__row dt { font-family: var(--font-mono); font-size: var(--text-11); color: var(--text-muted); padding-top: 1px; }
+.field-card__row dd { overflow-wrap: anywhere; }
+.field-card__provenance { display: flex; align-items: flex-start; gap: var(--space-1); padding-top: var(--space-2); border-top: var(--line); font-size: var(--text-12); font-weight: var(--weight-medium); color: var(--moss); }
+.field-card__provenance .icon { margin-top: 2px; }
+.field-card__empty { font-size: var(--text-13); }
+.field-card__download { margin-left: auto; }
+
+/* 6h. Placeholders */
 .node--unsupported { width: var(--node-w-image); border-style: dashed; background: var(--bg); }
 .node--crashed { width: var(--node-w-image); border-color: var(--cinnabar); }
 .node--crashed .node__glyph { color: var(--cinnabar); }

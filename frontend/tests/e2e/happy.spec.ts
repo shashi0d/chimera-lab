@@ -82,3 +82,31 @@ test("F1 anatomy: pin parts, fuse, panel credits you", async ({ page }) => {
   await page.getByRole("button", { name: "Tail from Auto (model decides)" }).click();
   await expect(page.locator(".node--result .node__status")).toHaveText(/Outdated/);
 });
+
+test("F2 field card: make, write, download PNG, out of date after v2", async ({ page }) => {
+  await openApp(page);
+  await addImages(page, ["lion", "tiger"]);
+  await fuse(page);
+  await waitForResult(page);
+  await page.locator(".node--result").hover();
+  await page.getByRole("button", { name: "Make field card" }).click();
+  await page.getByRole("button", { name: "Write card" }).click();
+  const card = page.locator(".node--field-card");
+  await expect(card.locator(".field-card__binomial")).toContainText("Panthera", { timeout: 20_000 });
+  await expect(card).toContainText("Lion 126-272 kg");
+  await expect(card).toContainText("Generated fusion. Not a real animal.");
+  const download = page.waitForEvent("download");
+  await card.getByRole("button", { name: "Download PNG" }).click();
+  const file = await download;
+  expect(file.suggestedFilename()).toMatch(/-field-card\.png$/);
+  const path = await file.path();
+  const { readFileSync } = await import("node:fs");
+  const bytes = readFileSync(path);
+  expect(bytes.subarray(1, 4).toString()).toBe("PNG");
+  expect(bytes.readUInt32BE(16)).toBe(1600); // width from the IHDR chunk
+  await page.getByRole("button", { name: "Fuse again" }).click();
+  await waitForResult(page, 2);
+  await expect(card).toContainText("Written for v1; the Result now shows v2.");
+  await card.getByRole("button", { name: "Rewrite for v2" }).click();
+  await expect(card).not.toContainText("Written for v1", { timeout: 20_000 });
+});

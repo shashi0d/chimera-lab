@@ -18,7 +18,9 @@ export interface ResultData extends Record<string, unknown> {
 export type ResultConfig = Record<string, never>;
 
 export const RESULT_INPUTS = [{ id: "in", label: "", accepts: ["creature" as const] }];
+/** F2: a Result can feed downstream nodes (e.g. a Field card). */
+export const RESULT_OUTPUTS = [{ id: "out", emits: "creature" as const }];
 
 export function displayName(spec: CreatureSpec): string {
-  return spec.name?.trim() || spec.parents.map((p) => p.match?.commonName ?? p.reading.commonName ?? "?").join(" × ");
+  return spec.name?.trim() || (spec.parents ?? []).map((p) => p.match?.commonName ?? p.reading.commonName ?? "?").join(" × ");
 }

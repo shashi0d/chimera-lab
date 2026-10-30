@@ -16,7 +16,7 @@ import httpx
 
 from app.adapters.base import GeneratedImage
 from app.errors import ChimeraError
-from app.models.schemas import AnimalReading, ErrorCode, FusionPlan
+from app.models.schemas import AnimalReading, ErrorCode, FieldCard, FusionPlan
 
 # ------------------------------------------------------------- request builders
 
@@ -117,6 +117,33 @@ def build_generate_request(model: str, prompt: str, refs: list[bytes], aspect: s
     return body
 
 
+CARD_SCHEMA: dict[str, Any] = {
+    "type": "object",
+    "additionalProperties": False,
+    "required": ["common_name", "binomial", "habitat", "diet", "size", "behaviour"],
+    "properties": {k: {"type": "string"} for k in ["common_name", "binomial", "habitat", "diet", "size", "behaviour"]},
+}
+
+CARD_INSTRUCTIONS = (
+    "Write a natural-history field-guide entry for an INVENTED creature fused from two real animals. "
+    "Invent a Latinate binomial. Base habitat and diet only on the parents' data provided. For size, quote "
+    "the parents' recorded ranges exactly as given and do not compute averages or midpoints. Two sentences "
+    "of behaviour at most. Never claim the creature exists."
+)
+
+
+def build_card_request(model: str, context: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "model": model,
+        "messages": [
+            {"role": "system", "content": CARD_INSTRUCTIONS},
+            {"role": "user", "content": json.dumps(context, ensure_ascii=False)},
+        ],
+        "response_format": {"type": "json_schema", "json_schema": {"name": "field_card", "strict": True, "schema": CARD_SCHEMA}},
+        "temperature": 0.6,
+    }
+
+
 # ------------------------------------------------------------- response parsers
 
 
@@ -141,6 +168,10 @@ def parse_describe_response(payload: dict[str, Any]) -> AnimalReading:
 
 def parse_plan_response(payload: dict[str, Any]) -> FusionPlan:
     return FusionPlan.model_validate(_message_json(payload))
+
+
+def parse_card_response(payload: dict[str, Any]) -> FieldCard:
+    return FieldCard.model_validate(_message_json(payload))
 
 
 def parse_generate_response(payload: dict[str, Any], model: str) -> GeneratedImage:
@@ -216,6 +247,10 @@ class MetaVision:
     async def plan_fusion(self, context: dict[str, Any]) -> FusionPlan:
         payload = await self.http.post(CHAT_COMPLETIONS_PATH, build_plan_request(self.model_id, context))
         return parse_plan_response(payload)
+
+    async def write_field_card(self, context: dict[str, Any]) -> FieldCard:
+        payload = await self.http.post(CHAT_COMPLETIONS_PATH, build_card_request(self.model_id, context))
+        return parse_card_response(payload)
 
 
 class MetaImageGen:

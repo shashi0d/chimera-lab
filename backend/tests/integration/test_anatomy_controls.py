@@ -2,6 +2,7 @@
 
 import httpx
 import pytest
+
 from app.adapters.mock.image_gen import head_donor_index
 from app.main import create_app
 from tests.conftest import fusion_graph, make_settings, start_run, two_assets, wait_run

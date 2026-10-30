@@ -243,8 +243,15 @@ Process as in the original tasksheet (review → 3 to 5 candidates → score →
 - [x] F1-05 Panel donor attribution (you / model).
 - [x] F1-06 Visual QA round `f1` and baselines re-approved.
 - [x] F1-99 Round 1 closed out (ROUND-1.md "Outcome").
-- [ ] F2-00 ROUND-2.md.
-- [ ] F2-99 Round 2 closed out.
+- [x] F2-00 ROUND-2.md: review including F1, 4 candidates, scores, pick (Field-guide card), mini-spec.
+- [x] F2-01 Registry-level `onRunUpdate` dispatch (`registerRunHandlers`); Fusion handler moved into its definition (D-030).
+- [x] F2-02 Backend `FieldCardExecutor` (`load_creature → write_card → store_card`), `FieldCard` model, `RunResult.card`, mock + Meta `write_field_card`. Tests: `test_field_card.py`.
+- [x] F2-03 Server-written provenance; size quotes the parents' ranges verbatim.
+- [x] F2-04 `nodes/field-card/` view, validation, out-of-date detection, rewrite. Tests: `fieldCard.test.tsx`.
+- [x] F2-05 PNG export (client canvas, offline-capable). Tests: e2e download check.
+- [x] F2-06 Result node output port plus "Make field card" action.
+- [x] F2-07 Visual QA round `f2`; baselines verified.
+- [x] F2-99 Round 2 closed out (ROUND-2.md "Outcome").
 
 ### P7 Shashi (needs keys)
 

@@ -1,4 +1,5 @@
 import { defineNode } from "../types";
+import { handleFusionRun } from "./actions";
 import { FusionView } from "./NodeView";
 import { FUSION_INPUTS, FUSION_OUTPUTS } from "./ports";
 import { AUTO_DONORS, readDonors, type FusionConfig, type FusionData } from "./types";
@@ -18,6 +19,7 @@ export const fusionNode = defineNode<FusionConfig, FusionData>({
   validate: validateFusion,
   View: FusionView,
   runnable: true,
+  onRunUpdate: handleFusionRun,
   migrate: (oldConfig, oldData) => ({
     // v1 had no config; v2 starts every part on "auto" and sanitises anything odd.
     config: { donors: readDonors(oldConfig) },

@@ -13,7 +13,7 @@ from app.errors import ChimeraError
 from app.models.schemas import ErrorCode, Graph, GraphNode
 from app.pipeline.context import InputImage, RunContext
 from app.pipeline.steps import compile as compile_step
-from app.pipeline.steps import generate, hybrid_check, identify, load_inputs, match, rules_check, store
+from app.pipeline.steps import field_card, generate, hybrid_check, identify, load_inputs, match, rules_check, store
 
 StepFn = Callable[[RunContext], Awaitable[str | None]]
 
@@ -28,7 +28,7 @@ class StepDef:
 class Executor(Protocol):
     def resolve_inputs(self, graph: Graph, node: GraphNode) -> list[InputImage]: ...
 
-    def configure(self, node: GraphNode) -> dict[str, object]:
+    def configure(self, graph: Graph, node: GraphNode) -> dict[str, object]:
         """Validated node config, copied into the run's state before step 1."""
         ...
 
@@ -48,7 +48,7 @@ PARTS = ("head", "body", "limbs", "covering", "tail")
 class FusionExecutor:
     PORTS = ("a", "b")
 
-    def configure(self, node: GraphNode) -> dict[str, object]:
+    def configure(self, graph: Graph, node: GraphNode) -> dict[str, object]:
         donors = node.config.get("donors") or {}
         if not isinstance(donors, dict):
             raise ChimeraError(ErrorCode.GRAPH_INVALID, "The Fusion node's anatomy settings are not valid.")
@@ -90,4 +90,33 @@ class FusionExecutor:
         ]
 
 
-EXECUTORS: dict[str, Executor] = {"fusion": FusionExecutor()}
+class FieldCardExecutor:
+    """F2: writes a field-guide card for the upstream Result's selected version."""
+
+    def resolve_inputs(self, graph: Graph, node: GraphNode) -> list[InputImage]:
+        self.configure(graph, node)
+        return []
+
+    def configure(self, graph: Graph, node: GraphNode) -> dict[str, object]:
+        src = upstream(graph, node.id, "in")
+        if src is None or src.type != "result":
+            raise ChimeraError(ErrorCode.GRAPH_INVALID, "Connect a Result to write its card.")
+        versions = src.data.get("versions") or []
+        if not isinstance(versions, list) or not versions:
+            raise ChimeraError(ErrorCode.GRAPH_INVALID, "Fuse first; the card describes a finished creature.")
+        selected = src.data.get("selected", len(versions) - 1)
+        idx = selected if isinstance(selected, int) and 0 <= selected < len(versions) else len(versions) - 1
+        creature_id = (versions[idx] or {}).get("creatureId") if isinstance(versions[idx], dict) else None
+        if not creature_id:
+            raise ChimeraError(ErrorCode.GRAPH_INVALID, "This Result has no saved creature yet.")
+        return {"creature_id": str(creature_id)}
+
+    def steps(self) -> list[StepDef]:
+        return [
+            StepDef("load_creature", "Load creature", field_card.load_creature),
+            StepDef("write_card", "Write field notes", field_card.write_card),
+            StepDef("store_card", "Save card", field_card.store_card),
+        ]
+
+
+EXECUTORS: dict[str, Executor] = {"fusion": FusionExecutor(), "field-card": FieldCardExecutor()}

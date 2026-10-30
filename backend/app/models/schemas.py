@@ -206,11 +206,24 @@ class Step(ApiModel):
     detail: str | None = None
 
 
+class FieldCard(ApiModel):
+    """F2: field-guide card text. `provenance` is always written by the server, never the model."""
+
+    common_name: str
+    binomial: str
+    habitat: str
+    diet: str
+    size: str
+    behaviour: str
+    provenance: str = ""
+
+
 class RunResult(ApiModel):
     asset_id: str
     creature_id: str
     image_url: str
     spec: CreatureSpec
+    card: FieldCard | None = None
 
 
 class Run(ApiModel):
@@ -253,4 +266,5 @@ EXPORTED_MODELS: list[type[BaseModel]] = [
     CreatureSpec,
     Run,
     StartRunRequest,
+    FieldCard,
 ]

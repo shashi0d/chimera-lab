@@ -6,7 +6,7 @@ import contextvars
 from dataclasses import dataclass
 from typing import Any, Protocol
 
-from app.models.schemas import AnimalReading, FusionPlan
+from app.models.schemas import AnimalReading, FieldCard, FusionPlan
 
 MOCK_FAULTS = {
     "timeout",
@@ -39,6 +39,8 @@ class VisionAdapter(Protocol):
     async def describe_animal(self, image: bytes, slot: str) -> AnimalReading: ...
 
     async def plan_fusion(self, context: dict[str, Any]) -> FusionPlan: ...
+
+    async def write_field_card(self, context: dict[str, Any]) -> FieldCard: ...
 
 
 class ImageGenAdapter(Protocol):
