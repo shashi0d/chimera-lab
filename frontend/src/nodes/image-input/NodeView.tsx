@@ -80,58 +80,54 @@ export function ImageInputView({ node, selected, catalog }: NodeViewProps<ImageI
         {d.upload.status === "uploading" ? (
           <div className="upload-progress">
             <progress className="upload-progress__bar" max={100} value={pct} aria-label={t.uploading(pct)} />
-            <span className="upload-progress__label" aria-hidden="true">
-              {t.uploading(pct)}
+            <span className="upload-progress__row">
+              <span className="upload-progress__label" aria-hidden="true">
+                {t.uploading(pct)}
+              </span>
+              <button type="button" className="link-btn nodrag" onClick={() => cancelUpload(node.id)}>
+                {t.cancel}
+              </button>
             </span>
           </div>
         ) : null}
-      </div>
-      {flagged ? (
-        <p className="node__note node__note--error">
-          <Icon name="alert" size={14} /> {d.flagged}
-        </p>
-      ) : null}
-      {d.upload.status === "queued" ? (
-        <p className="node__note node__note--warn">
-          <Icon name="offline" size={14} /> {t.queued}
-        </p>
-      ) : null}
-      {d.upload.status === "uploading" ? (
-        <Button size="sm" variant="ghost" icon="stop" className="nodrag" onClick={() => cancelUpload(node.id)}>
-          {t.cancel}
-        </Button>
-      ) : null}
-      {d.upload.status === "error" && err ? (
-        <div className="node__error" role="alert">
-          <p className="node__error-title">{err.title}</p>
-          {err.fix ? <p className="node__error-fix">{err.fix}</p> : null}
-          <div className="node__actions">
-            {err.retry ? (
-              <Button size="sm" icon="refresh" className="nodrag" onClick={() => void startUpload(node.id)}>
+        {flagged ? (
+          <p className="image-node__banner image-node__banner--error">
+            <Icon name="alert" size={14} /> {d.flagged}
+          </p>
+        ) : d.upload.status === "queued" ? (
+          <p className="image-node__banner image-node__banner--warn">
+            <Icon name="offline" size={14} /> {t.queued}
+          </p>
+        ) : d.upload.status === "error" && err ? (
+          <div className="image-node__banner image-node__banner--error" role="alert">
+            <p className="node__error-title">{err.title}</p>
+            {err.fix ? <p className="node__error-fix">{err.fix}</p> : null}
+            <div className="node__actions">
+              {err.retry ? (
+                <Button size="sm" icon="refresh" className="nodrag" onClick={() => void startUpload(node.id)}>
+                  {t.retry}
+                </Button>
+              ) : null}
+              <Button size="sm" variant="ghost" icon="replace" className="nodrag" onClick={replace}>
+                {t.replace}
+              </Button>
+            </div>
+          </div>
+        ) : d.upload.status === "cancelled" ? (
+          <div className="image-node__banner">
+            <p className="node__error-fix">{t.cancelled}</p>
+            <div className="node__actions">
+              <Button size="sm" icon="upload" className="nodrag" onClick={() => void startUpload(node.id)}>
                 {t.retry}
               </Button>
-            ) : null}
-            <Button size="sm" variant="ghost" icon="replace" className="nodrag" onClick={replace}>
-              {t.replace}
-            </Button>
+              <Button size="sm" variant="ghost" icon="trash" className="nodrag" onClick={() => removeNodes([node.id])}>
+                {t.remove}
+              </Button>
+            </div>
           </div>
-        </div>
-      ) : null}
-      {d.upload.status === "cancelled" ? (
-        <div className="node__actions">
-          <Button size="sm" icon="upload" className="nodrag" onClick={() => void startUpload(node.id)}>
-            {t.retry}
-          </Button>
-          <Button size="sm" variant="ghost" icon="trash" className="nodrag" onClick={() => removeNodes([node.id])}>
-            {t.remove}
-          </Button>
-        </div>
-      ) : null}
-      {d.upload.status === "done" && d.width ? (
-        <p className="image-node__meta">
-          {d.width} × {d.height}
-        </p>
-      ) : null}
+        ) : null}
+      </div>
+      <p className="image-node__meta">{d.width && d.height ? `${d.width} × ${d.height}` : "\u00a0"}</p>
     </NodeCard>
   );
 }

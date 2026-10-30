@@ -5,6 +5,7 @@ import { useGraph } from "../graph/store";
 import { createNode, nodeRegistry } from "../nodes/registry";
 import { IconButton } from "../ui/Button";
 import { useUi } from "../ui/uiStore";
+import { findFreeSpot, FOOTPRINT } from "./addImages";
 import { pickImages } from "./filePicker";
 
 const t = copy.toolbar;
@@ -32,7 +33,8 @@ export function ToolRail({ onAddFiles }: { onAddFiles: (files: File[]) => void }
 
   const addNodeOfType = (type: string) => {
     const center = flow.screenToFlowPosition({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
-    const node = createNode(type, { x: center.x - 140, y: center.y - 120 });
+    const size = FOOTPRINT[type] ?? { w: 300, h: 320 };
+    const node = createNode(type, findFreeSpot({ x: center.x - size.w / 2, y: center.y - 160 }, size.w, size.h));
     useGraph.getState().addNode(node, { select: true });
   };
 

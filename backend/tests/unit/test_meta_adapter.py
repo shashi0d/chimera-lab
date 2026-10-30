@@ -5,7 +5,6 @@ import json
 
 import httpx
 import pytest
-
 from app.adapters.meta import client as meta
 from app.errors import ChimeraError
 from app.models.schemas import ErrorCode

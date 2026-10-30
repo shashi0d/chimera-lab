@@ -12,7 +12,7 @@ import asyncio
 import hashlib
 import io
 
-from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont, ImageOps
+from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageOps
 
 from app.adapters.base import GeneratedImage, current_fault
 from app.errors import ChimeraError
@@ -40,7 +40,7 @@ def _blob_mask(size: int, seed: int) -> Image.Image:
 
 def render_plate(prompt: str, refs: list[bytes]) -> bytes:
     seed = int(hashlib.sha256(b"".join(hashlib.sha256(r).digest() for r in refs)).hexdigest()[:8], 16)
-    inner = SIZE - 128
+    inner = SIZE
     a = _square(refs[0], inner)
     b = _square(refs[1] if len(refs) > 1 else refs[0], inner)
     body = ImageOps.autocontrast(b, cutoff=1)
@@ -49,15 +49,8 @@ def render_plate(prompt: str, refs: list[bytes]) -> bytes:
     # Shared tone so the two halves read as one animal.
     toned = ImageChops.blend(fused, ImageOps.colorize(ImageOps.grayscale(fused), INK, PAPER), 0.28)
 
-    plate = Image.new("RGB", (SIZE, SIZE), PAPER)
-    plate.paste(toned, (64, 40))
-    d = ImageDraw.Draw(plate)
-    d.rectangle([63, 39, 64 + inner, 40 + inner], outline=INK, width=2)
-    try:
-        font = ImageFont.load_default(size=22)
-    except TypeError:  # very old Pillow
-        font = ImageFont.load_default()
-    d.text((64, SIZE - 70), f"GENERATED FUSION  ·  MOCK  ·  PLATE {seed % 1000:03d}", fill=INK, font=font)
+    # Full-bleed: the UI supplies the plate frame and the "Generated fusion" caption (PV1-08).
+    plate = toned.resize((SIZE, SIZE), Image.Resampling.LANCZOS)
     out = io.BytesIO()
     plate.save(out, "JPEG", quality=90)
     return out.getvalue()

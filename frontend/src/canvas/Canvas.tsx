@@ -25,7 +25,7 @@ import { useRuns } from "../runs/store";
 import { TERMINAL } from "../runs/transport";
 import { toast } from "../ui/toastStore";
 import { useUi } from "../ui/uiStore";
-import { addImageFiles } from "./addImages";
+import { addImageFiles, FOOTPRINT } from "./addImages";
 import { EmptyState } from "./EmptyState";
 import { NodeErrorBoundary } from "./NodeErrorBoundary";
 import { ToolRail } from "./ToolRail";
@@ -267,6 +267,30 @@ export function Canvas() {
     return () => document.removeEventListener("paste", onPaste);
   }, [addFiles]);
 
+  // ---------------------------------------------------------------- keep new nodes in view
+
+  const knownIds = useRef<Set<string> | null>(null);
+  useEffect(() => {
+    const ids = new Set(nodes.map((n) => n.id));
+    const prev = knownIds.current;
+    knownIds.current = ids;
+    if (!prev || prev.size === 0) return; // first load / empty canvas is handled by fitView
+    const added = nodes.filter((n) => !prev.has(n.id));
+    if (!added.length) return;
+    const rect = wrapper.current?.getBoundingClientRect();
+    if (!rect) return;
+    const panelW = document.querySelector(".side-panel")?.getBoundingClientRect().width ?? 0;
+    const offscreen = added.some((n) => {
+      const p = flow.flowToScreenPosition(n.position);
+      const size = measured[n.id] ?? { width: FOOTPRINT[n.type]?.w ?? 300, height: FOOTPRINT[n.type]?.h ?? 300 };
+      const z = flow.getZoom();
+      return p.x < rect.left || p.y < rect.top || p.x + size.width * z > rect.right - panelW || p.y + size.height * z > rect.bottom;
+    });
+    // Zoom out only as far as needed; never zoom in on the user.
+    // Wait a beat so React Flow has measured the new nodes before fitting.
+    if (offscreen) window.setTimeout(() => void flow.fitView({ padding: 0.15, maxZoom: flow.getZoom(), duration: 300 }), 120);
+  }, [nodes, flow, measured]);
+
   // ---------------------------------------------------------------- keyboard shortcuts
 
   useEffect(() => {
@@ -328,7 +352,7 @@ export function Canvas() {
       </ReactFlow>
       <ToolRail onAddFiles={(files) => void addFiles(files)} />
       <ZoomControls />
-      {nodes.length === 0 ? <EmptyState onAddFiles={(files) => void addFiles(files)} /> : null}
+      {nodes.length === 0 && !dragging ? <EmptyState onAddFiles={(files) => void addFiles(files)} /> : null}
       {dragging ? (
         <div className="drop-overlay" aria-hidden="true">
           <p className="drop-overlay__label">{copy.empty.dropHere}</p>

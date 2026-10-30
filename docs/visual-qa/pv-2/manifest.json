@@ -1,0 +1,371 @@
+{
+  "round": "pv-2",
+  "captured": 52,
+  "failures": [],
+  "shots": [
+    {
+      "file": "docs/visual-qa/pv-2/1280x800/light/01-empty-canvas.png",
+      "state": "01-empty-canvas",
+      "shows": "Empty canvas with drop invitation",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1280x800/light/03-one-image.png",
+      "state": "03-one-image",
+      "shows": "One image, auto-added Fusion node with input A connected",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1280x800/light/05-two-unconnected.png",
+      "state": "05-two-unconnected",
+      "shows": "Two images, Fusion inputs empty (Fuse disabled with hint)",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1280x800/light/06-two-connected.png",
+      "state": "06-two-connected",
+      "shows": "Two images connected, ready to fuse",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1280x800/light/16-running-generate.png",
+      "state": "16-running-generate",
+      "shows": "Fusion running, current step: generate",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1280x800/light/20-success-real-hybrid.png",
+      "state": "20-success-real-hybrid",
+      "shows": "Success with real-hybrid badge (lion + tiger)",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1280x800/light/21-success-warnings.png",
+      "state": "21-success-warnings",
+      "shows": "Success with rule warnings (octopus + macaw)",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1280x800/light/23-panel-open.png",
+      "state": "23-panel-open",
+      "shows": "How this was made panel (top)",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1280x800/light/40-offline-banner.png",
+      "state": "40-offline-banner",
+      "shows": "Offline banner; Fuse disabled",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1280x800/light/42-server-unreachable.png",
+      "state": "42-server-unreachable",
+      "shows": "Server unreachable banner (distinct from offline)",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1280x800/light/50-node-crash.png",
+      "state": "50-node-crash",
+      "shows": "One node failed to render; canvas still usable",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1280x800/light/51-app-crash.png",
+      "state": "51-app-crash",
+      "shows": "App-level error screen",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1280x800/light/60-fit-view-many-nodes.png",
+      "state": "60-fit-view-many-nodes",
+      "shows": "Fit view with 7 nodes (two fusions)",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1280x800/dark/01-empty-canvas.png",
+      "state": "01-empty-canvas",
+      "shows": "Empty canvas with drop invitation",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1280x800/dark/03-one-image.png",
+      "state": "03-one-image",
+      "shows": "One image, auto-added Fusion node with input A connected",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1280x800/dark/05-two-unconnected.png",
+      "state": "05-two-unconnected",
+      "shows": "Two images, Fusion inputs empty (Fuse disabled with hint)",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1280x800/dark/06-two-connected.png",
+      "state": "06-two-connected",
+      "shows": "Two images connected, ready to fuse",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1280x800/dark/16-running-generate.png",
+      "state": "16-running-generate",
+      "shows": "Fusion running, current step: generate",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1280x800/dark/20-success-real-hybrid.png",
+      "state": "20-success-real-hybrid",
+      "shows": "Success with real-hybrid badge (lion + tiger)",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1280x800/dark/21-success-warnings.png",
+      "state": "21-success-warnings",
+      "shows": "Success with rule warnings (octopus + macaw)",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1280x800/dark/23-panel-open.png",
+      "state": "23-panel-open",
+      "shows": "How this was made panel (top)",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1280x800/dark/40-offline-banner.png",
+      "state": "40-offline-banner",
+      "shows": "Offline banner; Fuse disabled",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1280x800/dark/42-server-unreachable.png",
+      "state": "42-server-unreachable",
+      "shows": "Server unreachable banner (distinct from offline)",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1280x800/dark/50-node-crash.png",
+      "state": "50-node-crash",
+      "shows": "One node failed to render; canvas still usable",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1280x800/dark/51-app-crash.png",
+      "state": "51-app-crash",
+      "shows": "App-level error screen",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1280x800/dark/60-fit-view-many-nodes.png",
+      "state": "60-fit-view-many-nodes",
+      "shows": "Fit view with 7 nodes (two fusions)",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1024x768/light/01-empty-canvas.png",
+      "state": "01-empty-canvas",
+      "shows": "Empty canvas with drop invitation",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1024x768/light/03-one-image.png",
+      "state": "03-one-image",
+      "shows": "One image, auto-added Fusion node with input A connected",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1024x768/light/05-two-unconnected.png",
+      "state": "05-two-unconnected",
+      "shows": "Two images, Fusion inputs empty (Fuse disabled with hint)",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1024x768/light/06-two-connected.png",
+      "state": "06-two-connected",
+      "shows": "Two images connected, ready to fuse",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1024x768/light/16-running-generate.png",
+      "state": "16-running-generate",
+      "shows": "Fusion running, current step: generate",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1024x768/light/20-success-real-hybrid.png",
+      "state": "20-success-real-hybrid",
+      "shows": "Success with real-hybrid badge (lion + tiger)",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1024x768/light/21-success-warnings.png",
+      "state": "21-success-warnings",
+      "shows": "Success with rule warnings (octopus + macaw)",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1024x768/light/23-panel-open.png",
+      "state": "23-panel-open",
+      "shows": "How this was made panel (top)",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1024x768/light/40-offline-banner.png",
+      "state": "40-offline-banner",
+      "shows": "Offline banner; Fuse disabled",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1024x768/light/42-server-unreachable.png",
+      "state": "42-server-unreachable",
+      "shows": "Server unreachable banner (distinct from offline)",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1024x768/light/50-node-crash.png",
+      "state": "50-node-crash",
+      "shows": "One node failed to render; canvas still usable",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1024x768/light/51-app-crash.png",
+      "state": "51-app-crash",
+      "shows": "App-level error screen",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1024x768/light/60-fit-view-many-nodes.png",
+      "state": "60-fit-view-many-nodes",
+      "shows": "Fit view with 7 nodes (two fusions)",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1024x768/dark/01-empty-canvas.png",
+      "state": "01-empty-canvas",
+      "shows": "Empty canvas with drop invitation",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1024x768/dark/03-one-image.png",
+      "state": "03-one-image",
+      "shows": "One image, auto-added Fusion node with input A connected",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1024x768/dark/05-two-unconnected.png",
+      "state": "05-two-unconnected",
+      "shows": "Two images, Fusion inputs empty (Fuse disabled with hint)",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1024x768/dark/06-two-connected.png",
+      "state": "06-two-connected",
+      "shows": "Two images connected, ready to fuse",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1024x768/dark/16-running-generate.png",
+      "state": "16-running-generate",
+      "shows": "Fusion running, current step: generate",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1024x768/dark/20-success-real-hybrid.png",
+      "state": "20-success-real-hybrid",
+      "shows": "Success with real-hybrid badge (lion + tiger)",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1024x768/dark/21-success-warnings.png",
+      "state": "21-success-warnings",
+      "shows": "Success with rule warnings (octopus + macaw)",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1024x768/dark/23-panel-open.png",
+      "state": "23-panel-open",
+      "shows": "How this was made panel (top)",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1024x768/dark/40-offline-banner.png",
+      "state": "40-offline-banner",
+      "shows": "Offline banner; Fuse disabled",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1024x768/dark/42-server-unreachable.png",
+      "state": "42-server-unreachable",
+      "shows": "Server unreachable banner (distinct from offline)",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1024x768/dark/50-node-crash.png",
+      "state": "50-node-crash",
+      "shows": "One node failed to render; canvas still usable",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1024x768/dark/51-app-crash.png",
+      "state": "51-app-crash",
+      "shows": "App-level error screen",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-2/1024x768/dark/60-fit-view-many-nodes.png",
+      "state": "60-fit-view-many-nodes",
+      "shows": "Fit view with 7 nodes (two fusions)",
+      "viewport": "1024x768",
+      "theme": "dark"
+    }
+  ]
+}

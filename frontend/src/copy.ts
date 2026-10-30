@@ -100,6 +100,8 @@ export const copy = {
       retryIn: (s: number) => `Retrying in ${s}s`,
       stepCount: (done: number, total: number) => `${done} of ${total}`,
       moreSteps: (n: number) => `${n} more`,
+      summary: (n: number, time: string) => `${n} steps · ${time}`,
+      showSteps: "Show steps",
     },
     result: {
       label: "Result",
@@ -118,6 +120,7 @@ export const copy = {
       reloadImage: "Reload image",
       generating: "Generating…",
       waiting: "The result appears here after you fuse.",
+      noImageYet: "No image yet. The Fusion node explains what happened.",
     },
   },
   panel: {

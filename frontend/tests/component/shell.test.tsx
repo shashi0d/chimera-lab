@@ -1,3 +1,4 @@
+import { ReactFlowProvider } from "@xyflow/react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -103,7 +104,11 @@ describe("How this was made panel (TASKSHEET 7.4)", () => {
       }),
     ]);
     useUi.getState().openPanel("r");
-    render(<SidePanel />);
+    render(
+      <ReactFlowProvider>
+        <SidePanel />
+      </ReactFlowProvider>,
+    );
     expect(screen.getByRole("heading", { name: "How this was made" })).toBeInTheDocument();
     expect(screen.getByText("Panthera leo", { selector: "i" })).toBeInTheDocument();
     expect(screen.getByText(/Not in field data/)).toBeInTheDocument();

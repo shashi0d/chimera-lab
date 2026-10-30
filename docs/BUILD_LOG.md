@@ -53,3 +53,10 @@ Short entries per phase: what was built, what was tested, what was deferred. New
 ## 2026-10-30: PV round pv-1
 
 - Captured 56 states at 1440 in both themes, plus core states at 1280 and 1024 (`docs/visual-qa/pv-1`). Reviewed every image in contact sheets; defects are in `docs/visual-qa/DEFECTS.md`.
+
+## 2026-10-30: PV rounds pv-2, pv-3 (PV complete)
+
+- **pv-2:** full matrix after fixing PV1-01 to PV1-11. New findings: PV2-01 (reveal check underestimated height), PV2-02 (images not wired to an empty Fusion node, D-024).
+- **pv-3:** affected states plus a 10-state regression sample. No blockers or majors open; lowest rubric score is 4 on every criterion.
+- **Baselines:** 4 Playwright baselines saved (empty canvas, result + panel, both themes).
+- **Tests:** full e2e 37/37, vitest 135/135, pytest 75/75.

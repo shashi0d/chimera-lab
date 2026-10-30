@@ -72,3 +72,12 @@ axe flagged the fine print at the old value (3.9:1). Faint text is used for cata
 
 **D-023 Screenshot matrix: full states at 1440 (both themes), core states at 1280 and 1024.**
 See UI_STANDARD.md. Layout assertions still run the full flow at all three widths.
+
+**D-024 New images are wired into a Fusion node with free inputs.**
+Found in PV round pv-2 (PV2-02). After "Add fusion node", adding images left them unwired and placed to the right of the node. Images now go into the selected Fusion node with a free input, or the only one, and are placed to its left. With several candidates and none selected, nothing is auto-wired.
+
+**D-025 After success, the Fusion node shows a summary instead of the step log.**
+PV1-04: the step log outweighed the creature. On success the Fusion node shows thumbnail, name, step count and duration, and "Generated fusion", with steps behind a "Show steps" disclosure. While running, only the latest finished step shows its detail. This also delivers 7.4's "image in the Fusion node".
+
+**D-026 Screenshots are quantized to 256-color PNGs.**
+Each round is about 18MB raw, about 6MB quantized (`scripts/shrink_shots.py`). Visual baselines stay full-color.

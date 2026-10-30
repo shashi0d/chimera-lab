@@ -7,7 +7,7 @@ import type { Run } from "../../types/api";
 import type { ImageInputData } from "../image-input/types";
 import { createNode } from "../registry";
 import type { ResultData, ResultVersion } from "../result/types";
-import { LAYOUT } from "../../canvas/addImages";
+import { findFreeSpot, FOOTPRINT, LAYOUT } from "../../canvas/addImages";
 
 function resultNodeFor(fusionId: string): GraphNode | undefined {
   const g = useGraph.getState();
@@ -22,7 +22,8 @@ export function ensureResultNode(fusionId: string): string {
   if (existing) return existing.id;
   const g = useGraph.getState();
   const fusion = g.nodes.find((n) => n.id === fusionId);
-  const pos = fusion ? { x: fusion.position.x + LAYOUT.resultDx, y: fusion.position.y - 20 } : { x: 0, y: 0 };
+  const want = fusion ? { x: fusion.position.x + LAYOUT.resultDx, y: fusion.position.y - 20 } : { x: 0, y: 0 };
+  const pos = findFreeSpot(want, FOOTPRINT.result!.w, FOOTPRINT.result!.h);
   const result = createNode("result", pos);
   g.addNodes([result], [{ id: `e-${result.id}`, source: fusionId, sourcePort: "out", target: result.id, targetPort: "in" }]);
   return result.id;

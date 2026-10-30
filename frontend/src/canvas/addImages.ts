@@ -14,7 +14,7 @@ export const MAX_IMAGES_PER_DROP = 2;
 export const LAYOUT = { imageGapY: 300, fusionDx: 320, resultDx: 360 };
 
 /** Approximate footprints, used only to avoid dropping new nodes on top of old ones. */
-const FOOTPRINT: Record<string, { w: number; h: number }> = {
+export const FOOTPRINT: Record<string, { w: number; h: number }> = {
   "image-input": { w: 236, h: 280 },
   fusion: { w: 300, h: 320 },
   result: { w: 304, h: 500 },
@@ -35,8 +35,8 @@ export function findFreeSpot(at: Position, w: number, h: number): Position {
       return overlaps(p, w, h, n.position, f.w, f.h);
     });
   for (let ring = 0; ring < 12; ring++) {
-    for (const [dx, dy] of [[0, 1], [1, 0], [1, 1], [-1, 1], [0, -1]] as const) {
-      const p = { x: at.x + dx * ring * 140, y: at.y + dy * ring * 160 };
+    for (const [dx, dy] of [[1, 0], [0, 1], [1, 1]] as const) {
+      const p = { x: at.x + dx * ring * 160, y: at.y + dy * ring * 160 };
       if (!hits(p)) return p;
     }
   }
@@ -48,10 +48,26 @@ function sanitizeName(name: string): string {
 }
 
 /**
+ * The Fusion node new images should feed: the selected one if it has a free
+ * input, otherwise the only Fusion node with free inputs. Null if ambiguous.
+ */
+function fusionWithFreeSlots(): { node: GraphNode; free: string[] } | null {
+  const g = useGraph.getState();
+  const candidates = g.nodes
+    .filter((n) => n.type === "fusion")
+    .map((node) => ({ node, free: ["a", "b"].filter((p) => !g.edges.some((e) => e.target === node.id && e.targetPort === p)) }))
+    .filter((c) => c.free.length > 0);
+  const selected = candidates.find((c) => g.selection.includes(c.node.id));
+  if (selected) return selected;
+  return candidates.length === 1 ? candidates[0]! : null;
+}
+
+/**
  * Entry point for drop, paste and the file picker (TASKSHEET 7.1).
  * Validates and prepares each file client-side, creates one node per good file,
  * stores the local copy, and starts the upload. On a canvas with no Fusion node,
- * it also adds one and connects the new images to it (DECISIONS D-012).
+ * it also adds one and connects the new images to it; with a Fusion node that has
+ * free inputs, the new images are wired into it (DECISIONS D-012, D-024).
  */
 export async function addImageFiles(files: File[], at: Position): Promise<string[]> {
   const graph = useGraph.getState();
@@ -71,7 +87,13 @@ export async function addImageFiles(files: File[], at: Position): Promise<string
   }
   if (!prepared.length) return [];
 
-  const hasFusion = useGraph.getState().nodes.some((n) => n.type === "fusion");
+  const g = useGraph.getState();
+  const target = fusionWithFreeSlots();
+  const hasFusion = g.nodes.some((n) => n.type === "fusion");
+  if (target) {
+    // Sit the new images to the left of the Fusion node they feed.
+    at = { x: target.node.position.x - LAYOUT.fusionDx, y: target.node.position.y - 20 };
+  }
   const blockW = hasFusion ? FOOTPRINT["image-input"]!.w : LAYOUT.fusionDx + FOOTPRINT.fusion!.w;
   const blockH = (prepared.length - 1) * LAYOUT.imageGapY + FOOTPRINT["image-input"]!.h;
   at = findFreeSpot(at, blockW, blockH);
@@ -91,13 +113,19 @@ export async function addImageFiles(files: File[], at: Position): Promise<string
     nodes.push(createNode("image-input", { x: at.x, y: at.y + i * LAYOUT.imageGapY }, data));
   }
 
-  if (!hasFusion) {
+  const connect = (fusionId: string, ports: string[]) =>
+    nodes
+      .slice(0, ports.length)
+      .forEach((img, i) => edges.push({ id: `e-${uuid().slice(0, 8)}`, source: img.id, sourcePort: "out", target: fusionId, targetPort: ports[i]! }));
+
+  if (target) {
+    connect(target.node.id, target.free);
+    toast.info(target.free.length - Math.min(nodes.length, target.free.length) === 0 ? copy.graph.autoConnectedBoth : copy.graph.autoConnected);
+  } else if (!hasFusion) {
     const midY = at.y + ((nodes.length - 1) * LAYOUT.imageGapY) / 2 + (nodes.length === 1 ? 60 : 0);
     const fusion = createNode("fusion", { x: at.x + LAYOUT.fusionDx, y: midY - 40 });
+    connect(fusion.id, ["a", "b"]);
     nodes.push(fusion);
-    nodes
-      .filter((n) => n.type === "image-input")
-      .forEach((img, i) => edges.push({ id: `e-${uuid().slice(0, 8)}`, source: img.id, sourcePort: "out", target: fusion.id, targetPort: i === 0 ? "a" : "b" }));
     toast.info(edges.length === 2 ? copy.graph.autoConnectedBoth : copy.graph.autoConnected);
   }
   useGraph.getState().addNodes(nodes, edges);

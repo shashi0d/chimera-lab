@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { AppError } from "../../api/errors";
+import { absoluteUrl } from "../../api/client";
 import { presentError } from "../../api/errorMessages";
 import { NodeCard, type NodeStatus } from "../../canvas/NodeCard";
 import { formatElapsed, formatSeconds, useNow } from "../../canvas/useNow";
@@ -14,6 +15,7 @@ import { Button } from "../../ui/Button";
 import { Icon, type IconName } from "../../ui/Icon";
 import type { ImageInputData } from "../image-input/types";
 import { usePreview } from "../image-input/usePreview";
+import { displayName } from "../result/types";
 import type { NodeViewProps } from "../types";
 import { FUSION_INPUTS, FUSION_OUTPUTS } from "./ports";
 import type { FusionConfig, FusionData } from "./types";
@@ -49,11 +51,13 @@ const STEP_ICON: Record<Step["status"], IconName | null> = {
   skipped: "minus",
 };
 
-function StepList({ steps, now }: { steps: Step[]; now: number }) {
+function StepList({ steps, now, allDetails = false }: { steps: Step[]; now: number; allDetails?: boolean }) {
   const done = steps.filter((s) => s.status === "succeeded").length;
+  // While running, only the latest finished step explains itself; failures always do.
+  const lastDone = [...steps].reverse().find((s) => s.status === "succeeded")?.key;
   return (
     <div className="steps">
-      <p className="steps__count">{t.stepCount(done, steps.length)}</p>
+      {allDetails ? null : <p className="steps__count">{t.stepCount(done, steps.length)}</p>}
       <ol className="steps__list">
         {steps.map((s) => {
           const started = s.startedAt ? Date.parse(s.startedAt) : null;
@@ -70,11 +74,46 @@ function StepList({ steps, now }: { steps: Step[]; now: number }) {
                 <span className="sr-only">: {copy.steps[s.status]}</span>
               </span>
               <span className="step__time">{ms !== null && s.status !== "skipped" ? formatSeconds(ms) : ""}</span>
-              {s.detail && (s.status === "succeeded" || s.status === "failed") ? <span className="step__detail">{s.detail}</span> : null}
+              {s.detail && (s.status === "failed" || (s.status === "succeeded" && (allDetails || s.key === lastDone))) ? (
+                <span className="step__detail">{s.detail}</span>
+              ) : null}
             </li>
           );
         })}
       </ol>
+    </div>
+  );
+}
+
+function totalMs(steps: Step[]): number {
+  const starts = steps.map((s) => (s.startedAt ? Date.parse(s.startedAt) : NaN)).filter(Number.isFinite);
+  const ends = steps.map((s) => (s.endedAt ? Date.parse(s.endedAt) : NaN)).filter(Number.isFinite);
+  return starts.length && ends.length ? Math.max(...ends) - Math.min(...starts) : 0;
+}
+
+/** After success the creature leads; the step log folds away (PV1-04). */
+function RunSummary({ run, now }: { run: Run; now: number }) {
+  if (!run.result) return null;
+  const spec = run.result.spec;
+  const name = displayName(spec);
+  return (
+    <div className="fusion-node__summary">
+      <div className="fusion-node__result">
+        <img className="fusion-node__thumb" src={absoluteUrl(run.result.imageUrl)} alt={copy.nodes.result.alt(name)} draggable={false} />
+        <div className="fusion-node__result-text">
+          <p className="fusion-node__name">{name}</p>
+          <p className="fusion-node__meta">
+            {t.summary(run.steps.length, formatSeconds(totalMs(run.steps)))}
+          </p>
+          <p className="fusion-node__generated">
+            <Icon name="leaf" size={12} /> {copy.nodes.result.generated}
+          </p>
+        </div>
+      </div>
+      <details className="steps-details">
+        <summary className="steps-details__summary nodrag">{t.showSteps}</summary>
+        <StepList steps={run.steps} now={now} allDetails />
+      </details>
     </div>
   );
 }
@@ -263,7 +302,7 @@ export function FusionView({ node, selected, issues, catalog }: NodeViewProps<Fu
         <InputSlot fusionId={node.id} port="a" readOnly={readOnly || active} />
         <InputSlot fusionId={node.id} port="b" readOnly={readOnly || active} />
       </div>
-      {run ? <StepList steps={run.steps} now={now} /> : null}
+      {run ? run.status === "succeeded" && !active ? <RunSummary run={run} now={now} /> : <StepList steps={run.steps} now={now} /> : null}
       <div className="fusion-node__messages" aria-live="polite">
         {!active && blocking[0] ? (
           <p id={`${node.id}-hint`} className="node__hint">

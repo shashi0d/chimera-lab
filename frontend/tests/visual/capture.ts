@@ -9,7 +9,7 @@
  */
 import { chromium, type Browser, type Page } from "@playwright/test";
 import { spawn, type ChildProcess } from "node:child_process";
-import { mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 
@@ -396,7 +396,7 @@ const STATES: State[] = [
         r.fulfill({ status: 422, contentType: "application/json", body: JSON.stringify({ error: { code: "IMAGE_CORRUPT", message: "x", retryable: false, details: {} } }) }),
       );
       await add(page, ["lion"], false);
-      await page.locator(".node--image-input .node__error").waitFor();
+      await page.locator(".node--image-input .image-node__banner--error").waitFor();
       await quiet(page);
     },
   },
@@ -442,6 +442,7 @@ const STATES: State[] = [
       await page.getByRole("button", { name: "Add image", exact: true }).click();
       await (await chooser).setFiles([fx("tiger")]);
       await page.locator(".node--image-input").nth(1).waitFor();
+      await page.waitForTimeout(700); // let the reveal pan finish
       await quiet(page);
     },
   },
@@ -615,6 +616,11 @@ const STATES: State[] = [
 
 // ------------------------------------------------------------------ servers
 
+if (args.has("list")) {
+  console.log(JSON.stringify(STATES.map((s) => ({ name: s.name, shows: s.shows, core: Boolean(s.core) }))));
+  process.exit(0);
+}
+
 function startServers(): ChildProcess[] {
   const py = process.env.PYTHON ?? join(ROOT, ".venv/bin/python");
   const env = {
@@ -689,7 +695,11 @@ async function main() {
   } finally {
     await browser?.close();
     mkdirSync(OUT, { recursive: true });
-    writeFileSync(join(OUT, "manifest.json"), JSON.stringify({ round: ROUND, captured: manifest.length, failures, shots: manifest }, null, 2));
+    // Merge with earlier invocations of the same round (e.g. per-viewport runs).
+    const path = join(OUT, "manifest.json");
+    const prev = existsSync(path) ? (JSON.parse(readFileSync(path, "utf8")) as { shots: typeof manifest }) : { shots: [] };
+    const merged = [...prev.shots.filter((p) => !manifest.some((m) => m.file === p.file)), ...manifest].sort((a, b) => a.file.localeCompare(b.file));
+    writeFileSync(path, JSON.stringify({ round: ROUND, captured: merged.length, failures, shots: merged }, null, 2));
     stop();
   }
   console.log(`\n${manifest.length} screenshots in docs/visual-qa/${ROUND}${failures.length ? `, ${failures.length} failed:\n${failures.join("\n")}` : ""}`);

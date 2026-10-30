@@ -1,0 +1,35 @@
+{
+  "round": "pv-3",
+  "captured": 4,
+  "failures": [],
+  "shots": [
+    {
+      "file": "docs/visual-qa/pv-3/1440x900/light/03-one-image.png",
+      "state": "03-one-image",
+      "shows": "One image, auto-added Fusion node with input A connected",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/pv-3/1440x900/light/41-offline-upload-queue.png",
+      "state": "41-offline-upload-queue",
+      "shows": "Upload queued while offline",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/pv-3/1440x900/dark/03-one-image.png",
+      "state": "03-one-image",
+      "shows": "One image, auto-added Fusion node with input A connected",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-3/1440x900/dark/41-offline-upload-queue.png",
+      "state": "41-offline-upload-queue",
+      "shows": "Upload queued while offline",
+      "viewport": "1440x900",
+      "theme": "dark"
+    }
+  ]
+}

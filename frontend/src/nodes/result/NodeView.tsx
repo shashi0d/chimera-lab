@@ -16,6 +16,12 @@ const t = copy.nodes.result;
 /** Images already revealed this session: the develop effect plays once per version. */
 const developed = new Set<string>();
 
+function useUpstreamRunStatus(nodeId: string): string | undefined {
+  const fusionId = useGraph((s) => s.edges.find((e) => e.target === nodeId && e.targetPort === "in")?.source);
+  const runId = useGraph((s) => (fusionId ? (s.nodes.find((n) => n.id === fusionId)?.data as FusionData | undefined)?.activeRunId : null));
+  return useRuns((s) => (runId ? s.runs[runId]?.status : undefined));
+}
+
 function useUpstreamRunActive(nodeId: string): boolean {
   const fusionId = useGraph((s) => s.edges.find((e) => e.target === nodeId && e.targetPort === "in")?.source);
   const runId = useGraph((s) => (fusionId ? (s.nodes.find((n) => n.id === fusionId)?.data as FusionData | undefined)?.activeRunId : null));
@@ -77,6 +83,7 @@ function Plate({ url, runId, plateNo, name }: { url: string; runId: string; plat
 export function ResultView({ node, selected, catalog }: NodeViewProps<ResultConfig, ResultData>) {
   const { versions, selected: sel } = node.data;
   const active = useUpstreamRunActive(node.id);
+  const upstream = useUpstreamRunStatus(node.id);
   const openPanel = useUi((s) => s.openPanel);
   const update = useGraph((s) => s.updateNodeData);
   const idx = Math.min(Math.max(0, sel), versions.length - 1);
@@ -122,9 +129,9 @@ export function ResultView({ node, selected, catalog }: NodeViewProps<ResultConf
           <span className="plate__overlay-label">{t.generating}</span>
         </div>
       ) : (
-        <div className="plate plate--empty">
+        <div className={`plate plate--empty${upstream === "failed" || upstream === "interrupted" ? " is-muted" : ""}`}>
           <Icon name="result" size={28} />
-          <p>{t.waiting}</p>
+          <p>{upstream === "failed" || upstream === "interrupted" ? t.noImageYet : t.waiting}</p>
         </div>
       )}
       {version && spec ? (

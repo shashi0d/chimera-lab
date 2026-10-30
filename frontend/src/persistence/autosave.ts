@@ -59,10 +59,14 @@ export function startAutosave(): () => void {
   let localTimer: ReturnType<typeof setTimeout> | null = null;
   let serverTimer: ReturnType<typeof setTimeout> | null = null;
   let firstPendingAt: number | null = null;
+  // Only say "Saving…" when a save is actually slow to land (PV1-07).
+  let savingLabelTimer: ReturnType<typeof setTimeout> | null = null;
 
   const saveLocal = () => {
     localTimer = null;
     firstPendingAt = null;
+    if (savingLabelTimer) clearTimeout(savingLabelTimer);
+    savingLabelTimer = null;
     set(KEY, useGraph.getState().toDoc(), db())
       .then(() => useSaveState.getState().set("saved-local"))
       .catch(() => undefined); // quota or private mode: nothing more we can do locally
@@ -70,7 +74,7 @@ export function startAutosave(): () => void {
 
   const unsub = useGraph.subscribe((s, prev) => {
     if (s.revision === prev.revision || s.readOnly) return;
-    useSaveState.getState().set("saving");
+    savingLabelTimer ??= setTimeout(() => useSaveState.getState().set("saving"), 1000);
     const now = Date.now();
     firstPendingAt ??= now;
     if (localTimer) clearTimeout(localTimer);
