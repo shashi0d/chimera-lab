@@ -1,0 +1,364 @@
+{
+ "id": "run_c14b2436f1434591",
+ "graphId": "live",
+ "nodeId": "fuse",
+ "sessionId": "live-session-01",
+ "status": "succeeded",
+ "steps": [
+  {
+   "key": "load_inputs",
+   "label": "Load images",
+   "status": "succeeded",
+   "startedAt": "2026-10-30T22:59:27.300Z",
+   "endedAt": "2026-10-30T22:59:27.311Z",
+   "detail": "Two distinct images loaded",
+   "calls": null,
+   "tokens": null
+  },
+  {
+   "key": "identify",
+   "label": "Identify animals",
+   "status": "succeeded",
+   "startedAt": "2026-10-30T22:59:27.313Z",
+   "endedAt": "2026-10-30T22:59:32.109Z",
+   "detail": "Lion and Tiger",
+   "calls": 2,
+   "tokens": 8673
+  },
+  {
+   "key": "match",
+   "label": "Match field data",
+   "status": "succeeded",
+   "startedAt": "2026-10-30T22:59:32.111Z",
+   "endedAt": "2026-10-30T22:59:32.112Z",
+   "detail": "A: lion (tier 1), B: tiger (tier 1)",
+   "calls": null,
+   "tokens": null
+  },
+  {
+   "key": "hybrid_check",
+   "label": "Check real hybrids",
+   "status": "succeeded",
+   "startedAt": "2026-10-30T22:59:32.114Z",
+   "endedAt": "2026-10-30T22:59:32.117Z",
+   "detail": "Real hybrids: liger, tigon; resembles navagunjara",
+   "calls": null,
+   "tokens": null
+  },
+  {
+   "key": "rules_check",
+   "label": "Check anatomy rules",
+   "status": "succeeded",
+   "startedAt": "2026-10-30T22:59:32.119Z",
+   "endedAt": "2026-10-30T22:59:32.122Z",
+   "detail": "44 of 130 rules mapped; 26 run now, 18 after planning; 0 warnings, 5 notes; 86 unmapped",
+   "calls": null,
+   "tokens": null
+  },
+  {
+   "key": "compile",
+   "label": "Plan the creature",
+   "status": "succeeded",
+   "startedAt": "2026-10-30T22:59:32.123Z",
+   "endedAt": "2026-10-30T22:59:41.679Z",
+   "detail": "Quadruped body, head from A",
+   "calls": 1,
+   "tokens": 4327
+  },
+  {
+   "key": "generate",
+   "label": "Generate image",
+   "status": "succeeded",
+   "startedAt": "2026-10-30T22:59:41.681Z",
+   "endedAt": "2026-10-30T22:59:54.574Z",
+   "detail": "Image ready (1 generation)",
+   "calls": 1,
+   "tokens": 15641
+  },
+  {
+   "key": "store",
+   "label": "Save result",
+   "status": "succeeded",
+   "startedAt": "2026-10-30T22:59:54.576Z",
+   "endedAt": "2026-10-30T22:59:54.583Z",
+   "detail": "Saved with lineage",
+   "calls": null,
+   "tokens": null
+  }
+ ],
+ "result": {
+  "assetId": "ast_196ebe2220e34873",
+  "creatureId": "crt_6397c9e1f744437f",
+  "imageUrl": "/assets/ast_196ebe2220e34873/content",
+  "spec": {
+   "parents": [
+    {
+     "slot": "A",
+     "assetId": "ast_e78c111e8c834861",
+     "reading": {
+      "isAnimal": true,
+      "containsHuman": false,
+      "commonName": "Lion",
+      "scientificName": "Panthera leo",
+      "confidence": 1.0,
+      "visibleParts": [
+       "head",
+       "eyes",
+       "nose",
+       "mouth",
+       "ears",
+       "mane",
+       "torso",
+       "legs",
+       "paws",
+       "tail"
+      ],
+      "bodyPlan": "quadruped",
+      "notes": "Adult male lion with full brown mane standing facing camera in dry savanna grassland."
+     },
+     "match": {
+      "animalId": "lion",
+      "tier": 1,
+      "commonName": "lion",
+      "scientificName": "Panthera leo",
+      "matchedOn": "scientific_name",
+      "facts": {
+       "class": "Mammalia",
+       "order": "Carnivora",
+       "family": "Felidae",
+       "gbif_key": "5219404",
+       "body_plan": "quadruped",
+       "primary_locomotor_part": "four legs",
+       "covering": "fur",
+       "movement": "walk|run",
+       "active_time": "nocturnal|crepuscular",
+       "habitat": "grassland|forest|mountain",
+       "climate": "temperate|tropical",
+       "diet": "carnivore",
+       "body_mass_kg": "126-272",
+       "body_length_m": "2.4-3.3",
+       "metabolic_rate_w": "94.58",
+       "genus": "Panthera",
+       "scientific_name": "Panthera leo",
+       "measurement_rows": "3"
+      }
+     }
+    },
+    {
+     "slot": "B",
+     "assetId": "ast_7cdcecc831e240d1",
+     "reading": {
+      "isAnimal": true,
+      "containsHuman": false,
+      "commonName": "Tiger",
+      "scientificName": "Panthera tigris",
+      "confidence": 0.99,
+      "visibleParts": [
+       "head",
+       "torso",
+       "legs",
+       "paws",
+       "tail",
+       "ears",
+       "eyes",
+       "nose",
+       "whiskers"
+      ],
+      "bodyPlan": "quadruped",
+      "notes": "Adult tiger with orange coat and black stripes standing in side profile in woodland habitat"
+     },
+     "match": {
+      "animalId": "tiger",
+      "tier": 1,
+      "commonName": "tiger",
+      "scientificName": "Panthera tigris",
+      "matchedOn": "scientific_name",
+      "facts": {
+       "class": "Mammalia",
+       "order": "Carnivora",
+       "family": "Felidae",
+       "gbif_key": "5219416",
+       "body_plan": "quadruped",
+       "primary_locomotor_part": "four legs",
+       "covering": "fur",
+       "movement": "walk|run|swim",
+       "active_time": "diurnal|nocturnal|crepuscular",
+       "habitat": "tundra|grassland|forest|mountain|wetland",
+       "climate": "temperate|tropical",
+       "diet": "carnivore",
+       "body_mass_kg": "91-423",
+       "body_length_m": "1.98-3.7",
+       "metabolic_rate_w": "133.859",
+       "genus": "Panthera",
+       "scientific_name": "Panthera tigris",
+       "measurement_rows": "5"
+      }
+     }
+    }
+   ],
+   "realHybrid": {
+    "hybridId": "liger",
+    "name": "liger",
+    "facts": {
+     "fertility": "fertile=partial; Male lion x female tiger; exists only in captivity per source; male ligers sterile, female ligers fertile",
+     "confidence": "captive_only",
+     "generation": "first-generation",
+     "sex_specific_fertility": "male ligers sterile, female ligers fertile",
+     "source_url": "https://en.wikipedia.org/wiki/Liger",
+     "cross": "father: lion (Panthera leo) × mother: tiger (Panthera tigris)",
+     "also_known": "tigon"
+    },
+    "father": "Panthera leo",
+    "mother": "Panthera tigris",
+    "cross": "father: lion (Panthera leo) × mother: tiger (Panthera tigris)",
+    "confidence": "captive_only",
+    "fertility": "fertile=partial; Male lion x female tiger; exists only in captivity per source; male ligers sterile, female ligers fertile",
+    "matchedVia": "scientific_name"
+   },
+   "realHybrids": [
+    {
+     "hybridId": "liger",
+     "name": "liger",
+     "facts": {
+      "fertility": "fertile=partial; Male lion x female tiger; exists only in captivity per source; male ligers sterile, female ligers fertile",
+      "confidence": "captive_only",
+      "generation": "first-generation",
+      "sex_specific_fertility": "male ligers sterile, female ligers fertile",
+      "source_url": "https://en.wikipedia.org/wiki/Liger",
+      "cross": "father: lion (Panthera leo) × mother: tiger (Panthera tigris)",
+      "also_known": "tigon"
+     },
+     "father": "Panthera leo",
+     "mother": "Panthera tigris",
+     "cross": "father: lion (Panthera leo) × mother: tiger (Panthera tigris)",
+     "confidence": "captive_only",
+     "fertility": "fertile=partial; Male lion x female tiger; exists only in captivity per source; male ligers sterile, female ligers fertile",
+     "matchedVia": "scientific_name"
+    },
+    {
+     "hybridId": "tigon",
+     "name": "tigon",
+     "facts": {
+      "fertility": "fertile=partial; Male tiger x female lion; found only in captivity per source; male tigons sterile, females fertile",
+      "confidence": "captive_only",
+      "generation": "first-generation",
+      "sex_specific_fertility": "male tigons sterile, females fertile",
+      "source_url": "https://en.wikipedia.org/wiki/Tigon",
+      "cross": "father: tiger (Panthera tigris) × mother: lion (Panthera leo)"
+     },
+     "father": "Panthera tigris",
+     "mother": "Panthera leo",
+     "cross": "father: tiger (Panthera tigris) × mother: lion (Panthera leo)",
+     "confidence": "captive_only",
+     "fertility": "fertile=partial; Male tiger x female lion; found only in captivity per source; male tigons sterile, females fertile",
+     "matchedVia": "scientific_name"
+    }
+   ],
+   "mythology": [
+    {
+     "creatureName": "navagunjara",
+     "culture": "Hindu",
+     "componentAnimals": "rooster|peacock|bull|lion|snake|tiger|human|elephant|deer",
+     "componentParts": "rooster:head|peacock:neck|bull:hump|lion:waist|snake:tail|tiger:foot|human:arm|elephant:foot|deer:foot",
+     "hasHumanPart": true,
+     "matched": {
+      "A": "lion",
+      "B": "tiger"
+     },
+     "matchKind": {
+      "A": "name",
+      "B": "name"
+     },
+     "verification": "line-checked by Muse (not re-checked by Claude)",
+     "verified": false,
+     "sourceUrl": "https://en.wikipedia.org/wiki/Navagunjara"
+    }
+   ],
+   "rulesSummary": {
+    "total": 130,
+    "mapped": 44,
+    "pair": 26,
+    "plan": 18,
+    "unmapped": 86,
+    "run": 44,
+    "hits": 5
+   },
+   "bodyPlan": "quadruped",
+   "partDonors": {
+    "head": "A",
+    "body": "B",
+    "limbs": "B",
+    "covering": "B",
+    "tail": "A"
+   },
+   "rationale": "It pairs a lion head and tufted tail with a tiger torso, limbs and striped coat to stand and hunt as a quadruped carnivore, walking on land as primary while swimming in water only opportunistically. It lives as a terrestrial hunter in wetlands with seasonal water dependence and a temperate-to-tropical thermal range excluding tundra extremes, without inheriting captive liger fertility.",
+   "name": "Maned Striped Panther",
+   "warnings": [
+    {
+     "ruleId": "R-A3-07",
+     "message": "A fusion design inspired by a real hybrid must not claim the real hybrid's fertility unless its parents and cross direction match that hybrid exactly.",
+     "severity": "info",
+     "detail": "documented real hybrid(s): liger (father: lion (Panthera leo) × mother: tiger (Panthera tigris); fertility fertile=partial; Male lion x female tiger; exists only in captivity per source; male ligers sterile, female ligers fertile); tigon (father: tiger (Panthera tigris) × mother: lion (Panthera leo); fertility fertile=partial; Male tiger x female lion; found only in captivity per source; male tigons sterile, females fertile). This fusion does not inherit their fertility."
+    },
+    {
+     "ruleId": "R-A5-08",
+     "message": "A fusion combining a tundra parent and a tropical parent must state its thermal range; it may not be assumed to live in both extremes without a note.",
+     "severity": "info",
+     "detail": null
+    },
+    {
+     "ruleId": "R-A5-10",
+     "message": "A fusion with a wetland parent must not be recorded as purely terrestrial or purely aquatic without a note on its water dependence.",
+     "severity": "info",
+     "detail": "wetland parent: tiger"
+    },
+    {
+     "ruleId": "R-A4-18",
+     "message": "A fusion that walks and swims must state whether it walks on land and swims in water, or whether one medium is primary.",
+     "severity": "info",
+     "detail": null
+    },
+    {
+     "ruleId": "R-A5-25",
+     "message": "A fusion recorded in a wetland must state whether it is aquatic, semi-aquatic or terrestrial in that wetland.",
+     "severity": "info",
+     "detail": "wetland parent: tiger"
+    }
+   ],
+   "prompt": "Reference image 1 shows a lion. Use it only for the head and tail.\nReference image 2 shows a tiger. Use it only for the torso, limbs and skin covering.\nCreate one new creature with a single, committed quadruped body plan.\nPlace the lion's head and tail on the tiger's frame so every join heals naturally: no visible seams, no floating parts, no duplicated limbs.\nStay close to the documented liger, a real hybrid of these parents.\nShow the full body in a calm three-quarter view on a plain, softly lit background, in the style of a natural history field-guide plate. Photographic realism, accurate anatomy, no text, no labels, no people.",
+   "model": {
+    "vision": "muse-spark-1.3",
+    "image": "muse-image-1.0"
+   },
+   "donorSource": {
+    "head": "model",
+    "body": "model",
+    "limbs": "model",
+    "covering": "model",
+    "tail": "model"
+   }
+  },
+  "card": null,
+  "metaResponseId": "resp_6ae5216955955dc9182f43c7",
+  "savedImage": "docs/live/fusions/lion_tiger.webp"
+ },
+ "error": null,
+ "failedInput": null,
+ "createdAt": "2026-10-30T22:59:27.291Z",
+ "updatedAt": "2026-10-30T22:59:54.584Z",
+ "version": 21,
+ "usage": {
+  "calls": 4,
+  "spark": 3,
+  "input_tokens": 24235,
+  "output_tokens": 4406,
+  "tokens": 28641,
+  "image": 1
+ },
+ "inputs": {
+  "A": "lion.webp",
+  "B": "tiger.webp",
+  "donors": null,
+  "data": "chimera_data.json"
+ }
+}

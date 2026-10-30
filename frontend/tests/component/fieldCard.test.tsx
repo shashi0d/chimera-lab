@@ -55,11 +55,11 @@ describe("F2 field card", () => {
     let onUpdate: (r: Run) => void = () => undefined;
     useRuns.setState({ transport: { watch: (_id, cb) => ((onUpdate = cb), { stop: () => undefined }) } });
     seed([result("r", { versions: [v(1)], selected: 0 }), cardNode()], [edge("r", "c", "in")]);
-    const base = { id: "run_c", graphId: "g", nodeId: "c", sessionId: null, steps: [], error: null, failedInput: null, createdAt: "", updatedAt: "", version: 1 };
+    const base = { id: "run_c", graphId: "g", nodeId: "c", sessionId: null, steps: [], error: null, failedInput: null, createdAt: "", updatedAt: "", version: 1, usage: {} };
     vi.spyOn(api, "startRun").mockResolvedValue({ ...base, status: "queued", result: null });
     renderNode("c");
     await userEvent.click(screen.getByRole("button", { name: "Write card" }));
-    onUpdate({ ...base, status: "succeeded", version: 3, result: { assetId: "a1", creatureId: "crt1", imageUrl: "/assets/a1/content", spec: { name: "Lioiger", parents: [] } as never, card: CARD } });
+    onUpdate({ ...base, status: "succeeded", version: 3, result: { assetId: "a1", creatureId: "crt1", imageUrl: "/assets/a1/content", spec: { name: "Lioiger", parents: [] } as never, card: CARD, metaResponseId: null } });
     expect(await screen.findByRole("heading", { name: "Lioiger" })).toBeInTheDocument();
     expect(screen.getByText("Panthera tigroides")).toBeInTheDocument();
     expect(screen.getByText("invented name")).toBeInTheDocument();

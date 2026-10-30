@@ -2,6 +2,7 @@
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 testpaths = ["tests"]
+markers = ["live: calls the real Meta API; runs only with CHIMERA_LIVE=1 and is never part of the default run"]
 
 [tool.ruff]
 line-length = 120

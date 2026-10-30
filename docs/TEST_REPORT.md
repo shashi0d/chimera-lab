@@ -2,7 +2,7 @@
 
 Date: 2026-10-30
 Mode: mock
-Totals: frontend unit + component 146/146, backend 123/123 (sample + real-schema fixture + real file), e2e 39/39 (Playwright, Chromium; includes 4 visual baselines)
+Totals: frontend unit + component 146/146, backend 132/132 (sample + real-schema fixture + real file; 6 live tests skipped by default), e2e 39/39 (Playwright, Chromium; includes 4 visual baselines)
 
 Commands: `cd frontend && npm test`, `.venv/bin/python -m pytest backend`, `cd frontend && npm run e2e`, `scripts/check-css.sh`, `scripts/check-bundle.sh`.
 
@@ -96,6 +96,21 @@ Tested against three data sources: the invented sample, the verbatim real-schema
 
 - **wolfdog, coydog:** "Canis familiaris" is not a name in either tier (domestic dog is recorded as *Canis lupus*), so it falls back to genus *Canis*. These matches are tagged `matchedVia: "genus"` and rank after exact matches.
 
+## Live Meta API (L1)
+
+Run with `CHIMERA_LIVE=1` only; details in [LIVE_REPORT.md](LIVE_REPORT.md), every call in [LIVE_LOG.md](LIVE_LOG.md).
+
+| Live test | Result |
+|---|---|
+| Identify 6 AI-generated fixtures, match to the real data | **6/6** (all by scientific name, confidence 0.85 to 1.00) |
+| lion + tiger → tigon with cross direction | pass |
+| horse + donkey → mule | pass |
+| bald eagle + lion → griffin | pass |
+| lion + octopus → rule warnings | pass (4 warnings) |
+| lion + eagle with pins (head A, limbs B) | pass on run 2; run 1 failed: plan timeout (LIVE_REPORT problem 1, fixed after) |
+
+**Budget:** 11/15 image generations, 27/60 Muse Spark calls, 367,116 tokens logged. Cost unknown.
+
 ## Visual QA
 
 - Screenshots captured: 112 (pv-1) + 162 (pv-2) + 66 (pv-3) + 36 (f1) + 36 (f2). See [docs/visual-qa/INDEX.md](visual-qa/INDEX.md).
@@ -123,7 +138,9 @@ Round 2: **Field-guide card node** (writes a specimen card with Muse Spark; down
 
 ## Unverified against live services
 
-- Meta Muse Spark card writing (`write_field_card`, F2) and anatomy-pinned planning (F1).
-- Meta Muse Spark / Muse Image adapters (`backend/app/adapters/meta/client.py`): request shapes, endpoint path, model ids and error mapping are tested only against recorded-shape fakes.
+Verified live in L1: Muse Spark identify and plan, and Muse Image generation with references (see above). Still unverified:
+
+- Muse Spark card writing (`write_field_card`, F2) and `previous_response_id` refinement turns.
+- The 429 and 5xx retry paths (never observed live), and the Spark-client timeout fix (landed after the live runs).
 - Supabase storage and DB adapters and `schema.sql`.
 - Modal deployment (`modal_app.py` imports and builds its image definition; not deployed).

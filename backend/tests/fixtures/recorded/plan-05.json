@@ -1,0 +1,138 @@
+{
+ "purpose": "plan",
+ "request": {
+  "model": "muse-spark-1.3",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You design anatomically plausible creature fusions from two real animals, A and B. Choose which parent donates each part (head, body, limbs, covering, tail) so the result can plausibly stand, move and feed. Any part in donor_pins is fixed by the user: keep it exactly. body_plan must be exactly one value from allowed_body_plans. Respect the rule warnings and real-hybrid facts provided. Keep the rationale to two sentences. creature_name: an evocative common name of two or three words, as a field guide would print it. Do not glue the parents' names together (no portmanteaus like 'Liger' or 'Lioiger')."
+   },
+   {
+    "role": "user",
+    "content": "<elided> (4832 chars)"
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "fusion_plan",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "creature_name",
+      "body_plan",
+      "part_donors",
+      "rationale"
+     ],
+     "properties": {
+      "creature_name": {
+       "type": "string"
+      },
+      "body_plan": {
+       "type": "string"
+      },
+      "part_donors": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "head",
+        "body",
+        "limbs",
+        "covering",
+        "tail"
+       ],
+       "properties": {
+        "head": {
+         "type": "string",
+         "enum": [
+          "A",
+          "B"
+         ]
+        },
+        "body": {
+         "type": "string",
+         "enum": [
+          "A",
+          "B"
+         ]
+        },
+        "limbs": {
+         "type": "string",
+         "enum": [
+          "A",
+          "B"
+         ]
+        },
+        "covering": {
+         "type": "string",
+         "enum": [
+          "A",
+          "B"
+         ]
+        },
+        "tail": {
+         "type": "string",
+         "enum": [
+          "A",
+          "B"
+         ]
+        }
+       }
+      },
+      "rationale": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0.4
+ },
+ "response": {
+  "id": "chatcmpl-01a18f0f-ea54-7619-a95b-1a61c0842a13",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\"body_plan\": \"biped\", \"creature_name\": \"Maned Wetland Strider\", \"part_donors\": {\"body\": \"B\", \"covering\": \"B\", \"head\": \"A\", \"limbs\": \"B\", \"tail\": \"A\"}, \"rationale\": \"Quadruped lion versus winged-biped eagle is resolved as a flightless biped that stands and walks on eagle talons with folded wings vestigial and a lion tail counterbalancing a scaled-down maned lion head that tears meat. It is crepuscular as a compromise between nocturnal lion and diurnal eagle and hunts as a terrestrial bird at wetland edges while retaining fish in its diet, with fur on the head and tail and feathers on the torso and wings.\"}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null
+    }
+   }
+  ],
+  "created": 1793401547,
+  "model": "muse-spark-1.3",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 4524,
+   "prompt_tokens": 1812,
+   "total_tokens": 6336,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": null,
+    "audio_tokens": null,
+    "reasoning_tokens": 4355,
+    "rejected_prediction_tokens": null,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": null,
+    "cache_write_tokens": null,
+    "cached_tokens": 0,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

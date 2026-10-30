@@ -17,12 +17,14 @@ const steps = (current: number, status: "running" | "failed" = "running") =>
     startedAt: i <= current ? new Date(Date.now() - 1000).toISOString() : null,
     endedAt: i < current ? new Date().toISOString() : null,
     detail: null,
+    calls: null,
+    tokens: null,
   }));
 
 function makeRun(over: Partial<Run>): Run {
   return {
     id: "run1", graphId: "g", nodeId: "f", sessionId: null, status: "running", steps: steps(1), result: null, error: null,
-    failedInput: null, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), version: 1, ...over,
+    failedInput: null, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), version: 1, usage: {}, ...over,
   };
 }
 

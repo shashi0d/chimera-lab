@@ -24,8 +24,9 @@ async def run(ctx: RunContext) -> str:
         creature_id=new_id("crt"), run_id=ctx.run.id, asset_id=asset_id,
         parent_asset_ids=[i.asset_id for i in ctx.inputs], spec=ctx.state["spec"], created_at=now_iso(),
     )
-    await services.db.put("creatures", creature.creature_id, creature.dump())
+    await services.db.put("creatures", creature.creature_id, {**creature.dump(), "metaResponseId": generated.response_id})
     ctx.state["result"] = RunResult(
-        asset_id=asset_id, creature_id=creature.creature_id, image_url=asset.url, spec=ctx.state["spec"]
+        asset_id=asset_id, creature_id=creature.creature_id, image_url=asset.url, spec=ctx.state["spec"],
+        meta_response_id=generated.response_id,
     )
     return "Saved with lineage"

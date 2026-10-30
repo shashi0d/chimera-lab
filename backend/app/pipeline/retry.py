@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import random
 from collections.abc import Awaitable, Callable
 from typing import TypeVar
 
@@ -21,9 +22,10 @@ async def call_with_retry(
     before_attempt: Callable[[int], Awaitable[None] | None] | None = None,
     can_retry: Callable[[], bool] | None = None,
 ) -> T:
-    """Run `fn` with a per-attempt timeout. Retries RATE_LIMITED / UPSTREAM_* with
-    exponential backoff (base, 2x, 4x), honouring retryAfterMs (scaled by base so
-    tests stay fast). `before_attempt` charges the spend guard; `can_retry` lets
+    """Run `fn` with a per-attempt timeout. Retries RATE_LIMITED, UPSTREAM_TIMEOUT and
+    retryable UPSTREAM_ERROR (429, 5xx, timeouts, connection errors) with exponential
+    backoff plus jitter (base, 2x, 4x), honouring retryAfterMs (scaled by base so tests
+    stay fast). Errors marked non-retryable (400, 401, 403, 404) raise at once. `before_attempt` charges the spend guard; `can_retry` lets
     the guard stop retrying and surface the original error instead."""
     last: ChimeraError | None = None
     for attempt in range(max_attempts):
@@ -45,6 +47,7 @@ async def call_with_retry(
             delay = base_delay * (2**attempt)
             if last.retry_after_ms:
                 delay = max(delay, last.retry_after_ms / 1000 * base_delay)
-            await asyncio.sleep(delay)
+            # L1-03: jitter so parallel calls (identify A and B) don't retry in lockstep.
+            await asyncio.sleep(delay * (1 + random.uniform(0, 0.25)))
     assert last is not None
     raise last

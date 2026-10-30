@@ -1,0 +1,65 @@
+{
+ "data": "chimera_data.json",
+ "results": [
+  {
+   "fixture": "lion",
+   "common_name": "Lion",
+   "scientific_name": "Panthera leo",
+   "confidence": 0.99,
+   "body_plan": "quadruped",
+   "matched": "lion",
+   "matched_on": "scientific_name",
+   "expected": "lion"
+  },
+  {
+   "fixture": "tiger",
+   "common_name": "Tiger",
+   "scientific_name": "Panthera tigris",
+   "confidence": 0.99,
+   "body_plan": "quadruped",
+   "matched": "tiger",
+   "matched_on": "scientific_name",
+   "expected": "tiger"
+  },
+  {
+   "fixture": "horse",
+   "common_name": "Horse",
+   "scientific_name": "Equus caballus",
+   "confidence": 0.99,
+   "body_plan": "quadruped",
+   "matched": "horse",
+   "matched_on": "scientific_name",
+   "expected": "horse"
+  },
+  {
+   "fixture": "donkey",
+   "common_name": "Donkey",
+   "scientific_name": "Equus asinus",
+   "confidence": 0.99,
+   "body_plan": "quadruped",
+   "matched": "donkey",
+   "matched_on": "scientific_name",
+   "expected": "donkey"
+  },
+  {
+   "fixture": "bald_eagle",
+   "common_name": "Bald Eagle",
+   "scientific_name": "Haliaeetus leucocephalus",
+   "confidence": 0.99,
+   "body_plan": "winged",
+   "matched": "bald_eagle",
+   "matched_on": "scientific_name",
+   "expected": "bald_eagle"
+  },
+  {
+   "fixture": "common_octopus",
+   "common_name": "Common Octopus",
+   "scientific_name": "Octopus vulgaris",
+   "confidence": 0.85,
+   "body_plan": "multi_legged",
+   "matched": "common_octopus",
+   "matched_on": "scientific_name",
+   "expected": "common_octopus"
+  }
+ ]
+}

@@ -245,6 +245,9 @@ class Step(ApiModel):
     started_at: str | None = None
     ended_at: str | None = None
     detail: str | None = None
+    # L1-04: real model usage in this step (None in mock mode)
+    calls: int | None = None
+    tokens: int | None = None
 
 
 class FieldCard(ApiModel):
@@ -265,6 +268,8 @@ class RunResult(ApiModel):
     image_url: str
     spec: CreatureSpec
     card: FieldCard | None = None
+    # L1-01: Meta Responses API id of the generation, for previous_response_id edits
+    meta_response_id: str | None = None
 
 
 class Run(ApiModel):
@@ -280,6 +285,8 @@ class Run(ApiModel):
     created_at: str
     updated_at: str
     version: int = 0
+    # L1-04: totals across steps: calls, spark, image, input_tokens, output_tokens, tokens
+    usage: dict[str, int] = Field(default_factory=dict)
 
 
 class StartRunRequest(ApiModel):

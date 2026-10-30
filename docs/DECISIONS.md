@@ -117,3 +117,27 @@ Mythology components are everyday words. A component matches a parent if it is t
 
 **D-038 The open-weight model id is noted, not used.**
 Per the hackathon guide, the open-weight Muse Spark is `meta-models/muse-spark-open-1026` (not the id in the docs). Not used in L1; recorded here for a later "open-weight bonus" task.
+
+**D-039 The planner always runs, even when every part is pinned.**
+F1 skipped the planning call when all five parts were pinned, which saved one Spark call. L1-10 requires the plan step to name the creature, so the planner now always runs with the pins as hard constraints (pins still win if it disagrees). The mock planner returns descriptive names ("Lion-headed tiger") instead of portmanteaus. *Alternative:* a separate naming call, with the same cost and more code.
+
+**D-040 Real Meta adapters use the OpenAI SDK with SDK retries off; the image model uses the Responses API.**
+`openai.AsyncOpenAI(base_url, api_key, timeout, max_retries=0)`. The shared `call_with_retry` is the single retry layer, so every attempt is charged once by the spend guard and the live budget. Muse Image goes through `client.responses.create` with `input_image` parts; the old `/images/generations` guess is gone. Verified live (docs/LIVE_REPORT.md).
+
+**D-041 Every real call is accounted per step and per run; a hard live budget caps the whole phase.**
+`backend/app/adapters/usage.py`:
+- each attempt is recorded: step, purpose, model, latency, input/output tokens, outcome, response id
+- `Step.calls/tokens` and `Run.usage` carry the per-run totals
+- `MAX_TOKENS_PER_RUN` / `DAILY_TOKEN_CAP` join the call caps
+- an optional file-backed counter (`CHIMERA_LIVE_BUDGET_FILE`) refuses calls beyond 15 images / 60 Spark calls across processes
+
+Cancelled attempts (per-step timeout) are recorded too. That was missing at first, so two attempts are absent from LIVE_LOG; the counter still caught them.
+
+**D-042 Timeouts from measured latency; one Spark client covers the longest call.**
+Identify 20 s, plan 60 s, generate 80 s: about 2× the slowest live calls (9.0 s, 24.1 s, 37.1 s). The Spark client is shared by describe, plan and card, so its HTTP timeout is `max(identify, plan)`. Before this fix, plan calls were cut off at the identify timeout, which caused the one live failure.
+
+**D-043 Mocks replay recorded live shapes through the real parsers; the mock image is WebP.**
+Live responses are saved key-free (base64 elided, refused if any credential appears) in `backend/tests/fixtures/recorded/`. Mocks fill those templates and call `parse_*_response`, so a parser change is exercised by every mock test. Muse Image returns WebP, so the mock plate is WebP too. Format is detected by magic bytes everywhere.
+
+**D-044 Live fixtures are AI-generated, generated once.**
+Six `muse-image-1.0` text-to-image photos (`backend/tests/fixtures/live/`, with a README saying they are not real photos). `scripts/live_fixtures.py` never overwrites an existing file. Identification accuracy on clean generated images likely overstates accuracy on real phone photos (LIVE_REPORT problem 9).

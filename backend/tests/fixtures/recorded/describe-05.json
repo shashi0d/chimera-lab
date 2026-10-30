@@ -1,0 +1,142 @@
+{
+ "purpose": "describe",
+ "request": {
+  "model": "muse-spark-1.3",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You are a field biologist. Identify the single main animal in the photo: its everyday English common name and its Latin binomial (genus species, the standard accepted name). If there is no animal, set is_animal=false. If any human or human body part is visible, set contains_human=true and do not describe the person. List only anatomy that is actually visible. body_plan is one of: quadruped, biped, winged, finned, multi_legged, serpentine, radial."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "Identify the animal in this photo."
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (809583 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "animal_reading",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "is_animal",
+      "contains_human",
+      "common_name",
+      "scientific_name",
+      "confidence",
+      "visible_parts",
+      "body_plan",
+      "notes"
+     ],
+     "properties": {
+      "is_animal": {
+       "type": "boolean"
+      },
+      "contains_human": {
+       "type": "boolean"
+      },
+      "common_name": {
+       "type": [
+        "string",
+        "null"
+       ]
+      },
+      "scientific_name": {
+       "type": [
+        "string",
+        "null"
+       ]
+      },
+      "confidence": {
+       "type": "number"
+      },
+      "visible_parts": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "body_plan": {
+       "type": [
+        "string",
+        "null"
+       ],
+       "enum": [
+        "quadruped",
+        "biped",
+        "winged",
+        "finned",
+        "multi_legged",
+        "serpentine",
+        "radial",
+        null
+       ]
+      },
+      "notes": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0
+ },
+ "response": {
+  "id": "chatcmpl-01a18f09-cfee-710c-8e35-f1f75e30df80",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\"body_plan\": \"quadruped\", \"common_name\": \"Donkey\", \"confidence\": 0.99, \"contains_human\": false, \"is_animal\": true, \"notes\": \"Adult gray donkey standing in right-facing profile on a dry trail; long upright ears, short erect mane, dark dorsal and shoulder stripes forming a cross, pale muzzle and belly clearly visible.\", \"scientific_name\": \"Equus asinus\", \"visible_parts\": [\"head\", \"ear\", \"eye\", \"nose\", \"mouth\", \"neck\", \"torso\", \"leg\", \"hoof\", \"tail\", \"mane\"]}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null
+    }
+   }
+  ],
+  "created": 1793401147,
+  "model": "muse-spark-1.3",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 930,
+   "prompt_tokens": 3646,
+   "total_tokens": 4576,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": null,
+    "audio_tokens": null,
+    "reasoning_tokens": 789,
+    "rejected_prediction_tokens": null,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": null,
+    "cache_write_tokens": null,
+    "cached_tokens": 0,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

@@ -32,8 +32,8 @@ HTTP_STATUS: dict[ErrorCode, int] = {
 
 DEFAULT_MESSAGES: dict[ErrorCode, str] = {
     ErrorCode.INTERNAL: "Something went wrong on our side.",
-    ErrorCode.UPSTREAM_ERROR: "The image model returned an error.",
-    ErrorCode.UPSTREAM_TIMEOUT: "The image model took too long to answer.",
+    ErrorCode.UPSTREAM_ERROR: "The model service returned an error.",
+    ErrorCode.UPSTREAM_TIMEOUT: "The model took too long to answer.",
     ErrorCode.RATE_LIMITED: "Too many requests. Try again shortly.",
 }
 

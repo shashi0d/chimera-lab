@@ -7,7 +7,7 @@ import type { Run } from "../../src/types/api";
 
 const run = (status: Run["status"], version: number): Run => ({
   id: "run1", graphId: "g", nodeId: "f", sessionId: null, status, steps: [], result: null, error: null,
-  failedInput: null, createdAt: "", updatedAt: "", version,
+  failedInput: null, createdAt: "", updatedAt: "", version, usage: {},
 });
 
 beforeEach(() => {

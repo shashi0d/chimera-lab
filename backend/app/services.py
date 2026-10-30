@@ -27,9 +27,11 @@ def build_services(settings: Settings) -> Services:
 
         if not settings.meta_api_key:
             raise RuntimeError("CHIMERA_MODE=real needs META_API_KEY")
+        # One Spark client serves describe, plan and card calls, so its HTTP timeout must cover the longest
+        # of them; the per-step limits are enforced by call_with_retry (L1-05).
         vision: VisionAdapter = MetaVision(
             settings.meta_api_base_url, settings.meta_api_key, settings.meta_vision_model,
-            timeout=settings.identify_timeout_seconds,
+            timeout=max(settings.identify_timeout_seconds, settings.plan_timeout_seconds),
         )
         image_gen: ImageGenAdapter = MetaImageGen(
             settings.meta_api_base_url, settings.meta_api_key, settings.meta_image_model,

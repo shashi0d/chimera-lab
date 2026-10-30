@@ -123,7 +123,7 @@ describe("autosave restore (TASKSHEET 7.6)", () => {
 describe("run lifecycle on the canvas (P4)", () => {
   const baseRun = (over: Partial<Run>): Run => ({
     id: "run1", graphId: "g", nodeId: "f", sessionId: null, status: "queued", steps: [], result: null, error: null,
-    failedInput: null, createdAt: "", updatedAt: "", version: 1, ...over,
+    failedInput: null, createdAt: "", updatedAt: "", version: 1, usage: {}, ...over,
   });
 
   it("start creates a Result node; success adds versions; re-run adds version 2", async () => {
@@ -139,13 +139,13 @@ describe("run lifecycle on the canvas (P4)", () => {
       vi.spyOn(api, "startRun").mockResolvedValueOnce(baseRun({ id: `run${n}`, nodeId: fusionId }));
       await useRuns.getState().start(fusionId);
       expect(useGraph.getState().nodes.filter((x) => x.type === "result")).toHaveLength(1);
-      onUpdate(baseRun({ id: `run${n}`, nodeId: fusionId, status: "succeeded", version: 5, result: { assetId: `g${n}`, creatureId: `c${n}`, imageUrl: `/assets/g${n}/content`, spec, card: null } }));
+      onUpdate(baseRun({ id: `run${n}`, nodeId: fusionId, status: "succeeded", version: 5, result: { assetId: `g${n}`, creatureId: `c${n}`, imageUrl: `/assets/g${n}/content`, spec, card: null, metaResponseId: null } }));
     }
     const res = useGraph.getState().nodes.find((x) => x.type === "result")?.data as ResultData;
     expect(res.versions.map((v) => v.runId)).toEqual(["run1", "run2"]);
     expect(res.selected).toBe(1);
     // applying the same run twice (e.g. after reload) does not duplicate
-    onUpdate(baseRun({ id: "run2", nodeId: fusionId, status: "succeeded", version: 6, result: { assetId: "g2", creatureId: "c2", imageUrl: "/x", spec, card: null } }));
+    onUpdate(baseRun({ id: "run2", nodeId: fusionId, status: "succeeded", version: 6, result: { assetId: "g2", creatureId: "c2", imageUrl: "/x", spec, card: null, metaResponseId: null } }));
     expect((useGraph.getState().nodes.find((x) => x.type === "result")?.data as ResultData).versions).toHaveLength(2);
     stop();
   });

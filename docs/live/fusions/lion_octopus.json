@@ -1,0 +1,293 @@
+{
+ "id": "run_84f3b393758c4fea",
+ "graphId": "live",
+ "nodeId": "fuse",
+ "sessionId": "live-session-01",
+ "status": "succeeded",
+ "steps": [
+  {
+   "key": "load_inputs",
+   "label": "Load images",
+   "status": "succeeded",
+   "startedAt": "2026-10-30T23:01:55.705Z",
+   "endedAt": "2026-10-30T23:01:55.713Z",
+   "detail": "Two distinct images loaded",
+   "calls": null,
+   "tokens": null
+  },
+  {
+   "key": "identify",
+   "label": "Identify animals",
+   "status": "succeeded",
+   "startedAt": "2026-10-30T23:01:55.715Z",
+   "endedAt": "2026-10-30T23:02:04.713Z",
+   "detail": "Lion and Common Octopus",
+   "calls": 2,
+   "tokens": 9654
+  },
+  {
+   "key": "match",
+   "label": "Match field data",
+   "status": "succeeded",
+   "startedAt": "2026-10-30T23:02:04.715Z",
+   "endedAt": "2026-10-30T23:02:04.717Z",
+   "detail": "A: lion (tier 1), B: common octopus (tier 1)",
+   "calls": null,
+   "tokens": null
+  },
+  {
+   "key": "hybrid_check",
+   "label": "Check real hybrids",
+   "status": "succeeded",
+   "startedAt": "2026-10-30T23:02:04.719Z",
+   "endedAt": "2026-10-30T23:02:04.725Z",
+   "detail": "No documented hybrid",
+   "calls": null,
+   "tokens": null
+  },
+  {
+   "key": "rules_check",
+   "label": "Check anatomy rules",
+   "status": "succeeded",
+   "startedAt": "2026-10-30T23:02:04.726Z",
+   "endedAt": "2026-10-30T23:02:04.730Z",
+   "detail": "44 of 130 rules mapped; 26 run now, 18 after planning; 4 warnings, 3 notes; 86 unmapped",
+   "calls": null,
+   "tokens": null
+  },
+  {
+   "key": "compile",
+   "label": "Plan the creature",
+   "status": "succeeded",
+   "startedAt": "2026-10-30T23:02:04.732Z",
+   "endedAt": "2026-10-30T23:02:28.833Z",
+   "detail": "Quadruped body, head from A",
+   "calls": 1,
+   "tokens": 5863
+  },
+  {
+   "key": "generate",
+   "label": "Generate image",
+   "status": "succeeded",
+   "startedAt": "2026-10-30T23:02:28.835Z",
+   "endedAt": "2026-10-30T23:03:05.996Z",
+   "detail": "Image ready (1 generation)",
+   "calls": 1,
+   "tokens": 41866
+  },
+  {
+   "key": "store",
+   "label": "Save result",
+   "status": "succeeded",
+   "startedAt": "2026-10-30T23:03:06.000Z",
+   "endedAt": "2026-10-30T23:03:06.009Z",
+   "detail": "Saved with lineage",
+   "calls": null,
+   "tokens": null
+  }
+ ],
+ "result": {
+  "assetId": "ast_c658e429f7f4416d",
+  "creatureId": "crt_a01c1d349d934221",
+  "imageUrl": "/assets/ast_c658e429f7f4416d/content",
+  "spec": {
+   "parents": [
+    {
+     "slot": "A",
+     "assetId": "ast_4da4c67283274c5a",
+     "reading": {
+      "isAnimal": true,
+      "containsHuman": false,
+      "commonName": "Lion",
+      "scientificName": "Panthera leo",
+      "confidence": 0.99,
+      "visibleParts": [
+       "head",
+       "ears",
+       "eyes",
+       "nose",
+       "mouth",
+       "mane",
+       "torso",
+       "legs",
+       "paws",
+       "tail"
+      ],
+      "bodyPlan": "quadruped",
+      "notes": "Adult male with prominent brown mane walking toward camera in dry savanna grassland."
+     },
+     "match": {
+      "animalId": "lion",
+      "tier": 1,
+      "commonName": "lion",
+      "scientificName": "Panthera leo",
+      "matchedOn": "scientific_name",
+      "facts": {
+       "class": "Mammalia",
+       "order": "Carnivora",
+       "family": "Felidae",
+       "gbif_key": "5219404",
+       "body_plan": "quadruped",
+       "primary_locomotor_part": "four legs",
+       "covering": "fur",
+       "movement": "walk|run",
+       "active_time": "nocturnal|crepuscular",
+       "habitat": "grassland|forest|mountain",
+       "climate": "temperate|tropical",
+       "diet": "carnivore",
+       "body_mass_kg": "126-272",
+       "body_length_m": "2.4-3.3",
+       "metabolic_rate_w": "94.58",
+       "genus": "Panthera",
+       "scientific_name": "Panthera leo",
+       "measurement_rows": "3"
+      }
+     }
+    },
+    {
+     "slot": "B",
+     "assetId": "ast_3f968a060eb64e5e",
+     "reading": {
+      "isAnimal": true,
+      "containsHuman": false,
+      "commonName": "Common Octopus",
+      "scientificName": "Octopus vulgaris",
+      "confidence": 0.88,
+      "visibleParts": [
+       "mantle",
+       "head",
+       "eyes",
+       "arms",
+       "suckers"
+      ],
+      "bodyPlan": "multi_legged",
+      "notes": "Large brown mottled octopus with eight outstretched arms resting on sandy gravel seabed underwater, mantle and eyes clearly visible."
+     },
+     "match": {
+      "animalId": "common_octopus",
+      "tier": 1,
+      "commonName": "common octopus",
+      "scientificName": "Octopus vulgaris",
+      "matchedOn": "scientific_name",
+      "facts": {
+       "class": "Cephalopoda",
+       "order": "Octopoda",
+       "family": "Octopodidae",
+       "gbif_key": "2289671",
+       "body_plan": "multi_legged",
+       "primary_locomotor_part": "multiple legs",
+       "covering": "skin",
+       "movement": "swim",
+       "active_time": "unrecorded",
+       "habitat": "marine",
+       "climate": "temperate|tropical",
+       "diet": "carnivore",
+       "genus": "Octopus",
+       "scientific_name": "Octopus vulgaris"
+      }
+     }
+    }
+   ],
+   "realHybrid": null,
+   "realHybrids": [],
+   "mythology": [],
+   "rulesSummary": {
+    "total": 130,
+    "mapped": 44,
+    "pair": 26,
+    "plan": 18,
+    "unmapped": 86,
+    "run": 44,
+    "hits": 7
+   },
+   "bodyPlan": "quadruped",
+   "partDonors": {
+    "head": "A",
+    "body": "A",
+    "limbs": "A",
+    "covering": "A",
+    "tail": "B"
+   },
+   "rationale": "Quadruped amphibious design uses the lion torso, legs and head to walk on land as the primary medium and to swim secondarily in shallow water with grasping by the octopus-derived sucker tail, resolving the quadruped versus multi-legged conflict. Habitat conflict flagged with no shared habitat between lion grassland and octopus marine, requiring a marine to land habitat-change note for the tail.",
+   "name": "Maned Reef Prowler",
+   "warnings": [
+    {
+     "ruleId": "R-A1-03",
+     "message": "A fusion may not assign two different coverings to the same body region without naming the region for each.",
+     "severity": "info",
+     "detail": null
+    },
+    {
+     "ruleId": "R-A5-01",
+     "message": "A fusion's habitat list must overlap at least one habitat of each parent, or the non-overlap must be flagged as a habitat conflict.",
+     "severity": "warning",
+     "detail": "no shared habitat: lion forest/grassland/mountain; common octopus marine"
+    },
+    {
+     "ruleId": "R-A5-03",
+     "message": "A marine-only fusion must not be built from a terrestrial-only parent without a habitat-change note.",
+     "severity": "warning",
+     "detail": "common octopus lives only in the sea; lion only on land"
+    },
+    {
+     "ruleId": "R-A8-02",
+     "message": "A fusion with a body_plan conflict (e.g. finned x quadruped with no amphibious design note) must be flagged, not silently resolved by picking one parent's plan.",
+     "severity": "warning",
+     "detail": null
+    },
+    {
+     "ruleId": "R-A8-03",
+     "message": "A fusion with no habitat overlap with a parent must be flagged as a habitat conflict in the test output.",
+     "severity": "warning",
+     "detail": "no shared habitat: lion forest/grassland/mountain; common octopus marine"
+    },
+    {
+     "ruleId": "R-A4-18",
+     "message": "A fusion that walks and swims must state whether it walks on land and swims in water, or whether one medium is primary.",
+     "severity": "info",
+     "detail": null
+    },
+    {
+     "ruleId": "R-A4-P04",
+     "message": "A parent with active_time 'unrecorded' adds no tokens. The fusion's active_time is built from the other parents' values under R-A4-05, R-A4-06 and R-A4-P03. If every parent is 'unrecorded', the fusion's active_time is 'unrecorded' and the app shows it as 'activity pattern unknown'. 'unrecorded' never blocks a fusion and is never combined with other tokens.",
+     "severity": "info",
+     "detail": "active time unrecorded for common octopus: it adds nothing and does not block the fusion"
+    }
+   ],
+   "prompt": "Reference image 1 shows a lion. Use it only for the head, torso, limbs and skin covering.\nReference image 2 shows a common octopus. Use it only for the tail.\nCreate one new creature with a single, committed quadruped body plan.\nPlace the lion's head, torso, limbs and skin covering on the common octopus's frame so every join heals naturally: no visible seams, no floating parts, no duplicated limbs.\nno shared habitat: lion forest/grassland/mountain; common octopus marine common octopus lives only in the sea; lion only on land A fusion with a body_plan conflict (e.g. finned x quadruped with no amphibious design note) must be flagged, not silently resolved by picking one parent's plan.\nShow the full body in a calm three-quarter view on a plain, softly lit background, in the style of a natural history field-guide plate. Photographic realism, accurate anatomy, no text, no labels, no people.",
+   "model": {
+    "vision": "muse-spark-1.3",
+    "image": "muse-image-1.0"
+   },
+   "donorSource": {
+    "head": "model",
+    "body": "model",
+    "limbs": "model",
+    "covering": "model",
+    "tail": "model"
+   }
+  },
+  "card": null,
+  "metaResponseId": "resp_6ae5222754331d3efac34a9a",
+  "savedImage": "docs/live/fusions/lion_octopus.webp"
+ },
+ "error": null,
+ "failedInput": null,
+ "createdAt": "2026-10-30T23:01:55.699Z",
+ "updatedAt": "2026-10-30T23:03:06.011Z",
+ "version": 26,
+ "usage": {
+  "calls": 4,
+  "spark": 3,
+  "input_tokens": 47544,
+  "output_tokens": 9839,
+  "tokens": 57383,
+  "image": 1
+ },
+ "inputs": {
+  "A": "lion.webp",
+  "B": "common_octopus.webp",
+  "donors": null,
+  "data": "chimera_data.json"
+ }
+}

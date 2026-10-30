@@ -311,6 +311,9 @@ export interface Run {
   createdAt: string;
   updatedAt: string;
   version: number;
+  usage: {
+    [k: string]: number;
+  };
 }
 /**
  * This interface was referenced by `ChimeraApi`'s JSON-Schema
@@ -323,6 +326,8 @@ export interface Step {
   startedAt: string | null;
   endedAt: string | null;
   detail: string | null;
+  calls: number | null;
+  tokens: number | null;
 }
 /**
  * This interface was referenced by `ChimeraApi`'s JSON-Schema
@@ -334,6 +339,7 @@ export interface RunResult {
   imageUrl: string;
   spec: CreatureSpec;
   card: FieldCard | null;
+  metaResponseId: string | null;
 }
 /**
  * This interface was referenced by `ChimeraApi`'s JSON-Schema

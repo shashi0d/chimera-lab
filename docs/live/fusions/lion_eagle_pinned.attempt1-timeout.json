@@ -1,0 +1,121 @@
+{
+ "id": "run_8f65cfa2f01f4698",
+ "graphId": "live",
+ "nodeId": "fuse",
+ "sessionId": "live-session-01",
+ "status": "failed",
+ "steps": [
+  {
+   "key": "load_inputs",
+   "label": "Load images",
+   "status": "succeeded",
+   "startedAt": "2026-10-30T23:03:07.351Z",
+   "endedAt": "2026-10-30T23:03:07.358Z",
+   "detail": "Two distinct images loaded",
+   "calls": null,
+   "tokens": null
+  },
+  {
+   "key": "identify",
+   "label": "Identify animals",
+   "status": "succeeded",
+   "startedAt": "2026-10-30T23:03:07.359Z",
+   "endedAt": "2026-10-30T23:03:12.574Z",
+   "detail": "Lion and Bald Eagle",
+   "calls": 2,
+   "tokens": 8703
+  },
+  {
+   "key": "match",
+   "label": "Match field data",
+   "status": "succeeded",
+   "startedAt": "2026-10-30T23:03:12.577Z",
+   "endedAt": "2026-10-30T23:03:12.579Z",
+   "detail": "A: lion (tier 1), B: bald eagle (tier 1)",
+   "calls": null,
+   "tokens": null
+  },
+  {
+   "key": "hybrid_check",
+   "label": "Check real hybrids",
+   "status": "succeeded",
+   "startedAt": "2026-10-30T23:03:12.582Z",
+   "endedAt": "2026-10-30T23:03:12.585Z",
+   "detail": "No documented hybrid; resembles griffin, anzu, sharabha +3",
+   "calls": null,
+   "tokens": null
+  },
+  {
+   "key": "rules_check",
+   "label": "Check anatomy rules",
+   "status": "succeeded",
+   "startedAt": "2026-10-30T23:03:12.587Z",
+   "endedAt": "2026-10-30T23:03:12.589Z",
+   "detail": "44 of 130 rules mapped; 26 run now, 18 after planning; 1 warning, 5 notes; 86 unmapped",
+   "calls": null,
+   "tokens": null
+  },
+  {
+   "key": "compile",
+   "label": "Plan the creature",
+   "status": "failed",
+   "startedAt": "2026-10-30T23:03:12.591Z",
+   "endedAt": "2026-10-30T23:04:13.739Z",
+   "detail": "The image model took too long to answer.",
+   "calls": null,
+   "tokens": null
+  },
+  {
+   "key": "generate",
+   "label": "Generate image",
+   "status": "skipped",
+   "startedAt": null,
+   "endedAt": null,
+   "detail": null,
+   "calls": null,
+   "tokens": null
+  },
+  {
+   "key": "store",
+   "label": "Save result",
+   "status": "skipped",
+   "startedAt": null,
+   "endedAt": null,
+   "detail": null,
+   "calls": null,
+   "tokens": null
+  }
+ ],
+ "result": null,
+ "error": {
+  "code": "UPSTREAM_TIMEOUT",
+  "message": "The image model took too long to answer.",
+  "retryable": true,
+  "retryAfterMs": null,
+  "details": {},
+  "errorId": null
+ },
+ "failedInput": null,
+ "createdAt": "2026-10-30T23:03:07.344Z",
+ "updatedAt": "2026-10-30T23:04:13.739Z",
+ "version": 20,
+ "usage": {
+  "calls": 2,
+  "spark": 2,
+  "input_tokens": 7292,
+  "output_tokens": 1411,
+  "tokens": 8703
+ },
+ "inputs": {
+  "A": "lion.webp",
+  "B": "bald_eagle.webp",
+  "donors": {
+   "head": "A",
+   "body": "auto",
+   "limbs": "B",
+   "covering": "auto",
+   "tail": "auto"
+  },
+  "data": "chimera_data.json"
+ }
+}

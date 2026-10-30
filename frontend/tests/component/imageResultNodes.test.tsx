@@ -117,7 +117,7 @@ describe("Result node (TASKSHEET 7.4)", () => {
   });
 
   it("shows a skeleton while the upstream fusion is generating", () => {
-    useRuns.getState().upsert({ id: "run9", graphId: "g", nodeId: "f", sessionId: null, status: "running", steps: [], result: null, error: null, failedInput: null, createdAt: "", updatedAt: "", version: 1 });
+    useRuns.getState().upsert({ id: "run9", graphId: "g", nodeId: "f", sessionId: null, status: "running", steps: [], result: null, error: null, failedInput: null, createdAt: "", updatedAt: "", version: 1, usage: {} });
     seed([fusion("f", { activeRunId: "run9" }), result("r")], [edge("f", "r", "in")]);
     renderNode("r");
     expect(screen.getByLabelText("Generating…")).toBeInTheDocument();

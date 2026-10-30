@@ -1,0 +1,354 @@
+{
+ "id": "run_c68f9cfb4198469e",
+ "graphId": "live",
+ "nodeId": "fuse",
+ "sessionId": "live-session-01",
+ "status": "succeeded",
+ "steps": [
+  {
+   "key": "load_inputs",
+   "label": "Load images",
+   "status": "succeeded",
+   "startedAt": "2026-10-30T23:00:12.512Z",
+   "endedAt": "2026-10-30T23:00:12.521Z",
+   "detail": "Two distinct images loaded",
+   "calls": null,
+   "tokens": null
+  },
+  {
+   "key": "identify",
+   "label": "Identify animals",
+   "status": "succeeded",
+   "startedAt": "2026-10-30T23:00:12.522Z",
+   "endedAt": "2026-10-30T23:00:17.645Z",
+   "detail": "Horse and Donkey",
+   "calls": 2,
+   "tokens": 8629
+  },
+  {
+   "key": "match",
+   "label": "Match field data",
+   "status": "succeeded",
+   "startedAt": "2026-10-30T23:00:17.647Z",
+   "endedAt": "2026-10-30T23:00:17.648Z",
+   "detail": "A: horse (tier 1), B: donkey (tier 1)",
+   "calls": null,
+   "tokens": null
+  },
+  {
+   "key": "hybrid_check",
+   "label": "Check real hybrids",
+   "status": "succeeded",
+   "startedAt": "2026-10-30T23:00:17.649Z",
+   "endedAt": "2026-10-30T23:00:17.653Z",
+   "detail": "Real hybrids: hinny, mule",
+   "calls": null,
+   "tokens": null
+  },
+  {
+   "key": "rules_check",
+   "label": "Check anatomy rules",
+   "status": "succeeded",
+   "startedAt": "2026-10-30T23:00:17.654Z",
+   "endedAt": "2026-10-30T23:00:17.656Z",
+   "detail": "44 of 130 rules mapped; 26 run now, 18 after planning; 3 warnings, 4 notes; 86 unmapped",
+   "calls": null,
+   "tokens": null
+  },
+  {
+   "key": "compile",
+   "label": "Plan the creature",
+   "status": "succeeded",
+   "startedAt": "2026-10-30T23:00:17.657Z",
+   "endedAt": "2026-10-30T23:00:37.300Z",
+   "detail": "Quadruped body, head from B",
+   "calls": 1,
+   "tokens": 6172
+  },
+  {
+   "key": "generate",
+   "label": "Generate image",
+   "status": "succeeded",
+   "startedAt": "2026-10-30T23:00:37.302Z",
+   "endedAt": "2026-10-30T23:01:10.991Z",
+   "detail": "Image ready (1 generation)",
+   "calls": 1,
+   "tokens": 41373
+  },
+  {
+   "key": "store",
+   "label": "Save result",
+   "status": "succeeded",
+   "startedAt": "2026-10-30T23:01:10.993Z",
+   "endedAt": "2026-10-30T23:01:10.999Z",
+   "detail": "Saved with lineage",
+   "calls": null,
+   "tokens": null
+  }
+ ],
+ "result": {
+  "assetId": "ast_b3fe025fa92c457f",
+  "creatureId": "crt_eaae6aefce334e51",
+  "imageUrl": "/assets/ast_b3fe025fa92c457f/content",
+  "spec": {
+   "parents": [
+    {
+     "slot": "A",
+     "assetId": "ast_c9b91ca956c54283",
+     "reading": {
+      "isAnimal": true,
+      "containsHuman": false,
+      "commonName": "Horse",
+      "scientificName": "Equus caballus",
+      "confidence": 0.99,
+      "visibleParts": [
+       "head",
+       "ears",
+       "eyes",
+       "muzzle",
+       "neck",
+       "mane",
+       "torso",
+       "legs",
+       "hooves",
+       "tail"
+      ],
+      "bodyPlan": "quadruped",
+      "notes": "Adult bay horse with black mane, tail and lower legs standing in side profile on grass."
+     },
+     "match": {
+      "animalId": "horse",
+      "tier": 1,
+      "commonName": "horse",
+      "scientificName": "Equus caballus",
+      "matchedOn": "scientific_name",
+      "facts": {
+       "class": "Mammalia",
+       "order": "Perissodactyla",
+       "family": "Equidae",
+       "gbif_key": "2440886",
+       "body_plan": "quadruped",
+       "primary_locomotor_part": "four legs",
+       "covering": "fur",
+       "movement": "walk|run",
+       "active_time": "crepuscular",
+       "habitat": "tundra|grassland|forest|wetland",
+       "climate": "temperate|polar",
+       "diet": "herbivore",
+       "body_mass_kg": "227-900",
+       "body_length_m": "2.2-2.8",
+       "genus": "Equus",
+       "scientific_name": "Equus caballus",
+       "measurement_rows": "2"
+      }
+     }
+    },
+    {
+     "slot": "B",
+     "assetId": "ast_72b2e072fc814cea",
+     "reading": {
+      "isAnimal": true,
+      "containsHuman": false,
+      "commonName": "Donkey",
+      "scientificName": "Equus asinus",
+      "confidence": 0.99,
+      "visibleParts": [
+       "head",
+       "ears",
+       "eyes",
+       "muzzle",
+       "neck",
+       "torso",
+       "legs",
+       "hooves",
+       "tail",
+       "mane"
+      ],
+      "bodyPlan": "quadruped",
+      "notes": "Adult gray donkey standing in right-facing profile on a dry dirt path, showing characteristic long ears, short erect mane, dorsal stripe and shoulder stripe."
+     },
+     "match": {
+      "animalId": "donkey",
+      "tier": 1,
+      "commonName": "donkey",
+      "scientificName": "Equus asinus",
+      "matchedOn": "scientific_name",
+      "facts": {
+       "class": "Mammalia",
+       "order": "Perissodactyla",
+       "family": "Equidae",
+       "gbif_key": "2440891",
+       "body_plan": "quadruped",
+       "primary_locomotor_part": "four legs",
+       "covering": "fur",
+       "movement": "walk|run",
+       "active_time": "diurnal|nocturnal",
+       "habitat": "desert|mountain",
+       "climate": "arid",
+       "diet": "herbivore",
+       "body_mass_kg": "250",
+       "body_length_m": "1.1-1.4",
+       "metabolic_rate_w": "164.92",
+       "genus": "Equus",
+       "scientific_name": "Equus asinus",
+       "measurement_rows": "2"
+      }
+     }
+    }
+   ],
+   "realHybrid": {
+    "hybridId": "hinny",
+    "name": "hinny",
+    "facts": {
+     "fertility": "fertile=no; Male horse (stallion) x female donkey (jenny); reciprocal cross to mule; most reports say hinnies are sterile",
+     "confidence": "documented",
+     "generation": "first-generation",
+     "source_url": "https://en.wikipedia.org/wiki/Hinny",
+     "cross": "father: horse (Equus caballus) × mother: donkey (Equus asinus)",
+     "also_known": "mule"
+    },
+    "father": "Equus caballus",
+    "mother": "Equus asinus",
+    "cross": "father: horse (Equus caballus) × mother: donkey (Equus asinus)",
+    "confidence": "documented",
+    "fertility": "fertile=no; Male horse (stallion) x female donkey (jenny); reciprocal cross to mule; most reports say hinnies are sterile",
+    "matchedVia": "scientific_name"
+   },
+   "realHybrids": [
+    {
+     "hybridId": "hinny",
+     "name": "hinny",
+     "facts": {
+      "fertility": "fertile=no; Male horse (stallion) x female donkey (jenny); reciprocal cross to mule; most reports say hinnies are sterile",
+      "confidence": "documented",
+      "generation": "first-generation",
+      "source_url": "https://en.wikipedia.org/wiki/Hinny",
+      "cross": "father: horse (Equus caballus) × mother: donkey (Equus asinus)",
+      "also_known": "mule"
+     },
+     "father": "Equus caballus",
+     "mother": "Equus asinus",
+     "cross": "father: horse (Equus caballus) × mother: donkey (Equus asinus)",
+     "confidence": "documented",
+     "fertility": "fertile=no; Male horse (stallion) x female donkey (jenny); reciprocal cross to mule; most reports say hinnies are sterile",
+     "matchedVia": "scientific_name"
+    },
+    {
+     "hybridId": "mule",
+     "name": "mule",
+     "facts": {
+      "fertility": "fertile=no; Male donkey (jack) x female horse (mare); source classification E. africanus asinus male x E. ferus caballus female, mapped to pilot GBIF names Equus asinus and Equus caballus; odd chromosome number makes gamete formation difficult, often infertile, rare mare mule births reported",
+      "confidence": "documented",
+      "generation": "first-generation",
+      "source_url": "https://en.wikipedia.org/wiki/Mule",
+      "cross": "father: donkey (Equus asinus) × mother: horse (Equus caballus)"
+     },
+     "father": "Equus asinus",
+     "mother": "Equus caballus",
+     "cross": "father: donkey (Equus asinus) × mother: horse (Equus caballus)",
+     "confidence": "documented",
+     "fertility": "fertile=no; Male donkey (jack) x female horse (mare); source classification E. africanus asinus male x E. ferus caballus female, mapped to pilot GBIF names Equus asinus and Equus caballus; odd chromosome number makes gamete formation difficult, often infertile, rare mare mule births reported",
+     "matchedVia": "scientific_name"
+    }
+   ],
+   "mythology": [],
+   "rulesSummary": {
+    "total": 130,
+    "mapped": 44,
+    "pair": 26,
+    "plan": 18,
+    "unmapped": 86,
+    "run": 44,
+    "hits": 7
+   },
+   "bodyPlan": "quadruped",
+   "partDonors": {
+    "head": "B",
+    "body": "A",
+    "limbs": "A",
+    "covering": "B",
+    "tail": "A"
+   },
+   "rationale": "A horse torso carried on matching horse legs keeps size and stride aligned for stable quadruped walking and running, while a donkey head provides a compatible herbivore muzzle and ears for grazing. This concept carries a flagged habitat conflict and climate conflict from non-overlapping horse and donkey ranges, functions as terrestrial in wetlands with low water dependence, and is crepuscular by design choice.",
+   "name": "Grey Ridge Courser",
+   "warnings": [
+    {
+     "ruleId": "R-A3-07",
+     "message": "A fusion design inspired by a real hybrid must not claim the real hybrid's fertility unless its parents and cross direction match that hybrid exactly.",
+     "severity": "info",
+     "detail": "documented real hybrid(s): hinny (father: horse (Equus caballus) × mother: donkey (Equus asinus); fertility fertile=no; Male horse (stallion) x female donkey (jenny); reciprocal cross to mule; most reports say hinnies are sterile); mule (father: donkey (Equus asinus) × mother: horse (Equus caballus); fertility fertile=no; Male donkey (jack) x female horse (mare); source classification E. africanus asinus male x E. ferus caballus female, mapped to pilot GBIF names Equus asinus and Equus caballus; odd chromosome number makes gamete formation difficult, often infertile, rare mare mule births reported). This fusion does not inherit their fertility."
+    },
+    {
+     "ruleId": "R-A5-01",
+     "message": "A fusion's habitat list must overlap at least one habitat of each parent, or the non-overlap must be flagged as a habitat conflict.",
+     "severity": "warning",
+     "detail": "no shared habitat: horse forest/grassland/tundra/wetland; donkey desert/mountain"
+    },
+    {
+     "ruleId": "R-A5-02",
+     "message": "A fusion's climate list must overlap at least one climate of each parent, or the non-overlap must be flagged as a climate conflict.",
+     "severity": "warning",
+     "detail": "no shared climate: horse polar/temperate; donkey arid"
+    },
+    {
+     "ruleId": "R-A8-03",
+     "message": "A fusion with no habitat overlap with a parent must be flagged as a habitat conflict in the test output.",
+     "severity": "warning",
+     "detail": "no shared habitat: horse forest/grassland/tundra/wetland; donkey desert/mountain"
+    },
+    {
+     "ruleId": "R-A5-10",
+     "message": "A fusion with a wetland parent must not be recorded as purely terrestrial or purely aquatic without a note on its water dependence.",
+     "severity": "info",
+     "detail": "wetland parent: horse"
+    },
+    {
+     "ruleId": "R-A5-25",
+     "message": "A fusion recorded in a wetland must state whether it is aquatic, semi-aquatic or terrestrial in that wetland.",
+     "severity": "info",
+     "detail": "wetland parent: horse"
+    },
+    {
+     "ruleId": "R-A4-P03",
+     "message": "A fusion combining a diurnal parent with a nocturnal parent must state its active_time as the overlap or as a design choice with a note; it may not be recorded as both fully diurnal and fully nocturnal.",
+     "severity": "info",
+     "detail": "horse is crepuscular; donkey is diurnal/nocturnal"
+    }
+   ],
+   "prompt": "Reference image 1 shows a horse. Use it only for the torso, limbs and tail.\nReference image 2 shows a donkey. Use it only for the head and skin covering.\nCreate one new creature with a single, committed quadruped body plan.\nPlace the horse's torso, limbs and tail on the donkey's frame so every join heals naturally: no visible seams, no floating parts, no duplicated limbs.\nStay close to the documented hinny, a real hybrid of these parents. no shared habitat: horse forest/grassland/tundra/wetland; donkey desert/mountain no shared climate: horse polar/temperate; donkey arid no shared habitat: horse forest/grassland/tundra/wetland; donkey desert/mountain\nShow the full body in a calm three-quarter view on a plain, softly lit background, in the style of a natural history field-guide plate. Photographic realism, accurate anatomy, no text, no labels, no people.",
+   "model": {
+    "vision": "muse-spark-1.3",
+    "image": "muse-image-1.0"
+   },
+   "donorSource": {
+    "head": "model",
+    "body": "model",
+    "limbs": "model",
+    "covering": "model",
+    "tail": "model"
+   }
+  },
+  "card": null,
+  "metaResponseId": "resp_6ae521b6497a3668e9144d8f",
+  "savedImage": "docs/live/fusions/horse_donkey.webp"
+ },
+ "error": null,
+ "failedInput": null,
+ "createdAt": "2026-10-30T23:00:12.505Z",
+ "updatedAt": "2026-10-30T23:01:11.000Z",
+ "version": 24,
+ "usage": {
+  "calls": 4,
+  "spark": 3,
+  "input_tokens": 48065,
+  "output_tokens": 8109,
+  "tokens": 56174,
+  "image": 1
+ },
+ "inputs": {
+  "A": "horse.webp",
+  "B": "donkey.webp",
+  "donors": null,
+  "data": "chimera_data.json"
+ }
+}

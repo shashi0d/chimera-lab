@@ -12,6 +12,7 @@ import logging
 from datetime import UTC, datetime
 
 from app.adapters.base import current_fault
+from app.adapters.usage import current_calls, current_step
 from app.errors import ChimeraError
 from app.models.schemas import ApiError, ErrorCode, Graph, Run, Step
 from app.pipeline.context import RunContext
@@ -114,8 +115,27 @@ class RunManager:
             await asyncio.sleep(HEARTBEAT_SECONDS)
             await self.save(run)
 
+    async def _account(self, ctx: RunContext, step: Step, start: int) -> None:
+        """L1-04: real-model calls and tokens for one step, plus run totals and the daily token counter."""
+        calls = ctx.calls[start:]
+        if not calls:
+            return
+        step.calls = len(calls)
+        step.tokens = sum(c.total_tokens for c in calls)
+        u = ctx.run.usage
+        u["calls"] = u.get("calls", 0) + len(calls)
+        for c in calls:
+            u[c.kind] = u.get(c.kind, 0) + 1
+            u["input_tokens"] = u.get("input_tokens", 0) + c.input_tokens
+            u["output_tokens"] = u.get("output_tokens", 0) + c.output_tokens
+        u["tokens"] = u.get("tokens", 0) + step.tokens
+        if step.tokens:
+            day = datetime.now(UTC).strftime("%Y-%m-%d")
+            await self.services.db.incr(f"tokens:{day}", step.tokens)
+
     async def _execute(self, ctx: RunContext, steps: list[StepDef]) -> None:
         run = ctx.run
+        current_calls.set(ctx.calls)
         run.status = "running"
         await self.save(run)
         beat = asyncio.create_task(self._heartbeat(run))
@@ -129,15 +149,19 @@ class RunManager:
                     await asyncio.sleep(8 * self.services.settings.mock_delay_scale)
                 if ctx.fault == "crash_mid_run" and step_def.key == "generate":
                     raise _Crash()
+                current_step.set(step_def.key)
+                start = len(ctx.calls)
                 try:
                     step.detail = await step_def.fn(ctx)
                 except ChimeraError as exc:
+                    await self._account(ctx, step, start)
                     step.status = "failed"
                     step.ended_at = now_iso()
                     step.detail = exc.message
                     self._fail(run, exc.to_api(), exc.details.get("slot"))
                     await self.save(run)
                     return
+                await self._account(ctx, step, start)
                 step.status = "succeeded"
                 step.ended_at = now_iso()
                 await self.save(run)

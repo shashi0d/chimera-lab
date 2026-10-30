@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import contextvars
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, Protocol
 
 from app.models.schemas import AnimalReading, FieldCard, FusionPlan
@@ -31,6 +31,9 @@ class GeneratedImage:
     data: bytes
     content_type: str
     model: str
+    # L1-01: Meta's response id, so a later edit can chain with previous_response_id.
+    response_id: str | None = None
+    usage: dict[str, Any] = field(default_factory=dict)
 
 
 class VisionAdapter(Protocol):

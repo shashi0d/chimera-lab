@@ -28,7 +28,9 @@ async def test_happy_path_lion_tiger(client):
     assert "Reference image 1 shows a lion" in spec["prompt"]
     assert spec["model"] == {"vision": "mock-muse-spark", "image": "mock-muse-image"}
     img = await client.get(done["result"]["imageUrl"])
-    assert img.status_code == 200 and img.content[:3] == b"\xff\xd8\xff"
+    # Muse Image returns WebP; the mock replays that shape (L1-09)
+    assert img.status_code == 200 and img.content[:4] == b"RIFF" and img.content[8:12] == b"WEBP"
+    assert done["result"]["metaResponseId"].startswith("resp-mock-")
 
 
 async def test_unmatched_and_warnings_path(client):

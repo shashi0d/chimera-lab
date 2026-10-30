@@ -1,0 +1,117 @@
+{
+ "purpose": "generate",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Reference image 1 shows a lion. Use it only for the head and tail.\nReference image 2 shows a tiger. Use it only for the torso, limbs and skin covering.\nCreate one new creature with a single, committed quadruped body plan.\nPlace the lion's head and tail on the tiger's frame so every join heals naturally: no visible seams, no floating parts, no duplicated limbs.\nStay close to the documented liger, a real hybrid of these parents.\nShow the full body in a calm three-quarter view on a plain, softly lit background, in the style of a natural history field-guide plate. Photographic realism, accurate anatomy, no text, no labels, no people.\nAspect ratio: 1:1."
+     },
+     {
+      "type": "input_image",
+      "image_url": "<elided> (773387 chars)"
+     },
+     {
+      "type": "input_image",
+      "image_url": "<elided> (817283 chars)"
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "id": "resp_6ae5216955955dc9182f43c7",
+  "access_programs": null,
+  "created_at": 1793401193.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae52169920f3229671b409f",
+    "summary": [
+     {
+      "text": "**Composing hybrid creature image**\nI'm combining the lion head and tail with the tiger's torso, limbs, and striped skin to build a photoreal liger in a three-quarter view, set against a softly lit plain background in a natural-history field-guide style.\n**Composing tiger-lion hybrid image**\nI'm drafting a detailed prompt for a single tiger body in a three-quarter right pose, with a lion's head and a lion tail with a tuft, set against a plain background.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae52169c67cb528abb54536",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0lPRzdqRWJnZENkVjBvS0FFcXJXSHhTY3JKUGJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczpiYzJmOTc1ZS03ODI5LTQ2OWYtYmVjYi0yZGVmMzM1N2E1ZmE6R0k0ZmhqQTdNR0xxRUF3R0FLVFIteVgtc2ZwQmJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM0MDExOTN9.Q8WLFwEPQeK5beFbjNEj9G3i5wBN",
+    "result": "<elided> (508536 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 14646,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 10240
+   },
+   "output_tokens": 995,
+   "output_tokens_details": {
+    "reasoning_tokens": 239
+   },
+   "total_tokens": 15641
+  },
+  "user": null
+ }
+}

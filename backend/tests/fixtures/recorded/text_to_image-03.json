@@ -1,0 +1,109 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "A photorealistic wildlife photograph of a bay domestic horse standing in a green paddock, full body side view. Natural light, sharp focus, the whole animal clearly visible and centred, plain uncluttered background, no people, no text, no watermark.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "id": "resp_6ae52039cf469b7e2a934d11",
+  "access_programs": null,
+  "created_at": 1793400889.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae520398991f36efb4541f4",
+    "summary": [
+     {
+      "text": "**Crafting photorealistic horse image**\nI'm preparing a prompt for a photorealistic wildlife-style photo of a bay domestic horse standing in a green paddock, full-body side view, centered with natural light, sharp focus, and a plain uncluttered background.\n**Composing photoreal horse portrait**\nI'm setting up a 1:1 photoreal image of a bay horse in full-body side view on a simple green meadow, with soft natural overcast light, plain blurred background, and no people.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae520394471ed21885e441d",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR01Ca2V6UWZtSExsNkdJR0FFVURRSTc0ZGNaUWJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczphZjkwNGIzYy0yYjAzLTRlZDYtYmEzMC1mZWMzZGUxMDAxMzk6R0w4SVR6UnRaejVzMGdvRUFKd0hFcmppSEVkRGJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM0MDA4ODl9.Q8WLFwEKZkeFPsMeX2DYnKUXBHvd",
+    "result": "<elided> (690928 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 10151,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 8000
+   },
+   "output_tokens": 967,
+   "output_tokens_details": {
+    "reasoning_tokens": 237
+   },
+   "total_tokens": 11118
+  },
+  "user": null
+ }
+}

@@ -27,16 +27,21 @@ async def test_pins_override_the_plan_and_are_attributed(client):
     assert "2 parts chosen by you" in next(s for s in done["steps"] if s["key"] == "compile")["detail"]
 
 
-async def test_all_pinned_skips_the_planning_call(tmp_path):
-    # With a vision budget of exactly 2, only the two identify calls fit: a plan call would fail the run.
+async def test_all_pinned_still_plans_for_the_name_and_pins_win(tmp_path):
+    # D-039: the planner always runs (it names the creature); a 2-call vision budget is no longer enough.
     app = create_app(make_settings(tmp_path, max_vision_calls_per_run=2))
     async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://t") as c:
         a, b = await two_assets(c)
+        short = await wait_run(c, (await start_run(c, with_donors(fusion_graph(a, b), ALL_B), key="s")).json()["id"])
+    assert short["error"]["code"] == "BUDGET_EXCEEDED"
+    app = create_app(make_settings(tmp_path / "2"))
+    async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://t") as c:
+        a, b = await two_assets(c)
         done = await wait_run(c, (await start_run(c, with_donors(fusion_graph(a, b), ALL_B))).json()["id"])
-    assert done["status"] == "succeeded", done
     spec = done["result"]["spec"]
     assert set(spec["donorSource"].values()) == {"user"}
-    assert spec["rationale"].startswith("Every part was chosen by you")
+    assert spec["partDonors"] == ALL_B
+    assert spec["name"] == "Tiger-headed tiger" or "-headed" in spec["name"] or spec["name"].startswith("Variant")
 
 
 async def test_pins_change_the_mock_image(client):

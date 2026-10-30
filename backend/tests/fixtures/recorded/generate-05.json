@@ -1,0 +1,117 @@
+{
+ "purpose": "generate",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Reference image 1 shows a lion. Use it only for the head and tail.\nReference image 2 shows a bald eagle. Use it only for the torso, limbs and skin covering.\nCreate one new creature with a single, committed biped body plan.\nPlace the lion's head and tail on the bald eagle's frame so every join heals naturally: no visible seams, no floating parts, no duplicated limbs.\nA fusion with a body_plan conflict (e.g. finned x quadruped with no amphibious design note) must be flagged, not silently resolved by picking one parent's plan.\nShow the full body in a calm three-quarter view on a plain, softly lit background, in the style of a natural history field-guide plate. Photographic realism, accurate anatomy, no text, no labels, no people.\nAspect ratio: 1:1."
+     },
+     {
+      "type": "input_image",
+      "image_url": "<elided> (773387 chars)"
+     },
+     {
+      "type": "input_image",
+      "image_url": "<elided> (411359 chars)"
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "id": "resp_6ae522e2d69aef7033d6430d",
+  "access_programs": null,
+  "created_at": 1793401570.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae522e2927d756ff5ec459f",
+    "summary": [
+     {
+      "text": "**Fusing lion and eagle anatomy**\nI'm planning a photorealistic field-guide plate that places the lion's head and tail onto the bald eagle's torso and limbs, forming a single biped with seamless joins, shown in a calm three-quarter view on a plain, softly lit background.\n**Composing hybrid creature image**\nI'm planning a natural-history field guide illustration in 3/4 view, merging an eagle's body, wings, legs and talons with a lion's head, mane and tufted tail, on a plain softly lit background with seamless brown feathering.\n**Refining hybrid creature design**\nI'm removing the eagle tail feathers so only the lion tail remains, then regenerating the image to match the requested hybrid look.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae522e25f195fe722ac42ec",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR015eGtUQTlpUDBlSmMwSEFINXlrUjVlZUxWVmJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczoxNzEyNGE1ZC1kZjdkLTRkN2YtYTljNy1iZTAzMDIwMGE3ODM6R1BfUmx6Umx1bE9GY2hrRUFGX1QyUTBGWFRWaWJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM0MDE1NzB9.Q8WLFwHdqb4W-ruiG_kyfmsP-2h7",
+    "result": "<elided> (427760 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 25254,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 19456
+   },
+   "output_tokens": 1987,
+   "output_tokens_details": {
+    "reasoning_tokens": 317
+   },
+   "total_tokens": 27241
+  },
+  "user": null
+ }
+}

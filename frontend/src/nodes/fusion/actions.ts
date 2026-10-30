@@ -54,6 +54,7 @@ function addVersion(fusionId: string, run: Run): void {
     imageUrl: run.result.imageUrl,
     spec: run.result.spec,
     createdAt: run.updatedAt,
+    metaResponseId: run.result.metaResponseId,
   };
   g.updateNodeData<ResultData>(resultId, (d) => {
     const versions = [...(d.versions ?? []), version];

@@ -7,6 +7,8 @@ export interface ResultVersion {
   imageUrl: string;
   spec: CreatureSpec;
   createdAt: string;
+  /** Meta Responses API id of this generation, for future previous_response_id edits (L1-01). */
+  metaResponseId?: string | null;
 }
 
 export interface ResultData extends Record<string, unknown> {

@@ -89,3 +89,21 @@ Short entries per phase: what was built, what was tested, what was deferred. New
   - Startup data check, with counts in `/health` (status `degraded` on a silent zero).
 - **Tested:** pytest 89 → 123 (sample, real-schema fixture and the real file), vitest 146. Frontend changes were type fixtures only.
 - **Real-file numbers:** 29/31 hybrids resolve both parents; 44/130 rules mapped.
+
+## 2026-10-30: L1 Live Meta integration (passed)
+
+- **Built:**
+  - OpenAI-SDK Meta adapters (chat completions for Spark; Responses API for Muse Image), magic-byte formats, response id stored per version
+  - retry classification with jitter
+  - per-step token accounting and token caps
+  - hard live budget and call log
+  - record and replay (mocks now run the real parsers on recorded shapes)
+  - model-named creatures (planner always runs)
+  - measured timeouts; live test marker
+- **Live:**
+  - 6 fixture photos generated; 6/6 identified and matched by scientific name
+  - 5/5 fusions: tigon with cross direction, mule, griffin, rule warnings, pins honoured
+  - the pinned fusion failed once on a plan timeout; root cause fixed afterwards (D-042)
+- **Spend:** 11/15 images, 27/60 Spark calls, 367,116 tokens logged. Cost unknown.
+- **Tests (mock):** pytest 132 (+6 live skipped by default), vitest 146, Playwright 39; bundle check passes.
+- **Reports:** `docs/LIVE_REPORT.md` (per-fusion results, images in `docs/live/fusions/`, latency, tokens, judgment, ranked problems), `docs/LIVE_LOG.md` (every call).

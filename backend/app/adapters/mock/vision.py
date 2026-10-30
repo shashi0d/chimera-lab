@@ -16,6 +16,8 @@ from typing import Any
 from PIL import Image
 
 from app.adapters.base import current_fault
+from app.adapters.meta.client import parse_card_response, parse_describe_response, parse_plan_response
+from app.adapters.mock.recorded import chat_payload
 from app.errors import ChimeraError
 from app.models.schemas import AnimalReading, ErrorCode, FieldCard, FusionPlan, PartDonors
 
@@ -77,6 +79,11 @@ class MockVision:
             await asyncio.sleep(seconds * self.delay_scale)
 
     async def describe_animal(self, image: bytes, slot: str) -> AnimalReading:
+        reading = await self._describe(image, slot)
+        # L1-09: same wire shape and parser as the live API (snake_case JSON in a chat completion).
+        return parse_describe_response(chat_payload("describe", reading.model_dump()))
+
+    async def _describe(self, image: bytes, slot: str) -> AnimalReading:
         await self._delay(0.8)
         fault = current_fault.get()
         if fault == "timeout":
@@ -103,6 +110,12 @@ class MockVision:
         )
 
     async def plan_fusion(self, context: dict[str, Any]) -> FusionPlan:
+        plan = await self._plan(context)
+        wire = {"creature_name": plan.name_suggestion, "body_plan": plan.body_plan,
+                "part_donors": plan.part_donors.model_dump(), "rationale": plan.rationale}
+        return parse_plan_response(chat_payload("plan", wire))
+
+    async def _plan(self, context: dict[str, Any]) -> FusionPlan:
         await self._delay(0.6)
         readings = context["readings"]
         pins = context.get("donor_pins") or {}
@@ -114,8 +127,9 @@ class MockVision:
         body_plan = (match.get("facts") or {}).get("body_plan") or body_reading.get("bodyPlan") or other.get("bodyPlan") or "quadruped"
         if allowed and body_plan not in allowed:  # mock readings use loose words ("avian"); stay inside the data's set
             body_plan = {"avian": "winged", "aquatic": "finned", "cephalopod": "multi_legged"}.get(body_plan, allowed[0])
-        a_name = (readings[donors.head].get("commonName") or "animal").split()[-1]
-        b_name = (body_reading.get("commonName") or "animal").split()[-1]
+        head_name = (readings[donors.head].get("commonName") or "animal").split()[-1].lower()
+        body_name = (body_reading.get("commonName") or "animal").split()[-1].lower()
+        a_name, b_name = head_name, body_name
         return FusionPlan(
             body_plan=body_plan,
             part_donors=donors,
@@ -123,10 +137,15 @@ class MockVision:
                 f"Keep the {b_name}'s {body_plan} frame so the creature can stand and move, "
                 f"and give it the {a_name}'s head and covering as the recognisable signature."
             ),
-            name_suggestion=f"{a_name[:3].title()}{b_name[-4:].lower()}",
+            # L1-10: a descriptive field-guide style name, never a portmanteau of the parents.
+            name_suggestion=f"{head_name.capitalize()}-headed {body_name}" if head_name != body_name else f"Variant {body_name}",
         )
 
     async def write_field_card(self, context: dict[str, Any]) -> FieldCard:
+        card = await self._card(context)
+        return parse_card_response(chat_payload("card", card.model_dump(exclude={"provenance"})))
+
+    async def _card(self, context: dict[str, Any]) -> FieldCard:
         await self._delay(0.7)
         fault = current_fault.get()
         if fault == "timeout":

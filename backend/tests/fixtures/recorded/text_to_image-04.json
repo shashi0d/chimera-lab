@@ -1,0 +1,109 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "A photorealistic wildlife photograph of a grey domestic donkey standing on a dirt path, full body side view. Natural light, sharp focus, the whole animal clearly visible and centred, plain uncluttered background, no people, no text, no watermark.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "id": "resp_6ae52043cfc61d1e78724505",
+  "access_programs": null,
+  "created_at": 1793400899.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae5204397e4213a16764c44",
+    "summary": [
+     {
+      "text": "**Drafting photorealistic donkey prompt**\nI'm shaping the image brief around a grey domestic donkey in full-body side view on a dirt path, using natural light, sharp focus, centred framing, and a plain, uncluttered background.\n**Composing realistic donkey photo**\nI'm preparing a photorealistic 1:1 image of a grey donkey with a darker muzzle, shown in full-body side view walking left to right on a dirt path, with an uncluttered, blurred plain background and no people.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae5204353251b26b69544a2",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR01BTjNET28wUEVtZWdNRkFQSld6dHJzU2RvNWJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczo4MzVjOWQ5Mi03NDExLTRjYTgtOGYwNi1iNTA1ZDEyNmEzNTY6R014bG5UUmFQb1EzS1FvR0FHRkhpTWExQVZRaGJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM0MDA4OTl9.Q8WLFwGpVhtFH41ynrGvpd7k2VlC",
+    "result": "<elided> (809560 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 10109,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 8000
+   },
+   "output_tokens": 940,
+   "output_tokens_details": {
+    "reasoning_tokens": 259
+   },
+   "total_tokens": 11049
+  },
+  "user": null
+ }
+}

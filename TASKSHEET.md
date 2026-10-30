@@ -273,19 +273,24 @@ The real `data/chimera_data.json` uses a different schema from the invented samp
 
 Budget: at most 15 image generations and 60 Muse Spark calls. Every live call is logged in `docs/LIVE_LOG.md`. Starts only after D1 passes.
 
-- [ ] L1-01 `MetaImageGen` on the Responses API (`muse-image-1.0`, `input_image` parts, `image_generation_call` result); WebP/PNG/JPEG by magic bytes; Meta response id stored on each version.
-- [ ] L1-02 Defaults `META_VISION_MODEL=muse-spark-1.3`, `META_IMAGE_MODEL=muse-image-1.0`.
-- [ ] L1-03 Retry policy: 429, 5xx, timeouts and connection errors with backoff + jitter; never 400/401/404.
-- [ ] L1-04 Spend guard tracks usage tokens per run and per day; tokens per step in the run detail.
-- [ ] L1-05 Timeouts set to about 2× the slowest observed live latency per step (numbers logged).
-- [ ] L1-06 Six AI-generated live fixture photos in `backend/tests/fixtures/live/` (+ README), generated once.
-- [ ] L1-07 `live` pytest marker (only with `CHIMERA_LIVE=1`): identify all 6, then 5 full fusions.
-- [ ] L1-08 Live fusions use `data/chimera_data.json` (present in the repo as of D1).
-- [ ] L1-09 Record and replay: live responses saved as key-free JSON fixtures; mocks return the recorded shapes.
-- [ ] L1-10 The plan step names the creature (no string-mash names).
-- [ ] L1-11 `docs/LIVE_REPORT.md` with per-fusion results, images in `docs/live/`, latency, tokens, cost, judgment, ranked problems.
+- [x] L1-01 `MetaImageGen` on the Responses API (`muse-image-1.0`, `input_image` parts, `image_generation_call` result); WebP/PNG/JPEG by magic bytes; Meta response id stored on each version.
+- [x] L1-02 Defaults `META_VISION_MODEL=muse-spark-1.3`, `META_IMAGE_MODEL=muse-image-1.0`.
+- [x] L1-03 Retry policy: 429, 5xx, timeouts and connection errors with backoff + jitter; never 400/401/404.
+- [x] L1-04 Spend guard tracks usage tokens per run and per day; tokens per step in the run detail.
+- [x] L1-05 Timeouts set to about 2× the slowest observed live latency per step (numbers logged).
+- [x] L1-06 Six AI-generated live fixture photos in `backend/tests/fixtures/live/` (+ README), generated once.
+- [x] L1-07 `live` pytest marker (only with `CHIMERA_LIVE=1`): identify all 6, then 5 full fusions.
+- [x] L1-08 Live fusions use `data/chimera_data.json` (present in the repo as of D1).
+- [x] L1-09 Record and replay: live responses saved as key-free JSON fixtures; mocks return the recorded shapes.
+- [x] L1-10 The plan step names the creature (no string-mash names).
+- [x] L1-11 `docs/LIVE_REPORT.md` with per-fusion results, images in `docs/live/`, latency, tokens, cost, judgment, ranked problems.
 
 **Acceptance:** default tests pass in mock mode; live tests pass or every failure is explained in LIVE_REPORT.md; budget respected; README real-mode section matches what was verified.
+
+**Status: passed.**
+- **Default runs:** pytest 132 (+6 live skipped), vitest 146, Playwright 39.
+- **Live:** identify 6/6; fusions 5/5. The pinned fusion passed on its second run; the first failed with a plan timeout, explained in LIVE_REPORT problem 1.
+- **Budget:** 11/15 images, 27/60 Spark calls, 367k tokens logged. Cost unknown (no reachable pricing page).
 
 ### P7 Shashi (needs keys)
 

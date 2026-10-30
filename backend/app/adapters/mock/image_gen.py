@@ -16,6 +16,8 @@ import re
 from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageOps
 
 from app.adapters.base import GeneratedImage, current_fault
+from app.adapters.meta.client import parse_generate_response
+from app.adapters.mock.recorded import responses_payload
 from app.errors import ChimeraError
 from app.models.schemas import ErrorCode
 
@@ -63,7 +65,7 @@ def render_plate(prompt: str, refs: list[bytes]) -> bytes:
     # Full-bleed: the UI supplies the plate frame and the "Generated fusion" caption (PV1-08).
     plate = toned.resize((SIZE, SIZE), Image.Resampling.LANCZOS)
     out = io.BytesIO()
-    plate.save(out, "JPEG", quality=90)
+    plate.save(out, "WEBP", quality=85, method=4)  # Muse Image returns WebP (L1-01)
     return out.getvalue()
 
 
@@ -80,9 +82,10 @@ class MockImageGen:
             await asyncio.sleep((2.0 + (seed % 2000) / 1000) * self.delay_scale)
         if fault == "server_error":
             raise ChimeraError(ErrorCode.UPSTREAM_ERROR)
+        # L1-09: answers go through the recorded Responses API shape and the real parser.
         if fault == "refusal":
-            raise ChimeraError(ErrorCode.MODEL_REFUSED, "The image model declined this request.")
+            return parse_generate_response(responses_payload(None, "Sorry, I can't create that image."), self.model_id)
         if fault == "corrupt_output":
-            return GeneratedImage(data=b"\x00not-an-image", content_type="image/jpeg", model=self.model_id)
+            return parse_generate_response(responses_payload(b"\x00not-an-image"), self.model_id)
         data = await asyncio.to_thread(render_plate, prompt, reference_images)
-        return GeneratedImage(data=data, content_type="image/jpeg", model=self.model_id)
+        return parse_generate_response(responses_payload(data), self.model_id)

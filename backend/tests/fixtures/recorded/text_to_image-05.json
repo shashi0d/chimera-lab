@@ -1,0 +1,109 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "A photorealistic wildlife photograph of a bald eagle perched on a branch, wings folded, full body. Natural light, sharp focus, the whole animal clearly visible and centred, plain uncluttered background, no people, no text, no watermark.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "id": "resp_6ae5204fcbb0b070ab3d466e",
+  "access_programs": null,
+  "created_at": 1793400911.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae5204f539b8c521784410f",
+    "summary": [
+     {
+      "text": "**Composing photoreal eagle image**\nI'm planning a photoreal wildlife shot of a bald eagle perched on a mossy branch, wings folded, full body centered with sharp focus in natural light against a plain, uncluttered background.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae5204fd779749ad2d346c4",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR01wR0JqUWtHS04ybGVZSEFKbG41Z1EwaHlsWWJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczozN2VhYWQ4Yi1jYWNkLTQ5YjctOGRhMi02NWJlYjI0NGE5OTQ6R0N6d0F6UlduR0FfUV9RR0FQZ2U4TzQtOHRKX2JnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM0MDA5MTF9.Q8WLFwG1YxRMvuSPxewYDE6mKhDo",
+    "result": "<elided> (394732 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 9977,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 8000
+   },
+   "output_tokens": 807,
+   "output_tokens_details": {
+    "reasoning_tokens": 186
+   },
+   "total_tokens": 10784
+  },
+  "user": null
+ }
+}

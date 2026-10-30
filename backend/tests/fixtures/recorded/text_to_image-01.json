@@ -1,0 +1,109 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "A photorealistic wildlife photograph of an adult male African lion with a full mane, standing in dry savanna grass. Natural light, sharp focus, the whole animal clearly visible and centred, plain uncluttered background, no people, no text, no watermark.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "id": "resp_6ae520097a28e3d1cd33471a",
+  "access_programs": null,
+  "created_at": 1793400841.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae520097eae4210fefe473a",
+    "summary": [
+     {
+      "text": "**Composing photorealistic lion image**\nI'm planning a photorealistic wildlife photo of an adult male African lion with a full mane, standing centered in dry savanna grass, using natural golden-hour light, sharp focus, and a plain, uncluttered background.\n**Refining lion image composition**\nI'm planning another generation to center the whole lion, keep the head in focus, and blur the background for a cleaner, more centered full-body shot.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae52009708c4be2cbc84ac7",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0w4UkJEVHIycS1RTm9BSUFNOFQ3MHNiZlJCZmJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczoxZGI3ZTQzNy0zNWRiLTQ0YWUtYTY2Ni1hNjg0ZDc4ZjVkMTY6R05XckJ6VDNTYnNHMG5JRkFPaE1yUkZDQVNnMmJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM0MDA4NDF9.Q8WLFwFyns7TmVNvvRpzos1qWkRp",
+    "result": "<elided> (835180 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 17698,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 14400
+   },
+   "output_tokens": 1491,
+   "output_tokens_details": {
+    "reasoning_tokens": 239
+   },
+   "total_tokens": 19189
+  },
+  "user": null
+ }
+}
