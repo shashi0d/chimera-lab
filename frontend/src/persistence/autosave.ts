@@ -48,22 +48,33 @@ export async function restoreGraph(): Promise<void> {
   }
 }
 
-/** Debounced autosave to IndexedDB (500ms) and, when online, to the backend (2s). */
+const LOCAL_MAX_WAIT_MS = 2000;
+
+/**
+ * Debounced autosave to IndexedDB (500ms, but never more than 2s behind during a
+ * burst such as upload progress) and, when online, to the backend (2s). Pending
+ * work is flushed on teardown (e.g. the app error boundary) and on page hide.
+ */
 export function startAutosave(): () => void {
   let localTimer: ReturnType<typeof setTimeout> | null = null;
   let serverTimer: ReturnType<typeof setTimeout> | null = null;
+  let firstPendingAt: number | null = null;
+
+  const saveLocal = () => {
+    localTimer = null;
+    firstPendingAt = null;
+    set(KEY, useGraph.getState().toDoc(), db())
+      .then(() => useSaveState.getState().set("saved-local"))
+      .catch(() => undefined); // quota or private mode: nothing more we can do locally
+  };
+
   const unsub = useGraph.subscribe((s, prev) => {
     if (s.revision === prev.revision || s.readOnly) return;
     useSaveState.getState().set("saving");
+    const now = Date.now();
+    firstPendingAt ??= now;
     if (localTimer) clearTimeout(localTimer);
-    localTimer = setTimeout(async () => {
-      try {
-        await set(KEY, useGraph.getState().toDoc(), db());
-        useSaveState.getState().set("saved-local");
-      } catch {
-        /* quota or private mode: nothing more we can do locally */
-      }
-    }, LOCAL_DEBOUNCE_MS);
+    localTimer = setTimeout(saveLocal, Math.max(0, Math.min(LOCAL_DEBOUNCE_MS, firstPendingAt + LOCAL_MAX_WAIT_MS - now)));
     if (serverTimer) clearTimeout(serverTimer);
     serverTimer = setTimeout(async () => {
       if (useConnectivity.getState().status !== "online") return;
@@ -75,9 +86,18 @@ export function startAutosave(): () => void {
       }
     }, SERVER_DEBOUNCE_MS);
   });
+
+  const flush = () => {
+    if (localTimer) {
+      clearTimeout(localTimer);
+      saveLocal();
+    }
+  };
+  window.addEventListener("pagehide", flush);
   return () => {
     unsub();
-    if (localTimer) clearTimeout(localTimer);
+    window.removeEventListener("pagehide", flush);
+    flush();
     if (serverTimer) clearTimeout(serverTimer);
   };
 }

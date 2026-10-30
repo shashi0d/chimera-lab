@@ -12,7 +12,7 @@ function ToastItem({ t }: { t: Toast }) {
     return () => clearTimeout(id);
   }, [t.id, t.timeoutMs, dismiss]);
   return (
-    <li className={`toast toast--${t.kind}`} role={t.kind === "error" ? "alert" : "status"}>
+    <div className={`toast toast--${t.kind}`} role={t.kind === "error" ? "alert" : "status"}>
       <Icon name={ICON[t.kind]} size={16} />
       <p className="toast__msg">{t.message}</p>
       {t.action ? (
@@ -21,17 +21,17 @@ function ToastItem({ t }: { t: Toast }) {
         </button>
       ) : null}
       <IconButton icon="close" label="Dismiss" className="toast__close" onClick={() => dismiss(t.id)} />
-    </li>
+    </div>
   );
 }
 
 export function Toasts() {
   const toasts = useToasts((s) => s.toasts);
   return (
-    <ol className="toast-stack" aria-live="polite" aria-label="Notifications">
+    <section className="toast-stack" aria-label="Notifications">
       {toasts.map((t) => (
         <ToastItem key={t.id} t={t} />
       ))}
-    </ol>
+    </section>
   );
 }

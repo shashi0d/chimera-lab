@@ -26,7 +26,7 @@
   --folio-raised: #FFFDF8;
   --ink: #1E2620;
   --ink-2: #4A544D;
-  --ink-3: #7B837C;
+  --ink-3: #646C65;
   --rule: #DCD4C4;
   --rule-strong: #B4AB98;
   --grid: #E6DFD1;
@@ -909,6 +909,7 @@ svg.react-flow__connectionline {
 
 .toast-stack {
   position: fixed;
+  pointer-events: none;
   right: var(--space-4);
   bottom: var(--space-4);
   z-index: var(--z-toast);
@@ -918,6 +919,7 @@ svg.react-flow__connectionline {
   width: min(400px, calc(100vw - 2 * var(--space-4)));
 }
 .toast {
+  pointer-events: auto;
   display: grid;
   grid-template-columns: auto 1fr auto auto;
   align-items: start;
@@ -1076,7 +1078,7 @@ svg.react-flow__connectionline {
 .panel__heading { font-family: var(--font-serif); font-size: var(--text-16); font-weight: var(--weight-semibold); }
 .panel__heading-row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); }
 .panel__muted { color: var(--text-muted); font-size: var(--text-13); }
-.panel__fine { color: var(--text-faint); font-size: var(--text-12); }
+.panel__fine { color: var(--text-muted); font-size: var(--text-12); }
 .panel__text { font-size: var(--text-13); color: var(--text-muted); }
 .panel__label { color: var(--text); font-weight: var(--weight-medium); }
 .panel__mono { font-family: var(--font-mono); font-size: var(--text-12); color: var(--text-muted); overflow-wrap: anywhere; }

@@ -67,12 +67,12 @@ export function NodeCard(props: NodeCardProps) {
       <div className="node__body">{children}</div>
       {footer ? <footer className="node__footer">{footer}</footer> : null}
       {inputs.map((p, i) => (
-        <Handle key={p.id} id={p.id} type="target" position={Position.Left} className={portClass(p, "in", i, inputs.length)} aria-label={`Input ${p.label ?? p.id}`}>
+        <Handle key={p.id} id={p.id} type="target" position={Position.Left} className={portClass(p, "in", i, inputs.length)}>
           {p.label ? <span className="port__label">{p.label}</span> : null}
         </Handle>
       ))}
       {outputs.map((p, i) => (
-        <Handle key={p.id} id={p.id} type="source" position={Position.Right} className={portClass(p, "out", i, outputs.length)} aria-label={`Output ${p.label ?? p.id}`} />
+        <Handle key={p.id} id={p.id} type="source" position={Position.Right} className={portClass(p, "out", i, outputs.length)} />
       ))}
     </article>
   );

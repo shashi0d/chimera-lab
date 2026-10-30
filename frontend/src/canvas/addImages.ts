@@ -13,6 +13,36 @@ import { toast } from "../ui/toastStore";
 export const MAX_IMAGES_PER_DROP = 2;
 export const LAYOUT = { imageGapY: 300, fusionDx: 320, resultDx: 360 };
 
+/** Approximate footprints, used only to avoid dropping new nodes on top of old ones. */
+const FOOTPRINT: Record<string, { w: number; h: number }> = {
+  "image-input": { w: 236, h: 280 },
+  fusion: { w: 300, h: 320 },
+  result: { w: 304, h: 500 },
+};
+const DEFAULT_FOOTPRINT = { w: 280, h: 300 };
+
+function overlaps(a: Position, aw: number, ah: number, b: Position, bw: number, bh: number): boolean {
+  const pad = 24;
+  return a.x < b.x + bw + pad && a.x + aw + pad > b.x && a.y < b.y + bh + pad && a.y + ah + pad > b.y;
+}
+
+/** Nearest spot at or below/right of `at` where a block of the given size fits. */
+export function findFreeSpot(at: Position, w: number, h: number): Position {
+  const nodes = useGraph.getState().nodes;
+  const hits = (p: Position) =>
+    nodes.some((n) => {
+      const f = FOOTPRINT[n.type] ?? DEFAULT_FOOTPRINT;
+      return overlaps(p, w, h, n.position, f.w, f.h);
+    });
+  for (let ring = 0; ring < 12; ring++) {
+    for (const [dx, dy] of [[0, 1], [1, 0], [1, 1], [-1, 1], [0, -1]] as const) {
+      const p = { x: at.x + dx * ring * 140, y: at.y + dy * ring * 160 };
+      if (!hits(p)) return p;
+    }
+  }
+  return at;
+}
+
 function sanitizeName(name: string): string {
   return name.replace(/[^\w.\- ]+/g, "").slice(0, 60) || "image";
 }
@@ -41,6 +71,10 @@ export async function addImageFiles(files: File[], at: Position): Promise<string
   }
   if (!prepared.length) return [];
 
+  const hasFusion = useGraph.getState().nodes.some((n) => n.type === "fusion");
+  const blockW = hasFusion ? FOOTPRINT["image-input"]!.w : LAYOUT.fusionDx + FOOTPRINT.fusion!.w;
+  const blockH = (prepared.length - 1) * LAYOUT.imageGapY + FOOTPRINT["image-input"]!.h;
+  at = findFreeSpot(at, blockW, blockH);
   const nodes: GraphNode[] = [];
   const edges: GraphEdge[] = [];
   for (const [i, p] of prepared.entries()) {
@@ -57,7 +91,6 @@ export async function addImageFiles(files: File[], at: Position): Promise<string
     nodes.push(createNode("image-input", { x: at.x, y: at.y + i * LAYOUT.imageGapY }, data));
   }
 
-  const hasFusion = useGraph.getState().nodes.some((n) => n.type === "fusion");
   if (!hasFusion) {
     const midY = at.y + ((nodes.length - 1) * LAYOUT.imageGapY) / 2 + (nodes.length === 1 ? 60 : 0);
     const fusion = createNode("fusion", { x: at.x + LAYOUT.fusionDx, y: midY - 40 });
