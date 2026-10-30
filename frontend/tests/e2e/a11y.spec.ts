@@ -3,7 +3,7 @@ import { expect, test, type Page } from "@playwright/test";
 import { addImages, fuse, fx, openApp, waitForResult } from "./helpers";
 
 async function axe(page: Page, label: string) {
-  const res = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa"]).analyze();
+  const res = await new AxeBuilder({ page: page as never }).withTags(["wcag2a", "wcag2aa", "wcag21aa"]).analyze();
   const bad = res.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
   expect(bad.map((v) => `${label}: ${v.id} (${v.impact}) ${v.nodes.map((n) => n.target.join(" ")).slice(0, 3).join(" | ")}`)).toEqual([]);
 }

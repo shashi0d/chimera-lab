@@ -1,0 +1,399 @@
+{
+  "round": "pv-1",
+  "captured": 56,
+  "failures": [],
+  "shots": [
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/01-empty-canvas.png",
+      "state": "01-empty-canvas",
+      "shows": "Empty canvas with drop invitation",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/02-drop-overlay.png",
+      "state": "02-drop-overlay",
+      "shows": "Files dragged over the canvas",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/03-one-image.png",
+      "state": "03-one-image",
+      "shows": "One image, auto-added Fusion node with input A connected",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/04-uploading.png",
+      "state": "04-uploading",
+      "shows": "Upload in progress with percent and cancel",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/05-two-unconnected.png",
+      "state": "05-two-unconnected",
+      "shows": "Two images, Fusion inputs empty (Fuse disabled with hint)",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/06-two-connected.png",
+      "state": "06-two-connected",
+      "shows": "Two images connected, ready to fuse",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/10-running-load-inputs.png",
+      "state": "10-running-load-inputs",
+      "shows": "Fusion running, current step: load_inputs",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/11-running-identify.png",
+      "state": "11-running-identify",
+      "shows": "Fusion running, current step: identify",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/12-running-match.png",
+      "state": "12-running-match",
+      "shows": "Fusion running, current step: match",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/13-running-hybrid-check.png",
+      "state": "13-running-hybrid-check",
+      "shows": "Fusion running, current step: hybrid_check",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/14-running-rules-check.png",
+      "state": "14-running-rules-check",
+      "shows": "Fusion running, current step: rules_check",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/15-running-compile.png",
+      "state": "15-running-compile",
+      "shows": "Fusion running, current step: compile",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/16-running-generate.png",
+      "state": "16-running-generate",
+      "shows": "Fusion running, current step: generate",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/17-running-store.png",
+      "state": "17-running-store",
+      "shows": "Fusion running, current step: store",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/18-long-wait.png",
+      "state": "18-long-wait",
+      "shows": "Still working note after 20s",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/19-very-long-wait.png",
+      "state": "19-very-long-wait",
+      "shows": "After 120s: prominent cancel",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/20-success-real-hybrid.png",
+      "state": "20-success-real-hybrid",
+      "shows": "Success with real-hybrid badge (lion + tiger)",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/21-success-warnings.png",
+      "state": "21-success-warnings",
+      "shows": "Success with rule warnings (octopus + macaw)",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/22-version-2.png",
+      "state": "22-version-2",
+      "shows": "Re-run: version 2 selected in the switcher",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/23-panel-open.png",
+      "state": "23-panel-open",
+      "shows": "How this was made panel (top)",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/24-panel-notes-prompt.png",
+      "state": "24-panel-notes-prompt",
+      "shows": "Panel scrolled to field notes and prompt",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/25-stale-result.png",
+      "state": "25-stale-result",
+      "shows": "Input replaced after success: results marked outdated",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/26-result-image-failed.png",
+      "state": "26-result-image-failed",
+      "shows": "Generated image failed to load: fallback tile with reload",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/30-error-not-animal.png",
+      "state": "30-error-not-animal",
+      "shows": "NOT_AN_ANIMAL: message + offending input highlighted",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/30-error-human.png",
+      "state": "30-error-human",
+      "shows": "HUMAN_DETECTED: privacy-safe message + input highlighted",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/30-error-refusal.png",
+      "state": "30-error-refusal",
+      "shows": "MODEL_REFUSED: what to change, no retry",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/30-error-server-error.png",
+      "state": "30-error-server-error",
+      "shows": "UPSTREAM_ERROR: Retry fusion",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/30-error-timeout.png",
+      "state": "30-error-timeout",
+      "shows": "UPSTREAM_TIMEOUT: Retry fusion",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/30-error-budget.png",
+      "state": "30-error-budget",
+      "shows": "BUDGET_EXCEEDED: no retry",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/30-error-rate-limit.png",
+      "state": "30-error-rate-limit",
+      "shows": "RATE_LIMITED: automatic retry countdown",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/30-error-interrupted.png",
+      "state": "30-error-interrupted",
+      "shows": "RUN_INTERRUPTED: server restarted, re-run offered",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/30-error-internal.png",
+      "state": "30-error-internal",
+      "shows": "INTERNAL: generic message with reportable error id",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/31-duplicate-inputs.png",
+      "state": "31-duplicate-inputs",
+      "shows": "Same image twice: Fuse blocked with hint",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/32-upload-error.png",
+      "state": "32-upload-error",
+      "shows": "Server rejected an upload (IMAGE_CORRUPT)",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/33-unsupported-file-toast.png",
+      "state": "33-unsupported-file-toast",
+      "shows": "Unsupported file type rejected with toast",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/34-too-many-files-toast.png",
+      "state": "34-too-many-files-toast",
+      "shows": "Three images dropped: two added, toast explains",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/40-offline-banner.png",
+      "state": "40-offline-banner",
+      "shows": "Offline banner; Fuse disabled",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/41-offline-upload-queue.png",
+      "state": "41-offline-upload-queue",
+      "shows": "Upload queued while offline",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/42-server-unreachable.png",
+      "state": "42-server-unreachable",
+      "shows": "Server unreachable banner (distinct from offline)",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/43-offline-mid-run.png",
+      "state": "43-offline-mid-run",
+      "shows": "Connection lost during a run: polling paused note",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/50-node-crash.png",
+      "state": "50-node-crash",
+      "shows": "One node failed to render; canvas still usable",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/51-app-crash.png",
+      "state": "51-app-crash",
+      "shows": "App-level error screen",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/52-unsupported-node-and-orphans.png",
+      "state": "52-unsupported-node-and-orphans",
+      "shows": "Unknown node type placeholder + orphan edge toast",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/53-read-only-newer.png",
+      "state": "53-read-only-newer",
+      "shows": "Graph from a newer version: read-only banner",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/54-corrupt-autosave.png",
+      "state": "54-corrupt-autosave",
+      "shows": "Corrupt autosave discarded with toast",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/60-fit-view-many-nodes.png",
+      "state": "60-fit-view-many-nodes",
+      "shows": "Fit view with 7 nodes (two fusions)",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/61-canvas-100-percent.png",
+      "state": "61-canvas-100-percent",
+      "shows": "Canvas at 100% zoom after a fusion",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/62-minimap.png",
+      "state": "62-minimap",
+      "shows": "Minimap toggled on",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/63-refused-connection.png",
+      "state": "63-refused-connection",
+      "shows": "Wrong port type: refused with toast",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/64-shortcuts-dialog.png",
+      "state": "64-shortcuts-dialog",
+      "shows": "Keyboard shortcuts dialog",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/70-focus-add-image.png",
+      "state": "70-focus-add-image",
+      "shows": "Keyboard focus on toolbar control: Add image",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/71-focus-add-fusion-node.png",
+      "state": "71-focus-add-fusion-node",
+      "shows": "Keyboard focus on toolbar control: Add fusion node",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/72-focus-undo.png",
+      "state": "72-focus-undo",
+      "shows": "Keyboard focus on toolbar control: Undo",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/73-focus-fit-to-view.png",
+      "state": "73-focus-fit-to-view",
+      "shows": "Keyboard focus on toolbar control: Fit to view",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/74-focus-show-minimap.png",
+      "state": "74-focus-show-minimap",
+      "shows": "Keyboard focus on toolbar control: Show minimap",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/pv-1/1440x900/dark/75-focus-fuse-button.png",
+      "state": "75-focus-fuse-button",
+      "shows": "Keyboard focus on the Fuse button",
+      "viewport": "1440x900",
+      "theme": "dark"
+    }
+  ]
+}
