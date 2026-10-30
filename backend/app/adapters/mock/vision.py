@@ -109,7 +109,11 @@ class MockVision:
         donors = PartDonors(**{"head": "A", "body": "B", "limbs": "B", "covering": "A", "tail": "A", **pins})
         body_reading = readings[donors.body]
         other = readings["A" if donors.body == "B" else "B"]
-        body_plan = body_reading.get("bodyPlan") or other.get("bodyPlan") or "quadruped"
+        match = (context.get("matches") or {}).get(donors.body) or {}
+        allowed = context.get("allowed_body_plans") or []
+        body_plan = (match.get("facts") or {}).get("body_plan") or body_reading.get("bodyPlan") or other.get("bodyPlan") or "quadruped"
+        if allowed and body_plan not in allowed:  # mock readings use loose words ("avian"); stay inside the data's set
+            body_plan = {"avian": "winged", "aquatic": "finned", "cephalopod": "multi_legged"}.get(body_plan, allowed[0])
         a_name = (readings[donors.head].get("commonName") or "animal").split()[-1]
         b_name = (body_reading.get("commonName") or "animal").split()[-1]
         return FusionPlan(

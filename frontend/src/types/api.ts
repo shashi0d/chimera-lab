@@ -30,6 +30,7 @@ export interface ChimeraApi {
   ApiError?: ApiError;
   Asset?: Asset;
   CreatureSpec?: CreatureSpec;
+  DataHealth?: DataHealth;
   ErrorCode?: ErrorCode;
   ErrorEnvelope?: ErrorEnvelope;
   FieldCard?: FieldCard;
@@ -37,6 +38,7 @@ export interface ChimeraApi {
   GraphEdge?: GraphEdge;
   GraphNode?: GraphNode;
   Health?: Health;
+  MythologyMatch?: MythologyMatch;
   ParentInfo?: ParentInfo;
   PartDonors?: PartDonors;
   Position?: Position;
@@ -109,6 +111,11 @@ export interface Asset {
 export interface CreatureSpec {
   parents: ParentInfo[];
   realHybrid: RealHybrid | null;
+  realHybrids: RealHybrid[];
+  mythology: MythologyMatch[];
+  rulesSummary: {
+    [k: string]: number;
+  };
   bodyPlan: string;
   partDonors: PartDonors;
   rationale: string;
@@ -142,6 +149,34 @@ export interface RealHybrid {
   facts: {
     [k: string]: string;
   };
+  father: string | null;
+  mother: string | null;
+  cross: string | null;
+  confidence: string | null;
+  fertility: string | null;
+  matchedVia: string | null;
+}
+/**
+ * D1-04: a mythological creature whose components include both parents.
+ *
+ * This interface was referenced by `ChimeraApi`'s JSON-Schema
+ * via the `definition` "MythologyMatch".
+ */
+export interface MythologyMatch {
+  creatureName: string;
+  culture: string;
+  componentAnimals: string;
+  componentParts: string;
+  hasHumanPart: boolean;
+  matched: {
+    [k: string]: string;
+  };
+  matchKind: {
+    [k: string]: string;
+  };
+  verification: string;
+  verified: boolean;
+  sourceUrl: string;
 }
 /**
  * This interface was referenced by `ChimeraApi`'s JSON-Schema
@@ -162,6 +197,24 @@ export interface RuleWarning {
   ruleId: string;
   message: string;
   severity: "info" | "warning";
+  detail: string | null;
+}
+/**
+ * D1-06: what the loaded data file actually yields.
+ *
+ * This interface was referenced by `ChimeraApi`'s JSON-Schema
+ * via the `definition` "DataHealth".
+ */
+export interface DataHealth {
+  animals: number;
+  tier2Animals: number;
+  measurements: number;
+  hybrids: number;
+  hybridsResolved: number;
+  rules: number;
+  rulesMapped: number;
+  mythology: number;
+  problems: string[];
 }
 /**
  * This interface was referenced by `ChimeraApi`'s JSON-Schema
@@ -235,10 +288,11 @@ export interface GraphEdge {
  * via the `definition` "Health".
  */
 export interface Health {
-  status: "ok";
+  status: "ok" | "degraded";
   mode: "mock" | "real";
   version: string;
   dataSource: "full" | "sample";
+  data: DataHealth | null;
 }
 /**
  * This interface was referenced by `ChimeraApi`'s JSON-Schema

@@ -26,9 +26,24 @@ def _envelope(err: ApiError, status: int, headers: dict[str, str] | None = None)
     return JSONResponse(ErrorEnvelope(error=err).dump(), status_code=status, headers=headers)
 
 
+def check_data(svc: Services) -> None:
+    """D1-06: a data file that yields no hybrids or no runnable rules is an error, not a silent zero."""
+    from app.pipeline.steps.rules_check import CHECKS
+
+    report = svc.data.health(set(CHECKS))
+    for problem in report["problems"]:
+        log.error("Data check (%s): %s", svc.settings.resolved_data_path(), problem)
+    log.info(
+        "Data loaded (%s): %d animals, %d/%d hybrids resolve, %d/%d rules mapped, %d mythology rows",
+        svc.data.source, report["animals"], report["hybrids_resolved"], report["hybrids"],
+        report["rules_mapped"], report["rules"], report["mythology"],
+    )
+
+
 def create_app(settings: Settings | None = None, services: Services | None = None) -> FastAPI:
     settings = settings or get_settings()
     svc = services or build_services(settings)
+    check_data(svc)
 
     @asynccontextmanager
     async def lifespan(app: FastAPI) -> AsyncIterator[None]:

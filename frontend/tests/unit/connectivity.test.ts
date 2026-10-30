@@ -15,7 +15,7 @@ describe("connectivity (TASKSHEET 7.7)", () => {
   });
   it("health check restores online and records the mode", async () => {
     useConnectivity.getState().setServerReachable(false);
-    vi.spyOn(api, "health").mockResolvedValue({ status: "ok", mode: "mock", version: "1", dataSource: "sample" });
+    vi.spyOn(api, "health").mockResolvedValue({ status: "ok", mode: "mock", version: "1", dataSource: "sample", data: null });
     expect(await useConnectivity.getState().check()).toBe("online");
     expect(useConnectivity.getState().mode).toBe("mock");
   });

@@ -26,8 +26,8 @@ def test_lookup_by_name_scientific_genus_and_alias():
 
 def test_hybrids_by_unordered_pair_exact_first():
     data = load_data(SAMPLE)
-    assert [h["id"] for h in data.find_hybrids("lion", "tiger")] == ["liger", "tigon"]
-    assert [h["id"] for h in data.find_hybrids("tiger", "lion")] == ["tigon", "liger"]
+    assert [h.row["id"] for h in data.find_hybrids("lion", "tiger")] == ["liger", "tigon"]
+    assert [h.row["id"] for h in data.find_hybrids("tiger", "lion")] == ["tigon", "liger"]
     assert data.find_hybrids("lion", "red_fox") == []
 
 
@@ -37,7 +37,7 @@ def test_ranges_and_lists_stay_strings_never_midpoints():
     assert parse_range("") is None
     assert split_list("a| b |c") == ["a", "b", "c"]
     data = load_data(SAMPLE)
-    assert data.measurements_for("lion")["body_mass_kg"] == "126-272"
+    assert data.measurements_for("lion")[0]["body_mass_kg"] == "126-272"
 
 
 def test_missing_file_falls_back_to_sample(tmp_path):

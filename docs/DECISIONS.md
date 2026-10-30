@@ -99,3 +99,21 @@ It scored highest (27/30) and is the first post-v1 node type, which tests `ADDIN
 
 **D-032 `Executor.configure(graph, node)`.**
 The Field card's config comes from upstream (the Result's selected version), so `configure` takes the graph as well as the node.
+
+**D-033 Real data file is committed (`data/chimera_data.json`, 2.8 MB).**
+D1-07 and L1-08 need it in the repo, and Modal bakes it into the image. Removed from `.gitignore`. The invented sample stays for the earlier tests.
+
+**D-034 Hybrid parents resolve to a *set* of animals, tagged with how they matched.**
+The real file has three scientific names shared by two tier-1 animals each (*Canis lupus*: gray wolf and domestic dog; *Lama glama*: llama and guanaco; *Sus scrofa*: wild boar and domestic pig). "Canis familiaris" is in neither tier, so it resolves by genus. A parent therefore resolves to every tier-1 animal with that name (tier 2 if none, then genus), and each hybrid match records `matched_via`. Exact-species matches sort before genus-only ones, and the cross direction is kept from the role suffix. *Alternative:* a hand-written synonym table, which is more precise for dogs but hides data problems. Genus matches are visible instead (R-A3-P01 is about exactly this case).
+
+**D-035 Rules run through an explicit rule_id → check table, in two phases.**
+The real rules have no machine field, so `backend/app/data/rule_map.py` lists 44 of 130 by hand: 26 run on the two parents (rules_check step), 18 run on the planned fusion (end of compile). The other 86 are data-integrity or mythology-record rules about how the file must be written; they are counted as unmapped in every run, never silently skipped. Severity comes from the map, because the real rules don't carry one. Only rules with a specific detail (or warnings, max 3) go into the image prompt; the real rule texts are long.
+
+**D-036 The planner's allowed body plans come from the data.**
+R-A1-01 requires one body plan from the data's set (real: quadruped, biped, winged, finned, multi_legged, serpentine, radial). The previous hard-coded list ("avian", "aquatic", …) didn't match it.
+
+**D-037 Mythology matching: common-name words first, then a broad-word taxon table.**
+Mythology components are everyday words. A component matches a parent if it is the parent's common name or one of its words ("eagle" → bald eagle). Otherwise broad words map to a taxon test (`BROAD_TAXA`: bird → class Aves, snake → serpentine body plan, bull → genus Bos/Bison/Bubalus, …). Name matches rank above taxon matches. `verified` is true only when the row's verification text says "verified". No real row does: they are "line-checked by Muse" or "URL loads only", which the API passes through verbatim.
+
+**D-038 The open-weight model id is noted, not used.**
+Per the hackathon guide, the open-weight Muse Spark is `meta-models/muse-spark-open-1026` (not the id in the docs). Not used in L1; recorded here for a later "open-weight bonus" task.

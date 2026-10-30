@@ -76,3 +76,16 @@ Short entries per phase: what was built, what was tested, what was deferred. New
 - **Tested:** +7 backend, +6 component, +1 e2e (real PNG check).
 - **Visual:** round `f2` (36 shots, including the exported PNG), no blockers or majors.
 - **Totals:** pytest 89, vitest 146, Playwright 39; CSS and bundle checks pass.
+
+## 2026-10-30: D1 Real data schema (passed)
+
+- **Found:** with the real `chimera_data.json`, the old code resolved 0 hybrids and ran 0 rules, silently: it read invented field names (`parent_a`, `check`).
+- **Built:**
+  - Hybrid lookup on `parent1`/`parent2` with role suffixes, tier 1 → tier 2 → genus resolution and cross direction kept (D-034).
+  - Explicit rule map with 44 rules in two phases, plus new checks: fly/swim need a donor, habitat overlap, 1000× mass ratio on range bounds, unrecorded active time (D-035).
+  - All measurement rows per animal.
+  - Mythology resemblance (D-037).
+  - Real-schema fixture built from the real file (`scripts/make_real_schema_fixture.py`).
+  - Startup data check, with counts in `/health` (status `degraded` on a silent zero).
+- **Tested:** pytest 89 → 123 (sample, real-schema fixture and the real file), vitest 146. Frontend changes were type fixtures only.
+- **Real-file numbers:** 29/31 hybrids resolve both parents; 44/130 rules mapped.

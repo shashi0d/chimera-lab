@@ -6,6 +6,8 @@ from app.pipeline.steps.match import match_reading
 from tests.conftest import FIXTURES
 
 DATA = load_data(FIXTURES / "chimera_data.sample.json")
+# The checks the sample file's rules name (the sample predates the real-schema checks).
+SAMPLE_CHECKS = {r["check"] for r in DATA.rules}
 
 
 def side(common, sci, plan="quadruped"):
@@ -26,13 +28,13 @@ def test_match_prefers_scientific_then_name_then_genus():
 
 def test_lion_tiger_same_genus_no_anatomy_warnings():
     a, b = side("Lion", "Panthera leo"), side("Tiger", "Panthera tigris")
-    hits = {name for name, fn in rules_check.CHECKS.items() if fn(a, b)}
+    hits = {name for name in SAMPLE_CHECKS if rules_check.CHECKS[name].fn(rules_check.RuleInput(a, b))}
     assert hits == {"same_genus"}
 
 
 def test_octopus_lion_triggers_anatomy_and_realm_rules():
     a, b = side("Common octopus", "Octopus vulgaris", "cephalopod"), side("Lion", "Panthera leo")
-    hits = {name for name, fn in rules_check.CHECKS.items() if fn(a, b)}
+    hits = {name for name in SAMPLE_CHECKS if rules_check.CHECKS[name].fn(rules_check.RuleInput(a, b))}
     assert {"body_plan_mismatch", "limb_count_mismatch", "boneless_parent", "realm_conflict",
             "class_distance"} <= hits
 
@@ -48,8 +50,8 @@ def test_mass_ratio_uses_range_bounds():
 def test_unmatched_parent_never_crashes_rules():
     a = (AnimalReading(is_animal=True, common_name="Quokka", body_plan="quadruped"), None)
     b = side("Lion", "Panthera leo")
-    for fn in rules_check.CHECKS.values():
-        fn(a, b)
+    for check in rules_check.CHECKS.values():
+        check.fn(rules_check.RuleInput(a, b))
 
 
 def test_prompt_names_each_reference_and_its_parts():

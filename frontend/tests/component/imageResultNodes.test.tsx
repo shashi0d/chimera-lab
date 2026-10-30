@@ -72,6 +72,9 @@ const spec = (over: Partial<CreatureSpec> = {}): CreatureSpec => ({
   prompt: "Reference image 1 shows a lion.",
   model: { vision: "v", image: "i" },
   donorSource: {},
+  realHybrids: [],
+  mythology: [],
+  rulesSummary: {},
   ...over,
 });
 const version = (n: number, s = spec()) => ({ runId: `run${n}`, assetId: `ast${n}`, creatureId: `c${n}`, imageUrl: `/assets/ast${n}/content`, spec: s, createdAt: "" });
@@ -86,8 +89,8 @@ describe("Result node (TASKSHEET 7.4)", () => {
 
   it("shows the real-hybrid badge and warnings count", () => {
     const s = spec({
-      realHybrid: { hybridId: "liger", name: "Liger", facts: {} },
-      warnings: [{ ruleId: "R-A1-01", message: "m", severity: "warning" }, { ruleId: "R-T1-02", message: "m", severity: "info" }],
+      realHybrid: { hybridId: "liger", name: "Liger", facts: {}, father: null, mother: null, cross: null, confidence: null, fertility: null, matchedVia: null },
+      warnings: [{ ruleId: "R-A1-01", message: "m", severity: "warning", detail: null }, { ruleId: "R-T1-02", message: "m", severity: "info", detail: null }],
     });
     seed([result("r", { versions: [version(1, s)], selected: 0 })]);
     renderNode("r");

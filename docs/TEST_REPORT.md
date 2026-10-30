@@ -2,7 +2,7 @@
 
 Date: 2026-10-30
 Mode: mock
-Totals: unit 95/95 (frontend) + 27/27 (backend), component 51/51, backend integration 62/62, e2e 39/39 (Playwright, Chromium; includes 4 visual baselines)
+Totals: frontend unit + component 146/146, backend 123/123 (sample + real-schema fixture + real file), e2e 39/39 (Playwright, Chromium; includes 4 visual baselines)
 
 Commands: `cd frontend && npm test`, `.venv/bin/python -m pytest backend`, `cd frontend && npm run e2e`, `scripts/check-css.sh`, `scripts/check-bundle.sh`.
 
@@ -74,6 +74,27 @@ Abbreviations for test files used below:
 | F1 | Pin parts; pins override plan; all pinned skips plan call; invalid config `GRAPH_INVALID`; v1→v2 migration; Outdated on change; one-parent hint; panel credits you/model | `test_anatomy_controls.py`, `component/anatomy.test.tsx`, E2E-H "F1 anatomy" | pass |
 | F2 | Result→card connection; disabled hints; write card; ranges verbatim; server provenance; out of date + rewrite; PNG download (offline, 1600px); NOT_FOUND; timeout; vision budget | `test_field_card.py`, `component/fieldCard.test.tsx`, E2E-H "F2 field card" | pass |
 | P5-05 | CORS allowlist, server size limit, rate limit, no secrets in bundle | `test_graphs_and_security.py`, BE-A, BE-R, `scripts/check-bundle.sh`, `unit/codeRules.test.ts` | pass |
+
+## Real data (D1)
+
+Tested against three data sources: the invented sample, the verbatim real-schema fixture (`backend/tests/fixtures/chimera_data.real_schema.json`), and the real `data/chimera_data.json` (`tests/integration/test_real_data_file.py`, skipped when the file is absent).
+
+| Check | Real file result |
+|---|---|
+| Hybrids resolving both parents | **29 / 31** |
+| Rules mapped to a check | **44 / 130** (26 pair, 18 plan); the 86 unmapped are data-integrity and mythology-record rules |
+| lion + tiger | liger and tigon; tigon = father *Panthera tigris* × mother *Panthera leo* |
+| horse + donkey | hinny and mule; mule = father *Equus asinus* × mother *Equus caballus* |
+| bald eagle + lion | griffin (by name), plus bird-based matches (anzu, sphinx, …) |
+| `/health` | 200 animals, 1,778 tier-2, 5,827 measurements, 31 hybrids (29 resolved), 130 rules (44 mapped), 254 mythology rows, no problems |
+
+**Hybrids that do not resolve, and why:**
+
+- **liliger, tiliger:** a parent is `hybrid:liger`, itself a hybrid. These can never match a pair of animal photos.
+
+**Resolved only by genus:**
+
+- **wolfdog, coydog:** "Canis familiaris" is not a name in either tier (domestic dog is recorded as *Canis lupus*), so it falls back to genus *Canis*. These matches are tagged `matchedVia: "genus"` and rank after exact matches.
 
 ## Visual QA
 

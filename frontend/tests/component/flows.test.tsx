@@ -133,7 +133,7 @@ describe("run lifecycle on the canvas (P4)", () => {
     await addImageFiles([file("lion.jpg"), file("tiger.jpg")], { x: 0, y: 0 });
     await settle();
     const fusionId = useGraph.getState().nodes.find((n) => n.type === "fusion")?.id as string;
-    const spec = { parents: [], realHybrid: null, bodyPlan: "quadruped", partDonors: { head: "A", body: "B", limbs: "B", covering: "A", tail: "A" }, rationale: "", name: "X", warnings: [], prompt: "", model: { vision: "v", image: "i" }, donorSource: {} } satisfies CreatureSpec;
+    const spec = { parents: [], realHybrid: null, bodyPlan: "quadruped", partDonors: { head: "A", body: "B", limbs: "B", covering: "A", tail: "A" }, rationale: "", name: "X", warnings: [], prompt: "", model: { vision: "v", image: "i" }, donorSource: {}, realHybrids: [], mythology: [], rulesSummary: {} } satisfies CreatureSpec;
 
     for (const n of [1, 2]) {
       vi.spyOn(api, "startRun").mockResolvedValueOnce(baseRun({ id: `run${n}`, nodeId: fusionId }));

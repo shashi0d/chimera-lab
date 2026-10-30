@@ -8,9 +8,10 @@ from __future__ import annotations
 from pathlib import Path
 
 from app.errors import ChimeraError
-from app.models.schemas import CreatureSpec, ErrorCode, FusionPlan, ParentInfo, PartDonors
+from app.models.schemas import CreatureSpec, ErrorCode, FusionPlan, ParentInfo, PartDonors, RuleWarning
 from app.pipeline.context import RunContext
 from app.pipeline.retry import call_with_retry
+from app.pipeline.steps.rules_check import evaluate, fusion_profile
 
 TEMPLATE_PATH = Path(__file__).with_name("compile_template.txt")
 PART_WORDS = {"head": "head", "body": "torso", "limbs": "limbs", "covering": "skin covering", "tail": "tail"}
@@ -39,7 +40,10 @@ def planning_context(ctx: RunContext) -> dict[str, object]:
         "matches": {k: (v.dump() if v else None) for k, v in matches.items()},
         "real_hybrid": ctx.state["real_hybrid"].dump() if ctx.state.get("real_hybrid") else None,
         "rule_warnings": [w.dump() for w in ctx.state.get("warnings", [])],
-        "allowed_body_plans": ["quadruped", "biped", "avian", "aquatic", "serpentine", "cephalopod", "insectoid"],
+        "real_hybrids": [h.dump() for h in ctx.state.get("real_hybrids", [])],
+        "mythology": [m.dump() for m in ctx.state.get("mythology", [])][:3],
+        # R-A1-01: the body plans the data actually uses (real file: quadruped, biped, winged, finned, ...).
+        "allowed_body_plans": ctx.services.data.body_plans,
         # Parts the user pinned to a parent. The plan must keep these exactly.
         "donor_pins": ctx.state.get("donor_pins", {}),
     }
@@ -86,9 +90,20 @@ async def run(ctx: RunContext) -> str:
     constraints = []
     if ctx.state.get("real_hybrid"):
         constraints.append(f"Stay close to the documented {ctx.state['real_hybrid'].name}, a real hybrid of these parents.")
-    for w in ctx.state.get("warnings", []):
-        if w.severity == "warning":
-            constraints.append(w.message)
+    # Only the specific, actionable warnings go into the image prompt (real rule texts are long).
+    for w in [w for w in ctx.state.get("warnings", []) if w.severity == "warning"][:3]:
+        constraints.append(w.detail or w.message)
+    # D1-02: plan-phase rules run on the fusion the planner chose.
+    plan_hits: list[RuleWarning] = []
+    ri = ctx.state.get("rule_input")
+    if ri is not None:
+        ri.fusion = fusion_profile(ri.a, ri.b, plan)
+        plan_hits, ran = evaluate(ctx.services.data, ri, "plan")
+        summary = ctx.state.setdefault("rules_summary", {})
+        summary["run"] = summary.get("run", 0) + ran
+        summary["hits"] = summary.get("hits", 0) + len(plan_hits)
+    warnings = [*ctx.state.get("warnings", []), *plan_hits]
+    ctx.state["warnings"] = warnings
     try:
         prompt = build_prompt(plan.part_donors.model_dump(), {k: v.lower() for k, v in names.items()},
                               plan.body_plan, constraints)
@@ -99,11 +114,14 @@ async def run(ctx: RunContext) -> str:
                 for i in ctx.inputs
             ],
             real_hybrid=ctx.state.get("real_hybrid"),
+            real_hybrids=ctx.state.get("real_hybrids", []),
+            mythology=ctx.state.get("mythology", []),
+            rules_summary=ctx.state.get("rules_summary", {}),
             body_plan=plan.body_plan,
             part_donors=plan.part_donors,
             rationale=plan.rationale,
             name=plan.name_suggestion,
-            warnings=ctx.state.get("warnings", []),
+            warnings=warnings,
             prompt=prompt,
             model={"vision": ctx.services.vision.model_id, "image": ctx.services.image_gen.model_id},
             donor_source=donor_source,
@@ -112,4 +130,5 @@ async def run(ctx: RunContext) -> str:
         raise ChimeraError(ErrorCode.INTERNAL, "Could not build the creature plan.") from exc
     ctx.state["spec"] = spec
     pinned = f", {len(pins)} part{'s' if len(pins) != 1 else ''} chosen by you" if pins else ""
-    return f"{plan.body_plan.capitalize()} body, head from {plan.part_donors.head}{pinned}"
+    plan_notes = f"; {len(plan_hits)} plan rule hit{'s' if len(plan_hits) != 1 else ''}" if plan_hits else ""
+    return f"{plan.body_plan.capitalize()} body, head from {plan.part_donors.head}{pinned}{plan_notes}"

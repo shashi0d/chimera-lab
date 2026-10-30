@@ -62,11 +62,26 @@ class ErrorEnvelope(ApiModel):
 # ---------------------------------------------------------------- health
 
 
+class DataHealth(ApiModel):
+    """D1-06: what the loaded data file actually yields."""
+
+    animals: int
+    tier2_animals: int
+    measurements: int
+    hybrids: int
+    hybrids_resolved: int
+    rules: int
+    rules_mapped: int
+    mythology: int
+    problems: list[str] = Field(default_factory=list)
+
+
 class Health(ApiModel):
-    status: Literal["ok"] = "ok"
+    status: Literal["ok", "degraded"] = "ok"
     mode: Literal["mock", "real"]
     version: str
     data_source: Literal["full", "sample"]
+    data: DataHealth | None = None
 
 
 # ---------------------------------------------------------------- assets
@@ -148,12 +163,35 @@ class RealHybrid(ApiModel):
     hybrid_id: str
     name: str
     facts: dict[str, str] = Field(default_factory=dict)
+    # D1-01: cross direction as recorded ("Panthera tigris (father)"). None when the source says unknown.
+    father: str | None = None
+    mother: str | None = None
+    cross: str | None = None
+    confidence: str | None = None
+    fertility: str | None = None
+    matched_via: str | None = None  # "scientific_name" | "genus" | "id"
+
+
+class MythologyMatch(ApiModel):
+    """D1-04: a mythological creature whose components include both parents."""
+
+    creature_name: str
+    culture: str
+    component_animals: str
+    component_parts: str
+    has_human_part: bool
+    matched: dict[str, str]  # slot -> component word ("A": "eagle")
+    match_kind: dict[str, str]  # slot -> "name" | "taxon"
+    verification: str  # verbatim from the data
+    verified: bool  # True only when the data says the row was verified
+    source_url: str
 
 
 class RuleWarning(ApiModel):
     rule_id: str
     message: str
     severity: Literal["info", "warning"] = "warning"
+    detail: str | None = None  # what specifically triggered the rule for this pair
 
 
 PartSlot = Literal["A", "B"]
@@ -179,6 +217,9 @@ class FusionPlan(ApiModel):
 class CreatureSpec(ApiModel):
     parents: list[ParentInfo]
     real_hybrid: RealHybrid | None = None
+    real_hybrids: list[RealHybrid] = Field(default_factory=list)  # every documented cross for the pair
+    mythology: list[MythologyMatch] = Field(default_factory=list)
+    rules_summary: dict[str, int] = Field(default_factory=dict)  # total / mapped / run / unmapped / hits
     body_plan: str
     part_donors: PartDonors
     rationale: str = ""

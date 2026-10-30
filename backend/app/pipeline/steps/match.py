@@ -1,11 +1,13 @@
 from __future__ import annotations
 
-from app.data.loader import ChimeraData, field
+from app.data.loader import ChimeraData, field, genus_of
 from app.models.schemas import AnimalMatch, AnimalReading
 from app.pipeline.context import RunContext
 
-FACT_FIELDS = ("class", "family", "body_plan", "covering", "habitat", "realm", "diet", "locomotion",
-               "limb_count", "notable_features")
+# Real schema fields first; the sample's invented ones (realm, limb_count, ...) are kept for the sample fixture.
+FACT_FIELDS = ("class", "order", "family", "gbif_key", "body_plan", "primary_locomotor_part", "covering", "movement",
+               "active_time", "habitat", "climate", "diet", "body_mass_kg", "body_length_m", "metabolic_rate_w",
+               "realm", "locomotion", "limb_count", "notable_features")
 
 
 def match_reading(data: ChimeraData, reading: AnimalReading) -> AnimalMatch | None:
@@ -19,9 +21,19 @@ def match_reading(data: ChimeraData, reading: AnimalReading) -> AnimalMatch | No
     row, tier = hit
     animal_id = field(row, "id")
     facts = {k: str(row[k]) for k in FACT_FIELDS if row.get(k)}
-    for k, v in data.measurements_for(animal_id).items():
-        if k not in ("animal_id", "id") and v:
-            facts[k] = str(v)
+    if genus_of(row):
+        facts["genus"] = genus_of(row)
+    if row.get("scientific_name"):
+        facts["scientific_name"] = str(row["scientific_name"])
+    rows = data.measurements_for(animal_id)
+    for m in rows:
+        if "measurement" in m and "value" in m:
+            continue  # real long-form rows: kept in the data, counted below
+        for k, v in m.items():  # sample wide-form row
+            if k not in ("animal_id", "id") and v and k not in facts:
+                facts[k] = str(v)
+    if rows:
+        facts["measurement_rows"] = str(len(rows))
     return AnimalMatch(
         animal_id=animal_id,
         tier=tier,  # type: ignore[arg-type]

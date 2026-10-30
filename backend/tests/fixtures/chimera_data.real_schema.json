@@ -1,0 +1,1109 @@
+{
+ "meta": {
+  "name": "Real-schema test fixture (rows copied verbatim from chimera_data.json)",
+  "built": "2026-10-28",
+  "from": "Muse final.json (Tier 2 script data + Tier 11 research), cleaned by Claude",
+  "see": "chimera_info.md",
+  "updated": " | 2026-10-28: sandbox fix_data.py (71 changes) | 2026-10-28: fish order/family from GBIF (14 rows) | 2026-10-28: update 2 (113 changes) | 2026-10-28: update 3 cleanup (11 changes)",
+  "built_by": "scripts/make_real_schema_fixture.py"
+ },
+ "animals": [
+  {
+   "animal_id": "lion",
+   "common_name": "lion",
+   "scientific_name": "Panthera leo",
+   "class": "Mammalia",
+   "order": "Carnivora",
+   "family": "Felidae",
+   "gbif_key": "5219404",
+   "body_plan": "quadruped",
+   "primary_locomotor_part": "four legs",
+   "covering": "fur",
+   "movement": "walk|run",
+   "active_time": "nocturnal|crepuscular",
+   "habitat": "grassland|forest|mountain",
+   "climate": "temperate|tropical",
+   "diet": "carnivore",
+   "body_mass_kg": "126-272",
+   "body_length_m": "2.4-3.3",
+   "blank_notes": "",
+   "source_url": "https://animaldiversity.org/accounts/Panthera_leo/",
+   "taxonomy_url": "https://api.gbif.org/v1/species/5219404",
+   "metabolic_rate_w": "94.58"
+  },
+  {
+   "animal_id": "tiger",
+   "common_name": "tiger",
+   "scientific_name": "Panthera tigris",
+   "class": "Mammalia",
+   "order": "Carnivora",
+   "family": "Felidae",
+   "gbif_key": "5219416",
+   "body_plan": "quadruped",
+   "primary_locomotor_part": "four legs",
+   "covering": "fur",
+   "movement": "walk|run|swim",
+   "active_time": "diurnal|nocturnal|crepuscular",
+   "habitat": "tundra|grassland|forest|mountain|wetland",
+   "climate": "temperate|tropical",
+   "diet": "carnivore",
+   "body_mass_kg": "91-423",
+   "body_length_m": "1.98-3.7",
+   "blank_notes": "",
+   "source_url": "https://animaldiversity.org/accounts/Panthera_tigris/",
+   "taxonomy_url": "https://api.gbif.org/v1/species/5219416",
+   "metabolic_rate_w": "133.859"
+  },
+  {
+   "animal_id": "horse",
+   "common_name": "horse",
+   "scientific_name": "Equus caballus",
+   "class": "Mammalia",
+   "order": "Perissodactyla",
+   "family": "Equidae",
+   "gbif_key": "2440886",
+   "body_plan": "quadruped",
+   "primary_locomotor_part": "four legs",
+   "covering": "fur",
+   "movement": "walk|run",
+   "active_time": "crepuscular",
+   "habitat": "tundra|grassland|forest|wetland",
+   "climate": "temperate|polar",
+   "diet": "herbivore",
+   "body_mass_kg": "227-900",
+   "body_length_m": "2.2-2.8",
+   "blank_notes": "metabolic_rate: not found; AnimalTraits has no metabolic rate for this species and ADW gives no value in W",
+   "source_url": "https://animaldiversity.org/accounts/Equus_caballus/",
+   "taxonomy_url": "https://api.gbif.org/v1/species/2440886",
+   "metabolic_rate_w": ""
+  },
+  {
+   "animal_id": "donkey",
+   "common_name": "donkey",
+   "scientific_name": "Equus asinus",
+   "class": "Mammalia",
+   "order": "Perissodactyla",
+   "family": "Equidae",
+   "gbif_key": "2440891",
+   "body_plan": "quadruped",
+   "primary_locomotor_part": "four legs",
+   "covering": "fur",
+   "movement": "walk|run",
+   "active_time": "diurnal|nocturnal",
+   "habitat": "desert|mountain",
+   "climate": "arid",
+   "diet": "herbivore",
+   "body_mass_kg": "250",
+   "body_length_m": "1.1-1.4",
+   "blank_notes": "",
+   "source_url": "https://animaldiversity.org/accounts/Equus_asinus/",
+   "taxonomy_url": "https://api.gbif.org/v1/species/2440891",
+   "metabolic_rate_w": "164.92"
+  },
+  {
+   "animal_id": "bald_eagle",
+   "common_name": "bald eagle",
+   "scientific_name": "Haliaeetus leucocephalus",
+   "class": "Aves",
+   "order": "Accipitriformes",
+   "family": "Accipitridae",
+   "gbif_key": "2480446",
+   "body_plan": "biped|winged",
+   "primary_locomotor_part": "wings",
+   "covering": "feathers",
+   "movement": "fly|walk",
+   "active_time": "diurnal",
+   "habitat": "forest|mountain|wetland|freshwater",
+   "climate": "temperate",
+   "diet": "carnivore|piscivore",
+   "body_mass_kg": "3-6.3",
+   "body_length_m": "0.79-0.94",
+   "blank_notes": "metabolic_rate: not found; AnimalTraits has no metabolic rate for this species and ADW gives no value in W",
+   "source_url": "https://animaldiversity.org/accounts/Haliaeetus_leucocephalus/",
+   "taxonomy_url": "https://api.gbif.org/v1/species/2480446",
+   "metabolic_rate_w": ""
+  },
+  {
+   "animal_id": "common_octopus",
+   "common_name": "common octopus",
+   "scientific_name": "Octopus vulgaris",
+   "class": "Cephalopoda",
+   "order": "Octopoda",
+   "family": "Octopodidae",
+   "gbif_key": "2289671",
+   "body_plan": "multi_legged",
+   "primary_locomotor_part": "multiple legs",
+   "covering": "skin",
+   "movement": "swim",
+   "active_time": "unrecorded",
+   "habitat": "marine",
+   "climate": "temperate|tropical",
+   "diet": "carnivore",
+   "body_mass_kg": "",
+   "body_length_m": "",
+   "blank_notes": "active_time: unrecorded; no source gave an activity period",
+   "source_url": "https://animaldiversity.org/accounts/Octopus_vulgaris/",
+   "taxonomy_url": "https://api.gbif.org/v1/species/2289671",
+   "metabolic_rate_w": ""
+  },
+  {
+   "animal_id": "scarlet_macaw",
+   "common_name": "scarlet macaw",
+   "scientific_name": "Ara macao",
+   "class": "Aves",
+   "order": "Psittaciformes",
+   "family": "Psittacidae",
+   "gbif_key": "5959227",
+   "body_plan": "biped|winged",
+   "primary_locomotor_part": "wings",
+   "covering": "feathers",
+   "movement": "fly|walk|climb",
+   "active_time": "unrecorded",
+   "habitat": "forest",
+   "climate": "tropical",
+   "diet": "herbivore",
+   "body_mass_kg": "1.2",
+   "body_length_m": "0.89",
+   "blank_notes": "metabolic_rate: not found; AnimalTraits has no metabolic rate for this species and ADW gives no value in W; active_time: blank: ADW Key Behaviors lists no activity period",
+   "source_url": "https://animaldiversity.org/accounts/Ara_macao/",
+   "taxonomy_url": "https://api.gbif.org/v1/species/5959227",
+   "metabolic_rate_w": ""
+  },
+  {
+   "animal_id": "red_fox",
+   "common_name": "red fox",
+   "scientific_name": "Vulpes vulpes",
+   "class": "Mammalia",
+   "order": "Carnivora",
+   "family": "Canidae",
+   "gbif_key": "5219243",
+   "body_plan": "quadruped",
+   "primary_locomotor_part": "four legs",
+   "covering": "fur",
+   "movement": "walk|run",
+   "active_time": "nocturnal|crepuscular",
+   "habitat": "desert|grassland|forest|mountain",
+   "climate": "temperate",
+   "diet": "omnivore",
+   "body_mass_kg": "3-14",
+   "body_length_m": "0.455-0.9",
+   "blank_notes": "",
+   "source_url": "https://animaldiversity.org/accounts/Vulpes_vulpes/",
+   "taxonomy_url": "https://api.gbif.org/v1/species/5219243",
+   "metabolic_rate_w": "13.731"
+  },
+  {
+   "animal_id": "green_iguana",
+   "common_name": "green iguana",
+   "scientific_name": "Iguana iguana",
+   "class": "Reptilia",
+   "order": "Squamata",
+   "family": "Iguanidae",
+   "gbif_key": "2459658",
+   "body_plan": "quadruped",
+   "primary_locomotor_part": "four legs",
+   "covering": "scales",
+   "movement": "walk|run|climb|swim",
+   "active_time": "diurnal",
+   "habitat": "forest|freshwater|marine",
+   "climate": "tropical",
+   "diet": "herbivore",
+   "body_mass_kg": "4-8",
+   "body_length_m": "",
+   "blank_notes": "body_length: blank: ADW gives only Range length 2 (high) m, no range or average; metabolic_rate: not found; AnimalTraits has no metabolic rate for this species and ADW gives no value in W; class normalized 2026-10-28: GBIF backbone lists Squamata at class rank; traditional class Reptilia used, Squamata moved to order (project decision)",
+   "source_url": "https://animaldiversity.org/accounts/Iguana_iguana/",
+   "taxonomy_url": "https://api.gbif.org/v1/species/2459658",
+   "metabolic_rate_w": ""
+  },
+  {
+   "animal_id": "bottlenose_dolphin",
+   "common_name": "bottlenose dolphin",
+   "scientific_name": "Tursiops truncatus",
+   "class": "Mammalia",
+   "order": "Cetacea",
+   "family": "Delphinidae",
+   "gbif_key": "2440447",
+   "body_plan": "finned",
+   "primary_locomotor_part": "flippers",
+   "covering": "skin",
+   "movement": "swim",
+   "active_time": "diurnal|nocturnal",
+   "habitat": "marine",
+   "climate": "temperate|tropical",
+   "diet": "carnivore|piscivore",
+   "body_mass_kg": "260-500",
+   "body_length_m": "2.28-3.81",
+   "blank_notes": "metabolic_rate: not found; AnimalTraits has no metabolic rate for this species and ADW gives no value in W",
+   "source_url": "https://animaldiversity.org/accounts/Tursiops_truncatus/",
+   "taxonomy_url": "https://api.gbif.org/v1/species/2440447",
+   "metabolic_rate_w": ""
+  }
+ ],
+ "tier2_animals": [
+  {
+   "animal_id": "haliaeetus_leucogaster",
+   "scientific_name": "Haliaeetus leucogaster",
+   "class": "Aves",
+   "order": "Accipitriformes",
+   "family": "Accipitridae",
+   "genus": "Haliaeetus",
+   "gbif_key": "2480455",
+   "source_url": "https://api.gbif.org/v1/species/match?name=Haliaeetus%20leucogaster"
+  },
+  {
+   "animal_id": "haliaeetus_vocifer",
+   "scientific_name": "Haliaeetus vocifer",
+   "class": "Aves",
+   "order": "Accipitriformes",
+   "family": "Accipitridae",
+   "genus": "Haliaeetus",
+   "gbif_key": "2480454",
+   "source_url": "https://api.gbif.org/v1/species/match?name=Haliaeetus%20vocifer"
+  },
+  {
+   "animal_id": "abrothrix_andinus",
+   "scientific_name": "Abrothrix andinus",
+   "class": "Mammalia",
+   "order": "Rodentia",
+   "family": "Cricetidae",
+   "genus": "Abrothrix",
+   "gbif_key": "4265099",
+   "source_url": "https://api.gbif.org/v1/species/match?name=Abrothrix%20andinus"
+  },
+  {
+   "animal_id": "abrothrix_longipilis",
+   "scientific_name": "Abrothrix longipilis",
+   "class": "Mammalia",
+   "order": "Rodentia",
+   "family": "Cricetidae",
+   "genus": "Abrothrix",
+   "gbif_key": "4265092",
+   "source_url": "https://api.gbif.org/v1/species/match?name=Abrothrix%20longipilis"
+  }
+ ],
+ "measurements": [
+  {
+   "id": "SC001",
+   "animal_id": "lion",
+   "common_name": "lion",
+   "measurement": "body_mass",
+   "value": "126-272",
+   "unit": "kg",
+   "notes": "range; adult",
+   "source_url": "https://animaldiversity.org/accounts/Panthera_leo/"
+  },
+  {
+   "id": "SC002",
+   "animal_id": "lion",
+   "common_name": "lion",
+   "measurement": "body_length",
+   "value": "2.4-3.3",
+   "unit": "m",
+   "notes": "range; ADW Range length 2.4 to 3.3 m; tail 0.6-1.0 m stated separately",
+   "source_url": "https://animaldiversity.org/accounts/Panthera_leo/"
+  },
+  {
+   "id": "SC003",
+   "animal_id": "tiger",
+   "common_name": "tiger",
+   "measurement": "body_mass",
+   "value": "91-423",
+   "unit": "kg",
+   "notes": "range; adult",
+   "source_url": "https://animaldiversity.org/accounts/Panthera_tigris/"
+  },
+  {
+   "id": "SC004",
+   "animal_id": "tiger",
+   "common_name": "tiger",
+   "measurement": "body_length",
+   "value": "1.98-3.7",
+   "unit": "m",
+   "notes": "range; ADW Range length 1.98 to 3.7 m",
+   "source_url": "https://animaldiversity.org/accounts/Panthera_tigris/"
+  },
+  {
+   "id": "SC015",
+   "animal_id": "red_fox",
+   "common_name": "red fox",
+   "measurement": "body_mass",
+   "value": "3-14",
+   "unit": "kg",
+   "notes": "range; adult",
+   "source_url": "https://animaldiversity.org/accounts/Vulpes_vulpes/"
+  },
+  {
+   "id": "SC016",
+   "animal_id": "red_fox",
+   "common_name": "red fox",
+   "measurement": "body_length",
+   "value": "0.455-0.9",
+   "unit": "m",
+   "notes": "range; ADW Range length 455 to 900 mm converted to m",
+   "source_url": "https://animaldiversity.org/accounts/Vulpes_vulpes/"
+  },
+  {
+   "id": "SC021",
+   "animal_id": "horse",
+   "common_name": "horse",
+   "measurement": "body_mass",
+   "value": "227-900",
+   "unit": "kg",
+   "notes": "range; adult",
+   "source_url": "https://animaldiversity.org/accounts/Equus_caballus/"
+  },
+  {
+   "id": "SC022",
+   "animal_id": "horse",
+   "common_name": "horse",
+   "measurement": "body_length",
+   "value": "2.2-2.8",
+   "unit": "m",
+   "notes": "range; ADW Range length 220 to 280 cm converted to m",
+   "source_url": "https://animaldiversity.org/accounts/Equus_caballus/"
+  },
+  {
+   "id": "SC023",
+   "animal_id": "donkey",
+   "common_name": "donkey",
+   "measurement": "body_mass",
+   "value": "250",
+   "unit": "kg",
+   "notes": "average; no range",
+   "source_url": "https://animaldiversity.org/accounts/Equus_asinus/"
+  },
+  {
+   "id": "SC024",
+   "animal_id": "donkey",
+   "common_name": "donkey",
+   "measurement": "body_length",
+   "value": "1.1-1.4",
+   "unit": "m",
+   "notes": "range; ADW Range length 110 to 140 cm converted to m",
+   "source_url": "https://animaldiversity.org/accounts/Equus_asinus/"
+  },
+  {
+   "id": "SC033",
+   "animal_id": "bottlenose_dolphin",
+   "common_name": "bottlenose dolphin",
+   "measurement": "body_mass",
+   "value": "260-500",
+   "unit": "kg",
+   "notes": "range; adult",
+   "source_url": "https://animaldiversity.org/accounts/Tursiops_truncatus/"
+  },
+  {
+   "id": "SC034",
+   "animal_id": "bottlenose_dolphin",
+   "common_name": "bottlenose dolphin",
+   "measurement": "body_length",
+   "value": "2.28-3.81",
+   "unit": "m",
+   "notes": "range; ADW Range length 228 to 381 cm converted to m",
+   "source_url": "https://animaldiversity.org/accounts/Tursiops_truncatus/"
+  },
+  {
+   "id": "SC037",
+   "animal_id": "bald_eagle",
+   "common_name": "bald eagle",
+   "measurement": "body_mass",
+   "value": "3-6.3",
+   "unit": "kg",
+   "notes": "range; adult",
+   "source_url": "https://en.wikipedia.org/wiki/Bald_eagle"
+  },
+  {
+   "id": "SC038",
+   "animal_id": "bald_eagle",
+   "common_name": "bald eagle",
+   "measurement": "body_length",
+   "value": "0.79-0.94",
+   "unit": "m",
+   "notes": "range; ADW Range length 79 to 94 cm converted to m",
+   "source_url": "https://animaldiversity.org/accounts/Haliaeetus_leucocephalus/"
+  },
+  {
+   "id": "SC216",
+   "animal_id": "scarlet_macaw",
+   "common_name": "scarlet macaw",
+   "measurement": "body_mass",
+   "value": "1.2",
+   "unit": "kg",
+   "notes": "average; no range",
+   "source_url": "https://animaldiversity.org/accounts/Ara_macao/"
+  },
+  {
+   "id": "SC217",
+   "animal_id": "scarlet_macaw",
+   "common_name": "scarlet macaw",
+   "measurement": "body_length",
+   "value": "0.89",
+   "unit": "m",
+   "notes": "average; no range",
+   "source_url": "https://animaldiversity.org/accounts/Ara_macao/"
+  },
+  {
+   "id": "SC249",
+   "animal_id": "green_iguana",
+   "common_name": "green iguana",
+   "measurement": "body_mass",
+   "value": "4-8",
+   "unit": "kg",
+   "notes": "range; adult",
+   "source_url": "https://animaldiversity.org/accounts/Iguana_iguana/"
+  },
+  {
+   "id": "SC300",
+   "animal_id": "tiger",
+   "common_name": "tiger",
+   "measurement": "specimen_body_mass",
+   "value": "209",
+   "unit": "kg",
+   "notes": "sex: male; sample size: 1; reference: Crile & Quiring, 1940",
+   "source_url": "https://zenodo.org/records/6468938"
+  },
+  {
+   "id": "SC302",
+   "animal_id": "tiger",
+   "common_name": "tiger",
+   "measurement": "specimen_body_mass",
+   "value": "195",
+   "unit": "kg",
+   "notes": "sex: not given; sample size: 1; reference: Boddy et al., 2012",
+   "source_url": "https://zenodo.org/records/6468938"
+  },
+  {
+   "id": "SC303",
+   "animal_id": "red_fox",
+   "common_name": "red fox",
+   "measurement": "specimen_body_mass",
+   "value": "2.91",
+   "unit": "kg",
+   "notes": "sex: not given; sample size: 1; reference: Warnke, 1908",
+   "source_url": "https://zenodo.org/records/6468938"
+  },
+  {
+   "id": "SC304",
+   "animal_id": "red_fox",
+   "common_name": "red fox",
+   "measurement": "specimen_body_mass",
+   "value": "2.55",
+   "unit": "kg",
+   "notes": "sex: not given; sample size: 1; reference: Warnke, 1908",
+   "source_url": "https://zenodo.org/records/6468938"
+  },
+  {
+   "id": "SC305",
+   "animal_id": "red_fox",
+   "common_name": "red fox",
+   "measurement": "specimen_body_mass",
+   "value": "4.235",
+   "unit": "kg",
+   "notes": "sex: not given; sample size: 1; reference: Warnke, 1908",
+   "source_url": "https://zenodo.org/records/6468938"
+  },
+  {
+   "id": "SC306",
+   "animal_id": "lion",
+   "common_name": "lion",
+   "measurement": "specimen_body_mass",
+   "value": "84",
+   "unit": "kg",
+   "notes": "sex: not given; sample size: 1; reference: Warnke, 1908",
+   "source_url": "https://zenodo.org/records/6468938"
+  },
+  {
+   "id": "SC312",
+   "animal_id": "tiger",
+   "common_name": "tiger",
+   "measurement": "specimen_body_mass",
+   "value": "160",
+   "unit": "kg",
+   "notes": "sex: female; sample size: 1; reference: Crile & Quiring, 1940",
+   "source_url": "https://zenodo.org/records/6468938"
+  }
+ ],
+ "hybrids": [
+  {
+   "hybrid_id": "liger",
+   "hybrid_name": "liger",
+   "parent1": "Panthera leo (father)",
+   "parent2": "Panthera tigris (mother)",
+   "fertility": "fertile=partial; Male lion x female tiger; exists only in captivity per source; male ligers sterile, female ligers fertile",
+   "confidence": "captive_only",
+   "generation": "first-generation",
+   "sex_specific_fertility": "male ligers sterile, female ligers fertile",
+   "source_url": "https://en.wikipedia.org/wiki/Liger"
+  },
+  {
+   "hybrid_id": "tigon",
+   "hybrid_name": "tigon",
+   "parent1": "Panthera tigris (father)",
+   "parent2": "Panthera leo (mother)",
+   "fertility": "fertile=partial; Male tiger x female lion; found only in captivity per source; male tigons sterile, females fertile",
+   "confidence": "captive_only",
+   "generation": "first-generation",
+   "sex_specific_fertility": "male tigons sterile, females fertile",
+   "source_url": "https://en.wikipedia.org/wiki/Tigon"
+  },
+  {
+   "hybrid_id": "mule",
+   "hybrid_name": "mule",
+   "parent1": "Equus asinus (father)",
+   "parent2": "Equus caballus (mother)",
+   "fertility": "fertile=no; Male donkey (jack) x female horse (mare); source classification E. africanus asinus male x E. ferus caballus female, mapped to pilot GBIF names Equus asinus and Equus caballus; odd chromosome number makes gamete formation difficult, often infertile, rare mare mule births reported",
+   "confidence": "documented",
+   "generation": "first-generation",
+   "sex_specific_fertility": "",
+   "source_url": "https://en.wikipedia.org/wiki/Mule"
+  },
+  {
+   "hybrid_id": "hinny",
+   "hybrid_name": "hinny",
+   "parent1": "Equus caballus (father)",
+   "parent2": "Equus asinus (mother)",
+   "fertility": "fertile=no; Male horse (stallion) x female donkey (jenny); reciprocal cross to mule; most reports say hinnies are sterile",
+   "confidence": "documented",
+   "generation": "first-generation",
+   "sex_specific_fertility": "",
+   "source_url": "https://en.wikipedia.org/wiki/Hinny"
+  },
+  {
+   "hybrid_id": "liliger",
+   "hybrid_name": "liliger",
+   "parent1": "Panthera leo (father)",
+   "parent2": "hybrid:liger (mother)",
+   "fertility": "fertile=unknown; Second-generation hybrid: male lion x female liger (lion x tiger hybrid); mother is a liger, not a pure species, so parent2 is a hybrid, not a pilot-list species alone; first such hybrid born 1943 at Hellabrunn Zoo; liliger fertility not stated in source",
+   "confidence": "captive_only",
+   "generation": "second-generation",
+   "sex_specific_fertility": "",
+   "source_url": "https://en.wikipedia.org/wiki/Liliger"
+  }
+ ],
+ "mythology": [
+  {
+   "creature_name": "griffin",
+   "culture": "Greek",
+   "component_animals": "eagle|lion",
+   "component_parts": "eagle:head,wings,talons|lion:body,tail,back legs",
+   "has_human_part": "no",
+   "animal_components": 2,
+   "check_note": "",
+   "verification": "line-checked by Muse (not re-checked by Claude)",
+   "source_url": "https://en.wikipedia.org/wiki/Griffin"
+  },
+  {
+   "creature_name": "chimera",
+   "culture": "Greek",
+   "component_animals": "lion|goat|snake",
+   "component_parts": "lion:front,head|goat:middle,head|snake:rear,tail,head",
+   "has_human_part": "no",
+   "animal_components": 3,
+   "check_note": "",
+   "verification": "line-checked by Muse (not re-checked by Claude)",
+   "source_url": "https://en.wikipedia.org/wiki/Chimera_(mythology)"
+  },
+  {
+   "creature_name": "hippogriff",
+   "culture": "Italian",
+   "component_animals": "eagle|horse",
+   "component_parts": "eagle:head,wings,forelegs|horse:body,hind legs",
+   "has_human_part": "no",
+   "animal_components": 2,
+   "check_note": "",
+   "verification": "line-checked by Muse (not re-checked by Claude)",
+   "source_url": "https://en.wikipedia.org/wiki/Hippogriff"
+  },
+  {
+   "creature_name": "sphinx",
+   "culture": "Greek",
+   "component_animals": "human|lion|bird",
+   "component_parts": "human:head|lion:body,tail|bird:wings",
+   "has_human_part": "yes",
+   "animal_components": 2,
+   "check_note": "",
+   "verification": "line-checked by Muse (not re-checked by Claude)",
+   "source_url": "https://en.wikipedia.org/wiki/Sphinx"
+  }
+ ],
+ "rules": [
+  {
+   "rule_id": "R-A1-01",
+   "area": "A1",
+   "area_name": "Anatomy and Body Plans",
+   "rule_text": "A fusion must use exactly one body_plan value from the Tier 1 allowed set: quadruped, biped, biped|winged, winged, finned, multi_legged, serpentine, radial.",
+   "test_method": "Check fusion body_plan is in the allowed set and is a single value.",
+   "source_url": "https://animaldiversity.org/accounts/Panthera_leo/",
+   "basis": "radial added 2026-10-28 as a project decision for moon_jellyfish"
+  },
+  {
+   "rule_id": "R-A1-02",
+   "area": "A1",
+   "area_name": "Anatomy and Body Plans",
+   "rule_text": "A fusion's covering must be a covering of at least one donor parent (fur, feathers, scales, skin, exoskeleton, shell).",
+   "test_method": "Check fusion covering is in the union of parents' coverings.",
+   "source_url": "https://animaldiversity.org/accounts/Panthera_leo/"
+  },
+  {
+   "rule_id": "R-A1-03",
+   "area": "A1",
+   "area_name": "Anatomy and Body Plans",
+   "rule_text": "A fusion may not assign two different coverings to the same body region without naming the region for each.",
+   "test_method": "Check covering list per region; flag any unlabelled double covering.",
+   "source_url": "https://animaldiversity.org/accounts/Haliaeetus_leucocephalus/"
+  },
+  {
+   "rule_id": "R-A1-04",
+   "area": "A1",
+   "area_name": "Anatomy and Body Plans",
+   "rule_text": "A winged fusion must have a winged or biped|winged donor; wings cannot be invented from a finned or serpentine donor alone.",
+   "test_method": "Check at least one parent body_plan contains 'winged'.",
+   "source_url": "https://animaldiversity.org/accounts/Haliaeetus_leucocephalus/"
+  },
+  {
+   "rule_id": "R-A1-05",
+   "area": "A1",
+   "area_name": "Anatomy and Body Plans",
+   "rule_text": "A finned fusion must have a finned donor; fins cannot be invented from a quadruped donor alone.",
+   "test_method": "Check at least one parent body_plan is 'finned'.",
+   "source_url": "https://animaldiversity.org/accounts/Balaenoptera_musculus/"
+  },
+  {
+   "rule_id": "R-A1-06",
+   "area": "A1",
+   "area_name": "Anatomy and Body Plans",
+   "rule_text": "A serpentine fusion must have a serpentine donor; a limbless body cannot be invented from a quadruped donor alone.",
+   "test_method": "Check at least one parent body_plan is 'serpentine'.",
+   "source_url": "https://animaldiversity.org/accounts/Ophiophagus_hannah/"
+  },
+  {
+   "rule_id": "R-A1-07",
+   "area": "A1",
+   "area_name": "Anatomy and Body Plans",
+   "rule_text": "A shelled fusion must have a shelled donor (covering=shell); a shell cannot be invented from a fur or feather donor alone.",
+   "test_method": "Check at least one parent covering is 'shell'.",
+   "source_url": "https://animaldiversity.org/accounts/Chelonoidis_nigra/"
+  },
+  {
+   "rule_id": "R-A2-03",
+   "area": "A2",
+   "area_name": "Scaling and Allometry",
+   "rule_text": "A parent mass ratio above 1000x (larger parent maximum / smaller parent minimum) is an extreme-size conflict and must be flagged, not silently averaged.",
+   "test_method": "Compute max/min ratio; flag if >1000.",
+   "source_url": "https://animaldiversity.org/accounts/Balaenoptera_musculus/"
+  },
+  {
+   "rule_id": "R-A2-04",
+   "area": "A2",
+   "area_name": "Scaling and Allometry",
+   "rule_text": "A source range must be kept as a range in any fusion table; a midpoint must never be computed from a range.",
+   "test_method": "Check value fields for ranges are stored as 'low-high', never a single computed midpoint.",
+   "source_url": "https://animaldiversity.org/accounts/Panthera_tigris/"
+  },
+  {
+   "rule_id": "R-A3-01",
+   "area": "A3",
+   "area_name": "Real Hybrid Inheritance",
+   "rule_text": "A real hybrid's parents must be named by scientific name and role (father/mother), exactly as in Tier 1 hybrids.csv.",
+   "test_method": "Check parent1_scientific, parent2_scientific and roles are present.",
+   "source_url": "https://en.wikipedia.org/wiki/Mule"
+  },
+  {
+   "rule_id": "R-A3-02",
+   "area": "A3",
+   "area_name": "Real Hybrid Inheritance",
+   "rule_text": "A reciprocal cross (swapped father/mother) is a different hybrid from the original cross and must be recorded separately.",
+   "test_method": "Check mule vs hinny, liger vs tigon are distinct rows.",
+   "source_url": "https://en.wikipedia.org/wiki/Hinny"
+  },
+  {
+   "rule_id": "R-A3-07",
+   "area": "A3",
+   "area_name": "Real Hybrid Inheritance",
+   "rule_text": "A fusion design inspired by a real hybrid must not claim the real hybrid's fertility unless its parents and cross direction match that hybrid exactly.",
+   "test_method": "Check fusion parents and direction against the real hybrid row before copying fertility.",
+   "source_url": "https://en.wikipedia.org/wiki/Wholphin"
+  },
+  {
+   "rule_id": "R-A4-01",
+   "area": "A4",
+   "area_name": "Locomotion, Senses and Activity",
+   "rule_text": "A fusion's movement list must be a subset of the union of its parents' Tier 1 movement values.",
+   "test_method": "Check every fusion movement token appears in at least one parent's movement list.",
+   "source_url": "https://animaldiversity.org/accounts/Panthera_leo/"
+  },
+  {
+   "rule_id": "R-A4-02",
+   "area": "A4",
+   "area_name": "Locomotion, Senses and Activity",
+   "rule_text": "A fusion may not claim 'fly' unless at least one parent moves by flying.",
+   "test_method": "Check 'fly' in fusion movement implies 'fly' in a parent movement list.",
+   "source_url": "https://animaldiversity.org/accounts/Haliaeetus_leucocephalus/"
+  },
+  {
+   "rule_id": "R-A4-03",
+   "area": "A4",
+   "area_name": "Locomotion, Senses and Activity",
+   "rule_text": "A fusion may not claim 'swim' unless at least one parent moves by swimming.",
+   "test_method": "Check 'swim' in fusion movement implies 'swim' in a parent movement list.",
+   "source_url": "https://animaldiversity.org/accounts/Balaenoptera_musculus/"
+  },
+  {
+   "rule_id": "R-A4-07",
+   "area": "A4",
+   "area_name": "Locomotion, Senses and Activity",
+   "rule_text": "A fusion that combines a flying parent and a swimming parent must state which medium is primary; it may not claim both at full competence without a note.",
+   "test_method": "Check primary_medium field for fly+swim fusions.",
+   "source_url": "https://animaldiversity.org/accounts/Haliaeetus_leucocephalus/"
+  },
+  {
+   "rule_id": "R-A5-01",
+   "area": "A5",
+   "area_name": "Habitat, Climate and Ecogeography",
+   "rule_text": "A fusion's habitat list must overlap at least one habitat of each parent, or the non-overlap must be flagged as a habitat conflict.",
+   "test_method": "Compute habitat intersection per parent; flag empty intersections.",
+   "source_url": "https://animaldiversity.org/accounts/Panthera_leo/"
+  },
+  {
+   "rule_id": "R-A5-02",
+   "area": "A5",
+   "area_name": "Habitat, Climate and Ecogeography",
+   "rule_text": "A fusion's climate list must overlap at least one climate of each parent, or the non-overlap must be flagged as a climate conflict.",
+   "test_method": "Compute climate intersection per parent; flag empty intersections.",
+   "source_url": "https://animaldiversity.org/accounts/Ursus_maritimus/"
+  },
+  {
+   "rule_id": "R-A5-03",
+   "area": "A5",
+   "area_name": "Habitat, Climate and Ecogeography",
+   "rule_text": "A marine-only fusion must not be built from a terrestrial-only parent without a habitat-change note.",
+   "test_method": "Check marine claim against parent habitat lists.",
+   "source_url": "https://animaldiversity.org/accounts/Balaenoptera_musculus/"
+  },
+  {
+   "rule_id": "R-A5-04",
+   "area": "A5",
+   "area_name": "Habitat, Climate and Ecogeography",
+   "rule_text": "A polar-climate fusion must have a polar donor or a stated insulation mechanism; polar cannot be invented from tropical-only parents.",
+   "test_method": "Check polar claim against parent climate lists.",
+   "source_url": "https://animaldiversity.org/accounts/Ursus_maritimus/"
+  },
+  {
+   "rule_id": "R-A5-05",
+   "area": "A5",
+   "area_name": "Habitat, Climate and Ecogeography",
+   "rule_text": "A fusion combining a freshwater parent and a marine parent must state its salinity tolerance; it may not be assumed to live in both.",
+   "test_method": "Check salinity note for freshwater+marine fusions.",
+   "source_url": "https://animaldiversity.org/accounts/Rana_temporaria/"
+  },
+  {
+   "rule_id": "R-A5-06",
+   "area": "A5",
+   "area_name": "Habitat, Climate and Ecogeography",
+   "rule_text": "A desert fusion must have a desert donor or a stated water-conservation mechanism.",
+   "test_method": "Check desert claim against parent habitat lists.",
+   "source_url": "https://animaldiversity.org/accounts/Vulpes_zerda/"
+  },
+  {
+   "rule_id": "R-A6-01",
+   "area": "A6",
+   "area_name": "Diet, Metabolism and Energy",
+   "rule_text": "A fusion's diet must be a diet of at least one parent, or a stated intermediate (e.g. omnivore from carnivore x herbivore) with a note.",
+   "test_method": "Check diet against parent diets, or check intermediate note.",
+   "source_url": "https://animaldiversity.org/accounts/Panthera_leo/"
+  },
+  {
+   "rule_id": "R-A6-02",
+   "area": "A6",
+   "area_name": "Diet, Metabolism and Energy",
+   "rule_text": "A carnivore x herbivore fusion must not be recorded as purely carnivore or purely herbivore without a note; the default intermediate is omnivore.",
+   "test_method": "Check diet for carnivore x herbivore fusions.",
+   "source_url": "https://animaldiversity.org/accounts/Giraffa_camelopardalis/"
+  },
+  {
+   "rule_id": "R-A7-01",
+   "area": "A7",
+   "area_name": "Mythological and Cultural Hybrids",
+   "rule_text": "A mythological creature row must name its culture, its component animals, and the part each animal contributes.",
+   "test_method": "Check culture, component_animals and component_parts are all present.",
+   "source_url": "https://en.wikipedia.org/wiki/Griffin"
+  },
+  {
+   "rule_id": "R-A7-02",
+   "area": "A7",
+   "area_name": "Mythological and Cultural Hybrids",
+   "rule_text": "A mythological creature with any human component must have has_human_part=yes; all others must have no.",
+   "test_method": "Check has_human_part against component_animals containing 'human'.",
+   "source_url": "https://en.wikipedia.org/wiki/Sphinx"
+  },
+  {
+   "rule_id": "R-A8-02",
+   "area": "A8",
+   "area_name": "Fusion Design, Viability and Failure Modes",
+   "rule_text": "A fusion with a body_plan conflict (e.g. finned x quadruped with no amphibious design note) must be flagged, not silently resolved by picking one parent's plan.",
+   "test_method": "Check body_plan conflicts are flagged in test output.",
+   "source_url": "https://animaldiversity.org/accounts/Balaenoptera_musculus/"
+  },
+  {
+   "rule_id": "R-A8-03",
+   "area": "A8",
+   "area_name": "Fusion Design, Viability and Failure Modes",
+   "rule_text": "A fusion with no habitat overlap with a parent must be flagged as a habitat conflict in the test output.",
+   "test_method": "Check habitat intersection is computed and empty intersections are flagged.",
+   "source_url": "https://animaldiversity.org/accounts/Panthera_leo/"
+  },
+  {
+   "rule_id": "R-A8-04",
+   "area": "A8",
+   "area_name": "Fusion Design, Viability and Failure Modes",
+   "rule_text": "A fusion with a mass ratio above 1000x between parents must be flagged as an extreme-size conflict.",
+   "test_method": "Check mass ratio is computed and >1000x is flagged.",
+   "source_url": "https://animaldiversity.org/accounts/Balaenoptera_musculus/"
+  },
+  {
+   "rule_id": "R-A8-05",
+   "area": "A8",
+   "area_name": "Fusion Design, Viability and Failure Modes",
+   "rule_text": "A test round is clean only if every test fusion is evaluated, every rule check runs, and no fusion has a missing-data gap that was not logged.",
+   "test_method": "Check test_rounds.csv: all fusions evaluated, gaps logged.",
+   "source_url": "https://animaldiversity.org/accounts/Panthera_leo/"
+  },
+  {
+   "rule_id": "R-A8-06",
+   "area": "A8",
+   "area_name": "Fusion Design, Viability and Failure Modes",
+   "rule_text": "A design that uses a blank Tier 1 trait (value left blank for implausibility or absence) must treat that trait as unknown, never fill it from memory.",
+   "test_method": "Check blank-trait fusions carry 'unknown' for that trait, not an invented value.",
+   "source_url": "https://animaldiversity.org/accounts/Leptailurus_serval/"
+  },
+  {
+   "rule_id": "R-A5-08",
+   "area": "A5",
+   "area_name": "Habitat, Climate and Ecogeography",
+   "rule_text": "A fusion combining a tundra parent and a tropical parent must state its thermal range; it may not be assumed to live in both extremes without a note.",
+   "test_method": "Check thermal-range note for tundra+tropical fusions.",
+   "source_url": "https://animaldiversity.org/accounts/Ursus_maritimus/"
+  },
+  {
+   "rule_id": "R-A5-10",
+   "area": "A5",
+   "area_name": "Habitat, Climate and Ecogeography",
+   "rule_text": "A fusion with a wetland parent must not be recorded as purely terrestrial or purely aquatic without a note on its water dependence.",
+   "test_method": "Check water-dependence note for wetland fusions.",
+   "source_url": "https://animaldiversity.org/accounts/Rana_temporaria/"
+  },
+  {
+   "rule_id": "R-A4-08",
+   "area": "A4",
+   "area_name": "Locomotion, Senses and Activity",
+   "rule_text": "A fusion may claim movement 'walk' only if at least one parent's Tier 1 movement includes 'walk'.",
+   "test_method": "Check 'walk' in fusion movement implies 'walk' in a parent movement list.",
+   "source_url": "https://animaldiversity.org/accounts/Panthera_leo/"
+  },
+  {
+   "rule_id": "R-A4-18",
+   "area": "A4",
+   "area_name": "Locomotion, Senses and Activity",
+   "rule_text": "A fusion that walks and swims must state whether it walks on land and swims in water, or whether one medium is primary.",
+   "test_method": "Check primary_medium for walk+swim fusions.",
+   "source_url": "https://animaldiversity.org/accounts/Ornithorhynchus_anatinus/"
+  },
+  {
+   "rule_id": "R-A4-19",
+   "area": "A4",
+   "area_name": "Locomotion, Senses and Activity",
+   "rule_text": "A fusion that climbs must have a climbing donor; climbing cannot be inferred from walking alone.",
+   "test_method": "Check climb claim against parent movement lists.",
+   "source_url": "https://animaldiversity.org/accounts/Lynx_rufus/"
+  },
+  {
+   "rule_id": "R-A4-20",
+   "area": "A4",
+   "area_name": "Locomotion, Senses and Activity",
+   "rule_text": "A fusion that burrows must have a burrowing donor; burrowing cannot be inferred from walking alone.",
+   "test_method": "Check burrow claim against parent movement lists.",
+   "source_url": "https://animaldiversity.org/accounts/Oryctolagus_cuniculus/"
+  },
+  {
+   "rule_id": "R-A4-21",
+   "area": "A4",
+   "area_name": "Locomotion, Senses and Activity",
+   "rule_text": "A fusion that glides must have a gliding donor; gliding is not the same as flying and must not be recorded as fly.",
+   "test_method": "Check glide claim against parent movement lists; check glide is not stored as fly.",
+   "source_url": "https://animaldiversity.org/accounts/Anax_junius/"
+  },
+  {
+   "rule_id": "R-A4-22",
+   "area": "A4",
+   "area_name": "Locomotion, Senses and Activity",
+   "rule_text": "A fusion with no movement donor for a claimed movement must be flagged, even if the movement seems plausible for the body plan.",
+   "test_method": "Check every movement token against parents; flag unmatched tokens.",
+   "source_url": "https://animaldiversity.org/accounts/Panthera_leo/"
+  },
+  {
+   "rule_id": "R-A5-23",
+   "area": "A5",
+   "area_name": "Habitat, Climate and Ecogeography",
+   "rule_text": "A fusion recorded in both freshwater and marine habitats must state its salinity tolerance explicitly.",
+   "test_method": "Check salinity note for freshwater+marine fusions.",
+   "source_url": "https://animaldiversity.org/accounts/Rana_temporaria/"
+  },
+  {
+   "rule_id": "R-A5-25",
+   "area": "A5",
+   "area_name": "Habitat, Climate and Ecogeography",
+   "rule_text": "A fusion recorded in a wetland must state whether it is aquatic, semi-aquatic or terrestrial in that wetland.",
+   "test_method": "Check wetland dependence note.",
+   "source_url": "https://animaldiversity.org/accounts/Rana_temporaria/"
+  },
+  {
+   "rule_id": "R-A6-08",
+   "area": "A6",
+   "area_name": "Diet, Metabolism and Energy",
+   "rule_text": "A fusion recorded with diet 'carnivore' must have at least one parent whose Tier 1 diet includes 'carnivore', or a stated intermediate with a note.",
+   "test_method": "Check 'carnivore' against parent diets or intermediate note.",
+   "source_url": "https://animaldiversity.org/accounts/Panthera_leo/"
+  },
+  {
+   "rule_id": "R-A6-15",
+   "area": "A6",
+   "area_name": "Diet, Metabolism and Energy",
+   "rule_text": "A fusion with a metabolic_rate below 1 W and a body_mass above 1 kg must be flagged as implausible, as with serval 1.44 W.",
+   "test_method": "Check metabolic_rate against body_mass; flag implausible combinations.",
+   "source_url": "https://animaldiversity.org/accounts/Leptailurus_serval/"
+  },
+  {
+   "rule_id": "R-A5-P08",
+   "area": "A5",
+   "area_name": "Habitat, Climate and Ecogeography",
+   "rule_text": "A fusion with a 'temperate|tropical|polar' parent must not be recorded as living in all three climates unless each climate is separately justified; a broad parent range is not evidence for all three in the fusion.",
+   "test_method": "Check per-climate justification for broad-climate fusions.",
+   "source_url": "https://animaldiversity.org/accounts/Balaenoptera_musculus/"
+  },
+  {
+   "rule_id": "R-A1-P01",
+   "area": "A1",
+   "area_name": "Anatomy and Body Plans",
+   "rule_text": "A fusion combining a serpentine parent with a quadruped parent must state which body plan is primary and how limbs are handled; it may not be recorded as both serpentine and quadruped.",
+   "test_method": "Check primary body_plan and limb note for serpentine+quadruped fusions.",
+   "source_url": "https://animaldiversity.org/accounts/Ophiophagus_hannah/"
+  },
+  {
+   "rule_id": "R-A1-P03",
+   "area": "A1",
+   "area_name": "Anatomy and Body Plans",
+   "rule_text": "A fusion with a shelled parent and a fur parent must state whether the shell covers the whole body or a region; a whole-body shell and whole-body fur cannot both be claimed for the same region.",
+   "test_method": "Check shell coverage region for shell+fur fusions.",
+   "source_url": "https://animaldiversity.org/accounts/Chelonoidis_nigra/"
+  },
+  {
+   "rule_id": "R-A3-P01",
+   "area": "A3",
+   "area_name": "Real Hybrid Inheritance",
+   "rule_text": "A hybrid's parent Tier 1 match must be recorded separately from its cross: a parent that resolves to the same GBIF species as another parent (e.g. dog and wolf) is not two distinct species for fusion purposes.",
+   "test_method": "Check parent Tier 1 match field for wolfdog-type hybrids.",
+   "source_url": "https://en.wikipedia.org/wiki/Wolfdog"
+  },
+  {
+   "rule_id": "R-A4-P03",
+   "area": "A4",
+   "area_name": "Locomotion, Senses and Activity",
+   "rule_text": "A fusion combining a diurnal parent with a nocturnal parent must state its active_time as the overlap or as a design choice with a note; it may not be recorded as both fully diurnal and fully nocturnal.",
+   "test_method": "Check active_time overlap or design note for diurnal+nocturnal fusions.",
+   "source_url": "https://animaldiversity.org/accounts/Panthera_leo/"
+  },
+  {
+   "rule_id": "R-A6-P01",
+   "area": "A6",
+   "area_name": "Diet, Metabolism and Energy",
+   "rule_text": "A fusion with a 'carnivore|piscivore' parent must state whether fish are included; piscivore is not automatically included in carnivore.",
+   "test_method": "Check fish-inclusion note for carnivore|piscivore fusions.",
+   "source_url": "https://animaldiversity.org/accounts/Haliaeetus_leucocephalus/"
+  },
+  {
+   "rule_id": "R-A4-P04",
+   "area": "A4",
+   "area_name": "Locomotion, Senses and Activity",
+   "rule_text": "A parent with active_time 'unrecorded' adds no tokens. The fusion's active_time is built from the other parents' values under R-A4-05, R-A4-06 and R-A4-P03. If every parent is 'unrecorded', the fusion's active_time is 'unrecorded' and the app shows it as 'activity pattern unknown'. 'unrecorded' never blocks a fusion and is never combined with other tokens.",
+   "test_method": "Drop 'unrecorded' parents, then check the remaining parents as usual; if none remain, check the fusion value is exactly 'unrecorded'.",
+   "source_url": "",
+   "basis": "project design decision, 2026-10-28 (no external source)"
+  }
+ ],
+ "failure_modes": [
+  {
+   "failure_id": "FM01",
+   "rule_id": "R-A1-01",
+   "failure_mode": "body_plan conflict",
+   "example": "Finned x quadruped fusion with no amphibious design note",
+   "mitigation": "Flag as FAIL; add an amphibious design note or change a parent.",
+   "source_url": "https://animaldiversity.org/accounts/Balaenoptera_musculus/"
+  },
+  {
+   "failure_id": "FM02",
+   "rule_id": "R-A1-02",
+   "failure_mode": "covering conflict",
+   "example": "Fusion covering matches neither parent",
+   "mitigation": "Flag as FAIL; pick a parent covering or name a new region.",
+   "source_url": "https://animaldiversity.org/accounts/Panthera_leo/"
+  },
+  {
+   "failure_id": "FM04",
+   "rule_id": "R-A2-03",
+   "failure_mode": "extreme size",
+   "example": "Parent mass ratio above 1000x",
+   "mitigation": "Flag as extreme-size conflict; do not average.",
+   "source_url": "https://animaldiversity.org/accounts/Balaenoptera_musculus/"
+  }
+ ],
+ "design_principles": [
+  {
+   "principle_id": "DP01",
+   "area": "A1",
+   "principle": "Start from one parent's body_plan; do not blend two incompatible plans without an explicit design note.",
+   "source_url": "https://animaldiversity.org/accounts/Panthera_leo/"
+  },
+  {
+   "principle_id": "DP02",
+   "area": "A1",
+   "principle": "Pick covering from a donor; do not invent a new covering for a fusion.",
+   "source_url": "https://animaldiversity.org/accounts/Panthera_leo/"
+  },
+  {
+   "principle_id": "DP03",
+   "area": "A2",
+   "principle": "Keep fusion mass inside the parents' spanned mass interval, or flag it as a design extrapolation.",
+   "source_url": "https://animaldiversity.org/accounts/Panthera_leo/"
+  }
+ ],
+ "definitions": {
+  "about": "Definitions of every field and value in 'animals'. Lists use '|' and mean the animal has all listed values. Activity terms are standard biology terms; 'unrecorded', 'radial' and 'bell' are project terms.",
+  "fields": {
+   "animal_id": "Unique snake_case key used to join every section.",
+   "common_name": "Everyday English name.",
+   "scientific_name": "Latin binomial (genus species).",
+   "class / order / family": "Taxonomic ranks from GBIF. Reptiles and ray-finned fish use the traditional classes Reptilia and Actinopterygii (see blank_notes on those rows).",
+   "gbif_key": "GBIF species key; taxonomy_url points to its API record.",
+   "body_plan": "Overall body layout. Values: quadruped (four walking legs), biped (two walking legs), winged (wings are the main limbs), finned (fins are the main limbs), multi_legged (six or more legs or arms), serpentine (long body, no limbs), radial (body arranged around a central axis with no front or back, as in jellyfish).",
+   "primary_locomotor_part": "Body part mainly used to move: four legs, two legs, multiple legs, wings, fins, flippers, bell (jellyfish swim by pulsing the bell-shaped body).",
+   "covering": "Outer body surface: fur, feathers, scales, skin (bare skin), exoskeleton (hard outer skeleton, as in insects and spiders), shell.",
+   "movement": "Ways the animal moves: walk, run, swim, fly, climb, burrow (digs through ground), glide (unpowered flight).",
+   "active_time": "When in the 24-hour day the animal is usually awake and active. See active_time_values.",
+   "habitat": "Places it lives: grassland, forest, mountain, tundra, wetland, freshwater, marine (sea), desert.",
+   "climate": "Climate zones it lives in: temperate, tropical, polar, arid.",
+   "diet": "Main food: carnivore (meat), herbivore (plants), omnivore (both), insectivore (insects), piscivore (fish).",
+   "metabolic_rate_w": "Basal or resting metabolic rate in watts.",
+   "body_mass_kg": "Adult body mass in kg. A range stays a range; midpoints are never computed.",
+   "body_length_m": "Adult body length in m. Same range rule as mass.",
+   "blank_notes": "Why a value is blank or unrecorded, and any project decisions on the row.",
+   "source_url": "Page the trait values came from."
+  },
+  "active_time_values": {
+   "diurnal": "Active mainly during daylight, rests at night.",
+   "nocturnal": "Active mainly at night, rests during the day.",
+   "crepuscular": "Active mainly at dawn and dusk (twilight).",
+   "unrecorded": "No source used here gave an activity period. Not a claim about the animal: it may be any pattern. Under rule R-A4-P04 it adds nothing to a fusion and never blocks one. Replace it with a sourced value when one is found."
+  },
+  "active_time_combinations": "A list such as 'diurnal|nocturnal' means the animal is recorded as active in each listed period. 'unrecorded' is always used alone."
+ }
+}

@@ -253,6 +253,40 @@ Process as in the original tasksheet (review → 3 to 5 candidates → score →
 - [x] F2-07 Visual QA round `f2`; baselines verified.
 - [x] F2-99 Round 2 closed out (ROUND-2.md "Outcome").
 
+### D1 Real data schema (backend only, no UI)
+
+The real `data/chimera_data.json` uses a different schema from the invented sample. With it, the previous code found 0 hybrids and ran 0 rules, silently.
+
+- [x] D1-01 Hybrid lookup on real `parent1`/`parent2` ("Panthera tigris (father)"): strip the role, resolve tier 1 → tier 2 → genus, match either order, keep the cross direction.
+- [x] D1-02 Explicit `rule_id → check` table (`backend/app/data/rule_map.py`), new checks (R-A4-02, R-A4-03, R-A5-01, R-A2-03, R-A4-P04), step detail reports mapped/run/unmapped and is never a silent 0.
+- [x] D1-03 `measurements_for` returns every row for an animal.
+- [x] D1-04 Mythology resemblance (both parents, or a parent's genus/family for broad names like "bird"), with culture, verification, source. Never shown as verified unless it is.
+- [x] D1-05 `backend/tests/fixtures/chimera_data.real_schema.json` (real field names and formats); full pipeline tests against both fixtures.
+- [x] D1-06 Startup data check: errors logged and reported in `/health` when hybrids or rules exist but 0 resolve or map.
+- [x] D1-07 Test against `data/chimera_data.json` (skipped when absent): ≥ 25/31 hybrids resolve, ≥ 40 rules map; numbers in TEST_REPORT.
+
+**Acceptance:** pytest and npm test pass; lion+tiger finds tigon with the correct cross direction; horse+donkey finds mule; the rules step reports a nonzero mapped count; `/health` reports the data counts.
+
+**Status: passed.** pytest 123, vitest 146. Real file: 29/31 hybrids resolve, 44/130 rules map (26 pair, 18 plan); lion+tiger → liger and tigon (tigon: father *Panthera tigris*, mother *Panthera leo*); horse+donkey → hinny and mule; bald eagle+lion → griffin.
+
+### L1 Live Meta integration (backend only, no UI)
+
+Budget: at most 15 image generations and 60 Muse Spark calls. Every live call is logged in `docs/LIVE_LOG.md`. Starts only after D1 passes.
+
+- [ ] L1-01 `MetaImageGen` on the Responses API (`muse-image-1.0`, `input_image` parts, `image_generation_call` result); WebP/PNG/JPEG by magic bytes; Meta response id stored on each version.
+- [ ] L1-02 Defaults `META_VISION_MODEL=muse-spark-1.3`, `META_IMAGE_MODEL=muse-image-1.0`.
+- [ ] L1-03 Retry policy: 429, 5xx, timeouts and connection errors with backoff + jitter; never 400/401/404.
+- [ ] L1-04 Spend guard tracks usage tokens per run and per day; tokens per step in the run detail.
+- [ ] L1-05 Timeouts set to about 2× the slowest observed live latency per step (numbers logged).
+- [ ] L1-06 Six AI-generated live fixture photos in `backend/tests/fixtures/live/` (+ README), generated once.
+- [ ] L1-07 `live` pytest marker (only with `CHIMERA_LIVE=1`): identify all 6, then 5 full fusions.
+- [ ] L1-08 Live fusions use `data/chimera_data.json` (present in the repo as of D1).
+- [ ] L1-09 Record and replay: live responses saved as key-free JSON fixtures; mocks return the recorded shapes.
+- [ ] L1-10 The plan step names the creature (no string-mash names).
+- [ ] L1-11 `docs/LIVE_REPORT.md` with per-fusion results, images in `docs/live/`, latency, tokens, cost, judgment, ranked problems.
+
+**Acceptance:** default tests pass in mock mode; live tests pass or every failure is explained in LIVE_REPORT.md; budget respected; README real-mode section matches what was verified.
+
 ### P7 Shashi (needs keys)
 
 - [ ] P7-01 Modal secret `chimera-lab` with the Meta key, Supabase URL and service key.
