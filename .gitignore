@@ -11,3 +11,4 @@ backend/.localdata/
 data/chimera_data.json
 .env
 *.log
+chimera-lab.bundle
