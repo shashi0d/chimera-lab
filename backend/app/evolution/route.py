@@ -9,7 +9,7 @@ from app.evolution.data import Animal, Taxonomy, known_pairs
 from app.evolution.genome import Genome
 
 LABEL_HYBRID = "real hybrid precedent"
-LABEL_CLOSE = "plausible hybrid of close relatives, no documented cross"
+LABEL_CLOSE = "speculative hybrid of close relatives, no documented cross"
 LABEL_CHIMERA = "speculative chimera, no real-world precedent"
 LABEL_MYTHIC = "mythic design"
 LABEL_SPECULATIVE = "speculative design, no real-world precedent"
