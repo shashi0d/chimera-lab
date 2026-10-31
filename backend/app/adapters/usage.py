@@ -90,7 +90,7 @@ def _budget_file() -> Path | None:
 def _limits() -> dict[str, int]:
     return {"image": int(os.environ.get("CHIMERA_LIVE_MAX_IMAGES", "15")),
             "spark": int(os.environ.get("CHIMERA_LIVE_MAX_SPARK", "60")),
-            "sam": int(os.environ.get("CHIMERA_LIVE_MAX_SAM", "8"))}
+            "sam": int(os.environ.get("CHIMERA_LIVE_MAX_SAM", "15"))}
 
 
 def budget_used() -> dict[str, int]:

@@ -89,9 +89,11 @@ def test_example_4_eagle_x_octopus_chimera(engine, seed):
 async def test_worked_examples_through_fuse(engine, sire, dam):
     doc = await engine.fuse(sire_name=sire, dam_name=dam)
     prompt = doc["prompt"]
-    assert prompt.startswith("Silhouette: ")
+    if doc["route"]["known_pair"]:  # E2c: real hybrids open with name and cross, and get no habitat cue
+        assert prompt.startswith(f"A {doc['route']['known_pair']} (") and "Habitat cue" not in prompt
+    else:
+        assert prompt.startswith("Silhouette: ") and "Habitat cue" in prompt
     assert "fully visible" in prompt and "discernible eyes" in prompt and "One creature, full body" in prompt
-    assert "Habitat cue" in prompt
     assert doc["meta_calls"] == {"spark": 4, "image": 1, "sam": 1}
     assert doc["model_plan"] == "accepted"
     assert 0 <= doc["genome"]["scores"]["quality"] <= 1

@@ -47,6 +47,19 @@ def _resolve_roles(obj: Any, sire: str, dam: str) -> Any:
     return obj
 
 
+def is_real_hybrid(x: Any) -> bool:
+    """E2c: the real-hybrid route is a hybrid-mode Route or Genome labeled as a real hybrid precedent
+    (a known pair or a cross documented in chimera_data.json). Close relatives with no documented cross are not."""
+    return getattr(x, "mode", None) == "hybrid" and LABEL_HYBRID in (getattr(x, "labels", None) or [])
+
+
+def hybrid_names(pair: dict[str, Any] | None) -> list[str]:
+    """The hybrid's own name and its aliases, lowercase ("mule"; "pizzly", "grolar")."""
+    if not pair:
+        return []
+    return [n.lower() for n in [pair.get("name", ""), *(pair.get("prompt") or {}).get("aliases", [])] if n]
+
+
 def find_known_pair(sire: Animal, dam: Animal) -> dict[str, Any] | None:
     for p in known_pairs():
         hit = sire.id in p["sire"] and dam.id in p["dam"]

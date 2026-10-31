@@ -11,6 +11,7 @@ quality = 0.4 critic + 0.3 silhouette + 0.1 thumbnail + 0.2 (1 - normalized soft
 from __future__ import annotations
 
 import io
+import re
 from collections import deque
 from typing import Any
 
@@ -20,7 +21,7 @@ from app.evolution.adapters import EvoSpark, Meter, Segmenter
 from app.evolution.checks import soft_penalties
 from app.evolution.data import Animal, Taxonomy
 from app.evolution.genome import Genome
-from app.evolution.route import Route
+from app.evolution.route import Route, hybrid_names, is_real_hybrid
 
 WEIGHTS = {"critic": 0.4, "silhouette": 0.3, "thumbnail": 0.1, "rules": 0.2}
 ASPECT = {"quadruped": (1.2, 2.6), "winged": (0.5, 1.5), "biped": (0.4, 1.2), "finned": (1.5, 4.0),
@@ -35,11 +36,11 @@ GROUP_WORDS = {"bird": ("tax_class", "Aves"), "raptor": ("tax_class", "Aves"), "
 
 def third_animals(result: dict[str, Any], sire: Animal, dam: Animal, tax: Taxonomy, r: Route | None = None) -> list[str]:
     """Names the critic gave that are neither parent, a group word for a parent, nor the known pair's name (E2b)."""
-    pair = (r.pair or {}).get("name", "").lower() if r and r.pair else ""
+    own = hybrid_names(r.pair) if r else []
     out = []
     for said in [str(x) for x in result.get("animals") or []]:
         low = said.lower().strip()
-        if _named(sire, [said]) or _named(dam, [said]) or (pair and pair in low):
+        if _named(sire, [said]) or _named(dam, [said]) or _says_hybrid(own, [said]):
             continue
         group = GROUP_WORDS.get(low.removesuffix("s"))
         if group and any(getattr(p, group[0]) == group[1] for p in (sire, dam)):
@@ -54,10 +55,15 @@ def _named(animal: Animal, said: list[str]) -> bool:
     return any(head in s.lower() or words & set(s.lower().split()) for s in said)
 
 
-def critic_score(result: dict[str, Any], sire: Animal, dam: Animal) -> float:
+def _says_hybrid(names: list[str], said: list[str]) -> bool:
+    return any(re.search(rf"\b{re.escape(n)}s?\b", s.lower()) for n in names for s in said)
+
+
+def critic_score(result: dict[str, Any], sire: Animal, dam: Animal, hybrid: list[str] | None = None) -> float:
+    """hybrid (E2c, real-hybrid route only): the hybrid's own names. Naming it ("mule") counts as naming both parents."""
     said = [str(x) for x in result.get("animals") or []]
     one = int(result.get("creatures") or 0) == 1
-    hits = _named(sire, said) + _named(dam, said)
+    hits = 2 if hybrid and _says_hybrid(hybrid, said) else _named(sire, said) + _named(dam, said)
     if not one:
         return 0.0
     return {2: 1.0, 1: 0.5, 0: 0.0}[hits]
@@ -125,10 +131,11 @@ async def judge(image: bytes, g: Genome, r: Route, tax: Taxonomy, spark: EvoSpar
     thumb = await meter.call("spark", "critic_thumbnail", spark.critic(thumbnail(image)))
     items, soft = soft_penalties(g, r, tax)
     frame = "winged" if frame_animal.frame == "winged" else frame_animal.frame
+    own = hybrid_names(r.pair) if is_real_hybrid(r) else []
     scores = {
-        "critic": critic_score(critic, sire, dam),
+        "critic": critic_score(critic, sire, dam, own),
         "silhouette": silhouette_score(stats, frame, critic_one=int(critic.get("creatures") or 0) == 1),
-        "thumbnail": critic_score(thumb, sire, dam),
+        "thumbnail": critic_score(thumb, sire, dam, own),
         "soft_penalty": soft,
     }
     scores["quality"] = round(WEIGHTS["critic"] * scores["critic"] + WEIGHTS["silhouette"] * scores["silhouette"]

@@ -23,11 +23,11 @@ from app.evolution.card import output_card
 from app.evolution.checks import Violation, hard_violations
 from app.evolution.data import Animal, Taxonomy, cards, taxonomy
 from app.evolution.genome import TRAIT_TAGS, Genome, Trait, validate_plan
-from app.evolution.habitat import apply_habitat, choose_habitat
+from app.evolution.habitat import apply_habitat, choose_habitat, clear_habitat
 from app.evolution.judge import judge
 from app.evolution.physics import run_checks
 from app.evolution.prompt import PROMPT_CARDS, accept_polish, compile_prompt
-from app.evolution.route import Route, choose_host, route, silhouette
+from app.evolution.route import Route, choose_host, is_real_hybrid, route, silhouette
 from app.evolution.traits import build_traits, contribution, gate
 from app.models.schemas import ErrorCode
 from app.services import Services
@@ -147,12 +147,14 @@ class EvoEngine:
         g = g.model_copy(deep=True)
         locked = bool(r.pair and r.pair.get("locked"))
         gate_cards = gate(g.traits, r, g.host, self.tax)  # E2b: a model plan cannot undo GATE (e.g. a mane on feathers)
-        hab_cards = apply_habitat(g, self.tax, locked)
+        real = is_real_hybrid(r)
+        hab_cards = clear_habitat(g) if real else apply_habitat(g, self.tax, locked)  # E2c, D-056
         phys_cards = run_checks(g, self.tax)
         g.silhouette = silhouette(g, self.tax, r.pair)
         g.identity_balance = contribution(g.traits, g.limb_plan, g.host or g.parents.sire)
         g.labels = _dedupe([*r.labels, *g.labels])
-        g.card_trace = _dedupe(g.card_trace + gate_cards + hab_cards + phys_cards + PROMPT_CARDS)
+        g.card_trace = _dedupe(g.card_trace + gate_cards + hab_cards + phys_cards
+                               + [c for c in PROMPT_CARDS if not (real and c == "RC-R4-11")])
         assert g.limb_plan.requested_wings is None, "limb budget left a wing request unresolved (RC-R3-01)"
         g.id = plan_id(g)
         return validate_plan(g.model_dump())

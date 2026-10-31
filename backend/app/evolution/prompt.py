@@ -10,6 +10,10 @@ whether its version is kept.
 E2b (third-animal leakage): a pattern is only ever named as "<donor>-type <type>"
 from the parents' own data, or as "plain coat, no stripes or spots". Plan notes that
 mention patterns, or contradict the limb plan or mane, are left out.
+
+E2c (real-hybrid route): a documented hybrid is a known animal, so its prompt opens with
+the hybrid's name and cross, describes the frame in host terms in full, then names the
+other parent once in one grouped clause of features. No habitat cue (D-056).
 """
 
 from __future__ import annotations
@@ -18,6 +22,7 @@ import re
 
 from app.evolution.data import PLAIN_COAT, Taxonomy, config, pattern_phrase
 from app.evolution.genome import Genome
+from app.evolution.route import find_known_pair, is_real_hybrid
 
 PROMPT_CARDS = ["RC-R6-01", "RC-R7-06", "RC-R6-03", "RC-R6-04", "RC-R6-02", "RC-R6-05", "RC-R7-07", "RC-R6-07",
                 "RC-R4-11", "RC-R7-10"]
@@ -101,7 +106,52 @@ def plan_conflicts(text: str, g: Genome) -> list[str]:
 # ------------------------------------------------------------------ compile
 
 
+def _join(items: list[str]) -> str:
+    return items[0] if len(items) == 1 else ", ".join(items[:-1]) + " and " + items[-1]
+
+
+def _cap(text: str) -> str:
+    return text[0].upper() + text[1:] if text else text
+
+
+def hybrid_opener(g: Genome, tax: Taxonomy) -> str:
+    """'A mule (donkey sire x horse mare), a real hybrid animal.'"""
+    a, b = _name(tax, g.parents.sire), _name(tax, g.parents.dam)
+    pair = find_known_pair(tax.animals[g.parents.sire], tax.animals[g.parents.dam])
+    spec = (pair or {}).get("prompt") or {}
+    cross = spec.get("cross") or f"{a} sire x {b} dam"
+    name = pair["name"] if pair else f"{a} x {b} hybrid"
+    article = "An" if name[0] in "aeiou" else "A"
+    return f"{article} {name} ({cross}), a real hybrid animal."
+
+
+def compile_real_hybrid(g: Genome, tax: Taxonomy) -> str:
+    """Real-hybrid route (E2c): name and cross, frame in host terms, donor features grouped and named once."""
+    a, b = _name(tax, g.parents.sire), _name(tax, g.parents.dam)
+    pair = find_known_pair(tax.animals[g.parents.sire], tax.animals[g.parents.dam])
+    spec = (pair or {}).get("prompt") or {}
+    host = _name(tax, g.host) if g.host else None
+    if spec.get("frame"):
+        frame = spec["frame"].replace("{host}", host or "parent")
+    elif host:
+        frame = f"{host}-sized body, {host} proportions"
+    else:
+        frame = f"in-between body of the {a} and the {b}, a blend of both parents' proportions"
+    features = list(spec.get("donor_features") or [])
+    donor = g.other(g.host) if g.host else None
+    body = _cap(frame)
+    if features and donor:
+        body += f", with the {_name(tax, donor)}'s {_join(features)}"
+    lines = [hybrid_opener(g, tax), f"{body}; {pattern_clause(g, tax)}.",
+             "Head fully visible and uncluttered, with clear, discernible eyes.",
+             "Bilaterally symmetrical, recognizable limbs, visible sense organs.",
+             "One creature, full body, side three-quarter view, plain light background, natural history illustration."]
+    return strip_franchise(" ".join(lines))
+
+
 def compile_prompt(g: Genome, tax: Taxonomy) -> str:
+    if is_real_hybrid(g):
+        return compile_real_hybrid(g, tax)
     a, b = _name(tax, g.parents.sire), _name(tax, g.parents.dam)
     t, lp = g.traits, g.limb_plan
     lines: list[str] = []

@@ -3,7 +3,7 @@
 Usage (from the repo root, META_API_KEY in the environment):
     .venv/Scripts/python.exe scripts/e2_live_run.py
 
-Caps for this run (hard, cross-process, every attempt counts): images 20, Spark 70, SAM 8,
+Caps for this run (hard, cross-process, every attempt counts): images 20, Spark 70, SAM 15,
 on the shared counter docs/live/budget.json. An example that fails twice is skipped.
 Outputs go to docs/evolution/live/e2/ (per example: image, plan, prompts, critic answers,
 scores, SAM mask, call records) plus summary.json. Raw key-free request/response pairs
@@ -32,7 +32,7 @@ os.environ.update({
     "CHIMERA_RECORD_DIR": str(OUT / "raw"),
     "CHIMERA_LIVE_MAX_IMAGES": "20",
     "CHIMERA_LIVE_MAX_SPARK": "70",
-    "CHIMERA_LIVE_MAX_SAM": "8",
+    "CHIMERA_LIVE_MAX_SAM": "15",
 })
 
 from app.adapters.usage import CallRecord, budget_used, current_calls, current_step
@@ -138,7 +138,7 @@ async def main() -> int:
     for c in calls:
         attempts[c.kind] += 1
     summary = {"budget_before": budget_before, "budget_after": budget_after,
-               "caps": {"image": 20, "spark": 70, "sam": 8},
+               "caps": {"image": 20, "spark": 70, "sam": 15},
                "predicted_per_example": PREDICTED, "predicted_per_rerender": RERENDER,
                "predicted_total": {k: v * len(EXAMPLES) for k, v in PREDICTED.items()},
                "logical_calls_meter": eng.meter.snapshot(), "attempts_by_kind": attempts,

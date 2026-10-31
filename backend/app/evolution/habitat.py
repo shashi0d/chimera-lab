@@ -65,6 +65,15 @@ def _undo(g: Genome) -> None:
     g.size.flags = keep
 
 
+def clear_habitat(g: Genome) -> list[str]:
+    """Real-hybrid route (E2c, D-056): a documented hybrid is a known animal, not an adapted design, so
+    no habitat cue applies. Undoes earlier habitat deltas (a model plan may carry some) and clears the cue."""
+    _undo(g)
+    g.habitat.adjustments = []
+    g.habitat.visible_trait = None
+    return []
+
+
 def apply_habitat(g: Genome, tax: Taxonomy, locked: bool = False) -> list[str]:
     _undo(g)
     before = g.limb_plan.model_dump()

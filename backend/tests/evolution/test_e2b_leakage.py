@@ -101,11 +101,11 @@ def test_habitat_never_adds_markings(engine, habitat):
 
 
 def test_habitat_scales_an_existing_pattern(engine):
-    open_g, _ = plan_for(engine, "lion", "tiger", habitat="grassland")
-    closed_g, _ = plan_for(engine, "lion", "tiger", habitat="forest")
-    assert open_g.traits["coat_pattern"].strength == pytest.approx(0.2)  # liger 0.3, plainer in the open
-    assert closed_g.traits["coat_pattern"].strength == pytest.approx(0.4)
-    assert "fainter tiger-type stripes" in " ".join(open_g.habitat.adjustments)
+    # E2c: real hybrids (the liger) get no habitat step, so this uses close relatives with no documented cross.
+    open_g, _ = plan_for(engine, "tiger", "leopard", habitat="grassland")
+    closed_g, _ = plan_for(engine, "tiger", "leopard", habitat="forest")
+    assert closed_g.traits["coat_pattern"].strength - open_g.traits["coat_pattern"].strength == pytest.approx(0.2)
+    assert "fainter leopard-type rosettes" in " ".join(open_g.habitat.adjustments)
 
 
 # ------------------------------------------------------------------ 4. polish

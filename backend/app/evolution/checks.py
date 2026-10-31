@@ -12,7 +12,7 @@ from typing import Any
 from app.evolution.data import Taxonomy, cards, config
 from app.evolution.genome import BEYOND, HEAD_GROUP, MEASUREMENT_TAGS, SURFACE_TAGS, Genome
 from app.evolution.physics import LABEL_ARTHROPOD, LABEL_SIX, arthropod_parts
-from app.evolution.route import LABEL_CHIMERA, LABEL_SPECULATIVE, Route, find_known_pair
+from app.evolution.route import LABEL_CHIMERA, LABEL_SPECULATIVE, Route, find_known_pair, is_real_hybrid
 
 
 @dataclass
@@ -139,7 +139,7 @@ def soft_penalties(g: Genome, r: Route, tax: Taxonomy) -> tuple[list[dict[str, A
                 hits.append(("RC-R5-04", 0.5, f"{tag}: donor patch below full strength"))
     if g.mode == "chimera" and g.host and t["head"].donor not in (g.host, None):
         hits.append(("RC-R7-02", 0.7, "myth-style head swap outside mythic mode"))
-    if not g.habitat.visible_trait:
+    if not g.habitat.visible_trait and not is_real_hybrid(r):  # E2c: real hybrids get no habitat cue
         hits.append(("RC-R4-11", 1.0, "no visible habitat trait"))
     if g.host and tax.animals[g.host].group == "soft_bodied" and tax.animals[g.other(g.host)].structure_rank > 0:
         hits.append(("RC-R6-09", 1.0, "soft-bodied host for a structured partner"))
