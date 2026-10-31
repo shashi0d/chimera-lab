@@ -1,0 +1,99 @@
+{
+  "inputs": [
+    "common_octopus.webp",
+    "bald_eagle.webp"
+  ],
+  "prompt": "Create a hybrid: one new creature that combines the animal in the first image with the animal in the second image.",
+  "response": {
+    "id": "resp_6ae5425de99aa0486591428d",
+    "access_programs": null,
+    "created_at": 1793409629.0,
+    "error": null,
+    "incomplete_details": null,
+    "instructions": null,
+    "metadata": null,
+    "model": "muse-image-1.0",
+    "object": "response",
+    "output": [
+      {
+        "id": "rs_6ae5425d785390940fc246a9",
+        "summary": [
+          {
+            "text": "**Designing octopus-eagle hybrid**\nI'm planning a hybrid that pairs a bald eagle's head and feathers with an octopus body and tentacles, noting beak, white head feathers, brown suckers, and wing options for the final image.\n**Designing eagle-octopus hybrid**\nI'm planning a realistic underwater hybrid with a bald eagle head and neck, brown feathered mantle, eight tentacles with feather accents, and consistent sea-floor setting for the new creature.",
+            "type": "summary_text"
+          }
+        ],
+        "type": "reasoning",
+        "content": null,
+        "encrypted_content": null,
+        "status": "completed"
+      },
+      {
+        "id": "msg_6ae5425d60ad72abda334a92",
+        "content": [
+          {
+            "annotations": [],
+            "text": "",
+            "type": "output_text",
+            "logprobs": []
+          }
+        ],
+        "role": "assistant",
+        "status": "completed",
+        "type": "message",
+        "phase": null
+      },
+      {
+        "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0hvX0J6UkpRYWRhN0FVSUFIQVEtQkpkSVVscGJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczpkNGQ1NDBlMi04ZGZlLTRhOGUtYWQwYS04NzllMDhmNzc0ZmQ6R080OEJ6U1VUenRvV0FnRUFGQ0doRDI0SEFvOWJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM0MDk2Mjl9.Q8WLFwFaxXrvqfQXWAOhqTdD3aD1",
+        "result": "<base64 1255388 chars>",
+        "status": "completed",
+        "type": "image_generation_call",
+        "action": null,
+        "background": null,
+        "error": null,
+        "output_format": null,
+        "quality": null,
+        "revised_prompt": null,
+        "size": null
+      }
+    ],
+    "parallel_tool_calls": false,
+    "temperature": null,
+    "tool_choice": null,
+    "tools": null,
+    "top_p": null,
+    "background": null,
+    "completed_at": null,
+    "conversation": null,
+    "max_output_tokens": null,
+    "max_tool_calls": null,
+    "moderation": null,
+    "previous_response_id": null,
+    "prompt": null,
+    "prompt_cache_diagnostics": null,
+    "prompt_cache_key": null,
+    "prompt_cache_options": null,
+    "prompt_cache_retention": null,
+    "reasoning": null,
+    "safety_identifier": null,
+    "service_tier": null,
+    "status": "completed",
+    "text": null,
+    "tool_usage": null,
+    "top_logprobs": null,
+    "truncation": null,
+    "usage": {
+      "input_tokens": 14363,
+      "input_tokens_details": {
+        "cache_write_tokens": null,
+        "cached_tokens": 10112
+      },
+      "output_tokens": 955,
+      "output_tokens_details": {
+        "reasoning_tokens": 288
+      },
+      "total_tokens": 15318
+    },
+    "user": null
+  }
+}

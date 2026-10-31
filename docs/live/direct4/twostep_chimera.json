@@ -1,0 +1,99 @@
+{
+  "inputs": [
+    "common_octopus.webp",
+    "bald_eagle.webp"
+  ],
+  "prompt": "A hyperrealistic wildlife photograph of a majestic octopus-bald eagle hybrid perched upright on a moss-covered branch overhanging a shallow coastal tidepool, with a robust eagle-like torso covered in dark chocolate-brown layered feathers that blend into mottled brown-tan bumpy octopus skin on the chest and wing shoulders, a white-feathered bald eagle head in sharp right profile with fierce pale eye and large hooked yellow beak, broad folded feathered wings with cephalopod-textured undersides, two powerful yellow scaled raptor legs with long curved black talons gripping the branch alongside six muscular sucker-lined octopus tentacles with white spots and curled spiral tips coiling around the branch and hanging down, white tail feathers mixed with a short tentacle curl, three-quarter front view, misty pale grey-blue background with pebbly sand visible in clear water below, soft diffused overcast daylight, ultra-detailed feather, sucker and skin texture, telephoto sharp focus, natural colors, lifelike anatomy.",
+  "response": {
+    "id": "resp_6ae54289d3256930c7e64303",
+    "access_programs": null,
+    "created_at": 1793409673.0,
+    "error": null,
+    "incomplete_details": null,
+    "instructions": null,
+    "metadata": null,
+    "model": "muse-image-1.0",
+    "object": "response",
+    "output": [
+      {
+        "id": "rs_6ae542895a58be2df5a2492d",
+        "summary": [
+          {
+            "text": "**Composing hybrid wildlife image**\nI'm planning a hyperrealistic wildlife photo of an octopus-eagle hybrid on a mossy branch over a tidepool, mapping feathered torso, mottled skin, raptor legs with talons, and six sucker-lined tentacles with white spots.\n**Crafting hyperrealistic hybrid**\nI'm assembling the eagle-octopus hybrid in a three-quarter front view, blending feathered torso into mottled skin, cephalopod-textured wings, six coiling tentacles, and misty tidepool background with soft overcast light.\n**Refining hybrid integration**\nI'm planning another generation to blend the tentacles and chest more seamlessly, add wing undersides, and create a more integrated hybrid look.",
+            "type": "summary_text"
+          }
+        ],
+        "type": "reasoning",
+        "content": null,
+        "encrypted_content": null,
+        "status": "completed"
+      },
+      {
+        "id": "msg_6ae54289df21a2a00a6844ec",
+        "content": [
+          {
+            "annotations": [],
+            "text": "",
+            "type": "output_text",
+            "logprobs": []
+          }
+        ],
+        "role": "assistant",
+        "status": "completed",
+        "type": "message",
+        "phase": null
+      },
+      {
+        "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0JRcG1qU2NXS2tfRko0R0FLelAwQ3N6UkNnZWJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczoxZTFlMWFjZS1kOWNlLTRjNDgtODdiYi03MmJmMzZkMTdkODc6R1A3TW1UUU1scXBjR0hZT0FCWlZOc1lRd1hJZ2JnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM0MDk2NzN9.Q8WLFwFnXeTNb8185yd_dLuvoXBG",
+        "result": "<base64 650576 chars>",
+        "status": "completed",
+        "type": "image_generation_call",
+        "action": null,
+        "background": null,
+        "error": null,
+        "output_format": null,
+        "quality": null,
+        "revised_prompt": null,
+        "size": null
+      }
+    ],
+    "parallel_tool_calls": false,
+    "temperature": null,
+    "tool_choice": null,
+    "tools": null,
+    "top_p": null,
+    "background": null,
+    "completed_at": null,
+    "conversation": null,
+    "max_output_tokens": null,
+    "max_tool_calls": null,
+    "moderation": null,
+    "previous_response_id": null,
+    "prompt": null,
+    "prompt_cache_diagnostics": null,
+    "prompt_cache_key": null,
+    "prompt_cache_options": null,
+    "prompt_cache_retention": null,
+    "reasoning": null,
+    "safety_identifier": null,
+    "service_tier": null,
+    "status": "completed",
+    "text": null,
+    "tool_usage": null,
+    "top_logprobs": null,
+    "truncation": null,
+    "usage": {
+      "input_tokens": 26456,
+      "input_tokens_details": {
+        "cache_write_tokens": null,
+        "cached_tokens": 20288
+      },
+      "output_tokens": 2702,
+      "output_tokens_details": {
+        "reasoning_tokens": 606
+      },
+      "total_tokens": 29158
+    },
+    "user": null
+  }
+}

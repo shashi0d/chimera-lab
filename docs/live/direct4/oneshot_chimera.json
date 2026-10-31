@@ -1,0 +1,99 @@
+{
+  "inputs": [
+    "common_octopus.webp",
+    "bald_eagle.webp"
+  ],
+  "prompt": "Create a chimera: one new creature that combines the animal in the first image with the animal in the second image.",
+  "response": {
+    "id": "resp_6ae5424d7bdf44be809744a6",
+    "access_programs": null,
+    "created_at": 1793409613.0,
+    "error": null,
+    "incomplete_details": null,
+    "instructions": null,
+    "metadata": null,
+    "model": "muse-image-1.0",
+    "object": "response",
+    "output": [
+      {
+        "id": "rs_6ae5424d75bc7add282e4179",
+        "summary": [
+          {
+            "text": "**Designing fantasy creature image**\nI'm planning a natural rocky-shore scene with feathers, tentacles, and eagle wings on the sides, then preparing the generation to match that description.\n**Designing octopus-eagle chimera**\nI'm planning a realistic chimera with an octopus body and eight tentacles, adding an eagle head, brown and white feathers, wings, and talons, set in an underwater or coastal scene.\n**Finalizing fantasy creature image**\nI'm preparing the final version with reduced elements, keeping the core design while simplifying details for a cleaner result.",
+            "type": "summary_text"
+          }
+        ],
+        "type": "reasoning",
+        "content": null,
+        "encrypted_content": null,
+        "status": "completed"
+      },
+      {
+        "id": "msg_6ae5424dc96f82a5b13144a0",
+        "content": [
+          {
+            "annotations": [],
+            "text": "",
+            "type": "output_text",
+            "logprobs": []
+          }
+        ],
+        "role": "assistant",
+        "status": "completed",
+        "type": "message",
+        "phase": null
+      },
+      {
+        "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0d3OEJ6UUpBLUtLRjdzRkFIX2NESDFteTdCWGJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczpkYzVkMzBlMy1iMzljLTRhNmYtYmExMi0xNzgzODAxMzAzMzQ6R0R5VTNETTNRZl9GcWZJREFFOWhLTW12WDZ0bWJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM0MDk2MTN9.Q8WLFwFUbERIQLD8TB-FZ790JTT3",
+        "result": "<base64 1138544 chars>",
+        "status": "completed",
+        "type": "image_generation_call",
+        "action": null,
+        "background": null,
+        "error": null,
+        "output_format": null,
+        "quality": null,
+        "revised_prompt": null,
+        "size": null
+      }
+    ],
+    "parallel_tool_calls": false,
+    "temperature": null,
+    "tool_choice": null,
+    "tools": null,
+    "top_p": null,
+    "background": null,
+    "completed_at": null,
+    "conversation": null,
+    "max_output_tokens": null,
+    "max_tool_calls": null,
+    "moderation": null,
+    "previous_response_id": null,
+    "prompt": null,
+    "prompt_cache_diagnostics": null,
+    "prompt_cache_key": null,
+    "prompt_cache_options": null,
+    "prompt_cache_retention": null,
+    "reasoning": null,
+    "safety_identifier": null,
+    "service_tier": null,
+    "status": "completed",
+    "text": null,
+    "tool_usage": null,
+    "top_logprobs": null,
+    "truncation": null,
+    "usage": {
+      "input_tokens": 24072,
+      "input_tokens_details": {
+        "cache_write_tokens": null,
+        "cached_tokens": 18816
+      },
+      "output_tokens": 1504,
+      "output_tokens_details": {
+        "reasoning_tokens": 195
+      },
+      "total_tokens": 25576
+    },
+    "user": null
+  }
+}
