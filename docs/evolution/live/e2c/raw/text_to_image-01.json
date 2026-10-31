@@ -1,0 +1,109 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "A mule (donkey sire x horse mare), a real hybrid animal. Horse-sized body with deep chest, long back, long neck and horse proportions, with the donkey's long ears, short thick head, short upright mane, thin legs, small hooves and tufted tail; plain coat with no stripes or spots. Head fully visible and uncluttered, with clear, discernible eyes. Bilaterally symmetrical, recognizable limbs, visible sense organs. One creature, full body, side three-quarter view, plain light background, natural history illustration.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "id": "resp_6ae63528526b7b28e9e644ef",
+  "access_programs": null,
+  "created_at": 1793471784.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae63528c8cb50f74db146b2",
+    "summary": [
+     {
+      "text": "**Drafting natural history illustration**\nI'm planning a vintage natural history illustration of a single mule, side three-quarter full body on a plain light background, with horse-sized proportions and donkey traits like long ears, short thick head, and tufted tail, emphasizing clear eyes and bilateral symmetry.\n**Composing natural history illustration**\nI'm preparing a detailed watercolor/engraving of a mule in side three-quarter view with plain light background, showing long donkey ears, short thick head, upright mane, tufted tail, thin legs, and small hooves.\n**Refining horse proportions**\nI'm preparing another generation with deeper chest and larger horse-like proportions, adjusting the build to look less donkey-like while keeping the natural history style.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae6352893c80bffbf2948d0",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0RveG96Uk9tcEpxTjR3REFPV2pzUjF3eG5ZZ2JnMWlBUUJlIiwicmVzdW1lX2lkIjoiczo3YjJkYmM2Yi05ZGEwLTQ0MDktYTNkMS0yZGMwYzU0OGE1YjM6R0N3VHBEUUl1N0c3SkFBRkFIczJLdG5aSktJSmJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM0NzE3ODR9.Q8WLFwHLWDAv3zQAAZnLpU0UeBCV",
+    "result": "<elided> (463060 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 18745,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 15232
+   },
+   "output_tokens": 2030,
+   "output_tokens_details": {
+    "reasoning_tokens": 319
+   },
+   "total_tokens": 20775
+  },
+  "user": null
+ }
+}

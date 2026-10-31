@@ -211,3 +211,20 @@ Short entries per phase: what was built, what was tested, what was deferred. New
 - Budget counter: image 15→17, spark 43→51, sam 5→7.
 
 **Tested:** pytest 503 passed, 6 skipped (+268 E2b tests).
+
+## 2026-10-31: E2c real-hybrid prompt, example 1 re-run live
+
+**Plan:** make the known-pair (real hybrid) prompt carry the host frame, then re-run only example 1 (donkey x horse) live. No merge. Report appended to `docs/evolution/E2_LIVE.md`.
+
+**Built:**
+- `prompt.compile_real_hybrid` opens with the name and cross, gives the frame in host terms first, and names the donor once in a grouped clause. Wording comes from a `prompt` block per known pair. The liger opens with "A liger (lion sire x tiger dam)".
+- Real hybrids get no habitat step (`habitat.clear_habitat`, D-056).
+- On the real-hybrid route the critic counts the hybrid's own name or an alias as both parents.
+- `CHIMERA_LIVE_MAX_SAM` defaults to 15.
+
+**Live:**
+- 4 Spark, 1 image and 1 SAM call, as predicted. No retries, no re-render.
+- Mule 0.67 → 0.685: taller, deeper-chested, longer-necked, plain coat, no habitat scrub. The image-only critic still names "donkey", so the critic and thumbnail scores stay at 0.5.
+- Budget counter: image 17→18, spark 51→55, sam 7→8 (SAM cap now 15).
+
+**Tested:** pytest 543 passed, 6 skipped (+40 E2c tests).

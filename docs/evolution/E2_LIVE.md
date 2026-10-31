@@ -142,3 +142,68 @@ The first plan for example 1 was again rejected under RC-R2-03, because the mode
 ## Failures
 
 None. Both examples succeeded on the first try. No re-render was needed, so the re-render path (tested in mock mode) did not run live. Remaining headroom on these caps is 3 images, 19 Spark and 1 SAM. That is not enough for another run with a possible re-render without raising the SAM cap.
+
+---
+
+# E2c: real-hybrid prompt, example 1 re-run live
+
+Date: 2026-10-31. Branch: `evo` (not merged). Caps: 20 images and 70 Spark (unchanged), SAM raised from 8 to 15, all on the shared counter.
+Outputs: `docs/evolution/live/e2c/`. Command: `scripts/e2_live_run.py e2c 1`.
+
+## What changed (commit `0663718`)
+
+1. **Real-hybrid prompt.** A real hybrid is a known pair, or a cross documented in `chimera_data.json` (`route.is_real_hybrid`). Its prompt is built by `prompt.compile_real_hybrid`:
+   - It opens with the name and the cross: "A mule (donkey sire x horse mare), a real hybrid animal."
+   - It describes the frame in host terms first and in full: "Horse-sized body, deep chest, long back, long neck, horse proportions".
+   - It names the donor once, in one grouped clause: "with the donkey's long ears, short thick head, short upright mane, thin legs, small hooves and tufted tail".
+   - It then gives the coat pattern clause from E2b, here "plain coat, no stripes or spots".
+   - There are no "Silhouette:", "Host frame" or per-detail "Details:" lines, so the donor's name no longer comes back in every detail line. The wording lives in a new `prompt` block on each of the 7 known pairs in `data/evo_known_pairs.json`.
+   - The liger prompt opens with "A liger (lion sire x tiger dam), a real hybrid animal. Very large cat body ...". It names the tiger once, in "faint tiger-type stripes".
+   - Chimeras, mythic designs and close relatives with no documented cross keep the E2b prompt.
+2. **No habitat step for real hybrids (D-056).** `finish()` calls `clear_habitat`: earlier habitat deltas are undone, and the plan carries no adjustments and no visible habitat cue. RC-R4-11 is not traced or penalised for these plans. The liger's stripes therefore stay at 30 percent in every habitat.
+3. **Critic.** On the real-hybrid route only, naming the hybrid or an alias ("mule", "liger", "pizzly") counts as naming both parents. Such a name is never a third animal. On other routes "liger" still scores 0 and counts as a third animal.
+4. **SAM cap 15.** `CHIMERA_LIVE_MAX_SAM` now defaults to 15 in `adapters/usage.py` and in the run script. The image and Spark caps are unchanged.
+- **Tests:** 40 new tests in `tests/evolution/test_e2c_real_hybrid.py`, covering every known pair and both orders where allowed. Three earlier tests were updated: the liger habitat test now uses tiger x leopard, and the worked-examples test checks for the new opener on known pairs. Backend total: 543 passed, 6 skipped.
+
+## Before and after
+
+| # | Image | Route | Host | Label | Quality | Critic (full image) | Critic (192 px thumbnail) |
+|---|---|---|---|---|---|---|---|
+| 1 E2 | ![](live/e2/1_donkey_x_horse/image.webp) | hybrid, known pair `mule` | horse | real hybrid precedent | 0.45 | donkey, zebra; 1 creature | donkey; 1 creature |
+| 1 before (E2b) | ![](live/e2b/1_donkey_x_horse/image.webp) | hybrid, known pair `mule` | horse | real hybrid precedent | 0.67 | donkey; 1 creature | donkey; 1 creature |
+| 1 after (E2c) | ![](live/e2c/1_donkey_x_horse/image.webp) | hybrid, known pair `mule` | horse | real hybrid precedent | **0.685** | named **donkey**; **1 creature**. "A brown donkey stands in profile against a plain background." | donkey; 1 creature |
+
+Score parts:
+
+| # | critic | silhouette | thumbnail | soft penalty | SAM mask (fill, aspect, components) | habitat cue | polish | re-render |
+|---|---|---|---|---|---|---|---|---|
+| 1 before (E2b) | 0.5 | 0.733 | 0.5 | 0.0 | 0.284, 0.93, 1 | "Habitat cue (dry woodland): larger ears and longer tail for shedding heat", which pushed toward donkey ears | accepted | no |
+| 1 after (E2c) | 0.5 | 0.782 | 0.5 | 0.0 | 0.272, 0.98, 1 | none | accepted (wording only) | no |
+
+The first plan was again rejected under RC-R2-03, because the model edited the locked mule `body` note, so the code skeleton was used. That does not affect the prompt, which is compiled from the locked override. Spark's polish changed only the punctuation ("with deep chest ... and horse proportions") and was accepted.
+
+## My judgment: does the image match its plan?
+
+**Closer, but the critic still says donkey.** Compared with E2b, the body is taller and deeper-chested, the neck and legs are longer and the back is longer. The coat is finer and plain, with no dorsal or shoulder stripe, and the ground scrub from the habitat cue is gone. The long ears, short upright mane, small hooves and tufted tail are as planned. So the frame moved towards the horse and the image is now a fair mule. The muzzle and head, though, are still a donkey's, and mules do look like big donkeys. The image-only critic, which has no plan to go on, names it "donkey", so the critic and thumbnail scores stay at 0.5. The quality gain (0.67 → 0.685) comes only from the silhouette (aspect 0.93 → 0.98). The E2c critic rule would score a "mule" answer as both parents, but this critic never said "mule".
+
+## Calls: predicted vs made
+
+| | Spark | Image | SAM |
+|---|---|---|---|
+| Predicted, 1 example, no re-render | 4 | 1 | 1 |
+| Extra if a re-render fires | +2 | +1 | +1 |
+| Made, every attempt counted | **4** | **1** | **1** |
+| Retries | 0 | 0 | 0 |
+| Re-renders | 0 | 0 | 0 |
+
+## Budget counter (`docs/live/budget.json`)
+
+| | image | spark | sam |
+|---|---|---|---|
+| Before E2c | 17 | 51 | 7 |
+| After E2c | **18** | **55** | **8** |
+| Caps | 20 | 70 | **15** |
+
+## Failures
+
+None. Example 1 succeeded on the first try with no re-render. Remaining headroom: 2 images, 15 Spark and 7 SAM.

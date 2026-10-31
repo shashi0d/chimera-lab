@@ -1,0 +1,53 @@
+{
+ "critic": {
+  "animals": [
+   "donkey"
+  ],
+  "creatures": 1,
+  "notes": "A brown donkey stands in profile against a plain background."
+ },
+ "critic_thumbnail": {
+  "animals": [
+   "donkey"
+  ],
+  "creatures": 1,
+  "notes": "A brown donkey stands in profile against a plain background."
+ },
+ "mask": {
+  "fill": 0.272,
+  "aspect": 0.982,
+  "components": 1
+ },
+ "sam_prompt": "animal",
+ "soft_cards": [],
+ "scores": {
+  "critic": 0.5,
+  "silhouette": 0.782,
+  "thumbnail": 0.5,
+  "soft_penalty": 0.0,
+  "quality": 0.685
+ },
+ "third_animal": [],
+ "render_attempts": [
+  {
+   "prompt": "polished",
+   "critic": {
+    "animals": [
+     "donkey"
+    ],
+    "creatures": 1,
+    "notes": "A brown donkey stands in profile against a plain background."
+   },
+   "third_animal": [],
+   "scores": {
+    "critic": 0.5,
+    "silhouette": 0.782,
+    "thumbnail": 0.5,
+    "soft_penalty": 0.0,
+    "quality": 0.685
+   }
+  }
+ ],
+ "warnings": [],
+ "polish": "accepted"
+}
