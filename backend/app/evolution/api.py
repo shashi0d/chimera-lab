@@ -31,6 +31,8 @@ class FuseIn(BaseModel):
     sire: ParentIn
     dam: ParentIn
     myth: bool = False
+    mode: Literal["realistic", "speculative", "mythic", "compare"] | None = None  # E4 design mode
+    compare_with: Literal["speculative", "mythic"] = "speculative"
     host: Literal["sire", "dam"] | None = None
     habitat: str | None = None
     seed: int = Field(default=0, ge=0)
@@ -64,10 +66,13 @@ def _validated(doc: dict[str, Any]) -> dict[str, Any]:
 
 @router.post("/fuse")
 async def fuse(body: FuseIn, request: Request) -> dict[str, Any]:
-    return _validated(await engine(request).fuse(
+    out = await engine(request).fuse(
         sire_name=body.sire.name, dam_name=body.dam.name, sire_image=decode_image(body.sire.image_b64),
         dam_image=decode_image(body.dam.image_b64), myth=body.myth, host=body.host, habitat=body.habitat,
-        seed=body.seed))
+        seed=body.seed, mode=body.mode, compare_with=body.compare_with)
+    if out.get("mode") == "compare":
+        return {**out, "pair": [_validated(d) for d in out["pair"]]}
+    return _validated(out)
 
 
 class ResolveIn(BaseModel):

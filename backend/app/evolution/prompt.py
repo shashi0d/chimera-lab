@@ -142,11 +142,16 @@ def compile_real_hybrid(g: Genome, tax: Taxonomy) -> str:
     body = _cap(frame)
     if features and donor:
         body += f", with the {_name(tax, donor)}'s {_join(features)}"
-    lines = [hybrid_opener(g, tax), f"{body}; {pattern_clause(g, tax)}.",
+    lines = [hybrid_opener(g, tax), f"{body}; {pattern_clause(g, tax)}.", *([license_clause(g)] if g.licenses else []),
              "Head fully visible and uncluttered, with clear, discernible eyes.",
              "Bilaterally symmetrical, recognizable limbs, visible sense organs.",
              "One creature, full body, side three-quarter view, plain light background, natural history illustration."]
     return strip_franchise(" ".join(lines))
+
+
+def license_clause(g: Genome) -> str:
+    """E4 (4.5c): each declared license is shown with its compensation."""
+    return "Declared fiction: " + "; ".join(f"{lic.rule}, shown with {lic.compensation}" for lic in g.licenses) + "."
 
 
 def compile_prompt(g: Genome, tax: Taxonomy) -> str:
@@ -201,6 +206,8 @@ def compile_prompt(g: Genome, tax: Taxonomy) -> str:
     lines.append("Details: " + "; ".join(c for c in contrib if c) + ".")
     parts = _pattern_parts(g, tax)
     lines.append(f"The {parts[0][0]} follow the body outline." if parts else "Coat texture flows along the body outline.")
+    if g.licenses:
+        lines.append(license_clause(g))
     lines.append("Bilaterally symmetrical, recognizable limbs, visible sense organs.")
     if g.habitat.visible_trait and not BARE_PATTERN.search(g.habitat.visible_trait):
         lines.append(f"Habitat cue ({g.habitat.name}): {g.habitat.visible_trait}.")

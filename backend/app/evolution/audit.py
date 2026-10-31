@@ -290,20 +290,6 @@ def run_audit(g: Genome, tax: Taxonomy, r: Route) -> tuple[list[str], list[Need]
     return list(dict.fromkeys(cards)), needs
 
 
-NEED_LABELS = {
-    "land_gills": "speculative: gills on a land creature (gills collapse in air)",
-}
-
-
-def settle_needs(g: Genome, needs: list[Need]) -> list[str]:
-    """Without a fiction budget every need stays labeled (physics already labels six limbs, arthropod size
-    and tentacle legs). fiction.py replaces this with license, repair or label (E4 step 4)."""
-    for n in needs:
-        if n.id in NEED_LABELS:
-            _label(g, NEED_LABELS[n.id])
-    return []
-
-
 def uncovered(g: Genome) -> list[str]:
     return [i.function for i in g.audit if i.result == "pending"]
 

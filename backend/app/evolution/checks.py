@@ -162,6 +162,18 @@ def _r9_violations(g: Genome, r: Route, tax: Taxonomy, final: bool) -> list[Viol
             and "limbs" not in locked_tags(g, tax)):
         if not re.search(r"thicker|straightened|heavier leg muscles|thick supporting legs", limbs.note or ""):
             out.append(Violation("RC-R9-06", f"{g.size.mass_kg} kg on {leg.common_name} legs without a shape change"))
+    # RC-R9-10: licenses within the mode's budget, only on bendable cards, each shown with its compensation.
+    from app.evolution.fiction import budget, check_licensable
+
+    if len(g.licenses) > budget(g.design_mode):
+        out.append(Violation("RC-R9-10", f"{len(g.licenses)} licenses in {g.design_mode} mode "
+                                         f"(budget {budget(g.design_mode)})"))
+    for lic in g.licenses:
+        if not check_licensable(lic.card):
+            out.append(Violation("RC-R9-10", f"{lic.card} cannot be licensed"))
+        notes = " ".join(tr.note or "" for tr in g.traits.values())
+        if not lic.compensation or lic.compensation not in notes:
+            out.append(Violation("RC-R9-10", f"license {lic.id} without its compensation in the plan"))
     # RC-R9-09: never state high oxygen as the settled reason giant insects existed.
     for text in _texts(g):
         if OXYGEN.search(text) and not OXYGEN_HEDGE.search(text):

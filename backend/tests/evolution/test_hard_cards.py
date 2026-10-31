@@ -16,7 +16,7 @@ from app.evolution.route import LABEL_CHIMERA, LABEL_SPECULATIVE, find_known_pai
 from tests.evolution.conftest import plan_for
 
 HARD = {"RC-R1-01", "RC-R1-14", "RC-R2-01", "RC-R2-03", "RC-R2-11", "RC-R2-16", "RC-R3-01", "RC-R3-02", "RC-R3-09",
-        "RC-R5-01", "RC-R5-10"}
+        "RC-R5-01", "RC-R5-10", "RC-R9-01", "RC-R9-02", "RC-R9-03", "RC-R9-06", "RC-R9-09", "RC-R9-10"}
 WORKED = [("donkey", "horse"), ("lion", "tiger"), ("lion", "eagle"), ("eagle", "octopus")]
 
 
@@ -287,3 +287,16 @@ def test_rc_r9_09_oxygen_never_stated_as_settled(engine):
     ok = g.model_copy(deep=True)
     ok.processes.append("high oxygen is one debated explanation for giant insects")
     assert "RC-R9-09" not in ids(hard_violations(ok, r, engine.tax))
+
+
+# ---------------------------------------------------------------- RC-R9-10 (E4; more in test_e4_fiction.py)
+
+
+@pytest.mark.parametrize("mode,most", [("realistic", 0), ("speculative", 1), ("mythic", 3)])
+def test_rc_r9_10_licenses_never_exceed_the_mode_budget(engine, mode, most):
+    for sire, dam in [*WORKED, ("tiger_shark", "lion")]:
+        a, b = engine.tax.resolve(sire), engine.tax.resolve(dam)
+        g, r = engine.seed_plan(a, b, design_mode=mode)
+        g = engine.finish(g, r)
+        assert len(g.licenses) <= most
+        assert "RC-R9-10" not in ids(hard_violations(g, r, engine.tax))

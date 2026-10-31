@@ -19,12 +19,13 @@ from typing import Any
 from app.adapters.base import ImageGenAdapter
 from app.errors import ChimeraError
 from app.evolution.adapters import EvoSpark, Meter, MockEvoSpark, MockRegistry, MockSegmenter, Segmenter, swatch
-from app.evolution.audit import apply_judgment, plan_text, run_audit, settle_needs, uncovered
+from app.evolution.audit import apply_judgment, plan_text, run_audit, uncovered
 from app.evolution.card import output_card
 from app.evolution.checks import Violation, hard_violations
 from app.evolution.data import DATA, Animal, Taxonomy, cards, taxonomy
+from app.evolution.fiction import settle
 from app.evolution.gbif import FixtureGbif, GbifClient
-from app.evolution.genome import TRAIT_TAGS, Genome, Trait, validate_plan
+from app.evolution.genome import DESIGN_MODES, TRAIT_TAGS, Genome, Trait, validate_plan
 from app.evolution.habitat import apply_habitat, choose_habitat, clear_habitat
 from app.evolution.judge import judge
 from app.evolution.physics import run_checks
@@ -43,9 +44,10 @@ def _dedupe(items: list[str]) -> list[str]:
     return list(dict.fromkeys(items))
 
 
-def cache_key(sire: str, dam: str, myth: bool, host: str | None, habitat: str | None, seed: int) -> str:
-    """Ordered: A x B and B x A never share a key (RC-R2-01)."""
-    return f"{sire}>{dam}|myth={int(myth)}|host={host or '-'}|habitat={habitat or '-'}|seed={seed}"
+def cache_key(sire: str, dam: str, myth: bool, host: str | None, habitat: str | None, seed: int,
+              mode: str = "speculative") -> str:
+    """Ordered: A x B and B x A never share a key (RC-R2-01). The design mode is part of the key (E4)."""
+    return f"{sire}>{dam}|myth={int(myth)}|mode={mode}|host={host or '-'}|habitat={habitat or '-'}|seed={seed}"
 
 
 def plan_id(g: Genome) -> str:
@@ -128,8 +130,11 @@ class EvoEngine:
     # ------------------------------------------------------------------ 4.1 to 4.5
 
     def seed_plan(self, sire: Animal, dam: Animal, myth: bool = False, host_pick: str | None = None,
-                  habitat: str | None = None, seed: int = 0) -> tuple[Genome, Route]:
-        """Code skeleton for 4.1 to 4.3 plus the habitat choice. No model call."""
+                  habitat: str | None = None, seed: int = 0, design_mode: str | None = None) -> tuple[Genome, Route]:
+        """Code skeleton for 4.1 to 4.3 plus the habitat choice. No model call. design_mode (E4): realistic,
+        speculative (default) or mythic; mythic routes a distant pair as a mythic composite."""
+        design = design_mode or ("mythic" if myth else "speculative")
+        myth = myth or design == "mythic"
         r = route(sire, dam, self.tax, myth)
         host, host_cards, _ = choose_host(r, host_pick)
         rng = random.Random(f"{sire.id}>{dam.id}|{seed}")
@@ -142,6 +147,7 @@ class EvoEngine:
             size=built["size"], silhouette="pending", limb_plan=built["limb_plan"], traits=built["traits"],
             labels=list(r.labels), processes=processes,
             card_trace=_dedupe(r.cards + host_cards + built["cards"] + hab_cards), seed=seed,
+            design_mode=design,  # type: ignore[arg-type]
         )
         g.silhouette = silhouette(g, self.tax, r.pair)
         return g, r
@@ -155,7 +161,7 @@ class EvoEngine:
         hab_cards = clear_habitat(g) if real else apply_habitat(g, self.tax, locked)  # E2c, D-056
         phys_cards = run_checks(g, self.tax)
         audit_cards, needs = run_audit(g, self.tax, r)  # 4.5b, after the physical checks (RC-R9-02)
-        audit_cards += settle_needs(g, needs)
+        audit_cards += settle(g, needs, self.tax)  # 4.5c fiction budget
         g.silhouette = silhouette(g, self.tax, r.pair)
         g.identity_balance = contribution(g.traits, g.limb_plan, g.host or g.parents.sire)
         g.labels = _dedupe([*r.labels, *g.labels])
@@ -238,19 +244,29 @@ class EvoEngine:
 
     async def fuse(self, sire_name: str | None = None, dam_name: str | None = None, sire_image: bytes | None = None,
                    dam_image: bytes | None = None, myth: bool = False, host: str | None = None,
-                   habitat: str | None = None, seed: int = 0) -> dict[str, Any]:
+                   habitat: str | None = None, seed: int = 0, mode: str | None = None,
+                   compare_with: str = "speculative") -> dict[str, Any]:
+        """mode: realistic, speculative (default), mythic, or compare (realistic plus `compare_with`, as a pair).
+        The old `myth` flag still means mythic."""
+        if mode == "compare":
+            return await self._compare(sire_name, dam_name, sire_image, dam_image, host, habitat, seed, compare_with)
+        design = mode or ("mythic" if myth else "speculative")
+        if design not in DESIGN_MODES:
+            raise ChimeraError(ErrorCode.VALIDATION_FAILED, f"Unknown mode {mode!r}.",
+                               details={"modes": [*DESIGN_MODES, "compare"]})
+        myth = design == "mythic"
         self._guard()
         before = self.meter.snapshot()
         sire = await self.resolve_parent(sire_name, sire_image, "sire")
         dam = await self.resolve_parent(dam_name, dam_image, "dam")
         if sire.id == dam.id:
             raise ChimeraError(ErrorCode.DUPLICATE_INPUTS, "Sire and dam are the same animal.")
-        key = cache_key(sire.id, dam.id, myth, host, habitat, seed)
+        key = cache_key(sire.id, dam.id, myth, host, habitat, seed, design)
         hit = self.store.get("cache", key)
         if hit and (doc := self.store.get("creatures", hit["creature_id"])):
             return {**doc, "cached": True, "cache_key": key, "meta_calls": self.meter.since(before)}
 
-        skeleton, r = self.seed_plan(sire, dam, myth, host, habitat, seed)
+        skeleton, r = self.seed_plan(sire, dam, myth, host, habitat, seed, design)
         model_note = "accepted"
         try:
             raw = await self.meter.call("spark", "first_plan", self.spark.write_plan(
@@ -273,6 +289,19 @@ class EvoEngine:
         self.store.put("cache", key, {"creature_id": g.id})
         return {**doc, "cached": False, "cache_key": key, "model_plan": model_note,
                 "meta_calls": self.meter.since(before)}
+
+    async def _compare(self, sire_name: str | None, dam_name: str | None, sire_image: bytes | None,
+                       dam_image: bytes | None, host: str | None, habitat: str | None, seed: int,
+                       other: str) -> dict[str, Any]:
+        """Compare mode (E4): the realistic version and the user's other mode, rendered as a pair."""
+        if other not in ("speculative", "mythic"):
+            raise ChimeraError(ErrorCode.VALIDATION_FAILED, "compare_with must be speculative or mythic.")
+        before = self.meter.snapshot()
+        docs = []
+        for m in ("realistic", other):
+            docs.append(await self.fuse(sire_name, dam_name, sire_image, dam_image, host=host, habitat=habitat,
+                                        seed=seed, mode=m))
+        return {"mode": "compare", "modes": ["realistic", other], "pair": docs, "meta_calls": self.meter.since(before)}
 
     async def get(self, creature_id: str) -> dict[str, Any]:
         doc = self.store.get("creatures", creature_id) if creature_id.startswith("crt_") else None
