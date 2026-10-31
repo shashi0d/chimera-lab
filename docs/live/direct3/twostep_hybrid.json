@@ -1,0 +1,99 @@
+{
+  "inputs": [
+    "bald_eagle.webp",
+    "common_octopus.webp"
+  ],
+  "prompt": "A photorealistic hybrid creature with the white feathered head of a bald eagle and the body of an octopus, upright and alert on a horizontal moss-covered branch over a shallow rocky tidepool, fierce pale eagle eyes and large hooked yellow beak, dark brown layered eagle chest feathers on the upper torso transitioning into mottled brown-tan bumpy octopus skin on the lower body and mantle hump on the back, broad feathered wings partially folded with thin webbed membrane and small suckers along the trailing edges, eight thick muscular octopus tentacle arms with pale suckers replacing bird feet and tightly coiling around the branch with curled tips hanging down, three-quarter front view head turned to the right, misty pale gray-blue background with sandy pebbly tidepool below, soft diffused overcast daylight, hyper-detailed wildlife photography style, ultra sharp feather and skin texture.",
+  "response": {
+    "id": "resp_6ae54108c1d9203efb3547fc",
+    "access_programs": null,
+    "created_at": 1793409288.0,
+    "error": null,
+    "incomplete_details": null,
+    "instructions": null,
+    "metadata": null,
+    "model": "muse-image-1.0",
+    "object": "response",
+    "output": [
+      {
+        "id": "rs_6ae541086d547063e0e44dec",
+        "summary": [
+          {
+            "text": "**Composing photorealistic hybrid creature**\nI'm planning the image using the two references, focusing on the eagle head with fierce pale eyes and yellow beak merging into an octopus body with mottled skin, tentacles, and feathered wings on a mossy branch over a tidepool.\n**Composing photorealistic hybrid creature**\nI'm assembling a photoreal wildlife image that merges an eagle's head and upper brown feathers with an octopus body, webbed wings with suckers, and eight tentacles coiling a branch over a misty tidepool.\n**Refining hybrid creature transition**\nI'm planning another generation with a more integrated transition from the chest to the octopus, aiming for smoother blending while keeping the photorealistic look.",
+            "type": "summary_text"
+          }
+        ],
+        "type": "reasoning",
+        "content": null,
+        "encrypted_content": null,
+        "status": "completed"
+      },
+      {
+        "id": "msg_6ae54108b7d9603597dd45ef",
+        "content": [
+          {
+            "annotations": [],
+            "text": "",
+            "type": "output_text",
+            "logprobs": []
+          }
+        ],
+        "role": "assistant",
+        "status": "completed",
+        "type": "message",
+        "phase": null
+      },
+      {
+        "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0hEQWd6STRvMUt3QmVzREFMNHByMHJRVTU0X2JnMWlBUUJlIiwicmVzdW1lX2lkIjoiczo3ZmJlNjdiMC03MzUwLTRhNjQtOGE5MC01NDNjZjZjNWJhOTE6R0h5TWREUnhaUnZIRHlzRUFJaGVyV0FFNzdKZGJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM0MDkyODh9.Q8WLFwFfyYcFgbzGlMkDvvZuO6DI",
+        "result": "<base64 763792 chars>",
+        "status": "completed",
+        "type": "image_generation_call",
+        "action": null,
+        "background": null,
+        "error": null,
+        "output_format": null,
+        "quality": null,
+        "revised_prompt": null,
+        "size": null
+      }
+    ],
+    "parallel_tool_calls": false,
+    "temperature": null,
+    "tool_choice": null,
+    "tools": null,
+    "top_p": null,
+    "background": null,
+    "completed_at": null,
+    "conversation": null,
+    "max_output_tokens": null,
+    "max_tool_calls": null,
+    "moderation": null,
+    "previous_response_id": null,
+    "prompt": null,
+    "prompt_cache_diagnostics": null,
+    "prompt_cache_key": null,
+    "prompt_cache_options": null,
+    "prompt_cache_retention": null,
+    "reasoning": null,
+    "safety_identifier": null,
+    "service_tier": null,
+    "status": "completed",
+    "text": null,
+    "tool_usage": null,
+    "top_logprobs": null,
+    "truncation": null,
+    "usage": {
+      "input_tokens": 26306,
+      "input_tokens_details": {
+        "cache_write_tokens": null,
+        "cached_tokens": 19968
+      },
+      "output_tokens": 2571,
+      "output_tokens_details": {
+        "reasoning_tokens": 490
+      },
+      "total_tokens": 28877
+    },
+    "user": null
+  }
+}
