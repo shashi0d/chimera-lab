@@ -1,0 +1,99 @@
+{
+  "inputs": [
+    "bald_eagle.webp",
+    "common_octopus.webp"
+  ],
+  "prompt": "A hyperrealistic photorealistic hybrid creature with the white feathered head, fierce pale yellow eye, and large hooked yellow beak of a bald eagle on top of a dense dark brown feathered raptor chest and partially folded feathered wings, its lower body transitioning from feathers to mottled brown-tan bumpy octopus skin into eight long muscular sucker-lined octopus arms with curled tips, two front arms tipped with small black eagle-like claws, perched upright in three-quarter front view on a horizontal moss-covered branch with five arms tightly coiled and suction-gripped around the branch and two arms raised, head turned sharply to the right in profile, above a shallow pebbly tidepool seabed, soft overcast natural daylight, blurred pale gray sky background, ultra-detailed wildlife photography, sharp focus on eye, feathers and suckers.",
+  "response": {
+    "id": "resp_6ae54050f3763c4a2e2844aa",
+    "access_programs": null,
+    "created_at": 1793409104.0,
+    "error": null,
+    "incomplete_details": null,
+    "instructions": null,
+    "metadata": null,
+    "model": "muse-image-1.0",
+    "object": "response",
+    "output": [
+      {
+        "id": "rs_6ae54050b381e9fd8d984741",
+        "summary": [
+          {
+            "text": "**Designing hybrid creature image**\nI'm planning the hybrid creature image, mapping the bald eagle head and chest onto an octopus lower body with eight sucker-lined arms, and setting the three-quarter pose on a mossy branch with specific arm placements.\n**Composing hybrid eagle-octopus**\nI'm building the photoreal hybrid with the eagle's head, neck, and chest feathers turned in right profile, then transitioning to textured octopus skin and eight arms, two with claws, perched on a mossy branch above a shallow pebbly tidepool under soft overcast light.\n**Refining hybrid integration**\nI'm reworking the eagle-octopus concept to blend the forms more seamlessly, moving away from separate parts toward a unified, integrated design before regenerating the image.",
+            "type": "summary_text"
+          }
+        ],
+        "type": "reasoning",
+        "content": null,
+        "encrypted_content": null,
+        "status": "completed"
+      },
+      {
+        "id": "msg_6ae54050907b047c0e754dab",
+        "content": [
+          {
+            "annotations": [],
+            "text": "",
+            "type": "output_text",
+            "logprobs": []
+          }
+        ],
+        "role": "assistant",
+        "status": "completed",
+        "type": "message",
+        "phase": null
+      },
+      {
+        "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0ptbW9qUmU0RDBSWlJZR0FHZXE5QzNqNkhZamJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczo0ZTQ2MTc3Ni00ZGU5LTRjZmEtYjY2Ni1mMzE5Yjk4NDU0YWQ6R0VXbW9qUmtqdUhOdVlrREFBR0FzV3dYZVh3YmJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM0MDkxMDR9.Q8WLFwHaAFjYgKGcL8PaR0ArzAFM",
+        "result": "<base64 759048 chars>",
+        "status": "completed",
+        "type": "image_generation_call",
+        "action": null,
+        "background": null,
+        "error": null,
+        "output_format": null,
+        "quality": null,
+        "revised_prompt": null,
+        "size": null
+      }
+    ],
+    "parallel_tool_calls": false,
+    "temperature": null,
+    "tool_choice": null,
+    "tools": null,
+    "top_p": null,
+    "background": null,
+    "completed_at": null,
+    "conversation": null,
+    "max_output_tokens": null,
+    "max_tool_calls": null,
+    "moderation": null,
+    "previous_response_id": null,
+    "prompt": null,
+    "prompt_cache_diagnostics": null,
+    "prompt_cache_key": null,
+    "prompt_cache_options": null,
+    "prompt_cache_retention": null,
+    "reasoning": null,
+    "safety_identifier": null,
+    "service_tier": null,
+    "status": "completed",
+    "text": null,
+    "tool_usage": null,
+    "top_logprobs": null,
+    "truncation": null,
+    "usage": {
+      "input_tokens": 26390,
+      "input_tokens_details": {
+        "cache_write_tokens": null,
+        "cached_tokens": 20224
+      },
+      "output_tokens": 2667,
+      "output_tokens_details": {
+        "reasoning_tokens": 484
+      },
+      "total_tokens": 29057
+    },
+    "user": null
+  }
+}
