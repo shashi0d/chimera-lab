@@ -106,7 +106,7 @@ Type labels: PR = peer-reviewed, UNI = university or university-affiliated, EDU 
 - [S2] LibreTexts Biology, Classical Genetics (Khan Academy). 2.2 Multiple alleles, incomplete dominance, and codominance. EDU. https://bio.libretexts.org/Bookshelves/Genetics/Classical_Genetics_(Khan_Academy)/02%3A_Non-Mendelian_inheritance/2.02%3A_Multiple_alleles_incomplete_dominance_and_codominance
 - [S3] JoVE Science Education. Polygenic traits. EDU. https://www.jove.com/science-education/10778/polygenic-traits
 - [S4] LibreTexts Biology, Online Open Genetics (Nickle and Barrette-Ng). 6.2 Epistasis and other gene interactions. EDU. https://bio.libretexts.org/Bookshelves/Genetics/Online_Open_Genetics_(Nickle_and_Barrette-Ng)/06%3A_Genetic_Analysis_of_Multiple_Genes/6.02%3A_Epistasis_and_Other_Gene_Interactions
-- [S5] Newcastle University School of Biomedical Sciences teaching wiki. Epistasis. UNI. https://teaching.ncl.ac.uk/bms/wiki/index.php/Epistasis
+- [S5] Mt. Hood Community College Majors Biology (Open Oregon open textbook). Epistasis, mouse coat color example. UNI. https://openoregon.pressbooks.pub/mhccmajorsbio/chapter/epistasis/
 - [S6] Toh H, Sasaki H and colleagues, Kyushu University (2025). A deletion at the X-linked ARHGAP36 gene locus is associated with the orange coloration of tortoiseshell and calico cats. Kyushu University repository copy. PR, UNI. https://catalog.lib.kyushu-u.ac.jp/opac_download_md/7390840/7390840.pdf
 - [S7] University of Southern Maine, Thinking Matters symposium (2019). X chromosome inactivation and calico cats (literature review poster). UNI. https://digitalcommons.usm.maine.edu/thinking_matters/173
 - [S8] Wilkins AS, Wrangham RW, Fitch WT (2014). The "domestication syndrome" in mammals: a unified explanation based on neural crest cell behavior and genetics. Genetics 197: 795 to 808. PR. https://pmc.ncbi.nlm.nih.gov/articles/PMC4096361/
@@ -165,7 +165,7 @@ rule: Some traits can be inherited yet hidden because another trait controls whe
 applies_to: [pipeline, coat_pattern, coat_color]
 strength: soft
 status: VERIFIED
-source: https://teaching.ncl.ac.uk/bms/wiki/index.php/Epistasis
+source: https://openoregon.pressbooks.pub/mhccmajorsbio/chapter/epistasis/
 
 ### RC-R1-08
 rule: Gate examples for fusions: a fur pattern only shows on regions that carry fur; a mane only shows where the body carries hair

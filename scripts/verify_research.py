@@ -11,6 +11,9 @@ Checks every .md file in the folder:
   5. a VERIFIED card whose source link is dead (not a 403) is flagged
   6. no em dashes in any doc
 
+A link whose cert chain fails local verification but resolves without it is
+reported as an SSL warning, not a failure.
+
 Standard library only. Exit 0 if clean, 1 if not.
 """
 from __future__ import annotations
@@ -35,6 +38,7 @@ UA = (
     "(KHTML, like Gecko) Chrome/124.0 Safari/537.36"
 )
 TIMEOUT = 20
+SSL_WARN = "SSL_WARNING"
 
 
 def clean_url(url: str) -> str:
@@ -87,10 +91,32 @@ def check_url(url: str) -> tuple[str, int | None, str]:
             return url, e.code, f"HTTP {e.code}"
         except Exception as e:  # noqa: BLE001 - network errors of every kind
             last_err = f"{type(e).__name__}: {e}"
+            if _is_cert_error(e):
+                return _check_insecure(url, headers)
             if method == "HEAD":
                 continue
             return url, None, last_err
     return url, None, last_err
+
+
+def _is_cert_error(e: Exception) -> bool:
+    reason = getattr(e, "reason", e)
+    return isinstance(reason, ssl.SSLCertVerificationError) or "CERTIFICATE_VERIFY_FAILED" in str(e)
+
+
+def _check_insecure(url: str, headers: dict) -> tuple[str, int | None, str]:
+    """Certificate chain rejected by the local trust store (often a server that
+    omits its intermediate cert). Retry without verification: if the page then
+    resolves, report an SSL warning instead of a failure."""
+    ctx = ssl._create_unverified_context()
+    req = urllib.request.Request(url, headers=headers, method="GET")
+    try:
+        with urllib.request.urlopen(req, timeout=TIMEOUT, context=ctx) as resp:
+            return url, resp.status, SSL_WARN
+    except urllib.error.HTTPError as e:
+        return url, e.code, f"HTTP {e.code} (after SSL verify failure)"
+    except Exception as e:  # noqa: BLE001
+        return url, None, f"{type(e).__name__}: {e} (after SSL verify failure)"
 
 
 def main(argv: list[str]) -> int:
@@ -101,6 +127,7 @@ def main(argv: list[str]) -> int:
     files = sorted(folder.glob("*.md"))
     problems: list[str] = []
     blocked: list[str] = []
+    ssl_warns: list[str] = []
 
     url_locs: dict[str, list[str]] = {}
     cards_by_file: dict[Path, list[dict]] = {}
@@ -138,6 +165,9 @@ def main(argv: list[str]) -> int:
         where = ", ".join(url_locs[url])
         if code == 403:
             blocked.append(f"{where} {url} (403: likely bot-blocked, check in a browser)")
+        elif err == SSL_WARN and code is not None and code < 400:
+            ssl_warns.append(f"{where} {url} (HTTP {code} only without cert verification; "
+                             "server likely omits its intermediate cert)")
         elif code is None or code >= 400:
             problems.append(f"{where} DEAD_LINK {url} ({err or code})")
 
@@ -159,7 +189,10 @@ def main(argv: list[str]) -> int:
         print(f"FAIL {p}")
     for b in blocked:
         print(f"403  {b}")
-    print(f"# {len(problems)} failures, {len(blocked)} bot-blocked (403)")
+    for w in ssl_warns:
+        print(f"SSL  {w}")
+    print(f"# {len(problems)} failures, {len(blocked)} bot-blocked (403), "
+          f"{len(ssl_warns)} SSL warnings")
     return 1 if problems else 0
 
 

@@ -74,7 +74,7 @@ Hard rule cards act as filters. Soft cards act as score penalties, so the models
 
 Type labels: PR = peer-reviewed, PRE = preprint or conference paper with arXiv copy, UNI = university or university-affiliated.
 
-- [S1] Sims K (1994). Evolving virtual creatures. SIGGRAPH 94 Proceedings, 15 to 22. Copy hosted on a Northeastern University course site. PR, UNI. https://course.ccs.neu.edu/cs5100f12/resources/reading/sims_creatures.pdf
+- [S1] Sims K (1994). Evolving virtual creatures. SIGGRAPH 94 Proceedings, 15 to 22. Copy hosted on the author's site. PR. https://www.karlsims.com/papers/siggraph94.pdf
 - [S2] Meyerson E, Nelson MJ, Bradley H, Gaier A, Moradi A, Hoover AK, Lehman J (2024). Language model crossover: variation through few-shot prompting. ACM Transactions on Evolutionary Learning and Optimization 4(4). arXiv copy. PR, PRE. https://arxiv.org/abs/2302.12170v3
 - [S3] Mouret JB, Clune J (2015). Illuminating search spaces by mapping elites. arXiv. PRE. https://arxiv.org/abs/1504.04909
 - [S4] Gaier A, Asteroth A, Mouret JB (2018). Data-efficient design exploration through surrogate-assisted illumination. arXiv copy. PR, PRE. https://arxiv.org/pdf/1806.05865
@@ -89,7 +89,7 @@ rule: Represent each creature as a structured text genome (trait plan with donor
 applies_to: [pipeline, all_traits]
 strength: soft
 status: VERIFIED
-source: https://course.ccs.neu.edu/cs5100f12/resources/reading/sims_creatures.pdf
+source: https://www.karlsims.com/papers/siggraph94.pdf
 
 ### RC-R8-02
 rule: Use a language model as the crossover and mutation operator: give it parent genomes and the rule cards, and parse its output as offspring genomes in the same schema
