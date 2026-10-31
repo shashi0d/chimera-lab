@@ -230,3 +230,16 @@ def test_plan_text_is_plain_words(engine):
     g, _ = plan_for(engine, "lion", "eagle")
     text = plan_text(g, engine.tax)
     assert "golden eagle" in text and "kg" in text and "_" not in text
+
+
+def test_feeding_teeth_that_contradict_the_diet_are_flagged(engine):
+    from dataclasses import replace
+
+    engine.tax.animals["lion"] = replace(engine.tax.animals["lion"], mouthparts="grinding teeth")  # this engine only
+    f = _audit(plan_for(engine, "lion", "eagle")[0])["feeding"]
+    assert f.result == "labeled" and f.cards == ["RC-R9-04"] and "do not match a carnivore diet" in f.detail
+
+
+def test_movement_plain_four_legs_pass(engine):
+    m = _audit(plan_for(engine, "lion", "cheetah")[0])["movement"]
+    assert m.result == "pass" and m.detail == "walks on four legs"

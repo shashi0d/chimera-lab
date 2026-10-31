@@ -253,3 +253,13 @@ Short entries per phase: what was built, what was tested, what was deferred. New
 **Step 0:** `verify_research.py` gate passed with R9 (109 cards, 0 failures, 16 403s). Rule cards regenerated (109, 17 hard). ALGORITHM.md v2 (4.5b function audit, 4.5c fiction budget, design modes, RC-R9-01 labels, section 8 tests). New `docs/evolution/ENGINE_CONTRACT.md`.
 
 **Step 1:** `evolution/resolve.py` (database, learned cache, Spark identify, GBIF exact match, Spark trait fill, refusals, needs_choice, offline fallback), `evolution/gbif.py` (client with timeout and retry, fixture replay), `/evo/resolve`. 12 recorded GBIF responses in `tests/fixtures/recorded/gbif/`. Animal gains order, genus, diet, movement, features, mouthparts, breathing, kind, provenance and claims. 23 resolver tests.
+
+**Step 2:** routing by taxonomy distance (`Route.distance`), precedent only from data, unknown taxonomy means a speculative chimera, "mythic composite" label (RC-R9-01). A source scan found and removed two hard-coded animal or pair names in `checks.py`.
+
+**Step 3:** `evolution/audit.py`: six functions, code-decided with cards, at most one Spark call for uncovered functions before the render, never a silent pass. Hard checks RC-R9-01, -02, -03, -06, -09.
+
+**Step 4:** `evolution/fiction.py`: budget realistic 0, speculative 1, mythic 3; licenses only on R9 3.2 bendable cards, each with a compensation in the plan and prompt; repair down to the budget, then label; honesty and floor rules never licensable; compare mode; RC-R9-10.
+
+**Step 5:** checklist generated from the plan for every route (hand-written pair checklists first), creature count and third-animal question in the same call, open critic logged only. The card gains `kind`, `can_it_live`, `licenses` and `provenance`; every prompt gets the prosaic-detail line.
+
+**Step 6:** full suite 684 passed, 6 skipped (E4 adds 124 tests: resolver 24, routing 12, audit 30, fiction 24, output 22, hard cards 12). Ruff clean.
