@@ -165,3 +165,28 @@ Short entries per phase: what was built, what was tested, what was deferred. New
 - person-checked quality tests
 - the cost test that sets batch and rounds
 - opening the 403 links in a browser
+
+## 2026-10-31: E2-live, first live run of the evolution engine (4 worked examples)
+
+**Plan:** two review fixes, live adapters, one SAM probe, then the 4 worked examples live (fuse only, no evolve). The `evo` → `main` merge was skipped on the user's instruction. Full report: `docs/evolution/E2_LIVE.md`.
+
+**Built:**
+- Review fixes: `LABEL_CLOSE` now says "speculative". The guanaco is now *Lama guanicoe*, and the cama still resolves for both dams (D-055).
+- `backend/app/evolution/live.py`: live Muse Spark (first plan, polish, critic, thumbnail critic), SAM 3.1 and retrying Muse Image. All reuse `_MetaClient`, the budget guard, usage records and `call_with_retry`.
+- Budget kind `sam` (`CHIMERA_LIVE_MAX_SAM`).
+- SAM mask parser built on Meta's `meta-sam-parser==0.1.0`, because masks come back as arithmetic-coded base85 text tokens. The install was approved by the user.
+
+**Live:**
+- 1 SAM probe call, recorded in `backend/tests/fixtures/recorded/sam-01.json`.
+- The 4 examples, all ok on the first try.
+- Calls made: 16 Spark, 4 image, 4 SAM, exactly as predicted, with no retries.
+- Budget counter: image 11→15, spark 27→43, sam 0→5.
+- Quality: mule 0.45, liger 0.955, lion x eagle 0.768, eagle x octopus 0.70.
+
+**Problems found, not fixed:**
+- SAM returned empty masks when prompted with the host name ("horse", "golden eagle"), giving silhouette 0 on 2 of 4. Prompting with "animal" worked.
+- The quadruped aspect band is too narrow for tall-eared animals.
+- The mule's "faint" stripes render as zebra stripes.
+- A habitat cue added leopard spots to the lion x eagle.
+
+**Tested:** pytest 235 passed, 6 skipped. `openai` was missing from `.venv` although it was in `requirements.txt`, so I installed it.
