@@ -21,7 +21,10 @@ from dataclasses import asdict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / "docs" / "evolution" / "live" / "e2"
+# E2b: `e2_live_run.py e2b 1 3` writes to docs/evolution/live/e2b/ and runs only examples 1 and 3.
+RUN = sys.argv[1] if len(sys.argv) > 1 else "e2"
+ONLY = {int(x) for x in sys.argv[2:]}
+OUT = ROOT / "docs" / "evolution" / "live" / RUN
 sys.path.insert(0, str(ROOT / "backend"))
 os.environ.update({
     "CHIMERA_LIVE_BUDGET_FILE": str(ROOT / "docs" / "live" / "budget.json"),
@@ -41,7 +44,9 @@ from app.services import build_services
 
 EXAMPLES = [("1_donkey_x_horse", "donkey", "horse"), ("2_lion_x_tiger", "lion", "tiger"),
             ("3_lion_x_eagle", "lion", "eagle"), ("4_eagle_x_octopus", "eagle", "octopus")]
+EXAMPLES = [e for i, e in enumerate(EXAMPLES, 1) if not ONLY or i in ONLY]
 PREDICTED = {"spark": 4, "image": 1, "sam": 1}  # first plan, polish, critic, thumbnail critic; render; SAM
+RERENDER = {"spark": 2, "image": 1, "sam": 1}  # E2b: one re-render after a third animal (critic x2, render, SAM)
 
 
 class MaskTap:
@@ -62,7 +67,7 @@ def _w(path: Path, obj) -> None:
 
 async def run_example(eng: EvoEngine, tap: MaskTap, slug: str, sire: str, dam: str, attempt: int,
                       calls: list[CallRecord]) -> dict:
-    current_step.set(f"e2:{slug}:try{attempt}")
+    current_step.set(f"{RUN}:{slug}:try{attempt}")
     before = len(calls)
     out = OUT / slug
     out.mkdir(parents=True, exist_ok=True)
@@ -77,6 +82,9 @@ async def run_example(eng: EvoEngine, tap: MaskTap, slug: str, sire: str, dam: s
     (out / "image.webp").write_bytes(image)
     if tap.last:
         (out / "sam_mask.png").write_bytes(tap.last[1])
+    if doc.get("first_image_key"):
+        first = eng.services.settings.resolved_local_dir() / "files" / doc["first_image_key"]
+        (out / "image_try1_third_animal.webp").write_bytes(first.read_bytes())
     g = doc["genome"]
     _w(out / "plan.json", g)
     _w(out / "prompt_compiled.txt", doc["prompt_compiled"])
@@ -84,17 +92,20 @@ async def run_example(eng: EvoEngine, tap: MaskTap, slug: str, sire: str, dam: s
     j = doc["judge"]
     _w(out / "critic.json", {"critic": j["critic"], "critic_thumbnail": j["critic_thumbnail"], "mask": j["mask"],
                              "sam_prompt": tap.last[0] if tap.last else None, "soft_cards": j["soft_cards"],
-                             "scores": g["scores"]})
+                             "scores": g["scores"], "third_animal": j.get("third_animal"),
+                             "render_attempts": doc.get("render_attempts"), "warnings": doc.get("warnings"),
+                             "polish": doc.get("polish")})
     recs = [asdict(c) for c in calls[before:]]
     _w(out / "calls.json", recs)
     return {"slug": slug, "sire": sire, "dam": dam, "try": attempt, "creature_id": g["id"], "route": doc["route"],
             "host": g["host"], "labels": g["labels"], "scores": g["scores"], "critic": j["critic"],
             "critic_thumbnail": j["critic_thumbnail"], "mask": j["mask"], "model_plan": doc["model_plan"],
-            "meta_calls": doc["meta_calls"], "attempts": len(recs)}
+            "meta_calls": doc["meta_calls"], "attempts": len(recs), "polish": doc.get("polish"),
+            "render_attempts": doc.get("render_attempts"), "warnings": doc.get("warnings")}
 
 
 async def main() -> int:
-    settings = Settings(chimera_mode="real", local_data_dir=str(ROOT / ".localdata" / "e2_live"))
+    settings = Settings(chimera_mode="real", local_data_dir=str(ROOT / ".localdata" / f"{RUN}_live"))
     if not settings.meta_api_key:
         print("META_API_KEY is not set")
         return 3
@@ -128,7 +139,7 @@ async def main() -> int:
         attempts[c.kind] += 1
     summary = {"budget_before": budget_before, "budget_after": budget_after,
                "caps": {"image": 20, "spark": 70, "sam": 8},
-               "predicted_per_example": PREDICTED,
+               "predicted_per_example": PREDICTED, "predicted_per_rerender": RERENDER,
                "predicted_total": {k: v * len(EXAMPLES) for k, v in PREDICTED.items()},
                "logical_calls_meter": eng.meter.snapshot(), "attempts_by_kind": attempts,
                "attempts_non_ok": [asdict(c) for c in calls if c.outcome != "ok"],
