@@ -10,7 +10,7 @@ from __future__ import annotations
 from app.evolution.data import Taxonomy, config
 from app.evolution.genome import Check, Genome, LimbSlot
 
-LABEL_SIX = "six limbs: mythic design, not a plausible animal"
+LABEL_SIX = "six limbs: mythic composite, not a plausible animal"
 LABEL_BORDERLINE = "borderline flight: size near the soaring limit"
 LABEL_NONFLYING = "non-flying wings: display or gliding only"
 LABEL_ARTHROPOD = "speculative: arthropod parts at large size (insect breathing limits size)"

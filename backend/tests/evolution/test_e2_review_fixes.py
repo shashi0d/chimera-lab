@@ -15,7 +15,7 @@ def test_close_relative_label_says_speculative():
 def test_same_genus_pair_without_a_record_gets_the_close_label(engine, tax):
     g, r = plan_for(engine, "guanaco", "llama")
     assert r.mode == "hybrid" and r.pair is None
-    assert r.reason == "same genus (Lama)"
+    assert r.reason == "same genus (Lama): hybrid candidate"
     assert r.labels == [LABEL_CLOSE]
     assert LABEL_CLOSE in g.labels
 

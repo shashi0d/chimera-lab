@@ -11,8 +11,24 @@ from app.evolution.genome import Genome
 LABEL_HYBRID = "real hybrid precedent"
 LABEL_CLOSE = "speculative hybrid of close relatives, no documented cross"
 LABEL_CHIMERA = "speculative chimera, no real-world precedent"
-LABEL_MYTHIC = "mythic design"
+LABEL_MYTHIC = "mythic composite"  # RC-R9-01 vocabulary (was "mythic design")
 LABEL_SPECULATIVE = "speculative design, no real-world precedent"
+# RC-R9-01: three kinds, never mixed. The plain word "hybrid" is used on the real-hybrid route only.
+KIND = {"hybrid": "hybrid", "chimera": "chimera", "mythic": "mythic composite"}
+RANKS = ("species", "genus", "family", "order", "class", "beyond class")
+
+
+def taxonomy_distance(a: Animal, b: Animal) -> dict[str, Any]:
+    """The closest shared rank (E4 routing by taxonomy distance). Unknown taxonomy (GBIF down) is 'unknown'."""
+    if not (a.taxonomy_known and b.taxonomy_known):
+        return {"shared_rank": "unknown", "steps": None}
+    if a.scientific_name and a.scientific_name == b.scientific_name:
+        return {"shared_rank": "species", "steps": 0}
+    for steps, (rank, x, y) in enumerate([("genus", a.genus, b.genus), ("family", a.family, b.family),
+                                          ("order", a.order, b.order), ("class", a.tax_class, b.tax_class)], 1):
+        if x and x == y:
+            return {"shared_rank": rank, "steps": steps}
+    return {"shared_rank": "beyond class", "steps": 5}
 
 
 @dataclass
@@ -25,6 +41,7 @@ class Route:
     cards: list[str]
     pair: dict[str, Any] | None = None  # known-pair override, roles resolved to animal ids
     processes: list[str] = field(default_factory=list)
+    distance: dict[str, Any] = field(default_factory=dict)
 
     @property
     def key(self) -> tuple[str, str]:
@@ -33,7 +50,8 @@ class Route:
 
     def public(self) -> dict[str, Any]:
         return {"sire": self.sire.id, "dam": self.dam.id, "mode": self.mode, "reason": self.reason,
-                "known_pair": self.pair["id"] if self.pair else None, "labels": self.labels, "cards": self.cards}
+                "known_pair": self.pair["id"] if self.pair else None, "labels": self.labels, "cards": self.cards,
+                "kind": KIND[self.mode], "distance": self.distance}
 
 
 def _resolve_roles(obj: Any, sire: str, dam: str) -> Any:
@@ -73,24 +91,35 @@ def find_known_pair(sire: Animal, dam: Animal) -> dict[str, Any] | None:
 
 
 def route(sire: Animal, dam: Animal, tax: Taxonomy, myth: bool = False) -> Route:
-    """KNOWN_PAIRS, then documented or same-genus hybrids, then myth, else chimera."""
+    """Known pair or documented cross (data files only), then same genus, then myth, else chimera.
+    Works for any pair by taxonomy distance; no animal or pair is named here. A model's claim that two
+    animals cross (Animal.claims) is never read: it is an unverified claim, not precedent (E4)."""
+    r = _route(sire, dam, tax, myth)
+    r.distance = taxonomy_distance(sire, dam)
+    return r
+
+
+def _route(sire: Animal, dam: Animal, tax: Taxonomy, myth: bool) -> Route:
     order = ["RC-R2-01"]
     pair = find_known_pair(sire, dam)
     if pair:
         return Route(sire, dam, "hybrid", f"known pair: {pair['name']}", [LABEL_HYBRID],
                      order + ["RC-R2-16", *pair["cards"]], pair, list(pair.get("processes", [])))
-    if tax.documented_hybrid(sire, dam):
+    known = sire.taxonomy_known and dam.taxonomy_known  # GBIF down: no precedent can be checked
+    if known and tax.documented_hybrid(sire, dam):
         return Route(sire, dam, "hybrid", "documented hybrid in chimera_data.json", [LABEL_HYBRID],
                      order + ["RC-R2-16"], None, ["in-between blend as in real hybrids"])
-    if sire.genus and sire.genus == dam.genus:
-        return Route(sire, dam, "hybrid", f"same genus ({sire.genus})", [LABEL_CLOSE],
+    if known and sire.genus and sire.genus == dam.genus:
+        return Route(sire, dam, "hybrid", f"same genus ({sire.genus}): hybrid candidate", [LABEL_CLOSE],
                      order + ["RC-R2-16", "RC-R1-14"], None, ["in-between blend as in real hybrids"])
     distant = order + ["RC-R1-14", "RC-R2-16", "RC-R5-10"]
+    why = ("taxonomy unknown (GBIF unreachable), treated as distant" if not known
+           else "distant pair: no documented hybrid and different genus")
     if myth:
-        return Route(sire, dam, "mythic", "distant pair, user asked for myth", [LABEL_MYTHIC, LABEL_SPECULATIVE],
-                     distant + ["RC-R7-02"], None, ["myth-style part swap, labeled as myth"])
-    return Route(sire, dam, "chimera", "distant pair: no documented hybrid and different genus", [LABEL_CHIMERA],
-                 distant, None, ["chimera patchwork: each region is one parent's tissue"])
+        return Route(sire, dam, "mythic", f"{why}; user asked for myth", [LABEL_MYTHIC, LABEL_SPECULATIVE],
+                     distant + ["RC-R7-02", "RC-R9-01"], None, ["myth-style part swap, labeled as myth"])
+    return Route(sire, dam, "chimera", why, [LABEL_CHIMERA], distant, None,
+                 ["chimera patchwork: each region is one parent's tissue"])
 
 
 def choose_host(r: Route, user_host: str | None = None) -> tuple[str | None, list[str], str]:

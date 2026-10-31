@@ -68,7 +68,7 @@ def test_example_3_mythic_variant_has_six_limbs_with_label(engine):
     assert (r.mode, g.host) == ("mythic", "lion")
     lp = g.limb_plan
     assert (lp.forelimbs.kind, lp.hindlimbs.kind, lp.extra_wings.kind, lp.limb_count()) == ("legs", "legs", "wings", 6)
-    assert g.labels[0] == "mythic design" and LABEL_SIX in g.labels
+    assert g.labels[0] == "mythic composite" and LABEL_SIX in g.labels  # RC-R9-01 vocabulary (E4)
 
 
 @pytest.mark.parametrize("seed", SEEDS)

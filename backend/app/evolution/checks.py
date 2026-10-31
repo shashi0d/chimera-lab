@@ -56,7 +56,8 @@ def hard_violations(g: Genome, r: Route, tax: Taxonomy) -> list[Violation]:
 
     # RC-R1-14, RC-R2-16, RC-R5-10, RC-R2-11: mode comes from routing only; distant pairs are speculative.
     if g.mode != r.mode:
-        card = "RC-R2-11" if r.pair and r.pair["id"] == "hybrid_bear" else ("RC-R2-16" if r.mode == "hybrid" else "RC-R1-14")
+        pair_cards = (r.pair or {}).get("cards", [])
+        card = "RC-R2-11" if "RC-R2-11" in pair_cards else ("RC-R2-16" if r.mode == "hybrid" else "RC-R1-14")
         out.append(Violation(card, f"mode {g.mode} differs from routed mode {r.mode}"))
     if r.mode != "hybrid":
         if g.mode == "hybrid":
@@ -123,7 +124,7 @@ def soft_penalties(g: Genome, r: Route, tax: Taxonomy) -> tuple[list[dict[str, A
             body_owner = g.host
             if tr.op == "OVERLAY" and tr.donor != body_owner and (tr.strength or 0) > 0.6:
                 hits.append(("RC-R2-07", 0.5, f"{tag} pattern too strong for a non-body donor"))
-        if {g.parents.sire, g.parents.dam} == {"lion", "tiger"}:
+        if r.pair and "RC-R2-08" in r.pair.get("cards", []):  # the pair's own card, from data (E4: no names in code)
             if (t["mane"].strength or (1.0 if t["mane"].donor else 0.0)) >= 0.7 and (t["coat_pattern"].strength or 0) >= 0.7:
                 hits.append(("RC-R2-08", 1.0, "full mane plus full stripes"))
     beyond = sum(BEYOND in tr.flags for tag, tr in t.items() if tag in MEASUREMENT_TAGS)
