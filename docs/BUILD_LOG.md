@@ -262,4 +262,17 @@ Short entries per phase: what was built, what was tested, what was deferred. New
 
 **Step 5:** checklist generated from the plan for every route (hand-written pair checklists first), creature count and third-animal question in the same call, open critic logged only. The card gains `kind`, `can_it_live`, `licenses` and `provenance`; every prompt gets the prosaic-detail line.
 
-**Step 6:** full suite 684 passed, 6 skipped (E4 adds 124 tests: resolver 24, routing 12, audit 30, fiction 24, output 22, hard cards 12). Ruff clean.
+**Step 6:** full suite 684 passed, 6 skipped (E4 adds 122 tests: resolver 23, routing 12, audit 30, fiction 24, output 22, hard cards 11). Ruff clean.
+
+**Step 7 (live):**
+- Calls: 24 Spark, 3 image, 3 SAM and 3 GBIF, exactly as predicted (the task estimated about 27 Spark). No retries, no re-renders.
+- Budget counter: image 18→21, spark 59→83, sam 8→11; caps 27/100/16 not reached.
+- Resolver: axolotl and jaguar from the database; golden retriever (breed) and woolly mammoth (extinct) via GBIF EXACT; pangolin (ambiguous) resolved to the Chinese pangolin via the tier2 table, with alternatives.
+- Renders:
+  - axolotl x pangolin, realistic: 1.0, but it shows the gills the audit dropped (a model-note leak).
+  - lion x eagle, mythic: 0.962, six-limb license shown.
+  - beetle x bear, speculative: 0.845, size license with visible breathing openings; the beetle wings were drawn on top of four legs, and the checklist answered no.
+- Fixed after the run: a dropped part is flagged on the plan, its note clauses are stripped and kept out of the prompt, and the checklist asks "no <part>". Regression test added; 685 passed, 6 skipped.
+- `e4_live.py` failed to write its outputs in run 1 (missing folder) after every call had succeeded. The outputs were rebuilt from the engine cache with `--recover` (0 calls), and the SAM masks were decoded offline from the recordings.
+
+**Step 8:** report `docs/evolution/E4_OPEN_WORLD.md`.

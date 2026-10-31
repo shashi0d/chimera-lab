@@ -1,0 +1,442 @@
+{
+ "budget_before": {
+  "image": 18,
+  "spark": 59,
+  "sam": 8
+ },
+ "budget_after": {
+  "image": 21,
+  "spark": 83,
+  "sam": 11
+ },
+ "caps": {
+  "image": 27,
+  "spark": 100,
+  "sam": 16
+ },
+ "predicted": {
+  "resolve": {
+   "spark": 6,
+   "image": 0,
+   "sam": 0
+  },
+  "b_axolotl_x_pangolin": {
+   "spark": 6,
+   "image": 1,
+   "sam": 1
+  },
+  "c_lion_x_eagle": {
+   "spark": 5,
+   "image": 1,
+   "sam": 1
+  },
+  "d_rhinoceros_beetle_x_brown_bear": {
+   "spark": 7,
+   "image": 1,
+   "sam": 1
+  }
+ },
+ "made": {
+  "resolve": {
+   "spark": 6,
+   "image": 0,
+   "sam": 0
+  }
+ },
+ "attempts_total": {
+  "spark": 24,
+  "image": 3,
+  "sam": 3
+ },
+ "meter": {
+  "spark": 24,
+  "image": 3,
+  "sam": 3
+ },
+ "gbif_calls": 3,
+ "attempts_non_ok": [],
+ "resolutions": [
+  {
+   "query": "axolotl",
+   "status": "resolved",
+   "source": "database",
+   "kind": "species",
+   "note": "",
+   "alternatives": [],
+   "taxonomy_source": "chimera_data.json",
+   "traits_source": "chimera_data.json",
+   "suggestion": "",
+   "gbif": null,
+   "animal": {
+    "id": "axolotl",
+    "common_name": "axolotl",
+    "scientific_name": "Ambystoma mexicanum",
+    "class": "Amphibia",
+    "order": "Caudata",
+    "family": "Ambystomatidae",
+    "genus": "Ambystoma",
+    "body_plan": "quadruped",
+    "group": "vertebrate",
+    "mass_kg": 0.08499999999999999,
+    "kind": "species",
+    "source": "database",
+    "features": [
+     "three pairs of feathery external gills on the sides of the head"
+    ],
+    "mouthparts": "pointed teeth",
+    "breathing": "external gills and lungs",
+    "diet": "carnivore",
+    "provenance": {
+     "common_name": "chimera_data.json",
+     "scientific_name": "chimera_data.json",
+     "class": "chimera_data.json",
+     "order": "chimera_data.json",
+     "family": "chimera_data.json",
+     "gbif_key": "chimera_data.json",
+     "body_plan": "chimera_data.json",
+     "primary_locomotor_part": "chimera_data.json",
+     "covering": "chimera_data.json",
+     "movement": "chimera_data.json",
+     "active_time": "chimera_data.json",
+     "habitat": "chimera_data.json",
+     "diet": "chimera_data.json",
+     "body_mass_kg": "chimera_data.json",
+     "breathing": "project default (evo_config.json function_defaults)",
+     "mouthparts": "project default (evo_config.json function_defaults)",
+     "features": "project data (evo_config.json function_defaults overrides)"
+    },
+    "claims": []
+   }
+  },
+  {
+   "query": "golden retriever",
+   "status": "resolved",
+   "source": "open_world",
+   "kind": "breed",
+   "note": "a breed of Canis lupus familiaris: taxonomy from the species, look from the breed.",
+   "alternatives": [],
+   "taxonomy_source": "gbif",
+   "traits_source": "model-estimated",
+   "suggestion": "",
+   "gbif": {
+    "usageKey": 6164210,
+    "scientificName": "Canis lupus familiaris Linnaeus, 1758",
+    "canonicalName": "Canis lupus familiaris",
+    "rank": "SUBSPECIES",
+    "status": "ACCEPTED",
+    "confidence": 100,
+    "matchType": "EXACT",
+    "kingdom": "Animalia",
+    "phylum": "Chordata",
+    "order": "Carnivora",
+    "family": "Canidae",
+    "genus": "Canis",
+    "species": "Canis lupus",
+    "kingdomKey": 1,
+    "phylumKey": 44,
+    "classKey": 359,
+    "orderKey": 732,
+    "familyKey": 9701,
+    "genusKey": 5219142,
+    "speciesKey": 5219173,
+    "class": "Mammalia"
+   },
+   "animal": {
+    "id": "golden_retriever",
+    "common_name": "Golden Retriever",
+    "scientific_name": "Canis lupus familiaris",
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Canidae",
+    "genus": "Canis",
+    "body_plan": "quadruped",
+    "group": "vertebrate",
+    "mass_kg": 29.5,
+    "kind": "breed",
+    "source": "learned",
+    "features": [
+     "dense golden coat",
+     "broad head with black nose",
+     "floppy ears",
+     "feathered tail",
+     "feathering on legs and chest"
+    ],
+    "mouthparts": "mixed teeth",
+    "breathing": "lungs",
+    "diet": "omnivore",
+    "provenance": {
+     "active_time": "model-estimated",
+     "body_length_m": "model-estimated",
+     "body_mass_kg": "model-estimated",
+     "body_plan": "model-estimated",
+     "breathing": "model-estimated",
+     "class": "gbif",
+     "climate": "model-estimated",
+     "common_name": "model-estimated",
+     "covering": "model-estimated",
+     "diet": "model-estimated",
+     "family": "gbif",
+     "gbif_key": "gbif",
+     "genus": "gbif",
+     "habitat": "model-estimated",
+     "mouthparts": "model-estimated",
+     "movement": "model-estimated",
+     "order": "gbif",
+     "primary_locomotor_part": "model-estimated",
+     "scientific_name": "gbif",
+     "visible_features": "model-estimated"
+    },
+    "claims": []
+   }
+  },
+  {
+   "query": "woolly mammoth",
+   "status": "resolved",
+   "source": "open_world",
+   "kind": "extinct",
+   "note": "extinct species (Mammuthus primigenius); traits are model-estimated from the record.",
+   "alternatives": [],
+   "taxonomy_source": "gbif",
+   "traits_source": "model-estimated",
+   "suggestion": "",
+   "gbif": {
+    "usageKey": 4825833,
+    "scientificName": "Mammuthus primigenius (Blumenbach, 1799)",
+    "canonicalName": "Mammuthus primigenius",
+    "rank": "SPECIES",
+    "status": "ACCEPTED",
+    "confidence": 100,
+    "matchType": "EXACT",
+    "kingdom": "Animalia",
+    "phylum": "Chordata",
+    "order": "Proboscidea",
+    "family": "Elephantidae",
+    "genus": "Mammuthus",
+    "species": "Mammuthus primigenius",
+    "kingdomKey": 1,
+    "phylumKey": 44,
+    "classKey": 359,
+    "orderKey": 799,
+    "familyKey": 9427,
+    "genusKey": 8411230,
+    "speciesKey": 4825833,
+    "class": "Mammalia"
+   },
+   "animal": {
+    "id": "woolly_mammoth",
+    "common_name": "woolly mammoth",
+    "scientific_name": "Mammuthus primigenius",
+    "class": "Mammalia",
+    "order": "Proboscidea",
+    "family": "Elephantidae",
+    "genus": "Mammuthus",
+    "body_plan": "quadruped",
+    "group": "vertebrate",
+    "mass_kg": 4000.0,
+    "kind": "extinct",
+    "source": "learned",
+    "features": [
+     "long shaggy brown coat",
+     "high shoulder hump",
+     "long curved tusks",
+     "trunk",
+     "small ears"
+    ],
+    "mouthparts": "grinding teeth",
+    "breathing": "lungs",
+    "diet": "herbivore",
+    "provenance": {
+     "active_time": "model-estimated",
+     "body_length_m": "model-estimated",
+     "body_mass_kg": "model-estimated",
+     "body_plan": "model-estimated",
+     "breathing": "model-estimated",
+     "class": "gbif",
+     "climate": "model-estimated",
+     "common_name": "model-estimated",
+     "covering": "model-estimated",
+     "diet": "model-estimated",
+     "family": "gbif",
+     "gbif_key": "gbif",
+     "genus": "gbif",
+     "habitat": "model-estimated",
+     "mouthparts": "model-estimated",
+     "movement": "model-estimated",
+     "order": "gbif",
+     "primary_locomotor_part": "model-estimated",
+     "scientific_name": "gbif",
+     "visible_features": "model-estimated"
+    },
+    "claims": [
+     "documented cross with Mammuthus columbi (unverified claim)"
+    ]
+   }
+  },
+  {
+   "query": "jaguar",
+   "status": "resolved",
+   "source": "database",
+   "kind": "species",
+   "note": "",
+   "alternatives": [],
+   "taxonomy_source": "chimera_data.json",
+   "traits_source": "chimera_data.json",
+   "suggestion": "",
+   "gbif": null,
+   "animal": {
+    "id": "jaguar",
+    "common_name": "jaguar",
+    "scientific_name": "Panthera onca",
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Felidae",
+    "genus": "Panthera",
+    "body_plan": "quadruped",
+    "group": "vertebrate",
+    "mass_kg": 102.0,
+    "kind": "species",
+    "source": "database",
+    "features": [],
+    "mouthparts": "bladed teeth",
+    "breathing": "lungs",
+    "diet": "carnivore",
+    "provenance": {
+     "common_name": "chimera_data.json",
+     "scientific_name": "chimera_data.json",
+     "class": "chimera_data.json",
+     "order": "chimera_data.json",
+     "family": "chimera_data.json",
+     "gbif_key": "chimera_data.json",
+     "body_plan": "chimera_data.json",
+     "primary_locomotor_part": "chimera_data.json",
+     "covering": "chimera_data.json",
+     "movement": "chimera_data.json",
+     "active_time": "chimera_data.json",
+     "habitat": "chimera_data.json",
+     "climate": "chimera_data.json",
+     "diet": "chimera_data.json",
+     "body_mass_kg": "chimera_data.json",
+     "body_length_m": "chimera_data.json",
+     "breathing": "project default (evo_config.json function_defaults)",
+     "mouthparts": "project default (evo_config.json function_defaults)"
+    },
+    "claims": []
+   }
+  },
+  {
+   "query": "pangolin",
+   "status": "resolved",
+   "source": "open_world",
+   "kind": "ambiguous",
+   "note": "'pangolin' names several species; chose the Chinese pangolin (Manis pentadactyla), the most common reading. Alternatives are listed.",
+   "alternatives": [
+    {
+     "scientific_name": "Manis javanica",
+     "common_name": "Sunda pangolin"
+    },
+    {
+     "scientific_name": "Manis crassicaudata",
+     "common_name": "Indian pangolin"
+    },
+    {
+     "scientific_name": "Smutsia temminckii",
+     "common_name": "Ground pangolin"
+    },
+    {
+     "scientific_name": "Phataginus tricuspis",
+     "common_name": "White-bellied pangolin"
+    }
+   ],
+   "taxonomy_source": "chimera_data.json tier2 (gbif)",
+   "traits_source": "model-estimated",
+   "suggestion": "",
+   "gbif": null,
+   "animal": {
+    "id": "chinese_pangolin",
+    "common_name": "Chinese pangolin",
+    "scientific_name": "Manis pentadactyla",
+    "class": "Mammalia",
+    "order": "Pholidota",
+    "family": "Manidae",
+    "genus": "Manis",
+    "body_plan": "quadruped",
+    "group": "vertebrate",
+    "mass_kg": 4.5,
+    "kind": "species",
+    "source": "learned",
+    "features": [
+     "overlapping brown-grey keratin scales",
+     "long broad tapering scaly tail",
+     "small pointed head with small eyes",
+     "short powerful limbs with large digging claws",
+     "sparse bristles between scales"
+    ],
+    "mouthparts": "toothless tongue",
+    "breathing": "lungs",
+    "diet": "insectivore",
+    "provenance": {
+     "active_time": "model-estimated",
+     "body_length_m": "model-estimated",
+     "body_mass_kg": "model-estimated",
+     "body_plan": "model-estimated",
+     "breathing": "model-estimated",
+     "class": "chimera_data.json tier2 (gbif)",
+     "climate": "model-estimated",
+     "common_name": "model-estimated",
+     "covering": "model-estimated",
+     "diet": "model-estimated",
+     "family": "chimera_data.json tier2 (gbif)",
+     "gbif_key": "chimera_data.json tier2 (gbif)",
+     "genus": "chimera_data.json tier2 (gbif)",
+     "habitat": "model-estimated",
+     "mouthparts": "model-estimated",
+     "movement": "model-estimated",
+     "order": "chimera_data.json tier2 (gbif)",
+     "primary_locomotor_part": "model-estimated",
+     "scientific_name": "chimera_data.json tier2 (gbif)",
+     "visible_features": "model-estimated"
+    },
+    "claims": []
+   }
+  }
+ ],
+ "results": [],
+ "failures": [
+  {
+   "slug": "b_axolotl_x_pangolin",
+   "try": 1,
+   "error": "FileNotFoundError(2, 'No such file or directory')"
+  },
+  {
+   "slug": "b_axolotl_x_pangolin",
+   "try": 2,
+   "error": "FileNotFoundError(2, 'No such file or directory')"
+  },
+  {
+   "slug": "c_lion_x_eagle",
+   "try": 1,
+   "error": "FileNotFoundError(2, 'No such file or directory')"
+  },
+  {
+   "slug": "c_lion_x_eagle",
+   "try": 2,
+   "error": "FileNotFoundError(2, 'No such file or directory')"
+  },
+  {
+   "slug": "d_rhinoceros_beetle_x_brown_bear",
+   "try": 1,
+   "error": "FileNotFoundError(2, 'No such file or directory')"
+  },
+  {
+   "slug": "d_rhinoceros_beetle_x_brown_bear",
+   "try": 2,
+   "error": "FileNotFoundError(2, 'No such file or directory')"
+  }
+ ],
+ "skipped": [
+  "b_axolotl_x_pangolin",
+  "c_lion_x_eagle",
+  "d_rhinoceros_beetle_x_brown_bear"
+ ],
+ "stopped": ""
+}

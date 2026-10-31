@@ -1,0 +1,450 @@
+{
+ "about": "E4 learned-animal cache. Taxonomy from GBIF (source 'gbif'); body and life traits from Muse Spark (model-estimated). Entries are reused and never silently overwritten.",
+ "animals": {
+  "golden_retriever": {
+   "id": "golden_retriever",
+   "common_name": "Golden Retriever",
+   "scientific_name": "Canis lupus familiaris",
+   "kind": "breed",
+   "breed": "Golden Retriever",
+   "note": "a breed of Canis lupus familiaris: taxonomy from the species, look from the breed.",
+   "inputs": [
+    "golden retriever"
+   ],
+   "alternatives": [],
+   "taxonomy": {
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Canidae",
+    "genus": "Canis",
+    "gbif_key": "6164210"
+   },
+   "taxonomy_source": "gbif",
+   "traits": {
+    "body_plan": [
+     "quadruped"
+    ],
+    "primary_locomotor_part": "four legs",
+    "covering": "fur",
+    "movement": [
+     "walk",
+     "run",
+     "swim"
+    ],
+    "habitat": [
+     "grassland",
+     "forest"
+    ],
+    "climate": [
+     "temperate"
+    ],
+    "diet": "omnivore",
+    "active_time": [
+     "diurnal"
+    ],
+    "body_mass_kg": {
+     "min": 25.0,
+     "max": 34.0
+    },
+    "body_length_m": {
+     "min": 1.0,
+     "max": 1.4
+    },
+    "visible_features": [
+     "dense golden coat",
+     "broad head with black nose",
+     "floppy ears",
+     "feathered tail",
+     "feathering on legs and chest"
+    ],
+    "mouthparts": "mixed teeth",
+    "breathing": "lungs"
+   },
+   "details": {
+    "mouthparts": "42 differentiated teeth with prominent canines and carnassial shearing teeth",
+    "breathing": "air-breathing lungs with panting for heat loss"
+   },
+   "claims": [],
+   "provenance": {
+    "body_plan": "model-estimated",
+    "primary_locomotor_part": "model-estimated",
+    "covering": "model-estimated",
+    "movement": "model-estimated",
+    "habitat": "model-estimated",
+    "climate": "model-estimated",
+    "diet": "model-estimated",
+    "active_time": "model-estimated",
+    "body_mass_kg": "model-estimated",
+    "body_length_m": "model-estimated",
+    "visible_features": "model-estimated",
+    "mouthparts": "model-estimated",
+    "breathing": "model-estimated",
+    "class": "gbif",
+    "order": "gbif",
+    "family": "gbif",
+    "genus": "gbif",
+    "gbif_key": "gbif",
+    "scientific_name": "gbif",
+    "common_name": "model-estimated"
+   },
+   "learned_at": "2026-10-31T20:13:17+00:00"
+  },
+  "woolly_mammoth": {
+   "id": "woolly_mammoth",
+   "common_name": "woolly mammoth",
+   "scientific_name": "Mammuthus primigenius",
+   "kind": "extinct",
+   "breed": "",
+   "note": "extinct species (Mammuthus primigenius); traits are model-estimated from the record.",
+   "inputs": [
+    "woolly mammoth"
+   ],
+   "alternatives": [],
+   "taxonomy": {
+    "class": "Mammalia",
+    "order": "Proboscidea",
+    "family": "Elephantidae",
+    "genus": "Mammuthus",
+    "gbif_key": "4825833"
+   },
+   "taxonomy_source": "gbif",
+   "traits": {
+    "body_plan": [
+     "quadruped"
+    ],
+    "primary_locomotor_part": "four legs",
+    "covering": "fur",
+    "movement": [
+     "walk"
+    ],
+    "habitat": [
+     "grassland",
+     "tundra"
+    ],
+    "climate": [
+     "polar",
+     "temperate"
+    ],
+    "diet": "herbivore",
+    "active_time": [
+     "diurnal"
+    ],
+    "body_mass_kg": {
+     "min": 2000.0,
+     "max": 6000.0
+    },
+    "body_length_m": {
+     "min": 4.0,
+     "max": 5.5
+    },
+    "visible_features": [
+     "long shaggy brown coat",
+     "high shoulder hump",
+     "long curved tusks",
+     "trunk",
+     "small ears"
+    ],
+    "mouthparts": "grinding teeth",
+    "breathing": "lungs"
+   },
+   "details": {
+    "mouthparts": "large ridged molars for grinding grasses, grasping trunk",
+    "breathing": "air-breathing lungs, inhaling through trunk and mouth"
+   },
+   "claims": [
+    "Mammuthus columbi"
+   ],
+   "provenance": {
+    "body_plan": "model-estimated",
+    "primary_locomotor_part": "model-estimated",
+    "covering": "model-estimated",
+    "movement": "model-estimated",
+    "habitat": "model-estimated",
+    "climate": "model-estimated",
+    "diet": "model-estimated",
+    "active_time": "model-estimated",
+    "body_mass_kg": "model-estimated",
+    "body_length_m": "model-estimated",
+    "visible_features": "model-estimated",
+    "mouthparts": "model-estimated",
+    "breathing": "model-estimated",
+    "class": "gbif",
+    "order": "gbif",
+    "family": "gbif",
+    "genus": "gbif",
+    "gbif_key": "gbif",
+    "scientific_name": "gbif",
+    "common_name": "model-estimated"
+   },
+   "learned_at": "2026-10-31T20:13:33+00:00"
+  },
+  "chinese_pangolin": {
+   "id": "chinese_pangolin",
+   "common_name": "Chinese pangolin",
+   "scientific_name": "Manis pentadactyla",
+   "kind": "species",
+   "breed": "",
+   "note": "'pangolin' names several species; chose the Chinese pangolin (Manis pentadactyla), the most common reading. Alternatives are listed.",
+   "inputs": [
+    "pangolin"
+   ],
+   "alternatives": [
+    {
+     "scientific_name": "Manis javanica",
+     "common_name": "Sunda pangolin"
+    },
+    {
+     "scientific_name": "Manis crassicaudata",
+     "common_name": "Indian pangolin"
+    },
+    {
+     "scientific_name": "Smutsia temminckii",
+     "common_name": "Ground pangolin"
+    },
+    {
+     "scientific_name": "Phataginus tricuspis",
+     "common_name": "White-bellied pangolin"
+    }
+   ],
+   "taxonomy": {
+    "class": "Mammalia",
+    "order": "Pholidota",
+    "family": "Manidae",
+    "genus": "Manis",
+    "gbif_key": "5219638"
+   },
+   "taxonomy_source": "chimera_data.json tier2 (gbif)",
+   "traits": {
+    "body_plan": [
+     "quadruped"
+    ],
+    "primary_locomotor_part": "four legs",
+    "covering": "scales",
+    "movement": [
+     "walk",
+     "climb",
+     "burrow"
+    ],
+    "habitat": [
+     "forest",
+     "grassland",
+     "mountain"
+    ],
+    "climate": [
+     "temperate",
+     "tropical"
+    ],
+    "diet": "insectivore",
+    "active_time": [
+     "nocturnal"
+    ],
+    "body_mass_kg": {
+     "min": 2.0,
+     "max": 7.0
+    },
+    "body_length_m": {
+     "min": 0.56,
+     "max": 0.93
+    },
+    "visible_features": [
+     "overlapping brown-grey keratin scales",
+     "long broad tapering scaly tail",
+     "small pointed head with small eyes",
+     "short powerful limbs with large digging claws",
+     "sparse bristles between scales"
+    ],
+    "mouthparts": "toothless tongue",
+    "breathing": "lungs"
+   },
+   "details": {
+    "mouthparts": "toothless narrow snout with very long sticky extensible tongue for ants and termites",
+    "breathing": "air-breathing mammalian lungs"
+   },
+   "claims": [],
+   "provenance": {
+    "body_plan": "model-estimated",
+    "primary_locomotor_part": "model-estimated",
+    "covering": "model-estimated",
+    "movement": "model-estimated",
+    "habitat": "model-estimated",
+    "climate": "model-estimated",
+    "diet": "model-estimated",
+    "active_time": "model-estimated",
+    "body_mass_kg": "model-estimated",
+    "body_length_m": "model-estimated",
+    "visible_features": "model-estimated",
+    "mouthparts": "model-estimated",
+    "breathing": "model-estimated",
+    "class": "chimera_data.json tier2 (gbif)",
+    "order": "chimera_data.json tier2 (gbif)",
+    "family": "chimera_data.json tier2 (gbif)",
+    "genus": "chimera_data.json tier2 (gbif)",
+    "gbif_key": "chimera_data.json tier2 (gbif)",
+    "scientific_name": "chimera_data.json tier2 (gbif)",
+    "common_name": "model-estimated"
+   },
+   "learned_at": "2026-10-31T20:13:45+00:00"
+  },
+  "european_rhinoceros_beetle": {
+   "id": "european_rhinoceros_beetle",
+   "common_name": "European rhinoceros beetle",
+   "scientific_name": "Oryctes nasicornis",
+   "kind": "species",
+   "breed": "",
+   "note": "'rhinoceros beetle' names several species; chose the European rhinoceros beetle (Oryctes nasicornis), the most common reading. Alternatives are listed.",
+   "inputs": [
+    "rhinoceros beetle"
+   ],
+   "alternatives": [
+    {
+     "scientific_name": "Trypoxylus dichotomus",
+     "common_name": "Japanese rhinoceros beetle"
+    },
+    {
+     "scientific_name": "Dynastes hercules",
+     "common_name": "Hercules beetle"
+    },
+    {
+     "scientific_name": "Oryctes rhinoceros",
+     "common_name": "Coconut rhinoceros beetle"
+    },
+    {
+     "scientific_name": "Dynastes tityus",
+     "common_name": "Eastern Hercules beetle"
+    }
+   ],
+   "taxonomy": {
+    "class": "Insecta",
+    "order": "Coleoptera",
+    "family": "Scarabaeidae",
+    "genus": "Oryctes",
+    "gbif_key": "4995700"
+   },
+   "taxonomy_source": "gbif",
+   "traits": {
+    "body_plan": [
+     "multi_legged",
+     "winged"
+    ],
+    "primary_locomotor_part": "multiple legs",
+    "covering": "exoskeleton",
+    "movement": [
+     "walk",
+     "fly",
+     "burrow"
+    ],
+    "habitat": [
+     "forest",
+     "grassland"
+    ],
+    "climate": [
+     "temperate"
+    ],
+    "diet": "herbivore",
+    "active_time": [
+     "nocturnal"
+    ],
+    "body_mass_kg": {
+     "min": 0.002,
+     "max": 0.006
+    },
+    "body_length_m": {
+     "min": 0.02,
+     "max": 0.04
+    },
+    "visible_features": [
+     "long curved head horn in males",
+     "broad armored pronotum",
+     "reddish-brown glossy elytra",
+     "six spiny jointed legs"
+    ],
+    "mouthparts": "mandibles",
+    "breathing": "tracheae"
+   },
+   "details": {
+    "mouthparts": "short chewing mandibles for soft decaying plant matter and tree sap; adults feed little or not at all",
+    "breathing": "air taken through lateral spiracles into branching tracheal tubes; no lungs"
+   },
+   "claims": [],
+   "provenance": {
+    "body_plan": "model-estimated",
+    "primary_locomotor_part": "model-estimated",
+    "covering": "model-estimated",
+    "movement": "model-estimated",
+    "habitat": "model-estimated",
+    "climate": "model-estimated",
+    "diet": "model-estimated",
+    "active_time": "model-estimated",
+    "body_mass_kg": "model-estimated",
+    "body_length_m": "model-estimated",
+    "visible_features": "model-estimated",
+    "mouthparts": "model-estimated",
+    "breathing": "model-estimated",
+    "class": "gbif",
+    "order": "gbif",
+    "family": "gbif",
+    "genus": "gbif",
+    "gbif_key": "gbif",
+    "scientific_name": "gbif",
+    "common_name": "model-estimated"
+   },
+   "learned_at": "2026-10-31T20:17:06+00:00"
+  }
+ },
+ "aliases": {
+  "golden retriever": {
+   "id": "golden_retriever",
+   "note": "",
+   "alternatives": []
+  },
+  "woolly mammoth": {
+   "id": "woolly_mammoth",
+   "note": "",
+   "alternatives": []
+  },
+  "pangolin": {
+   "id": "chinese_pangolin",
+   "note": "'pangolin' names several species; chose the Chinese pangolin (Manis pentadactyla), the most common reading. Alternatives are listed.",
+   "alternatives": [
+    {
+     "scientific_name": "Manis javanica",
+     "common_name": "Sunda pangolin"
+    },
+    {
+     "scientific_name": "Manis crassicaudata",
+     "common_name": "Indian pangolin"
+    },
+    {
+     "scientific_name": "Smutsia temminckii",
+     "common_name": "Ground pangolin"
+    },
+    {
+     "scientific_name": "Phataginus tricuspis",
+     "common_name": "White-bellied pangolin"
+    }
+   ]
+  },
+  "rhinoceros beetle": {
+   "id": "european_rhinoceros_beetle",
+   "note": "'rhinoceros beetle' names several species; chose the European rhinoceros beetle (Oryctes nasicornis), the most common reading. Alternatives are listed.",
+   "alternatives": [
+    {
+     "scientific_name": "Trypoxylus dichotomus",
+     "common_name": "Japanese rhinoceros beetle"
+    },
+    {
+     "scientific_name": "Dynastes hercules",
+     "common_name": "Hercules beetle"
+    },
+    {
+     "scientific_name": "Oryctes rhinoceros",
+     "common_name": "Coconut rhinoceros beetle"
+    },
+    {
+     "scientific_name": "Dynastes tityus",
+     "common_name": "Eastern Hercules beetle"
+    }
+   ]
+  }
+ }
+}

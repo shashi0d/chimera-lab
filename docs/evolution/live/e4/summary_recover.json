@@ -1,0 +1,623 @@
+{
+ "budget_before": {
+  "image": 21,
+  "spark": 83,
+  "sam": 11
+ },
+ "budget_after": {
+  "image": 21,
+  "spark": 83,
+  "sam": 11
+ },
+ "caps": {
+  "image": 27,
+  "spark": 100,
+  "sam": 16
+ },
+ "predicted": {
+  "resolve": {
+   "spark": 6,
+   "image": 0,
+   "sam": 0
+  },
+  "b_axolotl_x_pangolin": {
+   "spark": 6,
+   "image": 1,
+   "sam": 1
+  },
+  "c_lion_x_eagle": {
+   "spark": 5,
+   "image": 1,
+   "sam": 1
+  },
+  "d_rhinoceros_beetle_x_brown_bear": {
+   "spark": 7,
+   "image": 1,
+   "sam": 1
+  }
+ },
+ "made": {
+  "resolve": {
+   "spark": 0,
+   "image": 0,
+   "sam": 0
+  },
+  "b_axolotl_x_pangolin": {
+   "spark": 0,
+   "image": 0,
+   "sam": 0
+  },
+  "c_lion_x_eagle": {
+   "spark": 0,
+   "image": 0,
+   "sam": 0
+  },
+  "d_rhinoceros_beetle_x_brown_bear": {
+   "spark": 0,
+   "image": 0,
+   "sam": 0
+  }
+ },
+ "attempts_total": {
+  "spark": 0,
+  "image": 0,
+  "sam": 0
+ },
+ "meter": {
+  "spark": 0,
+  "image": 0,
+  "sam": 0
+ },
+ "gbif_calls": 0,
+ "attempts_non_ok": [],
+ "resolutions": [],
+ "results": [
+  {
+   "slug": "b_axolotl_x_pangolin",
+   "sire": "axolotl",
+   "dam": "pangolin",
+   "mode": "realistic",
+   "try": 0,
+   "creature_id": "crt_fa0bb76c2647",
+   "route": {
+    "sire": "axolotl",
+    "dam": "chinese_pangolin",
+    "mode": "chimera",
+    "reason": "distant pair: no documented hybrid and different genus",
+    "known_pair": null,
+    "labels": [
+     "speculative chimera, no real-world precedent"
+    ],
+    "cards": [
+     "RC-R2-01",
+     "RC-R1-14",
+     "RC-R2-16",
+     "RC-R5-10"
+    ],
+    "kind": "chimera",
+    "distance": {
+     "shared_rank": "beyond class",
+     "steps": 5
+    }
+   },
+   "labels": [
+    "speculative chimera, no real-world precedent"
+   ],
+   "licenses": [],
+   "audit": [
+    {
+     "function": "breathing",
+     "result": "repaired",
+     "detail": "external gills would collapse in air and have no job in a river forest habitat, so they are dropped; the creature breathes with the Chinese pangolin's lungs",
+     "cards": [
+      "RC-R9-03",
+      "RC-R9-12"
+     ],
+     "source": "code"
+    },
+    {
+     "function": "feeding",
+     "result": "pass",
+     "detail": "Head is Chinese pangolin with toothless tongue specialized for insectivore diet, allowing capture of ants/termites by protrusible sticky tongue and swallowing without chewing. Body is Chinese pangolin at 4.5 kg, providing matching oral cavity, esophagus, and insect-adapted stomach and gut from same species. Four-legged pangolin frame with legs supports terrestrial foraging in river forest where insect prey occurs. No anatomical mismatch prevents capture, ingestion, or digestion.",
+     "cards": [],
+     "source": "model-judged"
+    },
+    {
+     "function": "support",
+     "result": "pass",
+     "detail": "legs match the body size",
+     "cards": [],
+     "source": "code"
+    },
+    {
+     "function": "movement",
+     "result": "pass",
+     "detail": "walks on four legs",
+     "cards": [],
+     "source": "code"
+    },
+    {
+     "function": "heat",
+     "result": "pass",
+     "detail": "temperate river forest habitat: no heat adjustment needed",
+     "cards": [
+      "RC-R4-11"
+     ],
+     "source": "code"
+    },
+    {
+     "function": "senses",
+     "result": "pass",
+     "detail": "Chinese pangolin head and eyes kept fully visible",
+     "cards": [
+      "RC-R6-03",
+      "RC-R6-04"
+     ],
+     "source": "code"
+    }
+   ],
+   "scores": {
+    "critic": 1.0,
+    "silhouette": 1.0,
+    "thumbnail": 1.0,
+    "soft_penalty": 0.0,
+    "quality": 1.0
+   },
+   "checklist": [
+    "a chinese pangolin body shape",
+    "a chinese pangolin head with visible eyes",
+    "axolotl skin patches on the back and flanks",
+    "feet resting on the ground"
+   ],
+   "answers": [
+    {
+     "item": "a chinese pangolin body shape",
+     "answer": "yes"
+    },
+    {
+     "item": "a chinese pangolin head with visible eyes",
+     "answer": "yes"
+    },
+    {
+     "item": "axolotl skin patches on the back and flanks",
+     "answer": "yes"
+    },
+    {
+     "item": "feet resting on the ground",
+     "answer": "yes"
+    }
+   ],
+   "thumb_answers": [
+    {
+     "item": "a chinese pangolin body shape",
+     "answer": "yes"
+    },
+    {
+     "item": "a chinese pangolin head with visible eyes",
+     "answer": "yes"
+    },
+    {
+     "item": "axolotl skin patches on the back and flanks",
+     "answer": "yes"
+    },
+    {
+     "item": "feet resting on the ground",
+     "answer": "yes"
+    }
+   ],
+   "forced_choice": {
+    "full": "a mix of both",
+    "thumbnail": "a mix of both"
+   },
+   "open_critic": {
+    "animals": [
+     "pangolin",
+     "axolotl"
+    ],
+    "creatures": 1,
+    "notes": "A scaly pangolin-like creature with pink feathery axolotl gills walks in profile."
+   },
+   "third_animal": [],
+   "model_plan": "not kept in the cached document",
+   "meta_calls": {
+    "spark": 0,
+    "image": 0,
+    "sam": 0
+   },
+   "attempts_by_kind": {
+    "spark": 0,
+    "image": 0,
+    "sam": 0
+   },
+   "warnings": []
+  },
+  {
+   "slug": "c_lion_x_eagle",
+   "sire": "lion",
+   "dam": "eagle",
+   "mode": "mythic",
+   "try": 0,
+   "creature_id": "crt_055f43ffb670",
+   "route": {
+    "sire": "lion",
+    "dam": "golden_eagle",
+    "mode": "mythic",
+    "reason": "distant pair: no documented hybrid and different genus; user asked for myth",
+    "known_pair": null,
+    "labels": [
+     "mythic composite",
+     "speculative design, no real-world precedent"
+    ],
+    "cards": [
+     "RC-R2-01",
+     "RC-R1-14",
+     "RC-R2-16",
+     "RC-R5-10",
+     "RC-R7-02",
+     "RC-R9-01"
+    ],
+    "kind": "mythic composite",
+    "distance": {
+     "shared_rank": "beyond class",
+     "steps": 5
+    }
+   },
+   "labels": [
+    "mythic composite",
+    "speculative design, no real-world precedent",
+    "six limbs: mythic composite, not a plausible animal",
+    "non-flying wings: display or gliding only",
+    "mythic composite with 1 declared license: believability drops with each extra license"
+   ],
+   "licenses": [
+    {
+     "id": "six_limbs",
+     "card": "RC-R3-02",
+     "rule": "six limbs (four legs plus wings)",
+     "compensation": "wings rooted in a heavy shoulder structure that can carry them, not floating",
+     "reason": "four legs plus a separate pair of wings"
+    }
+   ],
+   "audit": [
+    {
+     "function": "breathing",
+     "result": "pass",
+     "detail": "lungs suit a land habitat",
+     "cards": [],
+     "source": "code"
+    },
+    {
+     "function": "feeding",
+     "result": "pass",
+     "detail": "golden eagle beak, carnivore: beak shape is never a reason to reject (it explains under 12 percent of diet)",
+     "cards": [
+      "RC-R9-04",
+      "RC-R9-05"
+     ],
+     "source": "code"
+    },
+    {
+     "function": "support",
+     "result": "pass",
+     "detail": "legs match the body size",
+     "cards": [
+      "RC-R9-06"
+     ],
+     "source": "code"
+    },
+    {
+     "function": "movement",
+     "result": "licensed",
+     "detail": "four legs plus wings: six limbs; too heavy for its flight muscles: wings labeled non-flying; licensed: six limbs (four legs plus wings), shown with wings rooted in a heavy shoulder structure that can carry them, not floating",
+     "cards": [
+      "RC-R3-02",
+      "RC-R3-03",
+      "RC-R3-04",
+      "RC-R9-13",
+      "RC-R9-10"
+     ],
+     "source": "code"
+    },
+    {
+     "function": "heat",
+     "result": "pass",
+     "detail": "temperate forest habitat: no heat adjustment needed",
+     "cards": [
+      "RC-R4-11"
+     ],
+     "source": "code"
+    },
+    {
+     "function": "senses",
+     "result": "pass",
+     "detail": "golden eagle head and eyes kept fully visible",
+     "cards": [
+      "RC-R6-03",
+      "RC-R6-04"
+     ],
+     "source": "code"
+    }
+   ],
+   "scores": {
+    "critic": 1.0,
+    "silhouette": 0.873,
+    "thumbnail": 1.0,
+    "soft_penalty": 0.0,
+    "quality": 0.962
+   },
+   "checklist": [
+    "a lion body shape",
+    "a golden eagle head with visible eyes",
+    "wings rooted in a heavy shoulder structure that can carry them, not floating",
+    "four legs plus a separate pair of golden eagle wings",
+    "golden eagle feathers patches on the forequarters and neck"
+   ],
+   "answers": [
+    {
+     "item": "a lion body shape",
+     "answer": "yes"
+    },
+    {
+     "item": "a golden eagle head with visible eyes",
+     "answer": "yes"
+    },
+    {
+     "item": "wings rooted in a heavy shoulder structure that can carry them, not floating",
+     "answer": "yes"
+    },
+    {
+     "item": "four legs plus a separate pair of golden eagle wings",
+     "answer": "yes"
+    },
+    {
+     "item": "golden eagle feathers patches on the forequarters and neck",
+     "answer": "yes"
+    }
+   ],
+   "thumb_answers": [
+    {
+     "item": "a lion body shape",
+     "answer": "yes"
+    },
+    {
+     "item": "a golden eagle head with visible eyes",
+     "answer": "yes"
+    },
+    {
+     "item": "wings rooted in a heavy shoulder structure that can carry them, not floating",
+     "answer": "yes"
+    },
+    {
+     "item": "four legs plus a separate pair of golden eagle wings",
+     "answer": "yes"
+    },
+    {
+     "item": "golden eagle feathers patches on the forequarters and neck",
+     "answer": "yes"
+    }
+   ],
+   "forced_choice": {
+    "full": "a mix of both",
+    "thumbnail": "a mix of both"
+   },
+   "open_critic": {
+    "animals": [
+     "eagle",
+     "lion"
+    ],
+    "creatures": 1,
+    "notes": "A griffin with an eagle's head and wings and a lion's body stands in profile."
+   },
+   "third_animal": [],
+   "model_plan": "not kept in the cached document",
+   "meta_calls": {
+    "spark": 0,
+    "image": 0,
+    "sam": 0
+   },
+   "attempts_by_kind": {
+    "spark": 0,
+    "image": 0,
+    "sam": 0
+   },
+   "warnings": []
+  },
+  {
+   "slug": "d_rhinoceros_beetle_x_brown_bear",
+   "sire": "rhinoceros beetle",
+   "dam": "brown bear",
+   "mode": "speculative",
+   "try": 0,
+   "creature_id": "crt_59cf10819612",
+   "route": {
+    "sire": "european_rhinoceros_beetle",
+    "dam": "brown_bear",
+    "mode": "chimera",
+    "reason": "distant pair: no documented hybrid and different genus",
+    "known_pair": null,
+    "labels": [
+     "speculative chimera, no real-world precedent"
+    ],
+    "cards": [
+     "RC-R2-01",
+     "RC-R1-14",
+     "RC-R2-16",
+     "RC-R5-10"
+    ],
+    "kind": "chimera",
+    "distance": {
+     "shared_rank": "beyond class",
+     "steps": 5
+    }
+   },
+   "labels": [
+    "speculative chimera, no real-world precedent",
+    "speculative: arthropod parts at large size (insect breathing limits size)",
+    "non-flying wings: display or gliding only"
+   ],
+   "licenses": [
+    {
+     "id": "arthropod_large",
+     "card": "RC-R3-09",
+     "rule": "arthropod parts at large size",
+     "compensation": "thick supporting legs and visible breathing openings along the flanks",
+     "reason": "arthropod parts at 340.0 kg"
+    }
+   ],
+   "audit": [
+    {
+     "function": "breathing",
+     "result": "pass",
+     "detail": "lungs suit a land habitat",
+     "cards": [],
+     "source": "code"
+    },
+    {
+     "function": "feeding",
+     "result": "pass",
+     "detail": "mixed teeth fit an omnivore diet",
+     "cards": [
+      "RC-R9-04"
+     ],
+     "source": "code"
+    },
+    {
+     "function": "support",
+     "result": "licensed",
+     "detail": "arthropod parts at 340.0 kg, far above the Meganeura scale (about 70 cm); the oxygen explanation for giant insects is debated, not settled (RC-R9-09); licensed: arthropod parts at large size, shown with thick supporting legs and visible breathing openings along the flanks",
+     "cards": [
+      "RC-R3-09",
+      "RC-R9-08",
+      "RC-R9-10"
+     ],
+     "source": "code"
+    },
+    {
+     "function": "movement",
+     "result": "labeled",
+     "detail": "too heavy for its flight muscles: wings labeled non-flying; jointed tail segments: balance and defend",
+     "cards": [
+      "RC-R3-03",
+      "RC-R3-04",
+      "RC-R9-13"
+     ],
+     "source": "code"
+    },
+    {
+     "function": "heat",
+     "result": "pass",
+     "detail": "warm grassland habitat: no heat adjustment needed",
+     "cards": [
+      "RC-R4-11"
+     ],
+     "source": "code"
+    },
+    {
+     "function": "senses",
+     "result": "pass",
+     "detail": "brown bear head and eyes kept fully visible",
+     "cards": [
+      "RC-R6-03",
+      "RC-R6-04"
+     ],
+     "source": "code"
+    }
+   ],
+   "scores": {
+    "critic": 0.833,
+    "silhouette": 0.818,
+    "thumbnail": 0.667,
+    "soft_penalty": 0.0,
+    "quality": 0.845
+   },
+   "checklist": [
+    "a brown bear body shape",
+    "a brown bear head with visible eyes",
+    "thick supporting legs and visible breathing openings along the flanks",
+    "european rhinoceros beetle wings in place of the front legs",
+    "european rhinoceros beetle jointed tail segments in place of the tail",
+    "european rhinoceros beetle exoskeleton patches on the forequarters and neck"
+   ],
+   "answers": [
+    {
+     "item": "a brown bear body shape",
+     "answer": "yes"
+    },
+    {
+     "item": "a brown bear head with visible eyes",
+     "answer": "yes"
+    },
+    {
+     "item": "thick supporting legs and visible breathing openings along the flanks",
+     "answer": "yes"
+    },
+    {
+     "item": "european rhinoceros beetle wings in place of the front legs",
+     "answer": "no"
+    },
+    {
+     "item": "european rhinoceros beetle jointed tail segments in place of the tail",
+     "answer": "yes"
+    },
+    {
+     "item": "european rhinoceros beetle exoskeleton patches on the forequarters and neck",
+     "answer": "yes"
+    }
+   ],
+   "thumb_answers": [
+    {
+     "item": "a brown bear body shape",
+     "answer": "yes"
+    },
+    {
+     "item": "a brown bear head with visible eyes",
+     "answer": "yes"
+    },
+    {
+     "item": "thick supporting legs and visible breathing openings along the flanks",
+     "answer": "no"
+    },
+    {
+     "item": "european rhinoceros beetle wings in place of the front legs",
+     "answer": "no"
+    },
+    {
+     "item": "european rhinoceros beetle jointed tail segments in place of the tail",
+     "answer": "yes"
+    },
+    {
+     "item": "european rhinoceros beetle exoskeleton patches on the forequarters and neck",
+     "answer": "yes"
+    }
+   ],
+   "forced_choice": {
+    "full": "a mix of both",
+    "thumbnail": "a mix of both"
+   },
+   "open_critic": {
+    "animals": [
+     "bear",
+     "beetle"
+    ],
+    "creatures": 1,
+    "notes": "A brown bear fused with beetle shells, wings, and a segmented tail."
+   },
+   "third_animal": [],
+   "model_plan": "not kept in the cached document",
+   "meta_calls": {
+    "spark": 0,
+    "image": 0,
+    "sam": 0
+   },
+   "attempts_by_kind": {
+    "spark": 0,
+    "image": 0,
+    "sam": 0
+   },
+   "warnings": []
+  }
+ ],
+ "failures": [],
+ "skipped": [],
+ "stopped": ""
+}

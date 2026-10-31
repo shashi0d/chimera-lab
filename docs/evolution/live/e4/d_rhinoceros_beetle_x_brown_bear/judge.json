@@ -1,0 +1,159 @@
+{
+ "scores": {
+  "critic": 0.833,
+  "silhouette": 0.818,
+  "thumbnail": 0.667,
+  "soft_penalty": 0.0,
+  "quality": 0.845
+ },
+ "checklist": [
+  "a brown bear body shape",
+  "a brown bear head with visible eyes",
+  "thick supporting legs and visible breathing openings along the flanks",
+  "european rhinoceros beetle wings in place of the front legs",
+  "european rhinoceros beetle jointed tail segments in place of the tail",
+  "european rhinoceros beetle exoskeleton patches on the forequarters and neck"
+ ],
+ "checklist_source": "generated from the plan",
+ "critic": {
+  "answers": [
+   {
+    "item": "a brown bear body shape",
+    "answer": "yes"
+   },
+   {
+    "item": "a brown bear head with visible eyes",
+    "answer": "yes"
+   },
+   {
+    "item": "thick supporting legs and visible breathing openings along the flanks",
+    "answer": "yes"
+   },
+   {
+    "item": "european rhinoceros beetle wings in place of the front legs",
+    "answer": "no"
+   },
+   {
+    "item": "european rhinoceros beetle jointed tail segments in place of the tail",
+    "answer": "yes"
+   },
+   {
+    "item": "european rhinoceros beetle exoskeleton patches on the forequarters and neck",
+    "answer": "yes"
+   }
+  ],
+  "choice": "a mix of both",
+  "creatures": 1,
+  "animals": [
+   "brown bear",
+   "european rhinoceros beetle"
+  ],
+  "notes": "A bear-beetle hybrid shows bear fur with beetle wings, armor, and tail."
+ },
+ "critic_thumbnail": {
+  "answers": [
+   {
+    "item": "a brown bear body shape",
+    "answer": "yes"
+   },
+   {
+    "item": "a brown bear head with visible eyes",
+    "answer": "yes"
+   },
+   {
+    "item": "thick supporting legs and visible breathing openings along the flanks",
+    "answer": "no"
+   },
+   {
+    "item": "european rhinoceros beetle wings in place of the front legs",
+    "answer": "no"
+   },
+   {
+    "item": "european rhinoceros beetle jointed tail segments in place of the tail",
+    "answer": "yes"
+   },
+   {
+    "item": "european rhinoceros beetle exoskeleton patches on the forequarters and neck",
+    "answer": "yes"
+   }
+  ],
+  "choice": "a mix of both",
+  "creatures": 1,
+  "animals": [
+   "brown bear",
+   "european rhinoceros beetle"
+  ],
+  "notes": "The creature combines a bear body with beetle wings, armor, and tail."
+ },
+ "forced_choice": {
+  "full": "a mix of both",
+  "thumbnail": "a mix of both"
+ },
+ "open_critic": {
+  "animals": [
+   "bear",
+   "beetle"
+  ],
+  "creatures": 1,
+  "notes": "A brown bear fused with beetle shells, wings, and a segmented tail."
+ },
+ "mask": {
+  "fill": 0.341,
+  "aspect": 1.018,
+  "components": 7
+ },
+ "third_animal": [],
+ "soft_cards": [],
+ "sam_prompt": "animal",
+ "render_attempts": [
+  {
+   "prompt": "polished",
+   "critic": {
+    "answers": [
+     {
+      "item": "a brown bear body shape",
+      "answer": "yes"
+     },
+     {
+      "item": "a brown bear head with visible eyes",
+      "answer": "yes"
+     },
+     {
+      "item": "thick supporting legs and visible breathing openings along the flanks",
+      "answer": "yes"
+     },
+     {
+      "item": "european rhinoceros beetle wings in place of the front legs",
+      "answer": "no"
+     },
+     {
+      "item": "european rhinoceros beetle jointed tail segments in place of the tail",
+      "answer": "yes"
+     },
+     {
+      "item": "european rhinoceros beetle exoskeleton patches on the forequarters and neck",
+      "answer": "yes"
+     }
+    ],
+    "choice": "a mix of both",
+    "creatures": 1,
+    "animals": [
+     "brown bear",
+     "european rhinoceros beetle"
+    ],
+    "notes": "A bear-beetle hybrid shows bear fur with beetle wings, armor, and tail."
+   },
+   "third_animal": [],
+   "scores": {
+    "critic": 0.833,
+    "silhouette": 0.818,
+    "thumbnail": 0.667,
+    "soft_penalty": 0.0,
+    "quality": 0.845
+   }
+  }
+ ],
+ "warnings": [],
+ "polish": "accepted",
+ "model_plan": "not kept in the cached document"
+}

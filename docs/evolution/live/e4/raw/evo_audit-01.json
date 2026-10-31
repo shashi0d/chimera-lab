@@ -1,0 +1,110 @@
+{
+ "purpose": "evo_audit",
+ "request": {
+  "model": "muse-spark-1.3",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You audit whether a planned fictional creature could perform basic body functions. You get the plan in plain words and a list of functions that no rule card covers. For each listed function only, answer pass (it works as planned), repaired (it works with a small change; put the change in repair as a short visible description) or labeled (it does not work; say why in detail). Judge from anatomy, not from story. Never state high oxygen as the settled reason giant insects existed."
+   },
+   {
+    "role": "user",
+    "content": "Plan: Parents: axolotl and Chinese pangolin. Silhouette: four-legged Chinese pangolin frame. Body from: Chinese pangolin; about 4.5 kg. Head from: Chinese pangolin (mouthparts: toothless tongue; diet: insectivore). Breathing organs of the body: lungs. Habitat: river forest. Limbs: legs and legs.\nFunctions to judge: feeding"
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "function_audit",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "functions"
+     ],
+     "properties": {
+      "functions": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "function",
+         "result",
+         "detail",
+         "repair"
+        ],
+        "properties": {
+         "function": {
+          "type": "string"
+         },
+         "result": {
+          "type": "string",
+          "enum": [
+           "pass",
+           "repaired",
+           "labeled"
+          ]
+         },
+         "detail": {
+          "type": "string"
+         },
+         "repair": {
+          "type": "string"
+         }
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0
+ },
+ "response": {
+  "id": "chatcmpl-01a19399-21db-7784-a353-23abc5ff4430",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\"functions\": [{\"detail\": \"Head is Chinese pangolin with toothless tongue specialized for insectivore diet, allowing capture of ants/termites by protrusible sticky tongue and swallowing without chewing. Body is Chinese pangolin at 4.5 kg, providing matching oral cavity, esophagus, and insect-adapted stomach and gut from same species. Four-legged pangolin frame with legs supports terrestrial foraging in river forest where insect prey occurs. No anatomical mismatch prevents capture, ingestion, or digestion.\", \"function\": \"feeding\", \"repair\": \"\", \"result\": \"pass\"}]}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null
+    }
+   }
+  ],
+  "created": 1793477648,
+  "model": "muse-spark-1.3",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 1372,
+   "prompt_tokens": 291,
+   "total_tokens": 1663,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": null,
+    "audio_tokens": null,
+    "reasoning_tokens": 1241,
+    "rejected_prediction_tokens": null,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": null,
+    "cache_write_tokens": null,
+    "cached_tokens": 0,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

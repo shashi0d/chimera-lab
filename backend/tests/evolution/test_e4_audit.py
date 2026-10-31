@@ -243,3 +243,25 @@ def test_feeding_teeth_that_contradict_the_diet_are_flagged(engine):
 def test_movement_plain_four_legs_pass(engine):
     m = _audit(plan_for(engine, "lion", "cheetah")[0])["movement"]
     assert m.result == "pass" and m.detail == "walks on four legs"
+
+
+async def test_live_regression_dropped_gills_never_return_through_model_notes(engine):
+    """E4 live: the realistic axolotl x pangolin audit dropped the gills, but the accepted model plan's notes
+    ("axolotl gills attached externally") reached the prompt and the gills were rendered. The notes below are
+    the live model's words (docs/evolution/live/e4/raw/evo_plan-01.json)."""
+    from app.evolution.judge import generated_checklist
+    from app.evolution.prompt import compile_prompt
+
+    await engine.resolve("pangolin")
+    a, b = engine.tax.resolve("axolotl"), engine.tax.resolve("pangolin")
+    g, r = engine.seed_plan(a, b, design_mode="realistic")
+    g.traits["body"].note = ("pangolin torso and scaled frame sets shape as structured host; retains pangolin lungs "
+                             "for air breathing with axolotl gills supplemental")
+    g.traits["head"].note = "pangolin head shape; axolotl gills attached externally, not blended into skull"
+    g.traits["behavior"].note = "nocturnal solitary foraging, stays near water to keep gills moist"
+    g = engine.finish(g, r)
+    prompt = compile_prompt(g, engine.tax)
+    assert "gill" not in prompt.lower()
+    assert "pangolin head shape" in (g.traits["head"].note or "")  # only the gill clause was removed
+    assert "no external gills" in generated_checklist(g, engine.tax)  # the critic now checks the absence
+    assert "dropped part: external gills" in g.traits["body"].flags

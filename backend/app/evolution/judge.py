@@ -22,6 +22,7 @@ from PIL import Image
 
 from app.errors import ChimeraError
 from app.evolution.adapters import EvoSpark, Meter, Segmenter
+from app.evolution.audit import dropped_parts
 from app.evolution.checks import soft_penalties
 from app.evolution.data import Animal, Taxonomy
 from app.evolution.genome import Genome
@@ -152,6 +153,7 @@ def generated_checklist(g: Genome, tax: Taxonomy) -> list[str]:
     head = t["head"].donor if isinstance(t["head"].donor, str) else None
     items.append(f"a {name(head)} head with visible eyes" if head else "one clear head with visible eyes")
     items += [lic.compensation for lic in g.licenses]
+    items += [f"no {key}" for key in dropped_parts(g)]  # E4: a dropped part must not be in the image
     parts: list[str] = []
     if lp.extra_wings and lp.extra_wings.donor:
         parts.append(f"four legs plus a separate pair of {name(lp.extra_wings.donor)} wings")

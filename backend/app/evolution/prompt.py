@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import re
 
+from app.evolution.audit import dropped_parts
 from app.evolution.data import PLAIN_COAT, Taxonomy, config, pattern_phrase
 from app.evolution.genome import Genome
 from app.evolution.route import find_known_pair, is_real_hybrid
@@ -94,6 +95,10 @@ def plan_conflicts(text: str, g: Genome) -> list[str]:
     tentacles = any("tentacle" in a for a in lp.appendages) or any(t.part == "tentacles" for t in g.traits.values())
     if not tentacles and re.search(r"\btentacles?\b", low):
         out.append("tentacles, but the plan has none")
+    for key in dropped_parts(g):  # E4: a part realistic mode dropped never comes back through a note
+        stem = key.split()[-1].rstrip("s")
+        if re.search(rf"\b{re.escape(stem)}s?\b", low):
+            out.append(f"{key}, but the plan dropped them")
     mane = g.traits["mane"].donor is not None
     says_none = re.search(r"\bmaneless\b|\bwithout (a )?mane\b|\bno mane\b|\bmane (is )?(absent|gated)", low)
     if not mane and re.search(r"\bmanes?\b", low) and not says_none:

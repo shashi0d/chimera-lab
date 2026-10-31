@@ -87,3 +87,33 @@ Every real Meta API call made by L1 (appended automatically by `backend/app/adap
 | 2026-10-31T18:56:47+00:00 | e2d:1_donkey_x_horse | evo_checklist | muse-spark-1.3 | 10618 | 320 | 2399 | 2719 | ok | chatcmpl-01a19352-4acc-72ce-99dc-99af0d572ad5 |
 | 2026-10-31T18:56:54+00:00 | e2d:2_lion_x_tiger | evo_checklist | muse-spark-1.3 | 7630 | 3652 | 1699 | 5351 | ok | chatcmpl-01a19352-687c-7492-a91a-ffd09f2c1f04 |
 | 2026-10-31T18:57:00+00:00 | e2d:2_lion_x_tiger | evo_checklist | muse-spark-1.3 | 5834 | 324 | 1478 | 1802 | ok | chatcmpl-01a19352-7fbf-77ef-b70a-435816da79b6 |
+| 2026-10-31T20:13:06+00:00 | e4:resolve:golden retriever | evo_identify | muse-spark-1.3 | 4632 | 341 | 1186 | 1527 | ok | chatcmpl-01a19398-2ad1-768d-989a-8bc7d05f4022 |
+| 2026-10-31T20:13:17+00:00 | e4:resolve:golden retriever | evo_learn_traits | muse-spark-1.3 | 10331 | 671 | 2806 | 3477 | ok | chatcmpl-01a19398-56b8-70ca-90b6-f0c06b082b1c |
+| 2026-10-31T20:13:23+00:00 | e4:resolve:woolly mammoth | evo_identify | muse-spark-1.3 | 5185 | 342 | 594 | 936 | ok | chatcmpl-01a19398-63c1-73cc-a65d-f333928baf55 |
+| 2026-10-31T20:13:33+00:00 | e4:resolve:woolly mammoth | evo_learn_traits | muse-spark-1.3 | 9003 | 669 | 2139 | 2808 | ok | chatcmpl-01a19398-916a-775e-9f1d-d2520545629d |
+| 2026-10-31T20:13:38+00:00 | e4:resolve:pangolin | evo_identify | muse-spark-1.3 | 5918 | 340 | 1490 | 1830 | ok | chatcmpl-01a19398-a937-708c-85e2-1eb7ab1c1c18 |
+| 2026-10-31T20:13:45+00:00 | e4:resolve:pangolin | evo_learn_traits | muse-spark-1.3 | 6778 | 667 | 1461 | 2128 | ok | chatcmpl-01a19398-c37b-7021-ab15-d0fd1aa55ba3 |
+| 2026-10-31T20:14:03+00:00 | e4:b_axolotl_x_pangolin:try1 | evo_plan | muse-spark-1.3 | 18097 | 5619 | 4992 | 10611 | ok | chatcmpl-01a19399-0a67-7337-852e-59b406d21ad2 |
+| 2026-10-31T20:14:09+00:00 | e4:b_axolotl_x_pangolin:try1 | evo_audit | muse-spark-1.3 | 5964 | 291 | 1372 | 1663 | ok | chatcmpl-01a19399-21db-7784-a353-23abc5ff4430 |
+| 2026-10-31T20:14:23+00:00 | e4:b_axolotl_x_pangolin:try1 | evo_polish | muse-spark-1.3 | 13218 | 454 | 4614 | 5068 | ok | chatcmpl-01a19399-556a-7181-9c22-babd28316c5f |
+| 2026-10-31T20:15:01+00:00 | e4:b_axolotl_x_pangolin:try1 | text_to_image | muse-image-1.0 | 38040 | 45095 | 3019 | 48114 | ok | resp_6ae64c437eaab3724d624689 |
+| 2026-10-31T20:15:06+00:00 | e4:b_axolotl_x_pangolin:try1 | evo_checklist | muse-spark-1.3 | 5357 | 3713 | 1218 | 4931 | ok | chatcmpl-01a19399-fef2-73e8-8f24-4820ebeadee6 |
+| 2026-10-31T20:15:09+00:00 | e4:b_axolotl_x_pangolin:try1 | sam | sam-3.1 | 3205 | 0 | 0 | 0 | ok | resp_6ae64c4b9aa9783ee9304be4 |
+| 2026-10-31T20:15:23+00:00 | e4:b_axolotl_x_pangolin:try1 | evo_checklist | muse-spark-1.3 | 7867 | 385 | 1710 | 2095 | ok | chatcmpl-01a1939a-3cd9-73ae-8cd3-762855b729e5 |
+| 2026-10-31T20:15:28+00:00 | e4:b_axolotl_x_pangolin:try1 | evo_critic | muse-spark-1.3 | 4860 | 3526 | 917 | 4443 | ok | chatcmpl-01a1939a-537c-74db-8bd9-2adb0060772d |
+| 2026-10-31T20:15:45+00:00 | e4:c_lion_x_eagle:try1 | evo_plan | muse-spark-1.3 | 16930 | 5568 | 4943 | 10511 | ok | chatcmpl-01a1939a-951c-75f8-9525-6fe134aeaa35 |
+| 2026-10-31T20:16:00+00:00 | e4:c_lion_x_eagle:try1 | evo_polish | muse-spark-1.3 | 15470 | 387 | 4462 | 4849 | ok | chatcmpl-01a1939a-d2b3-768a-b577-18278a0b950f |
+| 2026-10-31T20:16:23+00:00 | e4:c_lion_x_eagle:try1 | text_to_image | muse-image-1.0 | 22338 | 20278 | 2613 | 22891 | ok | resp_6ae64c95a1d04c59d75e4a4d |
+| 2026-10-31T20:16:28+00:00 | e4:c_lion_x_eagle:try1 | evo_checklist | muse-spark-1.3 | 5202 | 3725 | 1308 | 5033 | ok | chatcmpl-01a1939b-3e69-7405-8ffd-8796b64778db |
+| 2026-10-31T20:16:33+00:00 | e4:c_lion_x_eagle:try1 | sam | sam-3.1 | 5037 | 0 | 0 | 0 | ok | resp_6ae64c9d3358333b88ff40c2 |
+| 2026-10-31T20:16:48+00:00 | e4:c_lion_x_eagle:try1 | evo_checklist | muse-spark-1.3 | 7553 | 397 | 1818 | 2215 | ok | chatcmpl-01a1939b-8d7c-703a-9801-b5e602614b02 |
+| 2026-10-31T20:16:52+00:00 | e4:c_lion_x_eagle:try1 | evo_critic | muse-spark-1.3 | 4002 | 3526 | 652 | 4178 | ok | chatcmpl-01a1939b-9d1b-76e6-a331-adb0748dab28 |
+| 2026-10-31T20:16:59+00:00 | e4:d_rhinoceros_beetle_x_brown_bear:try1 | evo_identify | muse-spark-1.3 | 7208 | 344 | 1710 | 2054 | ok | chatcmpl-01a1939b-b97a-7788-aac9-676dc67248ab |
+| 2026-10-31T20:17:06+00:00 | e4:d_rhinoceros_beetle_x_brown_bear:try1 | evo_learn_traits | muse-spark-1.3 | 6118 | 673 | 1905 | 2578 | ok | chatcmpl-01a1939b-d43a-77bb-b4e8-9ebaaafd5d06 |
+| 2026-10-31T20:17:22+00:00 | e4:d_rhinoceros_beetle_x_brown_bear:try1 | evo_plan | muse-spark-1.3 | 15458 | 5643 | 4692 | 10335 | ok | chatcmpl-01a1939c-10b4-75da-8bd4-9aa6330ee382 |
+| 2026-10-31T20:17:37+00:00 | e4:d_rhinoceros_beetle_x_brown_bear:try1 | evo_polish | muse-spark-1.3 | 15777 | 457 | 5221 | 5678 | ok | chatcmpl-01a1939c-4e73-74cc-8d19-6136a220d68f |
+| 2026-10-31T20:18:09+00:00 | e4:d_rhinoceros_beetle_x_brown_bear:try1 | text_to_image | muse-image-1.0 | 31862 | 31068 | 3276 | 34344 | ok | resp_6ae64d00779eda4adde54ede |
+| 2026-10-31T20:18:16+00:00 | e4:d_rhinoceros_beetle_x_brown_bear:try1 | evo_checklist | muse-spark-1.3 | 6609 | 3765 | 1575 | 5340 | ok | chatcmpl-01a1939c-e4aa-72da-8c2c-abdf37e2329d |
+| 2026-10-31T20:18:19+00:00 | e4:d_rhinoceros_beetle_x_brown_bear:try1 | sam | sam-3.1 | 2861 | 0 | 0 | 0 | ok | resp_6ae64d082d7eb1fb59714e2d |
+| 2026-10-31T20:18:34+00:00 | e4:d_rhinoceros_beetle_x_brown_bear:try1 | evo_checklist | muse-spark-1.3 | 7675 | 437 | 2034 | 2471 | ok | chatcmpl-01a1939d-2d75-7448-b6d0-4d7668b28466 |
+| 2026-10-31T20:18:39+00:00 | e4:d_rhinoceros_beetle_x_brown_bear:try1 | evo_critic | muse-spark-1.3 | 4134 | 3526 | 706 | 4232 | ok | chatcmpl-01a1939d-3d64-76c5-8a2d-3b65034170c8 |

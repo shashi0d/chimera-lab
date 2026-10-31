@@ -1,0 +1,14 @@
+{
+ "b_axolotl_x_pangolin": {
+  "model_plan": "accepted (model-written notes on: behavior, body, coat_color, coat_pattern, coat_texture, ears, face, feet, head, limbs, size, skull, tail)",
+  "sam_mask": "decoded offline from raw/sam-01.json"
+ },
+ "c_lion_x_eagle": {
+  "model_plan": "code skeleton (identical plan id: the model plan was rejected or came back unchanged)",
+  "sam_mask": "decoded offline from raw/sam-02.json"
+ },
+ "d_rhinoceros_beetle_x_brown_bear": {
+  "model_plan": "code skeleton (identical plan id: the model plan was rejected or came back unchanged)",
+  "sam_mask": "decoded offline from raw/sam-03.json"
+ }
+}

@@ -1,0 +1,146 @@
+{
+ "scores": {
+  "critic": 1.0,
+  "silhouette": 0.873,
+  "thumbnail": 1.0,
+  "soft_penalty": 0.0,
+  "quality": 0.962
+ },
+ "checklist": [
+  "a lion body shape",
+  "a golden eagle head with visible eyes",
+  "wings rooted in a heavy shoulder structure that can carry them, not floating",
+  "four legs plus a separate pair of golden eagle wings",
+  "golden eagle feathers patches on the forequarters and neck"
+ ],
+ "checklist_source": "generated from the plan",
+ "critic": {
+  "answers": [
+   {
+    "item": "a lion body shape",
+    "answer": "yes"
+   },
+   {
+    "item": "a golden eagle head with visible eyes",
+    "answer": "yes"
+   },
+   {
+    "item": "wings rooted in a heavy shoulder structure that can carry them, not floating",
+    "answer": "yes"
+   },
+   {
+    "item": "four legs plus a separate pair of golden eagle wings",
+    "answer": "yes"
+   },
+   {
+    "item": "golden eagle feathers patches on the forequarters and neck",
+    "answer": "yes"
+   }
+  ],
+  "choice": "a mix of both",
+  "creatures": 1,
+  "animals": [
+   "lion",
+   "golden eagle"
+  ],
+  "notes": "The image shows a griffin with lion body and eagle head and wings."
+ },
+ "critic_thumbnail": {
+  "answers": [
+   {
+    "item": "a lion body shape",
+    "answer": "yes"
+   },
+   {
+    "item": "a golden eagle head with visible eyes",
+    "answer": "yes"
+   },
+   {
+    "item": "wings rooted in a heavy shoulder structure that can carry them, not floating",
+    "answer": "yes"
+   },
+   {
+    "item": "four legs plus a separate pair of golden eagle wings",
+    "answer": "yes"
+   },
+   {
+    "item": "golden eagle feathers patches on the forequarters and neck",
+    "answer": "yes"
+   }
+  ],
+  "choice": "a mix of both",
+  "creatures": 1,
+  "animals": [
+   "lion",
+   "golden eagle"
+  ],
+  "notes": "The image shows a griffin combining lion and eagle traits."
+ },
+ "forced_choice": {
+  "full": "a mix of both",
+  "thumbnail": "a mix of both"
+ },
+ "open_critic": {
+  "animals": [
+   "eagle",
+   "lion"
+  ],
+  "creatures": 1,
+  "notes": "A griffin with an eagle's head and wings and a lion's body stands in profile."
+ },
+ "mask": {
+  "fill": 0.448,
+  "aspect": 1.073,
+  "components": 3
+ },
+ "third_animal": [],
+ "soft_cards": [],
+ "sam_prompt": "animal",
+ "render_attempts": [
+  {
+   "prompt": "polished",
+   "critic": {
+    "answers": [
+     {
+      "item": "a lion body shape",
+      "answer": "yes"
+     },
+     {
+      "item": "a golden eagle head with visible eyes",
+      "answer": "yes"
+     },
+     {
+      "item": "wings rooted in a heavy shoulder structure that can carry them, not floating",
+      "answer": "yes"
+     },
+     {
+      "item": "four legs plus a separate pair of golden eagle wings",
+      "answer": "yes"
+     },
+     {
+      "item": "golden eagle feathers patches on the forequarters and neck",
+      "answer": "yes"
+     }
+    ],
+    "choice": "a mix of both",
+    "creatures": 1,
+    "animals": [
+     "lion",
+     "golden eagle"
+    ],
+    "notes": "The image shows a griffin with lion body and eagle head and wings."
+   },
+   "third_animal": [],
+   "scores": {
+    "critic": 1.0,
+    "silhouette": 0.873,
+    "thumbnail": 1.0,
+    "soft_penalty": 0.0,
+    "quality": 0.962
+   }
+  }
+ ],
+ "warnings": [],
+ "polish": "accepted",
+ "model_plan": "not kept in the cached document"
+}

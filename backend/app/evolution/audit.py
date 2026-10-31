@@ -97,6 +97,33 @@ def part_job(part: str, wet: bool) -> str | None:
     return None
 
 
+DROPPED = "dropped part: "
+
+
+def part_key(part: str) -> str:
+    """The part_jobs key a part matches ("axolotl external gills on ..." -> "external gills"), else the part."""
+    return next((k for k in config()["part_jobs"] if k in part), part)
+
+
+def dropped_parts(g: Genome) -> list[str]:
+    """Parts realistic mode dropped (E4 live fix): kept as body flags so the prompt and checklist know."""
+    return [f[len(DROPPED):] for f in g.traits["body"].flags if f.startswith(DROPPED)]
+
+
+def _drop(g: Genome, part: str, locked: frozenset[str]) -> None:
+    """Record a dropped part and strip model-note clauses that would bring it back into the prompt."""
+    key = part_key(part)
+    stem = key.split()[-1].rstrip("s")
+    body = g.traits["body"]
+    if f"{DROPPED}{key}" not in body.flags:
+        g.traits["body"] = body.model_copy(update={"flags": [*body.flags, f"{DROPPED}{key}"]})
+    for tag, tr in g.traits.items():
+        if tag in locked or not tr.note or stem not in tr.note.lower():
+            continue
+        kept = [c for c in tr.note.split(";") if stem not in c.lower()]
+        g.traits[tag] = tr.model_copy(update={"note": ";".join(kept).strip() or None})
+
+
 def donor_parts(g: Genome) -> list[tuple[str, str]]:
     """(where, part) for every signature part a non-host donor adds."""
     out: list[tuple[str, str]] = []
@@ -128,9 +155,10 @@ def _breathing(g: Genome, tax: Taxonomy, locked: frozenset[str], needs: list[Nee
     gill_parts = [(w, p) for w, p in donor_parts(g) if "gill" in p]
     if gill_parts and land:
         if g.design_mode == "realistic":  # RC-R9-12: no job in air, so dropped
-            for where, _p in sorted(gill_parts, reverse=True):
+            for where, part in sorted(gill_parts, reverse=True):
                 if where.startswith("appendages."):
                     g.limb_plan.appendages.pop(int(where.split(".")[1]))
+                _drop(g, part, locked)
             return AuditItem(function="breathing", result="repaired", cards=["RC-R9-03", "RC-R9-12"],
                              detail=f"external gills would collapse in air and have no job in a {g.habitat.name} "
                                     f"habitat, so they are dropped; the creature breathes with the {names}'s lungs")
@@ -247,6 +275,7 @@ def _movement(g: Genome, tax: Taxonomy, locked: frozenset[str], needs: list[Need
                                                                  "note": f"host {tag}: the donor part had no job"})
             else:
                 g.limb_plan.appendages.remove(part)
+            _drop(g, part, locked)
             notes.append(f"{part} had no job here and was dropped")
             result = "repaired" if result == "pass" else result
         else:

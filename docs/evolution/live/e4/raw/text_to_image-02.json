@@ -1,0 +1,109 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Silhouette: Four-legged lion frame, four legs plus a separate pair of golden eagle wings. Host frame: the lion sets the outline, body size, and overall frame. A single creature that combines a lion and a golden eagle. Head of the golden eagle, fully visible and uncluttered, with clear, discernible eyes. Details: head: myth-style head swap. Golden eagle feathers in a few large patches over the forequarters and neck, at full strength with clean edges, color and surface unchanged inside each patch. Lion coat everywhere else. Behavior: follows the head donor. Plain coat, no stripes or spots. Four legs plus a separate pair of golden eagle wings on the shoulders. Wings held for display or gliding, not powered flight. Coat texture flows along the body outline. Declared fiction: six limbs (four legs plus wings), shown with wings rooted in a heavy shoulder structure that can carry them, not floating. Bilaterally symmetrical, recognizable limbs, visible sense organs. Habitat cue (forest): dark back and light belly (mild countershading). Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws, and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "id": "resp_6ae64c95a1d04c59d75e4a4d",
+  "access_programs": null,
+  "created_at": 1793477781.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae64c95311759ad91224c13",
+    "summary": [
+     {
+      "text": "**Designing lion-eagle creature**\nI'm planning a fictional silhouette with a lion's four-legged body and coat, plus a golden eagle head and a separate pair of wings on the shoulders, with clean feather patches on the forequarters and neck.\n**Drafting natural history illustration**\nI'm planning a scientific illustration of a single lion-bodied creature with a golden eagle head, six limbs, feather patches on the neck and forequarters, and wings displayed from a heavy shoulder structure.\n**Refining coat color details**\nI'm adjusting the illustration to remove the white patches and keep a plain coat with consistent color and surface, while preserving the forest habitat cue and clean background the user approved.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae64c95d17dde8f56ab4f35",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0R6ckJEUnFLVXhkZ3dRRUFCckpPclFpVWxkOWJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczo2ZDljNjZkMy1lMmMyLTRmYjUtYmU0Ny1hMzU5N2QxYzY2ODA6R0lpbkJ6UWhmc3pQSEVJSkFBSWZJVXZ6WFd0amJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM0Nzc3ODF9.Q8WLFwHadwKC5By5rGUBjazPkVBX",
+    "result": "<elided> (803096 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 20278,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 16128
+   },
+   "output_tokens": 2613,
+   "output_tokens_details": {
+    "reasoning_tokens": 631
+   },
+   "total_tokens": 22891
+  },
+  "user": null
+ }
+}
