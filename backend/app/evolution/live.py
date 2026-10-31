@@ -79,7 +79,7 @@ PLAN_SCHEMA: dict[str, Any] = _obj({
     "processes": _STRS,
     "card_trace": _STRS,
 })
-CODE_FIELDS = ("id", "seed", "lineage", "checks", "scores")
+CODE_FIELDS = ("id", "seed", "lineage", "checks", "scores", "design_mode", "audit", "licenses")  # E4: code-owned
 
 POLISH_SCHEMA = _obj({"prompt": _STR})
 CRITIC_SCHEMA = _obj({"animals": _STRS, "creatures": {"type": "integer"}, "notes": _STR})

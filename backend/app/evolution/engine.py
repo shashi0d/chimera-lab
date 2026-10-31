@@ -19,6 +19,7 @@ from typing import Any
 from app.adapters.base import ImageGenAdapter
 from app.errors import ChimeraError
 from app.evolution.adapters import EvoSpark, Meter, MockEvoSpark, MockRegistry, MockSegmenter, Segmenter, swatch
+from app.evolution.audit import apply_judgment, plan_text, run_audit, settle_needs, uncovered
 from app.evolution.card import output_card
 from app.evolution.checks import Violation, hard_violations
 from app.evolution.data import DATA, Animal, Taxonomy, cards, taxonomy
@@ -153,10 +154,12 @@ class EvoEngine:
         real = is_real_hybrid(r)
         hab_cards = clear_habitat(g) if real else apply_habitat(g, self.tax, locked)  # E2c, D-056
         phys_cards = run_checks(g, self.tax)
+        audit_cards, needs = run_audit(g, self.tax, r)  # 4.5b, after the physical checks (RC-R9-02)
+        audit_cards += settle_needs(g, needs)
         g.silhouette = silhouette(g, self.tax, r.pair)
         g.identity_balance = contribution(g.traits, g.limb_plan, g.host or g.parents.sire)
         g.labels = _dedupe([*r.labels, *g.labels])
-        g.card_trace = _dedupe(g.card_trace + gate_cards + hab_cards + phys_cards
+        g.card_trace = _dedupe(g.card_trace + gate_cards + hab_cards + phys_cards + audit_cards
                                + [c for c in PROMPT_CARDS if not (real and c == "RC-R4-11")])
         assert g.limb_plan.requested_wings is None, "limb budget left a wing request unresolved (RC-R3-01)"
         g.id = plan_id(g)
@@ -169,8 +172,8 @@ class EvoEngine:
                 f"Rule cards (quoted from data/rule_cards.json):\n{book.quote(ids)}\n"
                 f"Plan:\n{g.model_dump_json()}")
 
-    def _check(self, g: Genome, r: Route) -> list[Violation]:
-        return hard_violations(g, r, self.tax)
+    def _check(self, g: Genome, r: Route, final: bool = True) -> list[Violation]:
+        return hard_violations(g, r, self.tax, final)
 
     # ------------------------------------------------------------------ 4.6 to 4.8
 
@@ -180,7 +183,22 @@ class EvoEngine:
             self.registry.note(img.data, prompt)
         return img, await judge(img.data, g, r, self.tax, self.spark, self.segmenter, self.meter)
 
+    async def _judge_functions(self, g: Genome) -> None:
+        """4.5b: one Muse Spark call for every audit function no card covers, before the render."""
+        fns = uncovered(g)
+        if not fns:
+            return
+        try:
+            judged = await self.meter.call("spark", "audit", self.spark.judge_functions(plan_text(g, self.tax), fns))
+        except ChimeraError as e:
+            if e.code == ErrorCode.BUDGET_EXCEEDED:
+                raise
+            apply_judgment(g, None, f"{e.code.value}: {e.message[:120]}")
+            return
+        apply_judgment(g, judged)
+
     async def realize(self, g: Genome, r: Route, refs: list[bytes]) -> dict[str, Any]:
+        await self._judge_functions(g)
         prompt = compile_prompt(g, self.tax)
         polished = await self.meter.call("spark", "polish", self.spark.polish(prompt))
         final, polish_reason = accept_polish(prompt, polished, g, self.tax)
@@ -238,7 +256,7 @@ class EvoEngine:
             raw = await self.meter.call("spark", "first_plan", self.spark.write_plan(
                 self.plan_prompt(skeleton, "Write the first plan for this pair."), skeleton.model_dump()))
             plan = validate_plan({**raw, "id": "pending"})
-            if v := self._check(plan, r):
+            if v := self._check(plan, r, final=False):
                 raise ValueError("; ".join(f"{x.card}: {x.detail}" for x in v))
         except (ValueError, TypeError) as e:
             plan, model_note = skeleton, f"rejected, code skeleton used ({str(e)[:200]})"
@@ -267,7 +285,7 @@ class EvoEngine:
             plan = validate_plan({**raw, "id": raw.get("id") or "pending", "scores": {}})
         except ValueError as e:
             return None, [{"card": "schema", "detail": str(e)[:300]}]
-        if v := self._check(plan, r):
+        if v := self._check(plan, r, final=False):
             return None, [x.public() for x in v]
         g = self.finish(plan, r)
         if v := self._check(g, r):

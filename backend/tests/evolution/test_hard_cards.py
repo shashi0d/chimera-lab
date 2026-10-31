@@ -213,3 +213,77 @@ async def test_rc_r5_01_invalid_offspring_are_filtered_before_render(engine):
     assert len(out["rejected"]) == 2
     assert all(v["card"] == "RC-R5-01" for rej in out["rejected"] for v in rej["violations"])
     assert used["image"] == 2  # no image budget spent on invalid plans (RC-R8-03)
+
+
+# ---------------------------------------------------------------- RC-R9-01 (E4)
+
+
+def test_rc_r9_01_three_kinds_never_mixed(engine):
+    from app.evolution.route import LABEL_HYBRID, LABEL_MYTHIC
+
+    chim, r = plan_for(engine, "lion", "eagle")
+    bad = chim.model_copy(deep=True)
+    bad.labels = [LABEL_HYBRID, *bad.labels]
+    assert "RC-R9-01" in ids(hard_violations(bad, r, engine.tax))
+    bad = chim.model_copy(deep=True)
+    bad.labels.append(LABEL_MYTHIC)
+    assert "RC-R9-01" in ids(hard_violations(bad, r, engine.tax))
+    close, rc = plan_for(engine, "guanaco", "llama")
+    bad = close.model_copy(deep=True)
+    bad.labels = [LABEL_HYBRID]
+    assert "RC-R9-01" in ids(hard_violations(bad, rc, engine.tax))
+    myth, rm = plan_for(engine, "lion", "eagle", myth=True)
+    assert "RC-R9-01" not in ids(hard_violations(myth, rm, engine.tax)) and myth.labels[0] == LABEL_MYTHIC
+
+
+# ---------------------------------------------------------------- RC-R9-02 (E4)
+
+
+@pytest.mark.parametrize("sire,dam", WORKED)
+def test_rc_r9_02_every_function_audited(engine, sire, dam):
+    g, r = plan_for(engine, sire, dam)
+    assert "RC-R9-02" not in ids(hard_violations(g, r, engine.tax))
+    bad = g.model_copy(deep=True)
+    bad.audit = bad.audit[:-1]  # senses missing
+    assert "RC-R9-02" in ids(hard_violations(bad, r, engine.tax))
+    bad.audit = []
+    assert "RC-R9-02" not in ids(hard_violations(bad, r, engine.tax, final=False))  # a model plan before finish()
+    assert "RC-R9-02" in ids(hard_violations(bad, r, engine.tax))
+
+
+# ---------------------------------------------------------------- RC-R9-03 (E4)
+
+
+def test_rc_r9_03_gills_alone_on_land_never_pass(engine):
+    g, r = plan_for(engine, "tiger_shark", "lion", host_pick="sire")
+    b = next(i for i in g.audit if i.function == "breathing")
+    assert b.result != "pass"
+    bad = g.model_copy(deep=True)
+    bad.audit = [i.model_copy(update={"result": "pass"}) if i.function == "breathing" else i for i in bad.audit]
+    assert "RC-R9-03" in ids(hard_violations(bad, r, engine.tax))
+
+
+# ---------------------------------------------------------------- RC-R9-06 (E4)
+
+
+def test_rc_r9_06_scaled_up_body_changes_leg_shape(engine):
+    g, r = plan_for(engine, "lion", "eagle")
+    bad = g.model_copy(deep=True)
+    bad.size.mass_kg = engine.tax.animals["lion"].mass_kg * 3
+    bad.traits["limbs"] = bad.traits["limbs"].model_copy(update={"note": None})
+    assert "RC-R9-06" in ids(hard_violations(bad, r, engine.tax))
+    run_checks(bad, engine.tax)
+    assert "RC-R9-06" not in ids(hard_violations(bad, r, engine.tax))
+
+
+# ---------------------------------------------------------------- RC-R9-09 (E4)
+
+
+def test_rc_r9_09_oxygen_never_stated_as_settled(engine):
+    g, r = plan_for(engine, "lion", "eagle")
+    bad = g.model_copy(deep=True)
+    bad.processes.append("giant insects grew large because of high oxygen")
+    assert "RC-R9-09" in ids(hard_violations(bad, r, engine.tax))
+    ok = g.model_copy(deep=True)
+    ok.processes.append("high oxygen is one debated explanation for giant insects")
+    assert "RC-R9-09" not in ids(hard_violations(ok, r, engine.tax))

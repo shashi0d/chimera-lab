@@ -25,6 +25,9 @@ REGIONS: tuple[str, ...] = (
 BEYOND = "beyond both parents"
 Op = Literal["BLEND", "PICK", "OVERLAY", "PATCH"]
 Mode = Literal["hybrid", "chimera", "mythic"]
+DesignMode = Literal["realistic", "speculative", "mythic"]  # E4: the fiction budget (R9 3.1)
+DESIGN_MODES: tuple[str, ...] = ("realistic", "speculative", "mythic")
+FUNCTIONS: tuple[str, ...] = ("breathing", "feeding", "support", "movement", "heat", "senses")  # R9 2
 LimbKind = Literal["legs", "wings", "fins", "tentacles", "arms", "none"]
 
 
@@ -124,6 +127,24 @@ class Check(_Strict):
     cards: list[str] = Field(default_factory=list)
 
 
+class AuditItem(_Strict):
+    """One function of the R9 audit (4.5b). `pending` waits for the one model judgment before the render."""
+    function: Literal["breathing", "feeding", "support", "movement", "heat", "senses"]
+    result: Literal["pass", "repaired", "labeled", "licensed", "pending"]
+    detail: str
+    cards: list[str] = Field(default_factory=list)
+    source: Literal["code", "model-judged"] = "code"
+
+
+class License(_Strict):
+    """A declared fiction license (4.5c): bends one named bendable card, always with a compensation."""
+    id: str
+    card: str
+    rule: str
+    compensation: str
+    reason: str
+
+
 class Genome(_Strict):
     id: str
     parents: Parents
@@ -143,6 +164,9 @@ class Genome(_Strict):
     checks: list[Check] = Field(default_factory=list)
     scores: dict[str, float] = Field(default_factory=dict)
     seed: int = 0
+    design_mode: DesignMode = "speculative"
+    audit: list[AuditItem] = Field(default_factory=list)
+    licenses: list[License] = Field(default_factory=list)
 
     @model_validator(mode="after")
     def _consistent(self) -> Genome:

@@ -6,13 +6,22 @@ each offspring, and each edit. A plan with any violation is never rendered.
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 from typing import Any
 
 from app.evolution.data import Taxonomy, cards, config
 from app.evolution.genome import BEYOND, HEAD_GROUP, MEASUREMENT_TAGS, SURFACE_TAGS, Genome
 from app.evolution.physics import LABEL_ARTHROPOD, LABEL_SIX, arthropod_parts
-from app.evolution.route import LABEL_CHIMERA, LABEL_SPECULATIVE, Route, find_known_pair, is_real_hybrid
+from app.evolution.route import (
+    LABEL_CHIMERA,
+    LABEL_HYBRID,
+    LABEL_MYTHIC,
+    LABEL_SPECULATIVE,
+    Route,
+    find_known_pair,
+    is_real_hybrid,
+)
 
 
 @dataclass
@@ -36,7 +45,8 @@ def _speculative(labels: list[str]) -> bool:
     return any(lbl in (LABEL_CHIMERA, LABEL_SPECULATIVE) for lbl in labels)
 
 
-def hard_violations(g: Genome, r: Route, tax: Taxonomy) -> list[Violation]:
+def hard_violations(g: Genome, r: Route, tax: Taxonomy, final: bool = True) -> list[Violation]:
+    """final=False for a model plan before finish(): code-owned fields (the audit) are not filled yet."""
     out: list[Violation] = []
     sire, dam = g.parents.sire, g.parents.dam
 
@@ -104,6 +114,59 @@ def hard_violations(g: Genome, r: Route, tax: Taxonomy) -> list[Violation]:
                 out.append(Violation("RC-R5-01", f"{tag} is blended on the chimera path"))
             elif set(tr.region or []) & patch_regions:
                 out.append(Violation("RC-R5-01", f"{tag} blends inside a patch region"))
+    out += _r9_violations(g, r, tax, final)
+    return out
+
+
+OXYGEN = re.compile(r"oxygen", re.IGNORECASE)
+OXYGEN_HEDGE = re.compile(r"debated|not settled|probably not|contested", re.IGNORECASE)
+
+
+def _texts(g: Genome) -> list[str]:
+    out = [g.silhouette, *g.labels, *g.processes, *g.habitat.adjustments, *g.limb_plan.appendages]
+    out += [tr.note or "" for tr in g.traits.values()] + [i.detail for i in g.audit] + [c.detail for c in g.checks]
+    out += [f"{lic.rule} {lic.compensation} {lic.reason}" for lic in g.licenses]
+    return out
+
+
+def _r9_violations(g: Genome, r: Route, tax: Taxonomy, final: bool) -> list[Violation]:
+    from app.evolution.audit import body_animals, is_wet
+    from app.evolution.genome import FUNCTIONS
+    from app.evolution.physics import locked_tags
+
+    out: list[Violation] = []
+    # RC-R9-01: hybrid, chimera and mythic composite are never mixed.
+    if LABEL_HYBRID in g.labels and not is_real_hybrid(r):
+        out.append(Violation("RC-R9-01", "the plain hybrid label outside the real-hybrid route"))
+    if LABEL_MYTHIC in g.labels and g.mode != "mythic":
+        out.append(Violation("RC-R9-01", "mythic composite label outside mythic mode"))
+    if LABEL_CHIMERA in g.labels and g.mode != "chimera":
+        out.append(Violation("RC-R9-01", f"chimera label on a {g.mode} plan"))
+    # RC-R9-02: every function audited, none silently failed.
+    if final or g.audit:
+        got = [i.function for i in g.audit]
+        if got != list(FUNCTIONS):
+            out.append(Violation("RC-R9-02", f"audit covers {got}, not all six functions"))
+    # RC-R9-03: gills alone cannot serve a land creature.
+    by_fn = {i.function: i for i in g.audit}
+    body = body_animals(g, tax)
+    if body and all(a.breathing == "gills" for a in body) and not is_wet(g):
+        if by_fn.get("breathing") and by_fn["breathing"].result == "pass":
+            out.append(Violation("RC-R9-03", "a gill-breathing body on land passed the breathing audit"))
+    # RC-R9-06: scaled well above the leg donor, the legs must change shape.
+    limbs = g.traits["limbs"]
+    leg_id = limbs.donor if isinstance(limbs.donor, str) else (g.host or g.parents.sire)
+    leg = tax.animals[leg_id]
+    th = config()["thresholds"]
+    if (final and g.size.mass_kg and leg.mass_kg and g.size.mass_kg > leg.mass_kg * th["posture_scale"]
+            and "limbs" not in locked_tags(g, tax)):
+        if not re.search(r"thicker|straightened|heavier leg muscles|thick supporting legs", limbs.note or ""):
+            out.append(Violation("RC-R9-06", f"{g.size.mass_kg} kg on {leg.common_name} legs without a shape change"))
+    # RC-R9-09: never state high oxygen as the settled reason giant insects existed.
+    for text in _texts(g):
+        if OXYGEN.search(text) and not OXYGEN_HEDGE.search(text):
+            out.append(Violation("RC-R9-09", f"oxygen stated as settled: {text[:80]!r}"))
+            break
     return out
 
 

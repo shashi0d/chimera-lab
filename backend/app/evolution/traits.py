@@ -192,6 +192,8 @@ def build_traits(r: Route, host_id: str | None, tax: Taxonomy, rng: random.Rando
             limbs.requested_wings = donor.id  # resolved by the limb-budget check (4.5)
         if traits["tail"].part:
             limbs.appendages.append(f"{traits['tail'].part} (tail)")
+        if "external gills" in donor.breathing:  # E4: visible gills are a donor part (audited under breathing)
+            limbs.appendages.append(f"{donor.common_name} external gills on the sides of the head")
     size, size_cards = size_for(r, host_id, tax)
     gate_cards = gate(traits, r, host_id, tax)
     assert set(traits) == set(TRAIT_TAGS)

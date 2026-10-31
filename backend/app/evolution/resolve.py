@@ -178,7 +178,7 @@ class Resolver:
             return Resolution(query, "resolved", a, "database", a.kind, rec.get("note", ""), rec.get("alternatives", []),
                               DB, DB) if a else None
         a = self.tax.animals.get(entry["id"]) or animal_from_entry(entry)
-        self.tax.add(a)
+        self.tax.add(a, [query])
         return Resolution(query, "resolved", a, "learned", entry.get("kind", "species"),
                           rec.get("note") or entry.get("note", ""), rec.get("alternatives") or entry.get("alternatives", []),
                           entry.get("taxonomy_source", GBIF), MODEL)
@@ -300,6 +300,6 @@ class Resolver:
             if name:
                 self.store.alias(name, entry["id"], ambiguous_note, alts)
         a = animal_from_entry(entry)
-        self.tax.add(a, [common])
+        self.tax.add(a, [common, query] if name else [common])
         return Resolution(query, "resolved", a, "open_world", kind, entry.get("note", note), alts, tax_source, MODEL,
                           gbif=match)
