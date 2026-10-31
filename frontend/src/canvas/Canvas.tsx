@@ -347,7 +347,7 @@ export function Canvas() {
         selectNodesOnDrag={false}
         aria-label="Fusion canvas"
       >
-        <Background variant={BackgroundVariant.Lines} gap={24} lineWidth={1} className="canvas__grid" />
+        <Background variant={BackgroundVariant.Dots} gap={28} size={1.6} className="canvas__grid" />
         {minimap ? <MiniMap pannable zoomable className="canvas__minimap" ariaLabel="Minimap" /> : null}
       </ReactFlow>
       <ToolRail onAddFiles={(files) => void addFiles(files)} />

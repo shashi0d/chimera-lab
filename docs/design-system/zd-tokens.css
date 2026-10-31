@@ -1,0 +1,250 @@
+/* ZD (ZeroDistance) design system tokens. Extracted verbatim from ZeroDistance_Dashboard.html (Claude Design project ZeroDistanceCMSDesignSystem_3e5a47). Do not edit values here; Chimera-specific deviations live in ZD.md. */
+:root {
+  /* RGB triplet of the ink used for hairlines/wells — flips in dark theme */
+  --ink-rgb: 27,29,60; /* @kind other */
+  /* Ink ramp (cool neutral) */
+  --ink-900: #1b1d29;   /* headings, primary text, toast ground */
+  --ink-800: #2a2c3c;   /* row titles */
+  --ink-700: #4a4d62;   /* body, secondary button text */
+  --ink-600: #6b6e82;   /* muted, labels */
+  --ink-500: #8d90a3;   /* subtle, breadcrumbs, helper copy */
+  --ink-400: #9a9cb0;   /* subtle 2, metadata, neutral status */
+  --ink-300: #a6a8bb;   /* faint, mono kickers, placeholders */
+  --ink-250: #b8bac8;   /* chevrons, count meta */
+  --ink-200: #c7c9d6;   /* breadcrumb separators */
+  --ink-100: #eef0f6;   /* neutral avatar, placeholder stripe A */
+  --ink-050: #e5e8f2;   /* placeholder stripe B */
+  --white: #ffffff;
+  --paper: #fbfbfe;     /* modal / auth panel ground */
+
+  /* Accent — one decisive indigo */
+  --indigo-500: #6a63f5;
+  --indigo-600: #5a53e6;  /* hover */
+  --indigo-700: #4b45c9;  /* text on tint */
+  --indigo-800: #3a3486;  /* banner heading on tint */
+  --indigo-400: #8478ff;  /* gradient end for hero CTAs */
+  --indigo-300: #8b7bff;  /* brand mark gradient end */
+  --indigo-200: #c9c6ff;  /* toast action text */
+  --indigo-150: #a9a4ff;  /* kicker on dark */
+
+  /* Semantic status */
+  --info: #3f7fe6;
+  --info-text: #2c5fb3;
+  --warning: #d99518;      /* also "needs you" badges */
+  --warning-text: #93620b;
+  --success: #1f9d6b;
+  --success-hover: #17865b;
+  --success-text: #178a5d;
+  --danger: #df5a63;
+  --danger-text: #c8414b;
+  --neutral: #9a9cb0;
+
+  /* Categorical — for identity (people groups, content types, filters). Never for status. */
+  --cat-charcoal: #2a2c3c;
+  --cat-blue: #3f7fe6;
+  --cat-indigo: #6a63f5;
+  --cat-green: #1f9d6b;
+  --cat-teal: #2a9bb0;
+  --cat-slate: #5b6075;
+
+  /* Hairlines & wells (ink at low alpha) */
+  --line-faint: rgba(var(--ink-rgb),.05);
+  --line: rgba(var(--ink-rgb),.06);
+  --line-strong: rgba(var(--ink-rgb),.08);
+  --line-input: rgba(var(--ink-rgb),.12);
+  --line-input-strong: rgba(var(--ink-rgb),.14);
+  --well: rgba(var(--ink-rgb),.035);
+  --well-track: rgba(var(--ink-rgb),.05);
+  --row-hover: rgba(106,99,245,.045);
+  --dashed: rgba(var(--ink-rgb),.12);
+
+  /* Tints (≈8%) */
+  --tint-indigo: rgba(106,99,245,.08);
+  --tint-info: rgba(63,127,230,.08);
+  --tint-warning: rgba(217,149,24,.08);
+  --tint-success: rgba(31,157,107,.1);
+  --tint-danger: rgba(223,90,99,.08);
+
+  /* Grounds */
+  --ground-app: linear-gradient(158deg,#f6f7fb 0%,#eceef6 58%,#e8eaf4 100%); /* @kind color */
+  --ground-brand: linear-gradient(168deg,#14163a 0%,#21255f 52%,#2b2d77 100%); /* @kind color */
+  --gradient-cta: linear-gradient(140deg,#6a63f5,#8478ff); /* @kind color */
+  --gradient-mark: linear-gradient(150deg,#6a63f5,#8b7bff); /* @kind color */
+  --scrim: rgba(20,22,45,.34);
+
+  /* Semantic aliases */
+  --text-strong: var(--ink-900);
+  --text-body: var(--ink-700);
+  --text-muted: var(--ink-600);
+  --text-subtle: var(--ink-500);
+  --text-faint: var(--ink-300);
+  --accent: var(--indigo-500);
+  --accent-hover: var(--indigo-600);
+  --accent-text: var(--indigo-700);
+  --surface-card: var(--white);
+  --surface-glass: rgba(255,255,255,.62);
+  --surface-glass-strong: rgba(255,255,255,.72);
+  --surface-sidebar: rgba(255,255,255,.55);
+  --surface-header: rgba(255,255,255,.4);
+  --surface-modal: var(--white);
+  --border-card: 1px solid var(--line);
+  --border-glass: 1px solid rgba(255,255,255,.9); /* @kind other */
+  --focus-ring: 0 0 0 3px rgba(106,99,245,.14);
+}
+
+:root {
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-ui: 'Hanken Grotesk', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Display (Space Grotesk 600, tight tracking) */
+  --type-hero: 600 33px/1.15 var(--font-display);      /* display name H1, auth hero */
+  --type-h1: 600 27px/1.2 var(--font-display);         /* auth step titles */
+  --type-h2: 600 21px/1.25 var(--font-display);        /* modal title */
+  --type-h3: 600 20px/1.25 var(--font-display);        /* section heading "Assigned content" */
+  --type-page: 600 17px/1.15 var(--font-display);      /* page title in header bar */
+  --type-card-title: 600 16px/1.3 var(--font-display);
+  --tracking-display: -.01em;
+  --tracking-hero: -.02em;
+
+  /* UI (Hanken Grotesk) */
+  --type-body-lg: 400 14.5px/1.55 var(--font-ui);
+  --type-body: 400 14px/1.5 var(--font-ui);
+  --type-body-sm: 400 13px/1.5 var(--font-ui);
+  --type-row-title: 600 16px/1.3 var(--font-ui);       /* asset names */
+  --type-label: 600 11.5px/1.3 var(--font-ui);         /* field labels, #6b6e82 */
+  --type-button: 600 13px/1 var(--font-ui);
+  --type-button-lg: 600 14px/1 var(--font-ui);
+  --type-caption: 400 12px/1.4 var(--font-ui);
+
+  /* Mono (metadata, kickers, counts, IDs) */
+  --type-kicker: 400 10px/1.2 var(--font-mono);        /* UPPERCASE, .16em */
+  --type-nav-kicker: 400 9.5px/1.2 var(--font-mono);   /* sidebar group label, .18em */
+  --type-meta: 400 12px/1.4 var(--font-mono);
+  --type-meta-sm: 400 11.5px/1.4 var(--font-mono);
+  --type-count: 400 10.5px/1 var(--font-mono);
+  --tracking-kicker: .16em;
+  --tracking-nav-kicker: .18em;
+  --tracking-table-head: .14em;
+}
+
+:root {
+  /* Spacing — values as used in source (not snapped to a grid) */
+  --space-1: 3px;   /* segmented track padding */
+  --space-2: 6px;
+  --space-3: 8px;
+  --space-4: 10px;
+  --space-5: 13px;
+  --space-6: 16px;
+  --space-7: 18px;
+  --space-8: 20px;
+  --space-9: 24px;
+  --space-10: 28px;  /* page gutter */
+  --space-11: 30px;
+
+  --page-max: 1140px;
+  --page-max-wide: 1280px;
+  --sidebar-w: 248px;
+  --header-h: 64px;
+  --drawer-w: 440px;
+
+  /* Radius */
+  --radius-xs: 7px;    /* mono place tags */
+  --radius-sm: 9px;    /* small/icon buttons, seg tab inner */
+  --radius-md: 11px;   /* buttons, inputs, seg track */
+  --radius-lg: 13px;   /* version rows, wells */
+  --radius-xl: 14px;   /* machine card, popover, toast */
+  --radius-2xl: 18px;  /* asset cards, glass cards */
+  --radius-3xl: 22px;  /* hero cards, modals */
+  --radius-pill: 99px;
+
+  /* Shadows */
+  --shadow-xs: 0 1px 3px rgba(20,22,50,.12);   /* active segmented tab */
+  --shadow-card: 0 1px 2px rgba(20,22,50,.04), 0 10px 30px -20px rgba(20,22,50,.25);
+  --shadow-card-hover: 0 1px 2px rgba(20,22,50,.04), 0 18px 44px -22px rgba(20,22,50,.32);
+  --shadow-hero: 0 1px 2px rgba(20,22,50,.04), 0 14px 40px -22px rgba(20,22,50,.22);
+  --shadow-glass: 0 1px 2px rgba(20,22,50,.04), 0 18px 40px -26px rgba(20,22,50,.25);
+  --shadow-popover: 0 24px 60px -18px rgba(20,22,50,.42);
+  --shadow-modal: 0 30px 70px -20px rgba(20,22,50,.5);
+  --shadow-toast: 0 18px 50px -12px rgba(20,22,50,.6);
+  --shadow-cta: 0 8px 22px -6px rgba(106,99,245,.6);
+  --shadow-primary: 0 8px 20px -10px rgba(106,99,245,.8);
+  --shadow-success: 0 6px 16px -6px rgba(31,157,107,.6);
+  --shadow-danger: 0 8px 20px -8px rgba(223,90,99,.7);
+
+  /* Blur */
+  --blur-sidebar: 22px;
+  --blur-glass: 18px;
+  --blur-header: 16px;
+  --blur-scrim: 4px;
+
+  /* Motion */
+  --ease-spring: cubic-bezier(.22,1,.36,1); /* @kind other */
+  --dur-fast: .15s; /* @kind other */
+  --dur-base: .18s; /* @kind other */
+  --dur-slow: .32s; /* @kind other */
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--paper);font-family:var(--font-ui);color:var(--text-strong);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+a{color:var(--accent-text);text-decoration:none}
+a:hover{color:var(--accent-hover);text-decoration:underline}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-thumb{background:rgba(var(--ink-rgb),.14);border-radius:99px;border:3px solid transparent;background-clip:padding-box}
+::-webkit-scrollbar-thumb:hover{background:rgba(var(--ink-rgb),.26);background-clip:padding-box}
+/* Reveal/overlay keyframes rest at a visible end-state: transform only, never opacity-from-0. */
+@keyframes zdPulseDot{0%{box-shadow:0 0 0 0 rgba(31,157,107,.5)}70%{box-shadow:0 0 0 7px rgba(31,157,107,0)}100%{box-shadow:0 0 0 0 rgba(31,157,107,0)}}
+@keyframes zdExpandIn{from{transform:translateY(-6px)}to{transform:none}}
+@keyframes zdPopIn{from{transform:scale(.97) translateY(8px)}to{transform:none}}
+@keyframes zdToastIn{from{transform:translate(-50%,18px)}to{transform:translate(-50%,0)}}
+@keyframes zdSpin{to{transform:rotate(360deg)}}
+@keyframes zdIndeterminate{0%{transform:translateX(-100%)}100%{transform:translateX(250%)}}
+@keyframes zdShimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+
+/* Dark theme — apply with <html data-theme="dark">. Same hues, inverted ink ramp, deep indigo-black grounds. */
+[data-theme="dark"] {
+  --ink-rgb: 214,218,255; /* @kind other */
+  --ink-900: #eef0fa;
+  --ink-800: #dcdeeb;
+  --ink-700: #b8bbcf;
+  --ink-600: #9a9db4;
+  --ink-500: #8285a0;
+  --ink-400: #70738e;
+  --ink-300: #62657f;
+  --ink-250: #575a73;
+  --ink-200: #464962;
+  --ink-100: #2b2e45;
+  --ink-050: #24273b;
+  --paper: #121320;
+
+  --indigo-700: #aaa5ff;
+  --indigo-800: #c9c6ff;
+  --info-text: #7fadf7;
+  --warning-text: #f0b44a;
+  --success-text: #46d39b;
+  --success-hover: #27b07a;
+  --danger-text: #f3848b;
+
+  --tint-indigo: rgba(132,120,255,.14);
+  --row-hover: rgba(132,120,255,.08);
+
+  --ground-app: linear-gradient(158deg,#111220 0%,#151727 58%,#191b2e 100%); /* @kind color */
+  --scrim: rgba(5,6,14,.6);
+  --surface-card: #1b1d2e;
+  --surface-glass: rgba(30,32,52,.62);
+  --surface-glass-strong: rgba(30,32,52,.8);
+  --surface-sidebar: rgba(20,22,36,.72);
+  --surface-header: rgba(20,22,36,.5);
+  --surface-modal: #1e2033;
+  --border-glass: 1px solid rgba(255,255,255,.06); /* @kind other */
+  --focus-ring: 0 0 0 3px rgba(132,120,255,.28);
+
+  --shadow-card: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px -20px rgba(0,0,0,.7);
+  --shadow-card-hover: 0 1px 2px rgba(0,0,0,.3), 0 18px 44px -22px rgba(0,0,0,.8);
+  --shadow-hero: 0 1px 2px rgba(0,0,0,.3), 0 14px 40px -22px rgba(0,0,0,.7);
+  --shadow-glass: 0 1px 2px rgba(0,0,0,.3), 0 18px 40px -26px rgba(0,0,0,.7);
+  --shadow-popover: 0 24px 60px -18px rgba(0,0,0,.75);
+  --shadow-modal: 0 30px 70px -20px rgba(0,0,0,.8);
+  color-scheme: dark;
+}

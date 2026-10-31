@@ -21,7 +21,7 @@ Beyond the core flow:
 - **Models:** Meta Model API (`muse-spark-1.3` for vision and planning, `muse-image-1.0` for generation), behind adapters; verified live on 5 fusions (`docs/LIVE_REPORT.md`).
 - **Storage/DB:** Supabase in real mode; local files plus SQLite in dev.
 
-See `docs/ARCHITECTURE.md` for the design, `docs/DESIGN.md` for the visual system, and `TASKSHEET.md` for the build plan and status.
+See `docs/ARCHITECTURE.md` for the design, `docs/DESIGN_U1.md` for the visual system (ZD design system, `docs/design-system/`; the older `docs/DESIGN.md` is kept for history), and `TASKSHEET.md` for the build plan and status.
 
 ## Quick start (mock mode, no keys needed)
 

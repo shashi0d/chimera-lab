@@ -19,14 +19,18 @@ import { upstreamVersion } from "./upstream";
 const t = copy.nodes.fieldCard;
 
 function slug(s: string): string {
-  return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || "creature";
+  return (
+    s
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "") || "creature"
+  );
 }
 
 function CardBody({ card, imageUrl }: { card: FieldCard; imageUrl: string }) {
   return (
     <article className="field-card" aria-label={`${t.title}: ${card.commonName}`}>
       <img className="field-card__plate" src={absoluteUrl(imageUrl)} alt={copy.nodes.result.alt(card.commonName)} draggable={false} />
-      <h4 className="field-card__name">{card.commonName}</h4>
       <p className="field-card__binomial">
         <i className="binomial">{card.binomial}</i> <span className="field-card__tag">{t.invented}</span>
       </p>
@@ -52,7 +56,7 @@ function CardBody({ card, imageUrl }: { card: FieldCard; imageUrl: string }) {
   );
 }
 
-export function FieldCardView({ node, selected, issues, catalog }: NodeViewProps<FieldCardConfig, FieldCardData>) {
+export function FieldCardView({ node, selected, issues }: NodeViewProps<FieldCardConfig, FieldCardData>) {
   const runId = node.data.activeRunId ?? null;
   const run = useRuns((s) => (runId ? s.runs[runId] : undefined));
   const starting = useRuns((s) => Boolean(s.starting[node.id]));
@@ -72,7 +76,9 @@ export function FieldCardView({ node, selected, issues, catalog }: NodeViewProps
   const card = node.data.card ?? null;
 
   const up = upstreamVersion({ nodes, edges }, node.id);
-  const madeFor = up.result ? ((up.result.data.versions as Array<{ creatureId: string }> | undefined) ?? []).findIndex((v) => v.creatureId === node.data.creatureId) : -1;
+  const madeFor = up.result
+    ? ((up.result.data.versions as Array<{ creatureId: string }> | undefined) ?? []).findIndex((v) => v.creatureId === node.data.creatureId)
+    : -1;
   const outOfDate = Boolean(card && up.version && up.version.creatureId !== node.data.creatureId);
 
   let status: NodeStatus;
@@ -80,7 +86,11 @@ export function FieldCardView({ node, selected, issues, catalog }: NodeViewProps
   else if (shownError) status = { tone: "error", label: copy.status.failed };
   else if (outOfDate) status = { tone: "stale", label: copy.status.stale };
   else if (card) status = { tone: "ok", label: copy.status.succeeded };
-  else status = { tone: "idle", label: blocking.length ? copy.status.idle : copy.status.ready };
+  else
+    status = {
+      tone: "idle",
+      label: blocking.length ? copy.status.idle : copy.status.ready,
+    };
 
   const exportPng = async () => {
     if (!card || !node.data.imageUrl) return;
@@ -94,15 +104,14 @@ export function FieldCardView({ node, selected, issues, catalog }: NodeViewProps
     }
   };
 
-  const writeLabel = shownError ? copy.nodes.fusion.retry : card ? (outOfDate ? t.rewriteFor(up.index + 1) : t.rewrite) : t.write;
+  const writeLabel = shownError ? t.retry : card ? (outOfDate ? t.rewriteFor(up.index + 1) : t.rewrite) : t.write;
 
   return (
     <NodeCard
       nodeId={node.id}
       kind="field-card"
-      catalog={catalog}
-      title={t.title}
-      icon="card"
+      kicker={t.kicker}
+      title={card && !active ? card.commonName : t.title}
       status={status}
       inputs={FIELD_CARD_INPUTS}
       outputs={[]}

@@ -292,6 +292,24 @@ Budget: at most 15 image generations and 60 Muse Spark calls. Every live call is
 - **Live:** identify 6/6; fusions 5/5. The pinned fusion passed on its second run; the first failed with a plan timeout, explained in LIVE_REPORT problem 1.
 - **Budget:** 11/15 images, 27/60 Spark calls, 367k tokens logged. Cost unknown (no reachable pricing page).
 
+### U1 UI redesign with the ZD design system (frontend only)
+
+ZD (`docs/design-system/ZD.md`, `zd-tokens.css`) replaces the "Field paper" identity. Design: `docs/DESIGN_U1.md`. No changes to backend behaviour, API contracts, the node registry pattern or test hooks. Leave room for L2 (wings slot, plan summary, cost) without building it.
+
+- [x] U1-01 `docs/DESIGN_U1.md`: token usage, components, wireframes (canvas, nodes, toolbar, body diagram, result card, drawer).
+- [x] U1-02 `theme.css`: ZD tokens verbatim (light `:root`, dark `[data-theme="dark"]`), Chimera tokens after them, `-aa` deviations only (logged). Self-hosted Space Grotesk, Hanken Grotesk, JetBrains Mono. `check-css.sh` and contrast tests updated for ZD.
+- [x] U1-03 ZD components in React: Card, SegmentedTabs, LiveIndicator, Timeline, StatCard, BrandMark (Chimera glyph and name), Pill, Section.
+- [x] U1-04 Image-first nodes: photo edge to edge, species title (never the filename), no catalog numbers.
+- [x] U1-05 Fusion node: two portraits with species names, no dropdowns; slot selectors in the contextual toolbar; status + Timeline only (no result thumbnail).
+- [x] U1-06 Result hero card: ≥ 2× input size, `--type-h2` name, Generated fusion pill, real-hybrid pill, SegmentedTabs versions.
+- [x] U1-07 Glass contextual toolbar for node actions (hover, select, focus-within).
+- [x] U1-08 Body diagram from a region list (Auto/A/B cycling, donor portraits).
+- [x] U1-09 Drawer: frontend summary, stat cards (unknown, never 0), collapsible Timeline / hybrids / rules / mythology (always "Unverified") / planner notes / sources.
+- [x] U1-10 12px floor for UI text (mono kickers excepted, `--text-muted` on cards).
+- [x] U1-11 Screenshot round `u1` with real images (live fixtures + `docs/live/fusions`) in both themes at all viewports; review; fix blockers/majors; re-approve baselines; BEFORE_AFTER pv-3 vs u1.
+
+**Acceptance:** backend, frontend and browser suites pass; check-css passes; axe 0 serious/critical in both themes; no ZD value edited; u1 screenshots use real images.
+
 ### P7 Shashi (needs keys)
 
 - [ ] P7-01 Modal secret `chimera-lab` with the Meta key, Supabase URL and service key.

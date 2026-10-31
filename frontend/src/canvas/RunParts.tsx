@@ -3,51 +3,42 @@ import type { AppError } from "../api/errors";
 import { presentError } from "../api/errorMessages";
 import { copy } from "../copy";
 import type { Step } from "../types/api";
-import { Icon, type IconName } from "../ui/Icon";
+import { Icon } from "../ui/Icon";
+import { Timeline, type TimelineItem } from "../ui/Timeline";
 import { formatSeconds } from "./useNow";
 
 // Shared by every runnable node (Fusion, Field Card, …): step list, error block, retry countdown.
 
 const t = copy.nodes.fusion;
 
-const STEP_ICON: Record<Step["status"], IconName | null> = {
-  pending: null,
-  running: null,
-  succeeded: "check",
-  failed: "error",
-  skipped: "minus",
-};
+export function stepDuration(s: Step, now: number): string {
+  const started = s.startedAt ? Date.parse(s.startedAt) : null;
+  const ended = s.endedAt ? Date.parse(s.endedAt) : null;
+  return started && s.status !== "skipped" ? formatSeconds((ended ?? now) - started) : "";
+}
+
+export function totalMs(steps: Step[]): number {
+  const starts = steps.map((s) => (s.startedAt ? Date.parse(s.startedAt) : NaN)).filter(Number.isFinite);
+  const ends = steps.map((s) => (s.endedAt ? Date.parse(s.endedAt) : NaN)).filter(Number.isFinite);
+  return starts.length && ends.length ? Math.max(...ends) - Math.min(...starts) : 0;
+}
 
 export function StepList({ steps, now, allDetails = false }: { steps: Step[]; now: number; allDetails?: boolean }) {
   const done = steps.filter((s) => s.status === "succeeded").length;
   // While running, only the latest finished step explains itself; failures always do.
   const lastDone = [...steps].reverse().find((s) => s.status === "succeeded")?.key;
+  const items: TimelineItem[] = steps.map((s) => ({
+    key: s.key,
+    label: s.label,
+    status: s.status,
+    statusText: copy.steps[s.status],
+    duration: stepDuration(s, now),
+    detail: s.detail && (s.status === "failed" || (s.status === "succeeded" && (allDetails || s.key === lastDone))) ? s.detail : undefined,
+  }));
   return (
     <div className="steps">
       {allDetails ? null : <p className="steps__count">{t.stepCount(done, steps.length)}</p>}
-      <ol className="steps__list">
-        {steps.map((s) => {
-          const started = s.startedAt ? Date.parse(s.startedAt) : null;
-          const ended = s.endedAt ? Date.parse(s.endedAt) : null;
-          const ms = started ? (ended ?? now) - started : null;
-          const icon = STEP_ICON[s.status];
-          return (
-            <li key={s.key} className={`step step--${s.status}`} aria-current={s.status === "running" ? "step" : undefined}>
-              <span className="step__glyph" aria-hidden="true">
-                {s.status === "running" ? <span className="pulse-dot" /> : icon ? <Icon name={icon} size={14} /> : <span className="step__hollow" />}
-              </span>
-              <span className="step__label">
-                {s.label}
-                <span className="sr-only">: {copy.steps[s.status]}</span>
-              </span>
-              <span className="step__time">{ms !== null && s.status !== "skipped" ? formatSeconds(ms) : ""}</span>
-              {s.detail && (s.status === "failed" || (s.status === "succeeded" && (allDetails || s.key === lastDone))) ? (
-                <span className="step__detail">{s.detail}</span>
-              ) : null}
-            </li>
-          );
-        })}
-      </ol>
+      <Timeline items={items} dense />
     </div>
   );
 }
@@ -97,4 +88,3 @@ export function ErrorBlock({ err, countdown }: { err: AppError; countdown: numbe
     </div>
   );
 }
-

@@ -53,14 +53,14 @@ export const styleNode = defineNode<StyleConfig, StyleData>({
 });
 ```
 
-`nodes/style/NodeView.tsx` composes the shared card and the shared run widgets in `canvas/RunParts.tsx` (`StepList`, `ErrorBlock`, `useCountdown`). Ports, status, header and hover toolbar come from `NodeCard`. Starting and watching runs come from `useRuns`, exactly as in `nodes/fusion/NodeView.tsx`:
+`nodes/style/NodeView.tsx` composes the shared card and the shared run widgets in `canvas/RunParts.tsx` (`StepList`, `ErrorBlock`, `useCountdown`). Ports, the kicker + title header, the `LiveIndicator` status, optional edge-to-edge `media` and the glass contextual `toolbar` come from `NodeCard` (U1, `docs/DESIGN_U1.md`). Starting and watching runs come from `useRuns`, exactly as in `nodes/fusion/NodeView.tsx`:
 
 ```tsx
-export function StyleView({ node, selected, issues, catalog }: NodeViewProps<StyleConfig, StyleData>) {
+export function StyleView({ node, selected, issues }: NodeViewProps<StyleConfig, StyleData>) {
   const start = useRuns((s) => s.start);
   const blocked = issues.some((i) => i.severity === "block");
   return (
-    <NodeCard nodeId={node.id} kind="style" catalog={catalog} title="Style" icon="leaf"
+    <NodeCard nodeId={node.id} kind="style" kicker="Style" title="Restyle"
       inputs={styleNode.inputs} outputs={styleNode.outputs} selected={selected}
       footer={<Button variant="primary" disabled={blocked} onClick={() => void start(node.id)}>Restyle</Button>}>
       {/* a <select> bound to node.config.style via useGraph().updateNodeData */}
@@ -69,7 +69,7 @@ export function StyleView({ node, selected, issues, catalog }: NodeViewProps<Sty
 }
 ```
 
-CSS: add a `/* 6x. Style */` block in `theme.css`, section 6 (for example `.node--style { width: var(--node-w-fusion); }`), using tokens only.
+CSS: add a `/* 5x. Style */` block in `theme.css`, section 5 (Nodes) (for example `.node--style { width: var(--node-w-fusion); }`), using tokens only.
 
 Strings go in `copy.ts`.
 

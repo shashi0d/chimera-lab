@@ -30,7 +30,13 @@ export class NodeErrorBoundary extends Component<Props, State> {
     return (
       <article className="node node--crashed" role="alert" data-node-id={this.props.nodeId}>
         <header className="node__header">
-          <Icon name="error" size={16} className="node__glyph" />
+          <div className="node__head-row">
+            <p className="node__kicker">{copy.nodes.crashKicker}</p>
+            <span className="live status--error">
+              <Icon name="error" size={14} />
+              <span className="live__label">{copy.status.error}</span>
+            </span>
+          </div>
           <h3 className="node__title">{copy.nodes.crashTitle}</h3>
         </header>
         <div className="node__body">

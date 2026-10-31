@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { addImages, fuse, openApp, waitForResult } from "./helpers";
+import { addImages, fuse, openApp, openSection, waitForResult } from "./helpers";
 
 test("two images to a fusion, re-run keeps versions, How this was made", async ({ page }) => {
   await openApp(page);
@@ -14,13 +14,17 @@ test("two images to a fusion, re-run keeps versions, How this was made", async (
 
   await page.getByRole("button", { name: "Fuse again" }).click();
   await waitForResult(page, 2);
-  await page.getByRole("button", { name: "Previous version" }).click();
-  await expect(page.locator(".version-switch__label")).toContainText("v1");
+  await page.getByRole("radio", { name: "Version 1 of 2" }).click();
+  await expect(page.locator(".node--result .node__kicker")).toContainText("v1");
 
   await page.getByRole("button", { name: "How this was made" }).click();
   const panel = page.getByRole("complementary");
-  await expect(panel.getByText("Parents as read")).toBeVisible();
+  // U1: the drawer leads with a plain summary and stat cards; evidence sits in sections
+  await expect(panel.locator(".panel__summary")).toContainText("Real hybrids of these parents exist");
+  await expect(panel.locator(".stat")).toHaveCount(5);
+  await openSection(page, "Parents as read");
   await expect(panel.getByText("Panthera leo")).toBeVisible();
+  await openSection(page, "Prompt and sources");
   await expect(panel.getByText("Reference image 1 shows a lion", { exact: false })).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(panel).toBeHidden();
@@ -33,6 +37,7 @@ test("warnings path: octopus + macaw shows field notes, image still shown", asyn
   await waitForResult(page);
   await expect(page.locator(".badge--warn")).toBeVisible();
   await page.getByRole("button", { name: "How this was made" }).click();
+  await openSection(page, "Rules and warnings");
   await expect(page.getByText("R-A2-01")).toBeVisible();
 });
 

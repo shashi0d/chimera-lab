@@ -1,9 +1,20 @@
 import { expect, test, type Page } from "@playwright/test";
-import { addImages, fuse, openApp, waitForResult } from "./helpers";
+import { seedLive } from "../visual/liveSeed";
+import { openApp } from "./helpers";
+
+const API = "http://localhost:8100"; // playwright.config.ts API_PORT
 
 // PV-05 baselines: approved screens that F-rounds must not silently break.
-// Timers and blob previews vary run to run, so they are masked.
-const masks = (page: Page) => [page.locator(".node__timer"), page.locator(".step__time"), page.locator(".topbar__save")];
+// The live timer and save state vary run to run, so they are masked; seeded live runs are fixed.
+const masks = (page: Page) => [page.locator(".node__timer"), page.locator(".topbar__save")];
+
+/** U1: baselines use real generated images, never mock drawings (tests/visual/liveSeed.ts). */
+async function addLive(page: Page, files: string[]) {
+  const chooser = page.waitForEvent("filechooser");
+  await page.getByRole("button", { name: "Add images" }).click();
+  await (await chooser).setFiles(files);
+  await expect(page.locator(".node--image-input .status--ok")).toHaveCount(2, { timeout: 20_000 });
+}
 
 async function settle(page: Page) {
   await page.evaluate(() => window.__chimera.clearToasts());
@@ -25,9 +36,7 @@ for (const theme of ["light", "dark"] as const) {
 
     test("result with panel", async ({ page }) => {
       await openApp(page);
-      await addImages(page, ["lion", "tiger"]);
-      await fuse(page);
-      await waitForResult(page);
+      await seedLive(page, ["lion_tiger"], { api: API, addInputs: (files) => addLive(page, files) });
       await page.getByRole("button", { name: "Fit to view" }).click();
       await page.getByRole("button", { name: "How this was made" }).click();
       await settle(page);

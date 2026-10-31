@@ -27,7 +27,7 @@ describe("F1 anatomy controls", () => {
     await userEvent.click(head);
     expect(screen.getByRole("button", { name: "Head from A" })).toBeInTheDocument();
     await userEvent.click(screen.getByRole("button", { name: "Head from A" }));
-    expect(screen.getByRole("button", { name: "Head from B" })).toHaveClass("anatomy__part--b");
+    expect(screen.getByRole("button", { name: "Head from B" })).toHaveClass("body-region--b");
     expect((useGraph.getState().nodes.find((n) => n.id === "f")?.config as { donors: Record<string, string> }).donors.head).toBe("B");
     await userEvent.click(screen.getByRole("button", { name: "Head from B" }));
     expect(screen.getByRole("button", { name: "Head from Auto (model decides)" })).toBeInTheDocument();

@@ -11,6 +11,7 @@ Screenshots from `npm run shots` (`frontend/tests/visual/capture.ts`), named `<r
 | [pv-3](pv-3/) | Affected states after PV2 fixes, plus a 10-state regression sample | 64 |
 | [f1](f1/) | F1 anatomy controls: new states plus affected | 36 |
 | [f2](f2/) | F2 field card: new states (incl. exported PNG) plus affected | 36 |
+| [u1](u1/) | U1 ZD redesign: full matrix with real images (L1 live photos and fusions), both themes, three viewports | see `u1/manifest.json` |
 
 ## States
 
@@ -83,3 +84,14 @@ Core states (★) are also captured at 1280×800 (pv rounds) and 1024×768. The 
 | `73-focus-fit-to-view` | Keyboard focus on toolbar control: Fit to view | [pv-2](pv-2/1440x900/light/73-focus-fit-to-view.png) · [pv-2](pv-2/1440x900/dark/73-focus-fit-to-view.png) | [pv-1](pv-1/1440x900/light/73-focus-fit-to-view.png) · [pv-1](pv-1/1440x900/dark/73-focus-fit-to-view.png) |
 | `74-focus-show-minimap` | Keyboard focus on toolbar control: Show minimap | [pv-2](pv-2/1440x900/light/74-focus-show-minimap.png) · [pv-2](pv-2/1440x900/dark/74-focus-show-minimap.png) | [pv-1](pv-1/1440x900/light/74-focus-show-minimap.png) · [pv-1](pv-1/1440x900/dark/74-focus-show-minimap.png) |
 | `75-focus-fuse-button` | Keyboard focus on the Fuse button | [pv-2](pv-2/1440x900/light/75-focus-fuse-button.png) · [pv-2](pv-2/1440x900/dark/75-focus-fuse-button.png) | [pv-1](pv-1/1440x900/light/75-focus-fuse-button.png) · [pv-1](pv-1/1440x900/dark/75-focus-fuse-button.png) |
+
+## U1 states
+
+Round [u1](u1/) recaptures every state above in the ZD design, using real images (D-052), and adds:
+
+| State | Shows | u1 (light · dark) |
+|---|---|---|
+| `27-panel-sections-open` ★ | Drawer: summary, stat cards, pipeline Timeline and mythology ("Unverified") open | [light](u1/1440x900/light/27-panel-sections-open.png) · [dark](u1/1440x900/dark/27-panel-sections-open.png) |
+| `28-result-card` ★ | Result hero card on its own (element shot) | [light](u1/1440x900/light/28-result-card.png) · [dark](u1/1440x900/dark/28-result-card.png) |
+| `29-hybrid-drawer` | Drawer for lion + tiger: real hybrids with cross direction and sources | [light](u1/1440x900/light/29-hybrid-drawer.png) · [dark](u1/1440x900/dark/29-hybrid-drawer.png) |
+| `84-body-diagram` ★ | Body diagram with pinned parts and donor portraits (element shot) | [light](u1/1440x900/light/84-body-diagram.png) · [dark](u1/1440x900/dark/84-body-diagram.png) |

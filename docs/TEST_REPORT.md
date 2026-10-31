@@ -1,8 +1,8 @@
 # Test Report
 
-Date: 2026-10-30
+Date: 2026-10-31
 Mode: mock
-Totals: frontend unit + component 146/146, backend 132/132 (sample + real-schema fixture + real file; 6 live tests skipped by default), e2e 39/39 (Playwright, Chromium; includes 4 visual baselines)
+Totals: frontend unit + component 192/192, backend 132/132 (sample + real-schema fixture + real file; 6 live tests skipped by default), e2e 39/39 (Playwright, Chromium; includes 4 visual baselines)
 
 Commands: `cd frontend && npm test`, `.venv/bin/python -m pytest backend`, `cd frontend && npm run e2e`, `scripts/check-css.sh`, `scripts/check-bundle.sh`.
 
@@ -48,7 +48,7 @@ Abbreviations for test files used below:
 | 7.3 | Long wait (20s) and very long (120s) cancel | FUS | pass |
 | 7.3 | Skeleton in Result node while generating | IRN | pass |
 | 7.3 | Double-click Fuse ignored (button + idempotency key) | FUS, BE-R | pass |
-| 7.4 | Success: image in the Fusion summary and the Result node; "How this was made" | E2E-H, SH | pass |
+| 7.4 | Success: image in the Result hero card beside the Fusion node (U1, D-054); "How this was made" | E2E-H, SH, `component/u1.test.tsx` | pass |
 | 7.4 | Real hybrid badge plus facts | IRN, E2E-H, BE-R | pass |
 | 7.4 | Warnings badge plus notes, image still shown | IRN, E2E-H | pass |
 | 7.4 | Re-run creates v2, old versions kept, switcher | FL, IRN, E2E-H | pass |
@@ -111,10 +111,26 @@ Run with `CHIMERA_LIVE=1` only; details in [LIVE_REPORT.md](LIVE_REPORT.md), eve
 
 **Budget:** 11/15 image generations, 27/60 Muse Spark calls, 367,116 tokens logged. Cost unknown.
 
+## U1 redesign (ZD design system)
+
+| Check | Where | Result |
+|---|---|---|
+| ZD tokens pasted verbatim (no value edited) | `unit/contrast.test.ts` ("contains zd-tokens.css verbatim"); `zd-tokens.css` sha256 `b45304a3…` unchanged | pass |
+| Contrast on resolved ZD tokens (var chains, tints composited on the card, color-mix): 23 text pairs at 4.5, 4 UI pairs at 3.0, both themes | `unit/contrast.test.ts` | pass (caught the dark `--indigo-700` hover at 2.2:1, D-046) |
+| The four `-aa` deviations are needed (ZD value fails) and pass | `unit/contrast.test.ts` | pass |
+| Gradient only on the brand mark | `unit/contrast.test.ts` | pass |
+| 12px text floor (mono kickers excepted, muted) | `unit/textFloor.test.ts` | pass |
+| Field-card PNG paints with tokens and fonts that exist | `unit/renderPngTokens.test.ts` (added after U1-03) | pass |
+| Species titles, no filenames or catalog numbers; portraits, not dropdowns; no thumbnail in the Fusion node; hero card pills; body diagram keyboard cycling; drawer summary, "unknown" tokens, "Unverified" mythology, folded planner notes | `component/u1.test.tsx` (11 tests) | pass |
+| Versions as a radiogroup (click and arrow keys) | `component/imageResultNodes.test.tsx` | pass |
+| axe 0 serious/critical on empty, connected, result, drawer, error and offline states, light and dark | `e2e/a11y.spec.ts` | pass |
+| Keyboard-only flow: add, fuse, open the drawer | `e2e/a11y.spec.ts` | pass |
+| Visual baselines seeded with real L1 images | `e2e/visual.spec.ts` (4 baselines re-approved) | pass |
+
 ## Visual QA
 
-- Screenshots captured: 112 (pv-1) + 162 (pv-2) + 66 (pv-3) + 36 (f1) + 36 (f2). See [docs/visual-qa/INDEX.md](visual-qa/INDEX.md).
-- Correction rounds: 3 (pv-1 → pv-2 → pv-3).
+- Screenshots captured: 112 (pv-1) + 162 (pv-2) + 66 (pv-3) + 36 (f1) + 36 (f2) + u1 (full matrix with real images; count in `docs/visual-qa/u1/manifest.json`). See [docs/visual-qa/INDEX.md](visual-qa/INDEX.md).
+- Correction rounds: 3 (pv-1 → pv-2 → pv-3), plus u1 for the redesign (U1-01 to U1-10 in DEFECTS.md).
 - Final rubric scores (lowest per criterion): hierarchy 4, clarity 4, state legibility 4, consistency 4, polish 4, craft 4.
 - Defects fixed / remaining:
   - blocker: 1 fixed, 0 remaining
@@ -133,7 +149,7 @@ Round 2: **Field-guide card node** (writes a specimen card with Muse Spark; down
 
 - Clipboard paste is implemented but not automated in e2e (headless clipboard file events).
 - The 3-minute lease is tested with a 0.2s lease in the backend; the UI side uses a synthetic interrupted run.
-- Fixture "photos" are generated illustrations (D-008). Real photos are needed for the demo video.
+- Mock-mode fixture photos (`backend/tests/fixtures/images/`) are flat generated illustrations (D-008). Screenshots and baselines use the L1 live images instead (D-052). In mock-run states, species labels are mock readings (U1-10).
 - Runs are in-process; multi-container Modal scaling needs `Function.spawn` and a DB-backed lease (D-016).
 
 ## Unverified against live services

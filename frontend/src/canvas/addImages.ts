@@ -11,13 +11,14 @@ import { putBlob, rememberBlobUrl } from "../persistence/blobStore";
 import { toast } from "../ui/toastStore";
 
 export const MAX_IMAGES_PER_DROP = 2;
-export const LAYOUT = { imageGapY: 300, fusionDx: 320, resultDx: 360 };
+export const LAYOUT = { imageGapY: 330, fusionDx: 320, resultDx: 380 };
 
 /** Approximate footprints, used only to avoid dropping new nodes on top of old ones. */
 export const FOOTPRINT: Record<string, { w: number; h: number }> = {
-  "image-input": { w: 236, h: 280 },
-  fusion: { w: 300, h: 320 },
-  result: { w: 304, h: 500 },
+  "image-input": { w: 240, h: 300 },
+  fusion: { w: 300, h: 440 },
+  result: { w: 500, h: 660 },
+  "field-card": { w: 340, h: 620 },
 };
 const DEFAULT_FOOTPRINT = { w: 280, h: 300 };
 

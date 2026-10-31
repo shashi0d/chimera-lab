@@ -4,6 +4,12 @@ import { resolve } from "node:path";
 export const FIXTURES = resolve(process.cwd(), "../backend/tests/fixtures/images");
 export const fx = (name: string) => resolve(FIXTURES, name.includes(".") ? name : `${name}.jpg`);
 
+/** Open a drawer section ("Rules and warnings", …) so its contents are visible. */
+export async function openSection(page: Page, title: string): Promise<void> {
+  const details = page.locator("details.section", { has: page.locator(".section__title", { hasText: title }) });
+  if (!(await details.evaluate((d) => (d as HTMLDetailsElement).open))) await details.locator(".section__summary").click();
+}
+
 declare global {
   interface Window {
     __chimera: {
@@ -49,7 +55,7 @@ export async function fuse(page: Page): Promise<void> {
 export async function waitForResult(page: Page, versions = 1): Promise<void> {
   await expect(page.locator(".node--fusion .status--ok")).toBeVisible({ timeout: 30_000 });
   await expect(page.locator(".plate__img.is-loaded")).toBeVisible();
-  if (versions > 1) await expect(page.locator(".version-switch__label")).toContainText(`v${versions}`);
+  if (versions > 1) await expect(page.locator(".node--result .node__kicker")).toContainText(`v${versions}`);
 }
 
 export async function fusionId(page: Page): Promise<string> {

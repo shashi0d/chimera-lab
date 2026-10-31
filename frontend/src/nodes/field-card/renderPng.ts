@@ -3,7 +3,12 @@ import type { FieldCard } from "../../types/api";
 
 // Draws the field card onto a canvas using the current theme tokens and the
 // self-hosted fonts, so the PNG matches the on-canvas card. Works offline once
-// the plate image is cached.
+// the plate image is cached. Token names are checked against theme.css by
+// tests/unit/renderPngTokens.test.ts (U1 renamed every token once already).
+
+/** Theme tokens the PNG is painted with (ZD names; see docs/DESIGN_U1.md). */
+export const PNG_TOKENS = ["--surface-card", "--text-strong", "--text-muted", "--line-input-strong", "--success-text-aa", "--accent-text"] as const;
+export const PNG_FONTS = ["600 56px 'Space Grotesk'", "italic 400 36px 'Hanken Grotesk'", "400 24px 'Hanken Grotesk'", "500 18px 'JetBrains Mono'", "600 22px 'Hanken Grotesk'"] as const;
 
 const W = 1600;
 const H = 1000;
@@ -43,13 +48,13 @@ function loadImage(src: string): Promise<HTMLImageElement> {
 }
 
 export async function renderCardPng(card: FieldCard, imageUrl: string): Promise<Blob> {
-  await Promise.all(["500 56px Newsreader", "italic 400 36px Newsreader", "400 24px 'IBM Plex Sans'", "500 18px 'IBM Plex Mono'"].map((f) => document.fonts?.load(f)));
+  await Promise.all(PNG_FONTS.map((f) => document.fonts?.load(f)));
   const canvas = document.createElement("canvas");
   canvas.width = W;
   canvas.height = H;
   const ctx = canvas.getContext("2d");
   if (!ctx) throw new Error("no canvas");
-  const [paper, ink, muted, rule, moss, lapis] = ["--folio", "--ink", "--ink-2", "--rule-strong", "--moss", "--lapis"].map(token) as [string, string, string, string, string, string];
+  const [paper, ink, muted, rule, moss, lapis] = PNG_TOKENS.map(token) as unknown as [string, string, string, string, string, string];
 
   ctx.fillStyle = paper;
   ctx.fillRect(0, 0, W, H);
@@ -62,22 +67,22 @@ export async function renderCardPng(card: FieldCard, imageUrl: string): Promise<
   ctx.lineWidth = 2;
   ctx.strokeRect(64, 64, 820, 820);
   ctx.fillStyle = moss;
-  ctx.font = "600 22px 'IBM Plex Sans'";
+  ctx.font = "600 22px 'Hanken Grotesk'";
   ctx.fillText("Generated fusion · not a real animal", 64, 924);
 
   const x = 940;
   const w = W - x - 72;
   ctx.fillStyle = muted;
-  ctx.font = "500 18px 'IBM Plex Mono'";
+  ctx.font = "500 18px 'JetBrains Mono'";
   ctx.fillText("CHIMERA LAB · FIELD CARD", x, 100);
   ctx.fillStyle = ink;
-  ctx.font = "500 56px Newsreader";
+  ctx.font = "600 56px 'Space Grotesk'";
   let y = wrap(ctx, card.commonName, x, 170, w, 62, 2);
-  ctx.font = "italic 400 36px Newsreader";
+  ctx.font = "italic 400 36px 'Hanken Grotesk'";
   ctx.fillText(card.binomial, x, y + 4);
   const bw = ctx.measureText(card.binomial).width;
   ctx.fillStyle = lapis;
-  ctx.font = "500 18px 'IBM Plex Mono'";
+  ctx.font = "500 18px 'JetBrains Mono'";
   ctx.fillText("(invented name)", x + bw + 16, y + 2);
   y += 56;
 
@@ -95,14 +100,14 @@ export async function renderCardPng(card: FieldCard, imageUrl: string): Promise<
     ctx.lineTo(x + w, y - 30);
     ctx.stroke();
     ctx.fillStyle = muted;
-    ctx.font = "500 18px 'IBM Plex Mono'";
+    ctx.font = "500 18px 'JetBrains Mono'";
     ctx.fillText(label.toUpperCase(), x, y);
     ctx.fillStyle = ink;
-    ctx.font = "400 24px 'IBM Plex Sans'";
+    ctx.font = "400 24px 'Hanken Grotesk'";
     y = wrap(ctx, text, x, y + 34, w, 32, 4) + 28;
   }
   ctx.fillStyle = moss;
-  ctx.font = "500 20px 'IBM Plex Sans'";
+  ctx.font = "500 20px 'Hanken Grotesk'";
   wrap(ctx, card.provenance, x, Math.max(y, H - 120), w, 28, 3);
 
   return new Promise((resolve, reject) => canvas.toBlob((b) => (b ? resolve(b) : reject(new Error("encode failed"))), "image/png"));

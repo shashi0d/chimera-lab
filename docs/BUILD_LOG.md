@@ -107,3 +107,20 @@ Short entries per phase: what was built, what was tested, what was deferred. New
 - **Spend:** 11/15 images, 27/60 Spark calls, 367,116 tokens logged. Cost unknown.
 - **Tests (mock):** pytest 132 (+6 live skipped by default), vitest 146, Playwright 39; bundle check passes.
 - **Reports:** `docs/LIVE_REPORT.md` (per-fusion results, images in `docs/live/fusions/`, latency, tokens, judgment, ranked problems), `docs/LIVE_LOG.md` (every call).
+
+## 2026-10-31: U1 UI redesign with the ZD design system
+
+**Plan:** read ZD.md and zd-tokens.css; write `docs/DESIGN_U1.md` (token usage, components, wireframes); rebuild the frontend's look without touching the backend, the API contracts, the registry pattern or the test hooks.
+
+**Built:**
+- `theme.css` rewritten: self-hosted Space Grotesk, Hanken Grotesk and JetBrains Mono; ZD verbatim; a Chimera token block with four `-aa` deviations (D-045); then layout, components, nodes and drawer.
+- `src/ui/`: Card, BrandMark, SegmentedTabs, LiveIndicator, Timeline, StatCard, Pill, Section, ContextToolbar.
+- Nodes: image-first inputs titled by species (D-049); a Fusion node with portraits, a body diagram (D-050) and no thumbnail (D-054); a 500px Result hero card; a glass contextual toolbar (D-047).
+- Drawer: summary, stat cards, collapsible sections; mythology always "Unverified" (D-051).
+- Screenshots and baselines seeded with real L1 images (D-052).
+
+**Found by the tests while building:**
+- The new contrast test, which resolves ZD's `var()` chains and composites tints, showed the planned primary hover (`--indigo-700`) is 2.2:1 under white in dark mode. Fixed (D-046).
+- The old Field-paper contrast test parsed only hex tokens; it could not see ZD's `rgba()` tints. Rewritten.
+
+**Mistake:** running `prettier` without a project config reformatted ~70 untouched files. Reverted to the committed versions; only the files changed for U1 keep the repo's 160-column style.

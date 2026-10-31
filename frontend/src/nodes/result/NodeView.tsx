@@ -7,6 +7,8 @@ import { useRuns } from "../../runs/store";
 import { TERMINAL } from "../../runs/transport";
 import { Button, IconButton } from "../../ui/Button";
 import { Icon } from "../../ui/Icon";
+import { Pill } from "../../ui/Pill";
+import { SegmentedTabs } from "../../ui/SegmentedTabs";
 import { useUi } from "../../ui/uiStore";
 import type { FusionData } from "../fusion/types";
 import type { NodeViewProps } from "../types";
@@ -32,7 +34,7 @@ function useUpstreamRunActive(nodeId: string): boolean {
   return starting || (status !== undefined && !TERMINAL.has(status));
 }
 
-function Plate({ url, runId, plateNo, name }: { url: string; runId: string; plateNo: number; name: string }) {
+function Plate({ url, runId, name }: { url: string; runId: string; name: string }) {
   const [attempt, setAttempt] = useState(0);
   const [failed, setFailed] = useState(false);
   const [loaded, setLoaded] = useState(developed.has(runId));
@@ -72,12 +74,6 @@ function Plate({ url, runId, plateNo, name }: { url: string; runId: string; plat
           onError={() => setFailed(true)}
         />
       </div>
-      <figcaption className="plate__caption">
-        <span className="plate__no">{t.plate(plateNo)}</span>
-        <span className="plate__generated">
-          <Icon name="leaf" size={12} /> {t.generated}
-        </span>
-      </figcaption>
     </figure>
   );
 }
@@ -91,13 +87,24 @@ function makeFieldCard(resultId: string): void {
     return;
   }
   const res = g.nodes.find((n) => n.id === resultId);
-  const pos = findFreeSpot({ x: (res?.position.x ?? 0) + 360, y: res?.position.y ?? 0 }, 340, 620);
+  const pos = findFreeSpot({ x: (res?.position.x ?? 0) + 580, y: res?.position.y ?? 0 }, 340, 620);
   const card = createNode("field-card", pos);
-  g.addNodes([card], [{ id: `e-${card.id}`, source: resultId, sourcePort: "out", target: card.id, targetPort: "in" }]);
+  g.addNodes(
+    [card],
+    [
+      {
+        id: `e-${card.id}`,
+        source: resultId,
+        sourcePort: "out",
+        target: card.id,
+        targetPort: "in",
+      },
+    ],
+  );
   g.setSelection([card.id]);
 }
 
-export function ResultView({ node, selected, catalog }: NodeViewProps<ResultConfig, ResultData>) {
+export function ResultView({ node, selected }: NodeViewProps<ResultConfig, ResultData>) {
   const { versions, selected: sel } = node.data;
   const active = useUpstreamRunActive(node.id);
   const upstream = useUpstreamRunStatus(node.id);
@@ -113,73 +120,80 @@ export function ResultView({ node, selected, catalog }: NodeViewProps<ResultConf
   let status: NodeStatus | undefined;
   if (active) status = { tone: "running", label: t.generating.replace("…", "") };
   else if (node.data.stale && version) status = { tone: "stale", label: copy.status.stale };
-  else if (warnCount) status = { tone: "warn", label: t.warnings(warnCount) };
   else if (version) status = { tone: "ok", label: copy.status.succeeded };
 
-  const go = (delta: number) => update<ResultData>(node.id, (d) => ({ ...d, selected: Math.min(d.versions.length - 1, Math.max(0, d.selected + delta)) }));
+  const media = version ? (
+    <div className="result-node__stage">
+      <Plate url={version.imageUrl} runId={version.runId} name={name} />
+      {active ? (
+        <div className="plate__overlay" aria-hidden="true">
+          <span className="skeleton skeleton--fill" />
+          <span className="plate__overlay-label">{t.generating}</span>
+        </div>
+      ) : null}
+    </div>
+  ) : active ? (
+    <div className="plate plate--skeleton" aria-label={t.generating}>
+      <span className="skeleton skeleton--fill" />
+      <span className="plate__overlay-label">{t.generating}</span>
+    </div>
+  ) : (
+    <div className={`plate plate--empty${upstream === "failed" || upstream === "interrupted" ? " is-muted" : ""}`}>
+      <Icon name="result" size={28} />
+      <p>{upstream === "failed" || upstream === "interrupted" ? t.noImageYet : t.waiting}</p>
+    </div>
+  );
 
   return (
     <NodeCard
       nodeId={node.id}
       kind="result"
-      catalog={catalog}
-      title={t.title}
-      icon="result"
+      kicker={version ? t.kicker(idx + 1) : t.title}
+      title={version ? name || t.untitledTitle : t.title}
       status={status}
       inputs={RESULT_INPUTS}
       outputs={RESULT_OUTPUTS}
+      media={media}
       toolbar={version && !readOnly ? <IconButton icon="card" label={t.makeCard} onClick={() => makeFieldCard(node.id)} /> : null}
       selected={selected}
-      className={[active ? "is-generating" : "", node.data.stale ? "is-stale" : ""].filter(Boolean).join(" ")}
+      className={[active ? "is-generating" : "", node.data.stale ? "is-stale" : "", version ? "" : "node--result-empty"].filter(Boolean).join(" ")}
     >
-      {version ? (
-        <div className="result-node__stage">
-          <Plate url={version.imageUrl} runId={version.runId} plateNo={idx + 1} name={name} />
-          {active ? (
-            <div className="plate__overlay" aria-hidden="true">
-              <span className="skeleton skeleton--plate" />
-              <span className="plate__overlay-label">{t.generating}</span>
-            </div>
-          ) : null}
-        </div>
-      ) : active ? (
-        <div className="plate plate--skeleton" aria-label={t.generating}>
-          <span className="skeleton skeleton--plate" />
-          <span className="plate__overlay-label">{t.generating}</span>
-        </div>
-      ) : (
-        <div className={`plate plate--empty${upstream === "failed" || upstream === "interrupted" ? " is-muted" : ""}`}>
-          <Icon name="result" size={28} />
-          <p>{upstream === "failed" || upstream === "interrupted" ? t.noImageYet : t.waiting}</p>
-        </div>
-      )}
       {version && spec ? (
         <>
-          <h4 className="result-node__name">{name}</h4>
-          <div className="result-node__badges">
+          <div className="result-node__pills">
+            <Pill tone="indigo">
+              <Icon name="leaf" size={12} /> {t.generated}
+            </Pill>
             {spec.realHybrid ? (
-              <span className="badge badge--hybrid">
-                <span className="badge__diamond" aria-hidden="true" /> {t.realHybrid}: {spec.realHybrid.name}
-              </span>
+              <Pill tone="info" className="badge--hybrid">
+                <span className="pill__diamond" aria-hidden="true" /> {t.realHybrid}: {spec.realHybrid.name}
+              </Pill>
             ) : null}
             {warnCount ? (
-              <span className="badge badge--warn">
+              <Pill tone="warning" className="badge--warn">
                 <Icon name="alert" size={12} /> {t.warnings(warnCount)}
-              </span>
+              </Pill>
             ) : null}
           </div>
           <div className="result-node__bar">
             {versions.length > 1 ? (
-              <div className="version-switch" role="group" aria-label={t.version(idx + 1, versions.length)}>
-                <IconButton icon="left" label={t.prev} className="nodrag" disabled={idx === 0} onClick={() => go(-1)} />
-                <span className="version-switch__label" aria-live="polite">
-                  v{idx + 1}
-                  <span className="version-switch__of"> / {versions.length}</span>
-                </span>
-                <IconButton icon="right" label={t.next} className="nodrag" disabled={idx === versions.length - 1} onClick={() => go(1)} />
-              </div>
+              <SegmentedTabs
+                label={t.versions}
+                value={String(idx)}
+                onChange={(v) =>
+                  update<ResultData>(node.id, (d) => ({
+                    ...d,
+                    selected: Number(v),
+                  }))
+                }
+                items={versions.map((_, i) => ({
+                  value: String(i),
+                  label: `v${i + 1}`,
+                  ariaLabel: t.versionAria(i + 1, versions.length),
+                }))}
+              />
             ) : (
-              <span className="version-switch__single">v1</span>
+              <span className="result-node__single">v1</span>
             )}
             <Button size="sm" variant="secondary" icon="info" className="nodrag" onClick={() => openPanel(node.id)}>
               {t.howMade}

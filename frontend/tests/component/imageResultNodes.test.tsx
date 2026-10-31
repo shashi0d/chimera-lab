@@ -102,9 +102,13 @@ describe("Result node (TASKSHEET 7.4)", () => {
     seed([result("r", { versions: [version(1), version(2, spec({ name: "Second" }))], selected: 1 })]);
     renderNode("r");
     expect(screen.getByRole("heading", { name: "Second" })).toBeInTheDocument();
-    await userEvent.click(screen.getByRole("button", { name: "Previous version" }));
+    expect(screen.getByRole("radio", { name: "Version 2 of 2" })).toBeChecked();
+    await userEvent.click(screen.getByRole("radio", { name: "Version 1 of 2" }));
     expect(screen.getByRole("heading", { name: "Leotigris" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Previous version" })).toBeDisabled();
+    expect(screen.getByText("Result · v1")).toBeInTheDocument();
+    // arrow keys move between versions (radiogroup)
+    await userEvent.keyboard("{ArrowRight}");
+    expect(screen.getByRole("heading", { name: "Second" })).toBeInTheDocument();
   });
 
   it("falls back to a retry tile when the image fails to load", async () => {

@@ -141,3 +141,43 @@ Live responses are saved key-free (base64 elided, refused if any credential appe
 
 **D-044 Live fixtures are AI-generated, generated once.**
 Six `muse-image-1.0` text-to-image photos (`backend/tests/fixtures/live/`, with a README saying they are not real photos). `scripts/live_fixtures.py` never overwrites an existing file. Identification accuracy on clean generated images likely overstates accuracy on real phone photos (LIVE_REPORT problem 9).
+
+## U1 UI redesign (ZD design system)
+
+**D-045 Four `-aa` tokens are the only deviations from ZD values.**
+ZD (`docs/design-system/zd-tokens.css`) is pasted into `theme.css` verbatim; a unit test checks the file is contained byte for byte. Where a ZD pairing misses 4.5:1, a Chimera token ending in `-aa` is used instead (`contrast.test.ts` asserts both that the ZD value fails and that the `-aa` value passes):
+
+| Token | Light | Dark | Why |
+|---|---|---|---|
+| `--success-text-aa` | `#147a52` (5.34 on white, 4.78 on its tint) | `var(--success-text)` | ZD light success text is 4.35:1 on white |
+| `--danger-text-aa` | `#bf3b45` (5.35 on white, 4.87 on its tint) | `var(--danger-text)` | ZD light danger text is 4.43:1 on `--tint-danger` |
+| `--toast-bg-aa` / `--toast-text-aa` | `var(--ink-900)` / `var(--white)` | `var(--surface-modal)` / `var(--text-strong)` | ZD's dark `--ink-900` is near-white, so a white toast would be 1.1:1 |
+
+Each value is darkened only as far as needed. Dark keeps ZD's own text values.
+
+**D-046 ZD replaces "Field paper"; the primary hover keeps the indigo-600 fill.**
+The 4.5:1 bar from P-rounds stays. Fuse and every primary button are solid `--indigo-600` (5.51:1 under white). The first draft darkened the hover to `--indigo-700`. The rewritten contrast test caught that ZD's *dark* `--indigo-700` is a light lilac (`#aaa5ff`, 2.2:1 under white), so the hover now lifts the button (`--shadow-cta`, 1px up) instead of changing the fill. `--gradient-mark` appears once, on the brand mark (unit-tested). `check-css.sh` accepts ZD's `[data-theme="dark"] {` block as a token block.
+
+**D-047 Node actions live in a glass contextual toolbar; two actions stay on the card.**
+The toolbar (`ui/ContextToolbar`, `role="toolbar"`) shows on hover, on selection and on `:focus-within`. It is hidden with opacity and a transform, never `display`/`visibility`, so it stays in the tab order and the accessibility tree; keyboard users reach it by tabbing into the node. Contents: Input (Replace, Remove); Fusion ("Connect image A/B" selects, Swap A and B, Reset to Auto); Result (Make field card). Two primary actions stay on the card because they are the reason the node exists: **Fuse** on the Fusion node, and **How this was made** on the Result card. The Field card's Download PNG also stays in its footer. A transparent bridge under the toolbar keeps hover alive while the pointer travels to it.
+
+**D-048 The drawer is non-modal, so it has no scrim.**
+ZD pairs drawers with `--scrim`. "How this was made" is a complementary panel that explains a node, and the canvas pans so that node stays visible beside it (`SidePanel`). A scrim would hide what it explains and imply modality. The shortcuts dialog, which is modal, uses `--scrim` with `--blur-scrim`.
+
+**D-049 Input titles are the identified species, looked up in the frontend.**
+`nodes/image-input/species.ts` searches run results (newest first), then Result node versions, for a parent whose `assetId` matches the input, and shows `match.commonName ?? reading.commonName`, capitalised. Before any run identifies it, the title is "Animal photo" (the Fusion portrait reads "Image A"). The filename appears only in the photo's alt text. No backend change.
+
+**D-050 The anatomy body diagram is drawn from a region list.**
+`nodes/fusion/bodyRegions.ts` holds one entry per part: outline path, optional larger hit path (limbs, tail), label point and badge point. Regions are SVG `<g role="button" tabindex="0">` with the F1 aria-labels ("Head from A"). Click, Enter or Space cycles Auto → A → B. A pinned region fills with its donor colour (`--cat-blue` A, `--cat-teal` B, mixed into the card) and shows the donor's circular portrait plus a letter tag, so the colour is never the only signal. The diagram is hidden while a run is active (pins can't change then), which keeps the node compact. L2 wings = one new entry here plus its id in `PARTS`.
+
+**D-051 The drawer's lead and numbers are built from structured fields.**
+`nodes/result/summary.ts` writes 2–3 sentences from `partDonors`, `realHybrids`, `mythology[0]` and warning counts; it never quotes model prose. The planner's `rationale` sits in a collapsed "Planner notes" section. Stat cards show match confidence per parent, rules run (`rulesSummary.run` of `total`), warnings, and tokens from the run's `usage.tokens`. When the run is not in memory (e.g. after a reload) tokens read "unknown", never 0. Mythology rows always read "Resembles X (culture)" with an "Unverified" pill and the row's own verification text, whatever `verified` says (D-037): the UI never calls a resemblance verified or confirmed.
+
+**D-052 Screenshots and visual baselines use real generated images.**
+`tests/visual/liveSeed.ts` puts recorded L1 results on the canvas. It adds the live input photos through the file picker (a real upload), uploads the live fusion WebP, and then loads a graph with a Result node built from `docs/live/fusions/<case>.json`. The recorded run goes in through the existing `loadGraph` and `setRun` test hooks, so test hooks are unchanged. States that need a real mock run (faults, field cards, versions) keep it, but any generated asset is served as the live fusion image for that pair, so no flat mock drawing appears. Caveat: mock vision identifies by colour, so in mock-run states the species labels are mock readings (e.g. the live lion photo is read as "Red fox"). The hero states (canvas, result, drawer, body diagram, baselines) all use the live specs.
+
+**D-053 Fusion ports sit beside the parent portraits.**
+Input ports are fixed at 98px and 130px from the Fusion card's top, and the output port at 114px, so connections meet the portraits whatever the card's height (running, failed, done).
+
+**D-054 The Fusion node no longer shows the result thumbnail (supersedes part of PV1-04).**
+PV1-04 put a thumbnail in the Fusion node so the creature led. In U1 the Result card is the hero (about 2× an input card), so the Fusion node shows only status, the step Timeline (behind "Show steps" when done) and Fuse. TASKSHEET 7.4's "image in the Fusion summary" is now met by the Result card beside it.

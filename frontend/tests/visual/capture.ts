@@ -12,9 +12,12 @@ import { spawn, type ChildProcess } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
+import { LIVE_INPUTS, routeLiveResults, seedLive } from "./liveSeed";
 
 const ROOT = resolve(process.cwd(), "..");
 const FX = join(ROOT, "backend/tests/fixtures/images");
+// U1: every image in a screenshot is a real generated image (L1), never a flat mock drawing.
+const LIVE = LIVE_INPUTS;
 const API = 8200;
 const WEB = 5175;
 
@@ -33,7 +36,34 @@ const ONLY = args.get("states")?.split(",");
 
 // ------------------------------------------------------------------ helpers
 
-const fx = (n: string) => join(FX, n.includes(".") ? n : `${n}.jpg`);
+/** Bare names resolve to the live photos (lion, tiger, horse, donkey, bald_eagle, common_octopus). */
+const fx = (n: string) => (n.includes(".") ? join(FX, n) : existsSync(join(LIVE, `${n}.webp`)) ? join(LIVE, `${n}.webp`) : join(FX, `${n}.jpg`));
+
+/** Which live fusion image stands in for a mock-generated result of this input pair. */
+const PAIR_CASE: Record<string, string> = {
+  "lion,tiger": "lion_tiger",
+  "common_octopus,lion": "lion_octopus",
+  "bald_eagle,lion": "bald_eagle_lion",
+  "donkey,horse": "horse_donkey",
+  "bald_eagle,horse": "bald_eagle_lion",
+};
+let currentCase = "lion_tiger";
+
+async function seedLiveCases(page: Page, cases: string[], opts: { fitView?: boolean } = {}) {
+  currentCase = cases[cases.length - 1]!;
+  await seedLive(page, cases, {
+    api: `http://localhost:${API}`,
+    addInputs: async (files) => {
+      await addPaths(page, files);
+    },
+  });
+  if (opts.fitView !== false) await fit(page);
+}
+
+/** Open drawer sections by title. */
+async function openSections(page: Page, titles: string[]) {
+  for (const t of titles) await page.locator(".section__summary", { hasText: t }).first().click();
+}
 
 async function open(page: Page, theme: string) {
   await page.addInitScript((t) => {
@@ -42,20 +72,31 @@ async function open(page: Page, theme: string) {
       sessionStorage.setItem("shots.init", "1");
     }
   }, theme);
+  await routeLiveResults(page, () => currentCase);
   await page.goto(`http://localhost:${WEB}/`);
   await page.waitForFunction(() => Boolean((window as unknown as { __chimera?: unknown }).__chimera));
   await page.locator(".workspace[aria-busy=false]").waitFor();
 }
 
 async function add(page: Page, names: string[], wait = true) {
+  const pair = PAIR_CASE[[...names].sort().join(",")];
+  if (pair) currentCase = pair;
+  await addPaths(page, names.map(fx), wait);
+}
+
+async function addPaths(page: Page, paths: string[], wait = true) {
+  const names = paths;
   const before = await page.locator(".node--image-input").count();
   const chooser = page.waitForEvent("filechooser");
   const empty = page.getByRole("button", { name: "Add images" });
   if (await empty.isVisible()) await empty.click();
   else await page.getByRole("button", { name: "Add image", exact: true }).click();
-  await (await chooser).setFiles(names.map(fx));
+  await (await chooser).setFiles(names);
   const n = before + Math.min(2, names.length);
-  await page.locator(".node--image-input").nth(n - 1).waitFor();
+  await page
+    .locator(".node--image-input")
+    .nth(n - 1)
+    .waitFor();
   if (wait) await page.waitForFunction((k) => document.querySelectorAll(".node--image-input .status--ok").length >= k, n, { timeout: 20_000 });
 }
 
@@ -67,7 +108,7 @@ async function done(page: Page, versions = 1) {
   await page.waitForFunction(
     (v) => {
       const imgs = document.querySelectorAll(".plate__img.is-loaded").length;
-      const label = document.querySelector(".version-switch__label")?.textContent ?? "v1";
+      const label = document.querySelector(".node--result .node__kicker")?.textContent ?? "v1";
       return imgs > 0 && label.includes(`v${v}`) && !document.querySelector(".node.is-running");
     },
     versions,
@@ -78,7 +119,11 @@ async function done(page: Page, versions = 1) {
 async function hook<T>(page: Page, fn: string, ...a: unknown[]): Promise<T> {
   return page.evaluate(
     ([f, rest]) => {
-      const api = (window as unknown as { __chimera: Record<string, (...x: unknown[]) => unknown> }).__chimera;
+      const api = (
+        window as unknown as {
+          __chimera: Record<string, (...x: unknown[]) => unknown>;
+        }
+      ).__chimera;
       return api[f as string]!(...(rest as unknown[])) as never;
     },
     [fn, a] as const,
@@ -100,9 +145,27 @@ const STEP_KEYS: Array<[string, string]> = [
   ["generate", "Generate image"],
   ["store", "Save result"],
 ];
-const DETAILS = ["Two distinct images loaded", "Lion and Tiger", "A: Lion (tier 1), B: Tiger (tier 1)", "Real hybrid exists: Liger", "10 rules checked, 0 warnings", "Quadruped body, head from A", "Image ready (1 generation)", "Saved with lineage"];
+const DETAILS = [
+  "Two distinct images loaded",
+  "Lion and Tiger",
+  "A: Lion (tier 1), B: Tiger (tier 1)",
+  "Real hybrid exists: Liger",
+  "10 rules checked, 0 warnings",
+  "Quadruped body, head from A",
+  "Image ready (1 generation)",
+  "Saved with lineage",
+];
 
-function syntheticRun(nodeId: string, current: number, opts: { agoMs?: number; status?: string; error?: unknown; failedAt?: number } = {}) {
+function syntheticRun(
+  nodeId: string,
+  current: number,
+  opts: {
+    agoMs?: number;
+    status?: string;
+    error?: unknown;
+    failedAt?: number;
+  } = {},
+) {
   const now = Date.now();
   const created = now - (opts.agoMs ?? 6000);
   const failedAt = opts.failedAt ?? -1;
@@ -150,6 +213,8 @@ interface State {
   name: string;
   shows: string;
   core?: boolean;
+  /** Element screenshot of this selector instead of the full page. */
+  clip?: string;
   setup(page: Page): Promise<void>;
 }
 
@@ -168,7 +233,12 @@ const errorState = (fault: string, shows: string): State => ({
 });
 
 const STATES: State[] = [
-  { name: "01-empty-canvas", shows: "Empty canvas with drop invitation", core: true, setup: async (p) => quiet(p) },
+  {
+    name: "01-empty-canvas",
+    shows: "Empty canvas with drop invitation",
+    core: true,
+    setup: async (p) => quiet(p),
+  },
   {
     name: "02-drop-overlay",
     shows: "Files dragged over the canvas",
@@ -176,7 +246,13 @@ const STATES: State[] = [
       await page.evaluate(() => {
         const dt = new DataTransfer();
         dt.items.add(new File(["x"], "a.jpg", { type: "image/jpeg" }));
-        document.querySelector(".canvas")!.dispatchEvent(new DragEvent("dragover", { dataTransfer: dt, bubbles: true, cancelable: true }));
+        document.querySelector(".canvas")!.dispatchEvent(
+          new DragEvent("dragover", {
+            dataTransfer: dt,
+            bubbles: true,
+            cancelable: true,
+          }),
+        );
       });
       await page.waitForTimeout(200);
     },
@@ -201,7 +277,13 @@ const STATES: State[] = [
       await add(page, ["lion"], false);
       await page.evaluate(() => {
         // pin progress at a mid value so the shot is deterministic
-        const g = (window as unknown as { __chimera: { graph(): { nodes: Array<{ id: string; type: string }> } } }).__chimera.graph();
+        const g = (
+          window as unknown as {
+            __chimera: {
+              graph(): { nodes: Array<{ id: string; type: string }> };
+            };
+          }
+        ).__chimera.graph();
         return g.nodes[0]?.id;
       });
       await page.locator(".upload-progress").waitFor();
@@ -264,10 +346,7 @@ const STATES: State[] = [
     shows: "Success with real-hybrid badge (lion + tiger)",
     core: true,
     async setup(page) {
-      await add(page, ["lion", "tiger"]);
-      await fuse(page);
-      await done(page);
-      await fit(page);
+      await seedLiveCases(page, ["lion_tiger"]);
       await quiet(page);
     },
   },
@@ -276,10 +355,7 @@ const STATES: State[] = [
     shows: "Success with rule warnings (octopus + macaw)",
     core: true,
     async setup(page) {
-      await add(page, ["common_octopus", "scarlet_macaw"]);
-      await fuse(page);
-      await done(page);
-      await fit(page);
+      await seedLiveCases(page, ["lion_octopus"]);
       await quiet(page);
     },
   },
@@ -287,12 +363,7 @@ const STATES: State[] = [
     name: "22-version-2",
     shows: "Re-run: version 2 selected in the switcher",
     async setup(page) {
-      await add(page, ["red_fox", "green_iguana"]);
-      await fuse(page);
-      await done(page);
-      await page.getByRole("button", { name: "Fuse again" }).click();
-      await done(page, 2);
-      await fit(page);
+      await seedLiveCases(page, ["bald_eagle_lion", "lion_eagle_pinned"]);
       await quiet(page);
     },
   },
@@ -301,10 +372,7 @@ const STATES: State[] = [
     shows: "How this was made panel (top)",
     core: true,
     async setup(page) {
-      await add(page, ["lion", "tiger"]);
-      await fuse(page);
-      await done(page);
-      await fit(page);
+      await seedLiveCases(page, ["lion_tiger"]);
       await page.getByRole("button", { name: "How this was made" }).click();
       await quiet(page);
     },
@@ -313,10 +381,9 @@ const STATES: State[] = [
     name: "24-panel-notes-prompt",
     shows: "Panel scrolled to field notes and prompt",
     async setup(page) {
-      await add(page, ["common_octopus", "scarlet_macaw"]);
-      await fuse(page);
-      await done(page);
+      await seedLiveCases(page, ["lion_octopus"]);
       await page.getByRole("button", { name: "How this was made" }).click();
+      await openSections(page, ["Rules and warnings", "Prompt and sources"]);
       await page.locator(".side-panel__scroll").evaluate((el) => el.scrollTo(0, el.scrollHeight));
       await quiet(page);
     },
@@ -325,13 +392,11 @@ const STATES: State[] = [
     name: "25-stale-result",
     shows: "Input replaced after success: results marked outdated",
     async setup(page) {
-      await add(page, ["lion", "tiger"]);
-      await fuse(page);
-      await done(page);
+      await seedLiveCases(page, ["lion_tiger"]);
       await page.locator(".node--image-input").first().hover();
       const chooser = page.waitForEvent("filechooser");
       await page.locator(".node--image-input").first().getByRole("button", { name: "Replace image" }).click();
-      await (await chooser).setFiles([fx("red_fox")]);
+      await (await chooser).setFiles([fx("horse")]);
       await page.waitForFunction(() => document.querySelectorAll(".node--image-input .status--ok").length >= 2);
       await fit(page);
       await quiet(page);
@@ -341,15 +406,60 @@ const STATES: State[] = [
     name: "26-result-image-failed",
     shows: "Generated image failed to load: fallback tile with reload",
     async setup(page) {
-      await add(page, ["lion", "tiger"]);
-      await fuse(page);
-      await done(page);
+      await seedLiveCases(page, ["lion_tiger"]);
       await page.waitForTimeout(800); // autosave
-      const g = await hook<{ nodes: Array<{ type: string; data: { versions?: Array<{ assetId: string }> } }> }>(page, "graph");
+      const g = await hook<{
+        nodes: Array<{
+          type: string;
+          data: { versions?: Array<{ assetId: string }> };
+        }>;
+      }>(page, "graph");
       const generated = g.nodes.find((n) => n.type === "result")!.data.versions![0]!.assetId;
       await page.route(new RegExp(`/assets/${generated}/content`), (r) => r.abort());
       await page.reload();
       await page.locator(".plate--failed").waitFor({ timeout: 15_000 });
+      await quiet(page);
+    },
+  },
+  {
+    name: "27-panel-sections-open",
+    shows: "U1 drawer: summary, stats, pipeline timeline, real hybrids and mythology open",
+    core: true,
+    async setup(page) {
+      await seedLiveCases(page, ["bald_eagle_lion"]);
+      await page.getByRole("button", { name: "How this was made" }).click();
+      await openSections(page, ["Pipeline", "Mythology resemblances"]);
+      await page.locator(".side-panel__scroll").evaluate((el) => el.scrollTo(0, 0));
+      await quiet(page);
+    },
+  },
+  {
+    name: "28-result-card",
+    shows: "U1 result hero card on its own (element shot)",
+    core: true,
+    clip: ".node--result",
+    async setup(page) {
+      await seedLiveCases(page, ["lion_tiger"]);
+      await quiet(page);
+    },
+  },
+  {
+    name: "29-hybrid-drawer",
+    shows: "U1 drawer for lion + tiger: real hybrids open with cross direction and sources",
+    async setup(page) {
+      await seedLiveCases(page, ["lion_tiger"]);
+      await page.getByRole("button", { name: "How this was made" }).click();
+      await openSections(page, ["Real hybrids"]);
+      await quiet(page);
+    },
+  },
+  {
+    name: "84-body-diagram",
+    shows: "U1 body diagram with pinned parts showing donor portraits (element shot)",
+    core: true,
+    clip: ".node--fusion",
+    async setup(page) {
+      await seedLiveCases(page, ["lion_eagle_pinned"]);
       await quiet(page);
     },
   },
@@ -366,7 +476,23 @@ const STATES: State[] = [
     async setup(page) {
       await add(page, ["lion", "tiger"]);
       const id = await fusionId(page);
-      await hook(page, "setRun", id, syntheticRun(id, 6, { status: "interrupted", failedAt: 6, error: { code: "RUN_INTERRUPTED", message: "", retryable: true, retryAfterMs: null, details: {}, errorId: null } }));
+      await hook(
+        page,
+        "setRun",
+        id,
+        syntheticRun(id, 6, {
+          status: "interrupted",
+          failedAt: 6,
+          error: {
+            code: "RUN_INTERRUPTED",
+            message: "",
+            retryable: true,
+            retryAfterMs: null,
+            details: {},
+            errorId: null,
+          },
+        }),
+      );
       await quiet(page);
     },
   },
@@ -376,7 +502,23 @@ const STATES: State[] = [
     async setup(page) {
       await add(page, ["lion", "tiger"]);
       const id = await fusionId(page);
-      await hook(page, "setRun", id, syntheticRun(id, 5, { status: "failed", failedAt: 5, error: { code: "INTERNAL", message: "", retryable: true, retryAfterMs: null, details: {}, errorId: "7f3a91c2b4e0" } }));
+      await hook(
+        page,
+        "setRun",
+        id,
+        syntheticRun(id, 5, {
+          status: "failed",
+          failedAt: 5,
+          error: {
+            code: "INTERNAL",
+            message: "",
+            retryable: true,
+            retryAfterMs: null,
+            details: {},
+            errorId: "7f3a91c2b4e0",
+          },
+        }),
+      );
       await quiet(page);
     },
   },
@@ -393,7 +535,18 @@ const STATES: State[] = [
     shows: "Server rejected an upload (IMAGE_CORRUPT)",
     async setup(page) {
       await page.route("**/assets", (r) =>
-        r.fulfill({ status: 422, contentType: "application/json", body: JSON.stringify({ error: { code: "IMAGE_CORRUPT", message: "x", retryable: false, details: {} } }) }),
+        r.fulfill({
+          status: 422,
+          contentType: "application/json",
+          body: JSON.stringify({
+            error: {
+              code: "IMAGE_CORRUPT",
+              message: "x",
+              retryable: false,
+              details: {},
+            },
+          }),
+        }),
       );
       await add(page, ["lion"], false);
       await page.locator(".node--image-input .image-node__banner--error").waitFor();
@@ -417,7 +570,7 @@ const STATES: State[] = [
     async setup(page) {
       const chooser = page.waitForEvent("filechooser");
       await page.getByRole("button", { name: "Add images" }).click();
-      await (await chooser).setFiles([fx("lion"), fx("tiger"), fx("red_fox")]);
+      await (await chooser).setFiles([fx("lion"), fx("tiger"), fx("horse")]);
       await page.waitForFunction(() => document.querySelectorAll(".node--image-input .status--ok").length >= 2);
       await quiet(page, true);
     },
@@ -496,10 +649,32 @@ const STATES: State[] = [
         schemaVersion: 1,
         graphId: "broken",
         nodes: [
-          { id: "s1", type: "style", version: 3, position: { x: 0, y: 0 }, config: {}, data: {} },
-          { id: "f1", type: "fusion", version: 1, position: { x: 320, y: -20 }, config: {}, data: {} },
+          {
+            id: "s1",
+            type: "style",
+            version: 3,
+            position: { x: 0, y: 0 },
+            config: {},
+            data: {},
+          },
+          {
+            id: "f1",
+            type: "fusion",
+            version: 1,
+            position: { x: 320, y: -20 },
+            config: {},
+            data: {},
+          },
         ],
-        edges: [{ id: "e1", source: "ghost", sourcePort: "out", target: "f1", targetPort: "a" }],
+        edges: [
+          {
+            id: "e1",
+            source: "ghost",
+            sourcePort: "out",
+            target: "f1",
+            targetPort: "a",
+          },
+        ],
       });
       await page.reload();
       await page.getByText("Unsupported node").waitFor();
@@ -510,7 +685,12 @@ const STATES: State[] = [
     name: "53-read-only-newer",
     shows: "Graph from a newer version: read-only banner",
     async setup(page) {
-      await hook(page, "writeAutosave", { schemaVersion: 9, graphId: "future", nodes: [{ id: "f1", type: "fusion", position: { x: 0, y: 0 } }], edges: [] });
+      await hook(page, "writeAutosave", {
+        schemaVersion: 9,
+        graphId: "future",
+        nodes: [{ id: "f1", type: "fusion", position: { x: 0, y: 0 } }],
+        edges: [],
+      });
       await page.reload();
       await page.locator(".banner--readonly").waitFor();
       await quiet(page);
@@ -531,11 +711,9 @@ const STATES: State[] = [
     shows: "Fit view with 7 nodes (two fusions)",
     core: true,
     async setup(page) {
-      await add(page, ["lion", "tiger"]);
-      await fuse(page);
-      await done(page);
+      await seedLiveCases(page, ["lion_tiger"]);
       await page.getByRole("button", { name: "Add fusion node" }).click();
-      await add(page, ["common_octopus", "flamingo"]);
+      await add(page, ["horse", "donkey"]);
       const fusions = page.locator(".node--fusion");
       await fusions.nth(1).getByLabel("Connect image A").selectOption({ index: 3 });
       await fusions.nth(1).getByLabel("Connect image B").selectOption({ index: 4 });
@@ -549,9 +727,7 @@ const STATES: State[] = [
     name: "61-canvas-100-percent",
     shows: "Canvas at 100% zoom after a fusion",
     async setup(page) {
-      await add(page, ["scarlet_macaw", "red_fox"]);
-      await fuse(page);
-      await done(page);
+      await seedLiveCases(page, ["bald_eagle_lion"], { fitView: false });
       await quiet(page);
     },
   },
@@ -568,9 +744,7 @@ const STATES: State[] = [
     name: "63-refused-connection",
     shows: "Wrong port type: refused with toast",
     async setup(page) {
-      await add(page, ["lion", "tiger"]);
-      await fuse(page);
-      await done(page);
+      await seedLiveCases(page, ["lion_tiger"]);
       await hook(page, "clearToasts");
       await page.locator(".node--image-input .port--out").first().dragTo(page.locator(".node--result .port--in"));
       await page.locator(".toast").waitFor();
@@ -591,9 +765,10 @@ const STATES: State[] = [
     shows: "F1: parts pinned (Head B, Covering A) before fusing",
     core: true,
     async setup(page) {
-      await add(page, ["common_octopus", "scarlet_macaw"]);
+      await add(page, ["lion", "bald_eagle"]);
       await page.getByRole("button", { name: "Head from Auto (model decides)" }).click();
-      await page.getByRole("button", { name: "Head from A" }).click();
+      await page.getByRole("button", { name: "Limbs from Auto (model decides)" }).click();
+      await page.getByRole("button", { name: "Limbs from A" }).click();
       await page.getByRole("button", { name: "Covering from Auto (model decides)" }).click();
       await quiet(page);
     },
@@ -603,15 +778,10 @@ const STATES: State[] = [
     shows: "F1: result with pinned parts; panel credits you vs model",
     core: true,
     async setup(page) {
-      await add(page, ["common_octopus", "scarlet_macaw"]);
-      await page.getByRole("button", { name: "Head from Auto (model decides)" }).click();
-      await page.getByRole("button", { name: "Head from A" }).click();
-      await page.getByRole("button", { name: "Covering from Auto (model decides)" }).click();
-      await fuse(page);
-      await done(page);
-      await fit(page);
+      await seedLiveCases(page, ["lion_eagle_pinned"]);
       await page.getByRole("button", { name: "How this was made" }).click();
-      await page.locator(".side-panel__scroll").evaluate((el) => el.scrollTo(0, (el.querySelector(".donors") as HTMLElement).offsetTop - 120));
+      await openSections(page, ["Body plan and donors"]);
+      await page.locator(".side-panel__scroll").evaluate((el) => el.scrollTo(0, (el.querySelector(".donors") as HTMLElement).offsetTop - 160));
       await quiet(page);
     },
   },
@@ -630,9 +800,7 @@ const STATES: State[] = [
     name: "83-anatomy-outdated",
     shows: "F1: pin changed after a result: result outdated",
     async setup(page) {
-      await add(page, ["red_fox", "green_iguana"]);
-      await fuse(page);
-      await done(page);
+      await seedLiveCases(page, ["horse_donkey"]);
       await page.getByRole("button", { name: "Tail from Auto (model decides)" }).click();
       await fit(page);
       await quiet(page);
@@ -673,7 +841,7 @@ const STATES: State[] = [
     name: "92-card-out-of-date",
     shows: "F2: Result moved to v2; card offers a rewrite",
     async setup(page) {
-      await add(page, ["red_fox", "green_iguana"]);
+      await add(page, ["horse", "donkey"]);
       await fuse(page);
       await done(page);
       await page.locator(".node--result").hover();
@@ -707,7 +875,7 @@ const STATES: State[] = [
     name: "94-card-exported-png",
     shows: "F2: the downloaded field-card PNG itself (1600×1000)",
     async setup(page) {
-      await add(page, ["common_octopus", "scarlet_macaw"]);
+      await add(page, ["lion", "common_octopus"]);
       await fuse(page);
       await done(page);
       await page.locator(".node--result").hover();
@@ -720,23 +888,23 @@ const STATES: State[] = [
       // Show the exported file full-screen so it is captured like any other state.
       const { readFileSync } = await import("node:fs");
       const b64 = readFileSync(file).toString("base64");
-      await page.setContent(`<body style="margin:0;background:#888;display:grid;place-items:center;height:100vh"><img src="data:image/png;base64,${b64}" style="max-width:96vw;max-height:96vh"></body>`);
+      await page.setContent(
+        `<body style="margin:0;background:#888;display:grid;place-items:center;height:100vh"><img src="data:image/png;base64,${b64}" style="max-width:96vw;max-height:96vh"></body>`,
+      );
     },
   },
-  ...["Add image", "Add fusion node", "Undo", "Fit to view", "Show minimap"].map(
-    (label, i): State => ({
-      name: `7${i}-focus-${label.toLowerCase().replace(/\s+/g, "-")}`,
-      shows: `Keyboard focus on toolbar control: ${label}`,
-      async setup(page) {
-        await add(page, ["lion", "tiger"]);
-        await hook(page, "clearToasts");
-        await page.getByRole("button", { name: label, exact: true }).focus();
-        await page.keyboard.press("Shift+Tab");
-        await page.keyboard.press("Tab");
-        await page.waitForTimeout(200);
-      },
-    }),
-  ),
+  ...["Add image", "Add fusion node", "Undo", "Fit to view", "Show minimap"].map((label, i): State => ({
+    name: `7${i}-focus-${label.toLowerCase().replace(/\s+/g, "-")}`,
+    shows: `Keyboard focus on toolbar control: ${label}`,
+    async setup(page) {
+      await add(page, ["lion", "tiger"]);
+      await hook(page, "clearToasts");
+      await page.getByRole("button", { name: label, exact: true }).focus();
+      await page.keyboard.press("Shift+Tab");
+      await page.keyboard.press("Tab");
+      await page.waitForTimeout(200);
+    },
+  })),
   {
     name: "75-focus-fuse-button",
     shows: "Keyboard focus on the Fuse button",
@@ -754,7 +922,15 @@ const STATES: State[] = [
 // ------------------------------------------------------------------ servers
 
 if (args.has("list")) {
-  console.log(JSON.stringify(STATES.map((s) => ({ name: s.name, shows: s.shows, core: Boolean(s.core) }))));
+  console.log(
+    JSON.stringify(
+      STATES.map((s) => ({
+        name: s.name,
+        shows: s.shows,
+        core: Boolean(s.core),
+      })),
+    ),
+  );
   process.exit(0);
 }
 
@@ -770,7 +946,11 @@ function startServers(): ChildProcess[] {
     LOCAL_DATA_DIR: join(tmpdir(), `chimera-shots-${Date.now()}`),
     CORS_ORIGINS: `http://localhost:${WEB}`,
   };
-  const api = spawn(py, ["-m", "uvicorn", "app.main:app", "--port", String(API), "--log-level", "warning"], { cwd: join(ROOT, "backend"), env, stdio: "ignore" });
+  const api = spawn(py, ["-m", "uvicorn", "app.main:app", "--port", String(API), "--log-level", "warning"], {
+    cwd: join(ROOT, "backend"),
+    env,
+    stdio: "ignore",
+  });
   const web = spawn("npx", ["vite", "--mode", "test", "--port", String(WEB), "--strictPort", "--logLevel", "error"], {
     cwd: join(ROOT, "frontend"),
     env: { ...process.env, VITE_API_BASE_URL: `http://localhost:${API}` },
@@ -797,7 +977,13 @@ async function main() {
   const stop = () => procs.forEach((p) => p.kill());
   process.on("exit", stop);
   let browser: Browser | null = null;
-  const manifest: Array<{ file: string; state: string; shows: string; viewport: string; theme: string }> = [];
+  const manifest: Array<{
+    file: string;
+    state: string;
+    shows: string;
+    viewport: string;
+    theme: string;
+  }> = [];
   const failures: string[] = [];
   try {
     await waitFor(`http://localhost:${API}/health`);
@@ -811,14 +997,24 @@ async function main() {
         mkdirSync(dir, { recursive: true });
         for (const s of states) {
           if (small && !s.core && !ONLY) continue; // smaller viewports cover the core states (UI_STANDARD.md)
-          const ctx = await browser.newContext({ viewport: { width: vp.width, height: vp.height }, deviceScaleFactor: 1 });
+          const ctx = await browser.newContext({
+            viewport: { width: vp.width, height: vp.height },
+            deviceScaleFactor: 1,
+          });
           const page = await ctx.newPage();
           try {
             await open(page, theme);
             await s.setup(page);
             const file = join(dir, `${s.name}.png`);
-            await page.screenshot({ path: file, animations: "disabled" });
-            manifest.push({ file: file.replace(`${ROOT}/`, ""), state: s.name, shows: s.shows, viewport: vp.name, theme });
+            if (s.clip) await page.locator(s.clip).first().screenshot({ path: file, animations: "disabled" });
+            else await page.screenshot({ path: file, animations: "disabled" });
+            manifest.push({
+              file: file.replace(`${ROOT}/`, ""),
+              state: s.name,
+              shows: s.shows,
+              viewport: vp.name,
+              theme,
+            });
             process.stdout.write(`✓ ${vp.name} ${theme} ${s.name}\n`);
           } catch (e) {
             failures.push(`${vp.name} ${theme} ${s.name}: ${(e as Error).message.split("\n")[0]}`);

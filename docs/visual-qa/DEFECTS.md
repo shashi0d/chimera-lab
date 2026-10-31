@@ -37,3 +37,22 @@ Recaptured the affected states (03, 23, 32, 34, 41, 60) and a 10-state regressio
 **Lowest score per criterion across all reviewed pv-2/pv-3 screens:** hierarchy 4, clarity 4, state legibility 4, consistency 4, polish 4, craft 4.
 
 Open minors carried forward: PV1-09 (wontfix: an artefact of throttling).
+
+## Round u1: ZD redesign
+
+Full matrix (`npm run shots -- --round u1`): every state at 1440×900, and core states at 1280×800 and 1024×768, in light and dark. Every image is real: L1 live photos and live fusions (D-052). Reviewed in contact sheets (`scripts/contact_sheets.py`) against UI_STANDARD.md.
+
+| ID | Screenshot | Criterion (score) | Severity | Defect | Fix | Status |
+|---|---|---|---|---|---|---|
+| U1-01 | `u1/*/30-error-*.png` (first capture) | C (2), H (3) | **Major** | After a failure the Fusion node listed all 8 steps plus the anatomy diagram, which pushed the error message and Retry below the fold at 100%. | A finished run (any outcome) folds its steps behind "Show steps". The error block and the next action come first. | fixed |
+| U1-02 | `u1/*/30-error-*.png`, `26-*.png` (first capture) | P (3) | **Major** | The empty Result card ("No image yet…") was a full 500×500 grey square, the biggest thing on the canvas for a non-result. | Empty plate is a short well (min 220px); the square is kept for skeleton and failed-image states. | fixed |
+| U1-03 | `u1/1440x900/*/94-card-exported-png.png` | C (1) | **Blocker** | The exported field-card PNG had lost all its text. `renderPng.ts` read the deleted Field-paper tokens (`--folio`, `--ink`…) and fonts, which resolved to black-on-black. | Paint with ZD tokens and the new fonts; `tests/unit/renderPngTokens.test.ts` now fails if any token or font name the PNG uses is missing. | fixed |
+| U1-04 | `u1/*/21-*.png`, `24-*.png` | C (3) | Minor | Fusion portrait names truncated ("Common…"). | Names wrap to two lines before clipping. | fixed |
+| U1-05 | `u1/*/26-*.png`, `61-*.png`, `63-*.png`, `60-*.png` (first capture) | C (3) | Minor | These states used a mock run. Mock vision identifies by colour, so a real lion photo was titled "Red fox" next to a live fusion image. | Seed these states from the recorded live runs (D-052). Mock-run states that need the backend's creature (field cards, faults) keep mock labels; documented in D-052. | fixed (26, 60 first pair, 61, 63) |
+| U1-06 | `u1/*/22-version-2.png` | C (3) | Minor | v2 came from a run with the parents the other way round, so the pinned "Head from A" showed the eagle's portrait while the v2 image has a lion's head. | The seeder maps pins by slot order. | fixed |
+| U1-07 | `u1/*/50-node-crash.png` | P (3) | Minor | The crash card's kicker showed the raw node id ("IMAGE-INPUT-374877CC"). | Kicker reads "Node". | fixed |
+| U1-08 | `u1/*/93-card-error-timeout.png` | C (3) | Minor | The Field card's retry button said "Retry fusion". | Own label: "Retry card". | fixed |
+| U1-09 | `u1/*/04-uploading.png` | S (4) | Minor | "Uploading 0%" (same throttling artefact as PV1-09). | None. | wontfix |
+| U1-10 | `u1/*/90-93-card-*.png` | C (4) | Minor | Field-card states run the mock pipeline, so species labels and card text are mock readings beside real images (D-052). | None for screenshots. Live card writing is still unverified (TEST_REPORT). | open (accepted) |
+
+Fixed defects were re-shot (`--states 21,22,24,26,50,60,61,63,93,94` at every viewport and theme).

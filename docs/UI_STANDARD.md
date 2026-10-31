@@ -9,7 +9,7 @@ A first-time judge looks at any screen and believes it is a shipped, funded prod
 1. **The creature is the hero.** On any screen with a result, the generated image is the largest and highest-contrast element. Process detail (steps, provenance) is smaller, quieter and one click away.
 2. **Next action is obvious.** Every state shows either the next action (Fuse, Add images, Retry fusion) or a sentence that names what is missing. A disabled control always has a visible reason next to it.
 3. **State is legible without color.** Every status has a word plus a glyph shape (check, cross, triangle, pulse dot, hollow ring). Port types differ by shape (circle vs diamond). Errors have a left rule and a title, not only red text.
-4. **Nothing moves unless something is happening.** Allowed motion is listed in DESIGN.md. Nothing may shift layout when state changes, and a node's height change must never push it into a neighbour.
+4. **Nothing moves unless something is happening.** Allowed motion is listed in DESIGN_U1.md (Motion). Nothing may shift layout when state changes, and a node's height change must never push it into a neighbour.
 5. **Honest provenance.** Each generated image carries "Generated fusion" in its caption. Real hybrids are named as real and kept separate from the generated image.
 6. **Tokens only.** Every color, size, radius and duration comes from `theme.css` tokens (enforced by `scripts/check-css.sh`).
 

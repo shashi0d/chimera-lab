@@ -17,9 +17,10 @@ if grep -rnE "from ['\"](styled-components|@emotion|@stitches)" "$SRC"; then ech
 css_imports=$(grep -rnE "import ['\"].*\.css['\"]" "$SRC" --include='*.ts' --include='*.tsx' | grep -v 'src/main.tsx:.*styles/theme.css' || true)
 if [ -n "$css_imports" ]; then echo "✗ CSS imported outside main.tsx:"; echo "$css_imports"; fail=1; fi
 
-# Hex colors are only allowed inside ":root {" and ":root[data-theme=...] {" blocks.
+# Hex colors are only allowed inside token blocks: ":root {", ":root[data-theme=...] {"
+# and the verbatim ZD dark block '[data-theme="dark"] {' (docs/design-system/zd-tokens.css).
 awk '
-  /^:root(\[data-theme="[a-z]+"\])? \{/ { in_tokens = 1 }
+  /^(:root)?(\[data-theme="[a-z]+"\])? \{/ { in_tokens = 1 }
   in_tokens && /^\}/ { in_tokens = 0; next }
   !in_tokens && /#[0-9a-fA-F][0-9a-fA-F][0-9a-fA-F]/ { print FILENAME ":" NR ": " $0; bad = 1 }
   END { exit bad }
