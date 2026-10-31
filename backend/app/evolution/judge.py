@@ -5,6 +5,8 @@
 2. Silhouette check: SAM 3.1 mask compared with the planned frame by a simple shape
    comparison, which guards against texture bias in model critics (RC-R6-10).
 3. Thumbnail check: the critic again on a small copy (RC-R6-06).
+E2d: on the real-hybrid route both critics are a feature checklist from the pair's R2 card
+(yes 1, unclear 0.5, no 0; score = mean) with a logged, unscored forced choice.
 quality = 0.4 critic + 0.3 silhouette + 0.1 thumbnail + 0.2 (1 - normalized soft penalty)
 """
 
@@ -121,25 +123,60 @@ def thumbnail(image: bytes) -> bytes:
     return out.getvalue()
 
 
+CHECKLIST_VALUE = {"yes": 1.0, "unclear": 0.5, "no": 0.0}
+
+
+def checklist_for(r: Route) -> list[str]:
+    """E2d: the pair's feature checklist on the real-hybrid route; empty on every other route (and for a
+    documented cross with no known-pair entry), which keeps the open critic."""
+    return list((r.pair or {}).get("checklist") or []) if is_real_hybrid(r) else []
+
+
+def checklist_choices(sire: Animal, dam: Animal, r: Route) -> list[str]:
+    """Forced-choice options: the two parents, the hybrid's name, or "other"."""
+    return [sire.common_name.lower(), dam.common_name.lower(), str((r.pair or {}).get("name", "hybrid")), "other"]
+
+
+def checklist_score(result: dict[str, Any]) -> float:
+    """Fraction of items answered yes; unclear counts 0.5. The forced choice is logged, never scored."""
+    answers = result.get("answers") or []
+    if not answers:
+        return 0.0
+    return round(sum(CHECKLIST_VALUE.get(a.get("answer"), 0.5) for a in answers) / len(answers), 3)
+
+
 async def judge(image: bytes, g: Genome, r: Route, tax: Taxonomy, spark: EvoSpark, seg: Segmenter,
                 meter: Meter) -> dict[str, Any]:
     sire, dam = tax.animals[g.parents.sire], tax.animals[g.parents.dam]
     frame_animal = tax.animals[g.host] if g.host else sire
-    critic = await meter.call("spark", "critic", spark.critic(image))
+    checklist = checklist_for(r)
+    choices = checklist_choices(sire, dam, r) if checklist else []
+    small = thumbnail(image)
+    if checklist:  # E2d: real-hybrid route, feature checklist with a forced choice in the same call
+        critic = await meter.call("spark", "critic", spark.checklist(image, checklist, choices))
+    else:
+        critic = await meter.call("spark", "critic", spark.critic(image))
     mask = await meter.call("sam", "segment", seg.segment(image, SAM_PROMPT))  # E2b: never the host's name
     stats = mask_stats(mask)
-    thumb = await meter.call("spark", "critic_thumbnail", spark.critic(thumbnail(image)))
+    if checklist:  # the thumbnail critic uses the same checklist
+        thumb = await meter.call("spark", "critic_thumbnail", spark.checklist(small, checklist, choices))
+    else:
+        thumb = await meter.call("spark", "critic_thumbnail", spark.critic(small))
     items, soft = soft_penalties(g, r, tax)
     frame = "winged" if frame_animal.frame == "winged" else frame_animal.frame
-    own = hybrid_names(r.pair) if is_real_hybrid(r) else []
-    scores = {
-        "critic": critic_score(critic, sire, dam, own),
-        "silhouette": silhouette_score(stats, frame, critic_one=int(critic.get("creatures") or 0) == 1),
-        "thumbnail": critic_score(thumb, sire, dam, own),
-        "soft_penalty": soft,
-    }
+    if checklist:
+        crit, thumb_s, one = checklist_score(critic), checklist_score(thumb), False  # no creature count asked
+    else:
+        own = hybrid_names(r.pair) if is_real_hybrid(r) else []
+        crit, thumb_s = critic_score(critic, sire, dam, own), critic_score(thumb, sire, dam, own)
+        one = int(critic.get("creatures") or 0) == 1
+    scores = {"critic": crit, "silhouette": silhouette_score(stats, frame, critic_one=one), "thumbnail": thumb_s,
+              "soft_penalty": soft}
     scores["quality"] = round(WEIGHTS["critic"] * scores["critic"] + WEIGHTS["silhouette"] * scores["silhouette"]
                               + WEIGHTS["thumbnail"] * scores["thumbnail"] + WEIGHTS["rules"] * (1 - soft), 3)
-    third = third_animals(critic, sire, dam, tax, r)
-    return {"scores": scores, "critic": critic, "critic_thumbnail": thumb, "mask": stats, "soft_cards": items,
-            "third_animal": third, "sam_prompt": SAM_PROMPT}
+    third = [] if checklist else third_animals(critic, sire, dam, tax, r)
+    out = {"scores": scores, "critic": critic, "critic_thumbnail": thumb, "mask": stats, "soft_cards": items,
+           "third_animal": third, "sam_prompt": SAM_PROMPT, "critic_mode": "checklist" if checklist else "open"}
+    if checklist:
+        out["forced_choice"] = {"full": critic.get("choice"), "thumbnail": thumb.get("choice")}  # logged, not scored
+    return out

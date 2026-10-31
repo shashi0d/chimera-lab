@@ -169,8 +169,9 @@ async def test_third_animal_rerenders_once_with_the_compiled_prompt(engine):
 
 
 async def test_third_animal_twice_is_kept_with_a_warning(engine):
-    _scripted_critic(engine, [["donkey", "zebra"]])
-    doc = await engine.fuse(sire_name="donkey", dam_name="horse")
+    # E2d: the mule now gets the checklist critic, so the open critic is scripted on a chimera.
+    _scripted_critic(engine, [["lion", "golden eagle", "zebra"]])
+    doc = await engine.fuse(sire_name="lion", dam_name="eagle")
     assert len(doc["render_attempts"]) == 2  # exactly one re-render, no loop
     assert doc["warnings"] == ["third animal after one re-render: zebra"]
     assert doc["meta_calls"]["image"] == 2

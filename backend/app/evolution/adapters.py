@@ -41,6 +41,8 @@ class EvoSpark(Protocol):
 
     async def critic(self, image: bytes) -> dict[str, Any]: ...
 
+    async def checklist(self, image: bytes, items: list[str], choices: list[str]) -> dict[str, Any]: ...
+
 
 class Segmenter(Protocol):
     model_id: str
@@ -116,6 +118,7 @@ def swatch(name: str, size: int = 512) -> bytes:
 # ------------------------------------------------------------------ mocks
 
 PAIR_RE = re.compile(r"A single creature that combines an? ([a-z' -]+?) and an? ([a-z' -]+?)\.")
+HYBRID_RE = re.compile(r"^An? ([a-z' -]+?) \(.*?\), a real hybrid animal\.")
 HOST_RE = re.compile(r"Host frame: the ([a-z' -]+?) sets")
 STRONG_DONOR = ("full strength", "in place of the tail", "wings in place", "separate pair of")
 
@@ -151,6 +154,19 @@ class MockEvoSpark:
             host = HOST_RE.search(prompt)
             animals = [host.group(1)] if host else animals[:1]  # faint donor traits vanish at thumbnail size
         return self._wire("describe", {"animals": animals, "creatures": 1, "notes": "mock critic"})
+
+    async def checklist(self, image: bytes, items: list[str], choices: list[str]) -> dict[str, Any]:
+        """Mock: a real-hybrid render shows every item; at thumbnail size, fine detail (stripes, mane, tail
+        hair) reads as unclear. An unrecognized image is unclear throughout."""
+        prompt = self.registry.lookup(image)
+        m = HYBRID_RE.search(prompt or "")
+        with Image.open(io.BytesIO(image)) as im:
+            small = max(im.size) < 400
+        fine = ("stripe", "mane", "tail")
+        answers = [{"item": it, "answer": "unclear" if not m or (small and any(f in it for f in fine)) else "yes"}
+                   for it in items]
+        choice = m.group(1) if m and m.group(1) in choices else "other"
+        return self._wire("describe", {"answers": answers, "choice": choice, "notes": "mock checklist"})
 
     async def vary(self, prompt: str, elites: list[dict[str, Any]], n: int, seed: int) -> list[dict[str, Any]]:
         out: list[dict[str, Any]] = []

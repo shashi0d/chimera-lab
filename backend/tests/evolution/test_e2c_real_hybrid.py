@@ -165,13 +165,11 @@ def _scripted(engine, animals: list[str]):
     engine.spark.critic = critic  # type: ignore[method-assign]
 
 
-async def test_fuse_mule_critic_saying_mule_scores_full(engine):
-    _scripted(engine, ["mule"])
+async def test_fuse_mule_uses_the_real_hybrid_prompt(engine):
+    # E2d replaced the open critic on this route with a checklist (tests/evolution/test_e2d_checklist.py).
     doc = await engine.fuse(sire_name="donkey", dam_name="horse")
-    assert LABEL_HYBRID in doc["genome"]["labels"]
-    assert doc["judge"]["scores"]["critic"] == 1.0 and doc["judge"]["scores"]["thumbnail"] == 1.0
+    assert LABEL_HYBRID in doc["genome"]["labels"] and doc["prompt_compiled"].startswith(MULE_OPENER)
     assert doc["judge"]["third_animal"] == [] and len(doc["render_attempts"]) == 1
-    assert doc["prompt_compiled"].startswith(MULE_OPENER)
 
 
 async def test_fuse_chimera_does_not_accept_a_hybrid_name(engine):

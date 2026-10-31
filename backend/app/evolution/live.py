@@ -1,7 +1,8 @@
 """Live Meta adapters for the evolution engine (E2).
 
 * Muse Spark (chat completions, strict JSON schema): first plan, prompt polish,
-  readability critic and thumbnail critic. Crossover/mutation (`vary`) is not
+  readability critic and thumbnail critic (on the real-hybrid route, a feature
+  checklist with a forced choice, E2d). Crossover/mutation (`vary`) is not
   enabled live: E2 runs no evolve rounds.
 * Muse Image: the existing `MetaImageGen`, wrapped in the shared retry policy.
 * SAM 3.1: the Responses API at the same Meta base URL, model ``sam-3.1``, one
@@ -82,6 +83,15 @@ CODE_FIELDS = ("id", "seed", "lineage", "checks", "scores")
 
 POLISH_SCHEMA = _obj({"prompt": _STR})
 CRITIC_SCHEMA = _obj({"animals": _STRS, "creatures": {"type": "integer"}, "notes": _STR})
+ANSWERS = ("yes", "no", "unclear")
+
+
+def checklist_schema(choices: list[str]) -> dict[str, Any]:
+    """E2d: one yes/no/unclear answer per checklist item, plus a forced choice among `choices`."""
+    answer = _obj({"item": _STR, "answer": {"type": "string", "enum": list(ANSWERS)}})
+    # No minItems/maxItems: strict schemas may reject them. The parser pads a short list with "unclear".
+    return _obj({"answers": {"type": "array", "items": answer},
+                 "choice": {"type": "string", "enum": list(choices)}, "notes": _STR})
 
 PLAN_INSTRUCTIONS = (
     "You write creature plans for a natural-history fusion engine. You get rule cards and a code-built plan as "
@@ -99,6 +109,12 @@ CRITIC_INSTRUCTIONS = (
     "clearly see in it, as everyday English common names, most prominent first, at most three. If it looks like "
     "one ordinary animal, list only that animal. creatures: how many separate creatures are in the picture. "
     "notes: one short sentence on what you see."
+)
+CHECKLIST_INSTRUCTIONS = (
+    "You look at one picture of an animal and check it against a list of visible features. For each item, answer "
+    "yes if the feature is clearly visible, no if the picture clearly shows otherwise, or unclear if you cannot "
+    "tell. Copy each item's text exactly, in the given order. Judge only what is visible. choice: which one of the "
+    "listed options the animal in the picture looks most like; pick exactly one. notes: one short sentence."
 )
 
 # ------------------------------------------------------------------ request builders (pure)
@@ -124,6 +140,17 @@ def build_critic_request(model: str, image: bytes) -> dict[str, Any]:
     ], "response_format": _json_schema("readability_critic", CRITIC_SCHEMA), "temperature": 0}
 
 
+def build_checklist_request(model: str, image: bytes, items: list[str], choices: list[str]) -> dict[str, Any]:
+    listing = "\n".join(f"{i}. {item}" for i, item in enumerate(items, 1))
+    text = (f"Features to check:\n{listing}\n\nForced choice, the animal looks most like: "
+            f"{', '.join(choices)}.")
+    return {"model": model, "messages": [
+        {"role": "system", "content": CHECKLIST_INSTRUCTIONS},
+        {"role": "user", "content": [{"type": "text", "text": text},
+                                     {"type": "image_url", "image_url": {"url": _data_url(image)}}]},
+    ], "response_format": _json_schema("feature_checklist", checklist_schema(choices)), "temperature": 0}
+
+
 def build_sam_request(image: bytes, prompt: str, model: str = SAM_MODEL) -> dict[str, Any]:
     return {"model": model, "input": [{"role": "user", "content": [
         {"type": "input_text", "text": prompt},
@@ -146,6 +173,20 @@ def parse_polish_response(payload: dict[str, Any]) -> str:
 def parse_critic_response(payload: dict[str, Any]) -> dict[str, Any]:
     data = _message_json(payload)
     return {"animals": [str(a) for a in data.get("animals") or []], "creatures": int(data.get("creatures") or 0),
+            "notes": str(data.get("notes") or "")}
+
+
+def parse_checklist_response(payload: dict[str, Any], items: list[str], choices: list[str]) -> dict[str, Any]:
+    """Answers are matched to items by order (the model is told to keep it); anything missing or
+    not one of yes/no/unclear becomes "unclear". A choice outside `choices` becomes "other"."""
+    data = _message_json(payload)
+    got = [a for a in data.get("answers") or [] if isinstance(a, dict)]
+    answers = []
+    for i, item in enumerate(items):
+        a = str(got[i].get("answer", "")).lower() if i < len(got) else ""
+        answers.append({"item": item, "answer": a if a in ANSWERS else "unclear"})
+    choice = str(data.get("choice") or "")
+    return {"answers": answers, "choice": choice if choice in choices else "other",
             "notes": str(data.get("notes") or "")}
 
 
@@ -223,6 +264,10 @@ class LiveEvoSpark(_Retrying):
 
     async def critic(self, image: bytes) -> dict[str, Any]:
         return parse_critic_response(await self._chat("evo_critic", build_critic_request(self.model_id, image)))
+
+    async def checklist(self, image: bytes, items: list[str], choices: list[str]) -> dict[str, Any]:
+        body = build_checklist_request(self.model_id, image, items, choices)
+        return parse_checklist_response(await self._chat("evo_checklist", body), items, choices)
 
     async def vary(self, prompt: str, elites: list[dict[str, Any]], n: int, seed: int) -> list[dict[str, Any]]:
         raise ChimeraError(ErrorCode.UPSTREAM_ERROR, "Evolve rounds are not enabled live (E2 runs fuse only).",
