@@ -74,7 +74,7 @@ class Meter:
 def ahash(image: bytes, size: int = 16) -> int:
     with Image.open(io.BytesIO(image)) as im:
         g = im.convert("L").resize((size, size))
-        px = list(g.getdata())
+        px = list(g.get_flattened_data() if hasattr(g, "get_flattened_data") else g.getdata())
     mean = sum(px) / len(px)
     bits = 0
     for p in px:

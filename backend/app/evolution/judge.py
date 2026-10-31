@@ -46,7 +46,8 @@ def critic_score(result: dict[str, Any], sire: Animal, dam: Animal) -> float:
 def mask_stats(mask_png: bytes) -> dict[str, float]:
     with Image.open(io.BytesIO(mask_png)) as im:
         m = im.convert("L").resize((64, 64))
-        px = [1 if p > 127 else 0 for p in m.getdata()]
+        data = m.get_flattened_data() if hasattr(m, "get_flattened_data") else m.getdata()
+        px = [1 if p > 127 else 0 for p in data]
     n = 64
     on = sum(px)
     if not on:
