@@ -1,0 +1,106 @@
+{
+ "slug": "2_lion_x_tiger",
+ "image": "docs/evolution/live/e2/2_lion_x_tiger/image.webp",
+ "known_pair": "liger",
+ "checklist": [
+  "very large cat, longer and heavier-looking than a lion or a tiger",
+  "tawny, lion-like coat",
+  "faint tiger stripes",
+  "reduced mane or no mane",
+  "not a full mane together with full-strength stripes"
+ ],
+ "choices": [
+  "lion",
+  "tiger",
+  "liger",
+  "other"
+ ],
+ "full": {
+  "answers": [
+   {
+    "item": "very large cat, longer and heavier-looking than a lion or a tiger",
+    "answer": "yes"
+   },
+   {
+    "item": "tawny, lion-like coat",
+    "answer": "yes"
+   },
+   {
+    "item": "faint tiger stripes",
+    "answer": "yes"
+   },
+   {
+    "item": "reduced mane or no mane",
+    "answer": "yes"
+   },
+   {
+    "item": "not a full mane together with full-strength stripes",
+    "answer": "yes"
+   }
+  ],
+  "choice": "liger",
+  "notes": "Large tawny cat with faint striping and only a slight ruff matches a liger."
+ },
+ "thumbnail": {
+  "answers": [
+   {
+    "item": "very large cat, longer and heavier-looking than a lion or a tiger",
+    "answer": "unclear"
+   },
+   {
+    "item": "tawny, lion-like coat",
+    "answer": "yes"
+   },
+   {
+    "item": "faint tiger stripes",
+    "answer": "yes"
+   },
+   {
+    "item": "reduced mane or no mane",
+    "answer": "yes"
+   },
+   {
+    "item": "not a full mane together with full-strength stripes",
+    "answer": "yes"
+   }
+  ],
+  "choice": "liger",
+  "notes": "Tawny coat with faint leg stripes and reduced mane matches liger."
+ },
+ "forced_choice": {
+  "full": "liger",
+  "thumbnail": "liger"
+ },
+ "scores_before": {
+  "critic": 1.0,
+  "silhouette": 0.96,
+  "thumbnail": 1.0,
+  "soft_penalty": 0.167,
+  "quality": 0.955
+ },
+ "open_critic_before": {
+  "full": {
+   "animals": [
+    "lion",
+    "tiger"
+   ],
+   "creatures": 1,
+   "notes": "A large tawny hybrid big cat with faint tiger stripes stands in profile."
+  },
+  "thumbnail": {
+   "animals": [
+    "lion",
+    "tiger"
+   ],
+   "creatures": 1,
+   "notes": "A large tawny lion-like cat with faint tiger striping stands in view."
+  }
+ },
+ "scores_after": {
+  "critic": 1.0,
+  "silhouette": 0.96,
+  "thumbnail": 0.9,
+  "soft_penalty": 0.167,
+  "quality": 0.945
+ }
+}

@@ -83,3 +83,7 @@ Every real Meta API call made by L1 (appended automatically by `backend/app/adap
 | 2026-10-31T18:36:29+00:00 | e2c:1_donkey_x_horse:try1 | evo_critic | muse-spark-1.3 | 3416 | 3526 | 466 | 3992 | ok | chatcmpl-01a1933f-b6e5-73d0-aa15-a2cee99c4600 |
 | 2026-10-31T18:36:33+00:00 | e2c:1_donkey_x_horse:try1 | sam | sam-3.1 | 3420 | 0 | 0 | 0 | ok | resp_6ae6352d063a9b50d76843a8 |
 | 2026-10-31T18:36:44+00:00 | e2c:1_donkey_x_horse:try1 | evo_critic | muse-spark-1.3 | 3136 | 198 | 651 | 849 | ok | chatcmpl-01a1933f-ef0b-7668-a08c-d8ee4162f022 |
+| 2026-10-31T18:56:36+00:00 | e2d:1_donkey_x_horse | evo_checklist | muse-spark-1.3 | 7422 | 3648 | 1800 | 5448 | ok | chatcmpl-01a19352-20a9-712e-9a7b-cce2432b541d |
+| 2026-10-31T18:56:47+00:00 | e2d:1_donkey_x_horse | evo_checklist | muse-spark-1.3 | 10618 | 320 | 2399 | 2719 | ok | chatcmpl-01a19352-4acc-72ce-99dc-99af0d572ad5 |
+| 2026-10-31T18:56:54+00:00 | e2d:2_lion_x_tiger | evo_checklist | muse-spark-1.3 | 7630 | 3652 | 1699 | 5351 | ok | chatcmpl-01a19352-687c-7492-a91a-ffd09f2c1f04 |
+| 2026-10-31T18:57:00+00:00 | e2d:2_lion_x_tiger | evo_checklist | muse-spark-1.3 | 5834 | 324 | 1478 | 1802 | ok | chatcmpl-01a19352-7fbf-77ef-b70a-435816da79b6 |

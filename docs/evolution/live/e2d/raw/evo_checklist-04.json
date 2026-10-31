@@ -1,0 +1,127 @@
+{
+ "purpose": "evo_checklist",
+ "request": {
+  "model": "muse-spark-1.3",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture of an animal and check it against a list of visible features. For each item, answer yes if the feature is clearly visible, no if the picture clearly shows otherwise, or unclear if you cannot tell. Copy each item's text exactly, in the given order. Judge only what is visible. choice: which one of the listed options the animal in the picture looks most like; pick exactly one. notes: one short sentence."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "Features to check:\n1. very large cat, longer and heavier-looking than a lion or a tiger\n2. tawny, lion-like coat\n3. faint tiger stripes\n4. reduced mane or no mane\n5. not a full mane together with full-strength stripes\n\nForced choice, the animal looks most like: lion, tiger, liger, other."
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (70530 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "feature_checklist",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "answers",
+      "choice",
+      "notes"
+     ],
+     "properties": {
+      "answers": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "item",
+         "answer"
+        ],
+        "properties": {
+         "item": {
+          "type": "string"
+         },
+         "answer": {
+          "type": "string",
+          "enum": [
+           "yes",
+           "no",
+           "unclear"
+          ]
+         }
+        }
+       }
+      },
+      "choice": {
+       "type": "string",
+       "enum": [
+        "lion",
+        "tiger",
+        "liger",
+        "other"
+       ]
+      },
+      "notes": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0
+ },
+ "response": {
+  "id": "chatcmpl-01a19352-7fbf-77ef-b70a-435816da79b6",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\"answers\": [{\"answer\": \"unclear\", \"item\": \"very large cat, longer and heavier-looking than a lion or a tiger\"}, {\"answer\": \"yes\", \"item\": \"tawny, lion-like coat\"}, {\"answer\": \"yes\", \"item\": \"faint tiger stripes\"}, {\"answer\": \"yes\", \"item\": \"reduced mane or no mane\"}, {\"answer\": \"yes\", \"item\": \"not a full mane together with full-strength stripes\"}], \"choice\": \"liger\", \"notes\": \"Tawny coat with faint leg stripes and reduced mane matches liger.\"}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null
+    }
+   }
+  ],
+  "created": 1793473019,
+  "model": "muse-spark-1.3",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 1478,
+   "prompt_tokens": 324,
+   "total_tokens": 1802,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": null,
+    "audio_tokens": null,
+    "reasoning_tokens": 1345,
+    "rejected_prediction_tokens": null,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": null,
+    "cache_write_tokens": null,
+    "cached_tokens": 0,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

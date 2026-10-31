@@ -228,3 +228,22 @@ Short entries per phase: what was built, what was tested, what was deferred. New
 - Budget counter: image 17→18, spark 51→55, sam 7→8 (SAM cap now 15).
 
 **Tested:** pytest 543 passed, 6 skipped (+40 E2c tests).
+
+## 2026-10-31: E2d feature-checklist critic, re-score only
+
+**Plan:** replace the open critic on the real-hybrid route with a checklist from each pair's R2 card, then re-score the E2c mule and the E2 liger live. No new images. No merge. Report appended to `docs/evolution/E2_LIVE.md`.
+
+**Built:**
+- A `checklist` (4 to 6 visible features) on each of the 7 known pairs.
+- `LiveEvoSpark.checklist`, which asks for yes, no or unclear per item plus a forced choice (sire, dam, hybrid name, other) in one call.
+- `judge.checklist_score` (yes 1, unclear 0.5, no 0). The forced choice is logged in `judge.forced_choice` and not scored.
+- The thumbnail critic uses the same checklist. Other routes keep the open critic.
+- `scripts/e2d_rescore.py` re-scores existing images.
+
+**Live:**
+- 4 Spark calls, 0 image, 0 SAM, as predicted.
+- Mule: critic 0.5→0.8 and thumbnail 0.5→0.8; forced choice mule (full) and donkey (thumbnail); quality 0.685→0.835.
+- Liger: critic 1.0, thumbnail 0.9; forced choice liger on both; quality 0.955→0.945.
+- Budget counter: spark 55→59.
+
+**Tested:** pytest 562 passed, 6 skipped (+19 E2d tests).

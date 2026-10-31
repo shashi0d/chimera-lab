@@ -207,3 +207,94 @@ The first plan was again rejected under RC-R2-03, because the model edited the l
 ## Failures
 
 None. Example 1 succeeded on the first try with no re-render. Remaining headroom: 2 images, 15 Spark and 7 SAM.
+
+---
+
+# E2d: feature-checklist critic on the real-hybrid route (re-score only, no new images)
+
+Date: 2026-10-31. Branch: `evo` (not merged). Caps: images 20, Spark 70, SAM 15 on the shared counter.
+Outputs: `docs/evolution/live/e2d/`. Command: `scripts/e2d_rescore.py`.
+
+## What changed (commit `756056c`)
+
+1. **Checklists.** Each of the 7 known pairs in `data/evo_known_pairs.json` now has a `checklist` of 4 to 6 visible features, taken from its R2 card(s):
+
+   | Pair | R2 card(s) | Checklist |
+   |---|---|---|
+   | mule | RC-R2-03 | horse-sized body and long legs relative to the head; long donkey ears; short upright mane; tufted, short-haired tail base; plain coat with no stripes |
+   | hinny | RC-R2-04 | equine body close to a mule's but smaller and more horse-like; shorter, horse-shaped ears; fuller mane; fuller tail |
+   | liger | RC-R2-05, RC-R2-08 | very large cat, longer and heavier-looking than a lion or a tiger; tawny, lion-like coat; faint tiger stripes; reduced mane or no mane; not a full mane together with full-strength stripes |
+   | tigon | RC-R2-05, RC-R2-08 | cat near lion or tiger size, not oversized; tawny, lion-like coat; faint tiger stripes; reduced mane or no mane |
+   | zebroid | RC-R2-07, RC-R2-09 | horse or donkey body shape, not a zebra's; base coat color of the non-zebra parent; partial stripes, not a full zebra coat; stripes strongest on the legs; stripes on parts of the neck and body |
+   | hybrid bear | RC-R2-10 | long, polar-bear-like neck; small grizzly-like shoulder hump; visible tail; mostly pale coat; partly furred soles |
+   | cama | RC-R2-13, RC-R2-14 | intermediate camelid body, not a patchwork of parts; no hump; short camel-like ears; long camel-like tail; split, llama-like hooves |
+
+   The mule's "plain coat with no stripes" comes from the plain-coat override (E2b), not from the RC-R2-03 card text, as specified in the task.
+
+2. **Critic, real-hybrid route only.** One Muse Spark call (purpose `evo_checklist`) sends the image and the numbered checklist, and asks for JSON:
+   - one answer per item: `yes`, `no` or `unclear`;
+   - a forced `choice` between sire, dam, the hybrid's name and "other";
+   - a short note.
+
+   The critic score is the mean of the answers, with yes = 1, unclear = 0.5 and no = 0. The forced choice is stored in `judge.forced_choice` and is not scored. Answers are matched to items by order, and a missing or invalid answer becomes "unclear". The schema has no `minItems`/`maxItems`, because a strict schema might reject them. The checklist route asks for no creature count, so the silhouette check halves a mask that comes back in pieces. The third-animal re-render does not apply on this route.
+3. **Thumbnail critic.** It uses the same checklist and choices on the 192 px copy. The call count is unchanged: 2 Spark critic calls per render.
+4. **Other routes.** The chimera, mythic and same-genus routes keep the open critic exactly as before (`critic_mode: "open"`). A documented cross with no known-pair entry has no checklist, so it also keeps the open critic.
+- **Tests:** `tests/evolution/test_e2d_checklist.py` adds 19 tests covering the data, scoring, the choices, the request and parser, the metered client, engine wiring for full image and thumbnail, the open critic on other routes, and an unscored "other" choice. Two older tests that scripted the open critic on the mule were moved: one to a chimera, one to a prompt-only check. Backend total: 562 passed, 6 skipped.
+
+## Re-score results
+
+The silhouette and soft-penalty values are reused from each image's original run. Only the critic and thumbnail parts are new.
+
+| Image | Before: open critic (full / thumbnail) | Forced choice (full / thumbnail) | Critic | Thumbnail | Quality |
+|---|---|---|---|---|---|
+| ![](live/e2c/1_donkey_x_horse/image.webp) E2c mule | "donkey" / "donkey" → 0.5 / 0.5 | **mule** / donkey | 0.5 → **0.8** | 0.5 → **0.8** | 0.685 → **0.835** |
+| ![](live/e2/2_lion_x_tiger/image.webp) E2 liger (check) | "lion, tiger" / "lion, tiger" → 1.0 / 1.0 | **liger** / **liger** | 1.0 → 1.0 | 1.0 → 0.9 | 0.955 → 0.945 |
+
+Per-item answers, mule (E2c image):
+
+| Item | Full image | Thumbnail |
+|---|---|---|
+| horse-sized body and long legs relative to the head | yes | **no** |
+| long donkey ears | yes | yes |
+| short upright mane | yes | yes |
+| tufted, short-haired tail base | yes | yes |
+| plain coat with no stripes | **no** | yes |
+| Score | 4/5 = 0.8 | 4/5 = 0.8 |
+| Note | "Horse-proportioned body with long donkey ears, upright mane, and tufted tail indicates a mule." | "The illustration shows classic donkey features in profile." |
+
+Per-item answers, liger (E2 image):
+
+| Item | Full image | Thumbnail |
+|---|---|---|
+| very large cat, longer and heavier-looking than a lion or a tiger | yes | unclear |
+| tawny, lion-like coat | yes | yes |
+| faint tiger stripes | yes | yes |
+| reduced mane or no mane | yes | yes |
+| not a full mane together with full-strength stripes | yes | yes |
+| Score | 5/5 = 1.0 | 4.5/5 = 0.9 |
+| Note | "Large tawny cat with faint striping and only a slight ruff matches a liger." | "Tawny coat with faint leg stripes and reduced mane matches liger." |
+
+## My judgment
+
+- **Mule: the checklist reads the image better than the open critic did.** On the full image, given the hybrid's name as an option, the critic picks "mule", and its note names the horse-proportioned body. The open critic's "donkey" was an image with no context matched to the nearest common animal; the image itself did not change. Two answers are doubtful. The full image's "no" on "plain coat with no stripes" is one: I see no stripes, only darker shading on the shoulder and knees, which the critic may have read as markings. The thumbnail's "no" on the horse-sized body is the other, since size and proportion are hard to judge at 192 px, where the critic also chose "donkey". Full image and thumbnail disagree on exactly those two items, so single answers are noisy even at temperature 0.
+- **Liger: consistent.** All five items are yes on the full image, and the forced choice is "liger" on both sizes. The only drop is "very large" being unclear at thumbnail size, which is fair: absolute size can't be seen without a scale reference. So the checklist does not inflate a correct image, and its score is close to the open critic's.
+
+## Calls: predicted vs made
+
+| | Spark | Image | SAM |
+|---|---|---|---|
+| Predicted (2 images x full and thumbnail) | 4 | 0 | 0 |
+| Made, every attempt counted | **4** | **0** | **0** |
+| Retries / failures | 0 / 0 | - | - |
+
+## Budget counter (`docs/live/budget.json`)
+
+| | image | spark | sam |
+|---|---|---|---|
+| Before E2d | 18 | 55 | 8 |
+| After E2d | **18** | **59** | **8** |
+| Caps | 20 | 70 | 15 |
+
+## Failures
+
+None. Remaining headroom: 2 images, 11 Spark, 7 SAM.
