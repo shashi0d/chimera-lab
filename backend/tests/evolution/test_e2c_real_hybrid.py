@@ -173,9 +173,13 @@ async def test_fuse_mule_uses_the_real_hybrid_prompt(engine):
 
 
 async def test_fuse_chimera_does_not_accept_a_hybrid_name(engine):
-    _scripted(engine, ["liger"])
+    # E4: the animals seen come from the checklist call; "liger" on a chimera is a third animal.
+    async def checklist(image, items, choices):
+        return {"answers": [{"item": i, "answer": "yes"} for i in items], "choice": "other", "creatures": 1,
+                "animals": ["liger"], "notes": "s"}
+
+    engine.spark.checklist = checklist  # type: ignore[method-assign]
     doc = await engine.fuse(sire_name="lion", dam_name="eagle")
-    assert doc["judge"]["scores"]["critic"] == 0.0
     assert doc["render_attempts"][0]["third_animal"] == ["liger"]
 
 

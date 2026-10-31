@@ -191,13 +191,13 @@ async def test_one_spark_call_covers_every_uncovered_function(engine):
     assert len(seen) == 1 and set(seen[0]) >= {"breathing", "heat"}
     audit = {i["function"]: i for i in doc["genome"]["audit"]}
     assert all(audit[f]["source"] == "model-judged" and audit[f]["result"] == "pass" for f in seen[0])
-    assert doc["meta_calls"]["spark"] == 5  # plan, polish, audit, critic, thumbnail
+    assert doc["meta_calls"]["spark"] == 6  # plan, polish, audit, checklist, thumbnail, open critic
 
 
 async def test_no_uncovered_function_means_no_audit_call(engine):
     doc = await engine.fuse(sire_name="lion", dam_name="tiger")
     assert all(i["result"] != "pending" for i in doc["genome"]["audit"])
-    assert doc["meta_calls"]["spark"] == 4
+    assert doc["meta_calls"]["spark"] == 5
 
 
 async def test_failed_model_judgment_is_labeled_not_passed(engine):

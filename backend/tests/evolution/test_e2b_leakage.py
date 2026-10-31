@@ -149,14 +149,16 @@ def test_third_animal_detection(tax):
 
 
 def _scripted_critic(engine, answers: list[list[str]]):
+    """E4: the animals seen come from the checklist call (full image and thumbnail per render)."""
     calls: list[int] = []
 
-    async def critic(image: bytes) -> dict[str, Any]:
+    async def checklist(image: bytes, items: list[str], choices: list[str]) -> dict[str, Any]:
         calls.append(1)
-        n = (len(calls) - 1) // 2  # full image and thumbnail per render
-        return {"animals": answers[min(n, len(answers) - 1)], "creatures": 1, "notes": "scripted"}
+        n = (len(calls) - 1) // 2
+        return {"answers": [{"item": i, "answer": "yes"} for i in items], "choice": "other", "creatures": 1,
+                "animals": answers[min(n, len(answers) - 1)], "notes": "scripted"}
 
-    engine.spark.critic = critic  # type: ignore[method-assign]
+    engine.spark.checklist = checklist  # type: ignore[method-assign]
 
 
 async def test_third_animal_rerenders_once_with_the_compiled_prompt(engine):
@@ -165,7 +167,7 @@ async def test_third_animal_rerenders_once_with_the_compiled_prompt(engine):
     assert [a["third_animal"] for a in doc["render_attempts"]] == [["leopard"], []]
     assert doc["render_attempts"][1]["prompt"] == "compiled" and doc["prompt"] == doc["prompt_compiled"]
     assert doc["warnings"] == [] and doc["first_image_key"]
-    assert doc["meta_calls"] == {"spark": 6, "image": 2, "sam": 2}
+    assert doc["meta_calls"] == {"spark": 8, "image": 2, "sam": 2}  # E4: 3 critic calls per render
 
 
 async def test_third_animal_twice_is_kept_with_a_warning(engine):
@@ -179,7 +181,7 @@ async def test_third_animal_twice_is_kept_with_a_warning(engine):
 
 async def test_no_third_animal_no_rerender(engine):
     doc = await engine.fuse(sire_name="lion", dam_name="tiger")
-    assert len(doc["render_attempts"]) == 1 and doc["meta_calls"] == {"spark": 4, "image": 1, "sam": 1}
+    assert len(doc["render_attempts"]) == 1 and doc["meta_calls"] == {"spark": 5, "image": 1, "sam": 1}
 
 
 # ------------------------------------------------------------------ 6. SAM scorer

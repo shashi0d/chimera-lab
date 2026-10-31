@@ -94,7 +94,7 @@ async def test_worked_examples_through_fuse(engine, sire, dam):
     else:
         assert prompt.startswith("Silhouette: ") and "Habitat cue" in prompt
     assert "fully visible" in prompt and "discernible eyes" in prompt and "One creature, full body" in prompt
-    assert doc["meta_calls"] == {"spark": 4, "image": 1, "sam": 1}
+    assert doc["meta_calls"] == {"spark": 5, "image": 1, "sam": 1}  # E4: plus the logged open critic
     assert doc["model_plan"] == "accepted"
     assert 0 <= doc["genome"]["scores"]["quality"] <= 1
     card = doc["card"]

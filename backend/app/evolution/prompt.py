@@ -144,9 +144,14 @@ def compile_real_hybrid(g: Genome, tax: Taxonomy) -> str:
         body += f", with the {_name(tax, donor)}'s {_join(features)}"
     lines = [hybrid_opener(g, tax), f"{body}; {pattern_clause(g, tax)}.", *([license_clause(g)] if g.licenses else []),
              "Head fully visible and uncluttered, with clear, discernible eyes.",
-             "Bilaterally symmetrical, recognizable limbs, visible sense organs.",
+             "Bilaterally symmetrical, recognizable limbs, visible sense organs.", prosaic_line(),
              "One creature, full body, side three-quarter view, plain light background, natural history illustration."]
     return strip_franchise(" ".join(lines))
+
+
+def prosaic_line() -> str:
+    """R9 section 4 (RC-R9-15): ordinary detail in every mode, so the one impossible element is believable."""
+    return f"Prosaic detail: {config()['prosaic_detail']}."
 
 
 def license_clause(g: Genome) -> str:
@@ -195,6 +200,9 @@ def compile_prompt(g: Genome, tax: Taxonomy) -> str:
         if note and tr.op != "PATCH" and tag not in ("size",) and "host value" not in note:
             contrib.append(f"{tag.replace('_', ' ')}: {note}")
     contrib.append(pattern_clause(g, tax))
+    for app_ in lp.appendages:
+        if not app_.endswith("(tail)"):  # E4: e.g. donor external gills, kept as display frills outside realistic mode
+            contrib.append(f"{app_}, small display frills" if "gills" in app_ else app_)
     if lp.extra_wings:
         contrib.append(f"four legs plus a separate pair of {_name(tax, lp.extra_wings.donor)} wings on the shoulders")
     elif lp.forelimbs.kind == "wings" and lp.forelimbs.donor and lp.forelimbs.donor != g.host:
@@ -211,6 +219,7 @@ def compile_prompt(g: Genome, tax: Taxonomy) -> str:
     lines.append("Bilaterally symmetrical, recognizable limbs, visible sense organs.")
     if g.habitat.visible_trait and not BARE_PATTERN.search(g.habitat.visible_trait):
         lines.append(f"Habitat cue ({g.habitat.name}): {g.habitat.visible_trait}.")
+    lines.append(prosaic_line())
     lines.append("One creature, full body, side three-quarter view, plain light background, natural history illustration.")
     return strip_franchise(" ".join(lines))
 

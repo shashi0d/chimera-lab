@@ -76,7 +76,7 @@ async def test_evo_endpoints(client):
 
     r = await client.post("/evo/evolve", json={"creature_id": cid, "rounds": 1, "batch": 2})
     assert r.status_code == 200, r.text
-    assert r.json()["cells"] and r.json()["meta_calls"] == {"spark": 1 + 2 * 3, "image": 2, "sam": 2}
+    assert r.json()["cells"] and r.json()["meta_calls"] == {"spark": 1 + 2 * 4, "image": 2, "sam": 2}
 
     r = await client.post(f"/evo/creature/{cid}/edit", json={"gene": "habitat", "value": "desert"})
     assert r.status_code == 200, r.text
@@ -98,7 +98,7 @@ async def test_fuse_from_image_identifies_with_one_spark_call(client):
     r = await client.post("/evo/fuse", json={"sire": {"image_b64": lion}, "dam": {"name": "tiger"}})
     assert r.status_code == 200, r.text
     assert r.json()["genome"]["known_pair"] == "liger"
-    assert r.json()["meta_calls"] == {"spark": 5, "image": 1, "sam": 1}
+    assert r.json()["meta_calls"] == {"spark": 6, "image": 1, "sam": 1}  # identify + plan, polish, 3 critics
 
 
 def test_fixture_image_exists():

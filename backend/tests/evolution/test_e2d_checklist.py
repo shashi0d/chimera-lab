@@ -152,7 +152,7 @@ def _size(image: bytes) -> int:
 async def test_real_hybrid_uses_the_checklist_for_full_image_and_thumbnail(engine, sire, dam, name):
     seen = _spy(engine)
     doc = await engine.fuse(sire_name=sire, dam_name=dam)
-    assert seen["critic"] == []  # the open critic is not called on this route
+    assert len(seen["critic"]) == 1 and seen["critic"][0] > THUMB_PX  # E4: open critic logged, full image only
     (full, items, choices), (thumb, items2, choices2) = seen["checklist"]
     assert full > THUMB_PX and thumb == THUMB_PX
     assert items == items2 == next(p for p in known_pairs() if p["id"] == name)["checklist"]
@@ -162,16 +162,21 @@ async def test_real_hybrid_uses_the_checklist_for_full_image_and_thumbnail(engin
     assert j["forced_choice"] == {"full": name, "thumbnail": name}
     assert j["scores"]["critic"] == checklist_score(j["critic"]) == 1.0  # mock: every item visible at full size
     assert j["scores"]["thumbnail"] == checklist_score(j["critic_thumbnail"]) < 1.0  # fine detail unclear
-    assert doc["meta_calls"] == {"spark": 4, "image": 1, "sam": 1}  # still 2 critic calls per render
+    assert doc["meta_calls"] == {"spark": 5, "image": 1, "sam": 1}  # 2 checklist calls + the logged open critic
+    assert "animals" in j["open_critic"] and j["checklist_source"] == "known pair (hand-written)"
 
 
 @pytest.mark.parametrize("sire,dam", [("lion", "eagle"), ("eagle", "octopus"), ("tiger", "leopard")])
-async def test_other_routes_keep_the_open_critic(engine, sire, dam):
+async def test_other_routes_use_a_generated_checklist(engine, sire, dam):
+    # E4 supersedes E2d item 4: every route now gets a checklist (generated from the plan); the open
+    # critic runs once as a logged second opinion and is not scored.
     seen = _spy(engine)
     doc = await engine.fuse(sire_name=sire, dam_name=dam)
-    assert seen["checklist"] == [] and len(seen["critic"]) == 2
+    assert len(seen["checklist"]) == 2 and len(seen["critic"]) == 1
     j = doc["judge"]
-    assert j["critic_mode"] == "open" and "forced_choice" not in j and "animals" in j["critic"]
+    assert j["critic_mode"] == "checklist" and j["checklist_source"] == "generated from the plan"
+    assert 4 <= len(j["checklist"]) <= 6 and seen["checklist"][0][2][2] == "a mix of both"
+    assert "animals" in j["open_critic"] and j["scores"]["critic"] == checklist_score(j["critic"])
 
 
 async def test_forced_choice_other_is_logged_not_scored(engine):
