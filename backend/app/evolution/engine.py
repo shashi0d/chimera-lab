@@ -28,7 +28,7 @@ from app.evolution.judge import judge
 from app.evolution.physics import run_checks
 from app.evolution.prompt import PROMPT_CARDS, accept_polish, compile_prompt
 from app.evolution.route import Route, choose_host, route, silhouette
-from app.evolution.traits import build_traits, contribution
+from app.evolution.traits import build_traits, contribution, gate
 from app.models.schemas import ErrorCode
 from app.services import Services
 
@@ -146,12 +146,13 @@ class EvoEngine:
         """4.4 habitat and 4.5 physical checks, then derived fields. Idempotent."""
         g = g.model_copy(deep=True)
         locked = bool(r.pair and r.pair.get("locked"))
+        gate_cards = gate(g.traits, r, g.host, self.tax)  # E2b: a model plan cannot undo GATE (e.g. a mane on feathers)
         hab_cards = apply_habitat(g, self.tax, locked)
         phys_cards = run_checks(g, self.tax)
         g.silhouette = silhouette(g, self.tax, r.pair)
         g.identity_balance = contribution(g.traits, g.limb_plan, g.host or g.parents.sire)
         g.labels = _dedupe([*r.labels, *g.labels])
-        g.card_trace = _dedupe(g.card_trace + hab_cards + phys_cards + PROMPT_CARDS)
+        g.card_trace = _dedupe(g.card_trace + gate_cards + hab_cards + phys_cards + PROMPT_CARDS)
         assert g.limb_plan.requested_wings is None, "limb budget left a wing request unresolved (RC-R3-01)"
         g.id = plan_id(g)
         return validate_plan(g.model_dump())
@@ -168,22 +169,45 @@ class EvoEngine:
 
     # ------------------------------------------------------------------ 4.6 to 4.8
 
+    async def _render_and_judge(self, prompt: str, g: Genome, r: Route, refs: list[bytes]) -> tuple[Any, dict[str, Any]]:
+        img = await self.meter.call("image", "render", self.renderer.generate(prompt, refs, "1:1"))
+        if self.mock:
+            self.registry.note(img.data, prompt)
+        return img, await judge(img.data, g, r, self.tax, self.spark, self.segmenter, self.meter)
+
     async def realize(self, g: Genome, r: Route, refs: list[bytes]) -> dict[str, Any]:
         prompt = compile_prompt(g, self.tax)
         polished = await self.meter.call("spark", "polish", self.spark.polish(prompt))
-        final = accept_polish(prompt, polished)
+        final, polish_reason = accept_polish(prompt, polished, g, self.tax)
         if not refs and self.mock:
             refs = [swatch(g.parents.sire), swatch(g.parents.dam)]  # the mock renderer needs references
-        img = await self.meter.call("image", "render", self.renderer.generate(final, refs, "1:1"))
-        if self.mock:
-            self.registry.note(img.data, final)
-        verdict = await judge(img.data, g, r, self.tax, self.spark, self.segmenter, self.meter)
+        img, verdict = await self._render_and_judge(final, g, r, refs)
+        attempts = [{"prompt": "compiled" if final == prompt else "polished", "critic": verdict["critic"],
+                     "third_animal": verdict["third_animal"], "scores": verdict["scores"]}]
+        warnings: list[str] = []
+        first_key: str | None = None
+        if verdict["third_animal"]:  # E2b: one re-render with the code-compiled prompt, then keep it
+            first_key = f"evo/{g.id}.try1.webp"
+            await self.services.storage.put(first_key, img.data, img.content_type)
+            try:
+                img2, v2 = await self._render_and_judge(prompt, g, r, refs)
+            except ChimeraError as e:
+                if e.code != ErrorCode.BUDGET_EXCEEDED:
+                    raise
+                warnings.append(f"third animal ({', '.join(verdict['third_animal'])}); re-render skipped: {e.message}")
+            else:
+                img, verdict, final = img2, v2, prompt
+                attempts.append({"prompt": "compiled", "critic": v2["critic"], "third_animal": v2["third_animal"],
+                                 "scores": v2["scores"]})
+                if v2["third_animal"]:
+                    warnings.append(f"third animal after one re-render: {', '.join(v2['third_animal'])}")
         g = g.model_copy(update={"scores": verdict["scores"]})
         key = f"evo/{g.id}.webp"
         await self.services.storage.put(key, img.data, img.content_type)
         doc = {"genome": g.model_dump(), "prompt": final, "prompt_compiled": prompt, "image_key": key,
                "judge": verdict, "card": output_card(g, r, self.tax), "route": r.public(),
-               "ref_keys": []}
+               "polish": f"rejected: {polish_reason}" if polish_reason else "accepted",
+               "render_attempts": attempts, "first_image_key": first_key, "warnings": warnings, "ref_keys": []}
         self.store.put("creatures", g.id, doc)
         return doc
 

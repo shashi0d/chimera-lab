@@ -113,7 +113,7 @@ def test_rc_r2_03_mule_matches_override_field_by_field(engine, seed):
     pair = find_known_pair(engine.tax.animals["donkey"], engine.tax.animals["horse"])
     assert pair["id"] == "mule" and pair["locked"]
     for tag, spec in pair["traits"].items():
-        assert g.traits[tag].model_dump(exclude_none=True, exclude_defaults=True) == spec, tag
+        assert g.traits[tag].model_dump(exclude_none=True, exclude_defaults=True) == {k: v for k, v in spec.items() if v is not None}, tag
     assert g.size.mass_kg == engine.tax.animals["horse"].mass_kg  # horse height
     assert g.host == "horse"
     assert not ids(hard_violations(g, r, engine.tax))

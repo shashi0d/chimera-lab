@@ -12,7 +12,7 @@ import math
 import random
 from typing import Any
 
-from app.evolution.data import Animal, Taxonomy, config
+from app.evolution.data import PLAIN_COAT, Animal, Taxonomy, coat_pattern, config
 from app.evolution.genome import (
     BEYOND,
     MEASUREMENT_TAGS,
@@ -81,6 +81,20 @@ def _donor_kind(a: Animal) -> str:
     return "default"
 
 
+def plain_trait(note: str = PLAIN_COAT) -> Trait:
+    return Trait(op="PICK", donor=None, note=note, flags=["plain"])
+
+
+def _hybrid_pattern(a: str, b: str, head_donor: str) -> Trait:
+    """Overlay only a pattern a parent really has (E2b); the head donor's wins a tie (RC-R1-11)."""
+    patterned = [x for x in (head_donor, b if head_donor == a else a) if coat_pattern(x)]
+    if not patterned:
+        return plain_trait()
+    d = patterned[0]
+    return Trait(op="OVERLAY", donor=d, strength=0.4, region=["flanks", "legs"],
+                 note=f"reduced {coat_pattern(d)}: the pattern donor does not own the body")
+
+
 def _hybrid_traits(r: Route, rng: random.Random) -> tuple[dict[str, Trait], list[str]]:
     a, b = r.sire.id, r.dam.id
     spread = config()["thresholds"]["hybrid_spread"]
@@ -103,8 +117,7 @@ def _hybrid_traits(r: Route, rng: random.Random) -> tuple[dict[str, Trait], list
         "limbs": Trait(op="BLEND", donor=[a, b], value=lean(limb_donor)),
         "feet": Trait(op="PICK", donor=limb_donor),
         "coat_color": Trait(op="BLEND", donor=[a, b], value=near_mid()),
-        "coat_pattern": Trait(op="OVERLAY", donor=head_donor, strength=0.4, region=["flanks", "legs"],
-                              note="reduced: the pattern donor does not own the body"),
+        "coat_pattern": _hybrid_pattern(a, b, head_donor),
         "coat_texture": Trait(op="PICK", donor=rng.choice([a, b])),
         "behavior": Trait(op="PICK", donor=head_donor, note="behavior may follow one parent"),
     }
@@ -139,7 +152,8 @@ def _chimera_traits(r: Route, host: Animal, donor: Animal, rng: random.Random) -
     t["mane"] = Trait(op="PICK", donor=h, note="present only if the host has one")
     t["limbs"] = Trait(op="PICK", donor=h)
     t["feet"] = Trait(op="PICK", donor=h)
-    surface = {"coat_pattern": f"{donor.common_name} pattern", "coat_color": f"{donor.common_name} color",
+    surface = {"coat_pattern": f"{donor.common_name}-type {coat_pattern(d) or 'surface, no stripes or spots'}",
+               "coat_color": f"{donor.common_name} color",
                "coat_texture": f"{donor.common_name} {donor.covering or 'surface'}"}
     for tag in SURFACE_TAGS:
         t[tag] = Trait(op="PATCH", donor=d, strength=1.0, region=list(regions),

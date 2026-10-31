@@ -12,7 +12,7 @@ import random
 import re
 from typing import Any
 
-from app.evolution.data import Animal, Taxonomy, config
+from app.evolution.data import Animal, Taxonomy, coat_pattern, config, pattern_phrase
 from app.evolution.genome import Genome, Habitat
 
 PATTERN_FLAG = re.compile(r"^habitat pattern ([+-]\d+\.\d+)$")
@@ -74,21 +74,21 @@ def apply_habitat(g: Genome, tax: Taxonomy, locked: bool = False) -> list[str]:
     cards: list[str] = []
     visible: list[str] = []
 
-    # Pattern strength and complexity (RC-R4-01, RC-R4-02). PATCHes stay at full strength (RC-R5-04).
-    delta = 0.1 if p["openness"] == "closed" else -0.1
-    for tag in ("coat_pattern",):
-        tr = g.traits[tag]
-        if tr.op == "OVERLAY" and tr.strength is not None and not (locked and tag in _locked_tags(g)):
-            new = min(1.0, max(0.05, round(tr.strength + delta, 3)))
-            applied = round(new - tr.strength, 3)
-            if applied:
-                tr.strength = new
-                tr.flags.append(f"habitat pattern {applied:+.2f}")
-    if p["openness"] == "closed":
-        adj.append("more patterned, irregular coat markings for a closed habitat")
-    else:
-        adj.append("plainer coat with fewer markings for an open habitat")
-    visible.append(adj[-1])
+    # Pattern strength (RC-R4-01, RC-R4-02), E2b: the step only scales a pattern a parent already has and
+    # never adds markings. Open habitats make it plainer, closed ones a little bolder; with no patterned
+    # donor nothing changes. PATCHes stay at full strength (RC-R5-04).
+    tr = g.traits["coat_pattern"]
+    owner = tr.donor if isinstance(tr.donor, str) and coat_pattern(tr.donor) else None
+    if owner and tr.op == "OVERLAY" and tr.strength is not None and not (locked and "coat_pattern" in _locked_tags(g)):
+        delta = 0.1 if p["openness"] == "closed" else -0.1
+        new = min(1.0, max(0.05, round(tr.strength + delta, 3)))
+        applied = round(new - tr.strength, 3)
+        if applied:
+            tr.strength = new
+            tr.flags.append(f"habitat pattern {applied:+.2f}")
+            phrase = pattern_phrase(tax.animals[owner].common_name, owner)
+            adj.append(f"{'bolder' if applied > 0 else 'fainter'} {phrase} for {'a closed' if applied > 0 else 'an open'} habitat")
+            visible.append(adj[-1])
     cards += ["RC-R4-01", "RC-R4-02"]
 
     # Countershading (RC-R4-05).

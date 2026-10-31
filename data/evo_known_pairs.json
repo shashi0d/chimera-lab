@@ -20,7 +20,8 @@
         "limbs": {"op": "PICK", "donor": "sire", "note": "thin donkey limbs"},
         "feet": {"op": "PICK", "donor": "sire", "note": "small donkey hooves"},
         "tail": {"op": "BLEND", "donor": ["sire", "dam"], "value": 0.5, "note": "tail short-haired at the base and longer below"},
-        "coat_texture": {"op": "PICK", "donor": "sire", "note": "coarse donkey coat"}
+        "coat_texture": {"op": "PICK", "donor": "sire", "note": "coarse donkey coat"},
+        "coat_pattern": {"op": "PICK", "donor": null, "note": "plain coat, no stripes or spots (none documented for mules, RC-R2-03)", "flags": ["plain"]}
       },
       "processes": ["region mosaic as in mules"]
     },
@@ -40,7 +41,8 @@
         "head": {"op": "BLEND", "donor": ["sire", "dam"], "value": 0.6, "note": "head close to a mule's"},
         "ears": {"op": "PICK", "donor": "sire", "note": "shorter horse-shaped ears"},
         "mane": {"op": "PICK", "donor": "sire", "note": "fuller mane"},
-        "tail": {"op": "PICK", "donor": "sire", "note": "fuller tail"}
+        "tail": {"op": "PICK", "donor": "sire", "note": "fuller tail"},
+        "coat_pattern": {"op": "PICK", "donor": null, "note": "plain coat, no stripes or spots (none documented for hinnies, RC-R2-04)", "flags": ["plain"]}
       },
       "processes": ["region mosaic as in hinnies", "reciprocal cross differs from the mule"],
       "caveats": ["A hinny and a mule cannot reliably be told apart by looks alone."]

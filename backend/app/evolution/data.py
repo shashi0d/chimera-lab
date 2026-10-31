@@ -83,6 +83,20 @@ def config(path: Path = CONFIG_PATH) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+PLAIN_COAT = "plain coat, no stripes or spots"
+
+
+def coat_pattern(animal_id: str | None) -> str | None:
+    """The parent's own visible coat pattern type (e.g. "stripes"), or None: no stripes or spots (E2b)."""
+    return config().get("coat_patterns", {}).get(animal_id) if animal_id else None
+
+
+def pattern_phrase(name: str, animal_id: str | None) -> str | None:
+    """Always donor plus type, e.g. "tiger-type stripes"; never a bare "pattern" (E2b)."""
+    kind = coat_pattern(animal_id)
+    return f"{name.lower()}-type {kind}" if kind else None
+
+
 @lru_cache
 def known_pairs(path: Path = PAIRS_PATH) -> list[dict[str, Any]]:
     return json.loads(path.read_text(encoding="utf-8"))["pairs"]

@@ -69,7 +69,7 @@ def hard_violations(g: Genome, r: Route, tax: Taxonomy) -> list[Violation]:
     pair = find_known_pair(tax.animals[sire], tax.animals[dam])
     if pair and pair.get("locked"):
         for tag, spec in pair["traits"].items():
-            want = {k: v for k, v in spec.items()}
+            want = {k: v for k, v in spec.items() if v is not None}  # same as exclude_none below
             have = g.traits[tag].model_dump(exclude_none=True, exclude_defaults=True)
             if have != want:
                 out.append(Violation(pair["cards"][0], f"{tag}: {have} != override {want}"))

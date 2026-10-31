@@ -26,6 +26,26 @@ WEIGHTS = {"critic": 0.4, "silhouette": 0.3, "thumbnail": 0.1, "rules": 0.2}
 ASPECT = {"quadruped": (1.2, 2.6), "winged": (0.5, 1.5), "biped": (0.4, 1.2), "finned": (1.5, 4.0),
           "serpentine": (1.5, 6.0), "arthropod": (0.8, 2.5), "soft_bodied": (0.6, 2.0), "other": (0.5, 3.0)}
 THUMB_PX = 192
+SAM_PROMPT = "animal"
+# Group words a critic may use for a parent ("bird" for an eagle): (taxonomy field, value).
+GROUP_WORDS = {"bird": ("tax_class", "Aves"), "raptor": ("tax_class", "Aves"), "cat": ("family", "Felidae"),
+               "big cat": ("family", "Felidae"), "feline": ("family", "Felidae"), "equine": ("family", "Equidae"),
+               "equid": ("family", "Equidae"), "bear": ("family", "Ursidae"), "camelid": ("family", "Camelidae")}
+
+
+def third_animals(result: dict[str, Any], sire: Animal, dam: Animal, tax: Taxonomy, r: Route | None = None) -> list[str]:
+    """Names the critic gave that are neither parent, a group word for a parent, nor the known pair's name (E2b)."""
+    pair = (r.pair or {}).get("name", "").lower() if r and r.pair else ""
+    out = []
+    for said in [str(x) for x in result.get("animals") or []]:
+        low = said.lower().strip()
+        if _named(sire, [said]) or _named(dam, [said]) or (pair and pair in low):
+            continue
+        group = GROUP_WORDS.get(low.removesuffix("s"))
+        if group and any(getattr(p, group[0]) == group[1] for p in (sire, dam)):
+            continue
+        out.append(said)
+    return out
 
 
 def _named(animal: Animal, said: list[str]) -> bool:
@@ -74,13 +94,14 @@ def mask_stats(mask_png: bytes) -> dict[str, float]:
     return {"fill": round(on / len(px), 3), "aspect": round(w / h, 3), "components": comps}
 
 
-def silhouette_score(stats: dict[str, float], frame: str) -> float:
+def silhouette_score(stats: dict[str, float], frame: str, critic_one: bool = False) -> float:
+    """critic_one (E2b): the critic saw one creature, so a mask in pieces (wing tips, a tail) is still one."""
     if stats["fill"] < 0.05:
         return 0.0
     lo, hi = ASPECT.get(frame, ASPECT["other"])
     a = stats["aspect"]
     score = 1.0 if lo <= a <= hi else max(0.0, 1.0 - min(abs(a - lo), abs(a - hi)))
-    if stats["components"] > 1:
+    if stats["components"] > 1 and not critic_one:
         score *= 0.5  # reads as two creatures
     return round(score, 3)
 
@@ -99,17 +120,19 @@ async def judge(image: bytes, g: Genome, r: Route, tax: Taxonomy, spark: EvoSpar
     sire, dam = tax.animals[g.parents.sire], tax.animals[g.parents.dam]
     frame_animal = tax.animals[g.host] if g.host else sire
     critic = await meter.call("spark", "critic", spark.critic(image))
-    mask = await meter.call("sam", "segment", seg.segment(image, frame_animal.common_name))
+    mask = await meter.call("sam", "segment", seg.segment(image, SAM_PROMPT))  # E2b: never the host's name
     stats = mask_stats(mask)
     thumb = await meter.call("spark", "critic_thumbnail", spark.critic(thumbnail(image)))
     items, soft = soft_penalties(g, r, tax)
     frame = "winged" if frame_animal.frame == "winged" else frame_animal.frame
     scores = {
         "critic": critic_score(critic, sire, dam),
-        "silhouette": silhouette_score(stats, frame),
+        "silhouette": silhouette_score(stats, frame, critic_one=int(critic.get("creatures") or 0) == 1),
         "thumbnail": critic_score(thumb, sire, dam),
         "soft_penalty": soft,
     }
     scores["quality"] = round(WEIGHTS["critic"] * scores["critic"] + WEIGHTS["silhouette"] * scores["silhouette"]
                               + WEIGHTS["thumbnail"] * scores["thumbnail"] + WEIGHTS["rules"] * (1 - soft), 3)
-    return {"scores": scores, "critic": critic, "critic_thumbnail": thumb, "mask": stats, "soft_cards": items}
+    third = third_animals(critic, sire, dam, tax, r)
+    return {"scores": scores, "critic": critic, "critic_thumbnail": thumb, "mask": stats, "soft_cards": items,
+            "third_animal": third, "sam_prompt": SAM_PROMPT}
