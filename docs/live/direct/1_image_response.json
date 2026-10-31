@@ -1,0 +1,99 @@
+{
+  "prompt": "Create a chimera: one new creature that combines the animal in the first image with the animal in the second image.",
+  "inputs": [
+    "tiger.webp",
+    "horse.webp"
+  ],
+  "response": {
+    "id": "resp_6ae53f6b17f867674d5a4f99",
+    "access_programs": null,
+    "created_at": 1793408875.0,
+    "error": null,
+    "incomplete_details": null,
+    "instructions": null,
+    "metadata": null,
+    "model": "muse-image-1.0",
+    "object": "response",
+    "output": [
+      {
+        "id": "rs_6ae53f6b263c2b59271447ee",
+        "summary": [
+          {
+            "text": "**Designing tiger-horse chimera**\nI'm planning a chimera that merges a horse's body with tiger features, deciding on stripes, head shape, mane, and tail to guide the image generation.\n**Composing chimera in grassland**\nI'm assembling a single creature with a horse-like brown body, tiger-striped orange head, black mane and tufted tail, set in grassy terrain to blend realistically.",
+            "type": "summary_text"
+          }
+        ],
+        "type": "reasoning",
+        "content": null,
+        "encrypted_content": null,
+        "status": "completed"
+      },
+      {
+        "id": "msg_6ae53f6b69b0981710114cd1",
+        "content": [
+          {
+            "annotations": [],
+            "text": "",
+            "type": "output_text",
+            "logprobs": []
+          }
+        ],
+        "role": "assistant",
+        "status": "completed",
+        "type": "message",
+        "phase": null
+      },
+      {
+        "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0xpdUJ6Uk1XNVFpam04S0FDYV85S2JocXB4UWJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczozZTc0YWRiMy0xYWY2LTQ3NTMtYTEyMC1jZWJhYWNkN2FjZmM6R082SU1qUmMzOHN2X3gwUUFIWmVKOVIxZW5nZ2JnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM0MDg4NzV9.Q8WLFwHljn4nan4fVWqyIelTmAly",
+        "result": "<base64 801416 chars>",
+        "status": "completed",
+        "type": "image_generation_call",
+        "action": null,
+        "background": null,
+        "error": null,
+        "output_format": null,
+        "quality": null,
+        "revised_prompt": null,
+        "size": null
+      }
+    ],
+    "parallel_tool_calls": false,
+    "temperature": null,
+    "tool_choice": null,
+    "tools": null,
+    "top_p": null,
+    "background": null,
+    "completed_at": null,
+    "conversation": null,
+    "max_output_tokens": null,
+    "max_tool_calls": null,
+    "moderation": null,
+    "previous_response_id": null,
+    "prompt": null,
+    "prompt_cache_diagnostics": null,
+    "prompt_cache_key": null,
+    "prompt_cache_options": null,
+    "prompt_cache_retention": null,
+    "reasoning": null,
+    "safety_identifier": null,
+    "service_tier": null,
+    "status": "completed",
+    "text": null,
+    "tool_usage": null,
+    "top_logprobs": null,
+    "truncation": null,
+    "usage": {
+      "input_tokens": 14315,
+      "input_tokens_details": {
+        "cache_write_tokens": null,
+        "cached_tokens": 10112
+      },
+      "output_tokens": 921,
+      "output_tokens_details": {
+        "reasoning_tokens": 217
+      },
+      "total_tokens": 15236
+    },
+    "user": null
+  }
+}
