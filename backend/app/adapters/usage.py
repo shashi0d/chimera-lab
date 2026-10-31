@@ -6,7 +6,7 @@ put tokens per step in the run detail and charge the token spend guard, and,
 when ``CHIMERA_LIVE_LOG`` is set, to a markdown log (docs/LIVE_LOG.md).
 
 ``CHIMERA_LIVE_BUDGET_FILE`` enables a hard, cross-process cap on live calls
-(``CHIMERA_LIVE_MAX_IMAGES`` / ``CHIMERA_LIVE_MAX_SPARK``). Every attempt
+(``CHIMERA_LIVE_MAX_IMAGES`` / ``CHIMERA_LIVE_MAX_SPARK`` / ``CHIMERA_LIVE_MAX_SAM``). Every attempt
 counts, failed ones included; past the cap the adapter refuses to call.
 """
 
@@ -25,14 +25,14 @@ from typing import Any, Literal
 from app.errors import ChimeraError
 from app.models.schemas import ErrorCode
 
-CallKind = Literal["spark", "image"]
+CallKind = Literal["spark", "image", "sam"]
 
 
 @dataclass
 class CallRecord:
     step: str
     kind: CallKind
-    purpose: str  # describe / plan / card / generate / text_to_image
+    purpose: str  # describe / plan / card / generate / text_to_image / evo_* / sam
     model: str
     latency_ms: int
     input_tokens: int = 0
@@ -89,14 +89,15 @@ def _budget_file() -> Path | None:
 
 def _limits() -> dict[str, int]:
     return {"image": int(os.environ.get("CHIMERA_LIVE_MAX_IMAGES", "15")),
-            "spark": int(os.environ.get("CHIMERA_LIVE_MAX_SPARK", "60"))}
+            "spark": int(os.environ.get("CHIMERA_LIVE_MAX_SPARK", "60")),
+            "sam": int(os.environ.get("CHIMERA_LIVE_MAX_SAM", "8"))}
 
 
 def budget_used() -> dict[str, int]:
     path = _budget_file()
     if not path or not path.exists():
-        return {"image": 0, "spark": 0}
-    return {"image": 0, "spark": 0, **json.loads(path.read_text())}
+        return {"image": 0, "spark": 0, "sam": 0}
+    return {"image": 0, "spark": 0, "sam": 0, **json.loads(path.read_text())}
 
 
 def guard(kind: CallKind) -> None:

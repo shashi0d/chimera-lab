@@ -16,6 +16,7 @@ import random
 from pathlib import Path
 from typing import Any
 
+from app.adapters.base import ImageGenAdapter
 from app.errors import ChimeraError
 from app.evolution.adapters import EvoSpark, Meter, MockEvoSpark, MockRegistry, MockSegmenter, Segmenter, swatch
 from app.evolution.card import output_card
@@ -75,6 +76,16 @@ class EvoEngine:
         self.services = services
         self.mock = services.settings.chimera_mode == "mock"
         self.registry = registry or MockRegistry()
+        self.renderer: ImageGenAdapter = services.image_gen
+        self.live_error: str | None = None
+        if not self.mock and (spark is None or segmenter is None):
+            try:  # E2: live Spark, SAM 3.1 and a retrying Muse Image
+                from app.evolution.live import build_live
+
+                live_spark, live_seg, self.renderer = build_live(services.settings, services.image_gen)
+                spark, segmenter = spark or live_spark, segmenter or live_seg
+            except RuntimeError as e:
+                self.live_error = str(e)
         self.spark: EvoSpark = spark or MockEvoSpark(self.registry)
         self.segmenter: Segmenter = segmenter or MockSegmenter(self.registry)
         self.meter = Meter()
@@ -84,9 +95,9 @@ class EvoEngine:
     # ------------------------------------------------------------------ guards and lookups
 
     def _guard(self) -> None:
-        if not self.mock:
-            raise ChimeraError(ErrorCode.UPSTREAM_ERROR, "The evolution engine has no live Spark or SAM adapter yet "
-                               "(E1-offline). Run with CHIMERA_MODE=mock.", retryable=False)
+        if not self.mock and self.live_error:
+            raise ChimeraError(ErrorCode.UPSTREAM_ERROR, f"Live evolution adapters unavailable: {self.live_error}.",
+                               retryable=False)
 
     def _animal(self, name: str) -> Animal:
         a = self.tax.resolve(name)
@@ -163,7 +174,7 @@ class EvoEngine:
         final = accept_polish(prompt, polished)
         if not refs and self.mock:
             refs = [swatch(g.parents.sire), swatch(g.parents.dam)]  # the mock renderer needs references
-        img = await self.meter.call("image", "render", self.services.image_gen.generate(final, refs, "1:1"))
+        img = await self.meter.call("image", "render", self.renderer.generate(final, refs, "1:1"))
         if self.mock:
             self.registry.note(img.data, final)
         verdict = await judge(img.data, g, r, self.tax, self.spark, self.segmenter, self.meter)
@@ -202,6 +213,10 @@ class EvoEngine:
                 raise ValueError("; ".join(f"{x.card}: {x.detail}" for x in v))
         except (ValueError, TypeError) as e:
             plan, model_note = skeleton, f"rejected, code skeleton used ({str(e)[:200]})"
+        except ChimeraError as e:  # the plan call is optional: the code skeleton is already a valid plan
+            if e.code == ErrorCode.BUDGET_EXCEEDED:
+                raise
+            plan, model_note = skeleton, f"call failed, code skeleton used ({e.code.value}: {e.message[:200]})"
         g = self.finish(plan, r)
         if v := self._check(g, r):  # cannot happen for code plans; guards the model path
             raise ChimeraError(ErrorCode.VALIDATION_FAILED, "Plan breaks a hard rule card.",

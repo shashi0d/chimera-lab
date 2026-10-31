@@ -56,6 +56,7 @@ class Settings(BaseSettings):
     identify_timeout_seconds: float = 20.0
     plan_timeout_seconds: float = 60.0
     generate_timeout_seconds: float = 80.0
+    sam_timeout_seconds: float = 60.0  # E2: SAM 3.1 segmentation, no live latency measured yet
     run_lease_seconds: float = 180.0
     mock_delay_scale: float = Field(default=1.0, ge=0)
 

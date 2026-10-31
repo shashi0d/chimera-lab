@@ -314,6 +314,20 @@ def save_recording(purpose: str, request: dict[str, Any], payload: dict[str, Any
 # ------------------------------------------------------------- adapters
 
 
+def _record_error(purpose: str, body: dict[str, Any], exc: Exception, mapped: ChimeraError) -> None:
+    """Keep the upstream status and error body (e.g. model_not_found) on the mapped error and in the recording."""
+    response = getattr(exc, "response", None)
+    if response is None:
+        return
+    try:
+        err_body: Any = response.json()
+    except ValueError:
+        err_body = response.text[:2000]
+    mapped.details.setdefault("upstream_status", getattr(exc, "status_code", None))
+    mapped.details.setdefault("upstream_body", err_body)
+    save_recording(f"{purpose}_error", body, {"status": getattr(exc, "status_code", None), "body": err_body})
+
+
 class _MetaClient:
     def __init__(self, base_url: str, api_key: str, timeout: float) -> None:
         import openai
@@ -321,17 +335,22 @@ class _MetaClient:
         # The SDK does not read our key from the environment by itself: pass it explicitly.
         self.client = openai.AsyncOpenAI(base_url=base_url, api_key=api_key, timeout=timeout, max_retries=0)
 
-    async def call(self, kind: CallKind, purpose: str, model: str, body: dict[str, Any], responses: bool = False) -> dict[str, Any]:
+    async def call(self, kind: CallKind, purpose: str, model: str, body: dict[str, Any], responses: bool = False,
+                   raw: bool = False) -> dict[str, Any]:
+        """One attempt. `raw` returns the HTTP body as sent by the server (Responses API only), for models
+        whose output items the SDK has no type for (SAM 3.1)."""
         guard(kind)
         payload: dict[str, Any] | None = None
         outcome = "ok"
         with Timer() as t:
             try:
-                if responses:
-                    resp = await self.client.responses.create(**body)
+                if raw:
+                    resp = await self.client.responses.with_raw_response.create(**body)
+                    payload = resp.http_response.json()
+                elif responses:
+                    payload = (await self.client.responses.create(**body)).model_dump()
                 else:
-                    resp = await self.client.chat.completions.create(**body)
-                payload = resp.model_dump()
+                    payload = (await self.client.chat.completions.create(**body)).model_dump()
             except asyncio.CancelledError:
                 # The per-attempt timeout (asyncio.wait_for) cancelled us: still account for the attempt.
                 t.__exit__()
@@ -341,6 +360,7 @@ class _MetaClient:
             except Exception as exc:  # noqa: BLE001 - mapped below, then recorded
                 mapped = exc if isinstance(exc, ChimeraError) else map_sdk_error(exc)
                 outcome = mapped.code.value
+                _record_error(purpose, body, exc, mapped)
                 error: ChimeraError | None = mapped
             else:
                 error = None

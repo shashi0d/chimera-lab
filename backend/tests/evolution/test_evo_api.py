@@ -54,7 +54,7 @@ def test_card_wording_guards():
 
 
 async def test_real_mode_refuses_before_any_call(tmp_path):
-    svc = SimpleNamespace(settings=make_settings(tmp_path, chimera_mode="real"))
+    svc = SimpleNamespace(settings=make_settings(tmp_path, chimera_mode="real"), image_gen=None)  # no META_API_KEY
     eng = EvoEngine(svc)  # type: ignore[arg-type]
     with pytest.raises(ChimeraError):
         await eng.fuse(sire_name="lion", dam_name="tiger")

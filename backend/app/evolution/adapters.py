@@ -5,8 +5,8 @@ identification through the existing VisionAdapter.describe_animal. The two new
 roles have their own protocols: EvoSpark (first plan, crossover and mutation,
 prompt polish, readability critic) and Segmenter (SAM 3.1).
 
-E1-offline ships mock implementations only. In real mode the engine refuses before
-any call (no live adapter exists yet), so nothing here can reach the Meta API.
+This module holds the mocks. The live implementations (E2) are in `live.py`; in real
+mode without META_API_KEY the engine refuses before any call.
 
 Every call goes through `Meter`, which counts Meta calls by kind (spark, image, sam).
 """
@@ -218,9 +218,3 @@ class MockSegmenter:
         out = io.BytesIO()
         im.save(out, "PNG")
         return out.getvalue()
-
-
-class OfflineOnly:
-    """Real-mode placeholder: E1-offline builds no live Spark or SAM adapter."""
-
-    model_id = "unavailable"
