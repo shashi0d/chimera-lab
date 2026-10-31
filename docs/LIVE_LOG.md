@@ -40,3 +40,4 @@ Every real Meta API call made by L1 (appended automatically by `backend/app/adap
 | 2026-10-30T23:05:30+00:00 | compile | plan | muse-spark-1.3 | 20006 | 0 | 0 | 0 | UPSTREAM_TIMEOUT |  |
 | 2026-10-30T23:05:47+00:00 | compile | plan | muse-spark-1.3 | 15639 | 1812 | 4524 | 6336 | ok | chatcmpl-01a18f0f-ea54-7619-a95b-1a61c0842a13 |
 | 2026-10-30T23:06:11+00:00 | generate | generate | muse-image-1.0 | 23918 | 25254 | 1987 | 27241 | ok | resp_6ae522e2d69aef7033d6430d |
+| 2026-10-31T15:32:20+00:00 | e2-sam-probe | sam | sam-3.1 | 2949 | 0 | 0 | 0 | ok | resp_6ae60a041b7c7c2c0096448f |
