@@ -1,0 +1,81 @@
+{
+ "purpose": "evo_polish",
+ "request": {
+  "model": "muse-spark-1.3",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You lightly edit a text-to-image prompt for readability. Keep the first sentence word for word. Do not add, remove or change any animal, body part, color, count, strength, habitat or view. Do not add brand or franchise names. Stay within 20 percent of the original length. Return the edited prompt only."
+   },
+   {
+    "role": "user",
+    "content": "Silhouette: Horizontal lion frame carried on two hind legs, golden eagle wings in place of the forelegs. Host frame: the lion sets the outline, body size and overall frame. A single creature that combines a lion and a golden eagle. Head of the lion, fully visible and uncluttered, with clear, discernible eyes. Details: behavior: Follows lion head/brain donor; body: Lion torso and frame; eagle contributes only surface graft regions; golden eagle feathers in a few large patches over the forequarters and neck, at full strength with clean edges, color and surface unchanged inside each patch; lion coat everywhere else; ears: Lion rounded ears; face: Lion muzzle and eyes; feet: Lion paws; head: Fully lion head tissue; limbs: Four lion legs; no forelimb-to-wing substitution, avoids six-limb mythic plan; lion mane in place of the mane; mane: Gated off: neck carries eagle feathers so mane hair has no haired substrate to show; skull: Lion skull; tail: Lion tail with tuft, fully lion tissue; golden eagle wings in place of the forelegs, standing on two hind legs; wings held for display or gliding, not powered flight. Pattern lines and texture flow follow the body outline. Bilaterally symmetrical, recognizable limbs, visible sense organs. Habitat cue (forest): more patterned, irregular coat markings for a closed habitat. One creature, full body, side three-quarter view, plain light background, natural history illustration."
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "polished_prompt",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "prompt"
+     ],
+     "properties": {
+      "prompt": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0.2
+ },
+ "response": {
+  "id": "chatcmpl-01a192a0-9fa5-76e0-b798-259f043fd84c",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\"prompt\": \"Silhouette: Horizontal lion frame carried on two hind legs, golden eagle wings in place of the forelegs. Host frame: the lion sets the outline, body size, and overall frame. A single creature that combines a lion and a golden eagle. Head of the lion, fully visible and uncluttered, with clear, discernible eyes. Details: behavior follows lion head/brain donor; body is lion torso and frame; eagle contributes only surface graft regions; golden eagle feathers in a few large patches over the forequarters and neck, at full strength with clean edges, color and surface unchanged inside each patch; lion coat everywhere else; ears are lion rounded ears; face is lion muzzle and eyes; feet are lion paws; head is fully lion head tissue; limbs are four lion legs; no forelimb-to-wing substitution, avoids six-limb mythic plan; lion mane in place of the mane; mane gated off: neck carries eagle feathers so mane hair has no haired substrate to show; skull is lion skull; tail is lion tail with tuft, fully lion tissue; golden eagle wings in place of the forelegs, standing on two hind legs; wings held for display or gliding, not powered flight. Pattern lines and texture flow follow the body outline. Bilaterally symmetrical, recognizable limbs, visible sense organs. Habitat cue (forest): more patterned, irregular coat markings for a closed habitat. One creature, full body, side three-quarter view, plain light background, natural history illustration.\"}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null
+    }
+   }
+  ],
+  "created": 1793461362,
+  "model": "muse-spark-1.3",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 6643,
+   "prompt_tokens": 427,
+   "total_tokens": 7070,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": null,
+    "audio_tokens": null,
+    "reasoning_tokens": 6323,
+    "rejected_prediction_tokens": null,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": null,
+    "cache_write_tokens": null,
+    "cached_tokens": 0,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

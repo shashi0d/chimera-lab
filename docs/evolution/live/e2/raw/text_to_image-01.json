@@ -1,0 +1,109 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Silhouette: Horse-height equine frame with the horse's neck and body, a short thick donkey head with long ears, a short upright mane, thin limbs on small hooves. Host frame: the horse sets the outline, body size and overall frame. A single creature combining a donkey and a horse. Donkey head, fully visible and uncluttered, with clear, discernible eyes. Details: body with horse neck shape and body; head as short thick donkey head; ears as long donkey ears; mane as short donkey mane; tail short-haired at the base and longer below; limbs as thin donkey limbs; feet as small donkey hooves; faint donkey pattern at about 50 percent strength on the flanks and legs; coat pattern reduced, the pattern donor does not own the body; coat texture as coarse donkey coat; behavior may follow one parent. Pattern lines and texture flow follow the body outline. Bilaterally symmetrical, recognizable limbs, visible sense organs. Habitat cue (dry woodland): larger ears and longer tail for shedding heat. One creature, full body, side three-quarter view, plain light background, natural history illustration.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "id": "resp_6ae60bd28e9fc438f5a34baa",
+  "access_programs": null,
+  "created_at": 1793461202.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae60bd2b5c5b071422e4a1c",
+    "summary": [
+     {
+      "text": "**Designing natural history illustration**\nI'm planning a single hybrid equine silhouette at horse height, with a horse neck and body outline and a short, thick donkey head with long ears, short upright mane, thin limbs, small hooves, and a tail that's short at the base and longer below.\n**Drafting natural history illustration**\nI'm planning a watercolor-style scientific illustration of a single creature with a horse body and donkey head, faint striped pattern on flanks and legs, coarse coat, long ears, and dry woodland cues, shown in a side three-quarter view on a plain light background.\n**Refining horse illustration**\nI'm preparing another generation to emphasize a more robust horse neck and body, moving away from the donkey-like look while keeping the natural history style.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae60bd2f6bb6559b0444ea7",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0hQWnRqUkhQSnlVekVvR0FOSEVkQXNvNG9oWWJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczozMTdhMTFhOS0wNTAyLTQyNmUtOWVmZi00OTc0NzVlMTdmMDE6R0ZvZXBqUUdCLVphd19vREFLLXJ4UENlcFFFZ2JnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM0NjEyMDJ9.Q8WLFwEUbLKW3XYMgl28OTtx5lRY",
+    "result": "<elided> (509608 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 19669,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 15616
+   },
+   "output_tokens": 2373,
+   "output_tokens_details": {
+    "reasoning_tokens": 434
+   },
+   "total_tokens": 22042
+  },
+  "user": null
+ }
+}

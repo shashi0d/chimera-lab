@@ -1,0 +1,31 @@
+{
+ "critic": {
+  "animals": [
+   "donkey",
+   "zebra"
+  ],
+  "creatures": 1,
+  "notes": "A donkey-like animal with faint zebra stripes stands in profile."
+ },
+ "critic_thumbnail": {
+  "animals": [
+   "donkey"
+  ],
+  "creatures": 1,
+  "notes": "A striped donkey stands in profile on a plain background."
+ },
+ "mask": {
+  "fill": 0.0,
+  "aspect": 0.0,
+  "components": 0
+ },
+ "sam_prompt": "horse",
+ "soft_cards": [],
+ "scores": {
+  "critic": 0.5,
+  "silhouette": 0.0,
+  "thumbnail": 0.5,
+  "soft_penalty": 0.0,
+  "quality": 0.45
+ }
+}

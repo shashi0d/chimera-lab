@@ -1,0 +1,296 @@
+{
+ "id": "crt_a3019f3ebe52",
+ "parents": {
+  "sire": "golden_eagle",
+  "dam": "common_octopus"
+ },
+ "lineage": {
+  "parent_ids": [],
+  "generation": 0
+ },
+ "mode": "chimera",
+ "known_pair": null,
+ "host": "golden_eagle",
+ "identity_balance": 0.889,
+ "habitat": {
+  "name": "rocky coast",
+  "source": "bridging",
+  "adjustments": [
+   "plainer coat with fewer markings for an open habitat",
+   "dark back and light belly (strong countershading)"
+  ],
+  "visible_trait": "plainer coat with fewer markings for an open habitat"
+ },
+ "size": {
+  "mass_kg": 4.5625,
+  "flags": []
+ },
+ "silhouette": "upright golden eagle frame on two legs, tentacles in place of the tail",
+ "limb_plan": {
+  "forelimbs": {
+   "kind": "wings",
+   "donor": "golden_eagle"
+  },
+  "hindlimbs": {
+   "kind": "legs",
+   "donor": "golden_eagle"
+  },
+  "extra_wings": null,
+  "appendages": [
+   "tentacles (tail)"
+  ],
+  "wing_use": "powered",
+  "requested_wings": null
+ },
+ "traits": {
+  "behavior": {
+   "op": "PICK",
+   "donor": "golden_eagle",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "follows the head/brain donor golden_eagle",
+   "flags": []
+  },
+  "body": {
+   "op": "PICK",
+   "donor": "golden_eagle",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "host eagle body frame sets overall silhouette; donor parts scaled to host; deep keel and heavy flight chest",
+   "flags": []
+  },
+  "coat_color": {
+   "op": "PATCH",
+   "donor": "common_octopus",
+   "value": null,
+   "strength": 1.0,
+   "region": [
+    "belly",
+    "flanks"
+   ],
+   "part": null,
+   "note": "octopus color at full strength inside few large patches following eagle belly and flank regions, blend only at edges",
+   "flags": []
+  },
+  "coat_pattern": {
+   "op": "PATCH",
+   "donor": "common_octopus",
+   "value": null,
+   "strength": 1.0,
+   "region": [
+    "belly",
+    "flanks"
+   ],
+   "part": null,
+   "note": "octopus pattern at full strength inside few large patches following eagle belly and flank regions, blend only at edges",
+   "flags": []
+  },
+  "coat_texture": {
+   "op": "PATCH",
+   "donor": "common_octopus",
+   "value": null,
+   "strength": 1.0,
+   "region": [
+    "belly",
+    "flanks"
+   ],
+   "part": null,
+   "note": "octopus skin at full strength inside few large patches following eagle belly and flank regions, blend only at edges",
+   "flags": []
+  },
+  "ears": {
+   "op": "PICK",
+   "donor": "golden_eagle",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "host ear openings, feather-covered",
+   "flags": []
+  },
+  "face": {
+   "op": "PICK",
+   "donor": "golden_eagle",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "host eagle beak and eyes",
+   "flags": []
+  },
+  "feet": {
+   "op": "PICK",
+   "donor": "golden_eagle",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "host taloned feet",
+   "flags": []
+  },
+  "head": {
+   "op": "PICK",
+   "donor": "golden_eagle",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "host head tissue sets brain and behavior",
+   "flags": []
+  },
+  "limbs": {
+   "op": "PICK",
+   "donor": "golden_eagle",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "host wings and legs retain eagle structure",
+   "flags": []
+  },
+  "mane": {
+   "op": "PICK",
+   "donor": "golden_eagle",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "absent: no hair mane on feathered neck; gated by feathered coat",
+   "flags": [
+    "gated"
+   ]
+  },
+  "size": {
+   "op": "PICK",
+   "donor": "golden_eagle",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "host size; donor tentacle patch scaled to host",
+   "flags": []
+  },
+  "skull": {
+   "op": "PICK",
+   "donor": "golden_eagle",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "host eagle skull",
+   "flags": []
+  },
+  "tail": {
+   "op": "PICK",
+   "donor": "common_octopus",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": "tentacles",
+   "note": "signature tentacle cluster in place of tail fan; graft-aligned tail segment; jointless and smoothly curving; longer means thinner",
+   "flags": []
+  }
+ },
+ "labels": [
+  "speculative chimera, no real-world precedent"
+ ],
+ "processes": [
+  "chimera patchwork: each region is one parent's tissue"
+ ],
+ "card_trace": [
+  "RC-R2-01",
+  "RC-R1-14",
+  "RC-R2-16",
+  "RC-R5-10",
+  "RC-R6-08",
+  "RC-R6-09",
+  "RC-R5-02",
+  "RC-R1-01",
+  "RC-R1-09",
+  "RC-R1-10",
+  "RC-R5-01",
+  "RC-R5-03",
+  "RC-R5-04",
+  "RC-R5-05",
+  "RC-R5-06",
+  "RC-R5-07",
+  "RC-R6-02",
+  "RC-R6-05",
+  "RC-R1-07",
+  "RC-R1-08",
+  "RC-R4-09",
+  "RC-R4-01",
+  "RC-R4-02",
+  "RC-R4-05",
+  "RC-R4-11",
+  "RC-R4-10",
+  "RC-R3-12",
+  "RC-R3-05",
+  "RC-R3-03",
+  "RC-R3-04",
+  "RC-R3-10",
+  "RC-R6-01",
+  "RC-R7-06",
+  "RC-R6-03",
+  "RC-R6-04",
+  "RC-R7-07",
+  "RC-R6-07",
+  "RC-R7-10"
+ ],
+ "checks": [
+  {
+   "step": "body_plan_class",
+   "result": "pass",
+   "detail": "host class: vertebrate (biped|winged)",
+   "cards": []
+  },
+  {
+   "step": "limb_budget",
+   "result": "pass",
+   "detail": "4 limbs",
+   "cards": []
+  },
+  {
+   "step": "size_ceiling",
+   "result": "pass",
+   "detail": "within ceilings",
+   "cards": [
+    "RC-R3-05"
+   ]
+  },
+  {
+   "step": "flight_anatomy",
+   "result": "repaired",
+   "detail": "flyer gets a deep keel and heavy chest",
+   "cards": [
+    "RC-R3-03"
+   ]
+  },
+  {
+   "step": "posture",
+   "result": "pass",
+   "detail": "legs match the body size",
+   "cards": []
+  },
+  {
+   "step": "part_rendering",
+   "result": "repaired",
+   "detail": "jointless soft parts: tail",
+   "cards": [
+    "RC-R3-10"
+   ]
+  }
+ ],
+ "scores": {
+  "critic": 1.0,
+  "silhouette": 0.0,
+  "thumbnail": 1.0,
+  "soft_penalty": 0.0,
+  "quality": 0.7
+ },
+ "seed": 0
+}

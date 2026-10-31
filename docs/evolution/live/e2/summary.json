@@ -1,0 +1,291 @@
+{
+ "budget_before": {
+  "image": 11,
+  "spark": 27,
+  "sam": 1
+ },
+ "budget_after": {
+  "image": 15,
+  "spark": 43,
+  "sam": 5
+ },
+ "caps": {
+  "image": 20,
+  "spark": 70,
+  "sam": 8
+ },
+ "predicted_per_example": {
+  "spark": 4,
+  "image": 1,
+  "sam": 1
+ },
+ "predicted_total": {
+  "spark": 16,
+  "image": 4,
+  "sam": 4
+ },
+ "logical_calls_meter": {
+  "spark": 16,
+  "image": 4,
+  "sam": 4
+ },
+ "attempts_by_kind": {
+  "spark": 16,
+  "image": 4,
+  "sam": 4
+ },
+ "attempts_non_ok": [],
+ "results": [
+  {
+   "slug": "1_donkey_x_horse",
+   "sire": "donkey",
+   "dam": "horse",
+   "try": 1,
+   "creature_id": "crt_0c92d85dfa6f",
+   "route": {
+    "sire": "donkey",
+    "dam": "horse",
+    "mode": "hybrid",
+    "reason": "known pair: mule",
+    "known_pair": "mule",
+    "labels": [
+     "real hybrid precedent"
+    ],
+    "cards": [
+     "RC-R2-01",
+     "RC-R2-16",
+     "RC-R2-03"
+    ]
+   },
+   "host": "horse",
+   "labels": [
+    "real hybrid precedent"
+   ],
+   "scores": {
+    "critic": 0.5,
+    "silhouette": 0.0,
+    "thumbnail": 0.5,
+    "soft_penalty": 0.0,
+    "quality": 0.45
+   },
+   "critic": {
+    "animals": [
+     "donkey",
+     "zebra"
+    ],
+    "creatures": 1,
+    "notes": "A donkey-like animal with faint zebra stripes stands in profile."
+   },
+   "critic_thumbnail": {
+    "animals": [
+     "donkey"
+    ],
+    "creatures": 1,
+    "notes": "A striped donkey stands in profile on a plain background."
+   },
+   "mask": {
+    "fill": 0.0,
+    "aspect": 0.0,
+    "components": 0
+   },
+   "model_plan": "rejected, code skeleton used (RC-R2-03: body: {'op': 'PICK', 'donor': 'horse', 'region': ['neck', 'forequarters', 'back', 'flanks', 'belly', 'hindquarters'], 'note': 'horse neck shape and body frame'} != override {'op': 'PICK', 'd)",
+   "meta_calls": {
+    "spark": 4,
+    "image": 1,
+    "sam": 1
+   },
+   "attempts": 6
+  },
+  {
+   "slug": "2_lion_x_tiger",
+   "sire": "lion",
+   "dam": "tiger",
+   "try": 1,
+   "creature_id": "crt_8aefc31a88f1",
+   "route": {
+    "sire": "lion",
+    "dam": "tiger",
+    "mode": "hybrid",
+    "reason": "known pair: liger",
+    "known_pair": "liger",
+    "labels": [
+     "real hybrid precedent"
+    ],
+    "cards": [
+     "RC-R2-01",
+     "RC-R2-16",
+     "RC-R2-05",
+     "RC-R2-08"
+    ]
+   },
+   "host": "lion",
+   "labels": [
+    "real hybrid precedent"
+   ],
+   "scores": {
+    "critic": 1.0,
+    "silhouette": 0.96,
+    "thumbnail": 1.0,
+    "soft_penalty": 0.167,
+    "quality": 0.955
+   },
+   "critic": {
+    "animals": [
+     "lion",
+     "tiger"
+    ],
+    "creatures": 1,
+    "notes": "A large tawny hybrid big cat with faint tiger stripes stands in profile."
+   },
+   "critic_thumbnail": {
+    "animals": [
+     "lion",
+     "tiger"
+    ],
+    "creatures": 1,
+    "notes": "A large tawny lion-like cat with faint tiger striping stands in view."
+   },
+   "mask": {
+    "fill": 0.333,
+    "aspect": 1.16,
+    "components": 1
+   },
+   "model_plan": "accepted",
+   "meta_calls": {
+    "spark": 4,
+    "image": 1,
+    "sam": 1
+   },
+   "attempts": 6
+  },
+  {
+   "slug": "3_lion_x_eagle",
+   "sire": "lion",
+   "dam": "eagle",
+   "try": 1,
+   "creature_id": "crt_11ab36827eff",
+   "route": {
+    "sire": "lion",
+    "dam": "golden_eagle",
+    "mode": "chimera",
+    "reason": "distant pair: no documented hybrid and different genus",
+    "known_pair": null,
+    "labels": [
+     "speculative chimera, no real-world precedent"
+    ],
+    "cards": [
+     "RC-R2-01",
+     "RC-R1-14",
+     "RC-R2-16",
+     "RC-R5-10"
+    ]
+   },
+   "host": "lion",
+   "labels": [
+    "speculative chimera, no real-world precedent",
+    "non-flying wings: display or gliding only"
+   ],
+   "scores": {
+    "critic": 1.0,
+    "silhouette": 0.392,
+    "thumbnail": 0.5,
+    "soft_penalty": 0.0,
+    "quality": 0.768
+   },
+   "critic": {
+    "animals": [
+     "lion",
+     "leopard",
+     "eagle"
+    ],
+    "creatures": 1,
+    "notes": "A mythical winged creature with a lion head and spotted feline body rears up."
+   },
+   "critic_thumbnail": {
+    "animals": [
+     "lion",
+     "leopard",
+     "bird"
+    ],
+    "creatures": 1,
+    "notes": "A mythical winged feline with a lion head and leopard-spotted body."
+   },
+   "mask": {
+    "fill": 0.364,
+    "aspect": 0.983,
+    "components": 2
+   },
+   "model_plan": "accepted",
+   "meta_calls": {
+    "spark": 4,
+    "image": 1,
+    "sam": 1
+   },
+   "attempts": 6
+  },
+  {
+   "slug": "4_eagle_x_octopus",
+   "sire": "eagle",
+   "dam": "octopus",
+   "try": 1,
+   "creature_id": "crt_a3019f3ebe52",
+   "route": {
+    "sire": "golden_eagle",
+    "dam": "common_octopus",
+    "mode": "chimera",
+    "reason": "distant pair: no documented hybrid and different genus",
+    "known_pair": null,
+    "labels": [
+     "speculative chimera, no real-world precedent"
+    ],
+    "cards": [
+     "RC-R2-01",
+     "RC-R1-14",
+     "RC-R2-16",
+     "RC-R5-10"
+    ]
+   },
+   "host": "golden_eagle",
+   "labels": [
+    "speculative chimera, no real-world precedent"
+   ],
+   "scores": {
+    "critic": 1.0,
+    "silhouette": 0.0,
+    "thumbnail": 1.0,
+    "soft_penalty": 0.0,
+    "quality": 0.7
+   },
+   "critic": {
+    "animals": [
+     "eagle",
+     "octopus"
+    ],
+    "creatures": 1,
+    "notes": "A large brown eagle with octopus tentacles growing from its lower body."
+   },
+   "critic_thumbnail": {
+    "animals": [
+     "eagle",
+     "octopus"
+    ],
+    "creatures": 1,
+    "notes": "A brown eagle standing with curly tentacles beneath its body."
+   },
+   "mask": {
+    "fill": 0.0,
+    "aspect": 0.0,
+    "components": 0
+   },
+   "model_plan": "accepted",
+   "meta_calls": {
+    "spark": 4,
+    "image": 1,
+    "sam": 1
+   },
+   "attempts": 6
+  }
+ ],
+ "failures": [],
+ "skipped": []
+}

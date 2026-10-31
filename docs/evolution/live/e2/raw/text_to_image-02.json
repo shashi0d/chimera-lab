@@ -1,0 +1,109 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Silhouette: Very large cat frame, longer and heavier than either parent, long body, heavy forequarters, small or no mane. Host frame: the lion sets the outline, body size and overall frame. A single creature combining a lion and a tiger. Head of the lion, fully visible and uncluttered, with clear, discernible eyes. Details: behavior: social lion-like behavior may follow one parent without full performance behind it; body: long, heavy intermediate cat body with heavy forequarters; coat color: tawny lion-like base, incomplete-dominance blend leaning to sire; faint tiger pattern at about 20 percent strength on the flanks and legs; coat pattern: faint tiger stripes diluted because body is not tiger-owned, overlay on tawny base; coat texture: short, dense coat from tiger; ears: rounded intermediate ears leaning to lion, shifted with face; face: lion-like muzzle and face, same neural-crest group as ears; feet: lion-like feet consistent with head and forequarter group; head: lion-like head shape; limbs: intermediate limb proportions near midpoint; mane: reduced mane or none in males, never full mane with full-strength stripes; skull: skull proportions intermediate leaning to lion with face and ears; tail: intermediate tail length near midpoint. Pattern lines and texture flow follow the body outline. Bilaterally symmetrical, recognizable limbs, visible sense organs. Habitat cue (grassland): plainer coat with fewer markings for an open habitat. One creature, full body, side three-quarter view, plain light background, natural history illustration.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "id": "resp_6ae60c30cd8b0a73554f41d6",
+  "access_programs": null,
+  "created_at": 1793461296.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae60c302021626c855a4300",
+    "summary": [
+     {
+      "text": "**Planning hybrid illustration**\nI'm organizing the natural-history illustration around a single liger silhouette, using the lion's frame and head with a tawny base coat and faint tiger striping, emphasizing a long, heavy body and clear, uncluttered eyes.\n**Planning liger illustration details**\nI'm organizing the liger's features—tawny base with faint tiger stripes, intermediate lion-like head and ears, reduced mane, and dense short coat—for a side three-quarter natural history illustration on a plain light background.\n**Drafting natural history prompt**\nI'm combining the reference details into a scientific illustration prompt with watercolor and pen style, plain light background, and a full-body side three-quarter view of the creature.\n**Refining natural history illustration**\nI'm adjusting the prompt to emphasize a side three-quarter pose, a more elongated body, and a natural history illustration style for the next generation.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae60c30baa3283afed44e3f",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0s5S2t6VFlERXZfVFE0RUFDeW1IaG5QbTNjemJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczowMTRkYzZjMS02YWRmLTQ3YzItYjZlZi04ODU3YmZiZmI1MmM6R0J3R2hqQTZvZFB5YUFzRUFFNmQybkZaTE5BVmJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM0NjEyOTZ9.Q8WLFwHHsd8GVJF64_q5JNmBgh5V",
+    "result": "<elided> (781952 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 28198,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 23168
+   },
+   "output_tokens": 2912,
+   "output_tokens_details": {
+    "reasoning_tokens": 548
+   },
+   "total_tokens": 31110
+  },
+  "user": null
+ }
+}
