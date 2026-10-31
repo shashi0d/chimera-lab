@@ -1,6 +1,5 @@
 {
  "purpose": "sam",
- "image": "horse_donkey.webp",
  "request": {
   "model": "sam-3.1",
   "input": [

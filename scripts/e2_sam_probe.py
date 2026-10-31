@@ -4,7 +4,7 @@ Usage (from the repo root, META_API_KEY in the environment):
     .venv/Scripts/python.exe scripts/e2_sam_probe.py
 
 No retry: one attempt, counted against the live budget (docs/live/budget.json, kind "sam").
-The response is saved unelided (the mask data is what the parser needs); the request's
+Source image: docs/live/fusions/horse_donkey.webp. The response is saved unelided (the mask data is what the parser needs); the request's
 image data URL is elided. Exit 2 on model_not_found or an auth error.
 """
 
@@ -58,10 +58,10 @@ async def main() -> int:
         detail = {"code": e.code.value, "message": e.message, **e.details}
         print("budget after:", budget_used())
         print("SAM probe failed:", json.dumps(detail, ensure_ascii=False, default=str)[:2000])
-        _write("sam_error-01.json", {"purpose": "sam", "image": IMAGE.name, "request": _elide(body), "error": detail})
+        _write("sam_error-01.json", {"purpose": "sam", "request": _elide(body), "response": {"error": detail}})
         return 2
     print("budget after:", budget_used())
-    path = _write("sam-01.json", {"purpose": "sam", "image": IMAGE.name, "request": _elide(body), "response": payload})
+    path = _write("sam-01.json", {"purpose": "sam", "request": _elide(body), "response": payload})
     print("saved", path.relative_to(ROOT), f"({path.stat().st_size} bytes)")
     return 0
 

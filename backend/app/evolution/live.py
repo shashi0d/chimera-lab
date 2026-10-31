@@ -15,7 +15,6 @@ Request builders and parsers are pure functions so recordings replay in mock mod
 
 from __future__ import annotations
 
-import base64
 import io
 from collections.abc import Awaitable, Callable
 from typing import Any, TypeVar
@@ -150,20 +149,47 @@ def parse_critic_response(payload: dict[str, Any]) -> dict[str, Any]:
             "notes": str(data.get("notes") or "")}
 
 
-def parse_sam_response(payload: dict[str, Any]) -> bytes:
-    """Return a binary mask PNG (white = object). Written against the E2 probe recording (sam-01.json)."""
-    raise ChimeraError(ErrorCode.UPSTREAM_ERROR, "SAM 3.1 response parser not written yet (E2 step 3).",
-                       retryable=False)
+def sam_text(payload: dict[str, Any]) -> str:
+    """The output_text of SAM 3.1's message items (masks arrive as special-token text, not as an image)."""
+    if payload.get("status") not in (None, "completed"):
+        raise ChimeraError(ErrorCode.UPSTREAM_ERROR, f"SAM 3.1 response status {payload.get('status')!r}.")
+    return "".join(c.get("text", "") for item in payload.get("output") or [] if isinstance(item, dict)
+                   and item.get("type") == "message" for c in item.get("content") or []
+                   if isinstance(c, dict) and c.get("type") == "output_text")
+
+
+def parse_sam_response(payload: dict[str, Any], width: int, height: int) -> bytes:
+    """Full-frame binary mask PNG (white = object), the union of every mask record.
+
+    Format (recorded in tests/fixtures/recorded/sam-01.json): a box token and a mask token per object;
+    the mask is box-local, base85, '~' lossless (arithmetic-coded). It is decoded with Meta's own
+    `meta_sam_parser` (the SAM License forbids reverse engineering the format). No mask: an empty frame."""
+    import meta_sam_parser as msp
+
+    parser = msp.image_segmentation_format().create_parser()
+    parser.push(sam_text(payload), emit=False)
+    result = parser.finish(msp.CompletedOutcome()).result
+    frame = Image.new("L", (width, height), 0)
+    for rec in result.records:
+        if not isinstance(rec, msp.SegmentationMaskRecord):
+            continue
+        try:
+            raster = msp.decode_mask_to_raster(rec.mask)
+        except msp.InvalidSegmentationMaskError as e:
+            raise ChimeraError(ErrorCode.UPSTREAM_ERROR, "SAM 3.1 returned an undecodable mask.") from e
+        local = Image.frombytes("L", (rec.mask.width, rec.mask.height), bytes(255 if v else 0 for v in raster))
+        b = rec.bounds
+        box = (round(b.left), round(b.top), round(b.right), round(b.bottom))
+        if box[2] <= box[0] or box[3] <= box[1]:
+            continue
+        frame.paste(255, box[:2], local.resize((box[2] - box[0], box[3] - box[1]), Image.NEAREST))
+    return _mask_png(frame)
 
 
 def _mask_png(im: Image.Image) -> bytes:
     out = io.BytesIO()
     im.convert("L").point(lambda p: 255 if p > 127 else 0).save(out, "PNG")
     return out.getvalue()
-
-
-def _b64_image(s: str) -> Image.Image:
-    return Image.open(io.BytesIO(base64.b64decode(s.split(",", 1)[-1])))
 
 
 # ------------------------------------------------------------------ adapters
@@ -214,7 +240,10 @@ class MetaSegmenter(_Retrying):
         return await self.retry(lambda: self.http.call("sam", "sam", self.model_id, body, responses=True, raw=True))
 
     async def segment(self, image: bytes, label: str) -> bytes:
-        return parse_sam_response(await self.segment_raw(image, label))
+        payload = await self.segment_raw(image, label)
+        with Image.open(io.BytesIO(image)) as im:
+            size = im.size
+        return parse_sam_response(payload, *size)
 
 
 class RetryingImageGen(_Retrying):

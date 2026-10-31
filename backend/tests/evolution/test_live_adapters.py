@@ -6,10 +6,13 @@ _MetaClient.call so the guard/record path is the real one.
 
 from __future__ import annotations
 
+import io
 import json
+from pathlib import Path
 from typing import Any
 
 import pytest
+from PIL import Image
 
 from app.adapters import usage
 from app.adapters.base import GeneratedImage
@@ -19,6 +22,7 @@ from app.evolution import live
 from app.evolution.adapters import swatch
 from app.evolution.engine import EvoEngine
 from app.evolution.genome import Genome, validate_plan
+from app.evolution.judge import mask_stats, silhouette_score
 from app.models.schemas import ErrorCode
 from app.services import build_services
 from tests.conftest import make_settings
@@ -119,3 +123,51 @@ async def test_budget_error_on_first_plan_is_not_swallowed(engine):
     with pytest.raises(ChimeraError) as e:
         await engine.fuse(sire_name="lion", dam_name="tiger")
     assert e.value.code == ErrorCode.BUDGET_EXCEEDED
+
+
+# ------------------------------------------------------------------ SAM 3.1 (recorded probe, E2 step 3)
+
+SAM_RECORDING = Path(__file__).resolve().parents[1] / "fixtures" / "recorded" / "sam-01.json"
+
+
+def _sam_payload() -> dict[str, Any]:
+    return json.loads(SAM_RECORDING.read_text(encoding="utf-8"))["response"]
+
+
+def test_sam_recording_decodes_to_one_full_frame_silhouette():
+    mask = live.parse_sam_response(_sam_payload(), 1600, 1600)
+    with Image.open(io.BytesIO(mask)) as im:
+        assert im.size == (1600, 1600) and im.mode == "L"
+        assert im.getbbox() == (116, 97, 1477, 1509)  # the box token, in source pixels
+    stats = mask_stats(mask)
+    assert stats["components"] == 1
+    assert 0.15 < stats["fill"] < 0.3  # a standing donkey, legs apart
+    assert 0.9 < stats["aspect"] < 1.05
+    assert silhouette_score(stats, "quadruped") < 1.0  # square-ish box: below the quadruped aspect band
+
+
+def test_sam_text_and_empty_and_incomplete_responses():
+    payload = _sam_payload()
+    assert live.sam_text(payload).startswith("<0f>0<|box;")
+    empty = {**payload, "output": [{"type": "message", "content": [{"type": "output_text", "text": ""}]}]}
+    with Image.open(io.BytesIO(live.parse_sam_response(empty, 64, 64))) as im:
+        assert im.getbbox() is None
+    with pytest.raises(ChimeraError):
+        live.sam_text({**payload, "status": "incomplete"})
+
+
+async def test_meta_segmenter_parses_the_recorded_call(tmp_path, monkeypatch):
+    seg = live.MetaSegmenter(make_settings(tmp_path, meta_api_key="k"))
+    sent: list[dict[str, Any]] = []
+
+    async def fake_call(kind, purpose, model, body, responses=False, raw=False):
+        sent.append({"kind": kind, "model": model, "responses": responses, "raw": raw, "body": body})
+        return _sam_payload()
+
+    monkeypatch.setattr(seg.http, "call", fake_call)
+    image = Image.new("RGB", (1600, 1600), "white")
+    buf = io.BytesIO()
+    image.save(buf, "PNG")
+    mask = await seg.segment(buf.getvalue(), "animal")
+    assert mask_stats(mask)["components"] == 1
+    assert sent[0]["kind"] == "sam" and sent[0]["model"] == "sam-3.1" and sent[0]["raw"] and sent[0]["responses"]
