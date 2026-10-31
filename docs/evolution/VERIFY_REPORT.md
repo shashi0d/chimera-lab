@@ -16,10 +16,15 @@ Result (run 4): **exit 0. Gate PASSED: 0 failures, 14 bot-blocked links (403), 0
   - A timeout is reported as a `TIME` warning only if the URL is listed under "Resolved links" below, meaning it resolved in an earlier recorded run. A timeout on a link that never resolved is still a failure. Both cases were tested against an address that always times out (10.255.255.1): with the URL in the history the result was a warning (exit 0); without it, a failure (exit 1).
 - **Run 4**: clean. The Lancaster link resolved again.
 
+## Run 5 (task E4, R9 added)
+Command and gate rules unchanged. Result: **exit 0. Gate PASSED: 10 files, 109 cards (15 new in R9), 92 unique links, 0 failures, 16 bot-blocked links (403), 0 SSL warnings, 0 timeout warnings.** The two new 403s are both R9 sources: the Hull repository record for the beak study (RC-R9-05) and the Still North Books page for Science of Creature Design (RC-R9-14). `data/rule_cards.json` was regenerated with `scripts/build_rule_cards.py`: 109 cards, 17 hard.
+
 ## Recheck later
 - https://eprints.lancs.ac.uk/id/eprint/50885/ (R6:84, R6:110, R6:124; source of RC-R6-03 and RC-R6-05). It resolved in runs 1 and 4 and timed out in runs 2 and 3, so the server is intermittent. It will be retried once at the end of Step 4; the result goes in E1_OFFLINE.md.
 
 ## 403s (likely bot-blocked, check in a browser)
+- https://hull-repository.worktribe.com/output/3270317  (R9_function_fiction_realism.md:152, R9_function_fiction_realism.md:199)
+- https://www.stillnorthbooks.com/book/9781933492568  (R9_function_fiction_realism.md:159, R9_function_fiction_realism.md:262)
 - https://biewenerlab.oeb.harvard.edu/publications/biomechanical-consequences-scaling  (R3_body_plan_limits.md:104, R3_body_plan_limits.md:159, R3_body_plan_limits.md:194)
 - https://blog.everythingdinosaur.com/blog/_archives/2024/06/21  (R7_fiction_and_design.md:74, R7_fiction_and_design.md:103)
 - https://discovery-pp.ucl.ac.uk/id/eprint/10108322  (R5_real_chimeras.md:88, R5_real_chimeras.md:130)
@@ -102,6 +107,17 @@ The verifier reads this section as its history. Each URL below returned a status
 - https://www.newworldencyclopedia.org/entry/Liger
 - https://www.scientificamerican.com/blog/tetrapod-zoology/speculative-zoology-at-tet-zoo-the-story-so-far/
 - https://www.thetech.org/ask-a-geneticist/why-are-ligers-so-big
+- https://experts.illinois.edu/en/publications/dynamic-elastocapillary-coalescence-of-fish-gill-lamellae/
+- https://fds.duke.edu/db/aas/BAA/faculty%20all/krs75/publications/371619
+- https://genetics.academic.csusb.edu/glossary:chimera
+- https://informatics.jax.org/glossary/chimera
+- https://nautil.us/what-happened-to-the-ancient-bug-giants-of-300-million-years-ago-1279562
+- https://www.bio.fsu.edu/%7esteppanlab/assets/files/Martin%20et%20al%20murine%20teeth%20BJLS%202016.pdf
+- https://www.creativebloq.com/art/digital-art/pro-artists-reveal-how-they-design-imaginary-creatures-that-feel-believable
+- https://www.cs.utexas.edu/~witchel/S25-380L/papers/right-size.html
+- https://www.futura-sciences.com/en/?p=29524
+- https://www.sf-encyclopedia.com/entry/wellss_law
+- https://zenodo.org/record/5532916
 
 ## Raw verifier output (run 4)
 ```

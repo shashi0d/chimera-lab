@@ -1137,5 +1137,179 @@
     "strength": "soft",
     "status": "UNVERIFIED",
     "source": "https://arxiv.org/abs/1504.04909"
+  },
+  {
+    "id": "RC-R9-01",
+    "doc": "R9_function_fiction_realism.md",
+    "rule": "Use three distinct labels and never mix them: hybrid (both parents' DNA in every cell, real-hybrid route only), chimera (one body from two separate tissue sources), mythic composite (myth-style part swap)",
+    "applies_to": [
+      "pipeline"
+    ],
+    "strength": "hard",
+    "status": "VERIFIED",
+    "source": "https://informatics.jax.org/glossary/chimera"
+  },
+  {
+    "id": "RC-R9-02",
+    "doc": "R9_function_fiction_realism.md",
+    "rule": "Run a function audit after the physical checks and before rendering, covering breathing, feeding, support, movement, heat and senses; each function ends as pass, repaired or labeled, never silently failed",
+    "applies_to": [
+      "pipeline"
+    ],
+    "strength": "hard",
+    "status": "VERIFIED",
+    "source": "https://www.cs.utexas.edu/~witchel/S25-380L/papers/right-size.html"
+  },
+  {
+    "id": "RC-R9-03",
+    "doc": "R9_function_fiction_realism.md",
+    "rule": "Gills alone cannot serve a land or flying creature, because gills collapse in air; such a creature must also have an air-breathing system or live in water or a very wet habitat, otherwise repair or label it",
+    "applies_to": [
+      "body",
+      "pipeline"
+    ],
+    "strength": "hard",
+    "status": "VERIFIED",
+    "source": "https://experts.illinois.edu/en/publications/dynamic-elastocapillary-coalescence-of-fish-gill-lamellae/"
+  },
+  {
+    "id": "RC-R9-04",
+    "doc": "R9_function_fiction_realism.md",
+    "rule": "Diet follows the head donor's mouthparts; for a mammal head, grinding molars go with plant diets and bladed, shearing cheek teeth go with meat, and a mismatch is repaired or flagged",
+    "applies_to": [
+      "head",
+      "skull",
+      "behavior"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://fds.duke.edu/db/aas/BAA/faculty%20all/krs75/publications/371619"
+  },
+  {
+    "id": "RC-R9-05",
+    "doc": "R9_function_fiction_realism.md",
+    "rule": "Never reject or repair a plan because a bird beak's shape seems not to fit the diet; beak shape explains under 12 percent of diet variation, so only extreme mismatches are flagged",
+    "applies_to": [
+      "head",
+      "behavior"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://hull-repository.worktribe.com/output/3270317"
+  },
+  {
+    "id": "RC-R9-06",
+    "doc": "R9_function_fiction_realism.md",
+    "rule": "A creature scaled well above its leg donor must change shape to carry its weight, with short thick legs or splayed legs; the same shape at much larger size is not allowed",
+    "applies_to": [
+      "limbs",
+      "size"
+    ],
+    "strength": "hard",
+    "status": "VERIFIED",
+    "source": "https://www.cs.utexas.edu/~witchel/S25-380L/papers/right-size.html"
+  },
+  {
+    "id": "RC-R9-07",
+    "doc": "R9_function_fiction_realism.md",
+    "rule": "A large creature built from small-animal parts must show breathing compensation (deep chest, large nostrils or visible breathing openings), because breathing surfaces must grow faster than body size",
+    "applies_to": [
+      "body",
+      "size"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://www.cs.utexas.edu/~witchel/S25-380L/papers/right-size.html"
+  },
+  {
+    "id": "RC-R9-08",
+    "doc": "R9_function_fiction_realism.md",
+    "rule": "Insect-part creatures up to about 70 cm wingspan have a real precedent (Meganeura, about 68 cm) and need no size license; larger ones need a declared license with visible compensation",
+    "applies_to": [
+      "size",
+      "body"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://www.futura-sciences.com/en/?p=29524"
+  },
+  {
+    "id": "RC-R9-09",
+    "doc": "R9_function_fiction_realism.md",
+    "rule": "Never state high atmospheric oxygen as the settled reason giant insects existed; a 2025 Nature study argued oxygen was probably not the limiting factor",
+    "applies_to": [
+      "pipeline"
+    ],
+    "strength": "hard",
+    "status": "VERIFIED",
+    "source": "https://nautil.us/what-happened-to-the-ancient-bug-giants-of-300-million-years-ago-1279562"
+  },
+  {
+    "id": "RC-R9-10",
+    "doc": "R9_function_fiction_realism.md",
+    "rule": "Fiction budget: a realistic design takes no licenses; a speculative design bends at most one rule on purpose and obeys every other rule strictly; every bent rule is declared on the card with its compensation",
+    "applies_to": [
+      "pipeline"
+    ],
+    "strength": "hard",
+    "status": "VERIFIED",
+    "source": "https://www.sf-encyclopedia.com/entry/wellss_law"
+  },
+  {
+    "id": "RC-R9-11",
+    "doc": "R9_function_fiction_realism.md",
+    "rule": "Mythic designs may take several licenses, but each one is declared, and the label states that believability drops with each extra license",
+    "applies_to": [
+      "pipeline"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://www.sf-encyclopedia.com/entry/wellss_law"
+  },
+  {
+    "id": "RC-R9-12",
+    "doc": "R9_function_fiction_realism.md",
+    "rule": "Every donor part must have a job (fly, swim, grip, dig, display, defend); a part with no job is dropped in realistic mode, because purposeless extras such as extra limbs or spikes make a design look fake",
+    "applies_to": [
+      "all_traits"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://www.creativebloq.com/art/digital-art/pro-artists-reveal-how-they-design-imaginary-creatures-that-feel-believable"
+  },
+  {
+    "id": "RC-R9-13",
+    "doc": "R9_function_fiction_realism.md",
+    "rule": "Anatomy must match ability: a flyer shows strong wing muscles and a lighter frame, a digger shows thick forelimbs and strong shoulders",
+    "applies_to": [
+      "body",
+      "limbs"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://www.creativebloq.com/art/digital-art/pro-artists-reveal-how-they-design-imaginary-creatures-that-feel-believable"
+  },
+  {
+    "id": "RC-R9-14",
+    "doc": "R9_function_fiction_realism.md",
+    "rule": "Build believability from the inside out: donor parts attach where the host skeleton could carry them, with muscle and surface following the skeleton",
+    "applies_to": [
+      "body",
+      "limbs"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://www.stillnorthbooks.com/book/9781933492568"
+  },
+  {
+    "id": "RC-R9-15",
+    "doc": "R9_function_fiction_realism.md",
+    "rule": "Render ordinary, prosaic detail consistently (natural lighting, ground contact and shadow, normal wear on feet and claws) so the one impossible element is believable",
+    "applies_to": [
+      "all_traits"
+    ],
+    "strength": "soft",
+    "status": "UNVERIFIED",
+    "source": "https://www.sf-encyclopedia.com/entry/wellss_law"
   }
 ]

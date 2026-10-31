@@ -1,12 +1,16 @@
 # ALGORITHM. Chimera Lab evolution engine
 
 Doc: docs/evolution/ALGORITHM.md
-Status: spec v1 (Oct 31, 2026), built from docs/evolution/research/R1 to R8 and RESEARCH_SUMMARY.md
+Status: spec v2 (Oct 31, 2026), built from docs/evolution/research/R1 to R9 and RESEARCH_SUMMARY.md. v2 (task E4) adds
+open-world parents, the function audit (4.5b), the fiction budget (4.5c), design modes and the R9 label vocabulary.
+The engine's fixed and adaptable parts are listed in docs/evolution/ENGINE_CONTRACT.md.
 Scope: backend engine and API only (no app UI). Build the engine, verify it, then strengthen sources.
 
 ## 1. What the engine does
 
-Input: two animals (from images or names), parent order (sire, dam), optional user settings.
+Input: two animals (from images or names), parent order (sire, dam), a design mode (section 3.1), optional user
+settings. Names are resolved open-world: chimera_data.json first, then the learned-animal cache, then Muse Spark
+plus a GBIF exact match (ENGINE_CONTRACT.md). Every fact about a parent carries its provenance.
 Output: one or more creatures, each with a trait plan (genome), a rendered image, an honest label, the real processes it illustrates, and a trace of the rule cards that shaped it.
 
 Design stance: models make the creative decisions; rule cards are guardrails. Hard cards filter. Soft cards add score penalties. Nothing is a silent deterministic override except the hard cards and the documented known-pair overrides.
@@ -70,6 +74,21 @@ Field rules:
 - `identity_balance`: 0 to 1, share of the creature that reads as the host. Used as an archive axis.
 - `traits`: one entry per tag from the shared vocabulary (size, body, head, face, ears, mane, tail, limbs, feet, coat_pattern, coat_color, coat_texture, skull, behavior). Each entry names an operator from section 4.3.
 - `card_trace`: every card that changed or blocked something. Shown to the user as "why it looks like this".
+- `design_mode`: `realistic`, `speculative` or `mythic` (section 3.1). Set by the user, never by the model.
+- `audit`: one entry per function from the function audit (4.5b). Code-owned.
+- `licenses`: declared fiction licenses with their compensations (4.5c). Code-owned.
+
+### 3.1 Design modes
+
+| Mode | Fiction budget (RC-R9-10, RC-R9-11) | Route effect | Style |
+|---|---|---|---|
+| realistic | 0 licenses: every failed check is repaired; anything not repairable is labeled speculative; jobless donor parts are dropped (RC-R9-12) | as routed | natural history illustration |
+| speculative (default) | 1 license | as routed | natural history illustration |
+| mythic | several (3, a product decision) | a distant pair routes to `mythic` | myth-style part swaps allowed (RC-R7-02) |
+| compare | realistic plus one other mode | two creatures, rendered as a pair | each in its own mode |
+
+Every mode adds the prosaic-detail line to the render prompt (RC-R9-15). Color, pattern strength, art style and pose
+are free style choices and need no license (R9 3.4).
 
 ## 4. The pipeline
 
@@ -77,13 +96,18 @@ Field rules:
 
 ```
 if (sire, dam) in KNOWN_PAIRS:          mode = hybrid, apply override (section 6)
-elif same_genus(sire, dam):             mode = hybrid
-elif user asked for myth:               mode = mythic
+elif documented cross in chimera_data:  mode = hybrid (real hybrid precedent)
+elif same_genus(sire, dam):             mode = hybrid (hybrid candidate, labeled speculative)
+elif design_mode == mythic:             mode = mythic
 else:                                   mode = chimera
 ```
 
 Cards: RC-R2-16 (hard), RC-R1-14 (hard), RC-R5-10 (hard), RC-R2-11 (hard).
-Genus comes from chimera_data.json (GBIF taxonomy). Parent order is stored and never sorted (RC-R2-01, hard).
+Genus and the other ranks come from chimera_data.json or, for learned animals, from GBIF only. Routing works for
+any pair by taxonomy distance (same genus, family, order, class, phylum); no animal or pair is named in code.
+A documented cross comes only from the chimera_data.json hybrids table or data/evo_known_pairs.json. A model's
+claim that two animals cross is stored as an "unverified claim" and never counts as precedent.
+Parent order is stored and never sorted (RC-R2-01, hard).
 
 ### 4.2 Choose the host and silhouette
 
@@ -135,6 +159,49 @@ Chimera donor share is drawn per run, not fixed at 50 percent (RC-R5-03).
 
 A failed check either repairs the plan or adds a visible label. It never passes silently (RC-R3-12).
 
+### 4.5b Function audit (R9 section 2)
+
+Runs after the physical checks and before the render, so it costs no images (RC-R9-02, hard). Functions:
+breathing, feeding, support, movement, heat and senses. Reproduction is not audited: fertility cannot be seen in
+an image, and a mule is a real, generally sterile animal.
+
+Each function ends as `pass`, `repaired`, `labeled` or `licensed`, with the cards used. Where an R3, R4, R6 or R9
+card covers the case, code decides and cites the card. Otherwise Muse Spark judges, and the entry is marked
+"model-judged": at most one Spark call per creature, covering every uncovered function together.
+
+| Function | Code rule | Cards |
+|---|---|---|
+| breathing | gills on a land or flying creature need an air-breathing system or a wet habitat; donor gills on a lung-breathing land body have no job in air | RC-R9-03, RC-R9-12 |
+| breathing at size | a large creature built from small-animal parts shows breathing compensation | RC-R9-07 |
+| feeding | diet follows the head donor's mouthparts; mammal teeth must agree with diet; a beak is never a reason to reject | RC-R9-04, RC-R9-05 |
+| support | scaled well above the leg donor: thicker or straighter legs; insect parts up to about 70 cm need no license | RC-R3-06 to RC-R3-08, RC-R9-06, RC-R9-08 |
+| movement | anatomy matches ability (flight chest, digging forelimbs); every donor part has a job, jobless parts dropped in realistic mode | RC-R3-03, RC-R3-04, RC-R9-12, RC-R9-13 |
+| heat | habitat step adjusted extremities and coat | RC-R4-03, RC-R4-04, RC-R4-11 |
+| senses | head and eyes visible | RC-R6-03, RC-R6-04 |
+
+The engine never states high oxygen as the settled reason giant insects existed (RC-R9-09, hard).
+
+### 4.5c Fiction budget (R9 section 3)
+
+A license is a declared exception to a named card that R9 section 3.2 lists as bendable. It always carries a
+compensation that is written into the plan and the render prompt.
+
+| License | Card bent | Compensation shown |
+|---|---|---|
+| arthropod parts at large size | RC-R3-09 | thick supporting legs and visible breathing openings or a deep chest |
+| six limbs (four legs plus wings) | RC-R3-02 | wings attached with a shoulder structure that can carry them |
+| flight above about 40 kg | RC-R3-05 | huge chest and wing muscles |
+| gills on a land creature | RC-R9-03 | a wet habitat or a second, air-breathing system |
+| tentacles carrying a heavy land body | RC-R3-11 | many thick tentacles, short and low to the ground |
+
+Budget: realistic 0, speculative 1, mythic 3 (RC-R9-10, RC-R9-11). If a plan needs more licenses than its mode
+allows, it is repaired down to the budget and anything left is labeled. Licenses go first to needs that cannot be
+repaired. A mythic design with licenses carries a label that believability drops with each extra license.
+
+Never licensable, in any mode (R9 3.3): the honesty rules (honest labels, provenance; RC-R1-14, RC-R2-16,
+RC-R5-10, RC-R9-01, RC-R9-09) and the believability floor (parts attach to a structure that can carry them,
+weight rests on the ground, eyes and head visible, one creature, texture follows the body outline).
+
 ### 4.6 Compile the render prompt
 
 The prompt is generated from the plan by code, then lightly polished by Muse Spark. It must include:
@@ -145,6 +212,9 @@ The prompt is generated from the plan by code, then lightly polished by Muse Spa
 - bilateral symmetry and recognizable limbs unless the user asked for alien (RC-R6-07)
 - the visible habitat trait (RC-R4-11)
 - one creature, full body, plain background
+- the compensation of every declared license (4.5c)
+- the prosaic-detail line, in every mode: natural lighting, ground contact and shadow, normal wear on feet and
+  claws (RC-R9-15)
 
 It must never include a franchise character name (RC-R7-10).
 
@@ -155,7 +225,11 @@ Muse Image renders the prompt. One image per plan per round. The plan id and pro
 ### 4.8 Judge
 
 Three checks, each producing a score from 0 to 1:
-1. Readability critic (Muse Spark, image only, no plan shown): name the two animals and say one creature or two. Pass needs both parents named and "one creature" (RC-R6-11).
+1. Checklist critic (Muse Spark, image plus a checklist, no plan shown): yes, no or unclear on 4 to 6 visible
+   features, generated from the genome (visible traits, licenses and compensations) for every route. A
+   hand-written checklist in data/evo_known_pairs.json takes priority. Score = fraction yes, unclear 0.5. The
+   same call returns the creature count, the animals the critic sees (for the third-animal check) and a logged
+   forced choice. The open critic (name the animals) runs once more as a logged second opinion only (RC-R6-11).
 2. Silhouette check: SAM 3.1 mask of the creature, compared with the planned silhouette and host by the critic or a simple shape comparison. This guards against texture bias in model critics (RC-R6-10).
 3. Thumbnail check: repeat the critic on a small version of the image (RC-R6-06).
 
@@ -189,7 +263,12 @@ Batch size and round count are set after a cost test against the Meta API budget
 ### 4.10 Output card
 
 Each creature ships with:
-- label: "real hybrid precedent", "speculative chimera, no real-world precedent", or "mythic design", plus any check labels (six limbs, borderline flight, arthropod size)
+- kind, from the RC-R9-01 vocabulary only: `hybrid`, `chimera` or `mythic composite`. The unqualified word hybrid
+  is used only on the real-hybrid route; a same-genus pair with no documented cross is a "speculative hybrid".
+- label: "real hybrid precedent", "speculative hybrid of close relatives, no documented cross", "speculative chimera, no real-world precedent", or "mythic composite", plus any check labels (six limbs, borderline flight, arthropod size)
+- "Can it live?": each audited function, its result and the cards (or "model-judged") behind it
+- licenses: each bent rule with its compensation
+- provenance per fact: for each parent, where every field came from (chimera_data.json, GBIF, model-estimated)
 - processes it illustrates, in plain words (RC-R7-01)
 - resemblances: "resembles X (culture)", tagged unverified (RC-R7-10)
 - why it looks like this: the card trace with links to sources
@@ -240,6 +319,16 @@ Each hard card gets at least one automated test:
 - RC-R3-01, RC-R3-02: a vertebrate host with wings has no forelegs unless mode is mythic with the label.
 - RC-R3-09: arthropod parts above a size threshold force the speculative label with a reason.
 - RC-R5-01: chimera plans contain no BLEND inside a PATCH region.
+- RC-R9-01: the card kind is one of hybrid, chimera, mythic composite, and the plain word hybrid appears only on
+  the real-hybrid route.
+- RC-R9-02: every plan has an audit entry for each of the six functions, none silently failed.
+- RC-R9-03: a land creature with gill-only breathing is repaired, licensed or labeled.
+- RC-R9-09: no output states high oxygen as the settled reason for giant insects.
+- RC-R9-10: license count never exceeds the mode's budget; honesty and floor rules are never licensable.
+
+Resolver tests (mock GBIF fixtures): in database, learned cache, exact match, misspelling, breed, extinct,
+ambiguous, not an animal, human, plant, mythic parent, GBIF down. Routing for unknown pairs. Checklist
+generation and the output card's "Can it live?" panel.
 
 Plus quality tests on the four worked examples, scored by the critic and checked by a person.
 

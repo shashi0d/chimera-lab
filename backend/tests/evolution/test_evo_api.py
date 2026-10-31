@@ -28,8 +28,8 @@ def test_loader_matches_committed_cards(tmp_path):
     assert res.returncode == 0, res.stdout + res.stderr
     built = json.loads(out.read_text(encoding="utf-8"))
     assert built == json.loads((REPO_ROOT / "data/rule_cards.json").read_text(encoding="utf-8"))
-    assert len(built) == 94
-    assert {c["doc"].split("_")[0] for c in built} == {f"R{i}" for i in range(1, 9)}  # RESEARCH_SUMMARY skipped
+    assert len(built) == 109  # E4: R9 adds 15 cards
+    assert {c["doc"].split("_")[0] for c in built} == {f"R{i}" for i in range(1, 10)}  # RESEARCH_SUMMARY skipped
     assert all(set(c) == {"id", "doc", "rule", "applies_to", "strength", "status", "source"} for c in built)
 
 
@@ -63,7 +63,7 @@ async def test_real_mode_refuses_before_any_call(tmp_path):
 
 async def test_evo_endpoints(client):
     r = await client.get("/evo/cards")
-    assert r.status_code == 200 and r.json()["count"] == 94 and len(r.json()["hard"]) == 11
+    assert r.status_code == 200 and r.json()["count"] == 109 and len(r.json()["hard"]) == 17
 
     r = await client.post("/evo/fuse", json={"sire": {"name": "lion"}, "dam": {"name": "eagle"}})
     assert r.status_code == 200, r.text
