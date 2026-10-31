@@ -190,3 +190,24 @@ Short entries per phase: what was built, what was tested, what was deferred. New
 - A habitat cue added leopard spots to the lion x eagle.
 
 **Tested:** pytest 235 passed, 6 skipped. `openai` was missing from `.venv` although it was in `requirements.txt`, so I installed it.
+
+## 2026-10-31: E2b third-animal leakage, examples 1 and 3 re-run live
+
+**Plan:** stop third-animal leakage (E2's mule read as a zebra, and the lion x eagle had leopard spots), then re-run those two live. No merge. Report appended to `docs/evolution/E2_LIVE.md`.
+
+**Built:**
+- Pattern phrases are compiled by code only, as "<donor>-type <type>" (from a new `coat_patterns` table) or "plain coat, no stripes or spots".
+- Mule and hinny overrides have a plain coat.
+- The habitat step only scales an existing pattern.
+- A polish that adds an animal or contradicts the limbs or mane is rejected.
+- A critic naming a third animal triggers one re-render with the compiled prompt, then the creature is kept with a warning.
+- SAM is prompted with "animal". A mask in pieces counts as one creature when the critic says one.
+- Also: `finish()` re-runs GATE, and the RC-R2-03 check ignores `None` on both sides.
+
+**Live:**
+- 8 Spark, 2 image and 2 SAM calls, as predicted. No retries, no re-renders.
+- Mule 0.45 → 0.67: no stripes, but it still reads as a donkey.
+- Lion x eagle 0.768 → 0.94: no spots, no mane, critic names only lion and eagle.
+- Budget counter: image 15→17, spark 43→51, sam 5→7.
+
+**Tested:** pytest 503 passed, 6 skipped (+268 E2b tests).

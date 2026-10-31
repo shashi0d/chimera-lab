@@ -75,3 +75,70 @@ No call failed, so the retry policy never fired. Latency per call: plan 14 to 34
 - `engine.py`: in real mode the live adapters are built when `META_API_KEY` is set; without it, the engine still refuses before any call. If the first-plan call fails, the code skeleton is used (a budget error still stops the run).
 
 Tests: backend 235 passed, 6 skipped (live, off by default). The 18 new tests include the SAM parser tested in mock mode against the recording.
+
+---
+
+# E2b: third-animal leakage fixed, examples 1 and 3 re-run live
+
+Date: 2026-10-31. Branch: `evo` (not merged). Same caps: 20 images, 70 Spark and 8 SAM on the shared counter.
+Outputs: `docs/evolution/live/e2b/`. Command: `scripts/e2_live_run.py e2b 1 3`.
+
+## What changed (commit `679047a`)
+
+1. **Prompt compiler.** A pattern is named only as "<donor>-type <type>" (for example "faint tiger-type stripes at about 20 percent strength on the flanks and legs"). The donor and type come from a new `coat_patterns` table in `data/evo_config.json`. If no parent carries a pattern, the prompt says "plain coat, no stripes or spots". The generic "Pattern lines ... follow the body outline" line now names the donor, or becomes "Coat texture flows along the body outline". Plan notes that mention patterns, or contradict the limb plan or mane, are left out of the prompt. That removes E2's "limbs are four lion legs; no forelimb-to-wing substitution".
+2. **Mule and hinny.** Both overrides now carry an explicit plain `coat_pattern`. R2 documents no markings for either: RC-R2-03 covers coat *texture* only, and RC-R2-04 covers ears, mane, tail and size. The old donkey overlay came from the generic hybrid builder. That builder now overlays only a pattern a parent really has.
+3. **Habitat step.** It now only scales the strength of an existing donor pattern: 0.1 fainter in open habitats, 0.1 bolder in closed ones. Its wording names the pattern ("fainter tiger-type stripes for an open habitat"). With no patterned parent it changes nothing, and it never adds markings. The old cue "more patterned, irregular coat markings" is gone; in E2 it produced example 3's leopard spots.
+4. **Polish.** The polish is rejected if it adds an animal name that is not a parent (any of the 200 data animals, or their head word such as "leopard"). It is also rejected if it contradicts the limb plan or mane, or adds bare pattern wording. The compiled prompt is used instead, and the reason is stored in the creature's `polish` field.
+5. **Critic.** If the full-image critic names an animal that is neither parent, the candidate is marked "third animal". Group words for a parent ("bird", "big cat") and the known pair's own name ("mule") do not count. It is then re-rendered once with the compiled prompt. If the third animal is still there, the creature is kept with a warning. The first image is kept as well.
+6. **SAM scorer.** SAM is now prompted with "animal". A mask in 2 or more pieces is scored as one creature when the critic says one.
+- **Also changed:**
+  - `finish()` re-runs GATE, so a model plan cannot restore a mane that GATE removed. In E2 the accepted model plan put a lion mane back on a feathered neck.
+  - The RC-R2-03 field-by-field check now ignores `None` values on both sides.
+- **Tests:** 268 new tests in `tests/evolution/test_e2b_leakage.py`, including a 240-pair sweep. Backend total: 503 passed, 6 skipped.
+
+## Before and after
+
+| # | Image | Route | Host | Label | Quality | Critic (full image) | Critic (192 px thumbnail) |
+|---|---|---|---|---|---|---|---|
+| 1 before (E2) | ![](live/e2/1_donkey_x_horse/image.webp) | hybrid, known pair `mule` | horse | real hybrid precedent | 0.45 | named **donkey, zebra**; **1 creature** | donkey; 1 creature |
+| 1 after (E2b) | ![](live/e2b/1_donkey_x_horse/image.webp) | hybrid, known pair `mule` | horse | real hybrid precedent | **0.67** | named **donkey**; **1 creature**. "A brown donkey stands in profile against a light background." | donkey; 1 creature |
+| 3 before (E2) | ![](live/e2/3_lion_x_eagle/image.webp) | chimera | lion | speculative chimera, no real-world precedent; non-flying wings: display or gliding only | 0.768 | named **lion, leopard, eagle**; **1 creature** | lion, leopard, bird; 1 creature |
+| 3 after (E2b) | ![](live/e2b/3_lion_x_eagle/image.webp) | chimera | lion | speculative chimera, no real-world precedent; non-flying wings: display or gliding only | **0.94** | named **lion, eagle**; **1 creature**. "A winged lion-like creature stands with outstretched feathered wings." | lion, eagle; 1 creature |
+
+Score parts:
+
+| # | critic | silhouette | thumbnail | soft penalty | SAM prompt | SAM mask (fill, aspect, components) | third animal | polish | re-render |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 before | 0.5 | 0.0 | 0.5 | 0.0 | "horse" | empty | (not checked) | accepted | no |
+| 1 after | 0.5 | 0.733 | 0.5 | 0.0 | "animal" | 0.284, 0.93, 1 | none | accepted | no |
+| 3 before | 1.0 | 0.392 | 0.5 | 0.0 | "lion" | 0.364, 0.98, 2 (halved) | (not checked) | accepted | no |
+| 3 after | 1.0 | 0.80 | 1.0 | 0.0 | "animal" | 0.354, 1.00, 2 (counted as one) | none | accepted | no |
+
+The first plan for example 1 was again rejected under RC-R2-03, because the model edited the locked mule `body` field, so the code skeleton was used. Example 3's model plan was accepted. Its `coat_pattern` note ("eagle-pattern blocks") was left out of the prompt by fix 1.
+
+## My judgment: does each image match its plan?
+
+1. **Donkey x horse (mule): better, not yet.** The zebra stripes are gone (plain coat, as planned), and the critic sees no third animal. But the animal still reads as a plain donkey: long ears and donkey proportions, not the horse-height body and neck the plan asks for. So the critic names only one parent. The leakage is fixed; the mule frame is a separate problem, probably in how strongly the prompt carries the horse body.
+2. **Lion x eagle: yes.** Eagle wings in place of the forelegs, standing on the hind legs, eagle feathers on the chest and neck, a plain lion coat elsewhere, and no mane, which matches GATE (feathered neck). No spots and no third animal.
+
+## Calls: predicted vs made
+
+| | Spark | Image | SAM |
+|---|---|---|---|
+| Predicted, 2 examples, no re-render | 8 | 2 | 2 |
+| Extra if a re-render fires (per example) | +2 | +1 | +1 |
+| Made, every attempt counted | **8** | **2** | **2** |
+| Retries | 0 | 0 | 0 |
+| Re-renders | 0 | 0 | 0 |
+
+## Budget counter (`docs/live/budget.json`)
+
+| | image | spark | sam |
+|---|---|---|---|
+| Before E2b | 15 | 43 | 5 |
+| After E2b | **17** | **51** | **7** |
+| Caps | 20 | 70 | 8 |
+
+## Failures
+
+None. Both examples succeeded on the first try. No re-render was needed, so the re-render path (tested in mock mode) did not run live. Remaining headroom on these caps is 3 images, 19 Spark and 1 SAM. That is not enough for another run with a possible re-render without raising the SAM cap.

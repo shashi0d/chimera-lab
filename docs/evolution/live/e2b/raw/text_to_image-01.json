@@ -1,0 +1,109 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Silhouette: Horse-height equine frame with the horse's neck and body, a short thick donkey head with long ears, a short upright mane, thin limbs on small hooves. Host frame: the horse sets the outline, body size and overall frame. A single creature that combines a donkey and a horse. Head of the donkey, fully visible and uncluttered, with clear, discernible eyes. Details: body with horse neck shape and body; head with short thick donkey head; ears with long donkey ears; mane with short donkey mane; tail short-haired at the base and longer below; limbs with thin donkey limbs; feet with small donkey hooves; coat texture with coarse donkey coat; behavior may follow one parent; plain coat, no stripes or spots. Coat texture flows along the body outline. Bilaterally symmetrical, recognizable limbs, visible sense organs. Habitat cue (dry woodland): larger ears and longer tail for shedding heat. One creature, full body, side three-quarter view, plain light background, natural history illustration.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "id": "resp_6ae6130001b3a8c47df84aab",
+  "access_programs": null,
+  "created_at": 1793463040.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae61300efd7e59156054b13",
+    "summary": [
+     {
+      "text": "**Building hybrid creature image**\nI'm planning a single hybrid with a horse-sized equine body and neck, paired with a short, thick donkey head, long ears, short upright mane, thin limbs, small hooves, and a short-haired tail that lengthens below.\n**Drafting natural history illustration**\nI'm shaping a full-body, side three-quarter natural history plate of the hybrid, with a horse-like frame, donkey head and long ears, coarse plain coat, and subtle dry woodland cues on a plain light background.\n**Refining horse illustration**\nI'm adjusting the generation to emphasize a more horse-like body, moving away from the donkey look and focusing on stronger equine proportions for the next image.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae613007a61f66b2b814739",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0x3YnBqUU0tZ1pEc1hRR0FBVlp3QVZPU2JwdWJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczo4NDJmYTliMS1iMWY0LTQ2MTYtODE0ZS0zY2FkNzQ3OTg3NDg6R0xjVXBEUVlnT056TVhnRUFJNURQS2dyT3dZMWJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM0NjMwNDB9.Q8WLFwERZSxvB1Tkdob9FR60JdOr",
+    "result": "<elided> (626220 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 19869,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 15808
+   },
+   "output_tokens": 2498,
+   "output_tokens_details": {
+    "reasoning_tokens": 539
+   },
+   "total_tokens": 22367
+  },
+  "user": null
+ }
+}

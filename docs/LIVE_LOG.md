@@ -65,3 +65,15 @@ Every real Meta API call made by L1 (appended automatically by `backend/app/adap
 | 2026-10-31T15:44:30+00:00 | e2:4_eagle_x_octopus:try1 | evo_critic | muse-spark-1.3 | 5349 | 3526 | 745 | 4271 | ok | chatcmpl-01a192a2-4aa5-7352-973a-3ad753f921d1 |
 | 2026-10-31T15:44:31+00:00 | e2:4_eagle_x_octopus:try1 | sam | sam-3.1 | 1061 | 0 | 0 | 0 | ok | resp_6ae60ce0a49ad7031e5942c1 |
 | 2026-10-31T15:44:36+00:00 | e2:4_eagle_x_octopus:try1 | evo_critic | muse-spark-1.3 | 4759 | 198 | 991 | 1189 | ok | chatcmpl-01a192a2-6238-72e2-b4e6-c1933af4a11c |
+| 2026-10-31T16:09:53+00:00 | e2b:1_donkey_x_horse:try1 | evo_plan | muse-spark-1.3 | 21906 | 5175 | 5655 | 10830 | ok | chatcmpl-01a192b9-8244-7001-ad7a-93842f859dc4 |
+| 2026-10-31T16:10:13+00:00 | e2b:1_donkey_x_horse:try1 | evo_polish | muse-spark-1.3 | 19640 | 343 | 4438 | 4781 | ok | chatcmpl-01a192b9-cef3-72bb-a15b-315a2a309b19 |
+| 2026-10-31T16:10:41+00:00 | e2b:1_donkey_x_horse:try1 | text_to_image | muse-image-1.0 | 28287 | 19869 | 2498 | 22367 | ok | resp_6ae6130001b3a8c47df84aab |
+| 2026-10-31T16:10:45+00:00 | e2b:1_donkey_x_horse:try1 | evo_critic | muse-spark-1.3 | 3591 | 3526 | 407 | 3933 | ok | chatcmpl-01a192ba-4bcf-73f0-9889-e32781b130bb |
+| 2026-10-31T16:10:48+00:00 | e2b:1_donkey_x_horse:try1 | sam | sam-3.1 | 3563 | 0 | 0 | 0 | ok | resp_6ae61306ce6ca9370200490d |
+| 2026-10-31T16:10:59+00:00 | e2b:1_donkey_x_horse:try1 | evo_critic | muse-spark-1.3 | 3673 | 198 | 612 | 810 | ok | chatcmpl-01a192ba-83ff-701a-b629-1b09532de51a |
+| 2026-10-31T16:11:21+00:00 | e2b:3_lion_x_eagle:try1 | evo_plan | muse-spark-1.3 | 21722 | 5206 | 5946 | 11152 | ok | chatcmpl-01a192ba-d86f-771a-a7d9-076c1351b89e |
+| 2026-10-31T16:11:38+00:00 | e2b:3_lion_x_eagle:try1 | evo_polish | muse-spark-1.3 | 16982 | 403 | 5290 | 5693 | ok | chatcmpl-01a192bb-1aba-751c-ae73-4c856c7cc78e |
+| 2026-10-31T16:12:05+00:00 | e2b:3_lion_x_eagle:try1 | text_to_image | muse-image-1.0 | 26874 | 20318 | 2697 | 23015 | ok | resp_6ae61353de8bd7624e284d2a |
+| 2026-10-31T16:12:10+00:00 | e2b:3_lion_x_eagle:try1 | evo_critic | muse-spark-1.3 | 5625 | 3526 | 1028 | 4554 | ok | chatcmpl-01a192bb-9a5b-7155-9cc9-517b0c7ff1ea |
+| 2026-10-31T16:12:14+00:00 | e2b:3_lion_x_eagle:try1 | sam | sam-3.1 | 4041 | 0 | 0 | 0 | ok | resp_6ae6135ca43e847efb12409e |
+| 2026-10-31T16:12:27+00:00 | e2b:3_lion_x_eagle:try1 | evo_critic | muse-spark-1.3 | 4909 | 198 | 1054 | 1252 | ok | chatcmpl-01a192bb-dc27-7320-8bd4-cacf80e5b481 |

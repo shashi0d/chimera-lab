@@ -1,0 +1,285 @@
+{
+ "id": "crt_385f7ce8c223",
+ "parents": {
+  "sire": "donkey",
+  "dam": "horse"
+ },
+ "lineage": {
+  "parent_ids": [],
+  "generation": 0
+ },
+ "mode": "hybrid",
+ "known_pair": "mule",
+ "host": "horse",
+ "identity_balance": 0.22,
+ "habitat": {
+  "name": "dry woodland",
+  "source": "bridging",
+  "adjustments": [
+   "dark back and light belly (mild countershading)",
+   "larger ears and longer tail for shedding heat"
+  ],
+  "visible_trait": "larger ears and longer tail for shedding heat"
+ },
+ "size": {
+  "mass_kg": 563.5,
+  "flags": []
+ },
+ "silhouette": "horse-height equine frame with the horse's neck and body, a short thick donkey head with long ears, a short upright mane, thin limbs on small hooves",
+ "limb_plan": {
+  "forelimbs": {
+   "kind": "legs",
+   "donor": null
+  },
+  "hindlimbs": {
+   "kind": "legs",
+   "donor": null
+  },
+  "extra_wings": null,
+  "appendages": [],
+  "wing_use": "none",
+  "requested_wings": null
+ },
+ "traits": {
+  "size": {
+   "op": "BLEND",
+   "donor": [
+    "donkey",
+    "horse"
+   ],
+   "value": 0.5,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "geometric mean of parent masses",
+   "flags": []
+  },
+  "body": {
+   "op": "PICK",
+   "donor": "horse",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "horse neck shape and body",
+   "flags": []
+  },
+  "head": {
+   "op": "PICK",
+   "donor": "donkey",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "short thick donkey head",
+   "flags": []
+  },
+  "face": {
+   "op": "PICK",
+   "donor": "donkey",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": null,
+   "flags": []
+  },
+  "ears": {
+   "op": "PICK",
+   "donor": "donkey",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "long donkey ears",
+   "flags": []
+  },
+  "skull": {
+   "op": "BLEND",
+   "donor": [
+    "donkey",
+    "horse"
+   ],
+   "value": 0.35,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": null,
+   "flags": []
+  },
+  "mane": {
+   "op": "PICK",
+   "donor": "donkey",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "short donkey mane",
+   "flags": []
+  },
+  "tail": {
+   "op": "BLEND",
+   "donor": [
+    "donkey",
+    "horse"
+   ],
+   "value": 0.5,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "tail short-haired at the base and longer below",
+   "flags": []
+  },
+  "limbs": {
+   "op": "PICK",
+   "donor": "donkey",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "thin donkey limbs",
+   "flags": []
+  },
+  "feet": {
+   "op": "PICK",
+   "donor": "donkey",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "small donkey hooves",
+   "flags": []
+  },
+  "coat_color": {
+   "op": "BLEND",
+   "donor": [
+    "donkey",
+    "horse"
+   ],
+   "value": 0.51,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": null,
+   "flags": []
+  },
+  "coat_pattern": {
+   "op": "PICK",
+   "donor": null,
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "plain coat, no stripes or spots (none documented for mules, RC-R2-03)",
+   "flags": [
+    "plain"
+   ]
+  },
+  "coat_texture": {
+   "op": "PICK",
+   "donor": "donkey",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "coarse donkey coat",
+   "flags": []
+  },
+  "behavior": {
+   "op": "PICK",
+   "donor": "donkey",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "behavior may follow one parent",
+   "flags": []
+  }
+ },
+ "labels": [
+  "real hybrid precedent"
+ ],
+ "processes": [
+  "region mosaic as in mules"
+ ],
+ "card_trace": [
+  "RC-R2-01",
+  "RC-R2-16",
+  "RC-R2-03",
+  "RC-R2-06",
+  "RC-R1-01",
+  "RC-R1-02",
+  "RC-R1-04",
+  "RC-R1-05",
+  "RC-R1-06",
+  "RC-R1-11",
+  "RC-R2-02",
+  "RC-R2-07",
+  "RC-R2-15",
+  "RC-R4-09",
+  "RC-R4-01",
+  "RC-R4-02",
+  "RC-R4-05",
+  "RC-R4-04",
+  "RC-R4-11",
+  "RC-R4-10",
+  "RC-R3-12",
+  "RC-R6-01",
+  "RC-R7-06",
+  "RC-R6-03",
+  "RC-R6-04",
+  "RC-R6-02",
+  "RC-R6-05",
+  "RC-R7-07",
+  "RC-R6-07",
+  "RC-R7-10"
+ ],
+ "checks": [
+  {
+   "step": "body_plan_class",
+   "result": "pass",
+   "detail": "host class: vertebrate (quadruped)",
+   "cards": []
+  },
+  {
+   "step": "limb_budget",
+   "result": "pass",
+   "detail": "4 limbs",
+   "cards": []
+  },
+  {
+   "step": "size_ceiling",
+   "result": "pass",
+   "detail": "within ceilings",
+   "cards": []
+  },
+  {
+   "step": "flight_anatomy",
+   "result": "pass",
+   "detail": "no wings",
+   "cards": []
+  },
+  {
+   "step": "posture",
+   "result": "pass",
+   "detail": "limbs fixed by a documented known-pair override; posture left as documented",
+   "cards": [
+    "RC-R2-03"
+   ]
+  },
+  {
+   "step": "part_rendering",
+   "result": "pass",
+   "detail": "no soft parts",
+   "cards": []
+  }
+ ],
+ "scores": {
+  "critic": 0.5,
+  "silhouette": 0.733,
+  "thumbnail": 0.5,
+  "soft_penalty": 0.0,
+  "quality": 0.67
+ },
+ "seed": 0
+}

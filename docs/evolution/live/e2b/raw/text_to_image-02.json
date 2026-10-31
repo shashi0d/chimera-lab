@@ -1,0 +1,109 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Silhouette: Horizontal lion frame carried on two hind legs, golden eagle wings in place of the forelegs. Host frame: the lion sets the outline, body size and overall frame. A single creature that combines a lion and a golden eagle. Head of the lion, fully visible and uncluttered, with clear, discernible eyes. Details: behavior: lion-typical behavior following the lion head/brain tissue; golden eagle feathers in a few large patches over the forequarters and neck, at full strength with clean edges, color and surface unchanged inside each patch; lion coat everywhere else; ears: rounded lion ears, fully lion tissue; face: lion muzzle and facial features, no beak; feet: lion paws with claws, fully lion tissue; head: head capsule lion, supplying brain; behavior follows head donor; lion skull in place of the skull; skull: lion skull and jaw structure; tail: lion tail fully lion tissue; plain coat, no stripes or spots; golden eagle wings in place of the forelegs, standing on two hind legs; wings held for display or gliding, not powered flight. Coat texture flows along the body outline. Bilaterally symmetrical, recognizable limbs, visible sense organs. Habitat cue (forest): dark back and light belly (mild countershading). One creature, full body, side three-quarter view, plain light background, natural history illustration.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "id": "resp_6ae61353de8bd7624e284d2a",
+  "access_programs": null,
+  "created_at": 1793463123.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae61353278392c9e3ee455e",
+    "summary": [
+     {
+      "text": "**Composing lion-eagle illustration**\nI'm planning a natural history illustration that merges a lion's body and head with golden eagle wings and feather patches, keeping lion posture, clear eyes, and clean feather edges.\n**Drafting chimera illustration**\nI'm preparing a natural history plate of the bipedal lion-eagle chimera, with golden eagle wings as forelegs, lion head and paws, countershaded coat, and a plain light background in a three-quarter side view.\n**Refining chimera illustration**\nI'm adjusting the chimera image to remove the extra feather patch on the flank and keep only the two requested wings, then regenerating the clean version.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae61353b0961533ce974d7a",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR054M3VEUy1VS2lETWUwRkFKWlFKaWlkNExOU2JnMWlBUUJlIiwicmVzdW1lX2lkIjoiczpmM2QzODk4Mi02MzUzLTRmNmMtOTY4MC0zNjlmOTk2ZDkyOGI6R0JxbW9qU3JvSENEaXJvRkFCTXpqV01EVldoVmJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM0NjMxMjN9.Q8WLFwElrLvYeyJrZLBu7AtbsKuN",
+    "result": "<elided> (578424 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 20318,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 16128
+   },
+   "output_tokens": 2697,
+   "output_tokens_details": {
+    "reasoning_tokens": 455
+   },
+   "total_tokens": 23015
+  },
+  "user": null
+ }
+}
