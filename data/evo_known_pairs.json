@@ -1,0 +1,144 @@
+{
+  "about": "Known-pair overrides for the hybrid path (ALGORITHM.md section 6). Donors are written as roles ('sire', 'dam') or animal ids. Only the listed traits are fixed; the rest come from the default hybrid operators. 'locked' overrides come from a hard card: evolution and edits may not change their fixed fields.",
+  "pairs": [
+    {
+      "id": "mule",
+      "name": "mule",
+      "sire": ["donkey"],
+      "dam": ["horse"],
+      "either_order": false,
+      "locked": true,
+      "host": "dam",
+      "cards": ["RC-R2-03"],
+      "size": {"rule": "pick", "donor": "dam", "note": "horse height"},
+      "silhouette": "horse-height equine frame with the horse's neck and body, a short thick donkey head with long ears, a short upright mane, thin limbs on small hooves",
+      "traits": {
+        "body": {"op": "PICK", "donor": "dam", "note": "horse neck shape and body"},
+        "head": {"op": "PICK", "donor": "sire", "note": "short thick donkey head"},
+        "ears": {"op": "PICK", "donor": "sire", "note": "long donkey ears"},
+        "mane": {"op": "PICK", "donor": "sire", "note": "short donkey mane"},
+        "limbs": {"op": "PICK", "donor": "sire", "note": "thin donkey limbs"},
+        "feet": {"op": "PICK", "donor": "sire", "note": "small donkey hooves"},
+        "tail": {"op": "BLEND", "donor": ["sire", "dam"], "value": 0.5, "note": "tail short-haired at the base and longer below"},
+        "coat_texture": {"op": "PICK", "donor": "sire", "note": "coarse donkey coat"}
+      },
+      "processes": ["region mosaic as in mules"]
+    },
+    {
+      "id": "hinny",
+      "name": "hinny",
+      "sire": ["horse"],
+      "dam": ["donkey"],
+      "either_order": false,
+      "locked": false,
+      "host": "sire",
+      "cards": ["RC-R2-04"],
+      "size": {"rule": "blend", "value": 0.35, "note": "somewhat smaller than a mule"},
+      "silhouette": "equine frame close to a mule but smaller and more horse-like, shorter horse-shaped ears, fuller mane and tail",
+      "traits": {
+        "body": {"op": "PICK", "donor": "sire", "note": "more horse-like body"},
+        "head": {"op": "BLEND", "donor": ["sire", "dam"], "value": 0.6, "note": "head close to a mule's"},
+        "ears": {"op": "PICK", "donor": "sire", "note": "shorter horse-shaped ears"},
+        "mane": {"op": "PICK", "donor": "sire", "note": "fuller mane"},
+        "tail": {"op": "PICK", "donor": "sire", "note": "fuller tail"}
+      },
+      "processes": ["region mosaic as in hinnies", "reciprocal cross differs from the mule"],
+      "caveats": ["A hinny and a mule cannot reliably be told apart by looks alone."]
+    },
+    {
+      "id": "liger",
+      "name": "liger",
+      "sire": ["lion"],
+      "dam": ["tiger"],
+      "either_order": false,
+      "locked": false,
+      "host": "sire",
+      "cards": ["RC-R2-05", "RC-R2-08"],
+      "size": {"rule": "beyond", "factor": 1.25, "card": "RC-R2-05", "note": "documented direction-specific growth beyond both parents"},
+      "silhouette": "very large cat frame, longer and heavier than either parent, long body, heavy forequarters, small or no mane",
+      "traits": {
+        "body": {"op": "BLEND", "donor": ["sire", "dam"], "value": 0.5, "note": "long heavy cat body"},
+        "coat_color": {"op": "BLEND", "donor": ["sire", "dam"], "value": 0.25, "note": "tawny, lion-like base"},
+        "coat_pattern": {"op": "OVERLAY", "donor": "dam", "strength": 0.3, "region": ["flanks", "legs"], "note": "faint tiger stripes"},
+        "mane": {"op": "PICK", "donor": "sire", "strength": 0.3, "note": "reduced mane or none"}
+      },
+      "processes": ["in-between blend as in real hybrids", "diluted pattern from a non-body donor", "growth beyond both parents in one cross direction"]
+    },
+    {
+      "id": "tigon",
+      "name": "tigon",
+      "sire": ["tiger"],
+      "dam": ["lion"],
+      "either_order": false,
+      "locked": false,
+      "host": null,
+      "cards": ["RC-R2-05", "RC-R2-08"],
+      "size": {"rule": "blend", "value": 0.5, "note": "near parent size"},
+      "silhouette": "large cat frame near parent size, long body, tawny coat with faint stripes, small or no mane",
+      "traits": {
+        "body": {"op": "BLEND", "donor": ["sire", "dam"], "value": 0.5},
+        "coat_color": {"op": "BLEND", "donor": ["dam", "sire"], "value": 0.25, "note": "tawny, lion-like base"},
+        "coat_pattern": {"op": "OVERLAY", "donor": "sire", "strength": 0.3, "region": ["flanks", "legs"], "note": "faint tiger stripes"},
+        "mane": {"op": "PICK", "donor": "dam", "strength": 0.3, "note": "reduced mane or none"}
+      },
+      "processes": ["in-between blend as in real hybrids", "diluted pattern from a non-body donor"]
+    },
+    {
+      "id": "zebroid",
+      "name": "zebroid",
+      "sire": ["plains_zebra"],
+      "dam": ["horse", "donkey"],
+      "either_order": false,
+      "locked": false,
+      "host": "dam",
+      "cards": ["RC-R2-07", "RC-R2-09"],
+      "size": {"rule": "geomean"},
+      "silhouette": "equine frame with the non-zebra parent's body and base color, partial stripes on legs, neck and body",
+      "traits": {
+        "body": {"op": "PICK", "donor": "dam"},
+        "coat_color": {"op": "PICK", "donor": "dam", "note": "base color of the non-zebra parent"},
+        "coat_pattern": {"op": "OVERLAY", "donor": "sire", "strength": 0.5, "region": ["legs", "neck", "flanks"], "note": "partial stripes, strongest on the legs"}
+      },
+      "processes": ["partial pattern from a non-body donor"]
+    },
+    {
+      "id": "hybrid_bear",
+      "name": "polar bear and grizzly hybrid",
+      "sire": ["polar_bear", "brown_bear"],
+      "dam": ["polar_bear", "brown_bear"],
+      "either_order": true,
+      "locked": false,
+      "host": null,
+      "cards": ["RC-R2-10", "RC-R2-11"],
+      "size": {"rule": "geomean"},
+      "silhouette": "large bear frame with a long polar-like neck, a small grizzly-like shoulder hump and a visible tail",
+      "traits": {
+        "body": {"op": "BLEND", "donor": ["polar_bear", "brown_bear"], "value": 0.4, "note": "long polar-like neck, small grizzly-like shoulder hump"},
+        "tail": {"op": "PICK", "donor": "polar_bear", "note": "visible tail"},
+        "feet": {"op": "BLEND", "donor": ["polar_bear", "brown_bear"], "value": 0.5, "note": "partly furred soles"},
+        "coat_color": {"op": "BLEND", "donor": ["polar_bear", "brown_bear"], "value": 0.2, "note": "mostly pale coat"},
+        "behavior": {"op": "PICK", "donor": "polar_bear", "note": "behavior leans polar bear"}
+      },
+      "processes": ["in-between blend as in real hybrids", "behavior following one parent"]
+    },
+    {
+      "id": "cama",
+      "name": "cama",
+      "sire": ["dromedary_camel"],
+      "dam": ["guanaco", "llama"],
+      "either_order": false,
+      "locked": false,
+      "host": null,
+      "cards": ["RC-R2-13", "RC-R2-14"],
+      "size": {"rule": "geomean"},
+      "silhouette": "intermediate camelid frame with no hump, short camel-like ears and a long camel-like tail",
+      "traits": {
+        "body": {"op": "BLEND", "donor": ["sire", "dam"], "value": 0.5, "note": "intermediate camelid body, no hump"},
+        "ears": {"op": "PICK", "donor": "sire", "note": "short camel-like ears"},
+        "tail": {"op": "PICK", "donor": "sire", "note": "long camel-like tail"},
+        "feet": {"op": "PICK", "donor": "dam", "note": "split llama-like hooves"}
+      },
+      "processes": ["intermediate look from distant but compatible parents"]
+    }
+  ]
+}

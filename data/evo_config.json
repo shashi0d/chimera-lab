@@ -1,0 +1,200 @@
+{
+  "about": "Evolution engine tables (ALGORITHM.md sections 4.1 to 4.6). Plain data so the numbers can be tuned without code changes.",
+  "aliases": {
+    "eagle": "golden_eagle",
+    "octopus": "common_octopus",
+    "grizzly": "brown_bear",
+    "grizzly bear": "brown_bear",
+    "grizzly_bear": "brown_bear",
+    "zebra": "plains_zebra",
+    "camel": "dromedary_camel",
+    "dromedary": "dromedary_camel"
+  },
+  "class_groups": {
+    "vertebrate": [
+      "Mammalia",
+      "Aves",
+      "Reptilia",
+      "Amphibia",
+      "Actinopterygii",
+      "Elasmobranchii"
+    ],
+    "arthropod": [
+      "Insecta",
+      "Arachnida",
+      "Malacostraca"
+    ],
+    "soft_bodied": [
+      "Cephalopoda",
+      "Scyphozoa",
+      "Asteroidea",
+      "Gastropoda"
+    ]
+  },
+  "habitat_profiles": {
+    "grassland": {
+      "openness": "open",
+      "temp": "warm",
+      "sunny": true
+    },
+    "forest": {
+      "openness": "closed",
+      "temp": "temperate",
+      "sunny": false
+    },
+    "mountain": {
+      "openness": "open",
+      "temp": "cold",
+      "sunny": true
+    },
+    "tundra": {
+      "openness": "open",
+      "temp": "cold",
+      "sunny": false
+    },
+    "desert": {
+      "openness": "open",
+      "temp": "hot",
+      "sunny": true
+    },
+    "wetland": {
+      "openness": "closed",
+      "temp": "temperate",
+      "sunny": false
+    },
+    "freshwater": {
+      "openness": "open",
+      "temp": "temperate",
+      "sunny": false,
+      "water": true
+    },
+    "marine": {
+      "openness": "open",
+      "temp": "temperate",
+      "sunny": true,
+      "water": true,
+      "open_water": true
+    },
+    "rocky coast": {
+      "openness": "open",
+      "temp": "temperate",
+      "sunny": true
+    },
+    "river forest": {
+      "openness": "closed",
+      "temp": "temperate",
+      "sunny": false
+    },
+    "dry woodland": {
+      "openness": "closed",
+      "temp": "hot",
+      "sunny": true
+    },
+    "alpine meadow": {
+      "openness": "open",
+      "temp": "cold",
+      "sunny": true
+    }
+  },
+  "bridging": [
+    {
+      "between": [
+        "desert",
+        "forest"
+      ],
+      "name": "dry woodland"
+    },
+    {
+      "between": [
+        "tundra",
+        "grassland"
+      ],
+      "name": "alpine meadow"
+    },
+    {
+      "either": [
+        "marine"
+      ],
+      "name": "rocky coast"
+    },
+    {
+      "either": [
+        "freshwater",
+        "wetland"
+      ],
+      "name": "river forest"
+    }
+  ],
+  "thresholds": {
+    "wing_glide_kg": 40,
+    "wing_borderline_kg": [
+      26,
+      75
+    ],
+    "arthropod_large_kg": 20,
+    "posture_scale": 2.0,
+    "thick_bones_kg": 500,
+    "heavy_land_kg": 50,
+    "hybrid_spread": 0.1,
+    "chimera_donor_share": [
+      0.2,
+      0.45
+    ],
+    "max_patches": 3,
+    "beyond_share_max": 0.25
+  },
+  "patch_regions": {
+    "winged": [
+      "forequarters",
+      "neck",
+      "back"
+    ],
+    "soft_bodied": [
+      "belly",
+      "flanks",
+      "back"
+    ],
+    "arthropod": [
+      "back",
+      "flanks",
+      "hindquarters"
+    ],
+    "default": [
+      "back",
+      "flanks",
+      "hindquarters"
+    ]
+  },
+  "signature_parts": {
+    "soft_bodied": {
+      "trait": "tail",
+      "part": "tentacles"
+    },
+    "arthropod": {
+      "trait": "tail",
+      "part": "jointed tail segments"
+    },
+    "finned": {
+      "trait": "tail",
+      "part": "broad fins"
+    },
+    "serpentine": {
+      "trait": "tail",
+      "part": "long scaled coils"
+    }
+  },
+  "franchise_blocklist": [
+    "Pokemon",
+    "Pokémon",
+    "Digimon",
+    "Dolcetto",
+    "Chimera Ant",
+    "Meruem",
+    "Na'vi",
+    "Toruk",
+    "Ikran",
+    "Thanator",
+    "Banshee",
+    "Avatar"
+  ]
+}

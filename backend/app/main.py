@@ -89,6 +89,9 @@ def create_app(settings: Settings | None = None, services: Services | None = Non
 
     for r in (health.router, assets.router, runs.router, graphs.router):
         app.include_router(r)
+    from app.evolution.api import router as evo_router  # evolution engine, isolated under /evo
+
+    app.include_router(evo_router)
     return app
 
 

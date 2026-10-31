@@ -1,0 +1,1141 @@
+[
+  {
+    "id": "RC-R1-01",
+    "doc": "R1_inheritance.md",
+    "rule": "Decide inheritance per trait, never per animal; the engine must not assign one parent as dominant for the whole creature, because dominance is defined between alleles of a single gene",
+    "applies_to": [
+      "pipeline",
+      "all_traits"
+    ],
+    "strength": "hard",
+    "status": "VERIFIED",
+    "source": "https://slcc.pressbooks.pub/collegebiology1/chapter/incomplete-dominance-and-codominance/"
+  },
+  {
+    "id": "RC-R1-02",
+    "doc": "R1_inheritance.md",
+    "rule": "Measurement traits (size, limb, neck, tail, ear and snout length) use BLEND: start near the midpoint of the parents and add modest random spread, since many-gene traits vary continuously and cluster around the middle",
+    "applies_to": [
+      "size",
+      "limbs",
+      "tail",
+      "ears",
+      "face",
+      "body"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://www.jove.com/science-education/10778/polygenic-traits"
+  },
+  {
+    "id": "RC-R1-03",
+    "doc": "R1_inheritance.md",
+    "rule": "Blend body size on a log scale (geometric mean of parent masses) rather than a plain average",
+    "applies_to": [
+      "size"
+    ],
+    "strength": "soft",
+    "status": "UNVERIFIED",
+    "source": "https://www.jove.com/science-education/10778/polygenic-traits"
+  },
+  {
+    "id": "RC-R1-04",
+    "doc": "R1_inheritance.md",
+    "rule": "Clearly present-or-absent features (horns, crest, tail tuft, mane presence) use PICK: the feature comes fully from one parent or is absent, not half-formed",
+    "applies_to": [
+      "head",
+      "mane",
+      "tail"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://bio.libretexts.org/Bookshelves/Genetics/Classical_Genetics_(Khan_Academy)/02%3A_Non-Mendelian_inheritance/2.02%3A_Multiple_alleles_incomplete_dominance_and_codominance"
+  },
+  {
+    "id": "RC-R1-05",
+    "doc": "R1_inheritance.md",
+    "rule": "Shade-like traits (base coat color, contrast) may use BLEND, matching incomplete dominance where the in-between form appears",
+    "applies_to": [
+      "coat_color"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://slcc.pressbooks.pub/collegebiology1/chapter/incomplete-dominance-and-codominance/"
+  },
+  {
+    "id": "RC-R1-06",
+    "doc": "R1_inheritance.md",
+    "rule": "Patterns may use OVERLAY, where both parents' features are visible at once (a pattern over a base color), matching codominance; per R2 the pattern is shown diluted when its donor does not own the body",
+    "applies_to": [
+      "coat_pattern",
+      "coat_color"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://slcc.pressbooks.pub/collegebiology1/chapter/incomplete-dominance-and-codominance/"
+  },
+  {
+    "id": "RC-R1-07",
+    "doc": "R1_inheritance.md",
+    "rule": "Some traits can be inherited yet hidden because another trait controls whether they show (GATE); evaluate gating traits before the traits they control",
+    "applies_to": [
+      "pipeline",
+      "coat_pattern",
+      "coat_color"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://openoregon.pressbooks.pub/mhccmajorsbio/chapter/epistasis/"
+  },
+  {
+    "id": "RC-R1-08",
+    "doc": "R1_inheritance.md",
+    "rule": "Gate examples for fusions: a fur pattern only shows on regions that carry fur; a mane only shows where the body carries hair",
+    "applies_to": [
+      "coat_pattern",
+      "mane",
+      "coat_texture"
+    ],
+    "strength": "soft",
+    "status": "UNVERIFIED",
+    "source": "https://bio.libretexts.org/Bookshelves/Genetics/Online_Open_Genetics_(Nickle_and_Barrette-Ng)/06%3A_Genetic_Analysis_of_Multiple_Genes/6.02%3A_Epistasis_and_Other_Gene_Interactions"
+  },
+  {
+    "id": "RC-R1-09",
+    "doc": "R1_inheritance.md",
+    "rule": "PATCH is a valid coat mode: distinct blocks with clear edges, each block fully one version, no blending inside a block, as in tortoiseshell and calico cats",
+    "applies_to": [
+      "coat_pattern",
+      "coat_color"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://catalog.lib.kyushu-u.ac.jp/opac_download_md/7390840/7390840.pdf"
+  },
+  {
+    "id": "RC-R1-10",
+    "doc": "R1_inheritance.md",
+    "rule": "Each mosaic patch grows from a single cell lineage, so patches should be few and large rather than fine speckles",
+    "applies_to": [
+      "coat_pattern"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://digitalcommons.usm.maine.edu/thinking_matters/173"
+  },
+  {
+    "id": "RC-R1-11",
+    "doc": "R1_inheritance.md",
+    "rule": "Face shape, ear form and pigment pattern share a developmental origin (neural crest); prefer taking them from the same parent or shifting them in the same direction",
+    "applies_to": [
+      "face",
+      "ears",
+      "coat_pattern",
+      "skull"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4096361/"
+  },
+  {
+    "id": "RC-R1-12",
+    "doc": "R1_inheritance.md",
+    "rule": "Do not present the domestication syndrome explanation as settled science in any user-facing text; it is a debated hypothesis",
+    "applies_to": [
+      "pipeline"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8633094"
+  },
+  {
+    "id": "RC-R1-13",
+    "doc": "R1_inheritance.md",
+    "rule": "Allow a small share of traits to land beyond both parents; extremes are common in hybrids overall but rarer in crosses between wild animal species",
+    "applies_to": [
+      "all_traits"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://www.nature.com/articles/6886170"
+  },
+  {
+    "id": "RC-R1-14",
+    "doc": "R1_inheritance.md",
+    "rule": "Genetics-based operators only predict real outcomes for parents that can interbreed; for any other pair the fusion must be labeled speculative design, not a predicted animal",
+    "applies_to": [
+      "pipeline"
+    ],
+    "strength": "hard",
+    "status": "VERIFIED",
+    "source": "https://www.ucl.ac.uk/taxome/jim/pap/mallet07_hybspn_Nature.pdf"
+  },
+  {
+    "id": "RC-R2-01",
+    "doc": "R2_real_hybrids.md",
+    "rule": "Parent order is biological. Store fusions as (sire, dam) and never treat A x B as identical to B x A, because reciprocal crosses can differ in size and appearance",
+    "applies_to": [
+      "pipeline",
+      "size"
+    ],
+    "strength": "hard",
+    "status": "VERIFIED",
+    "source": "https://lsi.princeton.edu/research/faculty-publications/genomic-imprinting-disrupted-interspecific-peromyscus-hybrids"
+  },
+  {
+    "id": "RC-R2-02",
+    "doc": "R2_real_hybrids.md",
+    "rule": "For a first-generation fusion, place most measurable traits (size, limb length, skull proportions) between the two parents; allow only a minority of traits to exceed both parents, and flag any that do as unusual",
+    "applies_to": [
+      "size",
+      "limbs",
+      "skull",
+      "body"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://www.nature.com/articles/6886170"
+  },
+  {
+    "id": "RC-R2-03",
+    "doc": "R2_real_hybrids.md",
+    "rule": "Donkey sire x horse dam must render as the documented mule: horse height, neck shape and body; donkey short thick head, long ears, short mane, coarse coat, thin limbs and small hooves; tail short-haired at the base and longer below",
+    "applies_to": [
+      "body",
+      "head",
+      "ears",
+      "mane",
+      "limbs",
+      "feet",
+      "tail",
+      "coat_texture"
+    ],
+    "strength": "hard",
+    "status": "VERIFIED",
+    "source": "https://en.engormix.com/equines/horse-genetics/what-mule-made_n11953/"
+  },
+  {
+    "id": "RC-R2-04",
+    "doc": "R2_real_hybrids.md",
+    "rule": "Horse sire x donkey dam (hinny) renders close to the mule but somewhat smaller and more horse-like, with shorter horse-shaped ears and a fuller mane and tail; never claim the two can be told apart by looks alone",
+    "applies_to": [
+      "ears",
+      "mane",
+      "tail",
+      "size"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://thedonkeysanctuary.org.uk/all-about-donkeys/breeds/mules-and-hinnies"
+  },
+  {
+    "id": "RC-R2-05",
+    "doc": "R2_real_hybrids.md",
+    "rule": "Size may exceed both parents only when a documented direction-specific case exists (lion sire x tiger dam); the reverse cross stays near parent size",
+    "applies_to": [
+      "size"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://www.thetech.org/ask-a-geneticist/why-are-ligers-so-big"
+  },
+  {
+    "id": "RC-R2-06",
+    "doc": "R2_real_hybrids.md",
+    "rule": "Region mosaics are allowed and realistic: one parent can supply the frame while the other supplies head, ears and limbs, but the donor choice should cover a coherent group of regions rather than random single parts",
+    "applies_to": [
+      "body",
+      "head",
+      "ears",
+      "limbs"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://en.engormix.com/equines/horse-genetics/what-mule-made_n11953/"
+  },
+  {
+    "id": "RC-R2-07",
+    "doc": "R2_real_hybrids.md",
+    "rule": "When the pattern donor is not the body donor, render its pattern partial and reduced (zebroid: base body and color from the non-zebra parent, stripes on parts of legs, neck and body)",
+    "applies_to": [
+      "coat_pattern",
+      "coat_color"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://darwinmuseum.ru/pages/a-zebroid-a-horse-or-a-zebra"
+  },
+  {
+    "id": "RC-R2-08",
+    "doc": "R2_real_hybrids.md",
+    "rule": "Lion x tiger renders as a tawny lion-like coat with faint tiger stripes; a male may have a reduced mane or none; never full mane plus full-strength stripes",
+    "applies_to": [
+      "coat_pattern",
+      "coat_color",
+      "mane"
+    ],
+    "strength": "soft",
+    "status": "UNVERIFIED",
+    "source": "https://www.newworldencyclopedia.org/entry/Liger"
+  },
+  {
+    "id": "RC-R2-09",
+    "doc": "R2_real_hybrids.md",
+    "rule": "Zebroid stripes are strongest on the legs and do not appear on white patches of a patterned horse parent",
+    "applies_to": [
+      "coat_pattern",
+      "limbs"
+    ],
+    "strength": "soft",
+    "status": "UNVERIFIED",
+    "source": "https://www.iflscience.com/zebroids-zeedonks-zorses-zonies-welcome-to-the-world-of-zebra-hybrids-80202"
+  },
+  {
+    "id": "RC-R2-10",
+    "doc": "R2_real_hybrids.md",
+    "rule": "Polar bear x grizzly renders with a long polar-like neck and visible tail, a small grizzly-like shoulder hump, partly furred soles, and a mostly pale coat; behavior leans polar bear",
+    "applies_to": [
+      "body",
+      "tail",
+      "feet",
+      "coat_color",
+      "behavior"
+    ],
+    "strength": "soft",
+    "status": "UNVERIFIED",
+    "source": "https://www.livescience.com/12047-real-fake-8-bizarre-hybrid-animals.html"
+  },
+  {
+    "id": "RC-R2-11",
+    "doc": "R2_real_hybrids.md",
+    "rule": "Wild polar bear x grizzly hybrids are genetically confirmed, so the pair qualifies for the real-hybrid path",
+    "applies_to": [
+      "pipeline"
+    ],
+    "strength": "hard",
+    "status": "VERIFIED",
+    "source": "https://journalhosting.ucalgary.ca/index.php/arctic/article/view/67681"
+  },
+  {
+    "id": "RC-R2-12",
+    "doc": "R2_real_hybrids.md",
+    "rule": "Inherited traits can fit a new lifestyle: when a fusion takes the larger parent's size, it may also take a larger, wider skull suited to larger prey",
+    "applies_to": [
+      "skull",
+      "size"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://nysm.nysed.gov/node/8054"
+  },
+  {
+    "id": "RC-R2-13",
+    "doc": "R2_real_hybrids.md",
+    "rule": "Even distantly related compatible parents (camel x guanaco) give an intermediate-looking animal, not a part swap; a signature feature such as a hump is not guaranteed to transfer",
+    "applies_to": [
+      "body",
+      "all_traits"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1689826"
+  },
+  {
+    "id": "RC-R2-14",
+    "doc": "R2_real_hybrids.md",
+    "rule": "Camel x llama renders with short camel-like ears, a long camel-like tail, split llama-like hooves and no hump",
+    "applies_to": [
+      "ears",
+      "tail",
+      "feet",
+      "body"
+    ],
+    "strength": "soft",
+    "status": "UNVERIFIED",
+    "source": "https://www.farmshow.com/a_article.php?aid=11569"
+  },
+  {
+    "id": "RC-R2-15",
+    "doc": "R2_real_hybrids.md",
+    "rule": "Behavior can follow one parent even when the body is mixed, and a behavior can be present without the physical performance behind it (hybrid bears with seal-hunting style behavior but weaker swimming)",
+    "applies_to": [
+      "behavior"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://www.nature.com/articles/468891a"
+  },
+  {
+    "id": "RC-R2-16",
+    "doc": "R2_real_hybrids.md",
+    "rule": "Use the real-hybrid path only for pairs with a documented hybrid or a close relationship (same genus); all other pairs go to the chimera path and are labeled speculative",
+    "applies_to": [
+      "pipeline"
+    ],
+    "strength": "hard",
+    "status": "VERIFIED",
+    "source": "https://www.ucl.ac.uk/taxome/jim/pap/mallet07_hybspn_Nature.pdf"
+  },
+  {
+    "id": "RC-R3-01",
+    "doc": "R3_body_plan_limits.md",
+    "rule": "For a vertebrate base with a wing donor, the wings take the place of the forelimbs by default, because pterosaurs, birds and bats all built wings from forelimbs",
+    "applies_to": [
+      "limbs",
+      "body"
+    ],
+    "strength": "hard",
+    "status": "VERIFIED",
+    "source": "https://digitalcommons.usf.edu/geo_facpub/838"
+  },
+  {
+    "id": "RC-R3-02",
+    "doc": "R3_body_plan_limits.md",
+    "rule": "A vertebrate design with four legs plus a separate pair of wings (six limbs) is allowed only when labeled as a mythic or speculative design, never as a plausible animal",
+    "applies_to": [
+      "limbs",
+      "pipeline"
+    ],
+    "strength": "hard",
+    "status": "VERIFIED",
+    "source": "https://digitalcommons.usf.edu/geo_facpub/838"
+  },
+  {
+    "id": "RC-R3-03",
+    "doc": "R3_body_plan_limits.md",
+    "rule": "A creature described as a powered flyer must show a matching chest: a deep keel or a broad, heavily muscled chest and shoulders; otherwise its wings are labeled non-flying (display, gliding or vestigial)",
+    "applies_to": [
+      "body",
+      "limbs"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8377870/"
+  },
+  {
+    "id": "RC-R3-04",
+    "doc": "R3_body_plan_limits.md",
+    "rule": "Takeoff ability scales with the share of body mass in flight muscle (about 0.12 to 0.56 in studied flyers); a heavy body with small wing muscles should not be shown taking off",
+    "applies_to": [
+      "body",
+      "behavior"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://cir.nii.ac.jp/crid/1363388843989515904"
+  },
+  {
+    "id": "RC-R3-05",
+    "doc": "R3_body_plan_limits.md",
+    "rule": "Winged fusions above about 40 kg are shown as gliders or flightless, and those between about 26 and 75 kg are flagged as borderline, based on the soaring-animal size limit estimate",
+    "applies_to": [
+      "size",
+      "behavior",
+      "limbs"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2670537"
+  },
+  {
+    "id": "RC-R3-06",
+    "doc": "R3_body_plan_limits.md",
+    "rule": "When a fusion is scaled well above its leg donor's size, straighten the limbs toward an upright posture and reduce agility claims, because larger mammals use upright limbs to keep bone and muscle stress safe",
+    "applies_to": [
+      "limbs",
+      "size",
+      "behavior"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://www.scilit.net/publications/cf6810694dbfb043ba6799af13e88f18"
+  },
+  {
+    "id": "RC-R3-07",
+    "doc": "R3_body_plan_limits.md",
+    "rule": "Above roughly horse size, also thicken limb bones relative to their length, since posture alone stops compensating",
+    "applies_to": [
+      "limbs",
+      "size"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://biewenerlab.oeb.harvard.edu/publications/biomechanical-consequences-scaling"
+  },
+  {
+    "id": "RC-R3-08",
+    "doc": "R3_body_plan_limits.md",
+    "rule": "Cat-derived legs may keep a crouched stance at larger sizes, shown with heavier support muscles, since felids keep a crouched posture across a wide size range",
+    "applies_to": [
+      "limbs",
+      "size"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://rvc-repository.worktribe.com/OutputFile/1397435"
+  },
+  {
+    "id": "RC-R3-09",
+    "doc": "R3_body_plan_limits.md",
+    "rule": "Arthropod parts (exoskeleton, jointed insect legs, insect wings) must not appear at large mammal size in a plausible fusion; if a pair forces it, label the result speculative and say that insect breathing limits size",
+    "applies_to": [
+      "size",
+      "body",
+      "limbs",
+      "pipeline"
+    ],
+    "strength": "hard",
+    "status": "VERIFIED",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1941816"
+  },
+  {
+    "id": "RC-R3-10",
+    "doc": "R3_body_plan_limits.md",
+    "rule": "Tentacle and trunk parts are rendered jointless and smoothly curving (no elbows, knees or hooves), and a longer tentacle is a thinner one",
+    "applies_to": [
+      "limbs",
+      "tail",
+      "face"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://scholars.duke.edu/display/pub798983"
+  },
+  {
+    "id": "RC-R3-11",
+    "doc": "R3_body_plan_limits.md",
+    "rule": "Tentacles used as weight-bearing legs on a heavy land animal are treated as speculative",
+    "applies_to": [
+      "limbs",
+      "pipeline"
+    ],
+    "strength": "soft",
+    "status": "UNVERIFIED",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6793066"
+  },
+  {
+    "id": "RC-R3-12",
+    "doc": "R3_body_plan_limits.md",
+    "rule": "Physical checks run after trait selection in a fixed order (body-plan class, limb budget, size ceiling, posture, part rendering); a failed check either changes the design or adds a visible speculative label, never a silent pass",
+    "applies_to": [
+      "pipeline"
+    ],
+    "strength": "soft",
+    "status": "UNVERIFIED",
+    "source": "https://biewenerlab.oeb.harvard.edu/publications/biomechanical-consequences-scaling"
+  },
+  {
+    "id": "RC-R4-01",
+    "doc": "R4_environment_to_form.md",
+    "rule": "Fit coat pattern to the fusion's habitat: closed, forested or tree-climbing lifestyles lean patterned and irregular; open habitats lean plain",
+    "applies_to": [
+      "coat_pattern"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3061134"
+  },
+  {
+    "id": "RC-R4-02",
+    "doc": "R4_environment_to_form.md",
+    "rule": "Habitat may adjust pattern strength and complexity beyond what either parent shows, because coat pattern tracks ecology more than ancestry",
+    "applies_to": [
+      "coat_pattern",
+      "pipeline"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3061134"
+  },
+  {
+    "id": "RC-R4-03",
+    "doc": "R4_environment_to_form.md",
+    "rule": "In a cold habitat, nudge body size toward the upper end of the blended range (Bergmann's rule), staying within R3 size limits",
+    "applies_to": [
+      "size"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://pubmed.ncbi.nlm.nih.gov/29592141/"
+  },
+  {
+    "id": "RC-R4-04",
+    "doc": "R4_environment_to_form.md",
+    "rule": "In a hot habitat, enlarge heat-shedding extremities (ears, tail, beak, limbs); in a cold habitat, shorten them (Allen's rule)",
+    "applies_to": [
+      "ears",
+      "tail",
+      "limbs",
+      "face"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://researchportalplus.anu.edu.au/en/publications/shape-shifting-changing-animal-morphologies-as-a-response-to-clim/"
+  },
+  {
+    "id": "RC-R4-05",
+    "doc": "R4_environment_to_form.md",
+    "rule": "Default to a dark-back, light-belly gradient, stronger in open, sunny habitats and smaller bodies; describe it as a common pattern, not proven camouflage",
+    "applies_to": [
+      "coat_color"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://datadryad.org/dataset/doi:10.5061/dryad.4291n"
+  },
+  {
+    "id": "RC-R4-06",
+    "doc": "R4_environment_to_form.md",
+    "rule": "A fusion assigned a fast open-water lifestyle gets a streamlined torpedo body and a crescent or fluked tail; otherwise describe it as a shoreline or wading animal",
+    "applies_to": [
+      "body",
+      "tail",
+      "behavior"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6458325"
+  },
+  {
+    "id": "RC-R4-07",
+    "doc": "R4_environment_to_form.md",
+    "rule": "A nocturnal or dusk-active fusion with a bird or reptile head gets visibly larger eyes and pupils; with a mammal head the change is smaller",
+    "applies_to": [
+      "face",
+      "head",
+      "behavior"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3497252"
+  },
+  {
+    "id": "RC-R4-08",
+    "doc": "R4_environment_to_form.md",
+    "rule": "Larger prey goes with a larger, wider skull and stronger jaws",
+    "applies_to": [
+      "skull",
+      "head"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://nysm.nysed.gov/node/8054"
+  },
+  {
+    "id": "RC-R4-09",
+    "doc": "R4_environment_to_form.md",
+    "rule": "A fusion may live in a habitat neither parent uses (a bridging niche), because niche separation is what lets hybrid lineages establish; its visible traits must then match that habitat",
+    "applies_to": [
+      "pipeline",
+      "behavior"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://www.nature.com/articles/6886170"
+  },
+  {
+    "id": "RC-R4-10",
+    "doc": "R4_environment_to_form.md",
+    "rule": "Habitat adjusts plastic traits (pattern, shading, extremity size, eye size) but never the body-plan class or limb count; those stay with R3",
+    "applies_to": [
+      "pipeline",
+      "body",
+      "limbs"
+    ],
+    "strength": "soft",
+    "status": "UNVERIFIED",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3061134"
+  },
+  {
+    "id": "RC-R4-11",
+    "doc": "R4_environment_to_form.md",
+    "rule": "At least one habitat-linked trait must be visible in the image, so the ecology appears in the creature and not only in the text",
+    "applies_to": [
+      "pipeline"
+    ],
+    "strength": "soft",
+    "status": "UNVERIFIED",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3061134"
+  },
+  {
+    "id": "RC-R5-01",
+    "doc": "R5_real_chimeras.md",
+    "rule": "On the chimera path, each region is fully one parent's tissue; blend between regions only at the edges, never within a patch",
+    "applies_to": [
+      "coat_pattern",
+      "coat_texture",
+      "coat_color",
+      "all_traits"
+    ],
+    "strength": "hard",
+    "status": "VERIFIED",
+    "source": "https://sdbonline.org/archive/dbcinema/ledouarin/ledouarin.html"
+  },
+  {
+    "id": "RC-R5-02",
+    "doc": "R5_real_chimeras.md",
+    "rule": "The host parent sets silhouette, body size and overall frame; the donor contributes regions, organs or patches",
+    "applies_to": [
+      "body",
+      "size",
+      "pipeline"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://pubmed.ncbi.nlm.nih.gov/20813264/"
+  },
+  {
+    "id": "RC-R5-03",
+    "doc": "R5_real_chimeras.md",
+    "rule": "Chimeras are not 50:50; allow the donor share to vary between runs, and never present a fixed even split as the biological norm",
+    "applies_to": [
+      "all_traits",
+      "pipeline"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://www.nature.com/articles/nmeth1110-872.pdf"
+  },
+  {
+    "id": "RC-R5-04",
+    "doc": "R5_real_chimeras.md",
+    "rule": "Donor regions keep the donor's own color and surface (feathers, hair, skin), shown at full strength inside the region",
+    "applies_to": [
+      "coat_color",
+      "coat_texture"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://sdbonline.org/archive/dbcinema/ledouarin/ledouarin.html"
+  },
+  {
+    "id": "RC-R5-05",
+    "doc": "R5_real_chimeras.md",
+    "rule": "Where donor pattern appears follows the host's body layout (its skin and feather regions), not the donor's own pattern layout",
+    "applies_to": [
+      "coat_pattern"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://discovery-pp.ucl.ac.uk/id/eprint/10108322"
+  },
+  {
+    "id": "RC-R5-06",
+    "doc": "R5_real_chimeras.md",
+    "rule": "Donor regions align with body segments or regions (the level of a graft), not random scattered fragments",
+    "applies_to": [
+      "coat_pattern",
+      "body"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://sdbonline.org/archive/dbcinema/ledouarin/ledouarin.html"
+  },
+  {
+    "id": "RC-R5-07",
+    "doc": "R5_real_chimeras.md",
+    "rule": "Behavior can follow the parent that supplied the brain or head tissue",
+    "applies_to": [
+      "behavior",
+      "head"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://agris.fao.org/search/en/records/65dfe6754c5aef494fe67490"
+  },
+  {
+    "id": "RC-R5-08",
+    "doc": "R5_real_chimeras.md",
+    "rule": "A sheep and goat style chimera shows mixed patches of both coat types (hair and wool), with the overall look leaning toward either parent",
+    "applies_to": [
+      "coat_texture",
+      "body"
+    ],
+    "strength": "soft",
+    "status": "UNVERIFIED",
+    "source": "https://www.farmshow.com/a_article.php?aid=6960"
+  },
+  {
+    "id": "RC-R5-09",
+    "doc": "R5_real_chimeras.md",
+    "rule": "Where very different tissues meet, the description may note a seam or incompatibility; never claim a distant-pair chimera would be healthy or viable",
+    "applies_to": [
+      "pipeline",
+      "behavior"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://sdbonline.org/archive/dbcinema/ledouarin/ledouarin.html"
+  },
+  {
+    "id": "RC-R5-10",
+    "doc": "R5_real_chimeras.md",
+    "rule": "Documented interspecies chimeras pair close relatives only; any chimera between distant groups must be labeled a speculative design with no real-world precedent",
+    "applies_to": [
+      "pipeline"
+    ],
+    "strength": "hard",
+    "status": "VERIFIED",
+    "source": "https://www.nature.com/articles/nmeth1110-872.pdf"
+  },
+  {
+    "id": "RC-R6-01",
+    "doc": "R6_perception.md",
+    "rule": "The body silhouette donor sets the creature's identity for human viewers; choose it deliberately (or expose it as a user control), never as a side effect of input order",
+    "applies_to": [
+      "body",
+      "pipeline"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://arxiv.org/abs/1811.12231v3"
+  },
+  {
+    "id": "RC-R6-02",
+    "doc": "R6_perception.md",
+    "rule": "Carry the second parent mainly through surface texture, pattern and selected signature parts, which tell viewers which other animal is involved without changing what the creature is",
+    "applies_to": [
+      "coat_pattern",
+      "coat_texture",
+      "coat_color",
+      "all_traits"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://arxiv.org/abs/1811.12231v3"
+  },
+  {
+    "id": "RC-R6-03",
+    "doc": "R6_perception.md",
+    "rule": "Keep the head fully visible and uncluttered; the head and eyes draw the earliest and most looks, so the head donor dominates the first impression",
+    "applies_to": [
+      "head",
+      "face"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://eprints.lancs.ac.uk/id/eprint/50885/"
+  },
+  {
+    "id": "RC-R6-04",
+    "doc": "R6_perception.md",
+    "rule": "Every creature must have clearly discernible eyes; viewers search for eyes wherever they are, so extra or displaced eyes are used only on purpose",
+    "applies_to": [
+      "face",
+      "head"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://repository.essex.ac.uk/9355/"
+  },
+  {
+    "id": "RC-R6-05",
+    "doc": "R6_perception.md",
+    "rule": "Signature parts that draw looks on the real animal (a tail tuft, a trunk, an udder-like feature) are the best carriers of the second parent's identity",
+    "applies_to": [
+      "tail",
+      "face",
+      "body"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://eprints.lancs.ac.uk/id/eprint/50885/"
+  },
+  {
+    "id": "RC-R6-06",
+    "doc": "R6_perception.md",
+    "rule": "The creature must read as one animal at a glance; test the render at thumbnail size as well as full size",
+    "applies_to": [
+      "pipeline"
+    ],
+    "strength": "soft",
+    "status": "UNVERIFIED",
+    "source": "https://pubmed.ncbi.nlm.nih.gov/8632824/"
+  },
+  {
+    "id": "RC-R6-07",
+    "doc": "R6_perception.md",
+    "rule": "Keep bilateral symmetry, visible sense organs and recognizable limbs unless the user explicitly asks for an alien design, because these are what make an invented creature read as an animal",
+    "applies_to": [
+      "body",
+      "face",
+      "limbs"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://link.springer.com/content/pdf/10.3758%2FBF03195281.pdf"
+  },
+  {
+    "id": "RC-R6-08",
+    "doc": "R6_perception.md",
+    "rule": "When building a hybrid, take the overall shape from the parent with the more structured body schema; a schema higher in the human-like, four-legged, object, shapeless hierarchy is preferred",
+    "applies_to": [
+      "body",
+      "pipeline"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://cris.tau.ac.il/en/publications/how-to-build-a-hybrid-the-structure-of-imagination/"
+  },
+  {
+    "id": "RC-R6-09",
+    "doc": "R6_perception.md",
+    "rule": "Specific mapping for our animals: four-legged mammals and birds count as structured frames; octopus, jellyfish and similar soft-bodied animals count as low-structure donors that contribute surface, tentacles or signature parts",
+    "applies_to": [
+      "body",
+      "limbs"
+    ],
+    "strength": "soft",
+    "status": "UNVERIFIED",
+    "source": "https://cris.tau.ac.il/en/publications/how-to-build-a-hybrid-the-structure-of-imagination/"
+  },
+  {
+    "id": "RC-R6-10",
+    "doc": "R6_perception.md",
+    "rule": "A model critic's animal label is not proof of human readability, because standard image classifiers lean on texture where people lean on shape; pair the critic with a silhouette check against the planned body donor",
+    "applies_to": [
+      "pipeline"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://arxiv.org/abs/1811.12231v3"
+  },
+  {
+    "id": "RC-R6-11",
+    "doc": "R6_perception.md",
+    "rule": "Readability critic test: show the final image cold and ask which two animals it combines and whether it is one creature or two; pass only if both parents are named and it reads as one creature",
+    "applies_to": [
+      "pipeline"
+    ],
+    "strength": "soft",
+    "status": "UNVERIFIED",
+    "source": "https://cris.tau.ac.il/en/publications/how-to-build-a-hybrid-the-structure-of-imagination/"
+  },
+  {
+    "id": "RC-R7-01",
+    "doc": "R7_fiction_and_design.md",
+    "rule": "Frame every creature as a fictional example of real processes; its card names the processes behind its look (hybrid blend, chimera patchwork, habitat rules)",
+    "applies_to": [
+      "pipeline"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://www.scientificamerican.com/blog/tetrapod-zoology/speculative-zoology-at-tet-zoo-the-story-so-far/"
+  },
+  {
+    "id": "RC-R7-02",
+    "doc": "R7_fiction_and_design.md",
+    "rule": "Myth-style part swaps (griffin-like layouts) belong only to an explicit mythic mode, labeled as myth and never presented as biology",
+    "applies_to": [
+      "pipeline",
+      "body",
+      "limbs"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://classics.stanford.edu/publications/first-fossil-hunters-dinosaurs-mammoths-and-myth-greek-and-roman-times"
+  },
+  {
+    "id": "RC-R7-03",
+    "doc": "R7_fiction_and_design.md",
+    "rule": "Never state that a myth creature came from a specific fossil as fact; the Protoceratops and griffin link is contested",
+    "applies_to": [
+      "pipeline"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://blog.everythingdinosaur.com/blog/_archives/2024/06/21"
+  },
+  {
+    "id": "RC-R7-04",
+    "doc": "R7_fiction_and_design.md",
+    "rule": "Design pattern from manga chimeras: one consistent base body carries selected traits from the other species, and each donated trait has a visible use",
+    "applies_to": [
+      "body",
+      "all_traits"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://hunterxhunter.fandom.com/wiki/Chapter_187"
+  },
+  {
+    "id": "RC-R7-05",
+    "doc": "R7_fiction_and_design.md",
+    "rule": "Human and animal fusions are out of scope; parents are animals only",
+    "applies_to": [
+      "pipeline"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://fma.fandom.com/wiki/Dolcetto"
+  },
+  {
+    "id": "RC-R7-06",
+    "doc": "R7_fiction_and_design.md",
+    "rule": "State the intended silhouette in the plan and validate the render with a silhouette-only check; the creature must read with no interior detail",
+    "applies_to": [
+      "body",
+      "pipeline"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://www.cs.princeton.edu/courses/archive/fall07/cos597B/papers/mitchell-team-fortress.pdf"
+  },
+  {
+    "id": "RC-R7-07",
+    "doc": "R7_fiction_and_design.md",
+    "rule": "Interior detail (pattern lines, texture flow) should echo the silhouette's shapes rather than cut across them",
+    "applies_to": [
+      "coat_pattern",
+      "coat_texture"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://www.cs.princeton.edu/courses/archive/fall07/cos597B/papers/mitchell-team-fortress.pdf"
+  },
+  {
+    "id": "RC-R7-08",
+    "doc": "R7_fiction_and_design.md",
+    "rule": "Six limbs read as believable only as a consistent world rule, as with Pandora's mostly six-limbed fauna; in our engine a six-limbed design stays in mythic or speculative mode with its label",
+    "applies_to": [
+      "limbs",
+      "pipeline"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://news.cnrs.fr/node/2233"
+  },
+  {
+    "id": "RC-R7-09",
+    "doc": "R7_fiction_and_design.md",
+    "rule": "Write the biology rulebook before designing creatures, and treat design parameters as a shared palette across many creatures, as the Avatar team did",
+    "applies_to": [
+      "pipeline"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://gizmodo.com/27-avatar-questions-answered-by-the-movies-designers-5464478"
+  },
+  {
+    "id": "RC-R7-10",
+    "doc": "R7_fiction_and_design.md",
+    "rule": "Show myth and fiction resemblances as \"resembles X (culture or work)\", tagged unverified; never render or name-match a franchise character as an output",
+    "applies_to": [
+      "pipeline"
+    ],
+    "strength": "soft",
+    "status": "UNVERIFIED",
+    "source": "https://classics.stanford.edu/publications/first-fossil-hunters-dinosaurs-mammoths-and-myth-greek-and-roman-times"
+  },
+  {
+    "id": "RC-R8-01",
+    "doc": "R8_generative_evolution.md",
+    "rule": "Represent each creature as a structured text genome (trait plan with donor, operator, strength and region per trait, plus host, habitat and mode); all variation acts on the genome and the image is re-rendered from it",
+    "applies_to": [
+      "pipeline",
+      "all_traits"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://www.karlsims.com/papers/siggraph94.pdf"
+  },
+  {
+    "id": "RC-R8-02",
+    "doc": "R8_generative_evolution.md",
+    "rule": "Use a language model as the crossover and mutation operator: give it parent genomes and the rule cards, and parse its output as offspring genomes in the same schema",
+    "applies_to": [
+      "pipeline"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://arxiv.org/abs/2302.12170v3"
+  },
+  {
+    "id": "RC-R8-03",
+    "doc": "R8_generative_evolution.md",
+    "rule": "Validate every offspring genome by code (schema and hard rule cards) before rendering, so no image budget is spent on invalid plans",
+    "applies_to": [
+      "pipeline"
+    ],
+    "strength": "soft",
+    "status": "UNVERIFIED",
+    "source": "https://arxiv.org/abs/2302.12170v3"
+  },
+  {
+    "id": "RC-R8-04",
+    "doc": "R8_generative_evolution.md",
+    "rule": "Keep a quality-diversity archive (best creature per cell of a few user-meaningful axes) instead of a single best result, and show users elites from different cells",
+    "applies_to": [
+      "pipeline"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://arxiv.org/abs/1504.04909"
+  },
+  {
+    "id": "RC-R8-05",
+    "doc": "R8_generative_evolution.md",
+    "rule": "Archive axes for Chimera Lab: identity balance between the two parents, crossed with habitat or mode (hybrid, chimera, mythic)",
+    "applies_to": [
+      "pipeline"
+    ],
+    "strength": "soft",
+    "status": "UNVERIFIED",
+    "source": "https://arxiv.org/abs/1504.04909"
+  },
+  {
+    "id": "RC-R8-06",
+    "doc": "R8_generative_evolution.md",
+    "rule": "A model may score quality and assign diversity cells for subjective outputs, but its judgments need periodic human spot checks",
+    "applies_to": [
+      "pipeline"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://proceedings.iclr.cc/paper_files/paper/2024/hash/5b9bef4eae0f574cedbf9f4bf29d8ae7-Abstract-Conference.html"
+  },
+  {
+    "id": "RC-R8-07",
+    "doc": "R8_generative_evolution.md",
+    "rule": "Keep interactive sessions to a few short rounds with small grids, because users tire after evaluating relatively few generations",
+    "applies_to": [
+      "pipeline"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://arxiv.org/pdf/1801.08230"
+  },
+  {
+    "id": "RC-R8-08",
+    "doc": "R8_generative_evolution.md",
+    "rule": "Store parent ids for every saved creature so anyone can branch from it later; branching from others' results helps overcome user fatigue",
+    "applies_to": [
+      "pipeline"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://stars.library.ucf.edu/facultybib2010/1881"
+  },
+  {
+    "id": "RC-R8-09",
+    "doc": "R8_generative_evolution.md",
+    "rule": "Constrain the search space (fixed creature-plan schema, R3 checks passed) before users see candidates, to reduce wasted choices and fatigue",
+    "applies_to": [
+      "pipeline"
+    ],
+    "strength": "soft",
+    "status": "UNVERIFIED",
+    "source": "https://arxiv.org/pdf/1801.08230"
+  },
+  {
+    "id": "RC-R8-10",
+    "doc": "R8_generative_evolution.md",
+    "rule": "Hard rule cards act as filters on candidates; soft rule cards act as score penalties, so rules guide the models without replacing their choices",
+    "applies_to": [
+      "pipeline"
+    ],
+    "strength": "soft",
+    "status": "UNVERIFIED",
+    "source": "https://arxiv.org/abs/1504.04909"
+  }
+]
