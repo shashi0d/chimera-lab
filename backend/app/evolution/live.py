@@ -91,7 +91,8 @@ def checklist_schema(choices: list[str]) -> dict[str, Any]:
     answer = _obj({"item": _STR, "answer": {"type": "string", "enum": list(ANSWERS)}})
     # No minItems/maxItems: strict schemas may reject them. The parser pads a short list with "unclear".
     return _obj({"answers": {"type": "array", "items": answer},
-                 "choice": {"type": "string", "enum": list(choices)}, "notes": _STR})
+                 "choice": {"type": "string", "enum": list(choices)}, "creatures": {"type": "integer"},
+                 "animals": _STRS, "notes": _STR})
 
 PLAN_INSTRUCTIONS = (
     "You write creature plans for a natural-history fusion engine. You get rule cards and a code-built plan as "
@@ -114,8 +115,146 @@ CHECKLIST_INSTRUCTIONS = (
     "You look at one picture of an animal and check it against a list of visible features. For each item, answer "
     "yes if the feature is clearly visible, no if the picture clearly shows otherwise, or unclear if you cannot "
     "tell. Copy each item's text exactly, in the given order. Judge only what is visible. choice: which one of the "
-    "listed options the animal in the picture looks most like; pick exactly one. notes: one short sentence."
+    "listed options the animal in the picture looks most like; pick exactly one. creatures: how many separate "
+    "creatures are in the picture. animals: the real animal species whose features you can clearly see, as "
+    "everyday English common names, at most three. notes: one short sentence."
 )
+
+# ------------------------------------------------------------------ E4: open world and audit
+
+KINDS = ("species", "breed", "extinct", "ambiguous", "not_animal", "plant", "human", "mythic")
+BODY_PLANS = ("quadruped", "biped", "winged", "finned", "multi_legged", "serpentine", "radial")
+LOCOMOTOR = ("four legs", "two legs", "multiple legs", "wings", "fins", "flippers", "bell")
+COVERINGS = ("fur", "feathers", "scales", "skin", "exoskeleton", "shell")
+MOVEMENTS = ("walk", "run", "swim", "fly", "climb", "burrow", "glide")
+HABITATS = ("grassland", "forest", "mountain", "tundra", "wetland", "freshwater", "marine", "desert")
+CLIMATES = ("temperate", "tropical", "polar", "arid")
+DIETS = ("carnivore", "herbivore", "omnivore", "insectivore", "piscivore")
+ACTIVE = ("diurnal", "nocturnal", "crepuscular", "unrecorded")
+MOUTHPARTS = ("grinding teeth", "bladed teeth", "mixed teeth", "pointed teeth", "beak", "mandibles",
+              "toothless tongue", "other")
+BREATHING = ("lungs", "gills", "external gills and lungs", "skin and lungs", "tracheae", "book lungs", "other")
+AUDIT_RESULTS = ("pass", "repaired", "labeled")
+
+
+def _enum(values: tuple[str, ...]) -> dict[str, Any]:
+    return {"type": "string", "enum": list(values)}
+
+
+def _enums(values: tuple[str, ...]) -> dict[str, Any]:
+    return {"type": "array", "items": _enum(values)}
+
+
+_RANGE = _obj({"min": {"type": "number"}, "max": {"type": "number"}})
+_NAME = _obj({"scientific_name": _STR, "common_name": _STR})
+IDENTIFY_SCHEMA = _obj({"kind": _enum(KINDS), "scientific_name": _STR, "common_name": _STR, "breed": _STR,
+                        "alternatives": {"type": "array", "items": _NAME}, "note": _STR})
+TRAITS_SCHEMA = _obj({
+    "body_plan": _enums(BODY_PLANS), "primary_locomotor_part": _enum(LOCOMOTOR), "covering": _enum(COVERINGS),
+    "movement": _enums(MOVEMENTS), "habitat": _enums(HABITATS), "climate": _enums(CLIMATES), "diet": _enum(DIETS),
+    "active_time": _enums(ACTIVE), "body_mass_kg": _RANGE, "body_length_m": _RANGE, "visible_features": _STRS,
+    "mouthparts": _enum(MOUTHPARTS), "mouthparts_detail": _STR, "breathing": _enum(BREATHING),
+    "breathing_detail": _STR, "claimed_crosses": _STRS,
+})
+AUDIT_SCHEMA = _obj({"functions": {"type": "array", "items": _obj({
+    "function": _STR, "result": _enum(AUDIT_RESULTS), "detail": _STR, "repair": _STR})}})
+
+IDENTIFY_INSTRUCTIONS = (
+    "You identify an animal from a name (common, scientific, misspelled or regional) or a photo. Return the "
+    "scientific name of the species exactly as a taxonomist writes it (genus species, or genus species subspecies "
+    "for a domestic form). kind: species; breed (a domestic breed: give the species' scientific name and the breed "
+    "name in breed); extinct (a species known only from fossils or records); ambiguous (the name covers several "
+    "species: pick the most common or best-known species as scientific_name and list up to four others in "
+    "alternatives); not_animal; plant; human (any person or human group); mythic (a creature of myth, legend or "
+    "fiction). For a misspelling, answer for the intended animal. Never invent a species; if unsure, say "
+    "ambiguous and list candidates. note: one short sentence."
+)
+TRAITS_INSTRUCTIONS = (
+    "You describe a real animal for a natural-history engine. Use typical adult values. body_plan: the overall "
+    "layout (winged means wings are the main limbs; a bird is biped and winged). visible_features: three to six "
+    "short visible features someone would draw (for a breed, the breed's look). mouthparts: what the head eats "
+    "with. breathing: the main breathing organ. claimed_crosses: scientific names of species this animal is "
+    "documented to hybridize with, or an empty list; these are stored as unverified claims. Do not guess numbers "
+    "wildly: give a plausible min and max."
+)
+AUDIT_INSTRUCTIONS = (
+    "You audit whether a planned fictional creature could perform basic body functions. You get the plan in "
+    "plain words and a list of functions that no rule card covers. For each listed function only, answer pass "
+    "(it works as planned), repaired (it works with a small change; put the change in repair as a short visible "
+    "description) or labeled (it does not work; say why in detail). Judge from anatomy, not from story. Never "
+    "state high oxygen as the settled reason giant insects existed."
+)
+
+
+def build_identify_request(model: str, name: str | None, image: bytes | None) -> dict[str, Any]:
+    if image is not None:
+        content: Any = [{"type": "text", "text": "Identify the animal in this photo."},
+                        {"type": "image_url", "image_url": {"url": _data_url(image)}}]
+    else:
+        content = f"Identify this animal name: {name}"
+    return {"model": model, "messages": [{"role": "system", "content": IDENTIFY_INSTRUCTIONS},
+                                         {"role": "user", "content": content}],
+            "response_format": _json_schema("identify_animal", IDENTIFY_SCHEMA), "temperature": 0}
+
+
+def build_traits_request(model: str, ident: dict[str, Any]) -> dict[str, Any]:
+    who = f"{ident.get('common_name')} ({ident.get('scientific_name')})"
+    if ident.get("breed"):
+        who += f", breed: {ident['breed']}"
+    return {"model": model, "messages": [{"role": "system", "content": TRAITS_INSTRUCTIONS},
+                                         {"role": "user", "content": f"Describe: {who}"}],
+            "response_format": _json_schema("animal_traits", TRAITS_SCHEMA), "temperature": 0}
+
+
+def build_audit_request(model: str, plan_text: str, functions: list[str]) -> dict[str, Any]:
+    text = f"Plan: {plan_text}\nFunctions to judge: {', '.join(functions)}"
+    return {"model": model, "messages": [{"role": "system", "content": AUDIT_INSTRUCTIONS},
+                                         {"role": "user", "content": text}],
+            "response_format": _json_schema("function_audit", AUDIT_SCHEMA), "temperature": 0}
+
+
+def parse_identify_response(payload: dict[str, Any]) -> dict[str, Any]:
+    d = _message_json(payload)
+    kind = str(d.get("kind") or "")
+    return {"kind": kind if kind in KINDS else "ambiguous", "scientific_name": str(d.get("scientific_name") or "").strip(),
+            "common_name": str(d.get("common_name") or "").strip(), "breed": str(d.get("breed") or "").strip(),
+            "alternatives": [{"scientific_name": str(a.get("scientific_name") or ""),
+                              "common_name": str(a.get("common_name") or "")}
+                             for a in d.get("alternatives") or [] if isinstance(a, dict)][:4],
+            "note": str(d.get("note") or "")}
+
+
+def parse_traits_response(payload: dict[str, Any]) -> dict[str, Any]:
+    d = _message_json(payload)
+    keep = lambda v, allowed: [x for x in (v or []) if x in allowed]  # noqa: E731
+    one = lambda v, allowed, default: v if v in allowed else default  # noqa: E731
+    rng = lambda v: {"min": float((v or {}).get("min") or 0), "max": float((v or {}).get("max") or 0)}  # noqa: E731
+    return {"body_plan": keep(d.get("body_plan"), BODY_PLANS) or ["quadruped"],
+            "primary_locomotor_part": one(d.get("primary_locomotor_part"), LOCOMOTOR, "four legs"),
+            "covering": one(d.get("covering"), COVERINGS, "skin"), "movement": keep(d.get("movement"), MOVEMENTS),
+            "habitat": keep(d.get("habitat"), HABITATS), "climate": keep(d.get("climate"), CLIMATES),
+            "diet": one(d.get("diet"), DIETS, "omnivore"), "active_time": keep(d.get("active_time"), ACTIVE),
+            "body_mass_kg": rng(d.get("body_mass_kg")), "body_length_m": rng(d.get("body_length_m")),
+            "visible_features": [str(x) for x in d.get("visible_features") or []][:6],
+            "mouthparts": one(d.get("mouthparts"), MOUTHPARTS, "other"),
+            "mouthparts_detail": str(d.get("mouthparts_detail") or ""),
+            "breathing": one(d.get("breathing"), BREATHING, "other"),
+            "breathing_detail": str(d.get("breathing_detail") or ""),
+            "claimed_crosses": [str(x) for x in d.get("claimed_crosses") or []]}
+
+
+def parse_audit_response(payload: dict[str, Any], functions: list[str]) -> list[dict[str, str]]:
+    """One entry per asked function; a missing or unknown answer becomes 'labeled' (never a silent pass)."""
+    got = {str(f.get("function", "")).lower(): f for f in _message_json(payload).get("functions") or []
+           if isinstance(f, dict)}
+    out = []
+    for fn in functions:
+        f = got.get(fn, {})
+        result = f.get("result") if f.get("result") in AUDIT_RESULTS else "labeled"
+        detail = str(f.get("detail") or ("no model judgment returned" if not f else ""))
+        out.append({"function": fn, "result": result, "detail": detail, "repair": str(f.get("repair") or "")})
+    return out
+
 
 # ------------------------------------------------------------------ request builders (pure)
 
@@ -187,6 +326,7 @@ def parse_checklist_response(payload: dict[str, Any], items: list[str], choices:
         answers.append({"item": item, "answer": a if a in ANSWERS else "unclear"})
     choice = str(data.get("choice") or "")
     return {"answers": answers, "choice": choice if choice in choices else "other",
+            "creatures": int(data.get("creatures") or 0), "animals": [str(a) for a in data.get("animals") or []],
             "notes": str(data.get("notes") or "")}
 
 
@@ -268,6 +408,16 @@ class LiveEvoSpark(_Retrying):
     async def checklist(self, image: bytes, items: list[str], choices: list[str]) -> dict[str, Any]:
         body = build_checklist_request(self.model_id, image, items, choices)
         return parse_checklist_response(await self._chat("evo_checklist", body), items, choices)
+
+    async def identify(self, name: str | None = None, image: bytes | None = None) -> dict[str, Any]:
+        return parse_identify_response(await self._chat("evo_identify", build_identify_request(self.model_id, name, image)))
+
+    async def learn_traits(self, ident: dict[str, Any]) -> dict[str, Any]:
+        return parse_traits_response(await self._chat("evo_learn_traits", build_traits_request(self.model_id, ident)))
+
+    async def judge_functions(self, plan_text: str, functions: list[str]) -> list[dict[str, str]]:
+        body = build_audit_request(self.model_id, plan_text, functions)
+        return parse_audit_response(await self._chat("evo_audit", body), functions)
 
     async def vary(self, prompt: str, elites: list[dict[str, Any]], n: int, seed: int) -> list[dict[str, Any]]:
         raise ChimeraError(ErrorCode.UPSTREAM_ERROR, "Evolve rounds are not enabled live (E2 runs fuse only).",

@@ -247,3 +247,9 @@ Short entries per phase: what was built, what was tested, what was deferred. New
 - Budget counter: spark 55→59.
 
 **Tested:** pytest 562 passed, 6 skipped (+19 E2d tests).
+
+## 2026-10-31: E4 open world and R9 (in progress)
+
+**Step 0:** `verify_research.py` gate passed with R9 (109 cards, 0 failures, 16 403s). Rule cards regenerated (109, 17 hard). ALGORITHM.md v2 (4.5b function audit, 4.5c fiction budget, design modes, RC-R9-01 labels, section 8 tests). New `docs/evolution/ENGINE_CONTRACT.md`.
+
+**Step 1:** `evolution/resolve.py` (database, learned cache, Spark identify, GBIF exact match, Spark trait fill, refusals, needs_choice, offline fallback), `evolution/gbif.py` (client with timeout and retry, fixture replay), `/evo/resolve`. 12 recorded GBIF responses in `tests/fixtures/recorded/gbif/`. Animal gains order, genus, diet, movement, features, mouthparts, breathing, kind, provenance and claims. 23 resolver tests.

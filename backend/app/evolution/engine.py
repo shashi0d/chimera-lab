@@ -21,12 +21,14 @@ from app.errors import ChimeraError
 from app.evolution.adapters import EvoSpark, Meter, MockEvoSpark, MockRegistry, MockSegmenter, Segmenter, swatch
 from app.evolution.card import output_card
 from app.evolution.checks import Violation, hard_violations
-from app.evolution.data import Animal, Taxonomy, cards, taxonomy
+from app.evolution.data import DATA, Animal, Taxonomy, cards, taxonomy
+from app.evolution.gbif import FixtureGbif, GbifClient
 from app.evolution.genome import TRAIT_TAGS, Genome, Trait, validate_plan
 from app.evolution.habitat import apply_habitat, choose_habitat, clear_habitat
 from app.evolution.judge import judge
 from app.evolution.physics import run_checks
 from app.evolution.prompt import PROMPT_CARDS, accept_polish, compile_prompt
+from app.evolution.resolve import LearnedStore, Resolution, Resolver
 from app.evolution.route import Route, choose_host, is_real_hybrid, route, silhouette
 from app.evolution.traits import build_traits, contribution, gate
 from app.models.schemas import ErrorCode
@@ -86,11 +88,17 @@ class EvoEngine:
                 spark, segmenter = spark or live_spark, segmenter or live_seg
             except RuntimeError as e:
                 self.live_error = str(e)
-        self.spark: EvoSpark = spark or MockEvoSpark(self.registry)
+        self.spark: EvoSpark = spark or MockEvoSpark(self.registry, vision=getattr(services, "vision", None))
         self.segmenter: Segmenter = segmenter or MockSegmenter(self.registry)
         self.meter = Meter()
-        self.tax: Taxonomy = taxonomy()
+        self.tax: Taxonomy = taxonomy().copy()  # per engine: learned animals never leak between engines
         self.store = EvoStore(store_root or services.settings.resolved_local_dir() / "evo")
+        st = services.settings
+        learned = Path(st.evo_learned_path) if st.evo_learned_path else (
+            st.resolved_local_dir() / "evo" / "learned_animals.json" if self.mock else DATA / "learned_animals.json")
+        self.gbif = FixtureGbif() if self.mock else GbifClient(timeout=st.gbif_timeout_seconds)
+        self.resolver = Resolver(self.tax, self.spark, self.gbif, LearnedStore(learned), self.meter.call)
+        self.resolutions: dict[str, Resolution] = {}
 
     # ------------------------------------------------------------------ guards and lookups
 
@@ -99,24 +107,19 @@ class EvoEngine:
             raise ChimeraError(ErrorCode.UPSTREAM_ERROR, f"Live evolution adapters unavailable: {self.live_error}.",
                                retryable=False)
 
-    def _animal(self, name: str) -> Animal:
-        a = self.tax.resolve(name)
-        if a is None:
-            raise ChimeraError(ErrorCode.VALIDATION_FAILED, f"Unknown animal: {name!r}.",
-                               details={"hint": "use a common name or animal_id from chimera_data.json"})
-        return a
+    async def resolve(self, name: str | None = None, image: bytes | None = None) -> Resolution:
+        """E4 open-world resolution: database, learned cache, then Muse Spark plus a GBIF exact match."""
+        return await self.resolver.resolve(name=name, image=image)
 
     async def resolve_parent(self, name: str | None, image: bytes | None, slot: str) -> Animal:
-        if name:
-            return self._animal(name)
-        if image is None:
+        if not name and image is None:
             raise ChimeraError(ErrorCode.VALIDATION_FAILED, f"{slot}: give a name or an image.")
-        reading = await self.meter.call("spark", "identify", self.services.vision.describe_animal(image, slot))
-        for cand in (reading.common_name, reading.scientific_name):
-            if cand and (a := self.tax.resolve(cand)):
-                return a
-        raise ChimeraError(ErrorCode.VALIDATION_FAILED, f"{slot}: identified as {reading.common_name!r}, "
-                           "which is not in chimera_data.json.")
+        res = await self.resolve(name, image)
+        self.resolutions[slot] = res
+        if res.status != "resolved" or res.animal is None:
+            raise ChimeraError(ErrorCode.VALIDATION_FAILED, f"{slot}: {res.note}",
+                               details={"resolution": res.public()})
+        return res.animal
 
     def route_for(self, g: Genome) -> Route:
         return route(self.tax.animals[g.parents.sire], self.tax.animals[g.parents.dam], self.tax, myth=g.mode == "mythic")

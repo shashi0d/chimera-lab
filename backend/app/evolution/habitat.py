@@ -14,6 +14,7 @@ from typing import Any
 
 from app.evolution.data import Animal, Taxonomy, coat_pattern, config, pattern_phrase
 from app.evolution.genome import Genome, Habitat
+from app.evolution.physics import locked_tags
 
 PATTERN_FLAG = re.compile(r"^habitat pattern ([+-]\d+\.\d+)$")
 MASS_FLAG = re.compile(r"^habitat mass x(\d+\.\d+)$")
@@ -88,7 +89,7 @@ def apply_habitat(g: Genome, tax: Taxonomy, locked: bool = False) -> list[str]:
     # donor nothing changes. PATCHes stay at full strength (RC-R5-04).
     tr = g.traits["coat_pattern"]
     owner = tr.donor if isinstance(tr.donor, str) and coat_pattern(tr.donor) else None
-    if owner and tr.op == "OVERLAY" and tr.strength is not None and not (locked and "coat_pattern" in _locked_tags(g)):
+    if owner and tr.op == "OVERLAY" and tr.strength is not None and not (locked and "coat_pattern" in locked_tags(g, tax)):
         delta = 0.1 if p["openness"] == "closed" else -0.1
         new = min(1.0, max(0.05, round(tr.strength + delta, 3)))
         applied = round(new - tr.strength, 3)
@@ -146,11 +147,3 @@ def apply_habitat(g: Genome, tax: Taxonomy, locked: bool = False) -> list[str]:
     cards.append("RC-R4-10")
     return cards
 
-
-def _locked_tags(g: Genome) -> set[str]:
-    from app.evolution.data import taxonomy
-    from app.evolution.route import find_known_pair
-
-    tax = taxonomy()
-    pair = find_known_pair(tax.animals[g.parents.sire], tax.animals[g.parents.dam])
-    return set(pair["traits"]) if pair and pair.get("locked") else set()

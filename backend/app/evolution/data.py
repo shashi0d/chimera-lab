@@ -130,10 +130,32 @@ class Animal:
     climate: tuple[str, ...]
     active_time: tuple[str, ...]
     group: str  # vertebrate | arthropod | soft_bodied | other
+    # E4: open-world fields. Database rows fill them from chimera_data.json and evo_config function_defaults;
+    # learned animals from GBIF (taxonomy) and Muse Spark (model-estimated traits).
+    order: str = ""
+    genus_name: str | None = None  # None: the genus is the first word of the binomial
+    gbif_key: str = ""
+    diet: str = ""
+    movement: tuple[str, ...] = ()
+    locomotor: str = ""
+    length_m: float | None = None
+    features: tuple[str, ...] = ()  # visible features (breed look, signature parts)
+    mouthparts: str = ""  # grinding teeth | bladed teeth | mixed teeth | pointed teeth | beak | mandibles | ...
+    breathing: str = ""  # lungs | gills | external gills and lungs | skin and lungs | tracheae | book lungs | other
+    kind: str = "species"  # species | breed | extinct
+    source: str = "database"  # database | learned
+    provenance: tuple[tuple[str, str], ...] = ()  # (field, source) pairs; a tuple keeps the dataclass hashable
+    claims: tuple[str, ...] = ()  # model claims (e.g. documented crosses): stored, never used as precedent
 
     @property
     def genus(self) -> str:
+        if self.genus_name is not None:
+            return self.genus_name
         return self.scientific_name.split()[0] if self.scientific_name else ""
+
+    @property
+    def taxonomy_known(self) -> bool:
+        return bool(self.tax_class)
 
     @property
     def winged(self) -> bool:
@@ -168,8 +190,11 @@ class Animal:
 
     def public(self) -> dict[str, Any]:
         return {"id": self.id, "common_name": self.common_name, "scientific_name": self.scientific_name,
-                "class": self.tax_class, "body_plan": self.body_plan, "group": self.group,
-                "mass_kg": self.mass_kg}
+                "class": self.tax_class, "order": self.order, "family": self.family, "genus": self.genus,
+                "body_plan": self.body_plan, "group": self.group, "mass_kg": self.mass_kg, "kind": self.kind,
+                "source": self.source, "features": list(self.features), "mouthparts": self.mouthparts,
+                "breathing": self.breathing, "diet": self.diet, "provenance": dict(self.provenance),
+                "claims": list(self.claims)}
 
 
 @dataclass
@@ -178,6 +203,23 @@ class Taxonomy:
     aliases: dict[str, str]
     documented: set[tuple[str, str]] = field(default_factory=set)  # (sire binomial, dam binomial)
     mythology: list[dict[str, Any]] = field(default_factory=list)
+    tier2: dict[str, dict[str, Any]] = field(default_factory=dict)  # lower binomial -> GBIF taxonomy row (E4)
+
+    def copy(self) -> Taxonomy:
+        """A per-engine copy, so learned animals never leak between engines (tests, sessions)."""
+        return Taxonomy(animals=dict(self.animals), aliases=dict(self.aliases), documented=set(self.documented),
+                        mythology=self.mythology, tier2=self.tier2)
+
+    def add(self, animal: Animal, aliases: list[str] = ()) -> None:  # type: ignore[assignment]
+        self.animals[animal.id] = animal
+        for name in aliases:
+            key = norm(name)
+            if key and key not in self.animals:
+                self.aliases.setdefault(key, animal.id)
+
+    def by_scientific(self, binomial: str) -> Animal | None:
+        key = binomial.strip().lower()
+        return next((a for a in self.animals.values() if a.scientific_name.lower() == key), None) if key else None
 
     def resolve(self, name: str) -> Animal | None:
         key = name.strip().lower().replace("-", " ")
@@ -196,6 +238,29 @@ class Taxonomy:
         return (s, d) in self.documented or ("?" + s, "?" + d) in self.documented or ("?" + d, "?" + s) in self.documented
 
 
+def norm(name: str) -> str:
+    """Lookup key for a name: lower case, single spaces, no hyphens or underscores."""
+    return " ".join(name.strip().lower().replace("-", " ").replace("_", " ").split())
+
+
+def function_defaults(row: dict[str, Any]) -> dict[str, Any]:
+    """Breathing, mouthparts and visible features for a database row (E4): evo_config defaults by class
+    (mammal teeth by diet), then per-animal overrides. All are project defaults, not sourced facts."""
+    fd = config()["function_defaults"]
+    cls, diet = row.get("class", ""), (row.get("diet") or "").split("|")[0]
+    out = {"breathing": fd["breathing_by_class"].get(cls, "other"),
+           "mouthparts": (fd["mammal_teeth_by_diet"].get(diet, "mixed teeth") if cls == "Mammalia"
+                          else fd["mouthparts_by_class"].get(cls, "other")),
+           "features": []}
+    out.update(fd["overrides"].get(row.get("animal_id", ""), {}))
+    return out
+
+
+DB_FIELDS = ("common_name", "scientific_name", "class", "order", "family", "gbif_key", "body_plan",
+             "primary_locomotor_part", "covering", "movement", "active_time", "habitat", "climate", "diet",
+             "body_mass_kg", "body_length_m")
+
+
 def _group(tax_class: str) -> str:
     for group, classes in config()["class_groups"].items():
         if tax_class in classes:
@@ -207,14 +272,24 @@ def _group(tax_class: str) -> str:
 def taxonomy(path: Path = TAXONOMY_PATH) -> Taxonomy:
     raw = json.loads(path.read_text(encoding="utf-8"))
     animals: dict[str, Animal] = {}
+    split = lambda v: tuple(x for x in (v or "").split("|") if x)  # noqa: E731
     for a in raw.get("animals", []):
-        split = lambda v: tuple(x for x in (v or "").split("|") if x)  # noqa: E731
+        fd = function_defaults(a)
+        prov = [(f, "chimera_data.json") for f in DB_FIELDS if a.get(f)]
+        prov += [(f, "project default (evo_config.json function_defaults)") for f in ("breathing", "mouthparts")]
+        if fd["features"]:
+            prov.append(("features", "project data (evo_config.json function_defaults overrides)"))
         animals[a["animal_id"]] = Animal(
             id=a["animal_id"], common_name=a["common_name"], scientific_name=a["scientific_name"],
             tax_class=a.get("class", ""), family=a.get("family", ""), body_plan=a.get("body_plan", ""), covering=a.get("covering", ""),
             mass_kg=_mass_mid(a.get("body_mass_kg", "")), habitats=split(a.get("habitat")),
             climate=split(a.get("climate")), active_time=split(a.get("active_time")), group=_group(a.get("class", "")),
+            order=a.get("order", ""), gbif_key=str(a.get("gbif_key") or ""), diet=a.get("diet", ""),
+            movement=split(a.get("movement")), locomotor=a.get("primary_locomotor_part", ""),
+            length_m=_mass_mid(a.get("body_length_m", "")), features=tuple(fd["features"]),
+            mouthparts=fd["mouthparts"], breathing=fd["breathing"], provenance=tuple(prov),
         )
+    tier2 = {t["scientific_name"].lower(): t for t in raw.get("tier2_animals", []) if t.get("scientific_name")}
     documented: set[tuple[str, str]] = set()
     for h in raw.get("hybrids", []):
         p1, p2 = h.get("parent1", ""), h.get("parent2", "")
@@ -226,4 +301,4 @@ def taxonomy(path: Path = TAXONOMY_PATH) -> Taxonomy:
         else:
             documented.add((n1, n2))
     return Taxonomy(animals=animals, aliases=config()["aliases"], documented=documented,
-                    mythology=raw.get("mythology", []))
+                    mythology=raw.get("mythology", []), tier2=tier2)

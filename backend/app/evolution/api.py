@@ -70,6 +70,19 @@ async def fuse(body: FuseIn, request: Request) -> dict[str, Any]:
         seed=body.seed))
 
 
+class ResolveIn(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    name: str | None = None
+    image_b64: str | None = None
+
+
+@router.post("/resolve")
+async def resolve(body: ResolveIn, request: Request) -> dict[str, Any]:
+    """E4: resolve one parent (no image is rendered). needs_choice and refused are answers, not errors."""
+    res = await engine(request).resolve(body.name, decode_image(body.image_b64))
+    return res.public()
+
+
 @router.post("/evolve")
 async def evolve(body: EvolveIn, request: Request) -> dict[str, Any]:
     return await engine(request).evolve(body.creature_id, body.rounds, body.batch)

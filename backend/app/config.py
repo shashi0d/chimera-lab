@@ -41,6 +41,9 @@ class Settings(BaseSettings):
 
     # Local adapters
     local_data_dir: str = ".localdata"
+    # E4: learned-animal cache. None: data/learned_animals.json in real mode, <local_data_dir>/evo/ in mock mode.
+    evo_learned_path: str | None = None
+    gbif_timeout_seconds: float = 10.0
 
     # Limits
     max_upload_bytes: int = 20 * 1024 * 1024

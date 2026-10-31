@@ -21,11 +21,12 @@ import random
 import re
 from collections.abc import Awaitable
 from dataclasses import dataclass, field
+from functools import lru_cache
 from typing import Any, Protocol, TypeVar
 
 from PIL import Image, ImageDraw
 
-from app.adapters.mock.recorded import chat_payload
+from app.adapters.mock.recorded import RECORDED, chat_payload
 
 T = TypeVar("T")
 
@@ -42,6 +43,12 @@ class EvoSpark(Protocol):
     async def critic(self, image: bytes) -> dict[str, Any]: ...
 
     async def checklist(self, image: bytes, items: list[str], choices: list[str]) -> dict[str, Any]: ...
+
+    async def identify(self, name: str | None = None, image: bytes | None = None) -> dict[str, Any]: ...
+
+    async def learn_traits(self, ident: dict[str, Any]) -> dict[str, Any]: ...
+
+    async def judge_functions(self, plan_text: str, functions: list[str]) -> list[dict[str, str]]: ...
 
 
 class Segmenter(Protocol):
@@ -103,6 +110,11 @@ class MockRegistry:
         return best[1]
 
 
+@lru_cache
+def open_world() -> dict[str, Any]:
+    return json.loads((RECORDED / "open_world" / "knowledge.json").read_text(encoding="utf-8"))
+
+
 def swatch(name: str, size: int = 512) -> bytes:
     """A plain color reference for a parent given by name (mock render only)."""
     digest = hashlib.sha256(name.encode()).digest()
@@ -126,9 +138,10 @@ STRONG_DONOR = ("full strength", "in place of the tail", "wings in place", "sepa
 class MockEvoSpark:
     model_id = "mock-muse-spark-evo"
 
-    def __init__(self, registry: MockRegistry, invalid_every: int = 0) -> None:
+    def __init__(self, registry: MockRegistry, invalid_every: int = 0, vision: Any = None) -> None:
         self.registry = registry
         self.invalid_every = invalid_every
+        self.vision = vision  # the app's mock vision reader: photos are identified the same way in mock mode
 
     @staticmethod
     def _wire(kind: str, content: Any) -> Any:
@@ -163,10 +176,42 @@ class MockEvoSpark:
         with Image.open(io.BytesIO(image)) as im:
             small = max(im.size) < 400
         fine = ("stripe", "mane", "tail")
-        answers = [{"item": it, "answer": "unclear" if not m or (small and any(f in it for f in fine)) else "yes"}
+        known = prompt is not None
+        answers = [{"item": it, "answer": "unclear" if not known or (small and any(f in it for f in fine)) else "yes"}
                    for it in items]
-        choice = m.group(1) if m and m.group(1) in choices else "other"
-        return self._wire("describe", {"answers": answers, "choice": choice, "notes": "mock checklist"})
+        choice = m.group(1) if m and m.group(1) in choices else ("a mix of both" if "a mix of both" in choices
+                                                                  and known else "other")
+        pair = PAIR_RE.search(prompt or "")
+        animals = [pair.group(1), pair.group(2)] if pair else []
+        return self._wire("describe", {"answers": answers, "choice": choice, "creatures": 1 if known else 0,
+                                       "animals": animals, "notes": "mock checklist"})
+
+    # E4 open world (mock knowledge: tests/fixtures/recorded/open_world.json)
+
+    async def identify(self, name: str | None = None, image: bytes | None = None) -> dict[str, Any]:
+        table = open_world()["identify"]
+        if image is not None and self.vision is not None:
+            r = await self.vision.describe_animal(image, "parent")
+            kind = "human" if r.contains_human else ("species" if r.is_animal else "not_animal")
+            return self._wire("describe", {"kind": kind, "scientific_name": r.scientific_name or "",
+                                           "common_name": r.common_name or "", "breed": "", "alternatives": [],
+                                           "note": "mock: read by the mock vision adapter"})
+        key = "photo" if image is not None else " ".join((name or "").lower().split())
+        hit = table.get(key) or {"kind": "ambiguous", "scientific_name": "", "common_name": name or "",
+                                 "breed": "", "alternatives": [], "note": "mock: unknown name"}
+        return self._wire("describe", copy.deepcopy(hit))
+
+    async def learn_traits(self, ident: dict[str, Any]) -> dict[str, Any]:
+        table = open_world()["traits"]
+        key = ident.get("scientific_name", "")
+        hit = table.get(f"{key}|{ident.get('breed')}") or table.get(key)
+        if hit is None:
+            raise ValueError(f"mock: no traits for {key!r}")
+        return self._wire("describe", copy.deepcopy(hit))
+
+    async def judge_functions(self, plan_text: str, functions: list[str]) -> list[dict[str, str]]:
+        return self._wire("describe", [{"function": f, "result": "pass", "repair": "",
+                                        "detail": "mock model judgment: works as planned"} for f in functions])
 
     async def vary(self, prompt: str, elites: list[dict[str, Any]], n: int, seed: int) -> list[dict[str, Any]]:
         out: list[dict[str, Any]] = []

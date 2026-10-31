@@ -60,20 +60,23 @@
     "wetland": {
       "openness": "closed",
       "temp": "temperate",
-      "sunny": false
+      "sunny": false,
+      "wet": true
     },
     "freshwater": {
       "openness": "open",
       "temp": "temperate",
       "sunny": false,
-      "water": true
+      "water": true,
+      "wet": true
     },
     "marine": {
       "openness": "open",
       "temp": "temperate",
       "sunny": true,
       "water": true,
-      "open_water": true
+      "open_water": true,
+      "wet": true
     },
     "rocky coast": {
       "openness": "open",
@@ -229,5 +232,138 @@
     "Thanator",
     "Banshee",
     "Avatar"
-  ]
+  ],
+  "function_defaults_about": "E4: breathing organ and mouthparts for database animals, by class (and by diet for mammal teeth). These are project defaults, marked as such in provenance; learned animals get theirs from Muse Spark (model-estimated). Per-animal overrides are data, not code.",
+  "function_defaults": {
+    "breathing_by_class": {
+      "Mammalia": "lungs",
+      "Aves": "lungs",
+      "Reptilia": "lungs",
+      "Amphibia": "skin and lungs",
+      "Actinopterygii": "gills",
+      "Elasmobranchii": "gills",
+      "Insecta": "tracheae",
+      "Arachnida": "book lungs",
+      "Malacostraca": "gills",
+      "Cephalopoda": "gills",
+      "Scyphozoa": "other",
+      "Asteroidea": "other",
+      "Gastropoda": "other"
+    },
+    "mouthparts_by_class": {
+      "Aves": "beak",
+      "Reptilia": "pointed teeth",
+      "Amphibia": "pointed teeth",
+      "Actinopterygii": "pointed teeth",
+      "Elasmobranchii": "pointed teeth",
+      "Insecta": "mandibles",
+      "Arachnida": "other",
+      "Malacostraca": "mandibles",
+      "Cephalopoda": "other",
+      "Scyphozoa": "other",
+      "Asteroidea": "other",
+      "Gastropoda": "other"
+    },
+    "mammal_teeth_by_diet": {
+      "herbivore": "grinding teeth",
+      "carnivore": "bladed teeth",
+      "piscivore": "pointed teeth",
+      "omnivore": "mixed teeth",
+      "insectivore": "pointed teeth"
+    },
+    "overrides": {
+      "axolotl": {
+        "breathing": "external gills and lungs",
+        "features": [
+          "three pairs of feathery external gills on the sides of the head"
+        ]
+      }
+    }
+  },
+  "insect_part_free_length_m": 0.7,
+  "fiction_budget_about": "E4, R9 section 3: licenses per design mode (RC-R9-10, RC-R9-11). 'several' for mythic is a product decision (R9 'What this doc does not settle'). 'bendable' is R9 3.2: each license bends one named card and always carries the compensation shown. 'never_licensable' is R9 3.3: honesty rules and the believability floor.",
+  "fiction_budget": {
+    "realistic": 0,
+    "speculative": 1,
+    "mythic": 3
+  },
+  "bendable": [
+    {
+      "id": "arthropod_large",
+      "card": "RC-R3-09",
+      "rule": "arthropod parts at large size",
+      "compensation": "thick supporting legs and visible breathing openings along the flanks",
+      "repairable": false
+    },
+    {
+      "id": "six_limbs",
+      "card": "RC-R3-02",
+      "rule": "six limbs (four legs plus wings)",
+      "compensation": "wings rooted in a heavy shoulder structure that can carry them, not floating",
+      "repairable": true
+    },
+    {
+      "id": "heavy_flight",
+      "card": "RC-R3-05",
+      "rule": "flight above about 40 kg",
+      "compensation": "huge chest and wing muscles",
+      "repairable": true
+    },
+    {
+      "id": "land_gills",
+      "card": "RC-R9-03",
+      "rule": "gills on a land creature",
+      "compensation": "a wet habitat or a second, air-breathing system",
+      "repairable": true
+    },
+    {
+      "id": "tentacle_legs",
+      "card": "RC-R3-11",
+      "rule": "tentacles carrying a heavy land body",
+      "compensation": "many thick tentacles, short and low to the ground",
+      "repairable": false
+    }
+  ],
+  "never_licensable": {
+    "honesty": [
+      "RC-R1-14",
+      "RC-R2-16",
+      "RC-R5-10",
+      "RC-R9-01",
+      "RC-R9-09",
+      "provenance"
+    ],
+    "floor": [
+      "RC-R9-14",
+      "RC-R6-03",
+      "RC-R6-04",
+      "RC-R6-11",
+      "RC-R7-07",
+      "ground contact"
+    ]
+  },
+  "part_jobs_about": "E4, RC-R9-12: the job of each donated part. 'needs' names a habitat condition without which the part has no job ('water': a wet habitat profile). A part with no job is dropped in realistic mode.",
+  "part_jobs": {
+    "wings": {
+      "job": "fly, glide or display"
+    },
+    "tentacles": {
+      "job": "grip and feel"
+    },
+    "broad fins": {
+      "job": "swim",
+      "needs": "water"
+    },
+    "jointed tail segments": {
+      "job": "balance and defend"
+    },
+    "long scaled coils": {
+      "job": "grip and balance"
+    },
+    "external gills": {
+      "job": "breathe in water",
+      "needs": "water"
+    }
+  },
+  "prosaic_detail": "natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin"
 }
