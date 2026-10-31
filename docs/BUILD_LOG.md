@@ -124,3 +124,44 @@ Short entries per phase: what was built, what was tested, what was deferred. New
 - The old Field-paper contrast test parsed only hex tokens; it could not see ZD's `rgba()` tints. Rewritten.
 
 **Mistake:** running `prettier` without a project config reformatted ~70 untouched files. Reverted to the committed versions; only the files changed for U1 keep the repo's 160-column style.
+
+## 2026-10-31: E1-offline evolution engine (mocks only)
+
+**Plan:** build the engine in `docs/evolution/ALGORITHM.md` as a new module under `/evo`, against mocks, with no live API call. Full report: `docs/evolution/E1_OFFLINE.md`.
+
+**Step 0, docs and verification:**
+- The docs were already in `docs/evolution/`, and there was no verifier. I wrote `scripts/verify_research.py` (stdlib only) to the user's spec.
+- Run 1 failed on 4 links. The user authorized 3 source fixes (RC-R8-01, RC-R1-07, R4 [S7]) and two warning rules: certificate-chain errors, and timeouts on links that resolved in an earlier recorded run.
+- Run 4 passed with 14 bot-blocked links (403). See `docs/evolution/VERIFY_REPORT.md`.
+
+**Built:**
+- `scripts/build_rule_cards.py` produces `data/rule_cards.json` (94 cards, 11 hard).
+- `backend/app/evolution/`, in pipeline order:
+  - genome model validated by code
+  - routing, host and silhouette
+  - trait operators with GATE
+  - habitat step
+  - physical checks in fixed order
+  - prompt compiler
+  - hard filters and soft penalties
+  - judge
+  - evolve loop with a quality-diversity archive
+  - output card
+- 5 endpoints under `/evo`.
+- Known-pair overrides and engine tables are data (`data/evo_known_pairs.json`, `data/evo_config.json`).
+- Spark and SAM roles have protocols plus deterministic mocks. Real mode refuses before any call.
+- `main.py` only mounts the router.
+
+**Tested:**
+- pytest: 217 passed, 6 skipped (132 existing unchanged, plus 85 new).
+- Every hard card in section 8 has tests.
+- The 4 worked examples pass over seeds 0 to 9.
+- A mutation check confirms the tests catch broken hard checks.
+
+**Calls for one live run of the 4 examples:** 16 Spark, 4 images, 4 SAM (names as input). Default evolve costs 39 Spark, 12 images and 12 SAM per seed.
+
+**Deferred:**
+- live Spark and SAM adapters, and a SAM budget counter
+- person-checked quality tests
+- the cost test that sets batch and rounds
+- opening the 403 links in a browser
