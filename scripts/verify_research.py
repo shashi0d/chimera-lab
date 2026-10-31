@@ -14,6 +14,14 @@ Checks every .md file in the folder:
 A link whose cert chain fails local verification but resolves without it is
 reported as an SSL warning, not a failure.
 
+A link that times out is reported as a TIMEOUT warning, not a failure, only if
+it appears in the "## Resolved links" section of the history report (default:
+VERIFY_REPORT.md in the parent of the folder; override with --history PATH).
+A timeout on a link that has never resolved is still a failure.
+
+Every link that resolves (status < 400) is printed as an OK line so the report
+can record it in its "## Resolved links" section for later runs.
+
 Standard library only. Exit 0 if clean, 1 if not.
 """
 from __future__ import annotations
@@ -119,8 +127,36 @@ def _check_insecure(url: str, headers: dict) -> tuple[str, int | None, str]:
         return url, None, f"{type(e).__name__}: {e} (after SSL verify failure)"
 
 
+def _is_timeout(err: str) -> bool:
+    return "timed out" in err.lower() or "TimeoutError" in err
+
+
+def load_history(path: Path) -> set[str]:
+    """URLs listed under '## Resolved links' in an earlier VERIFY_REPORT.md."""
+    if not path.is_file():
+        return set()
+    urls: set[str] = set()
+    in_section = False
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if line.startswith("## "):
+            in_section = line.strip().lower().startswith("## resolved links")
+            continue
+        if in_section:
+            urls.update(clean_url(u) for u in URL_RE.findall(line))
+    return urls
+
+
 def main(argv: list[str]) -> int:
-    folder = Path(argv[1]) if len(argv) > 1 else Path("docs/evolution/research")
+    args = list(argv[1:])
+    history_path: Path | None = None
+    if "--history" in args:
+        i = args.index("--history")
+        history_path = Path(args[i + 1])
+        del args[i:i + 2]
+    folder = Path(args[0]) if args else Path("docs/evolution/research")
+    if history_path is None:
+        history_path = folder.parent / "VERIFY_REPORT.md"
+    history = load_history(history_path)
     if not folder.is_dir():
         print(f"ERROR {folder}: not a directory")
         return 1
@@ -128,6 +164,9 @@ def main(argv: list[str]) -> int:
     problems: list[str] = []
     blocked: list[str] = []
     ssl_warns: list[str] = []
+    timeout_warns: list[str] = []
+    resolved: list[str] = []
+    warned: set[str] = set()
 
     url_locs: dict[str, list[str]] = {}
     cards_by_file: dict[Path, list[dict]] = {}
@@ -168,8 +207,15 @@ def main(argv: list[str]) -> int:
         elif err == SSL_WARN and code is not None and code < 400:
             ssl_warns.append(f"{where} {url} (HTTP {code} only without cert verification; "
                              "server likely omits its intermediate cert)")
+            warned.add(url)
+        elif code is None and _is_timeout(err) and url in history:
+            timeout_warns.append(f"{where} {url} (timed out; resolved in an earlier recorded "
+                                 "run, recheck later)")
+            warned.add(url)
         elif code is None or code >= 400:
             problems.append(f"{where} DEAD_LINK {url} ({err or code})")
+        if code is not None and code < 400:
+            resolved.append(url)
 
     # VERIFIED cards whose source is dead (not 403).
     for f, cards in cards_by_file.items():
@@ -177,6 +223,8 @@ def main(argv: list[str]) -> int:
             if c["fields"].get("status") != "VERIFIED":
                 continue
             for raw in URL_RE.findall(c["fields"].get("source", "")):
+                if clean_url(raw) in warned:
+                    continue
                 code, err = results.get(clean_url(raw), (None, "not checked"))
                 if code != 403 and (code is None or code >= 400):
                     problems.append(
@@ -191,8 +239,13 @@ def main(argv: list[str]) -> int:
         print(f"403  {b}")
     for w in ssl_warns:
         print(f"SSL  {w}")
+    for w in timeout_warns:
+        print(f"TIME {w}")
+    for u in resolved:
+        print(f"OK   {u}")
     print(f"# {len(problems)} failures, {len(blocked)} bot-blocked (403), "
-          f"{len(ssl_warns)} SSL warnings")
+          f"{len(ssl_warns)} SSL warnings, {len(timeout_warns)} timeout warnings, "
+          f"{len(resolved)} resolved (history: {len(history)} URLs from {history_path})")
     return 1 if problems else 0
 
 
