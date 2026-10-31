@@ -46,8 +46,12 @@ export async function seedLive(page: Page, cases: string[], opts: { api: string;
   const first = runs[0]!;
   await opts.addInputs([join(LIVE_INPUTS, first.inputs.A), join(LIVE_INPUTS, first.inputs.B)]);
   const doc = (await page.evaluate(() => (window as unknown as { __chimera: { graph(): unknown } }).__chimera.graph())) as Doc;
+  // Later nodes win, so a re-added photo maps to its newest upload.
   const byFile = new Map(doc.nodes.filter((n) => n.type === "image-input").map((n) => [n.data.fileName as string, n.data.assetId as string]));
-  const fusion = doc.nodes.find((n) => n.type === "fusion")!;
+  // The Fusion wired to the inputs just added (a canvas may already hold other pairs).
+  const inputA = [...doc.nodes].reverse().find((n) => n.type === "image-input" && n.data.fileName === first.inputs.A);
+  const wired = doc.edges.find((e) => e.source === inputA?.id && e.targetPort === "a")?.target;
+  const fusion = doc.nodes.find((n) => n.id === wired) ?? doc.nodes.find((n) => n.type === "fusion")!;
   const versions = [];
   const patched = [];
   for (const [i, run] of runs.entries()) {

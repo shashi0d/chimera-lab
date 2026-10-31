@@ -1,0 +1,1757 @@
+{
+  "round": "u1",
+  "captured": 250,
+  "failures": [],
+  "shots": [
+    {
+      "file": "docs/visual-qa/u1/1024x768/dark/01-empty-canvas.png",
+      "state": "01-empty-canvas",
+      "shows": "Empty canvas with drop invitation",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/dark/03-one-image.png",
+      "state": "03-one-image",
+      "shows": "One image, auto-added Fusion node with input A connected",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/dark/05-two-unconnected.png",
+      "state": "05-two-unconnected",
+      "shows": "Two images, Fusion inputs empty (Fuse disabled with hint)",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/dark/06-two-connected.png",
+      "state": "06-two-connected",
+      "shows": "Two images connected, ready to fuse",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/dark/16-running-generate.png",
+      "state": "16-running-generate",
+      "shows": "Fusion running, current step: generate",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/dark/20-success-real-hybrid.png",
+      "state": "20-success-real-hybrid",
+      "shows": "Success with real-hybrid badge (lion + tiger)",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/dark/21-success-warnings.png",
+      "state": "21-success-warnings",
+      "shows": "Success with rule warnings (octopus + macaw)",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/dark/22-version-2.png",
+      "state": "22-version-2",
+      "shows": "Re-run: version 2 selected in the switcher",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/dark/23-panel-open.png",
+      "state": "23-panel-open",
+      "shows": "How this was made panel (top)",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/dark/24-panel-notes-prompt.png",
+      "state": "24-panel-notes-prompt",
+      "shows": "Panel scrolled to field notes and prompt",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/dark/26-result-image-failed.png",
+      "state": "26-result-image-failed",
+      "shows": "Generated image failed to load: fallback tile with reload",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/dark/27-panel-sections-open.png",
+      "state": "27-panel-sections-open",
+      "shows": "U1 drawer: summary, stats, pipeline timeline, real hybrids and mythology open",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/dark/28-result-card.png",
+      "state": "28-result-card",
+      "shows": "U1 result hero card on its own (element shot)",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/dark/30-error-refusal.png",
+      "state": "30-error-refusal",
+      "shows": "MODEL_REFUSED: what to change, no retry",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/dark/40-offline-banner.png",
+      "state": "40-offline-banner",
+      "shows": "Offline banner; Fuse disabled",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/dark/42-server-unreachable.png",
+      "state": "42-server-unreachable",
+      "shows": "Server unreachable banner (distinct from offline)",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/dark/50-node-crash.png",
+      "state": "50-node-crash",
+      "shows": "One node failed to render; canvas still usable",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/dark/51-app-crash.png",
+      "state": "51-app-crash",
+      "shows": "App-level error screen",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/dark/60-fit-view-many-nodes.png",
+      "state": "60-fit-view-many-nodes",
+      "shows": "Fit view with 7 nodes (two fusions)",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/dark/61-canvas-100-percent.png",
+      "state": "61-canvas-100-percent",
+      "shows": "Canvas at 100% zoom after a fusion",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/dark/63-refused-connection.png",
+      "state": "63-refused-connection",
+      "shows": "Wrong port type: refused with toast",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/dark/80-anatomy-pinned.png",
+      "state": "80-anatomy-pinned",
+      "shows": "F1: parts pinned (Head B, Covering A) before fusing",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/dark/81-anatomy-result-panel.png",
+      "state": "81-anatomy-result-panel",
+      "shows": "F1: result with pinned parts; panel credits you vs model",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/dark/84-body-diagram.png",
+      "state": "84-body-diagram",
+      "shows": "U1 body diagram with pinned parts showing donor portraits (element shot)",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/dark/90-card-empty.png",
+      "state": "90-card-empty",
+      "shows": "F2: Field card added from a Result, not written yet",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/dark/91-card-written.png",
+      "state": "91-card-written",
+      "shows": "F2: written field card with invented binomial, ranges and provenance",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/dark/93-card-error-timeout.png",
+      "state": "93-card-error-timeout",
+      "shows": "F2: writing the card timed out: message + retry",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/dark/94-card-exported-png.png",
+      "state": "94-card-exported-png",
+      "shows": "F2: the downloaded field-card PNG itself (1600×1000)",
+      "viewport": "1024x768",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/light/01-empty-canvas.png",
+      "state": "01-empty-canvas",
+      "shows": "Empty canvas with drop invitation",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/light/03-one-image.png",
+      "state": "03-one-image",
+      "shows": "One image, auto-added Fusion node with input A connected",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/light/05-two-unconnected.png",
+      "state": "05-two-unconnected",
+      "shows": "Two images, Fusion inputs empty (Fuse disabled with hint)",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/light/06-two-connected.png",
+      "state": "06-two-connected",
+      "shows": "Two images connected, ready to fuse",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/light/16-running-generate.png",
+      "state": "16-running-generate",
+      "shows": "Fusion running, current step: generate",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/light/20-success-real-hybrid.png",
+      "state": "20-success-real-hybrid",
+      "shows": "Success with real-hybrid badge (lion + tiger)",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/light/21-success-warnings.png",
+      "state": "21-success-warnings",
+      "shows": "Success with rule warnings (octopus + macaw)",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/light/22-version-2.png",
+      "state": "22-version-2",
+      "shows": "Re-run: version 2 selected in the switcher",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/light/23-panel-open.png",
+      "state": "23-panel-open",
+      "shows": "How this was made panel (top)",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/light/24-panel-notes-prompt.png",
+      "state": "24-panel-notes-prompt",
+      "shows": "Panel scrolled to field notes and prompt",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/light/26-result-image-failed.png",
+      "state": "26-result-image-failed",
+      "shows": "Generated image failed to load: fallback tile with reload",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/light/27-panel-sections-open.png",
+      "state": "27-panel-sections-open",
+      "shows": "U1 drawer: summary, stats, pipeline timeline, real hybrids and mythology open",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/light/28-result-card.png",
+      "state": "28-result-card",
+      "shows": "U1 result hero card on its own (element shot)",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/light/30-error-refusal.png",
+      "state": "30-error-refusal",
+      "shows": "MODEL_REFUSED: what to change, no retry",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/light/40-offline-banner.png",
+      "state": "40-offline-banner",
+      "shows": "Offline banner; Fuse disabled",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/light/42-server-unreachable.png",
+      "state": "42-server-unreachable",
+      "shows": "Server unreachable banner (distinct from offline)",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/light/50-node-crash.png",
+      "state": "50-node-crash",
+      "shows": "One node failed to render; canvas still usable",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/light/51-app-crash.png",
+      "state": "51-app-crash",
+      "shows": "App-level error screen",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/light/60-fit-view-many-nodes.png",
+      "state": "60-fit-view-many-nodes",
+      "shows": "Fit view with 7 nodes (two fusions)",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/light/61-canvas-100-percent.png",
+      "state": "61-canvas-100-percent",
+      "shows": "Canvas at 100% zoom after a fusion",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/light/63-refused-connection.png",
+      "state": "63-refused-connection",
+      "shows": "Wrong port type: refused with toast",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/light/80-anatomy-pinned.png",
+      "state": "80-anatomy-pinned",
+      "shows": "F1: parts pinned (Head B, Covering A) before fusing",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/light/81-anatomy-result-panel.png",
+      "state": "81-anatomy-result-panel",
+      "shows": "F1: result with pinned parts; panel credits you vs model",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/light/84-body-diagram.png",
+      "state": "84-body-diagram",
+      "shows": "U1 body diagram with pinned parts showing donor portraits (element shot)",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/light/90-card-empty.png",
+      "state": "90-card-empty",
+      "shows": "F2: Field card added from a Result, not written yet",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/light/91-card-written.png",
+      "state": "91-card-written",
+      "shows": "F2: written field card with invented binomial, ranges and provenance",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/light/93-card-error-timeout.png",
+      "state": "93-card-error-timeout",
+      "shows": "F2: writing the card timed out: message + retry",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1024x768/light/94-card-exported-png.png",
+      "state": "94-card-exported-png",
+      "shows": "F2: the downloaded field-card PNG itself (1600×1000)",
+      "viewport": "1024x768",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/dark/01-empty-canvas.png",
+      "state": "01-empty-canvas",
+      "shows": "Empty canvas with drop invitation",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/dark/03-one-image.png",
+      "state": "03-one-image",
+      "shows": "One image, auto-added Fusion node with input A connected",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/dark/05-two-unconnected.png",
+      "state": "05-two-unconnected",
+      "shows": "Two images, Fusion inputs empty (Fuse disabled with hint)",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/dark/06-two-connected.png",
+      "state": "06-two-connected",
+      "shows": "Two images connected, ready to fuse",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/dark/16-running-generate.png",
+      "state": "16-running-generate",
+      "shows": "Fusion running, current step: generate",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/dark/20-success-real-hybrid.png",
+      "state": "20-success-real-hybrid",
+      "shows": "Success with real-hybrid badge (lion + tiger)",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/dark/21-success-warnings.png",
+      "state": "21-success-warnings",
+      "shows": "Success with rule warnings (octopus + macaw)",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/dark/22-version-2.png",
+      "state": "22-version-2",
+      "shows": "Re-run: version 2 selected in the switcher",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/dark/23-panel-open.png",
+      "state": "23-panel-open",
+      "shows": "How this was made panel (top)",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/dark/24-panel-notes-prompt.png",
+      "state": "24-panel-notes-prompt",
+      "shows": "Panel scrolled to field notes and prompt",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/dark/26-result-image-failed.png",
+      "state": "26-result-image-failed",
+      "shows": "Generated image failed to load: fallback tile with reload",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/dark/27-panel-sections-open.png",
+      "state": "27-panel-sections-open",
+      "shows": "U1 drawer: summary, stats, pipeline timeline, real hybrids and mythology open",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/dark/28-result-card.png",
+      "state": "28-result-card",
+      "shows": "U1 result hero card on its own (element shot)",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/dark/30-error-refusal.png",
+      "state": "30-error-refusal",
+      "shows": "MODEL_REFUSED: what to change, no retry",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/dark/40-offline-banner.png",
+      "state": "40-offline-banner",
+      "shows": "Offline banner; Fuse disabled",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/dark/42-server-unreachable.png",
+      "state": "42-server-unreachable",
+      "shows": "Server unreachable banner (distinct from offline)",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/dark/50-node-crash.png",
+      "state": "50-node-crash",
+      "shows": "One node failed to render; canvas still usable",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/dark/51-app-crash.png",
+      "state": "51-app-crash",
+      "shows": "App-level error screen",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/dark/60-fit-view-many-nodes.png",
+      "state": "60-fit-view-many-nodes",
+      "shows": "Fit view with 7 nodes (two fusions)",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/dark/61-canvas-100-percent.png",
+      "state": "61-canvas-100-percent",
+      "shows": "Canvas at 100% zoom after a fusion",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/dark/63-refused-connection.png",
+      "state": "63-refused-connection",
+      "shows": "Wrong port type: refused with toast",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/dark/80-anatomy-pinned.png",
+      "state": "80-anatomy-pinned",
+      "shows": "F1: parts pinned (Head B, Covering A) before fusing",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/dark/81-anatomy-result-panel.png",
+      "state": "81-anatomy-result-panel",
+      "shows": "F1: result with pinned parts; panel credits you vs model",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/dark/84-body-diagram.png",
+      "state": "84-body-diagram",
+      "shows": "U1 body diagram with pinned parts showing donor portraits (element shot)",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/dark/90-card-empty.png",
+      "state": "90-card-empty",
+      "shows": "F2: Field card added from a Result, not written yet",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/dark/91-card-written.png",
+      "state": "91-card-written",
+      "shows": "F2: written field card with invented binomial, ranges and provenance",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/dark/93-card-error-timeout.png",
+      "state": "93-card-error-timeout",
+      "shows": "F2: writing the card timed out: message + retry",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/dark/94-card-exported-png.png",
+      "state": "94-card-exported-png",
+      "shows": "F2: the downloaded field-card PNG itself (1600×1000)",
+      "viewport": "1280x800",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/light/01-empty-canvas.png",
+      "state": "01-empty-canvas",
+      "shows": "Empty canvas with drop invitation",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/light/03-one-image.png",
+      "state": "03-one-image",
+      "shows": "One image, auto-added Fusion node with input A connected",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/light/05-two-unconnected.png",
+      "state": "05-two-unconnected",
+      "shows": "Two images, Fusion inputs empty (Fuse disabled with hint)",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/light/06-two-connected.png",
+      "state": "06-two-connected",
+      "shows": "Two images connected, ready to fuse",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/light/16-running-generate.png",
+      "state": "16-running-generate",
+      "shows": "Fusion running, current step: generate",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/light/20-success-real-hybrid.png",
+      "state": "20-success-real-hybrid",
+      "shows": "Success with real-hybrid badge (lion + tiger)",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/light/21-success-warnings.png",
+      "state": "21-success-warnings",
+      "shows": "Success with rule warnings (octopus + macaw)",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/light/22-version-2.png",
+      "state": "22-version-2",
+      "shows": "Re-run: version 2 selected in the switcher",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/light/23-panel-open.png",
+      "state": "23-panel-open",
+      "shows": "How this was made panel (top)",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/light/24-panel-notes-prompt.png",
+      "state": "24-panel-notes-prompt",
+      "shows": "Panel scrolled to field notes and prompt",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/light/26-result-image-failed.png",
+      "state": "26-result-image-failed",
+      "shows": "Generated image failed to load: fallback tile with reload",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/light/27-panel-sections-open.png",
+      "state": "27-panel-sections-open",
+      "shows": "U1 drawer: summary, stats, pipeline timeline, real hybrids and mythology open",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/light/28-result-card.png",
+      "state": "28-result-card",
+      "shows": "U1 result hero card on its own (element shot)",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/light/30-error-refusal.png",
+      "state": "30-error-refusal",
+      "shows": "MODEL_REFUSED: what to change, no retry",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/light/40-offline-banner.png",
+      "state": "40-offline-banner",
+      "shows": "Offline banner; Fuse disabled",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/light/42-server-unreachable.png",
+      "state": "42-server-unreachable",
+      "shows": "Server unreachable banner (distinct from offline)",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/light/50-node-crash.png",
+      "state": "50-node-crash",
+      "shows": "One node failed to render; canvas still usable",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/light/51-app-crash.png",
+      "state": "51-app-crash",
+      "shows": "App-level error screen",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/light/60-fit-view-many-nodes.png",
+      "state": "60-fit-view-many-nodes",
+      "shows": "Fit view with 7 nodes (two fusions)",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/light/61-canvas-100-percent.png",
+      "state": "61-canvas-100-percent",
+      "shows": "Canvas at 100% zoom after a fusion",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/light/63-refused-connection.png",
+      "state": "63-refused-connection",
+      "shows": "Wrong port type: refused with toast",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/light/80-anatomy-pinned.png",
+      "state": "80-anatomy-pinned",
+      "shows": "F1: parts pinned (Head B, Covering A) before fusing",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/light/81-anatomy-result-panel.png",
+      "state": "81-anatomy-result-panel",
+      "shows": "F1: result with pinned parts; panel credits you vs model",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/light/84-body-diagram.png",
+      "state": "84-body-diagram",
+      "shows": "U1 body diagram with pinned parts showing donor portraits (element shot)",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/light/90-card-empty.png",
+      "state": "90-card-empty",
+      "shows": "F2: Field card added from a Result, not written yet",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/light/91-card-written.png",
+      "state": "91-card-written",
+      "shows": "F2: written field card with invented binomial, ranges and provenance",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/light/93-card-error-timeout.png",
+      "state": "93-card-error-timeout",
+      "shows": "F2: writing the card timed out: message + retry",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1280x800/light/94-card-exported-png.png",
+      "state": "94-card-exported-png",
+      "shows": "F2: the downloaded field-card PNG itself (1600×1000)",
+      "viewport": "1280x800",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/01-empty-canvas.png",
+      "state": "01-empty-canvas",
+      "shows": "Empty canvas with drop invitation",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/02-drop-overlay.png",
+      "state": "02-drop-overlay",
+      "shows": "Files dragged over the canvas",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/03-one-image.png",
+      "state": "03-one-image",
+      "shows": "One image, auto-added Fusion node with input A connected",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/04-uploading.png",
+      "state": "04-uploading",
+      "shows": "Upload in progress with percent and cancel",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/05-two-unconnected.png",
+      "state": "05-two-unconnected",
+      "shows": "Two images, Fusion inputs empty (Fuse disabled with hint)",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/06-two-connected.png",
+      "state": "06-two-connected",
+      "shows": "Two images connected, ready to fuse",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/10-running-load-inputs.png",
+      "state": "10-running-load-inputs",
+      "shows": "Fusion running, current step: load_inputs",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/11-running-identify.png",
+      "state": "11-running-identify",
+      "shows": "Fusion running, current step: identify",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/12-running-match.png",
+      "state": "12-running-match",
+      "shows": "Fusion running, current step: match",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/13-running-hybrid-check.png",
+      "state": "13-running-hybrid-check",
+      "shows": "Fusion running, current step: hybrid_check",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/14-running-rules-check.png",
+      "state": "14-running-rules-check",
+      "shows": "Fusion running, current step: rules_check",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/15-running-compile.png",
+      "state": "15-running-compile",
+      "shows": "Fusion running, current step: compile",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/16-running-generate.png",
+      "state": "16-running-generate",
+      "shows": "Fusion running, current step: generate",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/17-running-store.png",
+      "state": "17-running-store",
+      "shows": "Fusion running, current step: store",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/18-long-wait.png",
+      "state": "18-long-wait",
+      "shows": "Still working note after 20s",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/19-very-long-wait.png",
+      "state": "19-very-long-wait",
+      "shows": "After 120s: prominent cancel",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/20-success-real-hybrid.png",
+      "state": "20-success-real-hybrid",
+      "shows": "Success with real-hybrid badge (lion + tiger)",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/21-success-warnings.png",
+      "state": "21-success-warnings",
+      "shows": "Success with rule warnings (octopus + macaw)",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/22-version-2.png",
+      "state": "22-version-2",
+      "shows": "Re-run: version 2 selected in the switcher",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/23-panel-open.png",
+      "state": "23-panel-open",
+      "shows": "How this was made panel (top)",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/24-panel-notes-prompt.png",
+      "state": "24-panel-notes-prompt",
+      "shows": "Panel scrolled to field notes and prompt",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/25-stale-result.png",
+      "state": "25-stale-result",
+      "shows": "Input replaced after success: results marked outdated",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/26-result-image-failed.png",
+      "state": "26-result-image-failed",
+      "shows": "Generated image failed to load: fallback tile with reload",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/27-panel-sections-open.png",
+      "state": "27-panel-sections-open",
+      "shows": "U1 drawer: summary, stats, pipeline timeline, real hybrids and mythology open",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/28-result-card.png",
+      "state": "28-result-card",
+      "shows": "U1 result hero card on its own (element shot)",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/29-hybrid-drawer.png",
+      "state": "29-hybrid-drawer",
+      "shows": "U1 drawer for lion + tiger: real hybrids open with cross direction and sources",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/30-error-budget.png",
+      "state": "30-error-budget",
+      "shows": "BUDGET_EXCEEDED: no retry",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/30-error-human.png",
+      "state": "30-error-human",
+      "shows": "HUMAN_DETECTED: privacy-safe message + input highlighted",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/30-error-internal.png",
+      "state": "30-error-internal",
+      "shows": "INTERNAL: generic message with reportable error id",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/30-error-interrupted.png",
+      "state": "30-error-interrupted",
+      "shows": "RUN_INTERRUPTED: server restarted, re-run offered",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/30-error-not-animal.png",
+      "state": "30-error-not-animal",
+      "shows": "NOT_AN_ANIMAL: message + offending input highlighted",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/30-error-rate-limit.png",
+      "state": "30-error-rate-limit",
+      "shows": "RATE_LIMITED: automatic retry countdown",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/30-error-refusal.png",
+      "state": "30-error-refusal",
+      "shows": "MODEL_REFUSED: what to change, no retry",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/30-error-server-error.png",
+      "state": "30-error-server-error",
+      "shows": "UPSTREAM_ERROR: Retry fusion",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/30-error-timeout.png",
+      "state": "30-error-timeout",
+      "shows": "UPSTREAM_TIMEOUT: Retry fusion",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/31-duplicate-inputs.png",
+      "state": "31-duplicate-inputs",
+      "shows": "Same image twice: Fuse blocked with hint",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/32-upload-error.png",
+      "state": "32-upload-error",
+      "shows": "Server rejected an upload (IMAGE_CORRUPT)",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/33-unsupported-file-toast.png",
+      "state": "33-unsupported-file-toast",
+      "shows": "Unsupported file type rejected with toast",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/34-too-many-files-toast.png",
+      "state": "34-too-many-files-toast",
+      "shows": "Three images dropped: two added, toast explains",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/40-offline-banner.png",
+      "state": "40-offline-banner",
+      "shows": "Offline banner; Fuse disabled",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/41-offline-upload-queue.png",
+      "state": "41-offline-upload-queue",
+      "shows": "Upload queued while offline",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/42-server-unreachable.png",
+      "state": "42-server-unreachable",
+      "shows": "Server unreachable banner (distinct from offline)",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/43-offline-mid-run.png",
+      "state": "43-offline-mid-run",
+      "shows": "Connection lost during a run: polling paused note",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/50-node-crash.png",
+      "state": "50-node-crash",
+      "shows": "One node failed to render; canvas still usable",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/51-app-crash.png",
+      "state": "51-app-crash",
+      "shows": "App-level error screen",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/52-unsupported-node-and-orphans.png",
+      "state": "52-unsupported-node-and-orphans",
+      "shows": "Unknown node type placeholder + orphan edge toast",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/53-read-only-newer.png",
+      "state": "53-read-only-newer",
+      "shows": "Graph from a newer version: read-only banner",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/54-corrupt-autosave.png",
+      "state": "54-corrupt-autosave",
+      "shows": "Corrupt autosave discarded with toast",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/60-fit-view-many-nodes.png",
+      "state": "60-fit-view-many-nodes",
+      "shows": "Fit view with 7 nodes (two fusions)",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/61-canvas-100-percent.png",
+      "state": "61-canvas-100-percent",
+      "shows": "Canvas at 100% zoom after a fusion",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/62-minimap.png",
+      "state": "62-minimap",
+      "shows": "Minimap toggled on",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/63-refused-connection.png",
+      "state": "63-refused-connection",
+      "shows": "Wrong port type: refused with toast",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/64-shortcuts-dialog.png",
+      "state": "64-shortcuts-dialog",
+      "shows": "Keyboard shortcuts dialog",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/70-focus-add-image.png",
+      "state": "70-focus-add-image",
+      "shows": "Keyboard focus on toolbar control: Add image",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/71-focus-add-fusion-node.png",
+      "state": "71-focus-add-fusion-node",
+      "shows": "Keyboard focus on toolbar control: Add fusion node",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/72-focus-undo.png",
+      "state": "72-focus-undo",
+      "shows": "Keyboard focus on toolbar control: Undo",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/73-focus-fit-to-view.png",
+      "state": "73-focus-fit-to-view",
+      "shows": "Keyboard focus on toolbar control: Fit to view",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/74-focus-show-minimap.png",
+      "state": "74-focus-show-minimap",
+      "shows": "Keyboard focus on toolbar control: Show minimap",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/75-focus-fuse-button.png",
+      "state": "75-focus-fuse-button",
+      "shows": "Keyboard focus on the Fuse button",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/80-anatomy-pinned.png",
+      "state": "80-anatomy-pinned",
+      "shows": "F1: parts pinned (Head B, Covering A) before fusing",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/81-anatomy-result-panel.png",
+      "state": "81-anatomy-result-panel",
+      "shows": "F1: result with pinned parts; panel credits you vs model",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/82-anatomy-one-parent.png",
+      "state": "82-anatomy-one-parent",
+      "shows": "F1: every part pinned to A: advisory hint",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/83-anatomy-outdated.png",
+      "state": "83-anatomy-outdated",
+      "shows": "F1: pin changed after a result: result outdated",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/84-body-diagram.png",
+      "state": "84-body-diagram",
+      "shows": "U1 body diagram with pinned parts showing donor portraits (element shot)",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/90-card-empty.png",
+      "state": "90-card-empty",
+      "shows": "F2: Field card added from a Result, not written yet",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/91-card-written.png",
+      "state": "91-card-written",
+      "shows": "F2: written field card with invented binomial, ranges and provenance",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/92-card-out-of-date.png",
+      "state": "92-card-out-of-date",
+      "shows": "F2: Result moved to v2; card offers a rewrite",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/93-card-error-timeout.png",
+      "state": "93-card-error-timeout",
+      "shows": "F2: writing the card timed out: message + retry",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/dark/94-card-exported-png.png",
+      "state": "94-card-exported-png",
+      "shows": "F2: the downloaded field-card PNG itself (1600×1000)",
+      "viewport": "1440x900",
+      "theme": "dark"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/01-empty-canvas.png",
+      "state": "01-empty-canvas",
+      "shows": "Empty canvas with drop invitation",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/02-drop-overlay.png",
+      "state": "02-drop-overlay",
+      "shows": "Files dragged over the canvas",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/03-one-image.png",
+      "state": "03-one-image",
+      "shows": "One image, auto-added Fusion node with input A connected",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/04-uploading.png",
+      "state": "04-uploading",
+      "shows": "Upload in progress with percent and cancel",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/05-two-unconnected.png",
+      "state": "05-two-unconnected",
+      "shows": "Two images, Fusion inputs empty (Fuse disabled with hint)",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/06-two-connected.png",
+      "state": "06-two-connected",
+      "shows": "Two images connected, ready to fuse",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/10-running-load-inputs.png",
+      "state": "10-running-load-inputs",
+      "shows": "Fusion running, current step: load_inputs",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/11-running-identify.png",
+      "state": "11-running-identify",
+      "shows": "Fusion running, current step: identify",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/12-running-match.png",
+      "state": "12-running-match",
+      "shows": "Fusion running, current step: match",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/13-running-hybrid-check.png",
+      "state": "13-running-hybrid-check",
+      "shows": "Fusion running, current step: hybrid_check",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/14-running-rules-check.png",
+      "state": "14-running-rules-check",
+      "shows": "Fusion running, current step: rules_check",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/15-running-compile.png",
+      "state": "15-running-compile",
+      "shows": "Fusion running, current step: compile",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/16-running-generate.png",
+      "state": "16-running-generate",
+      "shows": "Fusion running, current step: generate",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/17-running-store.png",
+      "state": "17-running-store",
+      "shows": "Fusion running, current step: store",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/18-long-wait.png",
+      "state": "18-long-wait",
+      "shows": "Still working note after 20s",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/19-very-long-wait.png",
+      "state": "19-very-long-wait",
+      "shows": "After 120s: prominent cancel",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/20-success-real-hybrid.png",
+      "state": "20-success-real-hybrid",
+      "shows": "Success with real-hybrid badge (lion + tiger)",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/21-success-warnings.png",
+      "state": "21-success-warnings",
+      "shows": "Success with rule warnings (octopus + macaw)",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/22-version-2.png",
+      "state": "22-version-2",
+      "shows": "Re-run: version 2 selected in the switcher",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/23-panel-open.png",
+      "state": "23-panel-open",
+      "shows": "How this was made panel (top)",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/24-panel-notes-prompt.png",
+      "state": "24-panel-notes-prompt",
+      "shows": "Panel scrolled to field notes and prompt",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/25-stale-result.png",
+      "state": "25-stale-result",
+      "shows": "Input replaced after success: results marked outdated",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/26-result-image-failed.png",
+      "state": "26-result-image-failed",
+      "shows": "Generated image failed to load: fallback tile with reload",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/27-panel-sections-open.png",
+      "state": "27-panel-sections-open",
+      "shows": "U1 drawer: summary, stats, pipeline timeline, real hybrids and mythology open",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/28-result-card.png",
+      "state": "28-result-card",
+      "shows": "U1 result hero card on its own (element shot)",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/29-hybrid-drawer.png",
+      "state": "29-hybrid-drawer",
+      "shows": "U1 drawer for lion + tiger: real hybrids open with cross direction and sources",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/30-error-budget.png",
+      "state": "30-error-budget",
+      "shows": "BUDGET_EXCEEDED: no retry",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/30-error-human.png",
+      "state": "30-error-human",
+      "shows": "HUMAN_DETECTED: privacy-safe message + input highlighted",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/30-error-internal.png",
+      "state": "30-error-internal",
+      "shows": "INTERNAL: generic message with reportable error id",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/30-error-interrupted.png",
+      "state": "30-error-interrupted",
+      "shows": "RUN_INTERRUPTED: server restarted, re-run offered",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/30-error-not-animal.png",
+      "state": "30-error-not-animal",
+      "shows": "NOT_AN_ANIMAL: message + offending input highlighted",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/30-error-rate-limit.png",
+      "state": "30-error-rate-limit",
+      "shows": "RATE_LIMITED: automatic retry countdown",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/30-error-refusal.png",
+      "state": "30-error-refusal",
+      "shows": "MODEL_REFUSED: what to change, no retry",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/30-error-server-error.png",
+      "state": "30-error-server-error",
+      "shows": "UPSTREAM_ERROR: Retry fusion",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/30-error-timeout.png",
+      "state": "30-error-timeout",
+      "shows": "UPSTREAM_TIMEOUT: Retry fusion",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/31-duplicate-inputs.png",
+      "state": "31-duplicate-inputs",
+      "shows": "Same image twice: Fuse blocked with hint",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/32-upload-error.png",
+      "state": "32-upload-error",
+      "shows": "Server rejected an upload (IMAGE_CORRUPT)",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/33-unsupported-file-toast.png",
+      "state": "33-unsupported-file-toast",
+      "shows": "Unsupported file type rejected with toast",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/34-too-many-files-toast.png",
+      "state": "34-too-many-files-toast",
+      "shows": "Three images dropped: two added, toast explains",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/40-offline-banner.png",
+      "state": "40-offline-banner",
+      "shows": "Offline banner; Fuse disabled",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/41-offline-upload-queue.png",
+      "state": "41-offline-upload-queue",
+      "shows": "Upload queued while offline",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/42-server-unreachable.png",
+      "state": "42-server-unreachable",
+      "shows": "Server unreachable banner (distinct from offline)",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/43-offline-mid-run.png",
+      "state": "43-offline-mid-run",
+      "shows": "Connection lost during a run: polling paused note",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/50-node-crash.png",
+      "state": "50-node-crash",
+      "shows": "One node failed to render; canvas still usable",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/51-app-crash.png",
+      "state": "51-app-crash",
+      "shows": "App-level error screen",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/52-unsupported-node-and-orphans.png",
+      "state": "52-unsupported-node-and-orphans",
+      "shows": "Unknown node type placeholder + orphan edge toast",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/53-read-only-newer.png",
+      "state": "53-read-only-newer",
+      "shows": "Graph from a newer version: read-only banner",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/54-corrupt-autosave.png",
+      "state": "54-corrupt-autosave",
+      "shows": "Corrupt autosave discarded with toast",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/60-fit-view-many-nodes.png",
+      "state": "60-fit-view-many-nodes",
+      "shows": "Fit view with 7 nodes (two fusions)",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/61-canvas-100-percent.png",
+      "state": "61-canvas-100-percent",
+      "shows": "Canvas at 100% zoom after a fusion",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/62-minimap.png",
+      "state": "62-minimap",
+      "shows": "Minimap toggled on",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/63-refused-connection.png",
+      "state": "63-refused-connection",
+      "shows": "Wrong port type: refused with toast",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/64-shortcuts-dialog.png",
+      "state": "64-shortcuts-dialog",
+      "shows": "Keyboard shortcuts dialog",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/70-focus-add-image.png",
+      "state": "70-focus-add-image",
+      "shows": "Keyboard focus on toolbar control: Add image",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/71-focus-add-fusion-node.png",
+      "state": "71-focus-add-fusion-node",
+      "shows": "Keyboard focus on toolbar control: Add fusion node",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/72-focus-undo.png",
+      "state": "72-focus-undo",
+      "shows": "Keyboard focus on toolbar control: Undo",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/73-focus-fit-to-view.png",
+      "state": "73-focus-fit-to-view",
+      "shows": "Keyboard focus on toolbar control: Fit to view",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/74-focus-show-minimap.png",
+      "state": "74-focus-show-minimap",
+      "shows": "Keyboard focus on toolbar control: Show minimap",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/75-focus-fuse-button.png",
+      "state": "75-focus-fuse-button",
+      "shows": "Keyboard focus on the Fuse button",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/80-anatomy-pinned.png",
+      "state": "80-anatomy-pinned",
+      "shows": "F1: parts pinned (Head B, Covering A) before fusing",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/81-anatomy-result-panel.png",
+      "state": "81-anatomy-result-panel",
+      "shows": "F1: result with pinned parts; panel credits you vs model",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/82-anatomy-one-parent.png",
+      "state": "82-anatomy-one-parent",
+      "shows": "F1: every part pinned to A: advisory hint",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/83-anatomy-outdated.png",
+      "state": "83-anatomy-outdated",
+      "shows": "F1: pin changed after a result: result outdated",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/84-body-diagram.png",
+      "state": "84-body-diagram",
+      "shows": "U1 body diagram with pinned parts showing donor portraits (element shot)",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/90-card-empty.png",
+      "state": "90-card-empty",
+      "shows": "F2: Field card added from a Result, not written yet",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/91-card-written.png",
+      "state": "91-card-written",
+      "shows": "F2: written field card with invented binomial, ranges and provenance",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/92-card-out-of-date.png",
+      "state": "92-card-out-of-date",
+      "shows": "F2: Result moved to v2; card offers a rewrite",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/93-card-error-timeout.png",
+      "state": "93-card-error-timeout",
+      "shows": "F2: writing the card timed out: message + retry",
+      "viewport": "1440x900",
+      "theme": "light"
+    },
+    {
+      "file": "docs/visual-qa/u1/1440x900/light/94-card-exported-png.png",
+      "state": "94-card-exported-png",
+      "shows": "F2: the downloaded field-card PNG itself (1600×1000)",
+      "viewport": "1440x900",
+      "theme": "light"
+    }
+  ]
+}

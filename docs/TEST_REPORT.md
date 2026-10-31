@@ -2,7 +2,7 @@
 
 Date: 2026-10-31
 Mode: mock
-Totals: frontend unit + component 192/192, backend 132/132 (sample + real-schema fixture + real file; 6 live tests skipped by default), e2e 39/39 (Playwright, Chromium; includes 4 visual baselines)
+Totals: frontend unit + component 193/193, backend 132/132 (sample + real-schema fixture + real file; 6 live tests skipped by default), e2e 39/39 (Playwright, Chromium; includes 4 visual baselines)
 
 Commands: `cd frontend && npm test`, `.venv/bin/python -m pytest backend`, `cd frontend && npm run e2e`, `scripts/check-css.sh`, `scripts/check-bundle.sh`.
 
@@ -129,7 +129,7 @@ Run with `CHIMERA_LIVE=1` only; details in [LIVE_REPORT.md](LIVE_REPORT.md), eve
 
 ## Visual QA
 
-- Screenshots captured: 112 (pv-1) + 162 (pv-2) + 66 (pv-3) + 36 (f1) + 36 (f2) + u1 (full matrix with real images; count in `docs/visual-qa/u1/manifest.json`). See [docs/visual-qa/INDEX.md](visual-qa/INDEX.md).
+- Screenshots captured: 112 (pv-1) + 162 (pv-2) + 66 (pv-3) + 36 (f1) + 36 (f2) + 250 (u1, full matrix with real images). See [docs/visual-qa/INDEX.md](visual-qa/INDEX.md).
 - Correction rounds: 3 (pv-1 → pv-2 → pv-3), plus u1 for the redesign (U1-01 to U1-10 in DEFECTS.md).
 - Final rubric scores (lowest per criterion): hierarchy 4, clarity 4, state legibility 4, consistency 4, polish 4, craft 4.
 - Defects fixed / remaining:

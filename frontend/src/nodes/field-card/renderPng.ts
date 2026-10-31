@@ -8,7 +8,7 @@ import type { FieldCard } from "../../types/api";
 
 /** Theme tokens the PNG is painted with (ZD names; see docs/DESIGN_U1.md). */
 export const PNG_TOKENS = ["--surface-card", "--text-strong", "--text-muted", "--line-input-strong", "--success-text-aa", "--accent-text"] as const;
-export const PNG_FONTS = ["600 56px 'Space Grotesk'", "italic 400 36px 'Hanken Grotesk'", "400 24px 'Hanken Grotesk'", "500 18px 'JetBrains Mono'", "600 22px 'Hanken Grotesk'"] as const;
+export const PNG_FONTS = ["600 56px 'Space Grotesk'", "italic 400 36px 'Hanken Grotesk'", "400 24px 'Hanken Grotesk'", "500 18px 'JetBrains Mono'", "600 22px 'Hanken Grotesk'", "500 20px 'Hanken Grotesk'"] as const;
 
 const W = 1600;
 const H = 1000;

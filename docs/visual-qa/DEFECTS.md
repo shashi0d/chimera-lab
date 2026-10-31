@@ -55,4 +55,12 @@ Full matrix (`npm run shots -- --round u1`): every state at 1440×900, and core 
 | U1-09 | `u1/*/04-uploading.png` | S (4) | Minor | "Uploading 0%" (same throttling artefact as PV1-09). | None. | wontfix |
 | U1-10 | `u1/*/90-93-card-*.png` | C (4) | Minor | Field-card states run the mock pipeline, so species labels and card text are mock readings beside real images (D-052). | None for screenshots. Live card writing is still unverified (TEST_REPORT). | open (accepted) |
 
-Fixed defects were re-shot (`--states 21,22,24,26,50,60,61,63,93,94` at every viewport and theme).
+Fixed defects were re-shot (`--states 21,22,24,26,30-error-refusal,50,60,61,63,93,94` at every viewport and theme). The re-shoot surfaced three more issues, all fixed:
+
+- **State 26:** reloading a seeded live run showed "This fusion run can't be found" (the run exists only client-side). The state now breaks the image URL without a reload.
+- **State 60:** seeding a live run freezes run polling, so the mock pair now runs first and the live pair gets its own empty Fusion node.
+- **Exported PNG:** the footer weight (Hanken 500) wasn't preloaded and fell back to a serif; it is now in `PNG_FONTS`.
+
+`30-error-refusal` (dark, 1440) timed out once during the full round and passed on re-shoot.
+
+**Lowest score per criterion across the final u1 screens:** hierarchy 4, clarity 4, state legibility 4, consistency 4, polish 4, craft 4. No open blocker or major defects.

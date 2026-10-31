@@ -11,7 +11,7 @@ Screenshots from `npm run shots` (`frontend/tests/visual/capture.ts`), named `<r
 | [pv-3](pv-3/) | Affected states after PV2 fixes, plus a 10-state regression sample | 64 |
 | [f1](f1/) | F1 anatomy controls: new states plus affected | 36 |
 | [f2](f2/) | F2 field card: new states (incl. exported PNG) plus affected | 36 |
-| [u1](u1/) | U1 ZD redesign: full matrix with real images (L1 live photos and fusions), both themes, three viewports | see `u1/manifest.json` |
+| [u1](u1/) | U1 ZD redesign: full matrix with real images (L1 live photos and fusions), both themes, three viewports | 250 |
 
 ## States
 

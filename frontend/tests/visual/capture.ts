@@ -407,19 +407,16 @@ const STATES: State[] = [
     shows: "Generated image failed to load: fallback tile with reload",
     async setup(page) {
       await seedLiveCases(page, ["lion_tiger"]);
-      await page.waitForTimeout(800); // autosave
-      const g = await hook<{
-        nodes: Array<{
-          type: string;
-          data: { versions?: Array<{ assetId: string }> };
-        }>;
-      }>(page, "graph");
-      const generated = g.nodes.find((n) => n.type === "result")!.data.versions![0]!.assetId;
-      await page.route(new RegExp(`/assets/${generated}/content`), (r) => r.abort());
-      await page.reload();
+      // Point the version at a URL that fails, without a reload (the seeded run only exists client-side).
+      type Doc = { nodes: Array<{ type: string; data: { versions?: Array<{ imageUrl: string }> } }> };
+      const g = await hook<Doc>(page, "graph");
+      const v = g.nodes.find((n) => n.type === "result")!.data.versions![0]!;
+      v.imageUrl = `${v.imageUrl}&broken=1`;
+      await page.route(/broken=1/, (r) => r.abort());
+      await hook(page, "loadGraph", g);
       await page.locator(".plate--failed").waitFor({ timeout: 15_000 });
       await quiet(page);
-    },
+    }
   },
   {
     name: "27-panel-sections-open",
@@ -711,17 +708,18 @@ const STATES: State[] = [
     shows: "Fit view with 7 nodes (two fusions)",
     core: true,
     async setup(page) {
-      await seedLiveCases(page, ["lion_tiger"]);
-      await page.getByRole("button", { name: "Add fusion node" }).click();
+      // Mock pair first: seeding a live run freezes run polling (setRun), so it must come last.
       await add(page, ["horse", "donkey"]);
-      const fusions = page.locator(".node--fusion");
-      await fusions.nth(1).getByLabel("Connect image A").selectOption({ index: 3 });
-      await fusions.nth(1).getByLabel("Connect image B").selectOption({ index: 4 });
-      await fuse(page, 1);
+      await fuse(page);
+      await done(page);
+      currentCase = "horse_donkey";
+      // An empty Fusion node first, so the live pair is wired into its own Fusion.
+      await page.getByRole("button", { name: "Add fusion node" }).click();
+      await seedLiveCases(page, ["lion_tiger"]);
       await page.waitForFunction(() => document.querySelectorAll(".plate__img.is-loaded").length >= 2, undefined, { timeout: 30_000 });
       await fit(page);
       await quiet(page);
-    },
+    }
   },
   {
     name: "61-canvas-100-percent",
