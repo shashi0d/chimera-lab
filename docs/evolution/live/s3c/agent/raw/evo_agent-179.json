@@ -1,0 +1,436 @@
+{
+ "purpose": "evo_agent",
+ "request": {
+  "messages": [
+   {
+    "role": "system",
+    "content": "You are the design agent of Chimera Lab, a natural-history creature engine. You build one creature from two parent animals by calling tools; code tools do the work and check every step.\n\nRules:\n1. You never write a plan. Pick a candidate from propose_candidates with choose_candidate, and change it only with plan_op (typed operations). Code fills every derived field.\n2. Every call has a reason: what you decided and why, citing the rule cards the tools return when they apply.\n3. Order: resolve_animal for each parent, propose_candidates, choose_candidate, audit_plan, render, inspect.\n4. audit_plan: blocking items stop render until fixed; advice is yours to weigh.\n5. After inspect: if it passes, call finalize with that image. If it fails, choose and say why:\n   - covering or surface failures (kind \"covering\"): edit that image with those failure keys;\n   - structural failures (kind \"structural\": counts, extra or missing parts, the frame, part identity or connection, a third animal): change the plan with plan_op or choose another candidate, audit, and render again;\n   - or accept the failures and finalize, saying why.\n   An edit or a new render can make things worse: compare with images_so_far from inspect, and finalize the best image, not just the latest.\n   Two-failure rule: after two inspects in a row with covering failures, stop editing the covering. Change the plan with typed operations instead: reduce the covering's extent (plan_op set_extent with feature \"covering\", fewer zones and a stated reason), or move the donor's identity to material and color only (plan_op set_transfer_class with cls non_homologous, or drop_part, for the donor part that fails). Then audit_plan and render again. edit refuses covering fixes until the plan has changed.\n6. A host tie: choose the host yourself from the candidates' notes, with a reason (this run is not interactive: ask_user returns no answer).\n7. Limits: at most 4 renders and 30 tool calls. Near a limit, finalize your best inspected image; its remaining failures go on the card.\nKeep reasons short. Call one tool at a time."
+   },
+   {
+    "role": "user",
+    "content": "Build one creature from the parents 'red fox' (sire) and 'barn owl' (dam) in speculative mode. Start with resolve_animal for each parent."
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-29f379f1b13b4c53b05b75887ea28095",
+      "type": "function",
+      "function": {
+       "name": "resolve_animal",
+       "arguments": "{\"name\": \"red fox\", \"reason\": \"Initialize parent sire as required first step.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-29f379f1b13b4c53b05b75887ea28095",
+    "content": "{\"ok\": true, \"status\": \"resolved\", \"note\": \"\", \"slot\": \"sire\", \"animal\": {\"id\": \"red_fox\", \"common_name\": \"red fox\", \"scientific_name\": \"Vulpes vulpes\", \"class\": \"Mammalia\", \"body_plan\": \"quadruped\", \"covering\": \"fur\", \"mass_kg\": 8.5, \"habitats\": [\"desert\", \"grassland\", \"forest\", \"mountain\"], \"breathing\": \"lungs\", \"features\": [], \"features_source\": \"model-estimated (no source recorded)\", \"source\": \"database\"}}"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-7999db81337549309e6348f888149251",
+      "type": "function",
+      "function": {
+       "name": "resolve_animal",
+       "arguments": "{\"name\": \"barn owl\", \"reason\": \"Resolve second parent dam barn owl to complete pair.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-7999db81337549309e6348f888149251",
+    "content": "{\"ok\": true, \"status\": \"resolved\", \"note\": \"\", \"slot\": \"dam\", \"animal\": {\"id\": \"barn_owl\", \"common_name\": \"barn owl\", \"scientific_name\": \"Tyto alba\", \"class\": \"Aves\", \"body_plan\": \"biped|winged\", \"covering\": \"feathers\", \"mass_kg\": 0.525, \"habitats\": [\"desert\", \"grassland\", \"forest\"], \"breathing\": \"lungs\", \"features\": [], \"features_source\": \"model-estimated (no source recorded)\", \"source\": \"database\"}}"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-0dc996ae996c490a824fbcca90483601",
+      "type": "function",
+      "function": {
+       "name": "propose_candidates",
+       "arguments": "{\"reason\": \"Need to generate hybrid candidates for speculative mode fox x owl.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-0dc996ae996c490a824fbcca90483601",
+    "content": "{\"ok\": true, \"host_tie\": [\"red fox\", \"barn owl\"], \"candidates\": [{\"id\": \"C1\", \"ops\": [{\"op\": \"set_host\", \"args\": {\"animal\": \"red fox\"}}], \"score\": 2.25, \"host\": \"red fox\", \"silhouette\": \"horizontal red fox frame carried on two hind legs, barn owl wings in place of the forelegs\", \"parts\": [\"wings (forelimbs)\"], \"dropped\": [], \"identity_parts\": [], \"covering\": {\"extent\": [\"forequarters\", \"neck\"], \"plate_pattern\": \"\", \"plate_source\": \"\"}, \"licenses\": [], \"labels\": [\"speculative chimera, no real-world precedent\"], \"notes\": {\"niche\": \"habitat forest (native to red fox, barn owl)\", \"autonomy\": \"functions not carried: movement: repaired\", \"survival\": \"0 license(s) of 1: none\", \"identity\": \"covering over forequarters, neck\", \"host\": \"structural tie: red fox is one of two equal options (RC-R10-01: never by size, mass or name order)\"}}, {\"id\": \"C2\", \"ops\": [{\"op\": \"set_host\", \"args\": {\"animal\": \"barn owl\"}}], \"score\": 2.25, \"host\": \"barn owl\", \"silhouette\": \"upright barn owl frame on two legs\", \"parts\": [], \"dropped\": [], \"identity_parts\": [], \"covering\": {\"extent\": [\"back\", \"flanks\"], \"plate_pattern\": \"\", \"plate_source\": \"\"}, \"licenses\": [], \"labels\": [\"speculative chimera, no real-world precedent\"], \"notes\": {\"niche\": \"habitat forest (native to red fox, barn owl)\", \"autonomy\": \"functions not carried: movement: repaired\", \"survival\": \"0 license(s) of 1: none\", \"identity\": \"covering over back, flanks\", \"host\": \"structural tie: barn owl is one of two equal options (RC-R10-01: never by size, mass or name order)\"}}], \"note\": \"advice only: you choose; scores rank the R10 notes, nothing more\", \"cards\": [\"RC-R10-01\", \"RC-R6-08\", \"RC-R6-09\", \"RC-R10-15\"]}"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-84d62b110acd43ab8f849d2c2946bf81",
+      "type": "function",
+      "function": {
+       "name": "choose_candidate",
+       "arguments": "{\"candidate_id\": \"C1\", \"reason\": \"Select C1 with red fox as host for horizontal quadruped frame allowing owl wings as forelimbs, providing clear speculative chimera identity. Per RC-R10-01 host tie resolved by design choice not size/mass.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-84d62b110acd43ab8f849d2c2946bf81",
+    "content": "{\"ok\": true, \"chosen\": \"C1\", \"plan\": {\"plan_id\": \"crt_91e1c29473b6\", \"host\": \"red fox\", \"host_tie\": null, \"mode\": \"speculative\", \"habitat\": \"forest\", \"silhouette\": \"horizontal red fox frame carried on two hind legs, barn owl wings in place of the forelegs\", \"parts\": [\"wings (forelimbs)\"], \"identity_parts\": [], \"dropped\": [], \"licenses\": [], \"covering\": {\"extent\": [\"forequarters\", \"neck\"], \"plate_pattern\": \"\"}, \"transfers\": [{\"feature\": \"feathered wings\", \"class\": \"homologous\", \"anchor\": \"the shoulder girdle\"}]}, \"next\": \"audit_plan\"}"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-45d1453dc74a4e41b784dc69f8c2ccc5",
+      "type": "function",
+      "function": {
+       "name": "audit_plan",
+       "arguments": "{\"reason\": \"Audit current plan before rendering, per mandatory order.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-45d1453dc74a4e41b784dc69f8c2ccc5",
+    "content": "{\"ok\": true, \"blocking\": [], \"advice\": [{\"card\": \"RC-R3-03,RC-R9-13\", \"detail\": \"movement: repaired (flyer gets a deep keel and heavy chest)\"}], \"functions\": {\"breathing\": \"pass\", \"feeding\": \"pass\", \"support\": \"pass\", \"movement\": \"repaired\", \"heat\": \"pass\", \"senses\": \"pass\"}, \"fiction_budget\": {\"budget\": 1, \"licenses\": [], \"identity_parts\": []}, \"labels\": [\"speculative chimera, no real-world precedent\"], \"renderable\": true, \"cards\": [\"RC-R3-03,RC-R9-13\"]}"
+   }
+  ],
+  "tools": [
+   {
+    "type": "function",
+    "function": {
+     "name": "resolve_animal",
+     "description": "Resolve one parent name to an animal with sourced traits.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "name": {
+        "type": "string"
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "name",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "propose_candidates",
+     "description": "Ranked plan arrangements for the two resolved parents, each with R10 selection notes (niche, autonomy, survival, identity) and its reasons. Advice only.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "choose_candidate",
+     "description": "Adopt one candidate plan by id.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "candidate_id": {
+        "type": "string"
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "candidate_id",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "plan_op",
+     "description": "Change the current plan with one typed operation. Typed plan operations (args): set_host(animal); set_region(region, donor, operator) with regions head, tail, forelimbs (PICK) or neck, forequarters, back, flanks, belly, hindquarters, legs (PATCH, OVERLAY, PICK); set_habitat(name); set_mode(mode); add_license(rule, compensation); drop_part(part, reason); set_transfer_class(feature, cls); set_extent(feature, extent, reason); connect_features(a, b); set_identity_cues(feature, cues); set_identity_part(donor, part, reason). A failed operation changes nothing and returns errors with valid values.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "op": {
+        "type": "string",
+        "enum": [
+         "set_host",
+         "set_region",
+         "set_habitat",
+         "set_mode",
+         "add_license",
+         "drop_part",
+         "set_transfer_class",
+         "set_extent",
+         "connect_features",
+         "set_identity_cues",
+         "set_identity_part"
+        ]
+       },
+       "args": {
+        "type": "object"
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "op",
+       "args",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "audit_plan",
+     "description": "Audit the current plan: blocking items (hard cards, an unchosen host tie) and advice (soft cards, the function audit, the fiction budget). Required before render.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "render",
+     "description": "Render the audited plan. method single_pass (default) or growth_edit (host first, then one edit grows the covering; only for a plan with a donor covering).",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "method": {
+        "type": "string",
+        "enum": [
+         "single_pass",
+         "growth_edit"
+        ]
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "method",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "inspect",
+     "description": "Inspect an image with the plan-blind critics. Returns pass or the failures, each with a key and kind (covering or structural).",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "image_id": {
+        "type": "string"
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "image_id",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "edit",
+     "description": "One image edit turn fixing covering or surface failures of an image (keys from inspect). Structural failures need a plan change and a new render instead.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "image_id": {
+        "type": "string"
+       },
+       "failure_keys": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "image_id",
+       "failure_keys",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "ask_user",
+     "description": "Ask the user to choose (interactive runs only).",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "question": {
+        "type": "string"
+       },
+       "options": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "question",
+       "options",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "finalize",
+     "description": "Finish with this image. Any failures it still has are stated on the card.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "image_id": {
+        "type": "string"
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "image_id",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   }
+  ],
+  "tool_choice": "auto",
+  "max_tokens": 8000,
+  "model": "meta-models/muse-spark-open-1026"
+ },
+ "response": {
+  "id": "chatcmpl-77a5e67e36d44bdcb9bd4db01f22e036",
+  "choices": [
+   {
+    "finish_reason": "tool_calls",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": null,
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": [
+      {
+       "id": "chatcmpl-tool-4527108742534750879d4dac632910ca",
+       "function": {
+        "arguments": "{\"method\": \"single_pass\", \"reason\": \"Plan audited renderable, initiate single_pass render for fox-owl chimera.\"}",
+        "name": "render"
+       },
+       "type": "function"
+      }
+     ]
+    }
+   }
+  ],
+  "created": 1793558309,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 72,
+   "prompt_tokens": 3924,
+   "total_tokens": 3996,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 52,
+    "audio_tokens": 0,
+    "reasoning_tokens": 0,
+    "rejected_prediction_tokens": 88,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 3584,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

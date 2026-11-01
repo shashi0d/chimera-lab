@@ -211,5 +211,163 @@
     "host": "domestic_goat"
    }
   ]
+ },
+ {
+  "at": "2026-11-01T13:44:09",
+  "budget": {
+   "before": {
+    "image": 129,
+    "spark": 568,
+    "sam": 117,
+    "spark_baseten": 808
+   },
+   "after": {
+    "image": 133,
+    "spark": 576,
+    "sam": 122,
+    "spark_baseten": 842
+   }
+  },
+  "calls": {
+   "baseten:spark_baseten:evo_agent": {
+    "ok": 19,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_polish": {
+    "ok": 4,
+    "failed": 0
+   },
+   "meta:image:text_to_image": {
+    "ok": 4,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_describe": {
+    "ok": 4,
+    "failed": 0
+   },
+   "meta:spark:evo_describe": {
+    "ok": 4,
+    "failed": 0
+   },
+   "meta:spark:evo_ask": {
+    "ok": 4,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_ask": {
+    "ok": 4,
+    "failed": 0
+   },
+   "meta:sam:sam": {
+    "ok": 5,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_checklist": {
+    "ok": 2,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_critic": {
+    "ok": 1,
+    "failed": 0
+   }
+  },
+  "summary": [
+   {
+    "run": "fox_owl",
+    "repeat": 1,
+    "held_out": true,
+    "renders": 4,
+    "edits": 0,
+    "tool_calls": 19,
+    "stop": null,
+    "final_image": "img4",
+    "remaining": [
+     {
+      "key": "extra_spots",
+      "kind": "structural",
+      "text": "described but not planned: spots"
+     }
+    ],
+    "host": "red_fox"
+   }
+  ]
+ },
+ {
+  "at": "2026-11-01T13:48:57",
+  "budget": {
+   "before": {
+    "image": 133,
+    "spark": 576,
+    "sam": 122,
+    "spark_baseten": 842
+   },
+   "after": {
+    "image": 136,
+    "spark": 582,
+    "sam": 126,
+    "spark_baseten": 869
+   }
+  },
+  "calls": {
+   "baseten:spark_baseten:evo_agent": {
+    "ok": 15,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_polish": {
+    "ok": 3,
+    "failed": 0
+   },
+   "meta:image:text_to_image": {
+    "ok": 3,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_describe": {
+    "ok": 3,
+    "failed": 0
+   },
+   "meta:spark:evo_describe": {
+    "ok": 3,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_ask": {
+    "ok": 3,
+    "failed": 0
+   },
+   "meta:spark:evo_ask": {
+    "ok": 3,
+    "failed": 0
+   },
+   "meta:sam:sam": {
+    "ok": 4,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_checklist": {
+    "ok": 2,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_critic": {
+    "ok": 1,
+    "failed": 0
+   }
+  },
+  "summary": [
+   {
+    "run": "fox_owl",
+    "repeat": 2,
+    "held_out": true,
+    "renders": 3,
+    "edits": 0,
+    "tool_calls": 16,
+    "stop": null,
+    "final_image": "img2",
+    "remaining": [
+     {
+      "key": "frame",
+      "kind": "structural",
+      "text": "Is the overall body shape that of a red fox?"
+     }
+    ],
+    "host": "red_fox"
+   }
+  ]
  }
 ]
