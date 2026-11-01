@@ -382,3 +382,21 @@ Read `docs/evolution/ROADMAP.md` (now committed) sections 4, 5 and 5b. Caps for 
 - **Budget counter:** image 26→28, Spark 103→104 (102→103 in run 1), SAM 21→25, Spark Open 44→52 over both runs.
 
 **Part 9:** report `docs/evolution/S2_FIXPACK.md`: what changed (D-063 to D-071), the cited-trait table, the beetle-bear result (two live runs), calls by provider, budget, and notes for step 3. S2 adds 134 tests; suite 834 passed, 6 skipped.
+
+## S3a: trust layer and integration experiment (evo)
+
+- **Part 1:** `docs/evolution/benchmark/gold_set.json`, 11 existing images (6 failures, 5 goods), every label "human-provided via chat review". ROADMAP 5b gained S2 and S3a rows.
+- **Part 2:** `backend/app/evolution/critic.py`, the plan-blind protocol. It adds `describe` and `ask` to the live, Baseten and mock adapters, routes both to Spark Open with an 8000-token cap, and Meta answers as the second critic. inspect runs it; the S2 inspect is kept as `inspect_checklist`. Call counts in the tests rose by 4 Spark calls per render.
+- **Part 3:** `scripts/s3a_live.py calibrate` on the gold set, 4 iterations (`benchmark/calibration/ITERATIONS.md`).
+  - Final, confirmed live: pair 6/6 caught, 0/5 false alarms; each critic alone the same.
+  - Old critic: 3/6, 0/5.
+  - Calls: 3 live runs of 44 critic calls, plus 11 old-critic calls, plus retries.
+- **Part 4:** `citecheck.py` (tiers, quote on the fetched page, subject; PDF via pypdf) in the resolver. `s3a_live.py cite` re-verified the 4 S2 animals with no model calls: 16 of 50 citations survive (beetle 0, pangolin 7, axolotl 6, mammoth 3). Failing fields fell back to model-estimated in `data/learned_animals.json`.
+- **Part 5:** R10 doc with RC-R10-12 to 14. The research scripts accept two-digit doc numbers. `verify_research.py` is clean (0 failures); `rule_cards.json` has 112 cards.
+- **Part 6:** `test_s3a_trust.py` (37 tests). Suite 869 passed, 6 skipped; ruff clean.
+  - Process note: the part 4 and part 5 commits each went in with failing tests (6 mock-citation tests; 2 card-count tests). Both were fixed in the next commits (`4fd2745`, and the part 6 commit).
+- **Part 7:** `docs/evolution/S3a_TRUST.md`.
+- **Part 8:** `s3a_live.py experiment`, 2 pairs × 6 variants × 2 repeats.
+  - Calls: 30 images, 97 critic calls, 12 SAM, no failures.
+  - Budget counter: image 28→58, spark 104→218, SAM 25→45, Spark Open 52→178 over all of S3a.
+- **Part 9:** `benchmark/s3a_review.html` (owner ratings, JSON export) and `benchmark/s3a_contact_sheet.png`.

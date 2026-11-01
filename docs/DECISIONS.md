@@ -287,3 +287,37 @@ What happens on a failure:
 
 **D-071 Code-owned labels are checked on the finished plan only (S2 live finding).**
 Part 3 made `labels` code-owned: they leave the model schema, the skeleton's labels are copied onto a model plan, and `finish()` adds the check labels. But the pre-finish hard check of a model plan (`final=False`) still demanded the RC-R3-09 arthropod-size label and the RC-R3-02 six-limb label, which only `finish()` adds. So every large-arthropod model plan was rejected and the code skeleton used. The first live beetle x bear (run 1) hit this: "rejected, code skeleton used (RC-R3-09: arthropod parts at large size without the labeled reason)". Both label requirements now apply only when `final` is true, after `finish()` has run the physical checks that add them. The finished plan is still checked with the label required. A regression test fuses the beetle x bear in mock mode and requires `model_plan == "accepted"`.
+
+**D-072 Inspect uses a plan-blind, two-critic protocol; "uncertain" is a fail signal (S3a, ROADMAP Q3, 5b).**
+The S2 inspect reused one plan-worded checklist and missed 3 of the 6 owner-labeled failures, including the run-1 whole-beetle plate. Inspect now runs `critic.protocol` on every route:
+- **Steps:** a free description from the image alone, then counts; a balanced checklist with at least half the questions expecting "no", worded as visible features with the expected answers never sent; integration questions for protective donor coverings.
+- **Two critics:** Spark Open and Meta Spark 1.3 answer independently. Disagreement or "unclear" is `uncertain`, and counts as a failure for the edit turn and the agent.
+- **Description check:** code matches each description against the plan for extras and omissions.
+- **SAM:** it may only confirm presence.
+- **Kept:** the S2 version stays as `inspect_checklist`, the calibration baseline.
+- **Cost:** 4 Spark calls per inspect, accepted on quality grounds.
+- **Calibration:** on the gold set, confirmed on a fresh run: each critic alone and the pair catch 6/6 failures with 0/5 false alarms.
+
+**D-073 Calibration rules for the critic (S3a part 3).**
+- **Answer format:** answers come back as a bare ordered list. Copying the question text made Spark Open run to its 8000-token cap on 4 of 11 calls. A failed critic call is retried once.
+- **Description matching:** negated clauses are dropped; wing cases are plates, not wings; a feather ruff is not a mane; one dorsal stripe is not a striped coat.
+- **Integration scope:** integration questions apply only to protective coverings (RC-R10-12 scope). The presence of a soft surface patch is informational, as in S2.
+- **Hybrid frame:** real hybrids get a "mixing both parents" frame question.
+- **Record:** every iteration is in `benchmark/calibration/ITERATIONS.md`.
+
+**D-074 A web citation counts only after code verification (S3a part 4).**
+- **The checks:** a cited field stays web-cited only when all of these hold:
+  - its page is tier 1 or tier 2 in `data/source_tiers.json`;
+  - the page fetched in code (PDFs via pypdf, a new dependency) contains the model's quote;
+  - the page names the animal.
+- **Rejected and unlisted:** stores, dictionaries, children's encyclopedias and general wikis are rejected. Unlisted domains are not accepted until added with a reason.
+- **Fallback:** a failing field falls back to `model-estimated (citation not accepted: <reason>)`. For learned animals, the old citation moves to `rejected_citations`.
+- **S2 re-check:** of the 4 S2 animals, 16 of 50 citations survive. Ten fail only because the site blocks automated fetches.
+- **Not used:** an archive-copy fallback for blocked sites. It was denied as a workaround of the site's block.
+
+**D-075 Research card IDs may have two-digit doc numbers (S3a part 5).**
+Both research scripts matched `RC-R\d-` and would have skipped R10 silently. They now accept `RC-R\d+-` and sort by doc number. RC-R10-12 to 14 are added, keeping the owner's numbers; RC-R10-01 to 11 are not in the repository.
+
+**D-076 The default prompt compiler does not change after the integration experiment until the owner rates it (S3a part 8).**
+- **Findings:** rewording the covering as a replacement (V1, V2) fixes scattering on both pairs. A hard shell over fur still reads as laid on top, mostly an image-model limit. The shoulders signal is a plan conflict: the plan says back and flanks, RC-R10-13 says shoulders to hips.
+- **Proposed after the ratings:** V2 wording for protective coverings; V5 (growth by edit) only as a repair; and in the plan, a dorsal shield covering shoulders to hips.
