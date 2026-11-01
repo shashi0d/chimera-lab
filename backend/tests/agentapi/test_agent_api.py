@@ -33,7 +33,8 @@ def fx(name: str) -> dict[str, Any]:
 
 def api_settings(tmp_path: Path, **over: Any):  # type: ignore[no-untyped-def]
     base = dict(evo_mock_replay_scale=0.0, evo_runs_per_minute_per_ip=1000, evo_visitor_daily_runs=1000,
-                evo_daily_runs=1000, evo_keepalive_seconds=15.0, evo_heartbeat_seconds=0.05)
+                evo_daily_runs=1000, evo_keepalive_seconds=15.0, evo_heartbeat_seconds=0.05,
+                evo_seed_on_start=False)
     base.update(over)
     return make_settings(tmp_path, **base)
 

@@ -94,6 +94,7 @@ class Settings(BaseSettings):
     evo_public_bucket: str = "chimera-public"  # Supabase: generated images, public read
     evo_proxy_hops: int = Field(default=1, ge=0)  # trusted proxies in front of the app (X-Forwarded-For)
     frontend_dist: str = "frontend/dist"  # served at / when it exists
+    evo_seed_on_start: bool = True  # seed the showcase in the background at startup (else on first gallery read)
 
     @property
     def cors_origin_list(self) -> list[str]:

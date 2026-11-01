@@ -5,6 +5,7 @@ the frontend at / with an SPA fallback."""
 
 from __future__ import annotations
 
+import asyncio
 import logging
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
@@ -61,7 +62,10 @@ def create_app(settings: Settings | None = None, services: Services | None = Non
             n = await app.state.agent.store.interrupt_orphans()
             if n:
                 log.warning("Marked %d orphaned agent run(s) as interrupted", n)
+        seed = asyncio.create_task(app.state.agent.creatures.ensure_showcase()) if settings.evo_seed_on_start else None
         yield
+        if seed is not None:
+            seed.cancel()
         await app.state.agent.runner.shutdown()
 
     app = FastAPI(title="Chimera Lab API", version=APP_VERSION, lifespan=lifespan)

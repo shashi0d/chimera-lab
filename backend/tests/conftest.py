@@ -28,6 +28,7 @@ def make_settings(tmp_path: Path, **overrides: Any) -> Settings:
         retry_base_seconds=0.001,
         runs_per_minute_per_session=1000,
         frontend_dist=str(tmp_path / "no-frontend"),  # R1: tests that serve a frontend build their own dist
+        evo_seed_on_start=False,
     )
     base.update(overrides)
     return Settings(**base)
