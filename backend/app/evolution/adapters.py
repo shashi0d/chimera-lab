@@ -106,7 +106,8 @@ class MockRegistry:
 
     def lookup(self, image: bytes) -> str | None:
         h = ahash(image)
-        best = min(self._items, key=lambda it: bin(it[0] ^ h).count("1"), default=None)
+        # the latest of equally close renders wins (S3a: compare mode paints two near-identical mock images)
+        best = min(reversed(self._items), key=lambda it: bin(it[0] ^ h).count("1"), default=None)
         if best is None or bin(best[0] ^ h).count("1") > 24:
             return None
         return best[1]
@@ -184,6 +185,38 @@ class MockEvoSpark:
         animals = [pair.group(1), pair.group(2)] if pair else []
         return self._wire("describe", {"answers": answers, "creatures": 1 if known else 0,
                                        "animals": animals, "notes": "mock checklist"})
+
+    async def describe(self, image: bytes) -> dict[str, Any]:
+        """Mock plan-blind description (S3a): what the mock renderer painted, read back from its prompt. Counts
+        follow the silhouette words; an unrecognized image describes nothing and counts zero bodies."""
+        prompt = self.registry.lookup(image)
+        if prompt is None:
+            return self._wire("describe", {"description": "unrecognized image", "parts": [], "attached_objects": [],
+                                           "animals": [], "separate_bodies": 0, "heads": 0, "walking_legs": 0,
+                                           "wings": 0, "extra_limb_pieces": 0})
+        low = prompt.lower()
+        pair = PAIR_RE.search(prompt)
+        two_legs = bool(re.search(r"wings in place of the front legs|upright [a-z' -]+ frame|two-legged|two hind legs"
+                                  r"|on two legs", low))  # not "short upright mane"
+        wings = 0 if ("no wings" in low and "wings in place" not in low) else 2 if " wings" in low else 0
+        details = prompt.split("Details:", 1)[-1].split(". ", 1)[0]
+        parts = [{"part": p.strip(), "looks_like": "", "where": ""} for p in re.split(r"[;,]", details)
+                 if p.strip() and not re.match(r"(no|without) ", p.strip())]
+        legs = 2 if two_legs else 4
+        seen = re.sub(r"\b(no|without|not as) [^,;.]*", "", prompt)  # the painter drew what was asked, minus negations
+        return self._wire("describe", {"description": seen, "parts": parts, "attached_objects": [],
+                                       "animals": [pair.group(1), pair.group(2)] if pair else [],
+                                       "separate_bodies": 1, "heads": 1, "walking_legs": legs, "wings": wings,
+                                       "extra_limb_pieces": 1 if "tentacle" in low else 0})
+
+    async def ask(self, image: bytes, questions: list[str]) -> dict[str, Any]:
+        """Mock balanced checklist (S3a): a recognized render answers every question as the plan expects; an
+        unrecognized image is unclear throughout."""
+        from app.evolution.critic import EXPECTED
+
+        known = self.registry.lookup(image) is not None
+        answers = [{"item": q, "answer": EXPECTED.get(q, "yes") if known else "unclear"} for q in questions]
+        return self._wire("describe", {"answers": answers, "notes": "mock balanced checklist"})
 
     # E4 open world (mock knowledge: tests/fixtures/recorded/open_world.json)
 

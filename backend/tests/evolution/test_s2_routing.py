@@ -42,7 +42,7 @@ def test_plans_and_traits_stay_on_meta(method):
 
 def test_caps_are_keyed_by_request_purpose():
     c = caps()
-    assert set(c) == {"evo_identify", "evo_checklist", "evo_polish", "evo_critic"}
+    assert set(c) == {"evo_identify", "evo_checklist", "evo_polish", "evo_critic", "evo_describe", "evo_ask"}
 
 
 async def test_routed_calls_reach_their_provider_and_are_logged():

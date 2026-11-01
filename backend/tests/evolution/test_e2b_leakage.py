@@ -159,6 +159,16 @@ def _scripted_critic(engine, answers: list[list[str]]):
                 "animals": answers[min(n, len(answers) - 1)], "notes": "scripted"}
 
     engine.spark.checklist = checklist  # type: ignore[method-assign]
+    real_describe = engine.spark.describe
+    seen: list[int] = []
+
+    async def describe(image: bytes) -> dict[str, Any]:
+        """S3a: inspect's plan-blind critics (two per render) report the animals they see."""
+        seen.append(1)
+        n = (len(seen) - 1) // 2
+        return {**await real_describe(image), "animals": answers[min(n, len(answers) - 1)]}
+
+    engine.spark.describe = describe  # type: ignore[method-assign]
 
 
 async def test_third_animal_gets_one_plan_worded_edit_turn(engine):
@@ -168,11 +178,14 @@ async def test_third_animal_gets_one_plan_worded_edit_turn(engine):
     assert [a["third_animal"] for a in doc["render_attempts"]] == [["leopard"], []]
     edit = doc["render_attempts"][1]
     assert edit["prompt"] == "edit" and "leopard" not in edit["instruction"].lower()
-    assert edit["instruction"].startswith("Show the creature exactly as planned")
+    assert edit["instruction"].startswith("Show the planned golden eagle contribution only as")
     assert doc["warnings"] == [] and doc["first_image_key"] and doc["inspect"]["kept"] == "edited"
     assert doc["inspect"]["edit"]["previous_response_id"]
-    # 2 renders x (2 checklist calls + open critic) + plan + polish; SAM: silhouette + the wings presence check each
-    assert doc["meta_calls"] == {"spark": 8, "image": 2, "sam": 4}
+    third = next(r for r in doc["inspect"]["before"]["failures"] if r["key"] == "third_animal")
+    assert third["status"] == "fail"  # both plan-blind critics named the leopard
+    # 2 renders x (2 checklist calls + open critic + 2 critics x (describe + ask)) + plan + polish;
+    # SAM: silhouette + the wings presence check each
+    assert doc["meta_calls"] == {"spark": 16, "image": 2, "sam": 4}
 
 
 async def test_third_animal_twice_is_kept_with_a_warning(engine):
@@ -180,13 +193,13 @@ async def test_third_animal_twice_is_kept_with_a_warning(engine):
     _scripted_critic(engine, [["lion", "golden eagle", "zebra"]])
     doc = await engine.fuse(sire_name="lion", dam_name="eagle")
     assert len(doc["render_attempts"]) == 2  # exactly one edit turn, no loop
-    assert doc["warnings"] == ["structural miss after one edit turn: only the two parents' features"]
+    assert doc["warnings"] == ["structural miss after one edit turn: an animal other than the two parents"]
     assert doc["meta_calls"]["image"] == 2
 
 
 async def test_no_third_animal_no_rerender(engine):
     doc = await engine.fuse(sire_name="lion", dam_name="tiger")
-    assert len(doc["render_attempts"]) == 1 and doc["meta_calls"] == {"spark": 5, "image": 1, "sam": 1}  # no part
+    assert len(doc["render_attempts"]) == 1 and doc["meta_calls"] == {"spark": 9, "image": 1, "sam": 1}  # no part; S3a: + 4 critic calls
 
 
 # ------------------------------------------------------------------ 6. SAM scorer

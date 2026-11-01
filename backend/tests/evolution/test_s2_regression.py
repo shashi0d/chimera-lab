@@ -48,9 +48,10 @@ async def test_beetle_bear_with_the_full_fix_pack(e4_engine):
     assert g["card_trace"] and [x["id"] for x in g["licenses"]] == ["arthropod_large"]
     # 5: the card names the providers
     assert doc["card"]["providers"]["render"].startswith("meta:")
-    # 6: inspect ran on the plan's own structural items
-    kinds = {it["kind"] for it in doc["inspect"]["before"]["items"] if it["structural"]}
-    assert {"frame", "head", "compensation", "absent", "part", "one_body"} <= kinds
+    # 6 (S3a): inspect ran the plan-blind protocol: structure, integration and placement questions, counts
+    keys = {it["key"] for it in doc["inspect"]["before"]["items"]}
+    assert {"frame", "head", "no_wings", "whole_animal", "insect_legs", "grows_out", "on_top", "continuous",
+            "scattered", "cover_on_legs", "walking_legs", "separate_bodies"} <= keys
     assert doc["inspect"]["before"]["sam_calls"] == 1  # the head horn; absences are never SAM-tested
 
 
@@ -72,5 +73,5 @@ async def test_mythic_beetle_bear_keeps_dorsal_wings_with_a_license(e4_engine):
     from app.evolution.genome import validate_plan
 
     assert dorsal_wings(validate_plan(g), e4_engine.tax)
-    items = [it for it in doc["inspect"]["before"]["items"] if it["kind"] == "part" and it["sam"] == "wings"]
-    assert items and "four legs" in items[0]["text"]
+    items = [it for it in doc["inspect"]["before"]["items"] if it["sam"] == "wings"]
+    assert items and "four walking legs" in items[0]["text"]

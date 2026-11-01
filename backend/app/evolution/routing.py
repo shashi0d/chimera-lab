@@ -18,10 +18,11 @@ from app.evolution.data import config
 from app.models.schemas import ErrorCode
 
 METHODS = ("write_plan", "vary", "polish", "critic", "checklist", "identify", "learn_traits", "judge_functions",
-           "cite_traits")
+           "cite_traits", "describe", "ask")
 PURPOSE = {"identify": "evo_identify", "checklist": "evo_checklist", "polish": "evo_polish", "critic": "evo_critic",
            "write_plan": "evo_plan", "learn_traits": "evo_learn_traits", "judge_functions": "evo_audit",
-           "cite_traits": "evo_cite_traits", "vary": "evo_vary"}
+           "cite_traits": "evo_cite_traits", "vary": "evo_vary",
+           "describe": "evo_describe", "ask": "evo_ask"}
 
 
 def routes() -> dict[str, Any]:
@@ -105,6 +106,12 @@ class RoutedSpark:
 
     async def cite_traits(self, ident: dict[str, Any]) -> dict[str, Any]:
         return await self._call("cite_traits", ident)
+
+    async def describe(self, image: bytes) -> dict[str, Any]:
+        return await self._call("describe", image)
+
+    async def ask(self, image: bytes, questions: list[str]) -> dict[str, Any]:
+        return await self._call("ask", image, questions)
 
 
 def summarize(log: list[dict[str, Any]]) -> dict[str, Any]:

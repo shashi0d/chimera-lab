@@ -151,7 +151,7 @@ async def test_real_hybrid_uses_the_checklist_for_full_image_and_thumbnail(engin
     assert "forced_choice" not in j
     assert j["scores"]["critic"] == checklist_score(j["critic"]) == 1.0  # mock: every item visible at full size
     assert j["scores"]["thumbnail"] == checklist_score(j["critic_thumbnail"]) < 1.0  # fine detail unclear
-    assert doc["meta_calls"] == {"spark": 5, "image": 1, "sam": 1}  # 2 checklist calls + the logged open critic
+    assert doc["meta_calls"] == {"spark": 9, "image": 1, "sam": doc["meta_calls"]["sam"]}  # 2 checklist calls + the logged open critic  # S3a: + 2 plan-blind critics x (describe + ask)
     assert "animals" in j["open_critic"] and j["checklist_source"] == "known pair (hand-written)"
 
 

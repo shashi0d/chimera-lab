@@ -384,7 +384,9 @@
     "vary": {"provider": "meta"},
     "learn_traits": {"provider": "meta"},
     "cite_traits": {"provider": "meta"},
-    "judge_functions": {"provider": "meta"}
+    "judge_functions": {"provider": "meta"},
+    "describe": {"provider": "baseten", "max_tokens": 8000},
+    "ask": {"provider": "baseten", "max_tokens": 8000}
   },
   "prosaic_detail": "natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin"
 }

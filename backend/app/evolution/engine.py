@@ -23,12 +23,13 @@ from app.evolution.adapters import EvoSpark, Meter, MockEvoSpark, MockRegistry, 
 from app.evolution.audit import apply_judgment, plan_text, run_audit, uncovered
 from app.evolution.card import output_card
 from app.evolution.checks import Violation, hard_violations
+from app.evolution.critic import critics_for
 from app.evolution.data import DATA, Animal, Taxonomy, cards, taxonomy
 from app.evolution.fiction import settle
 from app.evolution.gbif import FixtureGbif, GbifClient
 from app.evolution.genome import DESIGN_MODES, TRAIT_TAGS, Genome, Trait, validate_plan
 from app.evolution.habitat import apply_habitat, choose_habitat, clear_habitat
-from app.evolution.inspect import Item, edit_instruction, inspect, plan_items
+from app.evolution.inspect import Item, edit_instruction, inspect, inspect_checklist, plan_items
 from app.evolution.judge import judge
 from app.evolution.parts import fix_parts
 from app.evolution.physics import run_checks
@@ -208,14 +209,18 @@ class EvoEngine:
         return img, await judge(img.data, g, r, self.tax, self.spark, self.segmenter, self.meter)
 
     async def _inspect(self, image: bytes, g: Genome, r: Route, verdict: dict[str, Any]) -> dict[str, Any]:
-        """S2: SAM presence for planned structural parts plus the judge's own checklist answers (no extra critic
-        call). A hand-written real-hybrid checklist is descriptive: only count and third animals are structural."""
+        """S3a: the plan-blind critic protocol with two independent critics (critic.critics_for), plus SAM presence
+        for planned parts. The judge's checklist still scores the render; it no longer decides inspect."""
+        return await inspect(image, g, self.tax, critics_for(self.spark), self.segmenter, self.meter, r)
+
+    async def _inspect_checklist(self, image: bytes, g: Genome, r: Route, verdict: dict[str, Any]) -> dict[str, Any]:
+        """S2 inspect (the calibration baseline): SAM presence plus the judge's own checklist answers."""
         if verdict.get("checklist_source", "").startswith("known pair"):
             items = [Item(t, "pad", False) for t in verdict["checklist"]]
         else:
             items = [i for i in plan_items(g, self.tax) if i.text in verdict["checklist"]]
-        return await inspect(image, g, self.tax, items, verdict["critic"], verdict["third_animal"], self.segmenter,
-                             self.meter)
+        return await inspect_checklist(image, g, self.tax, items, verdict["critic"], verdict["third_animal"],
+                                       self.segmenter, self.meter)
 
     async def _judge_functions(self, g: Genome) -> None:
         """4.5b: one Muse Spark call for every audit function no card covers, before the render."""

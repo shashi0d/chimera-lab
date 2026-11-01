@@ -142,9 +142,38 @@ def _fill(mask_png: bytes) -> float:
     return sum(1 for p in px if p > 127) / len(px)
 
 
-async def inspect(image: bytes, g: Genome, tax: Taxonomy, items: list[Item], critic: dict[str, Any],
-                  third: list[str], seg: Any, meter: Any) -> dict[str, Any]:
-    """Judge each structural item from the critic's answers (by order) plus SAM presence checks. `critic` is the
+async def inspect(image: bytes, g: Genome, tax: Taxonomy, critics: dict[str, Any], seg: Any, meter: Any,
+                  route: Any = None) -> dict[str, Any]:
+    """S3a: the plan-blind critic protocol (critic.protocol: describe first, counts, a balanced checklist,
+    integration questions, two independent critics, description matched against the plan), plus SAM presence for
+    planned parts. A row is a failure when it fails or is uncertain (the critics disagree or one cannot tell): the
+    agent treats "uncertain" as a fail signal. SAM can turn a positive part question into a pass (it finds named parts
+    reliably, S1), but an empty mask never fails anything on its own."""
+    from app.evolution.critic import protocol
+
+    result, raws = await protocol(image, g, tax, critics, meter, route)
+    sam_calls = 0
+    for row in result["rows"]:
+        row["sam_found"] = row["sam_fill"] = None
+        if row.get("sam") and row["expect"] == "yes":
+            mask = await meter.call("sam", "inspect", seg.segment(image, row["sam"]))
+            sam_calls += 1
+            row["sam_fill"] = round(_fill(mask), 4)
+            row["sam_found"] = row["sam_fill"] >= PRESENT_FILL
+            if row["status"] != "pass" and row["sam_found"]:
+                row["status"], row["note"] = "pass", "SAM confirms presence"
+    failures = [r for r in result["rows"] if r["status"] in ("fail", "uncertain")]
+    return {"protocol": "plan-blind (S3a)", "critics": result["critics"], "items": result["rows"],
+            "failures": failures, "structural_failures": len(failures),
+            "uncertain": sum(1 for r in failures if r["status"] == "uncertain"), "sam_calls": sam_calls,
+            "descriptions": result["descriptions"], "matches": result["matches"],
+            "third_animals": result["third_animals"], "balance": result["balance"],
+            "expected_counts": result["expected_counts"]}
+
+
+async def inspect_checklist(image: bytes, g: Genome, tax: Taxonomy, items: list[Item], critic: dict[str, Any],
+                            third: list[str], seg: Any, meter: Any) -> dict[str, Any]:
+    """S2 inspect (kept as the calibration baseline, "the old critic"). Judge each structural item from the critic's answers (by order) plus SAM presence checks. `critic` is the
     full-image checklist answer the judge already made for the same items; SAM runs once per presence item."""
     answers = {a["item"]: a["answer"] for a in critic.get("answers") or [] if isinstance(a, dict)}
     rows: list[dict[str, Any]] = []

@@ -119,6 +119,91 @@ CHECKLIST_INSTRUCTIONS = (
     "everyday English common names, at most three. notes: one short sentence."
 )
 
+# ------------------------------------------------------------------ S3a: plan-blind critic protocol
+
+DESCRIBE_SCHEMA = _obj({
+    "description": _STR,
+    "parts": {"type": "array", "items": _obj({"part": _STR, "looks_like": _STR, "where": _STR})},
+    "attached_objects": _STRS,
+    "animals": _STRS,
+    "separate_bodies": {"type": "integer"},
+    "heads": {"type": "integer"},
+    "walking_legs": {"type": "integer"},
+    "wings": {"type": "integer"},
+    "extra_limb_pieces": {"type": "integer"},
+})
+DESCRIBE_INSTRUCTIONS = (
+    "You look at one picture with no other context and describe exactly what is drawn, like a careful field "
+    "naturalist. Do not guess what was intended; describe only what is visible. description: a free paragraph "
+    "describing the whole creature first. parts: every body part you see, one entry each (head, horns, ears, mane, "
+    "legs, feet, tail, wings, gills, tentacles, shell, plates, scales, feathers, markings), with what it looks like "
+    "and where it is. attached_objects: anything that looks attached to or sitting on the body rather than part of "
+    "it, such as an object, an armor piece or a whole small animal; empty if none. animals: every real animal whose "
+    "features you can see, as everyday English common names, at most four; include any animal that only one part "
+    "resembles. Then count, looking carefully: separate_bodies: separate animal bodies or body-shaped objects in the "
+    "picture, including any whole animal or animal-shaped object attached to or sitting on the main creature. heads: "
+    "heads of any kind. walking_legs: legs the creature stands or walks on, including hidden ones you can infer. "
+    "wings: wings of any kind. extra_limb_pieces: jointed leg-like, claw-like or tentacle-like pieces other than the "
+    "walking legs and the tail."
+)
+ASK_SCHEMA = _obj({"answers": {"type": "array", "items": _obj({"item": _STR, "answer": {"type": "string",
+                                                                                     "enum": list(ANSWERS)}})},
+                   "notes": _STR})
+ASK_INSTRUCTIONS = (
+    "You look at one picture of a creature and answer questions about it. Answer each question on its own: yes if "
+    "the picture clearly shows it, no if it clearly does not, unclear if you cannot tell. Many questions describe "
+    "things that should not be there, so do not lean toward yes. Judge only what is visible. Copy each question's "
+    "text exactly into item, in the given order. notes: one short sentence."
+)
+
+
+def build_describe_request(model: str, image: bytes) -> dict[str, Any]:
+    return {"model": model, "messages": [
+        {"role": "system", "content": DESCRIBE_INSTRUCTIONS},
+        {"role": "user", "content": [{"type": "text", "text": "Describe this creature, then count."},
+                                     {"type": "image_url", "image_url": {"url": _data_url(image)}}]},
+    ], "response_format": _json_schema("plan_blind_describe", DESCRIBE_SCHEMA), "temperature": 0}
+
+
+def build_ask_request(model: str, image: bytes, questions: list[str]) -> dict[str, Any]:
+    listing = "\n".join(f"{i}. {q}" for i, q in enumerate(questions, 1))
+    return {"model": model, "messages": [
+        {"role": "system", "content": ASK_INSTRUCTIONS},
+        {"role": "user", "content": [{"type": "text", "text": f"Questions:\n{listing}"},
+                                     {"type": "image_url", "image_url": {"url": _data_url(image)}}]},
+    ], "response_format": _json_schema("balanced_checklist", ASK_SCHEMA), "temperature": 0}
+
+
+def _int(v: Any) -> int | None:
+    try:
+        return int(v)
+    except (TypeError, ValueError):
+        return None
+
+
+def parse_describe_response(payload: dict[str, Any]) -> dict[str, Any]:
+    data = _message_json(payload)
+    parts = [{"part": str(p.get("part", "")), "looks_like": str(p.get("looks_like", "")), "where": str(p.get("where", ""))}
+             for p in data.get("parts") or [] if isinstance(p, dict)]
+    out: dict[str, Any] = {"description": str(data.get("description") or ""), "parts": parts,
+                           "attached_objects": [str(x) for x in data.get("attached_objects") or []],
+                           "animals": [str(x) for x in data.get("animals") or []]}
+    for k in ("separate_bodies", "heads", "walking_legs", "wings", "extra_limb_pieces"):
+        out[k] = _int(data.get(k))
+    return out
+
+
+def parse_ask_response(payload: dict[str, Any], questions: list[str]) -> dict[str, Any]:
+    """Matched by order, like the checklist; a missing or invalid answer is "unclear"."""
+    data = _message_json(payload)
+    got = [a for a in data.get("answers") or [] if isinstance(a, dict)]
+    answers = []
+    for i, q in enumerate(questions):
+        a = str(got[i].get("answer", "")).lower() if i < len(got) else ""
+        answers.append({"item": q, "answer": a if a in ANSWERS else "unclear"})
+    return {"answers": answers, "notes": str(data.get("notes") or "")}
+
+
 # ------------------------------------------------------------------ E4: open world and audit
 
 KINDS = ("species", "breed", "extinct", "ambiguous", "not_animal", "plant", "human", "mythic")
@@ -499,6 +584,15 @@ class LiveEvoSpark(_Retrying):
     async def checklist(self, image: bytes, items: list[str]) -> dict[str, Any]:
         body = build_checklist_request(self.model_id, image, items)
         return parse_checklist_response(await self._chat("evo_checklist", body), items)
+
+    async def describe(self, image: bytes) -> dict[str, Any]:
+        """S3a: the plan-blind free description plus counts."""
+        return parse_describe_response(await self._chat("evo_describe", build_describe_request(self.model_id, image)))
+
+    async def ask(self, image: bytes, questions: list[str]) -> dict[str, Any]:
+        """S3a: the balanced checklist (expected answers are never sent)."""
+        body = build_ask_request(self.model_id, image, questions)
+        return parse_ask_response(await self._chat("evo_ask", body), questions)
 
     async def identify(self, name: str | None = None, image: bytes | None = None) -> dict[str, Any]:
         return parse_identify_response(await self._chat("evo_identify", build_identify_request(self.model_id, name, image)))

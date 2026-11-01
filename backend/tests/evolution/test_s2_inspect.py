@@ -17,9 +17,10 @@ from PIL import Image
 
 from app.adapters.meta.client import build_generate_request
 from app.errors import ChimeraError
+from app.evolution.critic import EXPECTED, questions
 from app.evolution.engine import EvoEngine
 from app.evolution.genome import validate_plan
-from app.evolution.inspect import Item, edit_instruction, inspect, plan_items
+from app.evolution.inspect import Item, edit_instruction, inspect_checklist, plan_items
 from app.models.schemas import ErrorCode
 from app.services import build_services
 from tests.conftest import make_settings
@@ -90,13 +91,13 @@ def test_e4_beetle_plan_items(e4_engine):
     assert items["one_body"].text.startswith("only parts and materials of the european rhinoceros beetle")
 
 
-# ------------------------------------------------------------------ inspect rules
+# ------------------------------------------------------------------ inspect rules (S2 baseline, kept as inspect_checklist)
 
 
 async def test_sam_confirms_a_part_the_critic_missed(engine):
     g, _ = plan_for(engine, "lion", "eagle")
     items = plan_items(g, engine.tax)
-    out = await inspect(b"img", g, engine.tax, items, _critic(items, {"part": "no"}), [], Seg({"wings": True}), Meter())
+    out = await inspect_checklist(b"img", g, engine.tax, items, _critic(items, {"part": "no"}), [], Seg({"wings": True}), Meter())
     part = next(r for r in out["items"] if r["kind"] == "part")
     assert part["sam_found"] and part["status"] == "pass" and out["failures"] == []
 
@@ -104,14 +105,14 @@ async def test_sam_confirms_a_part_the_critic_missed(engine):
 async def test_critic_no_and_no_mask_fails(engine):
     g, _ = plan_for(engine, "lion", "eagle")
     items = plan_items(g, engine.tax)
-    out = await inspect(b"img", g, engine.tax, items, _critic(items, {"part": "no"}), [], Seg({}), Meter())
+    out = await inspect_checklist(b"img", g, engine.tax, items, _critic(items, {"part": "no"}), [], Seg({}), Meter())
     assert [f["kind"] for f in out["failures"]] == ["part"]
 
 
 async def test_an_empty_mask_alone_never_proves_absence(engine):
     g, _ = plan_for(engine, "lion", "eagle")
     items = plan_items(g, engine.tax)
-    out = await inspect(b"img", g, engine.tax, items, _critic(items, {}), [], Seg({}), Meter())
+    out = await inspect_checklist(b"img", g, engine.tax, items, _critic(items, {}), [], Seg({}), Meter())
     part = next(r for r in out["items"] if r["kind"] == "part")
     assert part["sam_found"] is False and part["status"] == "pass" and out["failures"] == []
 
@@ -120,7 +121,7 @@ async def test_absences_and_separate_bodies_come_from_the_critic(e4_engine):
     g = _e4_plan(e4_engine)
     items = plan_items(g, e4_engine.tax)
     seg = Seg({"head horn": True})
-    out = await inspect(b"img", g, e4_engine.tax, items, _critic(items, {"absent": "no", "one_body": "no"}), [], seg,
+    out = await inspect_checklist(b"img", g, e4_engine.tax, items, _critic(items, {"absent": "no", "one_body": "no"}), [], seg,
                         Meter())
     assert sorted(f["kind"] for f in out["failures"]) == ["absent", "one_body"]
     assert "wings" not in seg.seen  # absences are never SAM-tested, so no mask can be read as proof
@@ -129,7 +130,7 @@ async def test_absences_and_separate_bodies_come_from_the_critic(e4_engine):
 async def test_two_creatures_and_a_third_animal_fail(engine):
     g, _ = plan_for(engine, "lion", "eagle")
     items = plan_items(g, engine.tax)
-    out = await inspect(b"img", g, engine.tax, items, _critic(items, {}, creatures=2), ["leopard"], Seg({}), Meter())
+    out = await inspect_checklist(b"img", g, engine.tax, items, _critic(items, {}, creatures=2), ["leopard"], Seg({}), Meter())
     assert [f["kind"] for f in out["failures"]] == ["count", "third_animal"]
 
 
@@ -149,7 +150,7 @@ async def test_the_fix_is_worded_from_the_plan_not_the_symptom(e4_engine):
     assert s1_text.startswith("Remove the beetle bodies")  # S1: symptom-worded, and it removed the planned plates
     g = _e4_plan(e4_engine)
     items = plan_items(g, e4_engine.tax)
-    out = await inspect(b"img", g, e4_engine.tax, items, _critic(items, {"one_body": "no"}), [], Seg({}), Meter())
+    out = await inspect_checklist(b"img", g, e4_engine.tax, items, _critic(items, {"one_body": "no"}), [], Seg({}), Meter())
     text = edit_instruction(out["failures"])
     assert text.startswith("Show the planned european rhinoceros beetle contribution only as hard, glossy chitin plates")
     assert "not as separate animals" in text and "remove" not in text.lower()
@@ -160,7 +161,7 @@ async def test_the_fix_is_worded_from_the_plan_not_the_symptom(e4_engine):
 async def test_no_instruction_is_worded_from_a_symptom(e4_engine, kinds):
     g = _e4_plan(e4_engine)
     items = plan_items(g, e4_engine.tax)
-    out = await inspect(b"img", g, e4_engine.tax, items, _critic(items, kinds), ["zebra"], Seg({}), Meter())
+    out = await inspect_checklist(b"img", g, e4_engine.tax, items, _critic(items, kinds), ["zebra"], Seg({}), Meter())
     text = edit_instruction(out["failures"], limit=10)
     assert text and not any(w in text.lower() for w in ("remove", "delete", "zebra", "get rid"))
     assert all(f["fix"].startswith(("Show", "The plan has")) for f in out["failures"])
@@ -170,17 +171,18 @@ async def test_no_instruction_is_worded_from_a_symptom(e4_engine, kinds):
 
 
 def _script(engine, per_render: list[dict[str, str]]):
-    """Checklist answers by item kind for each render (full image and thumbnail share them)."""
+    """S3a: balanced-checklist answers by question id for each render (both plan-blind critics answer alike);
+    unlisted questions get their expected answer."""
     calls: list[int] = []
 
-    async def checklist(image: bytes, items: list[str]) -> dict[str, Any]:
+    async def ask(image: bytes, texts: list[str]) -> dict[str, Any]:
         calls.append(1)
-        kinds = {i.text: i.kind for i in plan_items(engine._last_plan, engine.tax)}
+        ids = {q.text: q.id for q in questions(engine._last_plan, engine.tax)}
         ans = per_render[min((len(calls) - 1) // 2, len(per_render) - 1)]
-        return {"answers": [{"item": t, "answer": ans.get(kinds.get(t, ""), "yes")} for t in items],
-                "creatures": 1, "animals": []}
+        return {"answers": [{"item": t, "answer": ans.get(ids.get(t, ""), EXPECTED.get(t, "yes"))} for t in texts],
+                "notes": "scripted"}
 
-    engine.spark.checklist = checklist  # type: ignore[method-assign]
+    engine.spark.ask = ask  # type: ignore[method-assign]
     real = engine.realize
 
     async def realize(g, r, refs):
@@ -199,7 +201,7 @@ class NoSeg:
 
 async def test_a_structural_miss_gets_one_edit_and_is_fixed(engine):
     engine.segmenter = NoSeg()
-    _script(engine, [{"part": "no"}, {}])
+    _script(engine, [{"wings_front": "no"}, {}])
     doc = await engine.fuse(sire_name="lion", dam_name="eagle")
     assert [a["prompt"] for a in doc["render_attempts"]][1] == "edit" and doc["inspect"]["kept"] == "edited"
     assert doc["inspect"]["after"]["failures"] == [] and doc["warnings"] == []
@@ -209,16 +211,17 @@ async def test_a_structural_miss_gets_one_edit_and_is_fixed(engine):
 
 async def test_still_failing_after_one_edit_is_kept_with_a_warning(engine):
     engine.segmenter = NoSeg()
-    _script(engine, [{"part": "no"}])
+    _script(engine, [{"wings_front": "no"}])
     doc = await engine.fuse(sire_name="lion", dam_name="eagle")
     assert len(doc["render_attempts"]) == 2 and doc["meta_calls"]["image"] == 2  # one edit, no loop
-    assert doc["warnings"] == ["structural miss after one edit turn: golden eagle wings in place of the front legs"]
+    assert doc["warnings"] == ["structural miss after one edit turn: Does it have golden eagle wings in place of its "
+                               "front legs?"]
     assert doc["inspect"]["kept"] == "edited"
 
 
 async def test_an_edit_that_makes_it_worse_keeps_the_first_render(engine):
     engine.segmenter = NoSeg()
-    _script(engine, [{"part": "no"}, {"part": "no", "frame": "no"}])
+    _script(engine, [{"wings_front": "no"}, {"wings_front": "no", "frame": "no"}])
     doc = await engine.fuse(sire_name="lion", dam_name="eagle")
     assert doc["inspect"]["kept"] == "first" and doc["image_key"] != doc["first_image_key"]
     assert "first render kept" in doc["warnings"][0]
@@ -226,7 +229,7 @@ async def test_an_edit_that_makes_it_worse_keeps_the_first_render(engine):
 
 async def test_a_failed_edit_call_keeps_the_first_render(engine, monkeypatch):
     engine.segmenter = NoSeg()
-    _script(engine, [{"part": "no"}])
+    _script(engine, [{"wings_front": "no"}])
     real = engine.renderer.generate
 
     async def gen(prompt, refs, aspect, previous_response_id=None):
@@ -241,7 +244,7 @@ async def test_a_failed_edit_call_keeps_the_first_render(engine, monkeypatch):
 
 async def test_a_budget_stop_during_the_edit_is_raised(engine, monkeypatch):
     engine.segmenter = NoSeg()
-    _script(engine, [{"part": "no"}])
+    _script(engine, [{"wings_front": "no"}])
     real = engine.renderer.generate
 
     async def gen(prompt, refs, aspect, previous_response_id=None):
@@ -259,6 +262,10 @@ async def test_a_clean_render_makes_no_edit(engine):
     assert doc["inspect"]["edit"] is None and len(doc["render_attempts"]) == 1
 
 
-async def test_real_hybrid_checklists_are_descriptive_only(engine):
+async def test_real_hybrids_get_the_plan_blind_protocol_too(engine):
+    # S3a: the hand-written pair checklist still scores the render, but inspect runs the balanced protocol on every
+    # route; a mule is asked about stripes and spots (planned plain) and must not grow wings.
     doc = await engine.fuse(sire_name="donkey", dam_name="horse")
-    assert all(not it["structural"] for it in doc["inspect"]["before"]["items"])
+    keys = {it["key"] for it in doc["inspect"]["before"]["items"]}
+    assert {"no_wings", "whole_animal", "plain_fur", "walking_legs"} <= keys
+    assert doc["inspect"]["before"]["failures"] == [] and doc["inspect"]["edit"] is None

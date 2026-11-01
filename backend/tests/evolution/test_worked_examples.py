@@ -95,7 +95,7 @@ async def test_worked_examples_through_fuse(engine, sire, dam):
         assert prompt.startswith("Silhouette: ") and "Habitat cue" in prompt
     assert "fully visible" in prompt and "discernible eyes" in prompt and "One creature, full body" in prompt
     sam = 1 + sum(1 for it in doc["inspect"]["before"]["items"] if it["sam"])  # S2: silhouette + part presence
-    assert doc["meta_calls"] == {"spark": 5, "image": 1, "sam": sam}  # E4: plus the logged open critic
+    assert doc["meta_calls"] == {"spark": 9, "image": 1, "sam": sam}  # E4: plus the logged open critic  # S3a: + 2 plan-blind critics x (describe + ask)
     assert doc["model_plan"] == "accepted"
     assert 0 <= doc["genome"]["scores"]["quality"] <= 1
     card = doc["card"]
