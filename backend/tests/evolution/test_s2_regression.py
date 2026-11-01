@@ -54,6 +54,17 @@ async def test_beetle_bear_with_the_full_fix_pack(e4_engine):
     assert doc["inspect"]["before"]["sam_calls"] == 1  # the head horn; absences are never SAM-tested
 
 
+async def test_a_model_plan_for_a_large_arthropod_pair_is_not_rejected_for_a_code_owned_label(e4_engine):
+    # S2 live finding: labels became code-owned (part 3), but the pre-finish check still demanded the RC-R3-09
+    # label, which only finish() adds; every large-arthropod model plan was rejected. Labels are now checked
+    # on the finished plan only.
+    doc = await e4_engine.fuse(sire_name="rhinoceros beetle", dam_name="brown bear", mode="speculative")
+    assert doc["model_plan"] == "accepted"
+    from app.evolution.physics import LABEL_ARTHROPOD
+
+    assert LABEL_ARTHROPOD in doc["genome"]["labels"]
+
+
 async def test_mythic_beetle_bear_keeps_dorsal_wings_with_a_license(e4_engine):
     doc = await e4_engine.fuse(sire_name="rhinoceros beetle", dam_name="brown bear", mode="mythic")
     g = doc["genome"]

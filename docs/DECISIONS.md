@@ -284,3 +284,6 @@ What happens on a failure:
 - **Errors:** an edit-call error keeps the first render, with a warning; a budget stop is raised.
 - **Records:** the document carries `inspect` (before, edit, after, kept) and `response_id`.
 - **Mock:** the mock image generator supports `previous_response_id` edits.
+
+**D-071 Code-owned labels are checked on the finished plan only (S2 live finding).**
+Part 3 made `labels` code-owned: they leave the model schema, the skeleton's labels are copied onto a model plan, and `finish()` adds the check labels. But the pre-finish hard check of a model plan (`final=False`) still demanded the RC-R3-09 arthropod-size label and the RC-R3-02 six-limb label, which only `finish()` adds. So every large-arthropod model plan was rejected and the code skeleton used. The first live beetle x bear (run 1) hit this: "rejected, code skeleton used (RC-R3-09: arthropod parts at large size without the labeled reason)". Both label requirements now apply only when `final` is true, after `finish()` has run the physical checks that add them. The finished plan is still checked with the label required. A regression test fuses the beetle x bear in mock mode and requires `model_plan == "accepted"`.

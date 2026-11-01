@@ -1,0 +1,109 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Silhouette: Four-legged brown bear frame. Host frame: the brown bear sets the outline, body size and overall frame. A single creature combining a european rhinoceros beetle and a brown bear. The head is that of the brown bear, fully visible and uncluttered, with clear, discernible eyes. Details: brown bear body and legs, with its own dense fur everywhere else, plain coat with no stripes or spots; from the european rhinoceros beetle, as parts and materials on the brown bear's own body: a single curved horn of hard, glossy chitin rising from the brow, and hard, glossy chitin plates with fine seams in its own colors, in a few large patches over the back and flanks, with clean edges and unchanged color and surface inside each patch. Coat texture and patches follow the body outline. Declared fiction: arthropod parts at large size, shown with thick supporting legs and visible breathing openings along the flanks. Bilaterally symmetrical, with recognizable limbs and visible sense organs. Habitat cue (forest): dark back and light belly with mild countershading. Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "id": "resp_6ae6abd1c9e3079627fe4951",
+  "access_programs": null,
+  "created_at": 1793502161.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae6abd139d91d20e8e54538",
+    "summary": [
+     {
+      "text": "**Designing hybrid creature concept**\nI'm shaping the fictional hybrid by keeping a brown bear silhouette and head with dense fur, then adding a single curved beetle horn and glossy chitin plates in large patches along the back and flanks.\n**Composing natural history illustration**\nI'm planning a full-body, side three-quarter natural history illustration with a brown bear body, chitin plates, a single curved brow horn, and visible flank spiracles, set on a plain light background with natural lighting and soft shadow.\n**Finalizing illustration prompt**\nI'm assembling the final prompt for a natural history illustration, weaving in the two reference images to guide the subject, details, and overall composition.\n**Refining illustration prompt**\nI'm adjusting the prompt to make the image feel more natural and less mechanical, then preparing to generate the second version.\n**Refining image generation prompt**\nI'm simplifying the prompt to get a more natural, cohesive result, building on the version that worked better while avoiding the segmented look from earlier.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae6abd1364db78ff2cb44af",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0xZSkJqUlNvbVd5R1FjR0FJQXdFWFFsWTlRMmJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczo3NDhlNDVhOS1mNWEzLTRhYTUtOGQwNy0zNWE3OWM3NDQwYzk6R09sSDNUTU1xcFJwRVlvR0FNYUxJWWRCV241MGJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM1MDIxNjF9.Q8WLFwHF1qMbxejW_tobZqTKSBg3",
+    "result": "<elided> (894460 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 42743,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 29440
+   },
+   "output_tokens": 4298,
+   "output_tokens_details": {
+    "reasoning_tokens": 595
+   },
+   "total_tokens": 47041
+  },
+  "user": null
+ }
+}

@@ -81,7 +81,53 @@ async def part_cite() -> None:
     finish("cited", calls, before, {"reports": reports})
 
 
-PARTS = {"cite": part_cite}
+class MaskTap:
+    """Keeps every SAM mask (label, png) so the report can show what SAM found."""
+
+    def __init__(self, inner: Any) -> None:
+        self.inner, self.model_id, self.masks = inner, inner.model_id, []
+
+    async def segment(self, image: bytes, label: str) -> bytes:
+        out = await self.inner.segment(image, label)
+        self.masks.append((label, out))
+        return out
+
+
+async def part_beetlebear() -> None:
+    eng, calls, before = setup("beetlebear", "s2_beetlebear_run2")  # run 1 used .localdata/s2_beetlebear
+    tap = MaskTap(eng.segmenter)
+    eng.segmenter = tap
+    out = OUT / "beetlebear"
+    current_step.set("s2:beetlebear")
+    doc = await eng.fuse(sire_name="rhinoceros beetle", dam_name="brown bear", mode="speculative", seed=0)
+    files = eng.services.settings.resolved_local_dir() / "files"
+    w(out / "image.webp", (files / doc["image_key"]).read_bytes())
+    if doc.get("first_image_key"):
+        w(out / "image_before_edit.webp", (files / doc["first_image_key"]).read_bytes())
+    for i, (label, png) in enumerate(tap.masks, 1):
+        w(out / "masks" / f"{i:02d}_{label.replace(' ', '_')}.png", png)
+    w(out / "plan.json", doc["genome"])
+    w(out / "prompt_compiled.txt", doc["prompt_compiled"])
+    w(out / "prompt_final.txt", doc["prompt"])
+    w(out / "judge.json", doc["judge"])
+    w(out / "inspect.json", doc["inspect"])
+    w(out / "card.json", doc["card"])
+    beetle = eng.tax.resolve("european_rhinoceros_beetle")
+    w(out / "beetle_traits.json", {"public": beetle.public()})
+    print("model plan:", doc.get("model_plan"), "| polish:", doc.get("polish"))
+    print("scores:", doc["genome"]["scores"], "| warnings:", doc["warnings"])
+    print("inspect before:", [(r["text"][:60], r["status"]) for r in doc["inspect"]["before"]["items"]])
+    if doc["inspect"]["edit"]:
+        print("edit:", doc["inspect"]["edit"]["instruction"])
+        print("inspect after:", [(r["text"][:60], r["status"]) for r in doc["inspect"]["after"]["items"]])
+    print("providers:", doc["providers"])
+    finish("beetlebear", calls, before, {"model_plan": doc.get("model_plan"), "polish": doc.get("polish"),
+                                         "meta_calls": doc["meta_calls"], "warnings": doc["warnings"],
+                                         "render_attempts": doc["render_attempts"], "providers": doc["providers"],
+                                         "spark_log": getattr(eng.spark, "log", [])})
+
+
+PARTS = {"cite": part_cite, "beetlebear": part_beetlebear}
 
 if __name__ == "__main__":
     if len(sys.argv) != 2 or sys.argv[1] not in PARTS:

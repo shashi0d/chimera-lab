@@ -194,3 +194,19 @@ Every real Meta API call made by L1 (appended automatically by `backend/app/adap
 | 2026-11-01T02:42:55+00:00 | s2:cite:chinese pangolin | evo_cite_traits | muse-spark-1.3 | 57433 | 568443 | 9384 | 577827 | ok | resp_6ae6a6f41a2a98abc6414ecf |
 | 2026-11-01T02:43:54+00:00 | s2:cite:rhinoceros beetle | evo_cite_traits | muse-spark-1.3 | 59343 | 321183 | 6835 | 328018 | ok | resp_6ae6a72e457124c0c57f4787 |
 | 2026-11-01T02:45:06+00:00 | s2:cite:woolly mammoth | evo_cite_traits | muse-spark-1.3 | 72356 | 531783 | 10563 | 542346 | ok | resp_6ae6a76983b00a67ebe74e01 |
+| 2026-11-01T03:01:51+00:00 | s2:beetlebear | evo_plan | meta/muse-spark-1.3 | 16230 | 5558 | 3866 | 9424 | ok | chatcmpl-01a1950e-60ab-76c9-91d8-7da969162f25 |
+| 2026-11-01T03:01:59+00:00 | s2:beetlebear | evo_polish | baseten/meta-models/muse-spark-open-1026 | 8151 | 489 | 3863 | 4352 | ok | chatcmpl-de3a062e81f24977b1cdcd8b38ad8a82 |
+| 2026-11-01T03:02:43+00:00 | s2:beetlebear | text_to_image | meta/muse-image-1.0 | 43758 | 42743 | 4298 | 47041 | ok | resp_6ae6abd1c9e3079627fe4951 |
+| 2026-11-01T03:02:56+00:00 | s2:beetlebear | evo_checklist | baseten/meta-models/muse-spark-open-1026 | 13603 | 3721 | 1902 | 5623 | ok | chatcmpl-c60df5684c5b4d3589efdc8ae9d3bc71 |
+| 2026-11-01T03:03:01+00:00 | s2:beetlebear | sam | meta/sam-3.1 | 4497 | 0 | 0 | 0 | ok | resp_6ae6abe0f557d92d77e042e3 |
+| 2026-11-01T03:03:15+00:00 | s2:beetlebear | evo_checklist | baseten/meta-models/muse-spark-open-1026 | 7057 | 393 | 1673 | 2066 | ok | chatcmpl-b6ee9fa36fbd416fb812618283e2fc78 |
+| 2026-11-01T03:03:25+00:00 | s2:beetlebear | evo_critic | baseten/meta-models/muse-spark-open-1026 | 10371 | 3595 | 1154 | 4749 | ok | chatcmpl-bae593515e714221a935bd70fc71458d |
+| 2026-11-01T03:03:27+00:00 | s2:beetlebear | sam | meta/sam-3.1 | 1881 | 0 | 0 | 0 | ok | resp_6ae6abfda16a0d073d1c48f4 |
+| 2026-11-01T03:05:50+00:00 | s2:beetlebear | evo_plan | meta/muse-spark-1.3 | 17109 | 5558 | 4241 | 9799 | ok | chatcmpl-01a19512-07f4-71f8-9579-7a1745274f2e |
+| 2026-11-01T03:05:59+00:00 | s2:beetlebear | evo_polish | baseten/meta-models/muse-spark-open-1026 | 8812 | 489 | 4293 | 4782 | ok | chatcmpl-e0d1c03c0e724fb790e67987a127e32f |
+| 2026-11-01T03:06:32+00:00 | s2:beetlebear | text_to_image | meta/muse-image-1.0 | 32929 | 29633 | 2713 | 32346 | ok | resp_6ae6acb6b04d30a230b54b03 |
+| 2026-11-01T03:06:46+00:00 | s2:beetlebear | evo_checklist | baseten/meta-models/muse-spark-open-1026 | 14305 | 3721 | 2013 | 5734 | ok | chatcmpl-2a8bc15207b243b589d0055a230e0379 |
+| 2026-11-01T03:06:50+00:00 | s2:beetlebear | sam | meta/sam-3.1 | 3703 | 0 | 0 | 0 | ok | resp_6ae6acc6b18cfb6cec8d49db |
+| 2026-11-01T03:07:07+00:00 | s2:beetlebear | evo_checklist | baseten/meta-models/muse-spark-open-1026 | 9296 | 393 | 2649 | 3042 | ok | chatcmpl-27586fce10b44bf3b1bca84ab225dd0f |
+| 2026-11-01T03:07:18+00:00 | s2:beetlebear | evo_critic | baseten/meta-models/muse-spark-open-1026 | 10964 | 3595 | 834 | 4429 | ok | chatcmpl-b0b61a8104084920b60af9db999545b2 |
+| 2026-11-01T03:07:20+00:00 | s2:beetlebear | sam | meta/sam-3.1 | 1513 | 0 | 0 | 0 | ok | resp_6ae6ace6494c93a981b54f8d |

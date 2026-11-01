@@ -97,12 +97,13 @@ def hard_violations(g: Genome, r: Route, tax: Taxonomy, final: bool = True) -> l
     vertebrate_wings = any(tax.animals[d].group == "vertebrate" for d in wing_donors) or not wing_donors
     if host.group == "vertebrate" and lp.has_wings() and vertebrate_wings:  # S2: vertebrate wing donors only
         six = lp.extra_wings is not None or (lp.forelimbs.kind == "legs" and lp.hindlimbs.kind == "legs" and lp.has_wings())
-        if six and not (g.mode == "mythic" and LABEL_SIX in g.labels):
+        if six and final and not (g.mode == "mythic" and LABEL_SIX in g.labels):  # S2: labels are code-filled
             out.append(Violation("RC-R3-02", "four legs plus wings outside mythic mode or without the label"))
             out.append(Violation("RC-R3-01", "wings must take the forelimb slot"))
 
     # RC-R3-09: arthropod parts at large size force the speculative label with the reason.
-    if arthropod_parts(g, tax) and (g.size.mass_kg or 0) > config()["thresholds"]["arthropod_large_kg"]:
+    # S2: labels are code-owned and added by finish(), so a model plan is checked for them only once finished.
+    if final and arthropod_parts(g, tax) and (g.size.mass_kg or 0) > config()["thresholds"]["arthropod_large_kg"]:
         if LABEL_ARTHROPOD not in g.labels:
             out.append(Violation("RC-R3-09", "arthropod parts at large size without the labeled reason"))
 

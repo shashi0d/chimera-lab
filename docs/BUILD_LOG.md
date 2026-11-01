@@ -374,3 +374,9 @@ Read `docs/evolution/ROADMAP.md` (now committed) sections 4, 5 and 5b. Caps for 
 - `test_s2_inspect.py` (22)
 
 `test_s2_regression.py` (2) runs the whole fix pack through `engine.fuse()` on the E4 live case, the beetle x bear with the beetle exactly as E4 learned it, in speculative and mythic modes. The regression fixtures are the recorded E4 beetle plan, the E4 beetle entry, the S1 edit-turn recording and the S2 web-search probe response. Full suite 833 passed, 6 skipped; ruff clean.
+
+**Part 8 (live: rhinoceros beetle x brown bear, speculative, full fix pack):** `scripts/s2_live.py beetlebear`.
+- **Run 1** (`live/s2/beetlebear_run1/`): 1 Meta Spark, 4 Spark Open, 1 image and 2 SAM, as predicted. The model plan was rejected by a bug I introduced in part 3 (D-071), so the code skeleton was used. The image has four bear legs, no wings, the horn on the brow and breathing openings. But one flank plate reads as a whole beetle body (wing cases plus pronotum), and jointed insect-leg pieces wrap the bear's legs. The Spark Open checklist still answered yes to "no whole beetle animals", so no edit was triggered.
+- **Fix:** labels are now checked on the finished plan only. A regression test was added; suite 834 passed, 6 skipped.
+- **Run 2** (`live/s2/beetlebear/`, fresh cache): again 1 Meta Spark, 4 Spark Open, 1 image and 2 SAM. The model plan and polish were accepted. Quality 0.967 (critic 1.0, silhouette 0.891, thumbnail 1.0). Inspect passed every structural item: four legs, bear head, horn found by SAM (fill 0.0064), compensation, no wings, no whole beetles. So no edit turn was needed. My judgment: correct, with plates slightly beyond the planned back and flanks (onto the shoulders and upper legs).
+- **Budget counter:** image 26→28, Spark 103→104 (102→103 in run 1), SAM 21→25, Spark Open 44→52 over both runs.
