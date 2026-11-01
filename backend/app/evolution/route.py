@@ -173,7 +173,44 @@ def silhouette(g: Genome, tax: Taxonomy, pair: dict[str, Any] | None = None) -> 
                       if lp.extra_wings.donor else "four legs plus a separate pair of wings")
     elif lp.forelimbs.kind == "wings" and g.host and lp.forelimbs.donor and lp.forelimbs.donor != g.host:
         extras.append(f"{tax.animals[lp.forelimbs.donor].common_name} wings in place of the forelegs")
+    from app.evolution.parts import dorsal_wings, match, part_owner
+
+    for part in dorsal_wings(g, tax):  # S2: insect wings sit on the back; the four legs stay
+        owner = part_owner(g, tax, part)
+        spec = match(owner, part) if owner else None
+        extras.append(f"{spec.shape if spec else 'a pair of insect wings'} on a raised mount between the shoulder "
+                      "blades, all four legs kept")
     tail = g.traits.get("tail")
     if tail and tail.part:
         extras.append(f"{tail.part} in place of the tail")
     return base + (", " + ", ".join(extras) if extras else "")
+
+
+def silhouette_issues(g: Genome, tax: Taxonomy, text: str | None = None) -> list[str]:
+    """S2 (E4c): ways the silhouette sentence disagrees with the final limb plan (empty when they match).
+    A known pair's documented silhouette is exempt."""
+    from app.evolution.parts import dorsal_wings
+
+    pair = find_known_pair(tax.animals[g.parents.sire], tax.animals[g.parents.dam])
+    if pair and pair.get("silhouette"):
+        return []
+    low = (text if text is not None else g.silhouette).lower()
+    lp, out = g.limb_plan, []
+    fore = lp.forelimbs.kind == "wings" and g.host and lp.forelimbs.donor and lp.forelimbs.donor != g.host
+    dorsal = dorsal_wings(g, tax)
+    if fore and "in place of the forelegs" not in low:
+        out.append("wings take the forelimb slot, but the silhouette does not say so")
+    if fore and g.host and tax.animals[g.host].frame == "quadruped" and "two hind legs" not in low:
+        out.append("a quadruped host with wing forelimbs stands on two hind legs")
+    if lp.extra_wings and "four legs plus" not in low:
+        out.append("six limbs, but the silhouette does not say four legs plus wings")
+    if dorsal and "shoulder blades" not in low:
+        out.append("dorsal insect wings, but the silhouette does not show the mount")
+    if not (lp.has_wings() or dorsal) and "wing" in low:
+        out.append("the silhouette names wings, but the limb plan has none")
+    if not fore and "two hind legs" in low:
+        out.append("the silhouette stands on two hind legs, but the forelimbs are legs")
+    tail = g.traits.get("tail")
+    if tail and tail.part and "in place of the tail" not in low:
+        out.append("a donor tail part, but the silhouette does not say so")
+    return out

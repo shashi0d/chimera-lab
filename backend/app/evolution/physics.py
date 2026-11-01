@@ -7,8 +7,9 @@ never passes silently (RC-R3-12). Every check writes a Check record.
 
 from __future__ import annotations
 
-from app.evolution.data import Taxonomy, config
+from app.evolution.data import Animal, Taxonomy, config
 from app.evolution.genome import Check, Genome, LimbSlot
+from app.evolution.parts import dorsal_part
 
 LABEL_SIX = "six limbs: mythic composite, not a plausible animal"
 LABEL_BORDERLINE = "borderline flight: size near the soaring limit"
@@ -34,6 +35,17 @@ def _note(g: Genome, tag: str, text: str, locked: frozenset[str] = frozenset()) 
 def _label(g: Genome, label: str) -> None:
     if label not in g.labels:
         g.labels.append(label)
+
+
+def _insect_wings(donor: Animal, host: Animal) -> bool:
+    """Wings from a non-vertebrate donor on a vertebrate body (S2): never a forelimb replacement."""
+    return donor.group != "vertebrate" and host.group == "vertebrate"
+
+
+def baseline_slot(host: Animal) -> LimbSlot:
+    from app.evolution.traits import baseline_limbs
+
+    return baseline_limbs(host).forelimbs
 
 
 def arthropod_parts(g: Genome, tax: Taxonomy) -> bool:
@@ -64,8 +76,29 @@ def run_checks(g: Genome, tax: Taxonomy) -> list[str]:
     # 1. Body-plan class of the host.
     g.checks.append(Check(step="body_plan_class", result="pass", detail=f"host class: {host.group} ({host.body_plan})"))
 
-    # 2. Limb budget (RC-R3-01, RC-R3-02).
-    if lp.requested_wings:
+    # 2. Limb budget (RC-R3-01, RC-R3-02). S2 (E4c): those cards cover vertebrate wing donors only. Insect
+    # wings on a vertebrate are not built from forelimbs: they sit on a dorsal mount, a body-plan license that
+    # the fiction budget settles (granted, or the wings are dropped).
+    host_frame = tax.animals[g.host] if g.host else host
+    for name in ("forelimbs", "extra_wings"):  # a plan that put insect wings in a limb slot (E4 beetle plan)
+        slot = getattr(lp, name)
+        if slot and slot.kind == "wings" and slot.donor and _insect_wings(tax.animals[slot.donor], host_frame):
+            if name == "forelimbs":
+                lp.forelimbs = baseline_slot(host_frame)
+            else:
+                lp.extra_wings = None
+            lp.requested_wings = slot.donor
+    if lp.requested_wings and _insect_wings(tax.animals[lp.requested_wings], host_frame):
+        donor_animal = tax.animals[lp.requested_wings]
+        part = dorsal_part(donor_animal)
+        if part not in lp.appendages:
+            lp.appendages.append(part)
+        lp.requested_wings = None
+        g.checks.append(Check(step="limb_budget", result="pass", cards=["RC-R3-12"],
+                              detail=f"{donor_animal.common_name} wings are insect wings, not forelimbs (RC-R3-01 and "
+                                     "RC-R3-02 cover vertebrate wing donors only): they sit on a dorsal mount and "
+                                     "all four legs stay; the mount is a body-plan license"))
+    elif lp.requested_wings:
         donor = lp.requested_wings
         name = tax.animals[donor].common_name
         if host.group == "vertebrate" and g.mode == "mythic":

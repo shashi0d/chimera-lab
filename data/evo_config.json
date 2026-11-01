@@ -296,6 +296,14 @@
       "repairable": false
     },
     {
+      "id": "insect_wings",
+      "card": "RC-R3-09",
+      "rule": "insect wings on a vertebrate body plan",
+      "compensation": "insect wings rising from a raised, plated mount between the shoulder blades, with all four legs kept",
+      "repairable": true,
+      "note": "S2 (E4c): RC-R3-01 and RC-R3-02 cover vertebrate wing donors only. Insect wings are an arthropod part (RC-R3-09 names insect wings) on a vertebrate frame: a body-plan license with a visible dorsal mount. Over budget, the repair drops them."
+    },
+    {
       "id": "six_limbs",
       "card": "RC-R3-02",
       "rule": "six limbs (four legs plus wings)",

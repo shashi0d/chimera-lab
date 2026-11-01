@@ -313,3 +313,15 @@ Short entries per phase: what was built, what was tested, what was deferred. New
 - Latency 1.2 to 3.4 s. SAM counter 16 → 21.
 
 **Part 6:** report `docs/evolution/S1_CAPABILITIES.md`: one table per probe, a verdict per capability and a recommended route per call type (no routing switch; that is step 3). In short: Spark Open is good for tools, image input, short strict JSON, the checklist (15/15 parity), identify and polish, but not for plans (runaway `card_trace` array) or traits. The Muse Image edit turn edits the same creature; references change style, not anatomy. SAM part prompts confirm presence precisely but can miss embedded parts.
+
+## S2: fix pack and agent preparation (evo)
+
+Read `docs/evolution/ROADMAP.md` (now committed) sections 4, 5 and 5b. Caps for live runs: images 80, Spark 250, SAM 80, Spark Open 600 (runaway guards only).
+
+**Part 1 (E4c fixes):** none of these were committed before. Details are in D-063 to D-065.
+- **(a) Wings:** RC-R3-01/02 now apply to vertebrate wing donors only. Insect wings sit on a dorsal mount (bendable `insect_wings`, card RC-R3-09) and are dropped over budget.
+- **(b) Class parts:** `data/class_parts.json` covers 11 classes, marked "model-estimated, reviewed". `parts.py` gates every donor part and saved trait. The learned beetle's body plan was corrected from `multi_legged, winged` to `multi_legged`, logged in its `corrections`. Its "jointed tail segments" became its head horn.
+- **(c) Grouped clause:** each donor is named once in one grouped clause, with parts as materials and shapes.
+- **(d) Silhouette:** recomputed last and checked against the limb plan.
+- **Regression:** the E4 live beetle plan, replayed with the beetle as E4 saved it, now gives four bear legs, no wings ("dropped part: wings"), a chitin horn on the brow, chitin plates, and one license (arthropod size).
+- **Tests:** 39 new (`test_s2_e4c.py`); one E2b test reworded ("lion body" instead of "lion coat"). Full suite 740 passed, 6 skipped.

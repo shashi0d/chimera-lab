@@ -93,7 +93,9 @@ def hard_violations(g: Genome, r: Route, tax: Taxonomy, final: bool = True) -> l
     # RC-R3-01, RC-R3-02: a vertebrate host with wings keeps no forelegs unless mythic with the label.
     host = tax.animals[g.host] if g.host else tax.animals[sire]
     lp = g.limb_plan
-    if host.group == "vertebrate" and lp.has_wings():
+    wing_donors = [s.donor for s in (lp.forelimbs, lp.hindlimbs, lp.extra_wings) if s and s.kind == "wings" and s.donor]
+    vertebrate_wings = any(tax.animals[d].group == "vertebrate" for d in wing_donors) or not wing_donors
+    if host.group == "vertebrate" and lp.has_wings() and vertebrate_wings:  # S2: vertebrate wing donors only
         six = lp.extra_wings is not None or (lp.forelimbs.kind == "legs" and lp.hindlimbs.kind == "legs" and lp.has_wings())
         if six and not (g.mode == "mythic" and LABEL_SIX in g.labels):
             out.append(Violation("RC-R3-02", "four legs plus wings outside mythic mode or without the label"))

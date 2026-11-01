@@ -323,8 +323,7 @@
    "taxonomy_source": "gbif",
    "traits": {
     "body_plan": [
-     "multi_legged",
-     "winged"
+     "multi_legged"
     ],
     "primary_locomotor_part": "multiple legs",
     "covering": "exoskeleton",
@@ -367,7 +366,7 @@
    },
    "claims": [],
    "provenance": {
-    "body_plan": "model-estimated",
+    "body_plan": "model-estimated, corrected by class_parts.json",
     "primary_locomotor_part": "model-estimated",
     "covering": "model-estimated",
     "movement": "model-estimated",
@@ -388,7 +387,22 @@
     "scientific_name": "gbif",
     "common_name": "model-estimated"
    },
-   "learned_at": "2026-10-31T20:17:06+00:00"
+   "learned_at": "2026-10-31T20:17:06+00:00",
+   "corrections": [
+    {
+     "field": "body_plan",
+     "was": [
+      "multi_legged",
+      "winged"
+     ],
+     "now": [
+      "multi_legged"
+     ],
+     "reason": "Insecta body plans are multi_legged (class_parts.json)",
+     "by": "class_parts.json",
+     "at": "2026-11-01T02:13:57+00:00"
+    }
+   ]
   }
  },
  "aliases": {

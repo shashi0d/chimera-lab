@@ -1,0 +1,220 @@
+{
+ "about": "S2 (E4c): the visible parts each animal class can have, plus the body plans, coverings, mouthparts and breathing organs that class allows. Every donor part and every saved trait is checked against its class here; an invalid part is replaced by the donor's most recognizable valid part (parts are listed most recognizable first, and the donor's own visible_features are tried first). 'shape' is the prompt wording: materials and shapes, never the donor's name. 'slot': where the part attaches on a host (head, face, back, tail, wings, limbs, surface). 'never': words naming parts the class cannot have (checked in free-text features too). 'job' feeds the part-job audit (RC-R9-12).",
+ "provenance": "model-estimated, reviewed",
+ "review": "Written by Claude (S2, 2026-11-01) from standard comparative anatomy and checked against the classes in chimera_data.json; reviewed for consistency with the database body plans (all insects multi_legged) and with the learned animals. Owner review pending.",
+ "class_aliases": {"Elasmobranchii": "Chondrichthyes"},
+ "surfaces": {
+  "fur": "dense fur",
+  "feathers": "layered contour feathers",
+  "scales": "small overlapping scales",
+  "skin": "smooth skin",
+  "exoskeleton": "hard, glossy chitin plates with fine seams",
+  "shell": "hard shell plates"
+ },
+ "classes": {
+  "Insecta": {
+   "body_plans": ["multi_legged"],
+   "coverings": ["exoskeleton"],
+   "mouthparts": ["mandibles", "other"],
+   "breathing": ["tracheae"],
+   "surfaces": {"exoskeleton": "hard, glossy chitin plates with fine seams"},
+   "parts": [
+    {"part": "head horn", "aliases": ["horn", "horns", "thoracic horn", "cephalic horn"], "slot": "head", "shape": "a single curved horn of hard, glossy chitin rising from the brow", "job": "push, defend and display"},
+    {"part": "elytra", "aliases": ["wing cases", "wing covers", "elytron"], "slot": "back", "shape": "two smooth, domed chitin shields along the back", "job": "shield the back"},
+    {"part": "membranous wings", "aliases": ["insect wings", "wings", "wing"], "slot": "wings", "shape": "a pair of thin, veined membranous wings", "job": "fly, glide or display"},
+    {"part": "antennae", "aliases": ["antenna", "feelers"], "slot": "head", "shape": "two long, jointed antennae on the brow", "job": "smell and feel"},
+    {"part": "mandibles", "aliases": ["jaws", "pincer jaws"], "slot": "face", "shape": "a pair of hard, curved chitin mandibles at the mouth", "job": "bite and carry"},
+    {"part": "compound eyes", "aliases": [], "slot": "head", "shape": "large faceted compound eyes", "job": "see"},
+    {"part": "pronotum", "aliases": ["armored pronotum", "pronotal shield"], "slot": "back", "shape": "a broad, armored chitin shield over the shoulders", "job": "shield the front body"},
+    {"part": "jointed legs", "aliases": ["spiny jointed legs", "six jointed legs", "jointed insect legs"], "slot": "limbs", "shape": "thin, jointed chitin legs with spines", "job": "walk and grip"},
+    {"part": "stinger", "aliases": ["sting"], "slot": "tail", "shape": "a short, sharp stinger at the tip of the abdomen", "job": "defend"},
+    {"part": "segmented abdomen", "aliases": ["abdominal segments", "abdomen"], "slot": "back", "shape": "ringed chitin segments", "job": "breathe and digest"},
+    {"part": "spiracles", "aliases": ["breathing openings"], "slot": "surface", "shape": "small breathing openings in a row along the sides", "job": "breathe"},
+    {"part": "exoskeleton plates", "aliases": ["exoskeleton", "chitin plates", "chitin"], "slot": "surface", "shape": "hard, glossy chitin plates with fine seams", "job": "protect"}
+   ],
+   "never": ["tail", "fur", "feather", "feathers", "beak", "teeth", "tusk", "tusks", "mane", "hoof", "hooves", "gill", "gills", "lung", "lungs", "tentacle", "tentacles", "bone", "bones", "whiskers"]
+  },
+  "Arachnida": {
+   "body_plans": ["multi_legged"],
+   "coverings": ["exoskeleton"],
+   "mouthparts": ["mandibles", "other"],
+   "breathing": ["book lungs", "tracheae"],
+   "parts": [
+    {"part": "pincers", "aliases": ["pedipalp pincers", "claws", "chelae"], "slot": "limbs", "shape": "a pair of broad, hard pincers held forward", "job": "grab and hold"},
+    {"part": "segmented tail with stinger", "aliases": ["stinger tail", "metasoma", "jointed tail segments", "tail segments", "segmented tail", "stinger"], "slot": "tail", "shape": "a ringed, upward-curving tail ending in a sharp stinger", "job": "defend and hunt"},
+    {"part": "fangs", "aliases": ["chelicerae", "fang"], "slot": "face", "shape": "two short, curved fangs at the mouth", "job": "bite"},
+    {"part": "eight jointed legs", "aliases": ["jointed legs", "eight legs", "hairy legs"], "slot": "limbs", "shape": "long, jointed legs", "job": "walk and grip"},
+    {"part": "pedipalps", "aliases": ["palps"], "slot": "face", "shape": "two short, leg-like feelers beside the mouth", "job": "feel and handle food"},
+    {"part": "simple eyes", "aliases": ["eye cluster", "eight eyes"], "slot": "head", "shape": "a small cluster of shiny simple eyes", "job": "see"},
+    {"part": "setae", "aliases": ["bristles", "hairy body", "urticating hairs", "hairs"], "slot": "surface", "shape": "dense, bristly hairs over hard plates", "job": "sense touch and defend"},
+    {"part": "spinnerets", "aliases": [], "slot": "tail", "shape": "small finger-like spinnerets at the rear", "job": "spin silk"},
+    {"part": "exoskeleton plates", "aliases": ["exoskeleton", "carapace", "cephalothorax"], "slot": "surface", "shape": "hard, glossy chitin plates with fine seams", "job": "protect"}
+   ],
+   "never": ["wing", "wings", "antenna", "antennae", "fur", "feather", "feathers", "scale", "scales", "beak", "teeth", "mane", "hoof", "hooves", "gill", "gills", "tentacle", "tentacles", "bone", "bones"]
+  },
+  "Malacostraca": {
+   "body_plans": ["multi_legged"],
+   "coverings": ["exoskeleton"],
+   "mouthparts": ["mandibles", "other"],
+   "breathing": ["gills"],
+   "parts": [
+    {"part": "claws", "aliases": ["pincers", "chelae", "crusher claw", "claw"], "slot": "limbs", "shape": "a pair of heavy, hard-shelled claws", "job": "grab, crush and defend"},
+    {"part": "segmented tail", "aliases": ["jointed tail segments", "tail segments", "abdomen", "tail"], "slot": "tail", "shape": "a ringed, armored tail of overlapping shell segments", "job": "swim backward and balance"},
+    {"part": "tail fan", "aliases": ["telson", "uropods"], "slot": "tail", "shape": "a flat, fan-shaped tail tip", "job": "swim"},
+    {"part": "antennae", "aliases": ["antenna", "long antennae", "feelers"], "slot": "head", "shape": "two long, whip-like antennae", "job": "smell and feel"},
+    {"part": "stalked eyes", "aliases": ["eye stalks"], "slot": "head", "shape": "two small eyes on short stalks", "job": "see"},
+    {"part": "carapace", "aliases": ["shell", "exoskeleton"], "slot": "surface", "shape": "a hard, smooth shell plate", "job": "protect"},
+    {"part": "jointed legs", "aliases": ["walking legs", "swimmerets"], "slot": "limbs", "shape": "thin, jointed shell-covered legs", "job": "walk"}
+   ],
+   "never": ["wing", "wings", "fur", "feather", "feathers", "scale", "scales", "beak", "teeth", "mane", "hoof", "hooves", "lung", "lungs", "tentacle", "tentacles", "bone", "bones"]
+  },
+  "Mammalia": {
+   "body_plans": ["quadruped", "biped", "finned", "winged"],
+   "coverings": ["fur", "skin", "scales"],
+   "mouthparts": ["grinding teeth", "bladed teeth", "mixed teeth", "pointed teeth", "toothless tongue", "other"],
+   "breathing": ["lungs"],
+   "surfaces": {"scales": "large overlapping keratin scales"},
+   "parts": [
+    {"part": "mane", "aliases": [], "slot": "head", "shape": "a thick mane of long hair around the neck", "job": "display and protect the neck"},
+    {"part": "tusks", "aliases": ["tusk"], "slot": "face", "shape": "a pair of long, curved ivory tusks", "job": "dig, fight and display"},
+    {"part": "horns", "aliases": ["horn"], "slot": "head", "shape": "a pair of hard keratin horns", "job": "fight and display"},
+    {"part": "antlers", "aliases": ["antler"], "slot": "head", "shape": "branching bony antlers", "job": "fight and display"},
+    {"part": "trunk", "aliases": ["proboscis"], "slot": "face", "shape": "a long, muscular trunk", "job": "grasp, feed and smell"},
+    {"part": "tail tuft", "aliases": ["tufted tail"], "slot": "tail", "shape": "a dark tuft of hair at the tail tip", "job": "signal"},
+    {"part": "long tail", "aliases": ["tail", "bushy tail", "prehensile tail", "feathered tail"], "slot": "tail", "shape": "a long, furred tail", "job": "balance and signal"},
+    {"part": "keratin scales", "aliases": ["scales", "overlapping scales", "scaly armor"], "slot": "surface", "shape": "large overlapping keratin scales", "job": "protect"},
+    {"part": "quills", "aliases": ["spines", "quill"], "slot": "back", "shape": "long, sharp quills", "job": "defend"},
+    {"part": "hump", "aliases": ["humps"], "slot": "back", "shape": "a rounded fatty hump on the back", "job": "store fat"},
+    {"part": "hooves", "aliases": ["hoof"], "slot": "limbs", "shape": "hard hooves", "job": "carry weight"},
+    {"part": "claws", "aliases": ["foreclaws", "digging claws", "curved claws"], "slot": "limbs", "shape": "strong curved claws", "job": "dig and grip"},
+    {"part": "whiskers", "aliases": [], "slot": "face", "shape": "long, stiff whiskers", "job": "feel"},
+    {"part": "flippers", "aliases": ["fins", "broad fins", "fluke", "tail flukes"], "slot": "limbs", "shape": "broad, smooth flippers", "job": "swim"},
+    {"part": "membrane wings", "aliases": ["bat wings", "wings"], "slot": "wings", "shape": "thin skin membranes stretched between long finger bones", "job": "fly"},
+    {"part": "duck-like bill", "aliases": ["bill"], "slot": "face", "shape": "a flat, leathery bill", "job": "feel for food"},
+    {"part": "large ears", "aliases": ["ears", "drop ears", "pointed ears"], "slot": "head", "shape": "large, mobile ears", "job": "hear and shed heat"},
+    {"part": "fur coat", "aliases": ["fur", "coat", "double coat", "shaggy hair", "hair"], "slot": "surface", "shape": "dense fur", "job": "keep warm"}
+   ],
+   "never": ["feather", "feathers", "beak", "exoskeleton", "chitin", "elytra", "antenna", "antennae", "gill", "gills", "tentacle", "tentacles", "compound eyes", "mandibles"]
+  },
+  "Aves": {
+   "body_plans": ["biped", "winged"],
+   "coverings": ["feathers"],
+   "mouthparts": ["beak"],
+   "breathing": ["lungs"],
+   "parts": [
+    {"part": "feathered wings", "aliases": ["wings", "wing", "broad wings"], "slot": "wings", "shape": "broad wings of layered flight feathers", "job": "fly, glide or display"},
+    {"part": "hooked beak", "aliases": ["beak", "bill", "curved beak"], "slot": "face", "shape": "a hooked, horn-colored beak", "job": "tear and pick up food"},
+    {"part": "talons", "aliases": ["claws", "talon"], "slot": "limbs", "shape": "scaled feet with long curved talons", "job": "grip and kill prey"},
+    {"part": "crest", "aliases": ["head crest", "crown feathers"], "slot": "head", "shape": "a crest of stiff feathers on the crown", "job": "display"},
+    {"part": "tail feathers", "aliases": ["tail fan", "fan tail", "tail"], "slot": "tail", "shape": "a fan of long tail feathers", "job": "steer and display"},
+    {"part": "wattle", "aliases": ["comb", "wattles"], "slot": "face", "shape": "a fleshy red wattle", "job": "display"},
+    {"part": "casque", "aliases": [], "slot": "head", "shape": "a hard, helmet-like casque on the head", "job": "display and protect"},
+    {"part": "scaled legs", "aliases": ["scaly legs"], "slot": "limbs", "shape": "thin legs covered in small scales", "job": "walk and perch"},
+    {"part": "contour feathers", "aliases": ["feathers", "plumage"], "slot": "surface", "shape": "layered contour feathers", "job": "insulate and streamline"}
+   ],
+   "never": ["fur", "mane", "teeth", "tusk", "tusks", "hoof", "hooves", "horn", "horns", "antler", "antlers", "gill", "gills", "tentacle", "tentacles", "exoskeleton", "chitin", "antenna", "antennae", "udder", "whiskers"]
+  },
+  "Reptilia": {
+   "body_plans": ["quadruped", "serpentine", "finned"],
+   "coverings": ["scales", "shell", "skin"],
+   "mouthparts": ["pointed teeth", "beak", "other"],
+   "breathing": ["lungs"],
+   "parts": [
+    {"part": "shell", "aliases": ["carapace", "domed shell", "plastron"], "slot": "back", "shape": "a domed shell of bony plates", "job": "protect"},
+    {"part": "neck frill", "aliases": ["frill"], "slot": "head", "shape": "a wide, thin frill of skin around the neck", "job": "display"},
+    {"part": "dorsal crest", "aliases": ["crest", "spines", "spiny crest"], "slot": "back", "shape": "a row of tall, soft spines along the back", "job": "display"},
+    {"part": "long scaled coils", "aliases": ["coils", "coiled body", "long body"], "slot": "tail", "shape": "long, scaled body coils", "job": "grip and balance"},
+    {"part": "long tail", "aliases": ["tail", "whip tail"], "slot": "tail", "shape": "a long, tapering scaled tail", "job": "balance and swim"},
+    {"part": "osteoderms", "aliases": ["armored scutes", "scutes", "bony plates"], "slot": "back", "shape": "rows of raised bony scutes", "job": "protect"},
+    {"part": "forked tongue", "aliases": [], "slot": "face", "shape": "a slim forked tongue", "job": "smell"},
+    {"part": "head horns", "aliases": ["horns", "horn"], "slot": "head", "shape": "short pointed scale horns on the head", "job": "defend"},
+    {"part": "clawed feet", "aliases": ["claws"], "slot": "limbs", "shape": "short legs with curved claws", "job": "walk and climb"},
+    {"part": "flippers", "aliases": ["fins", "broad fins"], "slot": "limbs", "shape": "long, flat flippers", "job": "swim"},
+    {"part": "scales", "aliases": ["scaly skin", "overlapping scales"], "slot": "surface", "shape": "small overlapping scales", "job": "protect and hold water"}
+   ],
+   "never": ["fur", "feather", "feathers", "mane", "hoof", "hooves", "antler", "antlers", "gill", "gills", "tentacle", "tentacles", "exoskeleton", "chitin", "antenna", "antennae", "whiskers", "udder"]
+  },
+  "Amphibia": {
+   "body_plans": ["quadruped", "serpentine"],
+   "coverings": ["skin"],
+   "mouthparts": ["pointed teeth", "toothless tongue", "other"],
+   "breathing": ["lungs", "external gills and lungs", "skin and lungs", "gills"],
+   "surfaces": {"skin": "smooth, moist skin"},
+   "parts": [
+    {"part": "external gills", "aliases": ["feathery gills", "gill stalks", "gills"], "slot": "head", "shape": "three pairs of feathery gill stalks on the sides of the head", "job": "breathe in water"},
+    {"part": "tail fin", "aliases": ["finned tail", "tail", "flat tail"], "slot": "tail", "shape": "a long, flat tail with a thin fin edge", "job": "swim"},
+    {"part": "webbed feet", "aliases": ["webbed toes"], "slot": "limbs", "shape": "feet with thin webs between the toes", "job": "swim"},
+    {"part": "toe pads", "aliases": ["sticky toe pads"], "slot": "limbs", "shape": "round sticky pads on the toe tips", "job": "climb"},
+    {"part": "vocal sac", "aliases": ["throat sac"], "slot": "face", "shape": "a stretchy throat sac", "job": "call"},
+    {"part": "parotoid glands", "aliases": ["warts", "warty skin"], "slot": "head", "shape": "raised glands behind the eyes", "job": "defend"},
+    {"part": "moist skin", "aliases": ["smooth skin", "skin", "speckled skin"], "slot": "surface", "shape": "smooth, moist skin", "job": "breathe and hold water"}
+   ],
+   "never": ["fur", "feather", "feathers", "scale", "scales", "beak", "mane", "hoof", "hooves", "horn", "horns", "antler", "antlers", "tentacle", "tentacles", "exoskeleton", "chitin", "antenna", "antennae", "whiskers"]
+  },
+  "Actinopterygii": {
+   "body_plans": ["finned", "serpentine"],
+   "coverings": ["scales", "skin"],
+   "mouthparts": ["pointed teeth", "grinding teeth", "other"],
+   "breathing": ["gills", "other"],
+   "parts": [
+    {"part": "broad fins", "aliases": ["fins", "fin", "pectoral fins", "flowing fins", "wing-like pectoral fins"], "slot": "limbs", "shape": "broad, thin fins on fine rays", "job": "swim"},
+    {"part": "tail fin", "aliases": ["caudal fin", "forked tail", "tail"], "slot": "tail", "shape": "a forked tail fin on fine rays", "job": "swim"},
+    {"part": "dorsal fin", "aliases": ["sail fin", "spiny dorsal fin"], "slot": "back", "shape": "a tall dorsal fin on spiny rays", "job": "steer and display"},
+    {"part": "gill covers", "aliases": ["gills", "gill slits", "operculum"], "slot": "head", "shape": "smooth gill covers behind the head", "job": "breathe in water"},
+    {"part": "barbels", "aliases": ["whisker barbels"], "slot": "face", "shape": "fleshy barbels at the mouth", "job": "taste and feel"},
+    {"part": "long scaled coils", "aliases": ["coils", "long body"], "slot": "tail", "shape": "a long, sinuous body", "job": "swim"},
+    {"part": "scales", "aliases": ["shiny scales", "overlapping scales"], "slot": "surface", "shape": "small overlapping scales with a sheen", "job": "protect"}
+   ],
+   "never": ["fur", "feather", "feathers", "beak", "mane", "hoof", "hooves", "horn", "horns", "antler", "antlers", "tentacle", "tentacles", "exoskeleton", "chitin", "antenna", "antennae", "leg", "legs", "lung", "lungs", "udder"]
+  },
+  "Chondrichthyes": {
+   "body_plans": ["finned"],
+   "coverings": ["skin", "scales"],
+   "mouthparts": ["pointed teeth", "bladed teeth", "grinding teeth", "other"],
+   "breathing": ["gills"],
+   "surfaces": {"skin": "rough, sandpaper-like skin of tiny tooth-like scales", "scales": "rough, sandpaper-like skin of tiny tooth-like scales"},
+   "parts": [
+    {"part": "dorsal fin", "aliases": ["triangular dorsal fin", "fin"], "slot": "back", "shape": "a tall, stiff triangular dorsal fin", "job": "steer"},
+    {"part": "pectoral fins", "aliases": ["fins", "broad fins", "wing-like fins", "wings"], "slot": "limbs", "shape": "long, stiff pectoral fins", "job": "swim and lift"},
+    {"part": "tail fin", "aliases": ["crescent tail", "tail"], "slot": "tail", "shape": "a tall, crescent-shaped tail fin", "job": "swim"},
+    {"part": "gill slits", "aliases": ["gills"], "slot": "head", "shape": "five gill slits behind the head", "job": "breathe in water"},
+    {"part": "rows of teeth", "aliases": ["teeth", "serrated teeth"], "slot": "face", "shape": "rows of sharp, triangular teeth", "job": "bite"},
+    {"part": "denticle skin", "aliases": ["denticles", "rough skin", "skin"], "slot": "surface", "shape": "rough, sandpaper-like skin of tiny tooth-like scales", "job": "streamline and protect"}
+   ],
+   "never": ["fur", "feather", "feathers", "beak", "mane", "hoof", "hooves", "horn", "horns", "antler", "antlers", "tentacle", "tentacles", "exoskeleton", "chitin", "antenna", "antennae", "leg", "legs", "lung", "lungs", "udder", "bone", "bones"]
+  },
+  "Cephalopoda": {
+   "body_plans": ["multi_legged"],
+   "coverings": ["skin", "shell"],
+   "mouthparts": ["beak"],
+   "breathing": ["gills"],
+   "surfaces": {"skin": "soft, color-changing skin with fine bumps"},
+   "parts": [
+    {"part": "tentacles", "aliases": ["arms", "suckered arms", "tentacle"], "slot": "limbs", "shape": "long, muscular arms lined with round suckers", "job": "grip and feel"},
+    {"part": "mantle", "aliases": ["bulbous head", "mantle sac"], "slot": "back", "shape": "a soft, bulbous mantle", "job": "hold the organs"},
+    {"part": "siphon", "aliases": ["funnel"], "slot": "head", "shape": "a short tube-shaped siphon", "job": "jet and breathe"},
+    {"part": "beak", "aliases": ["parrot-like beak"], "slot": "face", "shape": "a small, hard parrot-like beak", "job": "bite"},
+    {"part": "fins", "aliases": ["mantle fins", "side fins"], "slot": "back", "shape": "thin, rippling side fins", "job": "steer"},
+    {"part": "shell", "aliases": ["coiled shell", "chambered shell"], "slot": "back", "shape": "a coiled, chambered shell", "job": "protect and float"},
+    {"part": "chromatophore skin", "aliases": ["color-changing skin", "skin"], "slot": "surface", "shape": "soft, color-changing skin with fine bumps", "job": "camouflage"}
+   ],
+   "never": ["fur", "feather", "feathers", "scale", "scales", "mane", "hoof", "hooves", "horn", "horns", "antler", "antlers", "tail", "exoskeleton", "chitin", "antenna", "antennae", "leg", "legs", "lung", "lungs", "bone", "bones", "teeth", "whiskers"]
+  },
+  "Gastropoda": {
+   "body_plans": ["serpentine"],
+   "coverings": ["shell", "skin"],
+   "mouthparts": ["other"],
+   "breathing": ["gills", "lungs", "other"],
+   "surfaces": {"skin": "soft, moist, glistening skin", "shell": "a smooth, spiral shell"},
+   "parts": [
+    {"part": "spiral shell", "aliases": ["shell", "coiled shell"], "slot": "back", "shape": "a smooth, spiral shell", "job": "protect"},
+    {"part": "eye stalks", "aliases": ["tentacles", "eye tentacles", "stalks"], "slot": "head", "shape": "two soft eye stalks", "job": "see and feel"},
+    {"part": "muscular foot", "aliases": ["foot"], "slot": "limbs", "shape": "a broad, muscular foot", "job": "crawl"},
+    {"part": "mantle skirt", "aliases": ["mantle"], "slot": "back", "shape": "a soft mantle edge", "job": "make the shell"},
+    {"part": "operculum", "aliases": ["trapdoor"], "slot": "back", "shape": "a small, hard trapdoor plate", "job": "seal the shell"},
+    {"part": "moist skin", "aliases": ["skin", "slimy skin"], "slot": "surface", "shape": "soft, moist, glistening skin", "job": "breathe and hold water"}
+   ],
+   "never": ["fur", "feather", "feathers", "scale", "scales", "beak", "mane", "hoof", "hooves", "horn", "horns", "antler", "antlers", "tail", "exoskeleton", "chitin", "antenna", "antennae", "leg", "legs", "wing", "wings", "bone", "bones", "teeth", "whiskers"]
+  }
+ }
+}

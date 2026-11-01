@@ -18,6 +18,8 @@ from typing import Any
 from app.evolution.data import Animal, Taxonomy, config
 from app.evolution.genome import FUNCTIONS, AuditItem, Genome
 from app.evolution.habitat import profile
+from app.evolution.parts import dorsal_wings, part_owner
+from app.evolution.parts import job as class_job
 from app.evolution.physics import (
     LABEL_ARTHROPOD,
     LABEL_NONFLYING,
@@ -239,6 +241,10 @@ def _movement(g: Genome, tax: Taxonomy, locked: frozenset[str], needs: list[Need
         needs.append(Need("six_limbs", "movement", "four legs plus a separate pair of wings"))
         result, cards = "labeled", ["RC-R3-02"]
         notes.append("four legs plus wings: six limbs")
+    for part in dorsal_wings(g, tax):  # S2 (E4c): insect wings on a vertebrate, a body-plan license
+        needs.append(Need("insect_wings", "movement", f"{part} on a vertebrate body"))
+        result, cards = "labeled", [*cards, "RC-R3-09"]
+        notes.append(f"{part}: insect wings on a vertebrate body plan")
     fa = _check(g, "flight_anatomy")
     if lp.has_wings() and fa:
         cards += [*fa.cards, "RC-R9-13"]
@@ -262,7 +268,10 @@ def _movement(g: Genome, tax: Taxonomy, locked: frozenset[str], needs: list[Need
     for where, part in donor_parts(g):
         if "gill" in part:
             continue
-        job = part_job(part, wet)
+        owner = part_owner(g, tax, part) or (tax.animals[g.traits[where.split(".")[1]].donor]  # type: ignore[index]
+                                             if where.startswith("traits.") else None)
+        listed = any(k in part for k in config()["part_jobs"])  # the config's water rules come first
+        job = part_job(part, wet) if listed else class_job(part, owner)
         if job:
             notes.append(f"{part}: {job}")
             continue

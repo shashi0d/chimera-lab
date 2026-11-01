@@ -23,6 +23,7 @@ import re
 from app.evolution.audit import dropped_parts
 from app.evolution.data import PLAIN_COAT, Taxonomy, config, pattern_phrase
 from app.evolution.genome import Genome
+from app.evolution.parts import dorsal_wings, match, part_owner, surface, wing_spec
 from app.evolution.route import find_known_pair, is_real_hybrid
 
 PROMPT_CARDS = ["RC-R6-01", "RC-R7-06", "RC-R6-03", "RC-R6-04", "RC-R6-02", "RC-R6-05", "RC-R7-07", "RC-R6-07",
@@ -164,9 +165,82 @@ def license_clause(g: Genome) -> str:
     return "Declared fiction: " + "; ".join(f"{lic.rule}, shown with {lic.compensation}" for lic in g.licenses) + "."
 
 
+def donor_clause(g: Genome, tax: Taxonomy) -> str | None:
+    """S2 (E4c): everything the non-host parent gives, in one grouped clause that names it once. Parts are
+    described as materials and shapes on the host's own body (class_parts.json), so the image model draws parts,
+    not whole donor animals ("beetle bodies on the shoulders" in E4)."""
+    if g.host is None:
+        return None
+    did = g.other(g.host)
+    d, t, lp = tax.animals[did], g.traits, g.limb_plan
+    host = _name(tax, g.host)
+    bits: list[str] = []
+    if t["head"].donor == did:
+        bits.append("its head, fully visible, with clear, discernible eyes")
+    wing = wing_spec(d)
+    wing_shape = wing.shape if wing else "its wings"
+    if lp.forelimbs.kind == "wings" and lp.forelimbs.donor == did:
+        bits.append(f"{wing_shape} in place of the forelegs, standing on two hind legs")
+    if lp.extra_wings and lp.extra_wings.donor == did:
+        bits.append(f"a separate pair of {wing_shape} rooted in heavy shoulders, four legs kept")
+    for part in dorsal_wings(g, tax):
+        s = match(d, part)
+        bits.append(f"{s.shape if s else 'a pair of insect wings'} on a raised, plated mount between the shoulder "
+                    "blades, all four legs kept")
+    if lp.has_wings() or dorsal_wings(g, tax):
+        use = "gliding_or_display" if dorsal_wings(g, tax) and not lp.has_wings() else lp.wing_use
+        bits.append({"powered": "wings sized for flight", "borderline": "large wings, flight looks effortful",
+                     "gliding_or_display": "wings held for display or gliding, not powered flight",
+                     "none": ""}[use])
+    for tag, tr in t.items():
+        if tr.part and tr.donor == did:
+            s = match(d, tr.part)
+            bits.append(f"{s.shape if s else tr.part} in place of the {tag}")
+    for app_ in lp.appendages:
+        if app_.endswith(")") or app_ in dorsal_wings(g, tax) or part_owner(g, tax, app_) is not d:
+            continue
+        s = match(d, app_)
+        shape = s.shape if s else app_[len(d.common_name) + 1:]
+        bits.append(f"{shape}, as small display frills" if s and "gill" in s.part else shape)
+    tex = t["coat_texture"]
+    if tex.op == "PATCH" and tex.donor == did:
+        bits.append(f"{surface(d)} in its own colors, in a few large patches over the {_regions(tex.region)}, with "
+                    "clean edges, color and surface unchanged inside each patch")
+        pat = t["coat_pattern"]
+        if pat.op == "PATCH" and pat.donor == did and (ph := pattern_phrase(_name(tax, did), did)):
+            bits.append(f"{ph} only inside those patches")  # E2b: a pattern is always "<donor>-type <type>"
+    for tag, tr in t.items():
+        if tr.op == "OVERLAY" and tr.donor == did and tag != "coat_pattern":
+            pct = int(round((tr.strength or 0) * 100))
+            bits.append(f"a faint {tag.replace('coat_', '')} at about {pct} percent strength on the {_regions(tr.region)}")
+    bits = [b for b in bits if b]
+    if not bits:
+        return None
+    return f"from the {_name(tax, did)}, as parts and materials on the {host}'s own body: " + "; ".join(bits)
+
+
+def host_clause(g: Genome, tax: Taxonomy) -> str:
+    """The host's own body, coat and any host pattern (S2: the donor is named only in donor_clause)."""
+    host = _name(tax, g.host)
+    did = g.other(g.host) if g.host else None
+    pat = g.traits["coat_pattern"]
+    own = pattern_phrase(host, g.host)
+    skin = surface(tax.animals[g.host]) if g.host else "coat"
+    if pat.op == "OVERLAY" and pat.donor == did and (ph := pattern_phrase(_name(tax, did), did)):
+        pct = int(round((pat.strength or 0) * 100))
+        coat = f"its own {skin} with a faint {ph} at about {pct} percent strength on the {_regions(pat.region)}"
+    elif own:
+        coat = f"its own {skin} with {own} everywhere outside the patches"
+    else:
+        coat = f"its own {skin} everywhere else, {PLAIN_COAT}"
+    return f"{host} body and legs, with {coat}"
+
+
 def compile_prompt(g: Genome, tax: Taxonomy) -> str:
     if is_real_hybrid(g):
         return compile_real_hybrid(g, tax)
+    if g.host is not None:
+        return compile_hosted(g, tax)
     a, b = _name(tax, g.parents.sire), _name(tax, g.parents.dam)
     t, lp = g.traits, g.limb_plan
     lines: list[str] = []
@@ -279,3 +353,43 @@ def accept_polish(original: str, polished: str | None, g: Genome, tax: Taxonomy)
     """(prompt to render, rejection reason or None). A rejected polish falls back to the compiled prompt."""
     reason = check_polish(original, polished, g, tax)
     return (original, reason) if reason else (polished or original, None)
+
+
+def _detail_notes(g: Genome) -> list[str]:
+    """Trait notes that may still reach the prompt (replaced by structured render details in S2 part 2)."""
+    out = []
+    for tag, tr in g.traits.items():
+        note = tr.note or ""
+        if tag == "coat_pattern" or not note or tr.op == "PATCH" or tag == "size" or "host value" in note:
+            continue
+        if PATTERN_WORDS.search(note) or plan_conflicts(note, g) or (tr.donor is None and "gated" in tr.flags):
+            continue
+        out.append(f"{tag.replace('_', ' ')}: {note}")
+    return out
+
+
+def compile_hosted(g: Genome, tax: Taxonomy) -> str:
+    """Chimera and mythic plans (a host frame): silhouette, host, head, then the host clause and ONE grouped
+    donor clause (S2, E4c), license compensations, the habitat cue and the fixed closing lines."""
+    a, b = _name(tax, g.parents.sire), _name(tax, g.parents.dam)
+    host = _name(tax, g.host)
+    sil = g.silhouette.strip().rstrip(".")
+    lines = [f"Silhouette: {_cap(sil)}.", f"Host frame: the {host} sets the outline, body size and overall frame.",
+             f"A single creature that combines a {a} and a {b}."]
+    head_from_host = g.traits["head"].donor == g.host
+    lines.append(f"Head of the {host}, fully visible and uncluttered, with clear, discernible eyes." if head_from_host
+                 else "Head fully visible and uncluttered, with clear, discernible eyes.")
+    details = [host_clause(g, tax)]
+    if group := donor_clause(g, tax):
+        details.append(group)
+    details += _detail_notes(g)
+    lines.append("Details: " + "; ".join(details) + ".")
+    lines.append("Coat texture and patches follow the body outline.")
+    if g.licenses:
+        lines.append(license_clause(g))
+    lines.append("Bilaterally symmetrical, recognizable limbs, visible sense organs.")
+    if g.habitat.visible_trait and not BARE_PATTERN.search(g.habitat.visible_trait):
+        lines.append(f"Habitat cue ({g.habitat.name}): {g.habitat.visible_trait}.")
+    lines.append(prosaic_line())
+    lines.append("One creature, full body, side three-quarter view, plain light background, natural history illustration.")
+    return strip_franchise(" ".join(lines))

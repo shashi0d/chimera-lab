@@ -62,6 +62,14 @@ def _repair(g: Genome, need: Need, locked: frozenset[str]) -> str | None:
         lp.forelimbs, lp.extra_wings = lp.extra_wings, None
         g.labels = [x for x in g.labels if x != LABEL_SIX]
         return "over budget: the wings take the forelimb slot instead (four limbs)"
+    if need.id == "insect_wings":  # S2 (E4c): over budget, the insect wings are dropped
+        from app.evolution.audit import _drop
+
+        part = need.detail.removesuffix(" on a vertebrate body")
+        if part in lp.appendages:
+            lp.appendages.remove(part)
+        _drop(g, part, locked)
+        return "over budget: the insect wings are dropped (all four legs stay)"
     if need.id == "land_gills":
         _note(g, "body", "lungs assumed; gills reduced to small vestigial slits", locked)
         g.labels = [x for x in g.labels if x != LABEL_LAND_GILLS]

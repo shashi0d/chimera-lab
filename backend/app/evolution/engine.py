@@ -28,10 +28,11 @@ from app.evolution.gbif import FixtureGbif, GbifClient
 from app.evolution.genome import DESIGN_MODES, TRAIT_TAGS, Genome, Trait, validate_plan
 from app.evolution.habitat import apply_habitat, choose_habitat, clear_habitat
 from app.evolution.judge import judge
+from app.evolution.parts import fix_parts
 from app.evolution.physics import run_checks
 from app.evolution.prompt import PROMPT_CARDS, accept_polish, compile_prompt
 from app.evolution.resolve import LearnedStore, Resolution, Resolver
-from app.evolution.route import Route, choose_host, is_real_hybrid, route, silhouette
+from app.evolution.route import Route, choose_host, is_real_hybrid, route, silhouette, silhouette_issues
 from app.evolution.traits import build_traits, contribution, gate
 from app.models.schemas import ErrorCode
 from app.services import Services
@@ -149,6 +150,7 @@ class EvoEngine:
             card_trace=_dedupe(r.cards + host_cards + built["cards"] + hab_cards), seed=seed,
             design_mode=design,  # type: ignore[arg-type]
         )
+        g.checks += fix_parts(g, self.tax)  # S2 (E4c): donor parts must belong to the donor's class
         g.silhouette = silhouette(g, self.tax, r.pair)
         return g, r
 
@@ -156,13 +158,15 @@ class EvoEngine:
         """4.4 habitat and 4.5 physical checks, then derived fields. Idempotent."""
         g = g.model_copy(deep=True)
         locked = bool(r.pair and r.pair.get("locked"))
+        g.checks += fix_parts(g, self.tax)  # S2 (E4c): a model plan's parts are checked against the class too
         gate_cards = gate(g.traits, r, g.host, self.tax)  # E2b: a model plan cannot undo GATE (e.g. a mane on feathers)
         real = is_real_hybrid(r)
         hab_cards = clear_habitat(g) if real else apply_habitat(g, self.tax, locked)  # E2c, D-056
         phys_cards = run_checks(g, self.tax)
         audit_cards, needs = run_audit(g, self.tax, r)  # 4.5b, after the physical checks (RC-R9-02)
         audit_cards += settle(g, needs, self.tax)  # 4.5c fiction budget
-        g.silhouette = silhouette(g, self.tax, r.pair)
+        g.silhouette = silhouette(g, self.tax, r.pair)  # last, from the final limb plan (S2: RC-R7-06)
+        assert not silhouette_issues(g, self.tax), silhouette_issues(g, self.tax)
         g.identity_balance = contribution(g.traits, g.limb_plan, g.host or g.parents.sire)
         g.labels = _dedupe([*r.labels, *g.labels])
         g.card_trace = _dedupe(g.card_trace + gate_cards + hab_cards + phys_cards + audit_cards

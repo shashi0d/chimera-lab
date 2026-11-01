@@ -1,0 +1,117 @@
+{
+ "about": "S2 regression: the learned European rhinoceros beetle as E4 saved it (body_plan multi_legged + winged), before the class_parts.json correction.",
+ "animals": {
+  "european_rhinoceros_beetle": {
+   "id": "european_rhinoceros_beetle",
+   "common_name": "European rhinoceros beetle",
+   "scientific_name": "Oryctes nasicornis",
+   "kind": "species",
+   "breed": "",
+   "note": "'rhinoceros beetle' names several species; chose the European rhinoceros beetle (Oryctes nasicornis), the most common reading. Alternatives are listed.",
+   "inputs": [
+    "rhinoceros beetle"
+   ],
+   "alternatives": [
+    {
+     "scientific_name": "Trypoxylus dichotomus",
+     "common_name": "Japanese rhinoceros beetle"
+    },
+    {
+     "scientific_name": "Dynastes hercules",
+     "common_name": "Hercules beetle"
+    },
+    {
+     "scientific_name": "Oryctes rhinoceros",
+     "common_name": "Coconut rhinoceros beetle"
+    },
+    {
+     "scientific_name": "Dynastes tityus",
+     "common_name": "Eastern Hercules beetle"
+    }
+   ],
+   "taxonomy": {
+    "class": "Insecta",
+    "order": "Coleoptera",
+    "family": "Scarabaeidae",
+    "genus": "Oryctes",
+    "gbif_key": "4995700"
+   },
+   "taxonomy_source": "gbif",
+   "traits": {
+    "body_plan": [
+     "multi_legged",
+     "winged"
+    ],
+    "primary_locomotor_part": "multiple legs",
+    "covering": "exoskeleton",
+    "movement": [
+     "walk",
+     "fly",
+     "burrow"
+    ],
+    "habitat": [
+     "forest",
+     "grassland"
+    ],
+    "climate": [
+     "temperate"
+    ],
+    "diet": "herbivore",
+    "active_time": [
+     "nocturnal"
+    ],
+    "body_mass_kg": {
+     "min": 0.002,
+     "max": 0.006
+    },
+    "body_length_m": {
+     "min": 0.02,
+     "max": 0.04
+    },
+    "visible_features": [
+     "long curved head horn in males",
+     "broad armored pronotum",
+     "reddish-brown glossy elytra",
+     "six spiny jointed legs"
+    ],
+    "mouthparts": "mandibles",
+    "breathing": "tracheae"
+   },
+   "details": {
+    "mouthparts": "short chewing mandibles for soft decaying plant matter and tree sap; adults feed little or not at all",
+    "breathing": "air taken through lateral spiracles into branching tracheal tubes; no lungs"
+   },
+   "claims": [],
+   "provenance": {
+    "body_plan": "model-estimated",
+    "primary_locomotor_part": "model-estimated",
+    "covering": "model-estimated",
+    "movement": "model-estimated",
+    "habitat": "model-estimated",
+    "climate": "model-estimated",
+    "diet": "model-estimated",
+    "active_time": "model-estimated",
+    "body_mass_kg": "model-estimated",
+    "body_length_m": "model-estimated",
+    "visible_features": "model-estimated",
+    "mouthparts": "model-estimated",
+    "breathing": "model-estimated",
+    "class": "gbif",
+    "order": "gbif",
+    "family": "gbif",
+    "genus": "gbif",
+    "gbif_key": "gbif",
+    "scientific_name": "gbif",
+    "common_name": "model-estimated"
+   },
+   "learned_at": "2026-10-31T20:17:06+00:00"
+  }
+ },
+ "aliases": {
+  "rhinoceros beetle": {
+   "id": "european_rhinoceros_beetle",
+   "note": "",
+   "alternatives": []
+  }
+ }
+}

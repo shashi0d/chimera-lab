@@ -116,7 +116,7 @@ def test_polish_rejections(engine):
     orig = compile_prompt(g, engine.tax)
     assert check_polish(orig, orig.replace("plain light background", "plain, light background"), g, engine.tax) is None
     assert "not a parent: leopard" in check_polish(orig, orig + " Leopard spots on the body.", g, engine.tax)
-    assert "zebra" in check_polish(orig, orig.replace("lion coat", "zebra coat"), g, engine.tax)
+    assert "zebra" in check_polish(orig, orig.replace("lion body", "zebra body"), g, engine.tax)
     assert "contradicts the plan" in check_polish(orig, orig + " It walks on four lion legs.", g, engine.tax)
     assert "mane" in check_polish(orig, orig + " A full lion mane.", g, engine.tax)
     assert "pattern" in check_polish(orig, orig + " A patterned coat.", g, engine.tax)

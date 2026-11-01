@@ -23,6 +23,7 @@ from app.evolution.genome import (
     Size,
     Trait,
 )
+from app.evolution.parts import flies_with_wings
 from app.evolution.route import Route
 
 BODY_AREA = ("head", "neck", "forequarters", "back", "flanks", "belly", "hindquarters", "legs", "tail")
@@ -188,8 +189,8 @@ def build_traits(r: Route, host_id: str | None, tax: Taxonomy, rng: random.Rando
         donor = r.dam if host.id == r.sire.id else r.sire
         traits, cards, share = _chimera_traits(r, host, donor, rng)
         limbs = baseline_limbs(host)
-        if donor.winged and not host.winged:
-            limbs.requested_wings = donor.id  # resolved by the limb-budget check (4.5)
+        if flies_with_wings(donor) and not flies_with_wings(host):
+            limbs.requested_wings = donor.id  # resolved by the limb-budget check (4.5); insect wings go dorsal (S2)
         if traits["tail"].part:
             limbs.appendages.append(f"{traits['tail'].part} (tail)")
         if "external gills" in donor.breathing:  # E4: visible gills are a donor part (audited under breathing)

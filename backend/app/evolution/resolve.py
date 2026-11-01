@@ -30,6 +30,7 @@ from typing import Any, TypeVar
 
 from app.evolution.data import Animal, Taxonomy, config, norm
 from app.evolution.gbif import Gbif, GbifUnavailable, accepted, taxonomy_from
+from app.evolution.parts import apply_corrections, check_traits
 
 T = TypeVar("T")
 MODEL = "model-estimated"
@@ -37,6 +38,7 @@ GBIF = "gbif"
 TIER2 = "chimera_data.json tier2 (gbif)"
 UNKNOWN = "unknown (GBIF unreachable)"
 DB = "chimera_data.json"
+CLASS_PARTS = "class_parts.json"
 REFUSE_KINDS = ("not_animal", "plant", "human", "mythic")
 TRAIT_FIELDS = ("body_plan", "primary_locomotor_part", "covering", "movement", "habitat", "climate", "diet",
                 "active_time", "body_mass_kg", "body_length_m", "visible_features", "mouthparts", "breathing")
@@ -145,6 +147,17 @@ class LearnedStore:
         self._save()
         return entry, True
 
+    def correct(self, animal_id: str, fixes: list[dict[str, Any]], by: str) -> dict[str, Any]:
+        """S2: an explicit, logged correction (never a silent overwrite): the old values stay in `corrections`."""
+        e = self.data["animals"][animal_id]
+        e["traits"] = apply_corrections(e.get("traits") or {}, fixes)
+        stamp = datetime.now(UTC).isoformat(timespec="seconds")
+        e.setdefault("corrections", []).extend({**f, "by": by, "at": stamp} for f in fixes)
+        for f in fixes:
+            e.setdefault("provenance", {})[f["field"]] = f"{MODEL}, corrected by {by}"
+        self._save()
+        return e
+
     def _save(self) -> None:
         self.path.parent.mkdir(parents=True, exist_ok=True)
         tmp = self.path.with_suffix(".tmp")
@@ -161,6 +174,8 @@ class Resolver:
                  call: Callable[[str, str, Awaitable[Any]], Awaitable[Any]] = _direct) -> None:
         self.tax, self.spark, self.gbif, self.store, self.call = tax, spark, gbif, store, call
         for e in store.entries():  # learned animals are part of this engine's taxonomy from the start
+            if fixes := check_traits((e.get("taxonomy") or {}).get("class", ""), e.get("traits") or {}):
+                e = store.correct(e["id"], fixes, CLASS_PARTS)  # S2: saved traits must fit the class, logged
             self.tax.add(animal_from_entry(e), [e["common_name"]])
 
     # ------------------------------------------------------------------ lookups that cost nothing
@@ -295,6 +310,12 @@ class Resolver:
             "claims": traits.get("claimed_crosses", []), "provenance": prov,
             "learned_at": datetime.now(UTC).isoformat(timespec="seconds"),
         }
+        if fixes := check_traits(entry["taxonomy"].get("class", ""), entry["traits"]):  # S2: fit the class
+            entry["traits"] = apply_corrections(entry["traits"], fixes)
+            stamp = datetime.now(UTC).isoformat(timespec="seconds")
+            entry["corrections"] = [{**f, "by": CLASS_PARTS, "at": stamp} for f in fixes]
+            for f in fixes:
+                entry["provenance"][f["field"]] = f"{MODEL}, corrected by {CLASS_PARTS}"
         if taxo is not None:  # e) save; an offline entry is not saved (its taxonomy is unknown)
             entry, _new = self.store.add(entry)
             if name:
