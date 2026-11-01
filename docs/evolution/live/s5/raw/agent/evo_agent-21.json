@@ -1,0 +1,889 @@
+{
+ "purpose": "evo_agent",
+ "request": {
+  "messages": [
+   {
+    "role": "system",
+    "content": "You are the design agent of Chimera Lab, a natural-history creature engine. You build one creature from two parent animals by calling tools; code tools do the work and check every step.\n\nRules:\n1. You never write a plan. Pick a candidate from propose_candidates with choose_candidate, and change it only with the typed plan-operation tools (set_host, set_region, set_extent, drop_part, set_covering_material_only and the others). Code fills every derived field. Their enums list the plan's own parts and features: use only those.\n2. Every call has a reason: what you decided and why, citing the rule cards the tools return when they apply.\n3. Order: resolve_animal for each parent, propose_candidates, choose_candidate, audit_plan, render, inspect.\n4. audit_plan: blocking items stop render until fixed; advice is yours to weigh.\n5. After inspect: if it passes, call finalize with that image. If it fails, choose and say why:\n   - covering or surface failures (kind \"covering\"): edit that image with those failure keys;\n   - structural failures (kind \"structural\": counts, extra or missing parts, the frame, part identity or connection, a third animal): change the plan with a plan operation or choose another candidate, audit, and render again. An unplanned feature the critics report (extra_*, third_animal) is not a plan part: render again or accept it;\n   - or accept the failures and finalize, saying why.\n   An edit or a new render can make things worse: compare with images_so_far from inspect, and finalize the best image. If you finalize an image other than best_so_far, give why_not_best.\n   Two-failure rule: after two inspects in a row with covering failures, stop editing the covering. Change the plan instead: reduce the covering's extent (set_extent with fewer zones and a plan_reason), or show the donor by material and color only (set_covering_material_only with a plan_reason; the host keeps its own covering, the donor's identity parts stay). Then audit_plan and render again. edit refuses covering fixes until the plan has changed.\n6. A host tie: choose the host yourself from the candidates' notes, with a reason (this run is not interactive: ask_user returns no answer).\n7. Limits: at most 4 renders and 30 tool calls. Near a limit, finalize your best inspected image; its remaining failures go on the card.\nKeep reasons short. Call one tool at a time."
+   },
+   {
+    "role": "user",
+    "content": "Build one creature from the parents 'rhinoceros beetle' (sire) and 'brown bear' (dam) in speculative mode. Start with resolve_animal for each parent."
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-e47a5196a833497aa0a5c95db343ab54",
+      "type": "function",
+      "function": {
+       "name": "resolve_animal",
+       "arguments": "{\"name\": \"rhinoceros beetle\", \"reason\": \"First parent resolution as instructed to start build; required before candidate proposals.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-e47a5196a833497aa0a5c95db343ab54",
+    "content": "{\"ok\": true, \"status\": \"resolved\", \"note\": \"'rhinoceros beetle' names several species; chose the European rhinoceros beetle (Oryctes nasicornis), the most common reading. Alternatives are listed.\", \"slot\": \"sire\", \"animal\": {\"id\": \"european_rhinoceros_beetle\", \"common_name\": \"European rhinoceros beetle\", \"scientific_name\": \"Oryctes nasicornis\", \"class\": \"Insecta\", \"body_plan\": \"multi_legged\", \"covering\": \"exoskeleton\", \"mass_kg\": 0.004, \"habitats\": [\"forest\"], \"breathing\": \"tracheae\", \"features\": [\"long curved head horn in males\", \"reddish-brown glossy wing cases\", \"darker head and pronotum\", \"long red hair on underside and legs\"], \"features_source\": \"model-estimated\", \"source\": \"learned\"}}"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-e6bbcd7f728844f0952695882c474bd4",
+      "type": "function",
+      "function": {
+       "name": "resolve_animal",
+       "arguments": "{\"name\": \"brown bear\", \"reason\": \"Second parent resolution required to proceed to candidate proposals for chimera.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-e6bbcd7f728844f0952695882c474bd4",
+    "content": "{\"ok\": true, \"status\": \"resolved\", \"note\": \"\", \"slot\": \"dam\", \"animal\": {\"id\": \"brown_bear\", \"common_name\": \"brown bear\", \"scientific_name\": \"Ursus arctos\", \"class\": \"Mammalia\", \"body_plan\": \"quadruped\", \"covering\": \"fur\", \"mass_kg\": 340.0, \"habitats\": [\"tundra\", \"desert\", \"grassland\", \"forest\", \"mountain\"], \"breathing\": \"lungs\", \"features\": [], \"features_source\": \"model-estimated (no source recorded)\", \"source\": \"database\"}}"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-0c42ba3953624713a0dbe32aa5899457",
+      "type": "function",
+      "function": {
+       "name": "propose_candidates",
+       "arguments": "{\"reason\": \"Both parents resolved (beetle Insecta exoskeleton, bear Mammalia fur); need ranked chimera plans to choose from per speculative mode rules.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-0c42ba3953624713a0dbe32aa5899457",
+    "content": "{\"ok\": true, \"host_tie\": null, \"candidates\": [{\"id\": \"C1\", \"ops\": [], \"score\": 2.55, \"host\": \"brown bear\", \"silhouette\": \"four-legged brown bear frame\", \"parts\": [\"european rhinoceros beetle head horn\"], \"dropped\": [\"wings\"], \"identity_parts\": [{\"donor\": \"European rhinoceros beetle\", \"part\": \"head horn\", \"from_trait\": \"long curved head horn\", \"source\": \"model-estimated\", \"set_by\": \"code\"}], \"covering\": {\"extent\": [\"head\", \"neck\", \"forequarters\", \"back\", \"flanks\", \"belly\", \"hindquarters\", \"legs\", \"tail\"], \"plate_pattern\": \"a few large fused plates (from 'reddish-brown glossy wing cases')\", \"plate_source\": \"model-estimated\"}, \"licenses\": [{\"rule\": \"arthropod_large\", \"card\": \"RC-R3-09\", \"compensation\": \"thick supporting legs and rows of small breathing openings (spiracles) along the flanks\"}], \"labels\": [\"speculative chimera, no real-world precedent\", \"speculative: arthropod parts at large size (insect breathing limits size)\"], \"notes\": {\"niche\": \"habitat forest (native to European rhinoceros beetle, brown bear)\", \"autonomy\": \"functions not carried: movement: repaired\", \"survival\": \"1 license(s) of 1: arthropod parts at large size; labels: speculative: arthropod parts at large size (insect breathing limits size)\", \"identity\": \"identity part: head horn (long curved head horn; model-estimated); covering over head, neck, forequarters, back, flanks, belly, hindquarters, legs, tail, a few large fused plates (from 'reddish-brown glossy wing cases')\", \"host\": \"the brown bear has the more structured body schema (RC-R6-08)\"}}, {\"id\": \"C2\", \"ops\": [{\"op\": \"set_host\", \"args\": {\"animal\": \"European rhinoceros beetle\"}}], \"score\": 1.0, \"host\": \"European rhinoceros beetle\", \"silhouette\": \"segmented European rhinoceros beetle frame\", \"parts\": [], \"dropped\": [], \"identity_parts\": [], \"covering\": {\"extent\": [\"back\", \"flanks\"], \"plate_pattern\": \"\", \"plate_source\": \"\"}, \"licenses\": [], \"labels\": [\"speculative chimera, no real-world precedent\"], \"notes\": {\"niche\": \"habitat forest (native to European rhinoceros beetle, brown bear)\", \"autonomy\": \"the European rhinoceros beetle body carries every function\", \"survival\": \"0 license(s) of 1: none\", \"identity\": \"covering over back, flanks; no identity part from the donor's own traits\", \"host\": \"the European rhinoceros beetle has the less structured body schema (RC-R6-08, soft): advised against\"}}], \"note\": \"advice only: you choose; scores rank the R10 notes, nothing more\", \"cards\": [\"RC-R10-01\", \"RC-R6-08\", \"RC-R6-09\", \"RC-R10-15\"]}"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-d7519316a0e0464b94ffac37cbcbb667",
+      "type": "function",
+      "function": {
+       "name": "choose_candidate",
+       "arguments": "{\"candidate_id\": \"C1\", \"reason\": \"C1 has proper identity part (head horn) and covering from beetle gloss, host brown bear provides quadruped frame; higher R10 score and correct speculative handling of arthropod size.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-d7519316a0e0464b94ffac37cbcbb667",
+    "content": "{\"ok\": true, \"chosen\": \"C1\", \"plan\": {\"plan_id\": \"crt_581a4148c23c\", \"host\": \"brown bear\", \"host_tie\": null, \"mode\": \"speculative\", \"habitat\": \"forest\", \"silhouette\": \"four-legged brown bear frame\", \"parts\": [\"european rhinoceros beetle head horn\"], \"identity_parts\": [{\"donor\": \"European rhinoceros beetle\", \"part\": \"head horn\", \"from_trait\": \"long curved head horn\", \"source\": \"model-estimated\", \"set_by\": \"code\"}], \"dropped\": [\"wings\"], \"licenses\": [{\"rule\": \"arthropod_large\", \"card\": \"RC-R3-09\", \"compensation\": \"thick supporting legs and rows of small breathing openings (spiracles) along the flanks\"}], \"covering\": {\"extent\": [\"head\", \"neck\", \"forequarters\", \"back\", \"flanks\", \"belly\", \"hindquarters\", \"legs\", \"tail\"], \"plate_pattern\": \"a few large fused plates (from 'reddish-brown glossy wing cases')\"}, \"transfers\": [{\"feature\": \"head horn\", \"class\": \"non_homologous\", \"anchor\": \"the frontal bone of the head, above and between the eyes\"}]}, \"next\": \"audit_plan\"}"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-11c9eda029d44b1c8d939f88532b9ce2",
+      "type": "function",
+      "function": {
+       "name": "audit_plan",
+       "arguments": "{\"reason\": \"Required audit before render to check blocking issues and fiction budget for speculative chimera.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-11c9eda029d44b1c8d939f88532b9ce2",
+    "content": "{\"ok\": true, \"blocking\": [], \"advice\": [{\"card\": \"RC-R3-09,RC-R9-10\", \"detail\": \"movement: repaired (european rhinoceros beetle membranous wings on a dorsal mount: insect wings on a vertebrate body plan; european rhinoceros beetle head horn: push, defend and di)\"}], \"functions\": {\"breathing\": \"pass\", \"feeding\": \"pass\", \"support\": \"licensed\", \"movement\": \"repaired\", \"heat\": \"pass\", \"senses\": \"pass\"}, \"fiction_budget\": {\"budget\": 1, \"licenses\": [{\"rule\": \"arthropod parts at large size\", \"card\": \"RC-R3-09\", \"compensation\": \"thick supporting legs and rows of small breathing openings (spiracles) along the flanks\"}], \"identity_parts\": [{\"donor\": \"European rhinoceros beetle\", \"part\": \"head horn\", \"from_trait\": \"long curved head horn\", \"source\": \"model-estimated\", \"set_by\": \"code\"}]}, \"labels\": [\"speculative chimera, no real-world precedent\", \"speculative: arthropod parts at large size (insect breathing limits size)\"], \"renderable\": true, \"cards\": [\"RC-R3-09,RC-R9-10\"]}"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-94d83a9f01284c549438cad514b86da6",
+      "type": "function",
+      "function": {
+       "name": "render",
+       "arguments": "{\"method\": \"single_pass\", \"reason\": \"Audited plan pass with licensed arthropod large support; rendering brown bear frame with beetle horn and glossy plates.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-94d83a9f01284c549438cad514b86da6",
+    "content": "{\"ok\": true, \"image_id\": \"img1\", \"method\": \"single_pass\", \"renders_used\": 1, \"renders_left\": 3, \"polish\": \"accepted\"}"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-66ba11ac8ce04f5b8666252e602fe835",
+      "type": "function",
+      "function": {
+       "name": "inspect",
+       "arguments": "{\"image_id\": \"img1\", \"reason\": \"Inspecting first render for proportion and identity fidelity before finalization.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-66ba11ac8ce04f5b8666252e602fe835",
+    "content": "{\"ok\": true, \"image_id\": \"img1\", \"verdict\": \"fail\", \"failures\": [{\"key\": \"cover_present\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Are there hard, glossy chitin plates with fine seams on the head, neck, shoulders, back, flanks, belly, hips, legs and tail?\", \"fix\": \"Show the planned hard, glossy chitin plates with fine seams over the head, neck, shoulders, back, flanks, belly, hips, legs and tail; keep everything else the same.\"}, {\"key\": \"grows_out\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the hard, glossy chitin plates with fine seams grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending \", \"fix\": \"Show the hard, glossy chitin plates with fine seams grown in the skin over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, as one covering that replaces the brown bear's fur there\"}, {\"key\": \"on_top\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the hard, glossy chitin plates with fine seams look like separate pieces laid on top of the fur, with a raised rim or a gap at the edge?\", \"fix\": \"Show the hard, glossy chitin plates with fine seams grown in the skin over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, as one covering that replaces the brown bear's fur there\"}, {\"key\": \"continuous\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the hard, glossy chitin plates with fine seams form one continuous structure over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, rather\", \"fix\": \"Show the hard, glossy chitin plates with fine seams as one continuous covering over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, not scattered pieces; the brown bear's fur stay\"}, {\"key\": \"scattered\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Are the hard, glossy chitin plates with fine seams scattered as separate pieces over different parts of the body?\", \"fix\": \"Show the hard, glossy chitin plates with fine seams as one continuous covering over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, not scattered pieces; the brown bear's fur stay\"}, {\"key\": \"follows_body\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the hard, glossy chitin plates with fine seams follow this body's own shape and contours, the way its own skin would?\", \"fix\": \"Show the hard, glossy chitin plates with fine seams conforming to the brown bear's own body shape, grown from its skin over the head, neck, shoulders, back, flanks, belly, hips, legs and tail; keep ev\"}, {\"key\": \"separate_outline\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the hard, glossy chitin plates with fine seams keep the outline of a separate object, such as another animal's shell or back, instead of the body's own shape\", \"fix\": \"Show the hard, glossy chitin plates with fine seams conforming to the brown bear's own body shape, grown from its skin over the head, neck, shoulders, back, flanks, belly, hips, legs and tail; keep ev\"}, {\"key\": \"abrupt_stop\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the hard, glossy chitin plates with fine seams stop abruptly partway across the body or legs, with no visible reason?\", \"fix\": \"Show the hard, glossy chitin plates with fine seams as one system over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, with flexible joints, stopping only where the plan says; kee\"}, {\"key\": \"connects_head_horn\", \"kind\": \"structural\", \"status\": \"fail\", \"text\": \"Does the head horn"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-71e79e96843743328d7e77741cf9195e",
+      "type": "function",
+      "function": {
+       "name": "edit",
+       "arguments": "{\"image_id\": \"img1\", \"failure_keys\": [\"cover_present\", \"grows_out\", \"on_top\", \"continuous\", \"scattered\", \"follows_body\", \"separate_outline\", \"abrupt_stop\"], \"reason\": \"Covering failures dominate inspect: plates not grown from skin, scattered, not following bear contours; editing to integrate glossy chitin plates as continuous covering per RC-R10-15 identity.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-71e79e96843743328d7e77741cf9195e",
+    "content": "{\"ok\": true, \"image_id\": \"img2\", \"instruction\": \"Show the planned hard, glossy chitin plates with fine seams over the head, neck, shoulders, back, flanks, belly, hips, legs and tail; keep everything else the same. Show the hard, glossy chitin plates with fine seams grown in the skin over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, as one covering that replaces the brown bear's fur there; the fur stops at its edge; keep everything else the same. Show the hard, glossy chitin plates with fine seams as one continuous covering over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, not scattered pieces; the brown bear's fur stays on the belly and legs; keep everything else the same.\", \"edits_used\": 1, \"next\": \"inspect the new image (host drift is checked there)\"}"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-e8c4cf316953435bafada3a279da8acb",
+      "type": "function",
+      "function": {
+       "name": "inspect",
+       "arguments": "{\"image_id\": \"img2\", \"reason\": \"Second inspection after covering edit to verify continuity and growth integration.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-e8c4cf316953435bafada3a279da8acb",
+    "content": "{\"ok\": true, \"image_id\": \"img2\", \"verdict\": \"fail\", \"failures\": [{\"key\": \"grows_out\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the hard, glossy chitin plates with fine seams grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending \", \"fix\": \"Show the hard, glossy chitin plates with fine seams grown in the skin over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, as one covering that replaces the brown bear's fur there\"}, {\"key\": \"on_top\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the hard, glossy chitin plates with fine seams look like separate pieces laid on top of the fur, with a raised rim or a gap at the edge?\", \"fix\": \"Show the hard, glossy chitin plates with fine seams grown in the skin over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, as one covering that replaces the brown bear's fur there\"}, {\"key\": \"continuous\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the hard, glossy chitin plates with fine seams form one continuous structure over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, rather\", \"fix\": \"Show the hard, glossy chitin plates with fine seams as one continuous covering over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, not scattered pieces; the brown bear's fur stay\"}, {\"key\": \"scattered\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Are the hard, glossy chitin plates with fine seams scattered as separate pieces over different parts of the body?\", \"fix\": \"Show the hard, glossy chitin plates with fine seams as one continuous covering over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, not scattered pieces; the brown bear's fur stay\"}, {\"key\": \"follows_body\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the hard, glossy chitin plates with fine seams follow this body's own shape and contours, the way its own skin would?\", \"fix\": \"Show the hard, glossy chitin plates with fine seams conforming to the brown bear's own body shape, grown from its skin over the head, neck, shoulders, back, flanks, belly, hips, legs and tail; keep ev\"}, {\"key\": \"separate_outline\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the hard, glossy chitin plates with fine seams keep the outline of a separate object, such as another animal's shell or back, instead of the body's own shape\", \"fix\": \"Show the hard, glossy chitin plates with fine seams conforming to the brown bear's own body shape, grown from its skin over the head, neck, shoulders, back, flanks, belly, hips, legs and tail; keep ev\"}, {\"key\": \"abrupt_stop\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the hard, glossy chitin plates with fine seams stop abruptly partway across the body or legs, with no visible reason?\", \"fix\": \"Show the hard, glossy chitin plates with fine seams as one system over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, with flexible joints, stopping only where the plan says; kee\"}], \"rule\": \"two-failure rule: 2 inspects in a row with covering failures. Stop editing the covering; change the plan (set_extent with fewer zones and a plan_reason, or set_covering_material_only so the host keeps its own covering and the donor shows by material and color only), audit and render again\", \"counts\": {\"separate_bodies\": 1, \"heads\": 1, \"walking_legs\": 4, \"wings\": 0, \"extra_limb_pieces\": 0}, \"third_animals\": {\"spark_open\": [], \"meta_spark\": []}, \"drift\": {\"dri"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-e3e7d6f1a51c40b5935b4bbb3a1c4cd8",
+      "type": "function",
+      "function": {
+       "name": "set_extent",
+       "arguments": "{\"extent\": [\"forequarters\", \"back\", \"flanks\", \"hindquarters\"], \"plan_reason\": \"Dorsal armor protects spine while legs stay bare for agile locomotion and heat loss\", \"reason\": \"Two consecutive covering failures trigger two-failure rule; reducing extent from 9 zones to 4 dorsal zones keeps plates continuous and explains bare legs per RC-R10-16.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-e3e7d6f1a51c40b5935b4bbb3a1c4cd8",
+    "content": "{\"ok\": true, \"op\": \"set_extent\", \"errors\": [], \"warnings\": [], \"changed\": true, \"plan\": {\"plan_id\": \"crt_9ab863c47cdf\", \"host\": \"brown bear\", \"host_tie\": null, \"mode\": \"speculative\", \"habitat\": \"forest\", \"silhouette\": \"four-legged brown bear frame\", \"parts\": [\"european rhinoceros beetle head horn\"], \"identity_parts\": [{\"donor\": \"European rhinoceros beetle\", \"part\": \"head horn\", \"from_trait\": \"long curved head horn\", \"source\": \"model-estimated\", \"set_by\": \"code\"}], \"dropped\": [\"wings\"], \"licenses\": [{\"rule\": \"arthropod_large\", \"card\": \"RC-R3-09\", \"compensation\": \"thick supporting legs and rows of small breathing openings (spiracles) along the flanks\"}], \"covering\": {\"extent\": [\"forequarters\", \"back\", \"flanks\", \"hindquarters\"], \"plate_pattern\": \"a few large fused plates (from 'reddish-brown glossy wing cases')\"}, \"transfers\": [{\"feature\": \"head horn\", \"class\": \"non_homologous\", \"anchor\": \"the frontal bone of the head, above and between the eyes\"}]}, \"next\": \"audit_plan\"}"
+   }
+  ],
+  "tools": [
+   {
+    "type": "function",
+    "function": {
+     "name": "resolve_animal",
+     "description": "Resolve one parent name to an animal with sourced traits.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "name": {
+        "type": "string"
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "name",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "propose_candidates",
+     "description": "Ranked plan arrangements for the two resolved parents, each with R10 selection notes (niche, autonomy, survival, identity) and its reasons. Advice only.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "choose_candidate",
+     "description": "Adopt one candidate plan by id.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "candidate_id": {
+        "type": "string"
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "candidate_id",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "set_host",
+     "description": "Make this parent the host (the body frame). Required on a structural host tie.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "animal": {
+        "type": "string"
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "animal",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "set_region",
+     "description": "Give a body region to a parent. Regions head, tail, forelimbs take PICK; neck, forequarters, back, flanks, belly, hindquarters, legs take PATCH, OVERLAY or PICK.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "region": {
+        "type": "string",
+        "enum": [
+         "head",
+         "tail",
+         "forelimbs",
+         "neck",
+         "forequarters",
+         "back",
+         "flanks",
+         "belly",
+         "hindquarters",
+         "legs"
+        ]
+       },
+       "donor": {
+        "type": "string"
+       },
+       "operator": {
+        "type": "string",
+        "enum": [
+         "PICK",
+         "PATCH",
+         "OVERLAY"
+        ]
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "region",
+       "donor",
+       "operator",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "set_habitat",
+     "description": "Set the creature's habitat (a profiled habitat name).",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "name": {
+        "type": "string"
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "name",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "set_mode",
+     "description": "Set the design mode.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "mode": {
+        "type": "string",
+        "enum": [
+         "realistic",
+         "speculative",
+         "mythic"
+        ]
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "mode",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "add_license",
+     "description": "Declare one bendable rule (R9 3.2) the plan really bends, with its compensation, within the mode's fiction budget.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "rule": {
+        "type": "string"
+       },
+       "compensation": {
+        "type": "string"
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "rule",
+       "compensation",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "drop_part",
+     "description": "Remove one planned donor part. `part` must be one of the plan's parts (plan.parts). An unplanned feature the critics report (extra_*, third_animal, a misread) is not a part of the plan and cannot be dropped: render again, or accept it and finalize.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "part": {
+        "type": "string",
+        "enum": [
+         "european rhinoceros beetle head horn"
+        ]
+       },
+       "plan_reason": {
+        "type": "string",
+        "minLength": 12,
+        "description": "The reason recorded in the plan and shown on the card (one short sentence)."
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "part",
+       "plan_reason",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "set_transfer_class",
+     "description": "Change how a discrete donor part transfers: homologous (its shape where the host has the matching structure) or non_homologous (only its material and function). Parts only: the covering is always material; to show the donor's covering by color and texture only, use set_covering_material_only.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "feature": {
+        "type": "string",
+        "enum": [
+         "head horn"
+        ]
+       },
+       "cls": {
+        "type": "string",
+        "enum": [
+         "homologous",
+         "non_homologous"
+        ]
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "feature",
+       "cls",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "set_extent",
+     "description": "Set the body zones the donor covering grows over. `plan_reason` is its functional reason. For an exoskeleton donor (beetle, crab), a covering that leaves out the legs must say why the legs stay bare (name the legs in plan_reason); otherwise it is refused (RC-R10-16).",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "extent": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+         "type": "string",
+         "enum": [
+          "head",
+          "neck",
+          "forequarters",
+          "back",
+          "flanks",
+          "belly",
+          "hindquarters",
+          "legs",
+          "tail"
+         ]
+        }
+       },
+       "plan_reason": {
+        "type": "string",
+        "minLength": 12,
+        "description": "The reason recorded in the plan and shown on the card (one short sentence)."
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "extent",
+       "plan_reason",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "connect_features",
+     "description": "Two features of the same donor system grow from each other (for example a horn from the covering).",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "a": {
+        "type": "string",
+        "enum": [
+         "head horn",
+         "covering"
+        ]
+       },
+       "b": {
+        "type": "string",
+        "enum": [
+         "head horn",
+         "covering"
+        ]
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "a",
+       "b",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "set_identity_cues",
+     "description": "The positive form description that makes a discrete donor part the donor's. Parts only, not the covering.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "feature": {
+        "type": "string",
+        "enum": [
+         "head horn"
+        ]
+       },
+       "cues": {
+        "type": "string"
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "feature",
+       "cues",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "set_identity_part",
+     "description": "Choose the donor's one identity part among its own diagnostic parts.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "donor": {
+        "type": "string"
+       },
+       "part": {
+        "type": "string"
+       },
+       "plan_reason": {
+        "type": "string",
+        "minLength": 12,
+        "description": "The reason recorded in the plan and shown on the card (one short sentence)."
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "donor",
+       "part",
+       "plan_reason",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "set_covering_material_only",
+     "description": "The host keeps its own covering (fur, skin, feathers); the donor covering contributes only its color, gloss, texture and pattern on it. Discrete identity parts are kept. The two-failure rule's second route.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "plan_reason": {
+        "type": "string",
+        "minLength": 12,
+        "description": "The reason recorded in the plan and shown on the card (one short sentence)."
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "plan_reason",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "audit_plan",
+     "description": "Audit the current plan: blocking items (hard cards, an unchosen host tie) and advice (soft cards, the function audit, the fiction budget). Required before render.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "render",
+     "description": "Render the audited plan. method single_pass (default) or growth_edit (host first, then one edit grows the covering; only for a plan with a grown donor covering).",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "method": {
+        "type": "string",
+        "enum": [
+         "single_pass",
+         "growth_edit"
+        ]
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "method",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "inspect",
+     "description": "Inspect an image with the plan-blind critics. Returns pass or the failures, each with a key and kind (covering or structural).",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "image_id": {
+        "type": "string"
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "image_id",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "edit",
+     "description": "One image edit turn fixing covering or surface failures of an image (keys from inspect). Structural failures need a plan change and a new render instead.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "image_id": {
+        "type": "string"
+       },
+       "failure_keys": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "image_id",
+       "failure_keys",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "ask_user",
+     "description": "Ask the user to choose (interactive runs only).",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "question": {
+        "type": "string"
+       },
+       "options": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "question",
+       "options",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "finalize",
+     "description": "Finish with this image. Any failures it still has are stated on the card. If code ranks another image higher (best_so_far from inspect), say why yours is better in why_not_best; without it the call is refused.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "image_id": {
+        "type": "string"
+       },
+       "why_not_best": {
+        "type": "string",
+        "description": "Only when image_id is not best_so_far: why this image is better."
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "image_id",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   }
+  ],
+  "tool_choice": "auto",
+  "max_tokens": 8000,
+  "model": "meta-models/muse-spark-open-1026"
+ },
+ "response": {
+  "id": "chatcmpl-0e86db7a47854a4fb6ab56c911ec8380",
+  "choices": [
+   {
+    "finish_reason": "tool_calls",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": null,
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": [
+      {
+       "id": "chatcmpl-tool-cf16945a7e794af3bb25bb0f2b06ac56",
+       "function": {
+        "arguments": "{\"reason\": \"Plan changed to reduced dorsal extent to satisfy two-failure rule; audit required before re-render.\"}",
+        "name": "audit_plan"
+       },
+       "type": "function"
+      }
+     ],
+     "reasoning_content": "We have set_extent to 4 zones, but need legs excluded - must explain legs bare. Our plan_reason says \"legs stay bare for agile locomotion and heat loss\" - includes legs word. That satisfies RC-R10-16 requirement.\n\nNeed audit then render again.\n\n"
+    }
+   }
+  ],
+  "created": 1793564815,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 168,
+   "prompt_tokens": 9171,
+   "total_tokens": 9339,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 102,
+    "audio_tokens": 0,
+    "reasoning_tokens": 56,
+    "rejected_prediction_tokens": 360,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 8704,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

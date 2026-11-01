@@ -1,0 +1,54 @@
+{
+ "case": "b02",
+ "kind": "agent",
+ "sire": "rhinoceros beetle",
+ "dam": "brown bear",
+ "mode": "speculative",
+ "wall_seconds": 474.0,
+ "renders": 3,
+ "edits": 1,
+ "tool_calls": 18,
+ "host": "brown_bear",
+ "note": null,
+ "calls_by_provider": {
+  "baseten": {
+   "spark_baseten:evo_agent": 18,
+   "spark_baseten:evo_polish": 3,
+   "spark_baseten:evo_describe": 4,
+   "spark_baseten:evo_ask": 4,
+   "spark_baseten:evo_checklist": 2,
+   "spark_baseten:evo_critic": 1
+  },
+  "meta": {
+   "image:text_to_image": 4,
+   "spark:evo_describe": 4,
+   "spark:evo_ask": 4,
+   "sam:sam": 12
+  }
+ },
+ "failed_calls": 1,
+ "stop": null,
+ "final_image": "img2",
+ "final_choice": {
+  "shown_first": "agent",
+  "agree": true,
+  "agent_pick": {
+   "image_id": "img2",
+   "image_key": "evo/crt_581a4148c23c.agent.img2.webp",
+   "rank": 1,
+   "of": 4,
+   "structural": 0,
+   "failures": 7,
+   "reason": "Finalizing best inspected image per inspect comparison (img2 structural 0 vs later structural separate-animal failures); remaining covering failures accepted on card as integration limits under speculative license."
+  },
+  "code_pick": {
+   "image_id": "img2",
+   "image_key": "evo/crt_581a4148c23c.agent.img2.webp",
+   "rank": 1,
+   "of": 4,
+   "structural": 0,
+   "failures": 7,
+   "reason": "code ranks inspected images by fewest structural failures, then fewest failures, then the latest"
+  }
+ }
+}

@@ -1,0 +1,154 @@
+{
+ "purpose": "evo_describe",
+ "request": {
+  "model": "muse-spark-1.3",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture with no other context and describe exactly what is drawn, like a careful field naturalist. Do not guess what was intended; describe only what is visible. description: a free paragraph describing the whole creature first. parts: every body part you see, one entry each (head, horns, ears, mane, legs, feet, tail, wings, gills, tentacles, shell, plates, scales, feathers, markings), with what it looks like and where it is. attached_objects: anything that looks attached to or sitting on the body rather than part of it, such as an object, an armor piece or a whole small animal; empty if none. animals: every real animal whose features you can see, as everyday English common names, at most four; include any animal that only one part resembles. Then count, looking carefully: separate_bodies: separate animal bodies or body-shaped objects in the picture, including any whole animal or animal-shaped object attached to or sitting on the main creature. heads: heads of any kind. walking_legs: legs the creature stands or walks on, including hidden ones you can infer. wings: wings of any kind. extra_limb_pieces: jointed leg-like, claw-like or tentacle-like pieces other than the walking legs and the tail. tails: tails of any kind (0 if none)."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "Describe this creature, then count."
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (613711 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "plan_blind_describe",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "description",
+      "parts",
+      "attached_objects",
+      "animals",
+      "separate_bodies",
+      "heads",
+      "walking_legs",
+      "wings",
+      "extra_limb_pieces",
+      "tails"
+     ],
+     "properties": {
+      "description": {
+       "type": "string"
+      },
+      "parts": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "part",
+         "looks_like",
+         "where"
+        ],
+        "properties": {
+         "part": {
+          "type": "string"
+         },
+         "looks_like": {
+          "type": "string"
+         },
+         "where": {
+          "type": "string"
+         }
+        }
+       }
+      },
+      "attached_objects": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "animals": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "separate_bodies": {
+       "type": "integer"
+      },
+      "heads": {
+       "type": "integer"
+      },
+      "walking_legs": {
+       "type": "integer"
+      },
+      "wings": {
+       "type": "integer"
+      },
+      "extra_limb_pieces": {
+       "type": "integer"
+      },
+      "tails": {
+       "type": "integer"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0
+ },
+ "response": {
+  "id": "chatcmpl-01a198c9-8345-7630-bd08-94c4b6c343e2",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\"animals\": [\"bear\", \"beetle\"], \"attached_objects\": [], \"description\": \"The creature is a large quadruped shown in right profile with the thick shaggy brown fur, bear-shaped head, small rounded ears, tan muzzle, clawed paws, and short tail of a brown bear, combined with a glossy beetle-like exoskeleton. A single long black barbed horn curves up from the top of the head, a large smooth dark shield covers the shoulders, overlapping dark segmented plates cover the back from neck to rump, tan segmented plating with oval openings lines the lower flanks, and dark segmented guards cover the outer sides of the fore and hind limbs.\", \"extra_limb_pieces\": 0, \"heads\": 1, \"parts\": [{\"looks_like\": \"brown furry bear head with lighter tan muzzle and black nose\", \"part\": \"head\", \"where\": \"at the front right of the body\"}, {\"looks_like\": \"small round dark brown eyes\", \"part\": \"eyes\", \"where\": \"on the sides of the head\"}, {\"looks_like\": \"black bear nose\", \"part\": \"nose\", \"where\": \"at the tip of the muzzle\"}, {\"looks_like\": \"small rounded brown furry bear ears\", \"part\": \"ears\", \"where\": \"on the top sides of the head\"}, {\"looks_like\": \"long glossy black curved beetle horn with small barbs along the inner edge\", \"part\": \"horn\", \"where\": \"growing from the top center of the head between the ears and curving up and back\"}, {\"looks_like\": \"thick shaggy brown bear fur\", \"part\": \"torso fur\", \"where\": \"covering the neck, chest, belly sides, legs and rear\"}, {\"looks_like\": \"glossy dark brown segmented beetle-like carapace with many overlapping transverse plates and small paired holes\", \"part\": \"dorsal shell\", \"where\": \"covering the entire back from behind the neck to the rear\"}, {\"looks_like\": \"large smooth glossy dark brown beetle pronotum plates\", \"part\": \"shoulder plates\", \"where\": \"over the shoulders just behind the head\"}, {\"looks_like\": \"matte tan segmented plates with oval holes along the top edge\", \"part\": \"side segmentation\", \"where\": \"along the lower sides of the torso under the dark dorsal shell\"}, {\"looks_like\": \"glossy dark brown segmented plates with a large smooth shoulder guard and spiky stacked lower section\", \"part\": \"front leg armor\", \"where\": \"on the outer side of the visible front leg\"}, {\"looks_like\": \"glossy dark brown segmented plates with a large thigh guard and stacked shin bands\", \"part\": \"hind leg armor\", \"where\": \"on the outer side of the visible hind leg\"}, {\"looks_like\": \"thick furry brown bear legs\", \"part\": \"legs\", \"where\": \"four legs under the torso, two fully visible on the side and two partially visible behind them\"}, {\"looks_like\": \"broad furry bear paws with long dark claws\", \"part\": \"feet\", \"where\": \"at the bottom of each leg\"}, {\"looks_like\": \"small short furry brown bear tail\", \"part\": \"tail\", \"where\": \"at the extreme rear left of the body under the shell\"}], \"separate_bodies\": 1, \"tails\": 1, \"walking_legs\": 4, \"wings\": 0}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null
+    }
+   }
+  ],
+  "created": 1793564705,
+  "model": "muse-spark-1.3",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 3661,
+   "prompt_tokens": 3852,
+   "total_tokens": 7513,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": null,
+    "audio_tokens": null,
+    "reasoning_tokens": 2912,
+    "rejected_prediction_tokens": null,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": null,
+    "cache_write_tokens": null,
+    "cached_tokens": 0,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}
