@@ -30,7 +30,7 @@ sys.path.insert(0, str(ROOT / "backend"))
 os.environ.update({
     "CHIMERA_LIVE_BUDGET_FILE": str(ROOT / "docs" / "live" / "budget.json"),
     "CHIMERA_LIVE_LOG": str(ROOT / "docs" / "LIVE_LOG.md"),
-    "CHIMERA_RECORD_DIR": str(OUT / "raw"),
+    "CHIMERA_RECORD_DIR": str(OUT / ("raw_rerender" if "--rerender-b" in sys.argv else "raw")),
     "CHIMERA_LIVE_MAX_IMAGES": "27",
     "CHIMERA_LIVE_MAX_SPARK": "100",
     "CHIMERA_LIVE_MAX_SAM": "16",
@@ -116,10 +116,14 @@ async def render(eng: EvoEngine, tap: MaskTap, slug: str, sire: str, dam: str, m
 
 
 RECOVER = "--recover" in sys.argv  # rebuild outputs from the engine's cache: no Meta or GBIF call is made
+RERENDER = "--rerender-b" in sys.argv  # E4 follow-up: b) again after the dropped-part fix, fresh cache, no resolves
+if RERENDER:
+    RENDERS = [("b_axolotl_x_pangolin_rerender", "axolotl", "pangolin", "realistic")]
+    PREDICTED = {"b_axolotl_x_pangolin_rerender": {"spark": 6, "image": 1, "sam": 1}}
 
 
 async def main() -> int:
-    settings = Settings(chimera_mode="real", local_data_dir=str(ROOT / ".localdata" / "e4_live"))
+    settings = Settings(chimera_mode="real", local_data_dir=str(ROOT / ".localdata" / ("e4_rerender" if RERENDER else "e4_live")))
     if not settings.meta_api_key:
         print("META_API_KEY is not set")
         return 3
@@ -136,7 +140,7 @@ async def main() -> int:
 
     # a) resolve, no images
     resolutions, start = [], len(calls)
-    for name in ([] if RECOVER else NAMES):
+    for name in ([] if RECOVER or RERENDER else NAMES):
         current_step.set(f"e4:resolve:{name}")
         try:
             res = (await eng.resolve(name)).public()
@@ -148,7 +152,7 @@ async def main() -> int:
         print(f"resolve {name!r}: {res['status']} {res.get('note', '')}"[:300])
         if stopped:
             break
-    if not RECOVER:
+    if not (RECOVER or RERENDER):
         _w(OUT / "resolutions.json", resolutions)
     resolve_calls = _count(calls, start)
 
@@ -175,7 +179,7 @@ async def main() -> int:
 
     gbif = getattr(eng.gbif, "recorded", [])
     for i, rec in enumerate(gbif, 1):
-        _w(OUT / "gbif" / f"gbif-{i:02d}.json", rec)
+        _w(OUT / "gbif" / f"{'rerender-' if RERENDER else ''}gbif-{i:02d}.json", rec)
     after = budget_used()
     summary = {"budget_before": before, "budget_after": after, "caps": CAPS, "predicted": PREDICTED,
                "made": {"resolve": resolve_calls, **{r["slug"]: r["attempts_by_kind"] for r in results}},
@@ -183,7 +187,7 @@ async def main() -> int:
                "attempts_non_ok": [asdict(c) for c in calls if c.outcome != "ok"],
                "resolutions": resolutions, "results": results, "failures": failures, "skipped": skipped,
                "stopped": stopped}
-    _w(OUT / ("summary_recover.json" if RECOVER else "summary.json"), summary)
+    _w(OUT / ("summary_recover.json" if RECOVER else "summary_rerender.json" if RERENDER else "summary.json"), summary)
     print("budget after:", after, "| attempts:", _count(calls, 0), "| gbif calls:", len(gbif))
     if stopped:
         print("STOPPED:", stopped)

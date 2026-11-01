@@ -276,3 +276,5 @@ Short entries per phase: what was built, what was tested, what was deferred. New
 - `e4_live.py` failed to write its outputs in run 1 (missing folder) after every call had succeeded. The outputs were rebuilt from the engine cache with `--recover` (0 calls), and the SAM masks were decoded offline from the recordings.
 
 **Step 8:** report `docs/evolution/E4_OPEN_WORLD.md`.
+
+**Follow-up (live):** b) axolotl x pangolin, realistic, re-rendered after the dropped-part fix (`e4_live.py --rerender-b`, fresh cache). Calls were 6 Spark, 1 image and 1 SAM, as predicted. The budget counter moved image 21→22, spark 83→89, sam 11→12. There are no gills in the prompt or the image. The checklist's "no external gills" item was answered yes, and quality was 0.975 (the thumbnail missed the patches). The axolotl reads only through its skin patches; the open critic saw a pangolin. Details are in `E4_OPEN_WORLD.md`.

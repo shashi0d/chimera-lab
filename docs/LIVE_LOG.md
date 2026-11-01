@@ -117,3 +117,11 @@ Every real Meta API call made by L1 (appended automatically by `backend/app/adap
 | 2026-10-31T20:18:19+00:00 | e4:d_rhinoceros_beetle_x_brown_bear:try1 | sam | sam-3.1 | 2861 | 0 | 0 | 0 | ok | resp_6ae64d082d7eb1fb59714e2d |
 | 2026-10-31T20:18:34+00:00 | e4:d_rhinoceros_beetle_x_brown_bear:try1 | evo_checklist | muse-spark-1.3 | 7675 | 437 | 2034 | 2471 | ok | chatcmpl-01a1939d-2d75-7448-b6d0-4d7668b28466 |
 | 2026-10-31T20:18:39+00:00 | e4:d_rhinoceros_beetle_x_brown_bear:try1 | evo_critic | muse-spark-1.3 | 4134 | 3526 | 706 | 4232 | ok | chatcmpl-01a1939d-3d64-76c5-8a2d-3b65034170c8 |
+| 2026-11-01T00:38:48+00:00 | e4:b_axolotl_x_pangolin_rerender:try1 | evo_plan | muse-spark-1.3 | 21936 | 5619 | 5665 | 11284 | ok | chatcmpl-01a1948b-6a64-736d-ad3e-ba5c51c63d89 |
+| 2026-11-01T00:38:54+00:00 | e4:b_axolotl_x_pangolin_rerender:try1 | evo_audit | muse-spark-1.3 | 6038 | 291 | 1216 | 1507 | ok | chatcmpl-01a1948b-820b-7782-853c-328d91cd747e |
+| 2026-11-01T00:39:14+00:00 | e4:b_axolotl_x_pangolin_rerender:try1 | evo_polish | muse-spark-1.3 | 20029 | 455 | 6010 | 6465 | ok | chatcmpl-01a1948b-d03c-7307-825a-940b5d664d0d |
+| 2026-11-01T00:39:33+00:00 | e4:b_axolotl_x_pangolin_rerender:try1 | text_to_image | muse-image-1.0 | 18582 | 20579 | 2698 | 23277 | ok | resp_6ae68a4374a08b592ec149d0 |
+| 2026-11-01T00:39:38+00:00 | e4:b_axolotl_x_pangolin_rerender:try1 | evo_checklist | muse-spark-1.3 | 5267 | 3712 | 1136 | 4848 | ok | chatcmpl-01a1948c-2d90-76c7-80a3-b6d28f2dd7a4 |
+| 2026-11-01T00:39:41+00:00 | e4:b_axolotl_x_pangolin_rerender:try1 | sam | sam-3.1 | 3589 | 0 | 0 | 0 | ok | resp_6ae68a4ad975fe0b9ccd4ce2 |
+| 2026-11-01T00:39:55+00:00 | e4:b_axolotl_x_pangolin_rerender:try1 | evo_checklist | muse-spark-1.3 | 7062 | 384 | 1481 | 1865 | ok | chatcmpl-01a1948c-71cc-728c-8d1d-540708883cb3 |
+| 2026-11-01T00:40:00+00:00 | e4:b_axolotl_x_pangolin_rerender:try1 | evo_critic | muse-spark-1.3 | 4417 | 3526 | 644 | 4170 | ok | chatcmpl-01a1948c-82fd-70db-af52-0d713e3f9205 |

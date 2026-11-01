@@ -128,3 +128,21 @@ No cap was reached. Headroom: 6 images, 17 Spark, 5 SAM.
 7. **`model_plan` is not kept with a cached creature.** A rejection reason is lost after a cache hit.
 
 **Next weakest point:** the judge now detects structural misses, such as the limb slot in d) and absent parts in b), but nothing acts on them. A single re-render with the compiled prompt when a structural checklist item (frame, limbs, license compensation) is answered "no" would close the loop, as the third-animal check already does. It costs at most 3 Spark, 1 image and 1 SAM per creature.
+
+## Follow-up: b) re-rendered live after the dropped-part fix
+
+Run with `scripts/e4_live.py --rerender-b`: fresh engine cache (`.localdata/e4_rerender`), no resolves (the pangolin came from `data/learned_animals.json`). Outputs are in `live/e4/b_axolotl_x_pangolin_rerender/`, the raw recordings in `live/e4/raw_rerender/`, and the summary in `summary_rerender.json`.
+
+| | Predicted | Made |
+|---|---|---|
+| Spark (plan, polish, audit, checklist x2, open critic) | 6 | 6 |
+| Image | 1 | 1 |
+| SAM | 1 | 1 |
+| GBIF | 0 | 0 |
+
+Budget counter: image 21→22, spark 83→89, sam 11→12 (caps 27/100/16).
+
+- **The plan:** the model plan and the polish were both accepted. The body carries the flag `dropped part: external gills`. Breathing was repaired (RC-R9-03/-12) and the other five functions pass.
+- **The prompt:** contains no gill wording. The checklist (generated from the plan) is: pangolin body shape, pangolin head with eyes, **no external gills**, axolotl skin patches on the back and flanks.
+- **The judge:** the full-size checklist answered yes to all 4 items. The thumbnail answered no to the patches (0.75). The quality score is **0.975**. The critic counted 1 creature and listed the animals as pangolin and axolotl, with no third animal. The forced choice was "a mix of both" at full size and "chinese pangolin" on the thumbnail. The open critic (logged only) saw just "pangolin".
+- **My judgment: the fix works, but the creature reads weakly as an axolotl.** There are no gills, and the image is a clean pangolin frame with large pale-pink axolotl skin patches on the back and flanks, as planned. With the gills gone for a real reason, the only axolotl cue left is skin color, which is why the open critic and the thumbnail see a pangolin. This is a correct realistic-mode result, not an engine fault. A stronger realistic axolotl contribution would need a donor trait that keeps a job in air (for example the axolotl's wide, small-eyed head shape or a fringed tail fin as a display feature). That is a design question for realistic mode, not a bug.
