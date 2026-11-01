@@ -364,3 +364,13 @@ Read `docs/evolution/ROADMAP.md` (now committed) sections 4, 5 and 5b. Caps for 
 - **Edit loop:** `realize()` makes one plan-worded edit turn on a structural miss, inspects again, keeps the image with fewer misses, and warns if a miss remains. It replaces the E2b re-render. The checklist cap is now 8.
 - **Mock:** the image generator chains edits by `previous_response_id`.
 - **Tests:** 22 new (`test_s2_inspect.py`, with the S1 edit recording and the E4 beetle plan as regressions); E2b, E4 and worked-example tests updated for the extra SAM presence calls and the edit turn. Suite 831 passed, 6 skipped.
+
+**Part 7 (tests):** each part has its own test file:
+- `test_s2_e4c.py` (39)
+- `test_s2_prompt_hygiene.py` (13)
+- `test_s2_ops.py` (27)
+- `test_s2_cited.py` (12)
+- `test_s2_routing.py` (18)
+- `test_s2_inspect.py` (22)
+
+`test_s2_regression.py` (2) runs the whole fix pack through `engine.fuse()` on the E4 live case, the beetle x bear with the beetle exactly as E4 learned it, in speculative and mythic modes. The regression fixtures are the recorded E4 beetle plan, the E4 beetle entry, the S1 edit-turn recording and the S2 web-search probe response. Full suite 833 passed, 6 skipped; ruff clean.

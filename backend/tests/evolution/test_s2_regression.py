@@ -1,0 +1,65 @@
+"""S2 part 7: the whole fix pack end to end in mock mode, on the E4 live case (rhinoceros beetle x brown bear,
+speculative), starting from the beetle exactly as E4 learned it. Parts 1 to 6 each have their own test file;
+this one checks they work together through engine.fuse()."""
+
+from __future__ import annotations
+
+import re
+import shutil
+from pathlib import Path
+
+import pytest
+
+from app.evolution.engine import EvoEngine
+from app.evolution.parts import dorsal_wings
+from app.services import build_services
+from tests.conftest import make_settings
+
+FIX = Path(__file__).resolve().parents[1] / "fixtures" / "recorded" / "s2"
+
+
+@pytest.fixture
+def e4_engine(tmp_path: Path) -> EvoEngine:
+    store = tmp_path / "learned.json"
+    shutil.copy(FIX / "learned_beetle_e4.json", store)
+    return EvoEngine(build_services(make_settings(tmp_path, evo_learned_path=str(store))))
+
+
+async def test_beetle_bear_with_the_full_fix_pack(e4_engine):
+    doc = await e4_engine.fuse(sire_name="rhinoceros beetle", dam_name="brown bear", mode="speculative")
+    g, tax = doc["genome"], e4_engine.tax
+    lp = g["limb_plan"]
+    # 1a: no insect wings in the forelimb slot; over budget, so dropped
+    assert (lp["forelimbs"]["kind"], lp["hindlimbs"]["kind"]) == ("legs", "legs") and lp["extra_wings"] is None
+    assert "dropped part: wings" in g["traits"]["body"]["flags"]
+    # 1b: the beetle's class has no tail: its head horn instead; the learned entry was corrected and logged
+    assert g["traits"]["tail"]["part"] is None and "european rhinoceros beetle head horn" in lp["appendages"]
+    assert not tax.resolve("european_rhinoceros_beetle").winged
+    # 1c: the donor is named once in one grouped clause, as materials and shapes
+    p = doc["prompt_compiled"]
+    details = p[p.index("Details:"):p.index(". Coat texture")]
+    assert len(re.findall(r"european rhinoceros beetle(?!-type)", details)) == 1
+    assert "chitin plates" in details and "exoskeleton" not in details
+    # 1d: the silhouette matches the limb plan
+    assert "wing" not in g["silhouette"] and "two hind legs" not in g["silhouette"]
+    # 2: no notes, no forced choice
+    assert "host value" not in p and "forced_choice" not in doc["judge"]
+    # 3: code filled the derived lists
+    assert g["card_trace"] and [x["id"] for x in g["licenses"]] == ["arthropod_large"]
+    # 5: the card names the providers
+    assert doc["card"]["providers"]["render"].startswith("meta:")
+    # 6: inspect ran on the plan's own structural items
+    kinds = {it["kind"] for it in doc["inspect"]["before"]["items"] if it["structural"]}
+    assert {"frame", "head", "compensation", "absent", "part", "one_body"} <= kinds
+    assert doc["inspect"]["before"]["sam_calls"] == 1  # the head horn; absences are never SAM-tested
+
+
+async def test_mythic_beetle_bear_keeps_dorsal_wings_with_a_license(e4_engine):
+    doc = await e4_engine.fuse(sire_name="rhinoceros beetle", dam_name="brown bear", mode="mythic")
+    g = doc["genome"]
+    assert [x["id"] for x in g["licenses"]] == ["arthropod_large", "insect_wings"]
+    from app.evolution.genome import validate_plan
+
+    assert dorsal_wings(validate_plan(g), e4_engine.tax)
+    items = [it for it in doc["inspect"]["before"]["items"] if it["kind"] == "part" and it["sam"] == "wings"]
+    assert items and "four legs" in items[0]["text"]
