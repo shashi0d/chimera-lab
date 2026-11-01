@@ -23,6 +23,11 @@ class Settings(BaseSettings):
     meta_vision_model: str = "muse-spark-1.3"  # L1-02, verified via GET /v1/models
     meta_image_model: str = "muse-image-1.0"
 
+    # S1: Muse Spark Open on Baseten (OpenAI-compatible chat completions). Probe only: no route uses it yet.
+    baseten_base_url: str = "https://inference.baseten.co/v1"
+    baseten_api_key: str | None = Field(default=None, validation_alias="BASETEN_API_KEY_MODEL_MUSE_SPARK_OPEN_26")
+    baseten_spark_model: str = "meta-models/muse-spark-open-1026"
+
     supabase_url: str | None = None
     supabase_service_key: str | None = None
     storage_bucket: str = "chimera-assets"

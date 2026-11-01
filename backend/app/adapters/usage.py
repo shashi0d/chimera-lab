@@ -6,8 +6,9 @@ put tokens per step in the run detail and charge the token spend guard, and,
 when ``CHIMERA_LIVE_LOG`` is set, to a markdown log (docs/LIVE_LOG.md).
 
 ``CHIMERA_LIVE_BUDGET_FILE`` enables a hard, cross-process cap on live calls
-(``CHIMERA_LIVE_MAX_IMAGES`` / ``CHIMERA_LIVE_MAX_SPARK`` / ``CHIMERA_LIVE_MAX_SAM``). Every attempt
-counts, failed ones included; past the cap the adapter refuses to call.
+(``CHIMERA_LIVE_MAX_IMAGES`` / ``CHIMERA_LIVE_MAX_SPARK`` / ``CHIMERA_LIVE_MAX_SAM`` /
+``CHIMERA_LIVE_MAX_SPARK_BASETEN``). Every attempt counts, failed ones included; past the cap the adapter
+refuses to call. The caps are runaway guards, not quality limits.
 """
 
 from __future__ import annotations
@@ -25,7 +26,8 @@ from typing import Any, Literal
 from app.errors import ChimeraError
 from app.models.schemas import ErrorCode
 
-CallKind = Literal["spark", "image", "sam"]
+CallKind = Literal["spark", "image", "sam", "spark_baseten"]  # S1: Spark Open on Baseten counts separately
+KINDS: tuple[str, ...] = ("image", "spark", "sam", "spark_baseten")
 
 
 @dataclass
@@ -90,14 +92,16 @@ def _budget_file() -> Path | None:
 def _limits() -> dict[str, int]:
     return {"image": int(os.environ.get("CHIMERA_LIVE_MAX_IMAGES", "15")),
             "spark": int(os.environ.get("CHIMERA_LIVE_MAX_SPARK", "60")),
-            "sam": int(os.environ.get("CHIMERA_LIVE_MAX_SAM", "15"))}
+            "sam": int(os.environ.get("CHIMERA_LIVE_MAX_SAM", "15")),
+            "spark_baseten": int(os.environ.get("CHIMERA_LIVE_MAX_SPARK_BASETEN", "300"))}
 
 
 def budget_used() -> dict[str, int]:
     path = _budget_file()
+    zero = dict.fromkeys(KINDS, 0)
     if not path or not path.exists():
-        return {"image": 0, "spark": 0, "sam": 0}
-    return {"image": 0, "spark": 0, "sam": 0, **json.loads(path.read_text())}
+        return zero
+    return {**zero, **json.loads(path.read_text())}
 
 
 def guard(kind: CallKind) -> None:

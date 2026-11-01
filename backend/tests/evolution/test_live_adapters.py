@@ -73,7 +73,7 @@ def test_sam_budget_kind(tmp_path, monkeypatch):
     with pytest.raises(ChimeraError) as e:
         usage.guard("sam")
     assert e.value.code == ErrorCode.BUDGET_EXCEEDED
-    assert usage.budget_used() == {"image": 0, "spark": 0, "sam": 2}
+    assert usage.budget_used() == {"image": 0, "spark": 0, "sam": 2, "spark_baseten": 0}
 
 
 def test_real_mode_builds_live_adapters(tmp_path):

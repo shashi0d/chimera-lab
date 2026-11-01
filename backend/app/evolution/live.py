@@ -24,6 +24,7 @@ from PIL import Image
 
 from app.adapters.base import GeneratedImage, ImageGenAdapter
 from app.adapters.meta.client import _data_url, _json_schema, _message_json, _MetaClient
+from app.adapters.usage import CallKind
 from app.config import Settings
 from app.errors import ChimeraError
 from app.evolution.genome import REGIONS, TRAIT_TAGS
@@ -387,13 +388,15 @@ class _Retrying:
 
 
 class LiveEvoSpark(_Retrying):
+    kind: CallKind = "spark"  # the live-budget kind; the Baseten subclass counts as "spark_baseten"
+
     def __init__(self, settings: Settings) -> None:
         super().__init__(settings, settings.plan_timeout_seconds)
         self.model_id = settings.meta_vision_model
         self.http = _MetaClient(settings.meta_api_base_url, settings.meta_api_key or "", self.timeout)
 
     async def _chat(self, purpose: str, body: dict[str, Any]) -> dict[str, Any]:
-        return await self.retry(lambda: self.http.call("spark", purpose, self.model_id, body))
+        return await self.retry(lambda: self.http.call(self.kind, purpose, self.model_id, body))
 
     async def write_plan(self, prompt: str, skeleton: dict[str, Any]) -> dict[str, Any]:
         payload = await self._chat("evo_plan", build_plan_request(self.model_id, prompt))

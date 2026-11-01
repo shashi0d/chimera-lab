@@ -278,3 +278,9 @@ Short entries per phase: what was built, what was tested, what was deferred. New
 **Step 8:** report `docs/evolution/E4_OPEN_WORLD.md`.
 
 **Follow-up (live):** b) axolotl x pangolin, realistic, re-rendered after the dropped-part fix (`e4_live.py --rerender-b`, fresh cache). Calls were 6 Spark, 1 image and 1 SAM, as predicted. The budget counter moved image 21→22, spark 83→89, sam 11→12. There are no gills in the prompt or the image. The checklist's "no external gills" item was answered yes, and quality was 0.975 (the thumbnail missed the patches). The axolotl reads only through its skin patches; the open critic saw a pangolin. Details are in `E4_OPEN_WORLD.md`.
+
+## S1: capability probe for the new architecture (evo)
+
+`docs/evolution/ROADMAP.md` is not in the repo (neither evo nor main), so S1 follows the task text alone.
+
+**Part 1:** Baseten adapter `backend/app/adapters/baseten/` (`BasetenEvoSpark`). It is the existing EvoSpark interface over `https://inference.baseten.co/v1`, model `meta-models/muse-spark-open-1026`, and reuses the Meta request builders, parsers, `_MetaClient` (live-budget guard, usage records, key-free recordings), error mapping and `call_with_retry`. New budget kind `spark_baseten`, capped by `CHIMERA_LIVE_MAX_SPARK_BASETEN` (default 300, a runaway guard only). Recordings now refuse the Baseten key as well as the Meta key. The key is read from `BASETEN_API_KEY_MODEL_MUSE_SPARK_OPEN_26`; `.env.example` added with placeholders. No route uses the adapter yet. Tests: 11 new; full suite 696 passed, 6 skipped.

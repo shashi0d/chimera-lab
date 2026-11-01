@@ -278,6 +278,8 @@ def map_sdk_error(exc: Exception) -> ChimeraError:
 # ------------------------------------------------------------- record and replay (L1-09)
 
 ELIDED = "<elided>"
+# Every API key a recording must never contain (S1 adds the Baseten key).
+SECRET_ENV = ("META_API_KEY", "BASETEN_API_KEY_MODEL_MUSE_SPARK_OPEN_26")
 
 
 def _elide(obj: Any) -> Any:
@@ -302,8 +304,8 @@ def save_recording(purpose: str, request: dict[str, Any], payload: dict[str, Any
         return
     text = json.dumps({"purpose": purpose, "request": _elide(request), "response": _elide(payload)}, indent=1,
                       ensure_ascii=False, default=str)
-    key = os.environ.get("META_API_KEY") or ""
-    if (key and key in text) or "Bearer " in text or "Authorization" in text:
+    keys = [os.environ.get(k) or "" for k in SECRET_ENV]
+    if any(k and k in text for k in keys) or "Bearer " in text or "Authorization" in text:
         raise RuntimeError("refusing to save a recording that contains credentials")
     path = Path(folder)
     path.mkdir(parents=True, exist_ok=True)

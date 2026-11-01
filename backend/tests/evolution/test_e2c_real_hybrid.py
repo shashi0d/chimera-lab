@@ -187,6 +187,7 @@ async def test_fuse_chimera_does_not_accept_a_hybrid_name(engine):
 
 
 def test_sam_cap_defaults_to_15(monkeypatch):
-    for k in ("CHIMERA_LIVE_MAX_SAM", "CHIMERA_LIVE_MAX_IMAGES", "CHIMERA_LIVE_MAX_SPARK"):
+    for k in ("CHIMERA_LIVE_MAX_SAM", "CHIMERA_LIVE_MAX_IMAGES", "CHIMERA_LIVE_MAX_SPARK",
+              "CHIMERA_LIVE_MAX_SPARK_BASETEN"):
         monkeypatch.delenv(k, raising=False)
-    assert usage._limits() == {"image": 15, "spark": 60, "sam": 15}
+    assert usage._limits() == {"image": 15, "spark": 60, "sam": 15, "spark_baseten": 300}  # S1 adds Baseten
