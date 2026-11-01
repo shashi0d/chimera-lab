@@ -1,0 +1,109 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Silhouette: Four-legged brown bear frame. Host frame: the brown bear sets the outline, body size and overall frame. A single creature that combines a european rhinoceros beetle and a brown bear. Head of the brown bear, fully visible and uncluttered, with clear, discernible eyes. Details: brown bear body and legs, with its own dense fur on the face, neck, shoulders, belly, hips, legs and tail, plain coat, no stripes or spots; from the european rhinoceros beetle, as parts and materials on the brown bear's own body: a head horn grown from the frontal bone of the head, above and between the eyes, out of the covering, which continues from there into the body covering of smooth, glossy dark cuticle, one horn curving upward and back from the head, long curved head horn; hard, glossy chitin plates with fine seams in its own colors, grown from the skin as the brown bear's own covering over the back and flanks, replacing the brown bear's dense fur there and conforming to the brown bear's body, a few large, smooth, fused plates each spanning a whole body region of the brown bear (the shoulders, the back, the hips, each limb section), sized to the brown bear's body, joined by flexible cuticle at every joint; every covered part keeps the brown bear's own length and shape; the dense fur stops at the covering's edge, and the face, neck, shoulders, belly, hips, legs and tail keep the brown bear's own dense fur. The covering follows the body's own shape and bends at every joint. Declared fiction: arthropod parts at large size, shown with thick supporting legs and rows of small breathing openings (spiracles) along the flanks. Bilaterally symmetrical, recognizable limbs, visible sense organs. Habitat cue (forest): dark back and light belly (mild countershading). Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "id": "resp_6ae78ebc9b376128ce9c4e36",
+  "access_programs": null,
+  "created_at": 1793560252.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae78ebc97785df329574864",
+    "summary": [
+     {
+      "text": "**Designing hybrid creature silhouette**\nI'm shaping a four-legged brown bear frame with dense fur and a clear, uncluttered bear head, then adding the European rhinoceros beetle's frontal horn and body covering to create a single combined silhouette.\n**Finding rhinoceros beetle reference**\nI'm looking up a European rhinoceros beetle to match the horn shape, chitin plate seams, and spiracles for the bear hybrid illustration.\n**Generating detailed hybrid image**\nI'm preparing the final image with detailed rendering and incorporating the rhinoceros beetle references to shape the hybrid creature's silhouette and textures.\n**Refining hybrid creature design**\nI'm preparing another generation to improve the single horn, add more integrated spiracles, and strengthen the armored chitin while keeping the overall look.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae78ebc46ba306fd0bc439d",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR09NbUJ6UWhDRTZYOHc0RUFPalVVNmFHTDJjUWJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczpiNDU4OTc5Ny1mZjM1LTRhYzgtODc5ZS0zMzE0NmRmZTVjOTg6R09vOEJqUlNCR3hzN09JRkFQd3BqV1NjVGlvNmJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM1NjAyNTJ9.Q8WLFwGAC6KF7ehe2FM1KjdzhO0o",
+    "result": "<elided> (713960 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 31447,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 25536
+   },
+   "output_tokens": 3358,
+   "output_tokens_details": {
+    "reasoning_tokens": 542
+   },
+   "total_tokens": 34805
+  },
+  "user": null
+ }
+}

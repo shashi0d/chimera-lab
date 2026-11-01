@@ -1,0 +1,83 @@
+{
+ "purpose": "evo_polish",
+ "request": {
+  "model": "meta-models/muse-spark-open-1026",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You lightly edit a text-to-image prompt for readability. Keep the first sentence word for word. Do not add, remove or change any animal, body part, color, count, strength, habitat or view. Do not add brand or franchise names. Stay within 20 percent of the original length. Return the edited prompt only."
+   },
+   {
+    "role": "user",
+    "content": "Silhouette: Four-legged brown bear frame. Host frame: the brown bear sets the outline, body size and overall frame. A single creature that combines a european rhinoceros beetle and a brown bear. Head of the brown bear, fully visible and uncluttered, with clear, discernible eyes. Details: brown bear body and legs, with its own dense fur on the face, neck, shoulders, belly, hips, legs and tail, plain coat, no stripes or spots; from the european rhinoceros beetle, as parts and materials on the brown bear's own body: a head horn grown from the frontal bone of the head, above and between the eyes, out of the covering, which continues from there into the body covering: smooth, glossy dark cuticle, one horn curving upward and back from the head; long curved head horn; hard, glossy chitin plates with fine seams in its own colors, grown from the skin as the brown bear's own covering over the back and flanks: it replaces the brown bear's dense fur there and conforms to the brown bear's body, a few large, smooth, fused plates, each spanning a whole body region of the brown bear (the shoulders, the back, the hips, each limb section), sized to the brown bear's body, joined by flexible cuticle at every joint; every covered part keeps the brown bear's own length and shape; the dense fur stops at the covering's edge, and the face, neck, shoulders, belly, hips, legs and tail keep the brown bear's own dense fur. The covering follows the body's own shape and bends at every joint. Declared fiction: arthropod parts at large size, shown with thick supporting legs and rows of small breathing openings (spiracles) along the flanks. Bilaterally symmetrical, recognizable limbs, visible sense organs. Habitat cue (forest): dark back and light belly (mild countershading). Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration."
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "polished_prompt",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "prompt"
+     ],
+     "properties": {
+      "prompt": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0.2,
+  "max_tokens": 15000
+ },
+ "response": {
+  "id": "chatcmpl-3e2273722725472b9af56115b3a1179c",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{ \"prompt\": \"Silhouette: Four-legged brown bear frame. Host frame: the brown bear sets the outline, body size and overall frame. A single creature that combines a european rhinoceros beetle and a brown bear. Head of the brown bear, fully visible and uncluttered, with clear, discernible eyes. Details: brown bear body and legs, with its own dense fur on the face, neck, shoulders, belly, hips, legs and tail, plain coat, no stripes or spots; from the european rhinoceros beetle, as parts and materials on the brown bear's own body: a head horn grown from the frontal bone of the head, above and between the eyes, out of the covering, which continues from there into the body covering of smooth, glossy dark cuticle, one horn curving upward and back from the head, long curved head horn; hard, glossy chitin plates with fine seams in its own colors, grown from the skin as the brown bear's own covering over the back and flanks, replacing the brown bear's dense fur there and conforming to the brown bear's body, a few large, smooth, fused plates each spanning a whole body region of the brown bear (the shoulders, the back, the hips, each limb section), sized to the brown bear's body, joined by flexible cuticle at every joint; every covered part keeps the brown bear's own length and shape; the dense fur stops at the covering's edge, and the face, neck, shoulders, belly, hips, legs and tail keep the brown bear's own dense fur. The covering follows the body's own shape and bends at every joint. Declared fiction: arthropod parts at large size, shown with thick supporting legs and rows of small breathing openings (spiracles) along the flanks. Bilaterally symmetrical, recognizable limbs, visible sense organs. Habitat cue (forest): dark back and light belly (mild countershading). Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration.\" }",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null,
+     "reasoning_content": "<elided> (13040 chars)"
+    }
+   }
+  ],
+  "created": 1793560207,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 3505,
+   "prompt_tokens": 663,
+   "total_tokens": 4168,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 2858,
+    "audio_tokens": 0,
+    "reasoning_tokens": 3039,
+    "rejected_prediction_tokens": 1664,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 128,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

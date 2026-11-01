@@ -1,0 +1,156 @@
+{
+ "purpose": "evo_describe",
+ "request": {
+  "model": "meta-models/muse-spark-open-1026",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture with no other context and describe exactly what is drawn, like a careful field naturalist. Do not guess what was intended; describe only what is visible. description: a free paragraph describing the whole creature first. parts: every body part you see, one entry each (head, horns, ears, mane, legs, feet, tail, wings, gills, tentacles, shell, plates, scales, feathers, markings), with what it looks like and where it is. attached_objects: anything that looks attached to or sitting on the body rather than part of it, such as an object, an armor piece or a whole small animal; empty if none. animals: every real animal whose features you can see, as everyday English common names, at most four; include any animal that only one part resembles. Then count, looking carefully: separate_bodies: separate animal bodies or body-shaped objects in the picture, including any whole animal or animal-shaped object attached to or sitting on the main creature. heads: heads of any kind. walking_legs: legs the creature stands or walks on, including hidden ones you can infer. wings: wings of any kind. extra_limb_pieces: jointed leg-like, claw-like or tentacle-like pieces other than the walking legs and the tail. tails: tails of any kind (0 if none)."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "Describe this creature, then count."
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (581983 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "plan_blind_describe",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "description",
+      "parts",
+      "attached_objects",
+      "animals",
+      "separate_bodies",
+      "heads",
+      "walking_legs",
+      "wings",
+      "extra_limb_pieces",
+      "tails"
+     ],
+     "properties": {
+      "description": {
+       "type": "string"
+      },
+      "parts": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "part",
+         "looks_like",
+         "where"
+        ],
+        "properties": {
+         "part": {
+          "type": "string"
+         },
+         "looks_like": {
+          "type": "string"
+         },
+         "where": {
+          "type": "string"
+         }
+        }
+       }
+      },
+      "attached_objects": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "animals": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "separate_bodies": {
+       "type": "integer"
+      },
+      "heads": {
+       "type": "integer"
+      },
+      "walking_legs": {
+       "type": "integer"
+      },
+      "wings": {
+       "type": "integer"
+      },
+      "extra_limb_pieces": {
+       "type": "integer"
+      },
+      "tails": {
+       "type": "integer"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0,
+  "max_tokens": 8000
+ },
+ "response": {
+  "id": "chatcmpl-040e2a134262490a9452eb8260c4d530",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\n  \"description\": \"The creature is shown in left-facing profile as a quadrupedal animal with the overall size, proportions, fur, head shape, and paws of a brown bear, but extensively covered with a glossy, hard, dark brown to black exoskeleton resembling a beetle. The bear's brown furry head, four clawed paws, pale segmented underbelly, and short bushy tail remain visible beneath and around the armor. The armor is smooth, shiny, and composed of overlapping domed plates covering the top of the head, the back of the neck, the entire dorsal surface from shoulders to rump, the sides, shoulders, hips, and the outer surfaces of all four legs. Two large curved horns project from the head and neck armor. The animal stands on all four feet on a plain light background.\",\n  \"parts\": [\n    {\n      \"part\": \"head\",\n      \"looks_like\": \"a brown bear head with dense medium-brown fur on the cheeks and neck, a lighter tan muzzle, a black nose at the tip, a small dark brown eye, and a slightly open mouth\",\n      \"where\": \"at the front of the body, facing left, with the neck joining the armored torso\"\n    },\n    {\n      \"part\": \"horns\",\n      \"looks_like\": \"two large, smooth, glossy black horns like a rhinoceros beetle; the front horn is shorter, upright and forked with small points, arising from the forehead plate; the rear horn is much longer, thick at the base and tapering to a sharp tip, curving strongly forward and upward over the head\",\n      \"where\": \"on top of the head and on the large plate covering the back of the head and upper neck\"\n    },\n    {\n      \"part\": \"ears\",\n      \"looks_like\": \"small, rounded, brown furry ears\",\n      \"where\": \"on the sides of the head just behind the front horn, partially tucked under the edge of the glossy head plate\"\n    },\n    {\n      \"part\": \"legs\",\n      \"looks_like\": \"four thick, muscular legs with brown fur visible at the joints and underbelly, each largely sheathed in large, smooth, glossy black plates over the upper and lower segments\",\n      \"where\": \"two forelegs under the shoulder armor and two hindlegs under the hip armor, supporting the body in a standing quadrupedal posture\"\n    },\n    {\n      \"part\": \"feet\",\n      \"looks_like\": \"broad brown furry paws with five toes and long, curved, dark claws\",\n      \"where\": \"at the bottom of each leg, in contact with the ground\"\n    },\n    {\n      \"part\": \"tail\",\n      \"looks_like\": \"a short, bushy, brown furry tail\",\n      \"where\": \"protruding from the rear of the body beneath the last dorsal plate, above the hindlegs\"\n    },\n    {\n      \"part\": \"shell\",\n      \"looks_like\": \"a hard, smooth, highly glossy dark brown-black carapace forming a helmet over the head and a continuous dorsal covering\",\n      \"where\": \"covering the top of the head, the back of the neck, and the entire back from shoulders to rump\"\n    },\n    {\n      \"part\": \"plates\",\n      \"looks_like\": \"numerous overlapping, smooth, domed, glossy black plates with visible segmentation; the dorsal plates are large and transverse across the back, the shoulder and hip plates are large and rounded, the leg plates are shin-like, and the ventral surface is pale beige with transverse segmentation and a lateral row of small oval openings with dark centers\",\n      \"where\": \"dorsal plates in a row along the back and sides, shoulder plates over the forequarters, hip plates over the hindquarters, shin plates on the front and back of each leg, and pale segmented plates on the throat, chest, belly, and lower sides\"\n    }\n  ],\n  \"attached_objects\": [],\n  \"animals\": [\"bear\", \"beetle\"],\n  \"separate_bodies\": 1,\n  \"heads\": 1,\n  \"walking_legs\": 4,\n  \"wings\": 0,\n  \"extra_limb_pieces\": 0,\n  \"tails\": 1\n}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null,
+     "reasoning_content": "<elided> (8955 chars)"
+    }
+   }
+  ],
+  "created": 1793560426,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 2963,
+   "prompt_tokens": 3795,
+   "total_tokens": 6758,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 2086,
+    "audio_tokens": 0,
+    "reasoning_tokens": 2053,
+    "rejected_prediction_tokens": 4053,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 384,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

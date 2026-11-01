@@ -592,5 +592,188 @@
     "host": "gray_wolf"
    }
   ]
+ },
+ {
+  "at": "2026-11-01T14:12:40",
+  "budget": {
+   "before": {
+    "image": 144,
+    "spark": 598,
+    "sam": 136,
+    "spark_baseten": 943
+   },
+   "after": {
+    "image": 150,
+    "spark": 609,
+    "sam": 142,
+    "spark_baseten": 982
+   }
+  },
+  "calls": {
+   "baseten:spark_baseten:evo_agent": {
+    "ok": 22,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_polish": {
+    "ok": 3,
+    "failed": 0
+   },
+   "meta:image:text_to_image": {
+    "ok": 6,
+    "failed": 0
+   },
+   "meta:spark:evo_describe": {
+    "ok": 6,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_describe": {
+    "ok": 6,
+    "failed": 0
+   },
+   "meta:spark:evo_ask": {
+    "ok": 5,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_ask": {
+    "ok": 5,
+    "failed": 0
+   },
+   "meta:sam:sam": {
+    "ok": 6,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_checklist": {
+    "ok": 2,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_critic": {
+    "ok": 1,
+    "failed": 0
+   }
+  },
+  "summary": [
+   {
+    "run": "beetle_bear",
+    "repeat": 1,
+    "held_out": false,
+    "renders": 4,
+    "edits": 2,
+    "tool_calls": 23,
+    "stop": null,
+    "final_image": "img5",
+    "remaining": [
+     {
+      "key": "grows_out",
+      "kind": "covering",
+      "text": "Do the hard, glossy chitin plates with fine seams grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending "
+     },
+     {
+      "key": "on_top",
+      "kind": "covering",
+      "text": "Do the hard, glossy chitin plates with fine seams look like separate pieces laid on top of the fur, with a raised rim or a gap at the edge?"
+     },
+     {
+      "key": "continuous",
+      "kind": "covering",
+      "text": "Do the hard, glossy chitin plates with fine seams form one continuous structure over the head, neck, shoulders, back, flanks, belly, hips and tail, rather than "
+     },
+     {
+      "key": "scattered",
+      "kind": "covering",
+      "text": "Are the hard, glossy chitin plates with fine seams scattered as separate pieces over different parts of the body?"
+     },
+     {
+      "key": "cover_on_legs",
+      "kind": "covering",
+      "text": "Are there hard, glossy chitin plates with fine seams on the legs?"
+     },
+     {
+      "key": "third_animal",
+      "kind": "structural",
+      "text": "an animal other than the two parents"
+     }
+    ],
+    "host": "brown_bear"
+   }
+  ]
+ },
+ {
+  "at": "2026-11-01T14:19:30",
+  "budget": {
+   "before": {
+    "image": 150,
+    "spark": 609,
+    "sam": 142,
+    "spark_baseten": 982
+   },
+   "after": {
+    "image": 154,
+    "spark": 617,
+    "sam": 147,
+    "spark_baseten": 1017
+   }
+  },
+  "calls": {
+   "baseten:spark_baseten:evo_agent": {
+    "ok": 21,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_polish": {
+    "ok": 3,
+    "failed": 0
+   },
+   "meta:image:text_to_image": {
+    "ok": 4,
+    "failed": 0
+   },
+   "meta:spark:evo_describe": {
+    "ok": 4,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_describe": {
+    "ok": 4,
+    "failed": 0
+   },
+   "meta:spark:evo_ask": {
+    "ok": 4,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_ask": {
+    "ok": 4,
+    "failed": 0
+   },
+   "meta:sam:sam": {
+    "ok": 5,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_checklist": {
+    "ok": 2,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_critic": {
+    "ok": 1,
+    "failed": 0
+   }
+  },
+  "summary": [
+   {
+    "run": "beetle_bear",
+    "repeat": 2,
+    "held_out": false,
+    "renders": 3,
+    "edits": 1,
+    "tool_calls": 21,
+    "stop": null,
+    "final_image": "img2",
+    "remaining": [
+     {
+      "key": "third_animal",
+      "kind": "structural",
+      "text": "an animal other than the two parents"
+     }
+    ],
+    "host": "brown_bear"
+   }
+  ]
  }
 ]
