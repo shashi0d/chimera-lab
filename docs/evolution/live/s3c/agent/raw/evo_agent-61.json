@@ -1,0 +1,601 @@
+{
+ "purpose": "evo_agent",
+ "request": {
+  "messages": [
+   {
+    "role": "system",
+    "content": "You are the design agent of Chimera Lab, a natural-history creature engine. You build one creature from two parent animals by calling tools; code tools do the work and check every step.\n\nRules:\n1. You never write a plan. Pick a candidate from propose_candidates with choose_candidate, and change it only with plan_op (typed operations). Code fills every derived field.\n2. Every call has a reason: what you decided and why, citing the rule cards the tools return when they apply.\n3. Order: resolve_animal for each parent, propose_candidates, choose_candidate, audit_plan, render, inspect.\n4. audit_plan: blocking items stop render until fixed; advice is yours to weigh.\n5. After inspect: if it passes, call finalize with that image. If it fails, choose and say why:\n   - covering or surface failures (kind \"covering\"): edit that image with those failure keys;\n   - structural failures (kind \"structural\": counts, extra or missing parts, the frame, part identity or connection, a third animal): change the plan with plan_op or choose another candidate, audit, and render again;\n   - or accept the failures and finalize, saying why.\n   An edit or a new render can make things worse: compare with images_so_far from inspect, and finalize the best image, not just the latest.\n6. A host tie: choose the host yourself from the candidates' notes, with a reason (this run is not interactive: ask_user returns no answer).\n7. Limits: at most 4 renders and 30 tool calls. Near a limit, finalize your best inspected image; its remaining failures go on the card.\nKeep reasons short. Call one tool at a time."
+   },
+   {
+    "role": "user",
+    "content": "Build one creature from the parents 'tortoise' (sire) and 'domestic goat' (dam) in realistic mode. Start with resolve_animal for each parent."
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-33d1139e193845509ec353f4cf9b3349",
+      "type": "function",
+      "function": {
+       "name": "resolve_animal",
+       "arguments": "{\"name\": \"tortoise\", \"reason\": \"Resolving sire parent per instruction order: identify sourced traits before candidate generation.\"}"
+      }
+     },
+     {
+      "id": "chatcmpl-tool-93ea22491e724117a254ac8a8cac3811",
+      "type": "function",
+      "function": {
+       "name": "resolve_animal",
+       "arguments": "{\"name\": \"domestic goat\", \"reason\": \"Resolving dam parent per instruction order: identify sourced traits before candidate generation.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-33d1139e193845509ec353f4cf9b3349",
+    "content": "{\"ok\": true, \"status\": \"resolved\", \"note\": \"'tortoise' names several species; chose the tortoise (Testudo graeca), the most common reading. Alternatives are listed.\", \"slot\": \"sire\", \"animal\": {\"id\": \"tortoise\", \"common_name\": \"tortoise\", \"scientific_name\": \"Testudo graeca\", \"class\": \"Testudines\", \"body_plan\": \"quadruped\", \"covering\": \"shell\", \"mass_kg\": 1.6, \"habitats\": [\"grassland\", \"forest\", \"desert\"], \"breathing\": \"lungs\", \"features\": [\"high-domed brown-yellow carapace\", \"distinct thigh spurs\", \"sturdy scaly legs\", \"strong claws\"], \"features_source\": \"model-estimated\", \"source\": \"learned\"}}"
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-93ea22491e724117a254ac8a8cac3811",
+    "content": "{\"ok\": true, \"status\": \"resolved\", \"note\": \"\", \"slot\": \"dam\", \"animal\": {\"id\": \"domestic_goat\", \"common_name\": \"domestic goat\", \"scientific_name\": \"Capra hircus\", \"class\": \"Mammalia\", \"body_plan\": \"quadruped\", \"covering\": \"fur\", \"mass_kg\": 61.0, \"habitats\": [\"desert\", \"grassland\", \"forest\", \"mountain\"], \"breathing\": \"lungs\", \"features\": [], \"features_source\": \"model-estimated (no source recorded)\", \"source\": \"database\"}}"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-790dadee27b34348b6d6dfb74b8d51ad",
+      "type": "function",
+      "function": {
+       "name": "propose_candidates",
+       "arguments": "{\"reason\": \"Both parents resolved, need ranked candidate plans to select arrangement per rules.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-790dadee27b34348b6d6dfb74b8d51ad",
+    "content": "{\"ok\": true, \"host_tie\": [\"tortoise\", \"domestic goat\"], \"candidates\": [{\"id\": \"C1\", \"ops\": [{\"op\": \"set_host\", \"args\": {\"animal\": \"tortoise\"}}], \"score\": 2.5, \"host\": \"tortoise\", \"silhouette\": \"four-legged tortoise frame\", \"parts\": [], \"dropped\": [], \"identity_parts\": [], \"covering\": {\"extent\": [\"head\", \"neck\", \"legs\", \"tail\"], \"plate_pattern\": \"\", \"plate_source\": \"\"}, \"licenses\": [], \"labels\": [\"speculative chimera, no real-world precedent\"], \"notes\": {\"niche\": \"habitat grassland (native to tortoise, domestic goat)\", \"autonomy\": \"the tortoise body carries every function\", \"survival\": \"0 license(s) of 0: none\", \"identity\": \"covering over head, neck, legs, tail; the tortoise's shell keeps its own form and bony plates, with only its color taken from the domestic goat\", \"host\": \"structural tie: tortoise is one of two equal options (RC-R10-01: never by size, mass or name order)\"}}, {\"id\": \"C2\", \"ops\": [{\"op\": \"set_host\", \"args\": {\"animal\": \"domestic goat\"}}], \"score\": 2.5, \"host\": \"domestic goat\", \"silhouette\": \"four-legged domestic goat frame\", \"parts\": [], \"dropped\": [], \"identity_parts\": [], \"covering\": {\"extent\": [\"back\"], \"plate_pattern\": \"one broad carapace shield with short jointed plates on the limbs (from 'high-domed brown-yellow carapace')\", \"plate_source\": \"model-estimated\"}, \"licenses\": [], \"labels\": [\"speculative chimera, no real-world precedent\"], \"notes\": {\"niche\": \"habitat grassland (native to tortoise, domestic goat)\", \"autonomy\": \"the domestic goat body carries every function\", \"survival\": \"0 license(s) of 0: none\", \"identity\": \"covering over back, one broad carapace shield with short jointed plates on the limbs (from 'high-domed brown-yellow carapace')\", \"host\": \"structural tie: domestic goat is one of two equal options (RC-R10-01: never by size, mass or name order)\"}}], \"note\": \"advice only: you choose; scores rank the R10 notes, nothing more\", \"cards\": [\"RC-R10-01\", \"RC-R6-08\", \"RC-R6-09\", \"RC-R10-15\"]}"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-d8b06a40a45e41f091804736642ed74d",
+      "type": "function",
+      "function": {
+       "name": "choose_candidate",
+       "arguments": "{\"candidate_id\": \"C2\", \"reason\": \"Choosing domestic goat host per C2 notes: autonomy via goat frame carrying functions, niche grassland shared by both parents, identity via tortoise carapace covering on back; host tie broken by functional notes not size/mass per RC-R10-01.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-d8b06a40a45e41f091804736642ed74d",
+    "content": "{\"ok\": true, \"chosen\": \"C2\", \"plan\": {\"plan_id\": \"crt_fdb63debbfae\", \"host\": \"domestic goat\", \"host_tie\": null, \"mode\": \"realistic\", \"habitat\": \"grassland\", \"silhouette\": \"four-legged domestic goat frame\", \"parts\": [], \"identity_parts\": [], \"dropped\": [], \"licenses\": [], \"covering\": {\"extent\": [\"back\"], \"plate_pattern\": \"one broad carapace shield with short jointed plates on the limbs (from 'high-domed brown-yellow carapace')\"}, \"transfers\": []}, \"next\": \"audit_plan\"}"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-57b4f86bbe9b4b6e90472ae6e86ea97f",
+      "type": "function",
+      "function": {
+       "name": "audit_plan",
+       "arguments": "{\"reason\": \"Audit current plan before render to check blocking items and advice per rule 4.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-57b4f86bbe9b4b6e90472ae6e86ea97f",
+    "content": "{\"ok\": true, \"blocking\": [], \"advice\": [], \"functions\": {\"breathing\": \"pass\", \"feeding\": \"pass\", \"support\": \"pass\", \"movement\": \"pass\", \"heat\": \"pass\", \"senses\": \"pass\"}, \"fiction_budget\": {\"budget\": 0, \"licenses\": [], \"identity_parts\": []}, \"labels\": [\"speculative chimera, no real-world precedent\"], \"renderable\": true, \"cards\": []}"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-917eccdb5707404894a591970b0864f1",
+      "type": "function",
+      "function": {
+       "name": "render",
+       "arguments": "{\"method\": \"single_pass\", \"reason\": \"Audit passed with no blocking items, rendering domestic goat host with tortoise carapace covering per C2.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-917eccdb5707404894a591970b0864f1",
+    "content": "{\"ok\": true, \"image_id\": \"img1\", \"method\": \"single_pass\", \"renders_used\": 1, \"renders_left\": 3, \"polish\": \"accepted\"}"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-9026b1f5996f43b7bcb979ef7e654ece",
+      "type": "function",
+      "function": {
+       "name": "inspect",
+       "arguments": "{\"image_id\": \"img1\", \"reason\": \"Inspecting render for covering/surface vs structural failures to determine finalize vs edit vs plan change.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-9026b1f5996f43b7bcb979ef7e654ece",
+    "content": "{\"ok\": true, \"image_id\": \"img1\", \"verdict\": \"fail\", \"failures\": [{\"key\": \"grows_out\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the hard shell plates grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending into scales), rather than\", \"fix\": \"Show the hard shell plates grown in the skin over the back, as one covering that replaces the domestic goat's fur there; the fur stops at its edge; keep everything else the same.\"}, {\"key\": \"on_top\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the hard shell plates look like separate pieces laid on top of the fur, with a raised rim or a gap at the edge?\", \"fix\": \"Show the hard shell plates grown in the skin over the back, as one covering that replaces the domestic goat's fur there; the fur stops at its edge; keep everything else the same.\"}, {\"key\": \"scattered\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Are the hard shell plates scattered as separate pieces over different parts of the body?\", \"fix\": \"Show the hard shell plates as one continuous covering over the back, not scattered pieces; the domestic goat's fur stays on the belly and legs; keep everything else the same.\"}, {\"key\": \"cover_on_legs\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Are there hard shell plates on the legs?\", \"fix\": \"Keep the domestic goat's own fur on the legs and shoulders; the hard shell plates only over the back; keep everything else the same.\"}, {\"key\": \"cover_on_shoulders\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Are there hard shell plates on the shoulders?\", \"fix\": \"Keep the domestic goat's own fur on the legs and shoulders; the hard shell plates only over the back; keep everything else the same.\"}, {\"key\": \"follows_body\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the hard shell plates follow this body's own shape and contours, the way its own skin would?\", \"fix\": \"Show the hard shell plates conforming to the domestic goat's own body shape, grown from its skin over the back; keep everything else the same.\"}, {\"key\": \"separate_outline\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the hard shell plates keep the outline of a separate object, such as another animal's shell or back, instead of the body's own shape?\", \"fix\": \"Show the hard shell plates conforming to the domestic goat's own body shape, grown from its skin over the back; keep everything else the same.\"}, {\"key\": \"extra_horn\", \"kind\": \"structural\", \"status\": \"fail\", \"text\": \"described but not planned: horn\", \"fix\": \"The plan has no horn: show the domestic goat's own body there instead; keep everything else the same.\"}], \"counts\": {\"separate_bodies\": 1, \"heads\": 1, \"walking_legs\": 4, \"wings\": 0, \"extra_limb_pieces\": 0}, \"third_animals\": {\"spark_open\": [], \"meta_spark\": []}, \"drift\": null, \"decision\": \"Meta Spark decides; Spark Open answers kept as information (D-084)\", \"images_so_far\": {\"img1\": {\"structural\": 1, \"covering\": 7}}, \"best_so_far\": \"img1\", \"cards\": [\"RC-R10-12\", \"RC-R10-15\", \"RC-R10-16\"]}"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-6ca1bdfb9e114c618f92627505933804",
+      "type": "function",
+      "function": {
+       "name": "edit",
+       "arguments": "{\"image_id\": \"img1\", \"failure_keys\": [\"grows_out\", \"on_top\", \"scattered\", \"cover_on_legs\", \"cover_on_shoulders\", \"follows_body\", \"separate_outline\"], \"reason\": \"Fixing covering failures per inspect: shell plates must grow from skin replacing fur on back only, conform to goat body shape, not scattered on legs/shoulders, per RC-R10-15.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-6ca1bdfb9e114c618f92627505933804",
+    "content": "{\"ok\": true, \"image_id\": \"img2\", \"instruction\": \"Show the hard shell plates grown in the skin over the back, as one covering that replaces the domestic goat's fur there; the fur stops at its edge; keep everything else the same. Show the hard shell plates as one continuous covering over the back, not scattered pieces; the domestic goat's fur stays on the belly and legs; keep everything else the same. Keep the domestic goat's own fur on the legs and shoulders; the hard shell plates only over the back; keep everything else the same.\", \"edits_used\": 1, \"next\": \"inspect the new image (host drift is checked there)\"}"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-0b050c30e33543238a51bcd33e208c9c",
+      "type": "function",
+      "function": {
+       "name": "inspect",
+       "arguments": "{\"image_id\": \"img2\", \"reason\": \"Inspecting edited image to verify covering fixes and check remaining structural failures.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-0b050c30e33543238a51bcd33e208c9c",
+    "content": "{\"ok\": true, \"image_id\": \"img2\", \"verdict\": \"fail\", \"failures\": [{\"key\": \"grows_out\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the hard shell plates grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending into scales), rather than\", \"fix\": \"Show the hard shell plates grown in the skin over the back, as one covering that replaces the domestic goat's fur there; the fur stops at its edge; keep everything else the same.\"}, {\"key\": \"on_top\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the hard shell plates look like separate pieces laid on top of the fur, with a raised rim or a gap at the edge?\", \"fix\": \"Show the hard shell plates grown in the skin over the back, as one covering that replaces the domestic goat's fur there; the fur stops at its edge; keep everything else the same.\"}, {\"key\": \"follows_body\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the hard shell plates follow this body's own shape and contours, the way its own skin would?\", \"fix\": \"Show the hard shell plates conforming to the domestic goat's own body shape, grown from its skin over the back; keep everything else the same.\"}, {\"key\": \"separate_outline\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the hard shell plates keep the outline of a separate object, such as another animal's shell or back, instead of the body's own shape?\", \"fix\": \"Show the hard shell plates conforming to the domestic goat's own body shape, grown from its skin over the back; keep everything else the same.\"}, {\"key\": \"sized_to_body\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Are the plates sized to this animal's body, about as large as its own muscles and body segments?\", \"fix\": \"Show each plate sized to the domestic goat's own body segments and muscle masses; keep everything else the same.\"}, {\"key\": \"wrong_scale\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the plates look made for a much smaller or much larger animal?\", \"fix\": \"Show each plate sized to the domestic goat's own body segments and muscle masses; keep everything else the same.\"}, {\"key\": \"extra_horn\", \"kind\": \"structural\", \"status\": \"fail\", \"text\": \"described but not planned: horn\", \"fix\": \"The plan has no horn: show the domestic goat's own body there instead; keep everything else the same.\"}], \"counts\": {\"separate_bodies\": 1, \"heads\": 1, \"walking_legs\": 4, \"wings\": 0, \"extra_limb_pieces\": 0}, \"third_animals\": {\"spark_open\": [], \"meta_spark\": []}, \"drift\": {\"drifted\": false, \"changed\": [], \"by_critic\": {\"meta_spark\": [], \"spark_open\": []}}, \"decision\": \"Meta Spark decides; Spark Open answers kept as information (D-084)\", \"images_so_far\": {\"img1\": {\"structural\": 1, \"covering\": 7}, \"img2\": {\"structural\": 1, \"covering\": 6}}, \"best_so_far\": \"img2\", \"cards\": [\"RC-R10-12\", \"RC-R10-15\", \"RC-R10-16\"]}"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-4c5a726d43334895a855350f91f1adbd",
+      "type": "function",
+      "function": {
+       "name": "edit",
+       "arguments": "{\"image_id\": \"img2\", \"failure_keys\": [\"grows_out\", \"on_top\", \"follows_body\", \"separate_outline\", \"sized_to_body\", \"wrong_scale\"], \"reason\": \"Second covering edit to ensure shell plates grow from skin on back, conform to goat body contours, and are sized to goat segments per RC-R10-15.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-4c5a726d43334895a855350f91f1adbd",
+    "content": "{\"ok\": true, \"image_id\": \"img3\", \"instruction\": \"Show the hard shell plates grown in the skin over the back, as one covering that replaces the domestic goat's fur there; the fur stops at its edge; keep everything else the same. Show the hard shell plates conforming to the domestic goat's own body shape, grown from its skin over the back; keep everything else the same. Show each plate sized to the domestic goat's own body segments and muscle masses; keep everything else the same.\", \"edits_used\": 2, \"next\": \"inspect the new image (host drift is checked there)\"}"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-dc8f512f0365483f8c53a2ffa77fb31e",
+      "type": "function",
+      "function": {
+       "name": "inspect",
+       "arguments": "{\"image_id\": \"img3\", \"reason\": \"Inspecting second edit for remaining covering and structural issues.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-dc8f512f0365483f8c53a2ffa77fb31e",
+    "content": "{\"ok\": true, \"image_id\": \"img3\", \"verdict\": \"fail\", \"failures\": [{\"key\": \"grows_out\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the hard shell plates grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending into scales), rather than\", \"fix\": \"Show the hard shell plates grown in the skin over the back, as one covering that replaces the domestic goat's fur there; the fur stops at its edge; keep everything else the same.\"}, {\"key\": \"on_top\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the hard shell plates look like separate pieces laid on top of the fur, with a raised rim or a gap at the edge?\", \"fix\": \"Show the hard shell plates grown in the skin over the back, as one covering that replaces the domestic goat's fur there; the fur stops at its edge; keep everything else the same.\"}, {\"key\": \"follows_body\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the hard shell plates follow this body's own shape and contours, the way its own skin would?\", \"fix\": \"Show the hard shell plates conforming to the domestic goat's own body shape, grown from its skin over the back; keep everything else the same.\"}, {\"key\": \"separate_outline\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the hard shell plates keep the outline of a separate object, such as another animal's shell or back, instead of the body's own shape?\", \"fix\": \"Show the hard shell plates conforming to the domestic goat's own body shape, grown from its skin over the back; keep everything else the same.\"}, {\"key\": \"extra_horn\", \"kind\": \"structural\", \"status\": \"fail\", \"text\": \"described but not planned: horn\", \"fix\": \"The plan has no horn: show the domestic goat's own body there instead; keep everything else the same.\"}], \"counts\": {\"separate_bodies\": 1, \"heads\": 1, \"walking_legs\": 4, \"wings\": 0, \"extra_limb_pieces\": 0}, \"third_animals\": {\"spark_open\": [], \"meta_spark\": []}, \"drift\": {\"drifted\": false, \"changed\": [], \"by_critic\": {\"meta_spark\": [], \"spark_open\": []}}, \"decision\": \"Meta Spark decides; Spark Open answers kept as information (D-084)\", \"images_so_far\": {\"img1\": {\"structural\": 1, \"covering\": 7}, \"img2\": {\"structural\": 1, \"covering\": 6}, \"img3\": {\"structural\": 1, \"covering\": 4}}, \"best_so_far\": \"img3\", \"cards\": [\"RC-R10-12\", \"RC-R10-15\", \"RC-R10-16\"]}"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-c6b7b8ceecd842ec8d77eb66491a149c",
+      "type": "function",
+      "function": {
+       "name": "plan_op",
+       "arguments": "{\"op\": \"set_identity_part\", \"args\": {\"donor\": \"domestic goat\", \"part\": \"horn\", \"reason\": \"host goat naturally bears horns; adding to plan to align with image and resolve extra_horn structural flag\"}, \"reason\": \"Addressing structural extra_horn failure: plan omitted host horn, causing inspect flag; adding as identity part should resolve.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-c6b7b8ceecd842ec8d77eb66491a149c",
+    "content": "{\"ok\": false, \"op\": \"set_identity_part\", \"errors\": [{\"code\": \"donor_is_host\", \"message\": \"the host has no identity part; name the other parent\", \"field\": \"donor\", \"hint\": \"\", \"valid\": null}], \"warnings\": [], \"changed\": false, \"plan\": {\"plan_id\": \"crt_fdb63debbfae\", \"host\": \"domestic goat\", \"host_tie\": null, \"mode\": \"realistic\", \"habitat\": \"grassland\", \"silhouette\": \"four-legged domestic goat frame\", \"parts\": [], \"identity_parts\": [], \"dropped\": [], \"licenses\": [], \"covering\": {\"extent\": [\"back\"], \"plate_pattern\": \"one broad carapace shield with short jointed plates on the limbs (from 'high-domed brown-yellow carapace')\"}, \"transfers\": []}}"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-b159cccab24d4292a724f6b2dbea4ff4",
+      "type": "function",
+      "function": {
+       "name": "plan_op",
+       "arguments": "{\"op\": \"set_region\", \"args\": {\"region\": \"head\", \"donor\": \"domestic goat\", \"operator\": \"PICK\"}, \"reason\": \"Attempting to clarify head region as goat to legitimize horns via plan.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-b159cccab24d4292a724f6b2dbea4ff4",
+    "content": "{\"ok\": true, \"op\": \"set_region\", \"errors\": [], \"warnings\": [], \"changed\": true, \"plan\": {\"plan_id\": \"crt_c528e22a2502\", \"host\": \"domestic goat\", \"host_tie\": null, \"mode\": \"realistic\", \"habitat\": \"grassland\", \"silhouette\": \"four-legged domestic goat frame\", \"parts\": [], \"identity_parts\": [], \"dropped\": [], \"licenses\": [], \"covering\": {\"extent\": [\"back\"], \"plate_pattern\": \"one broad carapace shield with short jointed plates on the limbs (from 'high-domed brown-yellow carapace')\"}, \"transfers\": []}, \"next\": \"audit_plan\"}"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-f887e250fad2466f925cea61329be716",
+      "type": "function",
+      "function": {
+       "name": "audit_plan",
+       "arguments": "{\"reason\": \"Re-auditing after plan change to include goat head pick, checking if horn now accounted for.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-f887e250fad2466f925cea61329be716",
+    "content": "{\"ok\": true, \"blocking\": [], \"advice\": [], \"functions\": {\"breathing\": \"pass\", \"feeding\": \"pass\", \"support\": \"pass\", \"movement\": \"pass\", \"heat\": \"pass\", \"senses\": \"pass\"}, \"fiction_budget\": {\"budget\": 0, \"licenses\": [], \"identity_parts\": []}, \"labels\": [\"speculative chimera, no real-world precedent\"], \"renderable\": true, \"cards\": []}"
+   }
+  ],
+  "tools": [
+   {
+    "type": "function",
+    "function": {
+     "name": "resolve_animal",
+     "description": "Resolve one parent name to an animal with sourced traits.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "name": {
+        "type": "string"
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "name",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "propose_candidates",
+     "description": "Ranked plan arrangements for the two resolved parents, each with R10 selection notes (niche, autonomy, survival, identity) and its reasons. Advice only.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "choose_candidate",
+     "description": "Adopt one candidate plan by id.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "candidate_id": {
+        "type": "string"
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "candidate_id",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "plan_op",
+     "description": "Change the current plan with one typed operation. Typed plan operations (args): set_host(animal); set_region(region, donor, operator) with regions head, tail, forelimbs (PICK) or neck, forequarters, back, flanks, belly, hindquarters, legs (PATCH, OVERLAY, PICK); set_habitat(name); set_mode(mode); add_license(rule, compensation); drop_part(part, reason); set_transfer_class(feature, cls); set_extent(feature, extent, reason); connect_features(a, b); set_identity_cues(feature, cues); set_identity_part(donor, part, reason). A failed operation changes nothing and returns errors with valid values.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "op": {
+        "type": "string",
+        "enum": [
+         "set_host",
+         "set_region",
+         "set_habitat",
+         "set_mode",
+         "add_license",
+         "drop_part",
+         "set_transfer_class",
+         "set_extent",
+         "connect_features",
+         "set_identity_cues",
+         "set_identity_part"
+        ]
+       },
+       "args": {
+        "type": "object"
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "op",
+       "args",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "audit_plan",
+     "description": "Audit the current plan: blocking items (hard cards, an unchosen host tie) and advice (soft cards, the function audit, the fiction budget). Required before render.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "render",
+     "description": "Render the audited plan. method single_pass (default) or growth_edit (host first, then one edit grows the covering; only for a plan with a donor covering).",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "method": {
+        "type": "string",
+        "enum": [
+         "single_pass",
+         "growth_edit"
+        ]
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "method",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "inspect",
+     "description": "Inspect an image with the plan-blind critics. Returns pass or the failures, each with a key and kind (covering or structural).",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "image_id": {
+        "type": "string"
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "image_id",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "edit",
+     "description": "One image edit turn fixing covering or surface failures of an image (keys from inspect). Structural failures need a plan change and a new render instead.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "image_id": {
+        "type": "string"
+       },
+       "failure_keys": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "image_id",
+       "failure_keys",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "ask_user",
+     "description": "Ask the user to choose (interactive runs only).",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "question": {
+        "type": "string"
+       },
+       "options": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "question",
+       "options",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "finalize",
+     "description": "Finish with this image. Any failures it still has are stated on the card.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "image_id": {
+        "type": "string"
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "image_id",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   }
+  ],
+  "tool_choice": "auto",
+  "max_tokens": 8000,
+  "model": "meta-models/muse-spark-open-1026"
+ },
+ "response": {
+  "id": "chatcmpl-5fcd61a305994797bc680755de8227ec",
+  "choices": [
+   {
+    "finish_reason": "tool_calls",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": null,
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": [
+      {
+       "id": "chatcmpl-tool-1237af8ec5aa47d2a34876e03b31288a",
+       "function": {
+        "arguments": "{\"method\": \"single_pass\", \"reason\": \"Rendering updated plan with explicit goat head to resolve extra_horn structural flag, maintaining back carapace covering.\"}",
+        "name": "render"
+       },
+       "type": "function"
+      }
+     ]
+    }
+   }
+  ],
+  "created": 1793554924,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 77,
+   "prompt_tokens": 7886,
+   "total_tokens": 7963,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 56,
+    "audio_tokens": 0,
+    "reasoning_tokens": 0,
+    "rejected_prediction_tokens": 91,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 7680,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

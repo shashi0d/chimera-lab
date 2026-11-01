@@ -1,0 +1,93 @@
+[
+ {
+  "id": "C1",
+  "ops": [],
+  "score": 2.55,
+  "host": "brown bear",
+  "silhouette": "four-legged brown bear frame",
+  "parts": [
+   "european rhinoceros beetle head horn"
+  ],
+  "dropped": [
+   "wings"
+  ],
+  "identity_parts": [
+   {
+    "donor": "European rhinoceros beetle",
+    "part": "head horn",
+    "from_trait": "long curved head horn",
+    "source": "model-estimated",
+    "set_by": "code"
+   }
+  ],
+  "covering": {
+   "extent": [
+    "head",
+    "neck",
+    "forequarters",
+    "back",
+    "flanks",
+    "belly",
+    "hindquarters",
+    "legs",
+    "tail"
+   ],
+   "plate_pattern": "a few large fused plates (from 'reddish-brown glossy wing cases')",
+   "plate_source": "model-estimated"
+  },
+  "licenses": [
+   {
+    "rule": "arthropod_large",
+    "card": "RC-R3-09",
+    "compensation": "thick supporting legs and rows of small breathing openings (spiracles) along the flanks"
+   }
+  ],
+  "labels": [
+   "speculative chimera, no real-world precedent",
+   "speculative: arthropod parts at large size (insect breathing limits size)"
+  ],
+  "notes": {
+   "niche": "habitat forest (native to European rhinoceros beetle, brown bear)",
+   "autonomy": "functions not carried: movement: repaired",
+   "survival": "1 license(s) of 1: arthropod parts at large size; labels: speculative: arthropod parts at large size (insect breathing limits size)",
+   "identity": "identity part: head horn (long curved head horn; model-estimated); covering over head, neck, forequarters, back, flanks, belly, hindquarters, legs, tail, a few large fused plates (from 'reddish-brown glossy wing cases')",
+   "host": "the brown bear has the more structured body schema (RC-R6-08)"
+  }
+ },
+ {
+  "id": "C2",
+  "ops": [
+   {
+    "op": "set_host",
+    "args": {
+     "animal": "European rhinoceros beetle"
+    }
+   }
+  ],
+  "score": 1.0,
+  "host": "European rhinoceros beetle",
+  "silhouette": "segmented European rhinoceros beetle frame",
+  "parts": [],
+  "dropped": [],
+  "identity_parts": [],
+  "covering": {
+   "extent": [
+    "back",
+    "flanks"
+   ],
+   "plate_pattern": "",
+   "plate_source": ""
+  },
+  "licenses": [],
+  "labels": [
+   "speculative chimera, no real-world precedent"
+  ],
+  "notes": {
+   "niche": "habitat forest (native to European rhinoceros beetle, brown bear)",
+   "autonomy": "the European rhinoceros beetle body carries every function",
+   "survival": "0 license(s) of 1: none",
+   "identity": "covering over back, flanks; no identity part from the donor's own traits",
+   "host": "the European rhinoceros beetle has the less structured body schema (RC-R6-08, soft): advised against"
+  }
+ }
+]

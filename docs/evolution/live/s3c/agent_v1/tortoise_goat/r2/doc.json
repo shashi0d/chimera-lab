@@ -1,0 +1,646 @@
+{
+ "prompt": "Silhouette: Four-legged domestic goat frame. Host frame: the domestic goat sets the outline, body size and overall frame. A single creature combining a tortoise and a domestic goat. The head is that of the domestic goat, fully visible and uncluttered, with clear, discernible eyes. Details: domestic goat body and legs with its own dense fur on the face, neck, shoulders, flanks, belly, hips, legs and tail, plain coat with no stripes or spots; from the tortoise, as parts and materials on the domestic goat's own body, hard shell plates in its own colors grown from the skin as the domestic goat's own covering over the back, replacing the domestic goat's dense fur there and conforming to the domestic goat's body — one broad, fused carapace shield over the domestic goat's shoulders and back, with short jointed plates on each limb section sized to the domestic goat's body; every covered part keeps the domestic goat's own length and shape; the dense fur stops at the covering's edge, and the face, neck, shoulders, flanks, belly, hips, legs and tail keep the domestic goat's own dense fur. The covering follows the body's own shape and bends at every joint. Bilaterally symmetrical, with recognizable limbs and visible sense organs. Habitat cue (grassland): dark back and light belly (strong countershading). Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration.\n\n[edit turn]\nShow the hard shell plates grown in the skin over the back, as one covering that replaces the domestic goat's fur there; the fur stops at its edge; keep everything else the same. Show the hard shell plates as one continuous covering over the back, not scattered pieces; the domestic goat's fur stays on the belly and legs; keep everything else the same. Keep the domestic goat's own fur on the legs and shoulders; the hard shell plates only over the back; keep everything else the same.\n\n[edit turn]\nShow the hard shell plates grown in the skin over the back, as one covering that replaces the domestic goat's fur there; the fur stops at its edge; keep everything else the same. Show the hard shell plates conforming to the domestic goat's own body shape, grown from its skin over the back; keep everything else the same.",
+ "prompt_compiled": "Silhouette: Four-legged domestic goat frame. Host frame: the domestic goat sets the outline, body size and overall frame. A single creature that combines a tortoise and a domestic goat. Head of the domestic goat, fully visible and uncluttered, with clear, discernible eyes. Details: domestic goat body and legs, with its own dense fur on the face, neck, shoulders, flanks, belly, hips, legs and tail, plain coat, no stripes or spots; from the tortoise, as parts and materials on the domestic goat's own body: hard shell plates in its own colors, grown from the skin as the domestic goat's own covering over the back: it replaces the domestic goat's dense fur there and conforms to the domestic goat's body, one broad, fused carapace shield over the domestic goat's shoulders and back, with short jointed plates on each limb section, sized to the domestic goat's body; every covered part keeps the domestic goat's own length and shape; the dense fur stops at the covering's edge, and the face, neck, shoulders, flanks, belly, hips, legs and tail keep the domestic goat's own dense fur. The covering follows the body's own shape and bends at every joint. Bilaterally symmetrical, recognizable limbs, visible sense organs. Habitat cue (grassland): dark back and light belly (strong countershading). Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration.",
+ "image_key": "evo/crt_686f407a42ae.agent.img3.webp",
+ "image_id": "img3",
+ "image_kind": "edit",
+ "judge": {
+  "scores": {
+   "critic": 1.0,
+   "silhouette": 0.817,
+   "thumbnail": 1.0,
+   "soft_penalty": 0.0,
+   "quality": 0.945
+  },
+  "critic": {
+   "answers": [
+    {
+     "item": "a domestic goat body shape",
+     "answer": "yes"
+    },
+    {
+     "item": "a domestic goat head with visible eyes",
+     "answer": "yes"
+    },
+    {
+     "item": "only parts and materials of the tortoise, no whole tortoise animals on the body",
+     "answer": "yes"
+    },
+    {
+     "item": "hard shell plates patches on the back",
+     "answer": "yes"
+    }
+   ],
+   "creatures": 1,
+   "animals": [
+    "goat",
+    "tortoise"
+   ],
+   "notes": "A shaggy brown goat is shown in profile with a tortoise carapace fused to its back."
+  },
+  "critic_thumbnail": {
+   "answers": [
+    {
+     "item": "a domestic goat body shape",
+     "answer": "yes"
+    },
+    {
+     "item": "a domestic goat head with visible eyes",
+     "answer": "yes"
+    },
+    {
+     "item": "only parts and materials of the tortoise, no whole tortoise animals on the body",
+     "answer": "yes"
+    },
+    {
+     "item": "hard shell plates patches on the back",
+     "answer": "yes"
+    }
+   ],
+   "creatures": 1,
+   "animals": [
+    "goat",
+    "tortoise"
+   ],
+   "notes": "Vintage illustration shows a single goat with a tortoise shell patch on its back."
+  },
+  "mask": {
+   "fill": 0.348,
+   "aspect": 1.017,
+   "components": 4
+  },
+  "soft_cards": [],
+  "third_animal": [],
+  "sam_prompt": "animal",
+  "critic_mode": "checklist",
+  "checklist": [
+   "a domestic goat body shape",
+   "a domestic goat head with visible eyes",
+   "only parts and materials of the tortoise, no whole tortoise animals on the body",
+   "hard shell plates patches on the back"
+  ],
+  "checklist_source": "generated from the plan",
+  "open_critic": {
+   "animals": [
+    "goat",
+    "turtle"
+   ],
+   "creatures": 1,
+   "notes": "A single shaggy brown goat shown in profile with a dark turtle/tortoise shell fused to its back."
+  }
+ },
+ "card": {
+  "kind": "chimera",
+  "design_mode": "realistic",
+  "label": "speculative chimera, no real-world precedent",
+  "check_labels": [],
+  "processes": [
+   "chimera patchwork: each region is one parent's tissue",
+   "coat and extremities shaped by a grassland habitat"
+  ],
+  "resemblances": [],
+  "why": [
+   {
+    "card": "RC-R2-01",
+    "rule": "Parent order is biological. Store fusions as (sire, dam) and never treat A x B as identical to B x A, because reciprocal crosses can differ in size and appearance",
+    "strength": "hard",
+    "status": "VERIFIED",
+    "source": "https://lsi.princeton.edu/research/faculty-publications/genomic-imprinting-disrupted-interspecific-peromyscus-hybrids"
+   },
+   {
+    "card": "RC-R1-14",
+    "rule": "Genetics-based operators only predict real outcomes for parents that can interbreed; for any other pair the fusion must be labeled speculative design, not a predicted animal",
+    "strength": "hard",
+    "status": "VERIFIED",
+    "source": "https://www.ucl.ac.uk/taxome/jim/pap/mallet07_hybspn_Nature.pdf"
+   },
+   {
+    "card": "RC-R2-16",
+    "rule": "Use the real-hybrid path only for pairs with a documented hybrid or a close relationship (same genus); all other pairs go to the chimera path and are labeled speculative",
+    "strength": "hard",
+    "status": "VERIFIED",
+    "source": "https://www.ucl.ac.uk/taxome/jim/pap/mallet07_hybspn_Nature.pdf"
+   },
+   {
+    "card": "RC-R5-10",
+    "rule": "Documented interspecies chimeras pair close relatives only; any chimera between distant groups must be labeled a speculative design with no real-world precedent",
+    "strength": "hard",
+    "status": "VERIFIED",
+    "source": "https://www.nature.com/articles/nmeth1110-872.pdf"
+   },
+   {
+    "card": "RC-R6-01",
+    "rule": "The body silhouette donor sets the creature's identity for human viewers; choose it deliberately (or expose it as a user control), never as a side effect of input order",
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://arxiv.org/abs/1811.12231v3"
+   },
+   {
+    "card": "RC-R5-02",
+    "rule": "The host parent sets silhouette, body size and overall frame; the donor contributes regions, organs or patches",
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://pubmed.ncbi.nlm.nih.gov/20813264/"
+   },
+   {
+    "card": "RC-R1-01",
+    "rule": "Decide inheritance per trait, never per animal; the engine must not assign one parent as dominant for the whole creature, because dominance is defined between alleles of a single gene",
+    "strength": "hard",
+    "status": "VERIFIED",
+    "source": "https://slcc.pressbooks.pub/collegebiology1/chapter/incomplete-dominance-and-codominance/"
+   },
+   {
+    "card": "RC-R1-09",
+    "rule": "PATCH is a valid coat mode: distinct blocks with clear edges, each block fully one version, no blending inside a block, as in tortoiseshell and calico cats",
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://catalog.lib.kyushu-u.ac.jp/opac_download_md/7390840/7390840.pdf"
+   },
+   {
+    "card": "RC-R1-10",
+    "rule": "Each mosaic patch grows from a single cell lineage, so patches should be few and large rather than fine speckles",
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://digitalcommons.usm.maine.edu/thinking_matters/173"
+   },
+   {
+    "card": "RC-R5-01",
+    "rule": "On the chimera path, each region is fully one parent's tissue; blend between regions only at the edges, never within a patch",
+    "strength": "hard",
+    "status": "VERIFIED",
+    "source": "https://sdbonline.org/archive/dbcinema/ledouarin/ledouarin.html"
+   },
+   {
+    "card": "RC-R5-03",
+    "rule": "Chimeras are not 50:50; allow the donor share to vary between runs, and never present a fixed even split as the biological norm",
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://www.nature.com/articles/nmeth1110-872.pdf"
+   },
+   {
+    "card": "RC-R5-04",
+    "rule": "Donor regions keep the donor's own color and surface (feathers, hair, skin), shown at full strength inside the region",
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://sdbonline.org/archive/dbcinema/ledouarin/ledouarin.html"
+   },
+   {
+    "card": "RC-R5-05",
+    "rule": "Where donor pattern appears follows the host's body layout (its skin and feather regions), not the donor's own pattern layout",
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://discovery-pp.ucl.ac.uk/id/eprint/10108322"
+   },
+   {
+    "card": "RC-R5-06",
+    "rule": "Donor regions align with body segments or regions (the level of a graft), not random scattered fragments",
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://sdbonline.org/archive/dbcinema/ledouarin/ledouarin.html"
+   },
+   {
+    "card": "RC-R5-07",
+    "rule": "Behavior can follow the parent that supplied the brain or head tissue",
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://agris.fao.org/search/en/records/65dfe6754c5aef494fe67490"
+   },
+   {
+    "card": "RC-R6-02",
+    "rule": "Carry the second parent mainly through surface texture, pattern and selected signature parts, which tell viewers which other animal is involved without changing what the creature is",
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://arxiv.org/abs/1811.12231v3"
+   },
+   {
+    "card": "RC-R4-01",
+    "rule": "Fit coat pattern to the fusion's habitat: closed, forested or tree-climbing lifestyles lean patterned and irregular; open habitats lean plain",
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3061134"
+   },
+   {
+    "card": "RC-R4-02",
+    "rule": "Habitat may adjust pattern strength and complexity beyond what either parent shows, because coat pattern tracks ecology more than ancestry",
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3061134"
+   },
+   {
+    "card": "RC-R4-05",
+    "rule": "Default to a dark-back, light-belly gradient, stronger in open, sunny habitats and smaller bodies; describe it as a common pattern, not proven camouflage",
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://datadryad.org/dataset/doi:10.5061/dryad.4291n"
+   },
+   {
+    "card": "RC-R4-11",
+    "rule": "At least one habitat-linked trait must be visible in the image, so the ecology appears in the creature and not only in the text",
+    "strength": "soft",
+    "status": "UNVERIFIED",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3061134"
+   },
+   {
+    "card": "RC-R4-10",
+    "rule": "Habitat adjusts plastic traits (pattern, shading, extremity size, eye size) but never the body-plan class or limb count; those stay with R3",
+    "strength": "soft",
+    "status": "UNVERIFIED",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3061134"
+   },
+   {
+    "card": "RC-R3-12",
+    "rule": "Physical checks run after trait selection in a fixed order (body-plan class, limb budget, size ceiling, posture, part rendering); a failed check either changes the design or adds a visible speculative label, never a silent pass",
+    "strength": "soft",
+    "status": "UNVERIFIED",
+    "source": "https://biewenerlab.oeb.harvard.edu/publications/biomechanical-consequences-scaling"
+   },
+   {
+    "card": "RC-R9-02",
+    "rule": "Run a function audit after the physical checks and before rendering, covering breathing, feeding, support, movement, heat and senses; each function ends as pass, repaired or labeled, never silently failed",
+    "strength": "hard",
+    "status": "VERIFIED",
+    "source": "https://www.cs.utexas.edu/~witchel/S25-380L/papers/right-size.html"
+   },
+   {
+    "card": "RC-R9-04",
+    "rule": "Diet follows the head donor's mouthparts; for a mammal head, grinding molars go with plant diets and bladed, shearing cheek teeth go with meat, and a mismatch is repaired or flagged",
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://fds.duke.edu/db/aas/BAA/faculty%20all/krs75/publications/371619"
+   },
+   {
+    "card": "RC-R9-06",
+    "rule": "A creature scaled well above its leg donor must change shape to carry its weight, with short thick legs or splayed legs; the same shape at much larger size is not allowed",
+    "strength": "hard",
+    "status": "VERIFIED",
+    "source": "https://www.cs.utexas.edu/~witchel/S25-380L/papers/right-size.html"
+   },
+   {
+    "card": "RC-R6-03",
+    "rule": "Keep the head fully visible and uncluttered; the head and eyes draw the earliest and most looks, so the head donor dominates the first impression",
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://eprints.lancs.ac.uk/id/eprint/50885/"
+   },
+   {
+    "card": "RC-R6-04",
+    "rule": "Every creature must have clearly discernible eyes; viewers search for eyes wherever they are, so extra or displaced eyes are used only on purpose",
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://repository.essex.ac.uk/9355/"
+   },
+   {
+    "card": "RC-R9-10",
+    "rule": "Fiction budget: a realistic design takes no licenses; a speculative design bends at most one rule on purpose and obeys every other rule strictly; every bent rule is declared on the card with its compensation",
+    "strength": "hard",
+    "status": "VERIFIED",
+    "source": "https://www.sf-encyclopedia.com/entry/wellss_law"
+   },
+   {
+    "card": "RC-R10-15",
+    "rule": "Transfer traits, not shapes. Classify each donor feature as (a) material or covering, which grows on the host and conforms to the host's body shape; (b) homologous structure, placed where the host has the matching structure, keeping its form but fitted to host scale; (c) non-homologous structure, never transferred as a shape, only its material or function",
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://evolution.berkeley.edu/evolution-101/the-history-of-life-looking-at-the-patterns/homologies-and-analogies/"
+   },
+   {
+    "card": "RC-R7-06",
+    "rule": "State the intended silhouette in the plan and validate the render with a silhouette-only check; the creature must read with no interior detail",
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://www.cs.princeton.edu/courses/archive/fall07/cos597B/papers/mitchell-team-fortress.pdf"
+   },
+   {
+    "card": "RC-R6-05",
+    "rule": "Signature parts that draw looks on the real animal (a tail tuft, a trunk, an udder-like feature) are the best carriers of the second parent's identity",
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://eprints.lancs.ac.uk/id/eprint/50885/"
+   },
+   {
+    "card": "RC-R7-07",
+    "rule": "Interior detail (pattern lines, texture flow) should echo the silhouette's shapes rather than cut across them",
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://www.cs.princeton.edu/courses/archive/fall07/cos597B/papers/mitchell-team-fortress.pdf"
+   },
+   {
+    "card": "RC-R6-07",
+    "rule": "Keep bilateral symmetry, visible sense organs and recognizable limbs unless the user explicitly asks for an alien design, because these are what make an invented creature read as an animal",
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://link.springer.com/content/pdf/10.3758%2FBF03195281.pdf"
+   },
+   {
+    "card": "RC-R7-10",
+    "rule": "Show myth and fiction resemblances as \"resembles X (culture or work)\", tagged unverified; never render or name-match a franchise character as an output",
+    "strength": "soft",
+    "status": "UNVERIFIED",
+    "source": "https://classics.stanford.edu/publications/first-fossil-hunters-dinosaurs-mammoths-and-myth-greek-and-roman-times"
+   }
+  ],
+  "lineage": {
+   "sire": "tortoise",
+   "dam": "domestic goat",
+   "parent_ids": [],
+   "generation": 0
+  },
+  "caveats": [
+   "This is a design, not a prediction: no claim is made that such a creature would be not claimed to be healthy or viable."
+  ],
+  "can_it_live": [
+   {
+    "function": "breathing",
+    "result": "pass",
+    "detail": "lungs suit a land habitat",
+    "cards": [],
+    "decided_by": "code (rule cards)"
+   },
+   {
+    "function": "feeding",
+    "result": "pass",
+    "detail": "grinding teeth fit a herbivore diet",
+    "cards": [
+     "RC-R9-04"
+    ],
+    "decided_by": "code (rule cards)"
+   },
+   {
+    "function": "support",
+    "result": "pass",
+    "detail": "legs match the body size",
+    "cards": [
+     "RC-R9-06"
+    ],
+    "decided_by": "code (rule cards)"
+   },
+   {
+    "function": "movement",
+    "result": "pass",
+    "detail": "walks on four legs",
+    "cards": [],
+    "decided_by": "code (rule cards)"
+   },
+   {
+    "function": "heat",
+    "result": "pass",
+    "detail": "warm grassland habitat: no heat adjustment needed",
+    "cards": [
+     "RC-R4-11"
+    ],
+    "decided_by": "code (rule cards)"
+   },
+   {
+    "function": "senses",
+    "result": "pass",
+    "detail": "domestic goat head and eyes kept fully visible",
+    "cards": [
+     "RC-R6-03",
+     "RC-R6-04"
+    ],
+    "decided_by": "code (rule cards)"
+   }
+  ],
+  "licenses": [],
+  "identity_parts": [],
+  "provenance": {
+   "sire": {
+    "animal": "tortoise",
+    "scientific_name": "Testudo graeca",
+    "kind": "species",
+    "source": "learned",
+    "facts": {
+     "active_time": "model-estimated (citation not accepted: monaconatureencyclopedia.com: domain not in data/source_tiers.json)",
+     "body_length_m": "model-estimated (citation not accepted: monaconatureencyclopedia.com: domain not in data/source_tiers.json)",
+     "body_mass_kg": "model-estimated (citation not accepted: saskatoon.ca: domain not in data/source_tiers.json)",
+     "body_plan": "web-cited",
+     "breathing": "web-cited",
+     "class": "chimera_data.json tier2 (gbif)",
+     "climate": "web-cited",
+     "common_name": "model-estimated",
+     "covering": "web-cited",
+     "diet": "web-cited",
+     "family": "chimera_data.json tier2 (gbif)",
+     "gbif_key": "chimera_data.json tier2 (gbif)",
+     "genus": "chimera_data.json tier2 (gbif)",
+     "habitat": "model-estimated (citation not accepted: monaconatureencyclopedia.com: domain not in data/source_tiers.json)",
+     "mouthparts": "web-cited",
+     "movement": "web-cited",
+     "order": "chimera_data.json tier2 (gbif)",
+     "primary_locomotor_part": "web-cited",
+     "scientific_name": "chimera_data.json tier2 (gbif)",
+     "visible_features": "model-estimated (citation not accepted: the quote does not appear on the page)"
+    },
+    "citations": {
+     "body_plan": "https://www.nature.com/articles/s41598-021-04273-w",
+     "breathing": "https://www.nature.com/articles/s41598-021-04273-w",
+     "climate": "https://karachizoo.gov.pk/animals/the-spur-thighed-tortoise-testudo-graeca/",
+     "covering": "https://karachizoo.gov.pk/animals/the-spur-thighed-tortoise-testudo-graeca/",
+     "diet": "https://karachizoo.gov.pk/animals/the-spur-thighed-tortoise-testudo-graeca/",
+     "mouthparts": "https://karachizoo.gov.pk/animals/the-spur-thighed-tortoise-testudo-graeca/",
+     "movement": "https://www.nature.com/articles/s41598-021-04273-w",
+     "primary_locomotor_part": "https://www.nature.com/articles/s41598-021-04273-w"
+    },
+    "unverified_claims": [
+     "documented cross with Testudo hermanni (unverified claim)"
+    ]
+   },
+   "dam": {
+    "animal": "domestic goat",
+    "scientific_name": "Capra hircus",
+    "kind": "species",
+    "source": "database",
+    "facts": {
+     "common_name": "chimera_data.json",
+     "scientific_name": "chimera_data.json",
+     "class": "chimera_data.json",
+     "order": "chimera_data.json",
+     "family": "chimera_data.json",
+     "gbif_key": "chimera_data.json",
+     "body_plan": "chimera_data.json",
+     "primary_locomotor_part": "chimera_data.json",
+     "covering": "chimera_data.json",
+     "movement": "chimera_data.json",
+     "active_time": "chimera_data.json",
+     "habitat": "chimera_data.json",
+     "climate": "chimera_data.json",
+     "diet": "chimera_data.json",
+     "body_mass_kg": "chimera_data.json",
+     "body_length_m": "chimera_data.json",
+     "breathing": "project default (evo_config.json function_defaults)",
+     "mouthparts": "project default (evo_config.json function_defaults)"
+    },
+    "citations": {},
+    "unverified_claims": []
+   }
+  },
+  "remaining_failures": [
+   {
+    "key": "grows_out",
+    "kind": "covering",
+    "text": "Do the hard shell plates grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending into scales), rather than"
+   },
+   {
+    "key": "on_top",
+    "kind": "covering",
+    "text": "Do the hard shell plates look like separate pieces laid on top of the fur, with a raised rim or a gap at the edge?"
+   },
+   {
+    "key": "follows_body",
+    "kind": "covering",
+    "text": "Do the hard shell plates follow this body's own shape and contours, the way its own skin would?"
+   },
+   {
+    "key": "separate_outline",
+    "kind": "covering",
+    "text": "Do the hard shell plates keep the outline of a separate object, such as another animal's shell or back, instead of the body's own shape?"
+   },
+   {
+    "key": "extra_horn",
+    "kind": "structural",
+    "text": "described but not planned: horn"
+   }
+  ],
+  "agent": {
+   "brain": "meta-models/muse-spark-open-1026",
+   "renders": 2,
+   "edits": 2,
+   "tool_calls": 15,
+   "stop": "finalized by the agent",
+   "candidate": "C2"
+  },
+  "providers": {
+   "by_call": {
+    "polish": [
+     "baseten:meta-models/muse-spark-open-1026"
+    ],
+    "checklist": [
+     "baseten:meta-models/muse-spark-open-1026"
+    ],
+    "critic": [
+     "baseten:meta-models/muse-spark-open-1026"
+    ]
+   },
+   "fallbacks": [],
+   "render": "meta:muse-image-1.0",
+   "segment": "meta:sam-3.1"
+  }
+ },
+ "route": {
+  "sire": "tortoise",
+  "dam": "domestic_goat",
+  "mode": "chimera",
+  "reason": "distant pair: no documented hybrid and different genus",
+  "known_pair": null,
+  "labels": [
+   "speculative chimera, no real-world precedent"
+  ],
+  "cards": [
+   "RC-R2-01",
+   "RC-R1-14",
+   "RC-R2-16",
+   "RC-R5-10"
+  ],
+  "kind": "chimera",
+  "distance": {
+   "shared_rank": "beyond class",
+   "steps": 5
+  }
+ },
+ "agent_inspect": {
+  "image_id": "img3",
+  "verdict": "fail",
+  "failures": [
+   {
+    "key": "grows_out",
+    "kind": "covering",
+    "status": "fail",
+    "text": "Do the hard shell plates grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending into scales), rather than",
+    "fix": "Show the hard shell plates grown in the skin over the back, as one covering that replaces the domestic goat's fur there; the fur stops at its edge; keep everything else the same."
+   },
+   {
+    "key": "on_top",
+    "kind": "covering",
+    "status": "fail",
+    "text": "Do the hard shell plates look like separate pieces laid on top of the fur, with a raised rim or a gap at the edge?",
+    "fix": "Show the hard shell plates grown in the skin over the back, as one covering that replaces the domestic goat's fur there; the fur stops at its edge; keep everything else the same."
+   },
+   {
+    "key": "follows_body",
+    "kind": "covering",
+    "status": "fail",
+    "text": "Do the hard shell plates follow this body's own shape and contours, the way its own skin would?",
+    "fix": "Show the hard shell plates conforming to the domestic goat's own body shape, grown from its skin over the back; keep everything else the same."
+   },
+   {
+    "key": "separate_outline",
+    "kind": "covering",
+    "status": "fail",
+    "text": "Do the hard shell plates keep the outline of a separate object, such as another animal's shell or back, instead of the body's own shape?",
+    "fix": "Show the hard shell plates conforming to the domestic goat's own body shape, grown from its skin over the back; keep everything else the same."
+   },
+   {
+    "key": "extra_horn",
+    "kind": "structural",
+    "status": "fail",
+    "text": "described but not planned: horn",
+    "fix": "The plan has no horn: show the domestic goat's own body there instead; keep everything else the same."
+   }
+  ],
+  "counts": {
+   "separate_bodies": 1,
+   "heads": 1,
+   "walking_legs": 4,
+   "wings": 0,
+   "extra_limb_pieces": 0
+  },
+  "third_animals": {
+   "spark_open": [
+    "turtle"
+   ],
+   "meta_spark": []
+  },
+  "drift": {
+   "drifted": false,
+   "changed": [],
+   "by_critic": {
+    "meta_spark": [],
+    "spark_open": []
+   }
+  },
+  "decision": "Meta Spark decides; Spark Open answers kept as information (D-084)"
+ },
+ "response_id": "resp_6ae77ae83d14adb987d345c7",
+ "warnings": [
+  "remaining failure: Do the hard shell plates grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending into scales), rather than",
+  "remaining failure: Do the hard shell plates look like separate pieces laid on top of the fur, with a raised rim or a gap at the edge?",
+  "remaining failure: Do the hard shell plates follow this body's own shape and contours, the way its own skin would?",
+  "remaining failure: Do the hard shell plates keep the outline of a separate object, such as another animal's shell or back, instead of the body's own shape?",
+  "remaining failure: described but not planned: horn"
+ ],
+ "agent": {
+  "brain": "meta-models/muse-spark-open-1026",
+  "renders": 2,
+  "edits": 2,
+  "tool_calls": 15,
+  "stop": "finalized by the agent",
+  "candidate": "C2",
+  "trace_steps": 14
+ },
+ "providers": {
+  "by_call": {
+   "polish": [
+    "baseten:meta-models/muse-spark-open-1026"
+   ],
+   "checklist": [
+    "baseten:meta-models/muse-spark-open-1026"
+   ],
+   "critic": [
+    "baseten:meta-models/muse-spark-open-1026"
+   ]
+  },
+  "fallbacks": [],
+  "render": "meta:muse-image-1.0",
+  "segment": "meta:sam-3.1"
+ }
+}

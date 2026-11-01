@@ -1,0 +1,109 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Silhouette: Horizontal red fox frame carried on two hind legs, barn owl wings in place of the forelegs. Host frame: the red fox sets the outline, body size, and overall frame. It is a single creature combining a red fox and a barn owl. The head is that of the red fox, fully visible and uncluttered, with clear, discernible eyes. Details: red fox body and legs with its own dense fur on the face, back, flanks, belly, hips, legs, and tail; plain coat with no stripes or spots. From the barn owl, as parts and materials on the red fox's own body: broad wings of layered flight feathers in place of the forelegs, standing on two hind legs, wings sized for flight; layered contour feathers in its own colors grown from the skin as the red fox's own covering over the shoulders and neck, replacing the red fox's dense fur there and conforming to the red fox's body, sized to the red fox's body and following its contours. Every covered part keeps the red fox's own length and shape; the dense fur stops at the covering's edge, while the face, back, flanks, belly, hips, legs, and tail keep the red fox's own dense fur; deep keel and heavy flight chest. The covering follows the body's own shape. Bilaterally symmetrical, with recognizable limbs and visible sense organs. Habitat cue (desert): larger ears and longer tail for shedding heat. Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws, and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "id": "resp_6ae7810081b4ffc772f04738",
+  "access_programs": null,
+  "created_at": 1793556736.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae781001a7dab3526f04a22",
+    "summary": [
+     {
+      "text": "**Designing hybrid creature silhouette**\nI'm planning the image of a red fox standing on its hind legs with barn owl wings replacing the forelegs, keeping a clean silhouette, visible fox head with clear eyes, and dense fur details across the body and tail.\n**Refining natural history illustration**\nI'm shaping the side three-quarter, bipedal fox-owl hybrid with layered barn owl wings, contour feathers over shoulders and neck, desert cues like larger ears and long tail, set on a plain light background in natural history style.\n**Adjusting creature anatomy**\nI'm reworking the creature to stand bipedally on two hind legs and replace the forelegs with wings, then preparing a new generation to match that anatomy.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae78100c7ab9a88002c492c",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0hVTTNETnVwVWdDeU9nREFEZ05xVjNKRXowQmJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczo4NzYwYzZlZC1hNDYzLTRkYTgtODZiNC0yZTgzNGQxNTJhMGE6R0w0N0JqUjdEWjZFTXlNR0FKc0ZlRnROSWFaRmJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM1NTY3MzZ9.Q8WLFwEngSJXZWZ1DDk2Rm43KwA2",
+    "result": "<elided> (516512 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 21121,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 16768
+   },
+   "output_tokens": 3035,
+   "output_tokens_details": {
+    "reasoning_tokens": 613
+   },
+   "total_tokens": 24156
+  },
+  "user": null
+ }
+}

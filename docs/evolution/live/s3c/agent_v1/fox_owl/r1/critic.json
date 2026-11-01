@@ -1,0 +1,817 @@
+{
+ "img1": {
+  "kind": "render",
+  "parent": null,
+  "plan_id": "crt_91e1c29473b6",
+  "verdict": "fail",
+  "failures": [
+   {
+    "key": "extra_spots",
+    "kind": "structural",
+    "status": "fail",
+    "text": "described but not planned: spots",
+    "fix": "The plan has no spots: show the red fox's own body there instead; keep everything else the same."
+   }
+  ],
+  "drift": null,
+  "critic": [
+   {
+    "key": "frame",
+    "group": "structure",
+    "text": "Is the overall body shape that of a red fox?",
+    "expect": "yes",
+    "answers": {
+     "spark_open": "yes",
+     "meta_spark": "yes"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "head",
+    "group": "structure",
+    "text": "Does it have a red fox head with visible eyes?",
+    "expect": "yes",
+    "answers": {
+     "spark_open": "yes",
+     "meta_spark": "yes"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "wings_front",
+    "group": "structure",
+    "text": "Does it have barn owl wings in place of its front legs?",
+    "expect": "yes",
+    "answers": {
+     "spark_open": "yes",
+     "meta_spark": "yes"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": true
+   },
+   {
+    "key": "legs_and_wings",
+    "group": "structure",
+    "text": "Does it stand on four walking legs and also have wings?",
+    "expect": "no",
+    "answers": {
+     "spark_open": "no",
+     "meta_spark": "no"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "whole_animal",
+    "group": "structure",
+    "text": "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?",
+    "expect": "no",
+    "answers": {
+     "spark_open": "no",
+     "meta_spark": "no"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "second_head",
+    "group": "structure",
+    "text": "Is there a second head anywhere?",
+    "expect": "no",
+    "answers": {
+     "spark_open": "no",
+     "meta_spark": "no"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "extra_legs",
+    "group": "structure",
+    "text": "Does it have more than 2 walking legs?",
+    "expect": "no",
+    "answers": {
+     "spark_open": "no",
+     "meta_spark": "no"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "no_mane",
+    "group": "structure",
+    "text": "Does it have a full mane of long hair around the head and neck?",
+    "expect": "no",
+    "answers": {
+     "spark_open": "no",
+     "meta_spark": "no"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "plain_fur",
+    "group": "pattern",
+    "text": "Does the fur show stripes or spots?",
+    "expect": "no",
+    "answers": {
+     "spark_open": "no",
+     "meta_spark": "no"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "cover_present",
+    "group": "surface",
+    "text": "Are there layered contour feathers on the shoulders and neck?",
+    "expect": "yes",
+    "answers": {
+     "spark_open": "yes",
+     "meta_spark": "yes"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "connects_feathered_wings",
+    "group": "connection",
+    "text": "Does the feathered wings grow out of the layered contour feathers at its base, so they look like one connected system?",
+    "expect": "yes",
+    "answers": {
+     "spark_open": "yes",
+     "meta_spark": "yes"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "separate_feathered_wings",
+    "group": "connection",
+    "text": "Does the feathered wings look stuck on separately, with no connection to the layered contour feathers?",
+    "expect": "no",
+    "answers": {
+     "spark_open": "no",
+     "meta_spark": "no"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "separate_bodies",
+    "group": "structure",
+    "text": "separate bodies: 1",
+    "expect": 1,
+    "answers": {
+     "spark_open": 1,
+     "meta_spark": 1
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "heads",
+    "group": "structure",
+    "text": "heads: 1",
+    "expect": 1,
+    "answers": {
+     "spark_open": 1,
+     "meta_spark": 1
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "walking_legs",
+    "group": "structure",
+    "text": "walking legs: 2",
+    "expect": 2,
+    "answers": {
+     "spark_open": 2,
+     "meta_spark": 2
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "wings",
+    "group": "structure",
+    "text": "wings: 2",
+    "expect": 2,
+    "answers": {
+     "spark_open": 2,
+     "meta_spark": 2
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "extra_limb_pieces",
+    "group": "structure",
+    "text": "extra limb pieces: 0",
+    "expect": 0,
+    "answers": {
+     "spark_open": 0,
+     "meta_spark": 0
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "extra_spots",
+    "group": "structure",
+    "text": "described but not planned: spots",
+    "expect": "absent",
+    "answers": {
+     "spark_open": false,
+     "meta_spark": true
+    },
+    "status": "fail",
+    "pair_status": "uncertain",
+    "sam_found": null
+   },
+   {
+    "key": "origin_feathered_wings",
+    "group": "identity",
+    "text": "which animal the feathered wings came from",
+    "expect": "barn owl",
+    "answers": {
+     "spark_open": "barn owl",
+     "meta_spark": "barn owl"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   }
+  ],
+  "decision": "meta_spark decides"
+ },
+ "img2": {
+  "kind": "render",
+  "parent": null,
+  "plan_id": "crt_91e1c29473b6",
+  "verdict": "fail",
+  "failures": [
+   {
+    "key": "extra_spots",
+    "kind": "structural",
+    "status": "fail",
+    "text": "described but not planned: spots",
+    "fix": "The plan has no spots: show the red fox's own body there instead; keep everything else the same."
+   }
+  ],
+  "drift": null,
+  "critic": [
+   {
+    "key": "frame",
+    "group": "structure",
+    "text": "Is the overall body shape that of a red fox?",
+    "expect": "yes",
+    "answers": {
+     "spark_open": "no",
+     "meta_spark": "yes"
+    },
+    "status": "pass",
+    "pair_status": "uncertain",
+    "sam_found": null
+   },
+   {
+    "key": "head",
+    "group": "structure",
+    "text": "Does it have a red fox head with visible eyes?",
+    "expect": "yes",
+    "answers": {
+     "spark_open": "yes",
+     "meta_spark": "yes"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "wings_front",
+    "group": "structure",
+    "text": "Does it have barn owl wings in place of its front legs?",
+    "expect": "yes",
+    "answers": {
+     "spark_open": "yes",
+     "meta_spark": "yes"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": true
+   },
+   {
+    "key": "legs_and_wings",
+    "group": "structure",
+    "text": "Does it stand on four walking legs and also have wings?",
+    "expect": "no",
+    "answers": {
+     "spark_open": "no",
+     "meta_spark": "no"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "whole_animal",
+    "group": "structure",
+    "text": "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?",
+    "expect": "no",
+    "answers": {
+     "spark_open": "no",
+     "meta_spark": "no"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "second_head",
+    "group": "structure",
+    "text": "Is there a second head anywhere?",
+    "expect": "no",
+    "answers": {
+     "spark_open": "no",
+     "meta_spark": "no"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "extra_legs",
+    "group": "structure",
+    "text": "Does it have more than 2 walking legs?",
+    "expect": "no",
+    "answers": {
+     "spark_open": "no",
+     "meta_spark": "no"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "no_mane",
+    "group": "structure",
+    "text": "Does it have a full mane of long hair around the head and neck?",
+    "expect": "no",
+    "answers": {
+     "spark_open": "no",
+     "meta_spark": "no"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "plain_fur",
+    "group": "pattern",
+    "text": "Does the fur show stripes or spots?",
+    "expect": "no",
+    "answers": {
+     "spark_open": "no",
+     "meta_spark": "no"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "cover_present",
+    "group": "surface",
+    "text": "Are there layered contour feathers on the shoulders and neck?",
+    "expect": "yes",
+    "answers": {
+     "spark_open": "yes",
+     "meta_spark": "yes"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "connects_feathered_wings",
+    "group": "connection",
+    "text": "Does the feathered wings grow out of the layered contour feathers at its base, so they look like one connected system?",
+    "expect": "yes",
+    "answers": {
+     "spark_open": "yes",
+     "meta_spark": "yes"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "separate_feathered_wings",
+    "group": "connection",
+    "text": "Does the feathered wings look stuck on separately, with no connection to the layered contour feathers?",
+    "expect": "no",
+    "answers": {
+     "spark_open": "no",
+     "meta_spark": "no"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "separate_bodies",
+    "group": "structure",
+    "text": "separate bodies: 1",
+    "expect": 1,
+    "answers": {
+     "spark_open": 1,
+     "meta_spark": 1
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "heads",
+    "group": "structure",
+    "text": "heads: 1",
+    "expect": 1,
+    "answers": {
+     "spark_open": 1,
+     "meta_spark": 1
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "walking_legs",
+    "group": "structure",
+    "text": "walking legs: 2",
+    "expect": 2,
+    "answers": {
+     "spark_open": 2,
+     "meta_spark": 2
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "wings",
+    "group": "structure",
+    "text": "wings: 2",
+    "expect": 2,
+    "answers": {
+     "spark_open": 2,
+     "meta_spark": 2
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "extra_limb_pieces",
+    "group": "structure",
+    "text": "extra limb pieces: 0",
+    "expect": 0,
+    "answers": {
+     "spark_open": 0,
+     "meta_spark": 0
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "extra_spots",
+    "group": "structure",
+    "text": "described but not planned: spots",
+    "expect": "absent",
+    "answers": {
+     "spark_open": true,
+     "meta_spark": true
+    },
+    "status": "fail",
+    "pair_status": "fail",
+    "sam_found": null
+   },
+   {
+    "key": "origin_feathered_wings",
+    "group": "identity",
+    "text": "which animal the feathered wings came from",
+    "expect": "barn owl",
+    "answers": {
+     "spark_open": "barn owl",
+     "meta_spark": "barn owl"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   }
+  ],
+  "decision": "meta_spark decides"
+ },
+ "img3": {
+  "kind": "growth_host",
+  "parent": null,
+  "plan_id": "crt_91e1c29473b6",
+  "verdict": null,
+  "failures": null,
+  "drift": null,
+  "critic": [],
+  "decision": null
+ },
+ "img4": {
+  "kind": "growth",
+  "parent": "img3",
+  "plan_id": "crt_91e1c29473b6",
+  "verdict": "fail",
+  "failures": [
+   {
+    "key": "extra_spots",
+    "kind": "structural",
+    "status": "fail",
+    "text": "described but not planned: spots",
+    "fix": "The plan has no spots: show the red fox's own body there instead; keep everything else the same."
+   }
+  ],
+  "drift": {
+   "drifted": false,
+   "changed": [],
+   "by_critic": {
+    "meta_spark": [],
+    "spark_open": []
+   }
+  },
+  "critic": [
+   {
+    "key": "frame",
+    "group": "structure",
+    "text": "Is the overall body shape that of a red fox?",
+    "expect": "yes",
+    "answers": {
+     "spark_open": "no",
+     "meta_spark": "yes"
+    },
+    "status": "pass",
+    "pair_status": "uncertain",
+    "sam_found": null
+   },
+   {
+    "key": "head",
+    "group": "structure",
+    "text": "Does it have a red fox head with visible eyes?",
+    "expect": "yes",
+    "answers": {
+     "spark_open": "yes",
+     "meta_spark": "yes"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "wings_front",
+    "group": "structure",
+    "text": "Does it have barn owl wings in place of its front legs?",
+    "expect": "yes",
+    "answers": {
+     "spark_open": "yes",
+     "meta_spark": "yes"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": true
+   },
+   {
+    "key": "legs_and_wings",
+    "group": "structure",
+    "text": "Does it stand on four walking legs and also have wings?",
+    "expect": "no",
+    "answers": {
+     "spark_open": "no",
+     "meta_spark": "no"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "whole_animal",
+    "group": "structure",
+    "text": "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?",
+    "expect": "no",
+    "answers": {
+     "spark_open": "no",
+     "meta_spark": "no"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "second_head",
+    "group": "structure",
+    "text": "Is there a second head anywhere?",
+    "expect": "no",
+    "answers": {
+     "spark_open": "no",
+     "meta_spark": "no"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "extra_legs",
+    "group": "structure",
+    "text": "Does it have more than 2 walking legs?",
+    "expect": "no",
+    "answers": {
+     "spark_open": "no",
+     "meta_spark": "no"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "no_mane",
+    "group": "structure",
+    "text": "Does it have a full mane of long hair around the head and neck?",
+    "expect": "no",
+    "answers": {
+     "spark_open": "no",
+     "meta_spark": "no"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "plain_fur",
+    "group": "pattern",
+    "text": "Does the fur show stripes or spots?",
+    "expect": "no",
+    "answers": {
+     "spark_open": "no",
+     "meta_spark": "no"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "cover_present",
+    "group": "surface",
+    "text": "Are there layered contour feathers on the shoulders and neck?",
+    "expect": "yes",
+    "answers": {
+     "spark_open": "yes",
+     "meta_spark": "yes"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "connects_feathered_wings",
+    "group": "connection",
+    "text": "Does the feathered wings grow out of the layered contour feathers at its base, so they look like one connected system?",
+    "expect": "yes",
+    "answers": {
+     "spark_open": "yes",
+     "meta_spark": "yes"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "separate_feathered_wings",
+    "group": "connection",
+    "text": "Does the feathered wings look stuck on separately, with no connection to the layered contour feathers?",
+    "expect": "no",
+    "answers": {
+     "spark_open": "no",
+     "meta_spark": "no"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "separate_bodies",
+    "group": "structure",
+    "text": "separate bodies: 1",
+    "expect": 1,
+    "answers": {
+     "spark_open": 1,
+     "meta_spark": 1
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "heads",
+    "group": "structure",
+    "text": "heads: 1",
+    "expect": 1,
+    "answers": {
+     "spark_open": 1,
+     "meta_spark": 1
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "walking_legs",
+    "group": "structure",
+    "text": "walking legs: 2",
+    "expect": 2,
+    "answers": {
+     "spark_open": 2,
+     "meta_spark": 2
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "wings",
+    "group": "structure",
+    "text": "wings: 2",
+    "expect": 2,
+    "answers": {
+     "spark_open": 2,
+     "meta_spark": 2
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "extra_limb_pieces",
+    "group": "structure",
+    "text": "extra limb pieces: 0",
+    "expect": 0,
+    "answers": {
+     "spark_open": 0,
+     "meta_spark": 0
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "extra_spots",
+    "group": "structure",
+    "text": "described but not planned: spots",
+    "expect": "absent",
+    "answers": {
+     "spark_open": true,
+     "meta_spark": true
+    },
+    "status": "fail",
+    "pair_status": "fail",
+    "sam_found": null
+   },
+   {
+    "key": "origin_feathered_wings",
+    "group": "identity",
+    "text": "which animal the feathered wings came from",
+    "expect": "barn owl",
+    "answers": {
+     "spark_open": "barn owl",
+     "meta_spark": "barn owl"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   }
+  ],
+  "decision": "meta_spark decides"
+ }
+}

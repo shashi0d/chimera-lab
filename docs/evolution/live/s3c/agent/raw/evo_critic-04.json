@@ -1,0 +1,105 @@
+{
+ "purpose": "evo_critic",
+ "request": {
+  "model": "meta-models/muse-spark-open-1026",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture with no other context. animals: the real animal species whose features you can clearly see in it, as everyday English common names, most prominent first, at most three. If it looks like one ordinary animal, list only that animal. creatures: how many separate creatures are in the picture. notes: one short sentence on what you see."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "What animals do you see, and how many creatures?"
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (726791 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "readability_critic",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "animals",
+      "creatures",
+      "notes"
+     ],
+     "properties": {
+      "animals": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "creatures": {
+       "type": "integer"
+      },
+      "notes": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0,
+  "max_tokens": 4000
+ },
+ "response": {
+  "id": "chatcmpl-fc6125bdbde5432ab0fee2088cf11913",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{ \"animals\": [\"goat\", \"tortoise\"], \"creatures\": 1, \"notes\": \"A single shaggy brown goat with curved horns has a large domed tortoise shell fused to its back.\" }",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null,
+     "reasoning_content": "We need to answer: animals: real animal species whose features you can clearly see, as everyday English common names, most prominent first, at most three. If it looks like one ordinary animal, list only that animal. creatures: how many separate creatures are in the picture. notes: one short sentence on what you see.\n\nWe have a hybrid creature: goat body with turtle shell on back. So animals: goat, turtle/tortoise. Which is more prominent? Goat is main body, head, legs, fur. Turtle shell is on back. So animals: goat, turtle (or tortoise). Need everyday English common names. Could be goat, tortoise. Or goat, turtle. Both acceptable. Probably \"goat\" and \"tortoise\" or \"turtle\". Use \"goat\" and \"turtle\". Most prominent first: goat then turtle.\n\nCreatures: how many separate creatures are in the picture. There's one hybrid creature. So 1.\n\nNotes: one short sentence on what you see. Something like \"A fantastical hybrid with a goat's body and a tortoise shell on its back.\"\n\nWe must follow format? The user says: animals: ... creatures: ... notes: ... Probably need to output JSON? The instruction: You look at one picture with no other context. animals: ... creatures: ... notes: ...\n\nProbably need to output in that format. Might be structured. Provide animals list, creatures count, notes sentence.\n\nWe should ensure we list at most three. We have two.\n\nIf it looks like one ordinary animal, list only that animal. But this is not ordinary, it's hybrid, so list both.\n\nWe should be careful: The shell is clearly turtle/tortoise. So animals: goat, tortoise.\n\nCreatures: 1\n\nNotes: A single chimeric creature combining a shaggy brown goat with a large domed tortoise shell fused to its back.\n\nMake sure to follow required output format. Possibly JSON? The prompt says animals: ... creatures: ... notes: ... Could be plain text with those labels.\n\nWe should output something like:\n\nanimals: [\"goat\", \"tortoise\"]\ncreatures: 1\nnotes: ...\n\nOr maybe \"animals: goat, tortoise\" etc.\n\nBetter to provide clear structured answer.\n\nWe must not hallucinate. Provide most prominent first.\n\nWe should also consider if \"turtle\" vs \"tortoise\" - both are common names. The shell looks like a tortoise, maybe a star tortoise? But everyday name turtle is fine. Use tortoise.\n\nProvide answer.\n\nWe need to ensure we comply with reasoning strength 512 - but that's internal.\n\nWe should output final answer succinctly.\n\nPotential nuance: The creature count is 1. Some might argue 2 animals features but 1 creature.\n\nNotes: one short sentence on what you see.\n\nMake sure to not add extra fluff.\n\nProbably format as:\n\nAnimals: goat, turtle\nCreatures: 1\nNotes: A goat-like creature with a large turtle shell on its back stands in profile.\n\nThat satisfies.\n\nWe should ensure we use everyday English common names, lowercase? Probably.\n\nWe should not list more than three.\n\nWe should ensure we answer correctly.\n\nWe might want to provide JSON for machine readability. The instruction says \"animals: the real animal species whose features you can clearly see in it, as everyday English common names, most prominent first, at most three. If it looks like one ordinary animal, list only that animal. creatures: how many separate creatures are in the picture. notes: one short sentence on what you see.\"\n\nSo output should have those three fields.\n\nWe can output:\n\nanimals: goat, tortoise\ncreatures: 1\nnotes: A brown shaggy goat with curved horns has a large domed tortoise shell attached to its back.\n\nThat is good.\n\nMake sure not to violate policy. It's fine.\n\nWe should not mention reasoning.\n\nProceed to final."
+    }
+   }
+  ],
+  "created": 1793555013,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 871,
+   "prompt_tokens": 3595,
+   "total_tokens": 4466,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 642,
+    "audio_tokens": 0,
+    "reasoning_tokens": 813,
+    "rejected_prediction_tokens": 961,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 0,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

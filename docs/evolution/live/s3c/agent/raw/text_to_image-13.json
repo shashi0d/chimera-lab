@@ -1,0 +1,110 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Now grow the covering: hard, glossy chitin plates with fine seams in its own colors, grown from the skin as the brown bear's own covering over the crown of the head, neck, shoulders, back, flanks, belly, hips, legs and tail: it replaces the brown bear's dense fur there and conforms to the brown bear's body, a few large, smooth, fused plates, each spanning a whole body region of the brown bear (the shoulders, the back, the hips, each limb section), sized to the brown bear's body, joined by flexible cuticle at every joint; every covered part keeps the brown bear's own length and shape, and the tail stays the brown bear's own tail; the dense fur stops at the covering's edge, and the face keeps the brown bear's own dense fur. Let the covering run up to the base of the head horn, so they connect. Keep the pose, the head and face, the number of legs, the tail, the head horn exactly where and as they are, the background and everything else the same.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ],
+  "previous_response_id": "resp_6ae777b0bb9488eb8ae442eb"
+ },
+ "response": {
+  "id": "resp_6ae777c39ea13aadc2594414",
+  "access_programs": null,
+  "created_at": 1793554371.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae777c3a3f6705b78fa486c",
+    "summary": [
+     {
+      "text": "**Editing chitin armor coverage**\nI'm applying the requested chitin plates to the subject from media_fi568a, growing glossy, fused segments over the crown, neck, torso, limbs, and tail while keeping the pose, facial fur, and tail length unchanged.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae777c3f179a5ecbe0d42aa",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0JsRzNUTzhxUE12STc0TUFIaGlMeWhnaDZZLWJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczpkYTQ5MGJjNC1mMzU0LTQ4OTEtOTVlNS0zMDM0NjgzYzA4NjM6R0hvX0JqVERLOHZtV19FREFOZWhvbTIzZHBwemJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM1NTQzNzF9.Q8WLFwHEZexh3j2rMumWqHhbcmi8",
+    "result": "<elided> (696640 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": "resp_6ae777b0bb9488eb8ae442eb",
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 23550,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 15360
+   },
+   "output_tokens": 1436,
+   "output_tokens_details": {
+    "reasoning_tokens": 162
+   },
+   "total_tokens": 24986
+  },
+  "user": null
+ }
+}

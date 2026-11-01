@@ -1,0 +1,109 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Silhouette: Four-legged domestic goat frame. Host frame: the domestic goat sets the outline, body size and overall frame. A single creature combining a tortoise and a domestic goat. The head is that of the domestic goat, fully visible and uncluttered, with clear, discernible eyes. Details: domestic goat body and legs with its own dense fur on the face, neck, shoulders, flanks, belly, hips, legs and tail; plain coat with no stripes or spots. From the tortoise, as parts and materials on the domestic goat's own body, hard shell plates in its own colors grown from the skin as the domestic goat's own covering over the back; it replaces the domestic goat's dense fur there and conforms to the domestic goat's body as one broad, fused carapace shield over the domestic goat's shoulders and back, with short jointed plates on each limb section sized to the domestic goat's body. Every covered part keeps the domestic goat's own length and shape; the dense fur stops at the covering's edge, and the face, neck, shoulders, flanks, belly, hips, legs and tail keep the domestic goat's own dense fur. The covering follows the body's own shape and bends at every joint. Bilaterally symmetrical, with recognizable limbs and visible sense organs. Habitat cue (grassland): dark back and light belly (strong countershading). Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "id": "resp_6ae77b36740c815b25714449",
+  "access_programs": null,
+  "created_at": 1793555254.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae77b360b69ace61245405f",
+    "summary": [
+     {
+      "text": "**Designing goat-tortoise hybrid**\nI'm shaping a single creature with a goat's head and body, then layering a fused tortoise carapace over the back and shoulders while keeping dense fur on the face, neck, legs, and tail.\n**Composing goat-tortoise illustration**\nI'm assembling a natural-history illustration of a goat with a tortoise shell carapace and jointed limb plates, keeping dense fur on the face, neck, body, and legs, with countershading and a plain light background in a side three-quarter view.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae77b36315f1db1af4c4753",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0lKQ0JqU2JJUFRUcURkcEFIcmJBYUNFcWhCVGJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczo4ZTYwZTc2Ny0wY2Q1LTQzMWItYWU4Yi1mZmNkZjQxOTRmMjQ6R0ZSRzNUTlRhNVZPaDU4R0FBaUF0UzJtQU5CaWJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM1NTUyNTR9.Q8WLFwFN8Mx5NpI_-uCCR2ymcreP",
+    "result": "<elided> (666724 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 11220,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 8256
+   },
+   "output_tokens": 1467,
+   "output_tokens_details": {
+    "reasoning_tokens": 372
+   },
+   "total_tokens": 12687
+  },
+  "user": null
+ }
+}
