@@ -1,0 +1,71 @@
+[
+ {
+  "id": "C1",
+  "ops": [],
+  "score": 2.0,
+  "host": "horse",
+  "silhouette": "four-legged horse frame",
+  "parts": [],
+  "dropped": [
+   "tentacles"
+  ],
+  "identity_parts": [],
+  "covering": {
+   "extent": [
+    "belly",
+    "flanks",
+    "back"
+   ],
+   "plate_pattern": "",
+   "plate_source": ""
+  },
+  "licenses": [],
+  "labels": [
+   "speculative chimera, no real-world precedent"
+  ],
+  "notes": {
+   "niche": "habitat rocky coast (a bridging habitat)",
+   "autonomy": "the horse body carries every function",
+   "survival": "0 license(s) of 0: none",
+   "identity": "covering over belly, flanks, back",
+   "host": "the horse has the more structured body schema (RC-R6-08)"
+  }
+ },
+ {
+  "id": "C2",
+  "ops": [
+   {
+    "op": "set_host",
+    "args": {
+     "animal": "common octopus"
+    }
+   }
+  ],
+  "score": 0.75,
+  "host": "common octopus",
+  "silhouette": "soft common octopus body",
+  "parts": [],
+  "dropped": [],
+  "identity_parts": [],
+  "covering": {
+   "extent": [
+    "back",
+    "flanks",
+    "hindquarters"
+   ],
+   "plate_pattern": "",
+   "plate_source": ""
+  },
+  "licenses": [],
+  "labels": [
+   "speculative chimera, no real-world precedent"
+  ],
+  "notes": {
+   "niche": "habitat rocky coast (a bridging habitat)",
+   "autonomy": "functions not carried: breathing: repaired",
+   "survival": "0 license(s) of 0: none",
+   "identity": "covering over back, flanks, hindquarters",
+   "host": "the common octopus has the less structured body schema (RC-R6-08, soft): advised against"
+  }
+ }
+]

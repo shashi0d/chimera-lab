@@ -1,0 +1,31 @@
+{
+ "case": "b06",
+ "kind": "fixed",
+ "sire": "common octopus",
+ "dam": "horse",
+ "mode": "realistic",
+ "wall_seconds": 236.5,
+ "renders": 1,
+ "edits": 1,
+ "tool_calls": null,
+ "host": "horse",
+ "note": null,
+ "calls_by_provider": {
+  "meta": {
+   "spark:evo_plan": 1,
+   "image:text_to_image": 2,
+   "sam:sam": 7,
+   "spark:evo_describe": 2,
+   "spark:evo_ask": 2
+  },
+  "baseten": {
+   "spark_baseten:evo_polish": 1,
+   "spark_baseten:evo_checklist": 4,
+   "spark_baseten:evo_critic": 2,
+   "spark_baseten:evo_describe": 2,
+   "spark_baseten:evo_ask": 2
+  }
+ },
+ "failed_calls": 0,
+ "kept": "edited"
+}

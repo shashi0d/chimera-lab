@@ -1,0 +1,109 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Silhouette: Four-legged horse frame. Host frame: the horse sets the outline, body size and overall frame. A single creature that combines a common octopus and a horse. Head of the horse, fully visible and uncluttered, with clear, discernible eyes. Details: horse body and legs, with its own dense fur on the face, neck, shoulders, hips, legs and tail, plain coat, no stripes or spots; from the common octopus, as parts and materials on the horse's own body, soft, color-changing skin with fine bumps in its own colors, grown from the skin as the horse's own covering over the belly, flanks and back. It replaces the horse's dense fur there and conforms to the horse's body, sized to the horse's body and following its contours. Every covered part keeps the horse's own length and shape. The dense fur stops at the covering's edge, and the face, neck, shoulders, hips, legs and tail keep the horse's own dense fur. The covering follows the body's own shape. Bilaterally symmetrical, recognizable limbs, visible sense organs. Habitat cue (rocky coast): dark back and light belly (strong countershading). Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "id": "resp_6ae7a8b3517cb43928f746bd",
+  "access_programs": null,
+  "created_at": 1793566899.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae7a8b30d96ce2255fe44fc",
+    "summary": [
+     {
+      "text": "**Designing horse-octopus hybrid**\nI'm planning a single silhouette that uses a four-legged horse frame as the outline, with a fully visible horse head and clear eyes, then layering soft, color-changing octopus skin with fine bumps over the horse's fur on the face, neck, shoulders, hips, legs, and tail.\n**Drafting natural history illustration**\nI'm organizing the hybrid's anatomy for a side three-quarter view: horse head, neck, legs and tail keep dense fur, while the belly, flanks and back are covered in soft, color-changing octopus skin with fine papillae and countershading, set on a plain light background with natural lighting and soft shadow.\n**Finalizing octopus illustration**\nI'm wrapping up the natural history illustration, keeping the current version with its octopus details as the accepted final.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae7a8b34a50d37d032d4695",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0JBVXBUUW54N2tCbmhrRkFKQXV1U3hENWdKMGJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczo4ZjJhYTY1Zi00Nzg3LTQwNTctYTQ4Mi01NDkwNDY2MjIzYjI6R0lTbm9qUjBVMEVJNmV0b0FBbGxWVHk3RHgxSmJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM1NjY4OTl9.Q8WLFwHL3iIJJFG-ObiPQeRRm1OT",
+    "result": "<elided> (752244 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 21877,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 16960
+   },
+   "output_tokens": 3508,
+   "output_tokens_details": {
+    "reasoning_tokens": 887
+   },
+   "total_tokens": 25385
+  },
+  "user": null
+ }
+}
