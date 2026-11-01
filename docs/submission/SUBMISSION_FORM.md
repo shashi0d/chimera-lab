@@ -83,7 +83,7 @@ libraries came from outside or before the repo, and are listed with their licenc
 ## Results, stated honestly
 
 On the 11-case benchmark the agent and a fixed pipeline are about even: 5 vs 6 full matches, 1.82 vs 1.91 average
-critic failures. The agent wins host ties (6 of 11 cases tie) and names both parents more often (7 vs 5), at about
+critic failures. The agent wins host ties (7 of 11 cases tie) and names both parents more often (7 vs 5), at about
 1.6 times the calls. Hard plates and shells over fur still look worn, not grown. A run takes about 5 minutes
 (`docs/evolution/S5_BENCHMARK.md`).
 

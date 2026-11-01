@@ -109,7 +109,7 @@ once with the fixed pipeline, live, 22 creatures, no reruns. Scores are computed
 | wall time per creature | 295 s | 233 s |
 
 - **Overall the two are about even.** The agent does not beat the pipeline on the critics' scores.
-- **The agent wins host ties.** In 6 of 11 cases neither parent is structurally better as host, and the pipeline
+- **The agent wins host ties.** In 7 of 11 cases neither parent is structurally better as host, and the pipeline
   has no rule, so it falls back to the first-named parent. The agent chose the horse for pangolin × horse and the
   goat for tortoise × goat, with reasons, and in those two cases its images named both parents where the pipeline's did not.
 - **It loses when it re-rolls on a critic misread.** Octopus × horse spent all 4 renders on mottled skin the critic
