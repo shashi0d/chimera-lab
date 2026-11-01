@@ -42,6 +42,7 @@ class CallRecord:
     total_tokens: int = 0
     outcome: str = "ok"  # "ok" or an error code
     response_id: str | None = None
+    provider: str = ""  # S2: meta | baseten (from the endpoint), so every attempt names its provider
     ts: str = field(default_factory=lambda: datetime.now(UTC).isoformat(timespec="seconds"))
 
 
@@ -77,7 +78,8 @@ def _append_log(path: Path, rec: CallRecord) -> None:
                 f.write("# Live call log\n\nEvery real Meta API call made by L1 (appended automatically by "
                         "`backend/app/adapters/usage.py`).\n\n| Time (UTC) | Step | Purpose | Model | Latency ms | "
                         "Input tok | Output tok | Total tok | Outcome | Response id |\n|---|---|---|---|---|---|---|---|---|---|\n")
-            f.write(f"| {rec.ts} | {rec.step} | {rec.purpose} | {rec.model} | {rec.latency_ms} | {rec.input_tokens} | "
+            model = f"{rec.provider}/{rec.model}" if rec.provider else rec.model
+            f.write(f"| {rec.ts} | {rec.step} | {rec.purpose} | {model} | {rec.latency_ms} | {rec.input_tokens} | "
                     f"{rec.output_tokens} | {rec.total_tokens} | {rec.outcome} | {rec.response_id or ''} |\n")
 
 

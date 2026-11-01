@@ -78,7 +78,9 @@ def test_sam_budget_kind(tmp_path, monkeypatch):
 
 def test_real_mode_builds_live_adapters(tmp_path):
     eng = EvoEngine(build_services(make_settings(tmp_path, chimera_mode="real", meta_api_key="k-test")))
-    assert isinstance(eng.spark, live.LiveEvoSpark)
+    from app.evolution.routing import RoutedSpark
+
+    assert isinstance(eng.spark, RoutedSpark) and isinstance(eng.spark.meta, live.LiveEvoSpark)  # S2: routed
     assert isinstance(eng.segmenter, live.MetaSegmenter) and eng.segmenter.model_id == "sam-3.1"
     assert isinstance(eng.renderer, live.RetryingImageGen)
     assert eng.live_error is None

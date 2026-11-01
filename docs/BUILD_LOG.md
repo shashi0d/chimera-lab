@@ -350,3 +350,10 @@ Read `docs/evolution/ROADMAP.md` (now committed) sections 4, 5 and 5b. Caps for 
 | woolly mammoth | 12/13 | 10 | 2 | 1 (body length) | learned entry updated |
 
 - **Tests:** 12 new (`test_s2_cited.py`, including a replay of the live probe response); suite 791 passed, 6 skipped.
+
+**Part 5 (routing, D-069):**
+- **Router:** `app/evolution/routing.py` (`RoutedSpark`), driven by the `routing` table in `evo_config.json`.
+- **Spark Open with caps:** identify, checklist, thumbnail, polish and the open critic.
+- **Meta:** plans, traits, cited traits, the audit and vary.
+- **Fallback and provenance:** a logged fallback to Meta; the provider is on every call record and on the card.
+- **Tests:** 18 new (`test_s2_routing.py`); 2 S1 tests updated. Suite 809 passed, 6 skipped.

@@ -259,3 +259,10 @@ How a call works:
 - **Fallback:** if the cited call fails, the old model-estimated trait call runs and `traits_note` says why. A budget stop is never swallowed.
 - **Re-resolving a known animal (`Resolver.cite`):** each field is reported as matched (same value, same set, or overlapping range), corrected (it differs) or uncited. A learned entry takes the cited value and keeps the old one in `corrections` (by "web-cited", with the URL). A database animal is compared only: `chimera_data.json` stays the source of truth.
 - **Known limit:** a verified URL proves the page was opened, not that the quoted evidence supports the value. The live run has a few weak sources and quotes, listed in `S2_FIXPACK.md`.
+
+**D-069 Spark calls are routed per call type; Spark Open where S1 showed parity, Meta for plans and traits (S2, ROADMAP 5b).**
+- **The table:** `evo_config.json` `routing` sends `identify`, `checklist` (full image and thumbnail), `polish` and the logged open `critic` to Muse Spark Open on Baseten. It sends `write_plan` (the legacy full-plan path), `learn_traits`, `cite_traits`, `judge_functions` and `vary` to Muse Spark 1.3 on the Meta API.
+- **Output caps:** each Spark Open call carries a `max_tokens` cap at about 3x the largest output seen in S1, reasoning included: identify 5000, checklist 6000, polish 15000, open critic 4000.
+- **Router:** `routing.RoutedSpark` wraps the two adapters (built in `live.build_live`). A Baseten failure, including an unreadable answer from one cut off at its cap, falls back to Meta once, and the router logs both entries. A budget stop is never turned into a fallback. Without a Baseten key everything goes to Meta, with a note.
+- **Provider on records:** every usage record carries `provider` (from the endpoint). `LIVE_LOG.md` writes the model as `provider/model`.
+- **Provider on the card:** each creature's document and card carry `providers`: the provider and model per call type, any fallbacks, plus `meta:` Muse Image and SAM 3.1. Mock mode reports the mock adapter.

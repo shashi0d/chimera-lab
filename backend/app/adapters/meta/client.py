@@ -336,6 +336,7 @@ class _MetaClient:
 
         # The SDK does not read our key from the environment by itself: pass it explicitly.
         self.client = openai.AsyncOpenAI(base_url=base_url, api_key=api_key, timeout=timeout, max_retries=0)
+        self.provider = "baseten" if "baseten" in base_url else "meta" if "meta.ai" in base_url else "other"
 
     async def call(self, kind: CallKind, purpose: str, model: str, body: dict[str, Any], responses: bool = False,
                    raw: bool = False) -> dict[str, Any]:
@@ -357,7 +358,7 @@ class _MetaClient:
                 # The per-attempt timeout (asyncio.wait_for) cancelled us: still account for the attempt.
                 t.__exit__()
                 record(CallRecord(step=current_step.get(), kind=kind, purpose=purpose, model=model,
-                                  latency_ms=t.ms, outcome="TIMEOUT_CANCELLED"))
+                                  latency_ms=t.ms, outcome="TIMEOUT_CANCELLED", provider=self.provider))
                 raise
             except Exception as exc:  # noqa: BLE001 - mapped below, then recorded
                 mapped = exc if isinstance(exc, ChimeraError) else map_sdk_error(exc)
@@ -369,7 +370,7 @@ class _MetaClient:
         inp, out, total = tokens_of((payload or {}).get("usage"))
         record(CallRecord(step=current_step.get(), kind=kind, purpose=purpose, model=model, latency_ms=t.ms,
                           input_tokens=inp, output_tokens=out, total_tokens=total, outcome=outcome,
-                          response_id=(payload or {}).get("id")))
+                          response_id=(payload or {}).get("id"), provider=self.provider))
         if payload is not None:
             save_recording(purpose, body, payload)
         if error is not None:

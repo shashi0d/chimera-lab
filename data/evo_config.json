@@ -373,5 +373,18 @@
       "needs": "water"
     }
   },
+  "routing_about": "S2 (ROADMAP 5b): the provider per Spark call type. baseten = Muse Spark Open (meta-models/muse-spark-open-1026, OpenAI-compatible); meta = Muse Spark 1.3 on the Meta API. max_tokens caps a Spark Open answer at about 3x the largest output seen in S1 (reasoning tokens count): identify 1634, checklist 1848, polish 4881, open critic 1185. A failed or cut-off Baseten call falls back to Meta, logged. Plans (the legacy full-plan path), plain and web-cited traits, the function audit and vary stay on Meta (S1: Spark Open runs away on long JSON and trait lists).",
+  "routing": {
+    "fallback": "meta",
+    "identify": {"provider": "baseten", "max_tokens": 5000},
+    "checklist": {"provider": "baseten", "max_tokens": 6000},
+    "polish": {"provider": "baseten", "max_tokens": 15000},
+    "critic": {"provider": "baseten", "max_tokens": 4000},
+    "write_plan": {"provider": "meta"},
+    "vary": {"provider": "meta"},
+    "learn_traits": {"provider": "meta"},
+    "cite_traits": {"provider": "meta"},
+    "judge_functions": {"provider": "meta"}
+  },
   "prosaic_detail": "natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin"
 }

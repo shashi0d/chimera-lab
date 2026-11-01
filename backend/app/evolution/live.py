@@ -556,7 +556,16 @@ class RetryingImageGen(_Retrying):
         return await self.retry(lambda: self.inner.generate(prompt, reference_images, aspect, previous_response_id))
 
 
-def build_live(settings: Settings, image_gen: ImageGenAdapter) -> tuple[LiveEvoSpark, MetaSegmenter, RetryingImageGen]:
+def build_live(settings: Settings, image_gen: ImageGenAdapter) -> tuple[Any, MetaSegmenter, RetryingImageGen]:
+    """S2: Spark calls are routed per call type (evo_config `routing`): Spark Open on Baseten where configured,
+    Meta Spark 1.3 for the rest and as the fallback. Without a Baseten key everything goes to Meta (logged)."""
     if not settings.meta_api_key:
         raise RuntimeError("CHIMERA_MODE=real needs META_API_KEY")
-    return LiveEvoSpark(settings), MetaSegmenter(settings), RetryingImageGen(image_gen, settings)
+    from app.evolution.routing import RoutedSpark
+
+    baseten = None
+    if settings.baseten_api_key:
+        from app.adapters.baseten.client import BasetenEvoSpark
+
+        baseten = BasetenEvoSpark(settings)
+    return RoutedSpark(LiveEvoSpark(settings), baseten), MetaSegmenter(settings), RetryingImageGen(image_gen, settings)

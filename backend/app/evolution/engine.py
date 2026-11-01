@@ -9,6 +9,7 @@ All go through `Meter` so the number of Meta calls is known from the code path.
 from __future__ import annotations
 
 import base64
+import contextvars
 import copy
 import hashlib
 import json
@@ -33,11 +34,13 @@ from app.evolution.physics import run_checks
 from app.evolution.prompt import PROMPT_CARDS, accept_polish, compile_prompt
 from app.evolution.resolve import LearnedStore, Resolution, Resolver
 from app.evolution.route import Route, choose_host, is_real_hybrid, route, silhouette, silhouette_issues
+from app.evolution.routing import summarize
 from app.evolution.traits import build_traits, contribution, gate
 from app.models.schemas import ErrorCode
 from app.services import Services
 
 ARCHIVE_BUCKETS = 5
+_LOG_MARK: contextvars.ContextVar[int | None] = contextvars.ContextVar("evo_log_mark", default=None)
 EDITABLE = ("habitat", "host", "size.mass_kg") + tuple(f"traits.{t}" for t in TRAIT_TAGS)
 
 
@@ -217,7 +220,20 @@ class EvoEngine:
             return
         apply_judgment(g, judged)
 
+    def _spark_log(self) -> list[dict[str, Any]]:
+        return getattr(self.spark, "log", None) or []
+
+    def providers(self, start: int) -> dict[str, Any]:
+        """S2: which provider served each Spark call since `start`, plus the image and SAM models."""
+        if self.mock:
+            spark = {"by_call": {"all": [f"mock:{self.spark.model_id}"]}, "fallbacks": []}
+        else:
+            spark = summarize(self._spark_log()[start:])
+        return {**spark, "render": f"meta:{self.renderer.model_id}", "segment": f"meta:{self.segmenter.model_id}"}
+
     async def realize(self, g: Genome, r: Route, refs: list[bytes]) -> dict[str, Any]:
+        mark = _LOG_MARK.get()
+        start = mark if mark is not None else len(self._spark_log())
         await self._judge_functions(g)
         prompt = compile_prompt(g, self.tax)
         polished = await self.meter.call("spark", "polish", self.spark.polish(prompt))
@@ -251,6 +267,8 @@ class EvoEngine:
                "judge": verdict, "card": output_card(g, r, self.tax), "route": r.public(),
                "polish": f"rejected: {polish_reason}" if polish_reason else "accepted",
                "render_attempts": attempts, "first_image_key": first_key, "warnings": warnings, "ref_keys": []}
+        doc["providers"] = self.providers(start)
+        doc["card"]["providers"] = doc["providers"]  # S2: the provider of every call type is on the card
         self.store.put("creatures", g.id, doc)
         return doc
 
@@ -271,6 +289,16 @@ class EvoEngine:
         myth = design == "mythic"
         self._guard()
         before = self.meter.snapshot()
+        token = _LOG_MARK.set(len(self._spark_log()))  # S2: this fuse's calls start here (identify and plan too)
+        try:
+            return await self._fuse(sire_name, dam_name, sire_image, dam_image, myth, host, habitat, seed, design,
+                                    before)
+        finally:
+            _LOG_MARK.reset(token)
+
+    async def _fuse(self, sire_name: str | None, dam_name: str | None, sire_image: bytes | None,
+                    dam_image: bytes | None, myth: bool, host: str | None, habitat: str | None, seed: int,
+                    design: str, before: dict[str, int]) -> dict[str, Any]:
         sire = await self.resolve_parent(sire_name, sire_image, "sire")
         dam = await self.resolve_parent(dam_name, dam_image, "dam")
         if sire.id == dam.id:

@@ -34,6 +34,13 @@ class BasetenEvoSpark(LiveEvoSpark):
         _Retrying.__init__(self, settings, settings.baseten_timeout_seconds)  # reasoning model: slower
         self.model_id = settings.baseten_spark_model
         self.http = _MetaClient(settings.baseten_base_url, settings.baseten_api_key, self.timeout)
+        self.max_tokens: dict[str, int] = {}  # S2: output cap per request purpose (evo_config routing)
+
+    async def _chat(self, purpose: str, body: dict[str, Any]) -> dict[str, Any]:
+        """Every Spark Open call carries its purpose's output-token cap (reasoning tokens count toward it)."""
+        if purpose in self.max_tokens and "max_tokens" not in body:
+            body = {**body, "max_tokens": self.max_tokens[purpose]}
+        return await super()._chat(purpose, body)
 
     async def chat(self, purpose: str, body: dict[str, Any], retry: bool = True) -> dict[str, Any]:
         """One raw chat-completions call (probes: tool calling, refusal checks). The body's model is forced

@@ -120,9 +120,10 @@ def test_recordings_refuse_the_baseten_key(tmp_path, monkeypatch):
     assert (tmp_path / "probe-01.json").exists()
 
 
-def test_no_route_uses_baseten_yet():
+def test_baseten_is_built_only_by_the_live_router():
+    # S1 kept it unused; S2 routes per call type, built in one place (live.build_live).
     from pathlib import Path
 
     app = Path(__file__).resolve().parents[2] / "app"
-    users = [p.name for p in app.rglob("*.py") if "BasetenEvoSpark" in p.read_text(encoding="utf-8")]
-    assert users == ["client.py"]
+    users = sorted(p.name for p in app.rglob("*.py") if "BasetenEvoSpark" in p.read_text(encoding="utf-8"))
+    assert users == ["client.py", "live.py"]
