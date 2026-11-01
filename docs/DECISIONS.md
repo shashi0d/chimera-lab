@@ -321,3 +321,53 @@ Both research scripts matched `RC-R\d-` and would have skipped R10 silently. The
 **D-076 The default prompt compiler does not change after the integration experiment until the owner rates it (S3a part 8).**
 - **Findings:** rewording the covering as a replacement (V1, V2) fixes scattering on both pairs. A hard shell over fur still reads as laid on top, mostly an image-model limit. The shoulders signal is a plan conflict: the plan says back and flanks, RC-R10-13 says shoulders to hips.
 - **Proposed after the ratings:** V2 wording for protective coverings; V5 (growth by edit) only as a repair; and in the plan, a dorsal shield covering shoulders to hips.
+
+**D-077 The owner's R10 cards are in; mass never breaks a host tie (S3b part 0, RC-R10-01).**
+The owner supplied R10 with RC-R10-01 to 14, the verbatim S3a review and `plan_evolution_sim.py`; they were placed in `research/`, `benchmark/` and `scripts/`. RC-R10-01 is hard ("neither size nor mass decides which parent wins"), and `choose_host` broke equal-structure ties by mass. On a tie, the first-named parent now hosts by default, logged with RC-R10-01, and the user or agent switches it. A hard-card test swaps the masses and requires the same host. Four E4 tests that relied on the pangolin hosting by mass now name the host. Consequence seen live: tortoise × goat hosts the tortoise. A real tie rule should come from RC-R10-02 and 03 (per-region fitness, empty niches); that is not done here.
+
+**D-078 RC-R10-15 and RC-R10-16 VERIFIED; cards may be superseded (S3b part 1).**
+- **Sources:** both checked against the fetched page. UC Berkeley Understanding Evolution, homologies and analogies, for RC-R10-15. NC State General Entomology, arthropods ("exoskeleton (and its jointed appendages)", "membranous joints"), for RC-R10-16.
+- **Supersession:** RC-R10-13 carries `superseded_by: RC-R10-15`. The research scripts and loader accept the field, keep the card and never apply it.
+- **verify_research:** the run had 2 failures, both on the owner's RC-R10-07 source (`ria.ua.pt`). Every request to that host, including its home page, is reset from this network and from a second fetch path, so the source is unreachable rather than shown dead. Its status is left as the owner set it.
+
+**D-079 Every donor feature is a typed transfer (S3b part 2, RC-R10-15).**
+- **The record:** class (material, homologous, non-homologous), anchor, extent with a reason, scale rule, connections, identity cues, and who set it. Code derives it from `data/transfer_rules.json` in `finish()`.
+- **Classes:**
+  - Homologous needs a matching host structure (both vertebrates, the host has the slot).
+  - Non-homologous back shapes (elytra) fold into material.
+  - Extents come from the donor's own covering system (an exoskeleton covers the whole body; pangolin scales leave the belly and face soft); a patch-type covering keeps its plan regions.
+- **Connections:** a part on the head pulls the covering onto the head and connects to it.
+- **Regions:** the covering's extent becomes the coat traits' regions as one layer (RC-R10-06), exempt from the patch-count soft penalty.
+- **Typed operations:** set_transfer_class, set_extent, connect_features and set_identity_cues. An exoskeleton extent that leaves the legs bare needs a stated reason; identity cues must be positive and must not name the other parent.
+
+**D-080 The default compiler words a covering from its transfer (S3b part 3).**
+- **Wording:** the V2 replacement wording without donor-icon shapes: material, extent, "each plate sized to the host's own body segments and muscle masses, one per segment or muscle mass", "joined by flexible cuticle at every joint", "conforms to the host's body". The host keeps its covering and pattern only on the uncovered zones.
+- **"Bands":** dropped ("flexible bands" tripped the pattern-leak check; an image model may draw stripes).
+- **Parts:** worded by class, anchor, connection and identity cues.
+- **Tests:** S2 tests that pinned the old horn shape text were updated to the new intent.
+
+**D-081 Growth by edit is an option for coverings only, with a drift check (S3b part 4).**
+`fuse(growth="edit")` works in four steps:
+1. Render the host with its discrete parts (never grown by edit).
+2. Grow the covering in one edit, worded from the transfer.
+3. Compare head, walking-leg and tail counts from both critics' plan-blind descriptions, before and after.
+4. On drift, render the full plan in one pass instead.
+
+No repair edit follows a growth edit. The task's "fall back to the first-pass render" is read as the first-pass render of the full plan, because the plain-host image lacks the planned covering. The describe call now also counts tails.
+
+**D-082 New critic items; Meta Spark decides inspect (S3b part 5). Pending owner confirmation.**
+- **New items:** follows the body vs keeps a separate outline; plates sized to the body; legs covered and abrupt stop (armor); parts connect; an open "which animal did this part come from" per discrete part, scored by code ("rhinoceros" fails for a beetle's horn).
+- **Placement:** going beyond an extent with no reason (an old plan's bare regions) is informational.
+- **Recalibration:** 33 owner-labeled images (18 fail, 15 good).
+  - Spark Open calls grown pangolin scales on an axolotl "laid on top" in nearly every owner-good image, and the S3a pair rule inherits that: 9 to 11 false alarms of 15.
+  - Meta Spark alone: 18/18 caught, 3/15 false alarms, in two live runs.
+- **Configuration:** `critic_decision` is `primary: meta_spark`. Spark Open still answers every image, and its disagreement is kept on each row.
+- **Why confirmation is needed:** this departs from the owner's S3a rule ("disagreement is a fail signal"). It is the configuration that meets the owner's target on the owner's labels. Setting the mode to `pair` restores the S3a rule.
+
+**D-083 Validation fixes (S3b part 6).**
+Held-out and live runs exposed three general bugs:
+- A model-written plan prefixed a part with the parent's id, so the part got no transfer. Parts are now normalized to the common name.
+- Plates made a bear's short tail visible (0 → 1 tails), and that counted as drift although the plan has a tail. Drift now means a count that changed and also differs from the plan.
+- Turtles and tortoises have beaks, which the description matcher did not expect.
+
+Each has a test. The two affected runs were rerun beside the originals (`r1_fix`, fresh cache; the first rerun attempt hit the engine's fuse cache and was discarded).

@@ -20,14 +20,14 @@ from pathlib import Path
 from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-import s3a_live as S  # noqa: E402  (sets paths and the S3a caps; S3b caps below replace them)
+import s3a_live as S
 
 os.environ.update({"CHIMERA_LIVE_MAX_IMAGES": "120", "CHIMERA_LIVE_MAX_SPARK": "900", "CHIMERA_LIVE_MAX_SAM": "200",
                    "CHIMERA_LIVE_MAX_SPARK_BASETEN": "900"})
 
-from app.adapters.usage import current_step  # noqa: E402
-from app.evolution import critic as C  # noqa: E402
-from app.evolution.genome import Genome, validate_plan  # noqa: E402
+from app.adapters.usage import current_step
+from app.evolution import critic as C
+from app.evolution.genome import Genome, validate_plan
 
 ROOT, BENCH, LIVE = S.ROOT, S.BENCH, S.LIVE
 OUT = LIVE / "s3b"

@@ -400,3 +400,16 @@ Read `docs/evolution/ROADMAP.md` (now committed) sections 4, 5 and 5b. Caps for 
   - Calls: 30 images, 97 critic calls, 12 SAM, no failures.
   - Budget counter: image 28→58, spark 104→218, SAM 25→45, Spark Open 52→178 over all of S3a.
 - **Part 9:** `benchmark/s3a_review.html` (owner ratings, JSON export) and `benchmark/s3a_contact_sheet.png`.
+
+## S3b: trait transfer instead of part transfer (evo)
+
+- **Part 0:** the owner's three files placed (R10 RC-R10-01 to 14, the verbatim S3a review, `plan_evolution_sim.py`, which runs). The hard RC-R10-01 needed a code change: an equal-structure host tie goes to the first-named parent, never by mass (D-077).
+- **Part 1:** RC-R10-15 and 16, VERIFIED with tier-1 sources fetched (UC Berkeley, NC State); RC-R10-13 superseded. `verify_research` had 2 failures, both the owner's unreachable `ria.ua.pt` source. `rule_cards.json` has 125 cards.
+- **Part 2:** `transfer.py`, `data/transfer_rules.json`, `Genome.transfers`, and four typed PlanSession operations.
+- **Part 3:** the covering compiler built from the transfer record.
+- **Part 4:** `growth.py`, `fuse(growth="edit")`.
+- **Part 5:** new critic items, the origin question in `ask`, and `critic_decision` in `evo_config.json`. Recalibrated on `gold_set_s3b.json` (33 images) in 4 iterations, 3 of them live (396 critic calls). Configured: 18/18 caught, 3/15 false alarms (`benchmark/calibration_s3b/ITERATIONS.md`).
+- **Part 6:** `scripts/s3b_live.py validate`: 12 creatures plus 2 reruns after three fixes (D-083). Held out: crab (*Cancer pagurus*) and tortoise (*Testudo graeca*), both resolved by the resolver's most-common reading; Indian pangolin, learned with cited traits.
+- **Part 7:** `test_s3b_traits.py` (30 tests). Suite 900 passed, 6 skipped; ruff clean.
+- **Part 8:** `docs/evolution/S3b_TRAITS.md` (no review page, per the task).
+- **Budget counter over S3b:** image 58→84, Meta Spark 284→483, Spark Open 244→507, SAM 45→80.
