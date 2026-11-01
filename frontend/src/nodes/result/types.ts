@@ -1,14 +1,10 @@
-import type { CreatureSpec } from "../../types/api";
-
+/** One finished agent run shown on the Result node (R1). The full card is GET /evo/creatures/{id}. */
 export interface ResultVersion {
   runId: string;
-  assetId: string;
   creatureId: string;
   imageUrl: string;
-  spec: CreatureSpec;
+  title: string;
   createdAt: string;
-  /** Meta Responses API id of this generation, for future previous_response_id edits (L1-01). */
-  metaResponseId?: string | null;
 }
 
 export interface ResultData extends Record<string, unknown> {
@@ -20,9 +16,4 @@ export interface ResultData extends Record<string, unknown> {
 export type ResultConfig = Record<string, never>;
 
 export const RESULT_INPUTS = [{ id: "in", label: "", accepts: ["creature" as const] }];
-/** F2: a Result can feed downstream nodes (e.g. a Field card). */
-export const RESULT_OUTPUTS = [{ id: "out", emits: "creature" as const }];
-
-export function displayName(spec: CreatureSpec): string {
-  return spec.name?.trim() || (spec.parents ?? []).map((p) => p.match?.commonName ?? p.reading.commonName ?? "?").join(" × ");
-}
+export const RESULT_OUTPUTS: Array<{ id: string; emits: "creature" }> = [];

@@ -1,1040 +1,226 @@
 /**
- * PV screenshot matrix (TASKSHEET P0-10 / PV-01).
+ * R1 screenshot matrix (UI_STANDARD.md): every R1 state at 1440x900 and 390x844, light and dark.
  *
- *   npm run shots -- [--round pv-1] [--states a,b] [--viewports 1440x900,1024x768] [--themes light,dark] [--core]
+ *   npm run shots -- [--out ../docs/r1/ui_shots] [--states a,b] [--viewports 1440x900,390x844] [--themes light,dark]
  *
- * Starts its own mock backend + Vite (test mode), drives the app into each named
- * state, and writes docs/visual-qa/<round>/<viewport>/<theme>/<state>.png plus
- * docs/visual-qa/<round>/manifest.json. Every state is reachable without manual clicks.
+ * Starts its own Vite in test mode on 5175 (the mock transport: fixtures, no backend, no model calls) and
+ * drives the app into each state through real interactions and the ?mock= parameters.
  */
-import { chromium, type Browser, type Page } from "@playwright/test";
-import { spawn, type ChildProcess } from "node:child_process";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { tmpdir } from "node:os";
+import { chromium, type Page } from "@playwright/test";
+import { spawn } from "node:child_process";
+import { mkdirSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
-import { LIVE_INPUTS, routeLiveResults, seedLive } from "./liveSeed";
 
 const ROOT = resolve(process.cwd(), "..");
-const FX = join(ROOT, "backend/tests/fixtures/images");
-// U1: every image in a screenshot is a real generated image (L1), never a flat mock drawing.
-const LIVE = LIVE_INPUTS;
-const API = 8200;
+const LIVE = join(ROOT, "backend/tests/fixtures/live");
 const WEB = 5175;
-
 const args = new Map<string, string>();
 process.argv.slice(2).forEach((a, i, all) => {
   if (a.startsWith("--")) args.set(a.slice(2), all[i + 1] && !all[i + 1]!.startsWith("--") ? all[i + 1]! : "true");
 });
-const ROUND = args.get("round") ?? "pv-1";
-const OUT = join(ROOT, "docs/visual-qa", ROUND);
-const VIEWPORTS = (args.get("viewports") ?? "1440x900,1280x800,1024x768").split(",").map((v) => {
+const OUT = resolve(args.get("out") ?? join(ROOT, "docs/r1/ui_shots"));
+const VIEWPORTS = (args.get("viewports") ?? "1440x900,390x844").split(",").map((v) => {
   const [w, h] = v.split("x").map(Number);
   return { name: v, width: w!, height: h! };
 });
 const THEMES = (args.get("themes") ?? "light,dark").split(",") as Array<"light" | "dark">;
 const ONLY = args.get("states")?.split(",");
 
-// ------------------------------------------------------------------ helpers
-
-/** Bare names resolve to the live photos (lion, tiger, horse, donkey, bald_eagle, common_octopus). */
-const fx = (n: string) => (n.includes(".") ? join(FX, n) : existsSync(join(LIVE, `${n}.webp`)) ? join(LIVE, `${n}.webp`) : join(FX, `${n}.jpg`));
-
-/** Which live fusion image stands in for a mock-generated result of this input pair. */
-const PAIR_CASE: Record<string, string> = {
-  "lion,tiger": "lion_tiger",
-  "common_octopus,lion": "lion_octopus",
-  "bald_eagle,lion": "bald_eagle_lion",
-  "donkey,horse": "horse_donkey",
-  "bald_eagle,horse": "bald_eagle_lion",
-};
-let currentCase = "lion_tiger";
-
-async function seedLiveCases(page: Page, cases: string[], opts: { fitView?: boolean } = {}) {
-  currentCase = cases[cases.length - 1]!;
-  await seedLive(page, cases, {
-    api: `http://localhost:${API}`,
-    addInputs: async (files) => {
-      await addPaths(page, files);
-    },
-  });
-  if (opts.fitView !== false) await fit(page);
-}
-
-/** Open drawer sections by title. */
-async function openSections(page: Page, titles: string[]) {
-  for (const t of titles) await page.locator(".section__summary", { hasText: t }).first().click();
-}
-
-async function open(page: Page, theme: string) {
-  await page.addInitScript((t) => {
-    if (!sessionStorage.getItem("shots.init")) {
-      localStorage.setItem("chimera.theme", t);
-      sessionStorage.setItem("shots.init", "1");
-    }
-  }, theme);
-  await routeLiveResults(page, () => currentCase);
-  await page.goto(`http://localhost:${WEB}/`);
+async function open(page: Page, path: string, mock: { scenario?: string; stepMs?: number; hold?: number } = {}) {
+  const q = new URLSearchParams({ mock: mock.scenario ?? "success", mockStep: String(mock.stepMs ?? 60) });
+  if (mock.hold !== undefined) q.set("mockHold", String(mock.hold));
+  await page.goto(`http://localhost:${WEB}${path}${path.includes("?") ? "&" : "?"}${q}`);
   await page.waitForFunction(() => Boolean((window as unknown as { __chimera?: unknown }).__chimera));
+}
+async function lab(page: Page, mock: Parameters<typeof open>[2] = {}) {
+  await open(page, "/?view=lab", mock);
   await page.locator(".workspace[aria-busy=false]").waitFor();
 }
-
-async function add(page: Page, names: string[], wait = true) {
-  const pair = PAIR_CASE[[...names].sort().join(",")];
-  if (pair) currentCase = pair;
-  await addPaths(page, names.map(fx), wait);
+async function names(page: Page, a: string, b: string) {
+  await page.getByRole("button", { name: "Type two names" }).click();
+  await page.getByLabel("Animal A").fill(a);
+  await page.getByLabel("Animal B").fill(b);
 }
-
-async function addPaths(page: Page, paths: string[], wait = true) {
-  const names = paths;
-  const before = await page.locator(".node--image-input").count();
+async function photos(page: Page, files: string[]) {
   const chooser = page.waitForEvent("filechooser");
-  const empty = page.getByRole("button", { name: "Add images" });
-  if (await empty.isVisible()) await empty.click();
-  else await page.getByRole("button", { name: "Add image", exact: true }).click();
-  await (await chooser).setFiles(names);
-  const n = before + Math.min(2, names.length);
-  await page
-    .locator(".node--image-input")
-    .nth(n - 1)
-    .waitFor();
-  if (wait) await page.waitForFunction((k) => document.querySelectorAll(".node--image-input .status--ok").length >= k, n, { timeout: 20_000 });
+  await page.getByRole("button", { name: "Add images" }).click();
+  await (await chooser).setFiles(files.map((f) => join(LIVE, `${f}.webp`)));
+  await page.locator(".node--image-input .status--ok").nth(files.length - 1).waitFor();
 }
-
-async function fuse(page: Page, nth = 0) {
-  await page.locator(".fusion-node__fuse").nth(nth).click();
-}
-
-async function done(page: Page, versions = 1) {
-  await page.waitForFunction(
-    (v) => {
-      const imgs = document.querySelectorAll(".plate__img.is-loaded").length;
-      const label = document.querySelector(".node--result .node__kicker")?.textContent ?? "v1";
-      return imgs > 0 && label.includes(`v${v}`) && !document.querySelector(".node.is-running");
-    },
-    versions,
-    { timeout: 30_000 },
-  );
-}
-
-async function hook<T>(page: Page, fn: string, ...a: unknown[]): Promise<T> {
-  return page.evaluate(
-    ([f, rest]) => {
-      const api = (
-        window as unknown as {
-          __chimera: Record<string, (...x: unknown[]) => unknown>;
-        }
-      ).__chimera;
-      return api[f as string]!(...(rest as unknown[])) as never;
-    },
-    [fn, a] as const,
-  );
-}
-
-async function fusionId(page: Page): Promise<string> {
-  const g = await hook<{ nodes: Array<{ id: string; type: string }> }>(page, "graph");
-  return g.nodes.find((n) => n.type === "fusion")!.id;
-}
-
-const STEP_KEYS: Array<[string, string]> = [
-  ["load_inputs", "Load images"],
-  ["identify", "Identify animals"],
-  ["match", "Match field data"],
-  ["hybrid_check", "Check real hybrids"],
-  ["rules_check", "Check anatomy rules"],
-  ["compile", "Plan the creature"],
-  ["generate", "Generate image"],
-  ["store", "Save result"],
-];
-const DETAILS = [
-  "Two distinct images loaded",
-  "Lion and Tiger",
-  "A: Lion (tier 1), B: Tiger (tier 1)",
-  "Real hybrid exists: Liger",
-  "10 rules checked, 0 warnings",
-  "Quadruped body, head from A",
-  "Image ready (1 generation)",
-  "Saved with lineage",
-];
-
-function syntheticRun(
-  nodeId: string,
-  current: number,
-  opts: {
-    agoMs?: number;
-    status?: string;
-    error?: unknown;
-    failedAt?: number;
-  } = {},
-) {
-  const now = Date.now();
-  const created = now - (opts.agoMs ?? 6000);
-  const failedAt = opts.failedAt ?? -1;
-  return {
-    id: `run_synth_${current}_${opts.status ?? "running"}`,
-    graphId: "g",
-    nodeId,
-    sessionId: null,
-    status: opts.status ?? "running",
-    result: null,
-    error: opts.error ?? null,
-    failedInput: null,
-    createdAt: new Date(created).toISOString(),
-    updatedAt: new Date(now).toISOString(),
-    version: 1,
-    steps: STEP_KEYS.map(([key, label], i) => {
-      const st = i < current ? "succeeded" : i === current ? (failedAt === i ? "failed" : "running") : failedAt >= 0 ? "skipped" : "pending";
-      return {
-        key,
-        label,
-        status: st,
-        startedAt: i <= current ? new Date(created + i * 700).toISOString() : null,
-        endedAt: i < current || st === "failed" ? new Date(created + i * 700 + 600).toISOString() : null,
-        detail: st === "succeeded" ? DETAILS[i] : st === "failed" ? "The server stopped." : null,
-      };
-    }),
-  };
-}
-
-async function quiet(page: Page, keepToasts = false) {
-  if (!keepToasts) await hook(page, "clearToasts");
-  await page.mouse.move(2, 600);
+const make = (page: Page) => page.locator(".fusion-node__make").click();
+async function settle(page: Page) {
+  await page.evaluate(() => (window as unknown as { __chimera: { clearToasts(): void } }).__chimera.clearToasts());
+  await page.mouse.move(2, 2);
   await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur?.());
-  await page.waitForTimeout(350);
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+    await Promise.all([...document.images].filter((i) => !i.complete).map((i) => new Promise((r) => ((i.onload = r), (i.onerror = r)))));
+  });
+  await page.waitForTimeout(400);
 }
-
 async function fit(page: Page) {
-  await page.getByRole("button", { name: "Fit to view" }).click();
+  const btn = page.getByRole("button", { name: "Fit to view" });
+  if (await btn.isVisible()) await btn.click();
   await page.waitForTimeout(350);
 }
 
-// ------------------------------------------------------------------ states
-
-interface State {
-  name: string;
-  shows: string;
-  core?: boolean;
-  /** Element screenshot of this selector instead of the full page. */
-  clip?: string;
-  setup(page: Page): Promise<void>;
-}
-
-const errorState = (fault: string, shows: string): State => ({
-  name: `30-error-${fault.replace(/_/g, "-")}`,
-  shows,
-  async setup(page) {
-    await add(page, ["lion", "tiger"]);
-    await hook(page, "setFault", fault);
-    await fuse(page);
-    await page.locator(".node--fusion .node__error").waitFor({ timeout: 30_000 });
-    if (fault === "rate_limit") await page.waitForTimeout(200);
-    await hook(page, "freezeRuns");
-    await quiet(page);
-  },
-});
-
-const STATES: State[] = [
+const STATES: Array<{ id: string; title: string; go(page: Page): Promise<void> }> = [
+  { id: "01-gallery", title: "Gallery (first screen)", go: async (p) => (await open(p, "/"), await p.locator(".gcard__img").nth(3).waitFor()) },
+  { id: "02-new-creature", title: "New creature: two photos, mode, Make creature", go: async (p) => (await lab(p), await photos(p, ["common_octopus", "horse"]), await fit(p)) },
+  { id: "03-new-creature-names", title: "New creature by names (no photos)", go: async (p) => (await lab(p), await names(p, "Indian pangolin", "horse"), await fit(p)) },
   {
-    name: "01-empty-canvas",
-    shows: "Empty canvas with drop invitation",
-    core: true,
-    setup: async (p) => quiet(p),
-  },
-  {
-    name: "02-drop-overlay",
-    shows: "Files dragged over the canvas",
-    async setup(page) {
-      await page.evaluate(() => {
-        const dt = new DataTransfer();
-        dt.items.add(new File(["x"], "a.jpg", { type: "image/jpeg" }));
-        document.querySelector(".canvas")!.dispatchEvent(
-          new DragEvent("dragover", {
-            dataTransfer: dt,
-            bubbles: true,
-            cancelable: true,
-          }),
-        );
-      });
-      await page.waitForTimeout(200);
+    id: "04-queued",
+    title: "Queued with position",
+    go: async (p) => {
+      await lab(p, { scenario: "queued", stepMs: 60_000 });
+      await names(p, "lion", "golden eagle");
+      await make(p);
+      await p.getByText("Position 2 in the queue").waitFor();
+      await fit(p);
     },
   },
   {
-    name: "03-one-image",
-    shows: "One image, auto-added Fusion node with input A connected",
-    core: true,
-    async setup(page) {
-      await add(page, ["lion"]);
-      await quiet(page, true);
+    id: "05-trace-mid-run",
+    title: "Live trace mid-run",
+    go: async (p) => {
+      await lab(p, { scenario: "success", stepMs: 60, hold: 12 });
+      await names(p, "Indian pangolin", "horse");
+      await make(p);
+      await p.locator(".trace-img__img").nth(1).waitFor();
+      await fit(p);
     },
   },
   {
-    name: "04-uploading",
-    shows: "Upload in progress with percent and cancel",
-    async setup(page) {
-      await page.route("**/assets", async (r) => {
-        await new Promise((res) => setTimeout(res, 6000));
-        await r.continue().catch(() => undefined);
-      });
-      await add(page, ["lion"], false);
-      await page.evaluate(() => {
-        // pin progress at a mid value so the shot is deterministic
-        const g = (
-          window as unknown as {
-            __chimera: {
-              graph(): { nodes: Array<{ id: string; type: string }> };
-            };
-          }
-        ).__chimera.graph();
-        return g.nodes[0]?.id;
-      });
-      await page.locator(".upload-progress").waitFor();
-      await quiet(page);
+    id: "06-host-tie",
+    title: "needs_choice: host tie",
+    go: async (p) => {
+      await lab(p, { scenario: "host_tie", stepMs: 60 });
+      await names(p, "tortoise", "domestic goat");
+      await make(p);
+      await p.locator(".choice").waitFor();
+      await fit(p);
     },
   },
   {
-    name: "05-two-unconnected",
-    shows: "Two images, Fusion inputs empty (Fuse disabled with hint)",
-    core: true,
-    async setup(page) {
-      await add(page, ["lion", "tiger"]);
-      await page.getByLabel("Connect image A").selectOption("");
-      await page.getByLabel("Connect image B").selectOption("");
-      await quiet(page);
+    id: "07-identify",
+    title: "Identify confirmation (POST needs_choice)",
+    go: async (p) => {
+      await lab(p, { scenario: "identify_choice" });
+      await photos(p, ["horse", "donkey"]);
+      await fit(p);
+      await make(p);
+      await p.getByRole("dialog").waitFor();
     },
   },
   {
-    name: "06-two-connected",
-    shows: "Two images connected, ready to fuse",
-    core: true,
-    async setup(page) {
-      await add(page, ["lion", "tiger"]);
-      await quiet(page);
-    },
-  },
-  ...STEP_KEYS.map(([key], i): State => ({
-    name: `1${i}-running-${key.replace(/_/g, "-")}`,
-    shows: `Fusion running, current step: ${key}`,
-    core: i === 6,
-    async setup(page) {
-      await add(page, ["lion", "tiger"]);
-      const id = await fusionId(page);
-      await hook(page, "setRun", id, syntheticRun(id, i));
-      await quiet(page);
-    },
-  })),
-  {
-    name: "18-long-wait",
-    shows: "Still working note after 20s",
-    async setup(page) {
-      await add(page, ["lion", "tiger"]);
-      const id = await fusionId(page);
-      await hook(page, "setRun", id, syntheticRun(id, 6, { agoMs: 34_000 }));
-      await quiet(page);
+    id: "08-refused",
+    title: "Refused upload (HUMAN_DETECTED)",
+    go: async (p) => {
+      await lab(p, { scenario: "refused_human" });
+      await photos(p, ["lion", "horse"]);
+      await make(p);
+      await p.locator(".node--fusion [role=alert]").waitFor();
+      await fit(p);
     },
   },
   {
-    name: "19-very-long-wait",
-    shows: "After 120s: prominent cancel",
-    async setup(page) {
-      await add(page, ["lion", "tiger"]);
-      const id = await fusionId(page);
-      await hook(page, "setRun", id, syntheticRun(id, 6, { agoMs: 128_000 }));
-      await quiet(page);
+    id: "09-daily-cap",
+    title: "Daily cap: 429 CAP_REACHED on Make creature",
+    go: async (p) => {
+      await lab(p, { scenario: "cap_daily" });
+      await names(p, "lion", "tiger");
+      await make(p);
+      await p.locator(".node--fusion [role=alert]").waitFor();
+      await fit(p);
     },
   },
   {
-    name: "20-success-real-hybrid",
-    shows: "Success with real-hybrid badge (lion + tiger)",
-    core: true,
-    async setup(page) {
-      await seedLiveCases(page, ["lion_tiger"]);
-      await quiet(page);
+    id: "10-daily-cap-gallery",
+    title: "Daily cap shown before upload (limits capped)",
+    go: async (p) => (await open(p, "/", { scenario: "limits_capped" }), await p.getByText("Today's live creature runs are used up.").waitFor()),
+  },
+  {
+    id: "11-error",
+    title: "Run error",
+    go: async (p) => {
+      await lab(p, { scenario: "error", stepMs: 60 });
+      await names(p, "rhinoceros beetle", "brown bear");
+      await make(p);
+      await p.locator(".trace .now-card--error").waitFor({ timeout: 20_000 });
+      await fit(p);
     },
   },
   {
-    name: "21-success-warnings",
-    shows: "Success with rule warnings (octopus + macaw)",
-    core: true,
-    async setup(page) {
-      await seedLiveCases(page, ["lion_octopus"]);
-      await quiet(page);
+    id: "12-trace-finished",
+    title: "Trace finished: the creature leads",
+    go: async (p) => {
+      await lab(p, { scenario: "success", stepMs: 40 });
+      await names(p, "Indian pangolin", "horse");
+      await make(p);
+      await p.locator(".result-sum__img").waitFor({ timeout: 20_000 });
+      await fit(p);
+    },
+  },
+  { id: "13-card-overlay-off", title: "Creature card, anatomy map off", go: async (p) => (await open(p, "/?creature=crt_fx_b09"), await p.locator(".creature__img").waitFor()) },
+  {
+    id: "14-card-overlay-on",
+    title: "Creature card, anatomy map on with legend",
+    go: async (p) => {
+      await open(p, "/?creature=crt_fx_b10");
+      await p.getByRole("button", { name: "Anatomy map" }).click();
+      if ((p.viewportSize()?.width ?? 1440) < 700) await p.locator(".creature__overlay").evaluate((el) => el.scrollIntoView({ block: "end" }));
     },
   },
   {
-    name: "22-version-2",
-    shows: "Re-run: version 2 selected in the switcher",
-    async setup(page) {
-      await seedLiveCases(page, ["bald_eagle_lion", "lion_eagle_pinned"]);
-      await quiet(page);
-    },
-  },
-  {
-    name: "23-panel-open",
-    shows: "How this was made panel (top)",
-    core: true,
-    async setup(page) {
-      await seedLiveCases(page, ["lion_tiger"]);
-      await page.getByRole("button", { name: "How this was made" }).click();
-      await quiet(page);
-    },
-  },
-  {
-    name: "24-panel-notes-prompt",
-    shows: "Panel scrolled to field notes and prompt",
-    async setup(page) {
-      await seedLiveCases(page, ["lion_octopus"]);
-      await page.getByRole("button", { name: "How this was made" }).click();
-      await openSections(page, ["Rules and warnings", "Prompt and sources"]);
-      await page.locator(".side-panel__scroll").evaluate((el) => el.scrollTo(0, el.scrollHeight));
-      await quiet(page);
-    },
-  },
-  {
-    name: "25-stale-result",
-    shows: "Input replaced after success: results marked outdated",
-    async setup(page) {
-      await seedLiveCases(page, ["lion_tiger"]);
-      await page.locator(".node--image-input").first().hover();
-      const chooser = page.waitForEvent("filechooser");
-      await page.locator(".node--image-input").first().getByRole("button", { name: "Replace image" }).click();
-      await (await chooser).setFiles([fx("horse")]);
-      await page.waitForFunction(() => document.querySelectorAll(".node--image-input .status--ok").length >= 2);
-      await fit(page);
-      await quiet(page);
-    },
-  },
-  {
-    name: "26-result-image-failed",
-    shows: "Generated image failed to load: fallback tile with reload",
-    async setup(page) {
-      await seedLiveCases(page, ["lion_tiger"]);
-      // Point the version at a URL that fails, without a reload (the seeded run only exists client-side).
-      type Doc = { nodes: Array<{ type: string; data: { versions?: Array<{ imageUrl: string }> } }> };
-      const g = await hook<Doc>(page, "graph");
-      const v = g.nodes.find((n) => n.type === "result")!.data.versions![0]!;
-      v.imageUrl = `${v.imageUrl}&broken=1`;
-      await page.route(/broken=1/, (r) => r.abort());
-      await hook(page, "loadGraph", g);
-      await page.locator(".plate--failed").waitFor({ timeout: 15_000 });
-      await quiet(page);
-    }
-  },
-  {
-    name: "27-panel-sections-open",
-    shows: "U1 drawer: summary, stats, pipeline timeline, real hybrids and mythology open",
-    core: true,
-    async setup(page) {
-      await seedLiveCases(page, ["bald_eagle_lion"]);
-      await page.getByRole("button", { name: "How this was made" }).click();
-      await openSections(page, ["Pipeline", "Mythology resemblances"]);
-      await page.locator(".side-panel__scroll").evaluate((el) => el.scrollTo(0, 0));
-      await quiet(page);
-    },
-  },
-  {
-    name: "28-result-card",
-    shows: "U1 result hero card on its own (element shot)",
-    core: true,
-    clip: ".node--result",
-    async setup(page) {
-      await seedLiveCases(page, ["lion_tiger"]);
-      await quiet(page);
-    },
-  },
-  {
-    name: "29-hybrid-drawer",
-    shows: "U1 drawer for lion + tiger: real hybrids open with cross direction and sources",
-    async setup(page) {
-      await seedLiveCases(page, ["lion_tiger"]);
-      await page.getByRole("button", { name: "How this was made" }).click();
-      await openSections(page, ["Real hybrids"]);
-      await quiet(page);
-    },
-  },
-  {
-    name: "84-body-diagram",
-    shows: "U1 body diagram with pinned parts showing donor portraits (element shot)",
-    core: true,
-    clip: ".node--fusion",
-    async setup(page) {
-      await seedLiveCases(page, ["lion_eagle_pinned"]);
-      await quiet(page);
-    },
-  },
-  errorState("not_animal", "NOT_AN_ANIMAL: message + offending input highlighted"),
-  errorState("human", "HUMAN_DETECTED: privacy-safe message + input highlighted"),
-  errorState("refusal", "MODEL_REFUSED: what to change, no retry"),
-  errorState("server_error", "UPSTREAM_ERROR: Retry fusion"),
-  errorState("timeout", "UPSTREAM_TIMEOUT: Retry fusion"),
-  errorState("budget", "BUDGET_EXCEEDED: no retry"),
-  errorState("rate_limit", "RATE_LIMITED: automatic retry countdown"),
-  {
-    name: "30-error-interrupted",
-    shows: "RUN_INTERRUPTED: server restarted, re-run offered",
-    async setup(page) {
-      await add(page, ["lion", "tiger"]);
-      const id = await fusionId(page);
-      await hook(
-        page,
-        "setRun",
-        id,
-        syntheticRun(id, 6, {
-          status: "interrupted",
-          failedAt: 6,
-          error: {
-            code: "RUN_INTERRUPTED",
-            message: "",
-            retryable: true,
-            retryAfterMs: null,
-            details: {},
-            errorId: null,
-          },
-        }),
-      );
-      await quiet(page);
-    },
-  },
-  {
-    name: "30-error-internal",
-    shows: "INTERNAL: generic message with reportable error id",
-    async setup(page) {
-      await add(page, ["lion", "tiger"]);
-      const id = await fusionId(page);
-      await hook(
-        page,
-        "setRun",
-        id,
-        syntheticRun(id, 5, {
-          status: "failed",
-          failedAt: 5,
-          error: {
-            code: "INTERNAL",
-            message: "",
-            retryable: true,
-            retryAfterMs: null,
-            details: {},
-            errorId: "7f3a91c2b4e0",
-          },
-        }),
-      );
-      await quiet(page);
-    },
-  },
-  {
-    name: "31-duplicate-inputs",
-    shows: "Same image twice: Fuse blocked with hint",
-    async setup(page) {
-      await add(page, ["lion", "lion"]);
-      await quiet(page);
-    },
-  },
-  {
-    name: "32-upload-error",
-    shows: "Server rejected an upload (IMAGE_CORRUPT)",
-    async setup(page) {
-      await page.route("**/assets", (r) =>
-        r.fulfill({
-          status: 422,
-          contentType: "application/json",
-          body: JSON.stringify({
-            error: {
-              code: "IMAGE_CORRUPT",
-              message: "x",
-              retryable: false,
-              details: {},
-            },
-          }),
-        }),
-      );
-      await add(page, ["lion"], false);
-      await page.locator(".node--image-input .image-node__banner--error").waitFor();
-      await quiet(page);
-    },
-  },
-  {
-    name: "33-unsupported-file-toast",
-    shows: "Unsupported file type rejected with toast",
-    async setup(page) {
-      const chooser = page.waitForEvent("filechooser");
-      await page.getByRole("button", { name: "Add images" }).click();
-      await (await chooser).setFiles([fx("edge/anim.gif")]);
-      await page.locator(".toast").waitFor();
-      await quiet(page, true);
-    },
-  },
-  {
-    name: "34-too-many-files-toast",
-    shows: "Three images dropped: two added, toast explains",
-    async setup(page) {
-      const chooser = page.waitForEvent("filechooser");
-      await page.getByRole("button", { name: "Add images" }).click();
-      await (await chooser).setFiles([fx("lion"), fx("tiger"), fx("horse")]);
-      await page.waitForFunction(() => document.querySelectorAll(".node--image-input .status--ok").length >= 2);
-      await quiet(page, true);
-    },
-  },
-  {
-    name: "40-offline-banner",
-    shows: "Offline banner; Fuse disabled",
-    core: true,
-    async setup(page) {
-      await add(page, ["lion", "tiger"]);
-      await hook(page, "force", "offline");
-      await quiet(page);
-    },
-  },
-  {
-    name: "41-offline-upload-queue",
-    shows: "Upload queued while offline",
-    async setup(page) {
-      await add(page, ["lion"]);
-      await hook(page, "force", "offline");
-      const chooser = page.waitForEvent("filechooser");
-      await page.getByRole("button", { name: "Add image", exact: true }).click();
-      await (await chooser).setFiles([fx("tiger")]);
-      await page.locator(".node--image-input").nth(1).waitFor();
-      await page.waitForTimeout(700); // let the reveal pan finish
-      await quiet(page);
-    },
-  },
-  {
-    name: "42-server-unreachable",
-    shows: "Server unreachable banner (distinct from offline)",
-    core: true,
-    async setup(page) {
-      await add(page, ["lion", "tiger"]);
-      await hook(page, "force", "unreachable");
-      await quiet(page);
-    },
-  },
-  {
-    name: "43-offline-mid-run",
-    shows: "Connection lost during a run: polling paused note",
-    async setup(page) {
-      await add(page, ["lion", "tiger"]);
-      const id = await fusionId(page);
-      await hook(page, "setRun", id, syntheticRun(id, 6));
-      await hook(page, "force", "offline");
-      await quiet(page);
-    },
-  },
-  {
-    name: "50-node-crash",
-    shows: "One node failed to render; canvas still usable",
-    core: true,
-    async setup(page) {
-      await add(page, ["lion", "tiger"]);
-      const g = await hook<{ nodes: Array<{ id: string }> }>(page, "graph");
-      await hook(page, "crashNode", g.nodes[0]!.id);
-      await quiet(page);
-    },
-  },
-  {
-    name: "51-app-crash",
-    shows: "App-level error screen",
-    core: true,
-    async setup(page) {
-      await hook(page, "crashApp");
-      await page.getByRole("button", { name: "Reload app" }).waitFor();
-      await quiet(page);
-    },
-  },
-  {
-    name: "52-unsupported-node-and-orphans",
-    shows: "Unknown node type placeholder + orphan edge toast",
-    async setup(page) {
-      await hook(page, "writeAutosave", {
-        schemaVersion: 1,
-        graphId: "broken",
-        nodes: [
-          {
-            id: "s1",
-            type: "style",
-            version: 3,
-            position: { x: 0, y: 0 },
-            config: {},
-            data: {},
-          },
-          {
-            id: "f1",
-            type: "fusion",
-            version: 1,
-            position: { x: 320, y: -20 },
-            config: {},
-            data: {},
-          },
-        ],
-        edges: [
-          {
-            id: "e1",
-            source: "ghost",
-            sourcePort: "out",
-            target: "f1",
-            targetPort: "a",
-          },
-        ],
-      });
-      await page.reload();
-      await page.getByText("Unsupported node").waitFor();
-      await quiet(page, true);
-    },
-  },
-  {
-    name: "53-read-only-newer",
-    shows: "Graph from a newer version: read-only banner",
-    async setup(page) {
-      await hook(page, "writeAutosave", {
-        schemaVersion: 9,
-        graphId: "future",
-        nodes: [{ id: "f1", type: "fusion", position: { x: 0, y: 0 } }],
-        edges: [],
-      });
-      await page.reload();
-      await page.locator(".banner--readonly").waitFor();
-      await quiet(page);
-    },
-  },
-  {
-    name: "54-corrupt-autosave",
-    shows: "Corrupt autosave discarded with toast",
-    async setup(page) {
-      await hook(page, "writeAutosave", "garbage{");
-      await page.reload();
-      await page.locator(".toast").waitFor();
-      await quiet(page, true);
-    },
-  },
-  {
-    name: "60-fit-view-many-nodes",
-    shows: "Fit view with 7 nodes (two fusions)",
-    core: true,
-    async setup(page) {
-      // Mock pair first: seeding a live run freezes run polling (setRun), so it must come last.
-      await add(page, ["horse", "donkey"]);
-      await fuse(page);
-      await done(page);
-      currentCase = "horse_donkey";
-      // An empty Fusion node first, so the live pair is wired into its own Fusion.
-      await page.getByRole("button", { name: "Add fusion node" }).click();
-      await seedLiveCases(page, ["lion_tiger"]);
-      await page.waitForFunction(() => document.querySelectorAll(".plate__img.is-loaded").length >= 2, undefined, { timeout: 30_000 });
-      await fit(page);
-      await quiet(page);
-    }
-  },
-  {
-    name: "61-canvas-100-percent",
-    shows: "Canvas at 100% zoom after a fusion",
-    async setup(page) {
-      await seedLiveCases(page, ["bald_eagle_lion"], { fitView: false });
-      await quiet(page);
-    },
-  },
-  {
-    name: "62-minimap",
-    shows: "Minimap toggled on",
-    async setup(page) {
-      await add(page, ["lion", "tiger"]);
-      await page.getByRole("button", { name: "Show minimap" }).click();
-      await quiet(page);
-    },
-  },
-  {
-    name: "63-refused-connection",
-    shows: "Wrong port type: refused with toast",
-    async setup(page) {
-      await seedLiveCases(page, ["lion_tiger"]);
-      await hook(page, "clearToasts");
-      await page.locator(".node--image-input .port--out").first().dragTo(page.locator(".node--result .port--in"));
-      await page.locator(".toast").waitFor();
-      await page.mouse.move(2, 600);
-      await page.waitForTimeout(250);
-    },
-  },
-  {
-    name: "64-shortcuts-dialog",
-    shows: "Keyboard shortcuts dialog",
-    async setup(page) {
-      await page.getByRole("button", { name: "Keyboard shortcuts" }).click();
-      await page.waitForTimeout(250);
-    },
-  },
-  {
-    name: "80-anatomy-pinned",
-    shows: "F1: parts pinned (Head B, Covering A) before fusing",
-    core: true,
-    async setup(page) {
-      await add(page, ["lion", "bald_eagle"]);
-      await page.getByRole("button", { name: "Head from Auto (model decides)" }).click();
-      await page.getByRole("button", { name: "Limbs from Auto (model decides)" }).click();
-      await page.getByRole("button", { name: "Limbs from A" }).click();
-      await page.getByRole("button", { name: "Covering from Auto (model decides)" }).click();
-      await quiet(page);
-    },
-  },
-  {
-    name: "81-anatomy-result-panel",
-    shows: "F1: result with pinned parts; panel credits you vs model",
-    core: true,
-    async setup(page) {
-      await seedLiveCases(page, ["lion_eagle_pinned"]);
-      await page.getByRole("button", { name: "How this was made" }).click();
-      await openSections(page, ["Body plan and donors"]);
-      await page.locator(".side-panel__scroll").evaluate((el) => el.scrollTo(0, (el.querySelector(".donors") as HTMLElement).offsetTop - 160));
-      await quiet(page);
-    },
-  },
-  {
-    name: "82-anatomy-one-parent",
-    shows: "F1: every part pinned to A: advisory hint",
-    async setup(page) {
-      await add(page, ["lion", "tiger"]);
-      for (const part of ["Head", "Body", "Limbs", "Covering", "Tail"]) {
-        await page.getByRole("button", { name: `${part} from Auto (model decides)` }).click();
-      }
-      await quiet(page);
-    },
-  },
-  {
-    name: "83-anatomy-outdated",
-    shows: "F1: pin changed after a result: result outdated",
-    async setup(page) {
-      await seedLiveCases(page, ["horse_donkey"]);
-      await page.getByRole("button", { name: "Tail from Auto (model decides)" }).click();
-      await fit(page);
-      await quiet(page);
-    },
-  },
-  {
-    name: "90-card-empty",
-    shows: "F2: Field card added from a Result, not written yet",
-    core: true,
-    async setup(page) {
-      await add(page, ["lion", "tiger"]);
-      await fuse(page);
-      await done(page);
-      await page.locator(".node--result").hover();
-      await page.getByRole("button", { name: "Make field card" }).click();
-      await page.waitForTimeout(400);
-      await fit(page);
-      await quiet(page);
-    },
-  },
-  {
-    name: "91-card-written",
-    shows: "F2: written field card with invented binomial, ranges and provenance",
-    core: true,
-    async setup(page) {
-      await add(page, ["lion", "tiger"]);
-      await fuse(page);
-      await done(page);
-      await page.locator(".node--result").hover();
-      await page.getByRole("button", { name: "Make field card" }).click();
-      await page.getByRole("button", { name: "Write card" }).click();
-      await page.locator(".field-card__binomial").waitFor({ timeout: 20_000 });
-      await fit(page);
-      await quiet(page);
-    },
-  },
-  {
-    name: "92-card-out-of-date",
-    shows: "F2: Result moved to v2; card offers a rewrite",
-    async setup(page) {
-      await add(page, ["horse", "donkey"]);
-      await fuse(page);
-      await done(page);
-      await page.locator(".node--result").hover();
-      await page.getByRole("button", { name: "Make field card" }).click();
-      await page.getByRole("button", { name: "Write card" }).click();
-      await page.locator(".field-card__binomial").waitFor({ timeout: 20_000 });
-      await page.getByRole("button", { name: "Fuse again" }).click();
-      await done(page, 2);
-      await fit(page);
-      await quiet(page);
-    },
-  },
-  {
-    name: "93-card-error-timeout",
-    shows: "F2: writing the card timed out: message + retry",
-    async setup(page) {
-      await add(page, ["lion", "tiger"]);
-      await fuse(page);
-      await done(page);
-      await page.locator(".node--result").hover();
-      await page.getByRole("button", { name: "Make field card" }).click();
-      await hook(page, "setFault", "timeout");
-      await page.getByRole("button", { name: "Write card" }).click();
-      await page.locator(".node--field-card .node__error").waitFor({ timeout: 20_000 });
-      await hook(page, "freezeRuns");
-      await fit(page);
-      await quiet(page);
-    },
-  },
-  {
-    name: "94-card-exported-png",
-    shows: "F2: the downloaded field-card PNG itself (1600×1000)",
-    async setup(page) {
-      await add(page, ["lion", "common_octopus"]);
-      await fuse(page);
-      await done(page);
-      await page.locator(".node--result").hover();
-      await page.getByRole("button", { name: "Make field card" }).click();
-      await page.getByRole("button", { name: "Write card" }).click();
-      await page.locator(".field-card__binomial").waitFor({ timeout: 20_000 });
-      const download = page.waitForEvent("download");
-      await page.getByRole("button", { name: "Download PNG" }).click();
-      const file = await (await download).path();
-      // Show the exported file full-screen so it is captured like any other state.
-      const { readFileSync } = await import("node:fs");
-      const b64 = readFileSync(file).toString("base64");
-      await page.setContent(
-        `<body style="margin:0;background:#888;display:grid;place-items:center;height:100vh"><img src="data:image/png;base64,${b64}" style="max-width:96vw;max-height:96vh"></body>`,
-      );
-    },
-  },
-  ...["Add image", "Add fusion node", "Undo", "Fit to view", "Show minimap"].map((label, i): State => ({
-    name: `7${i}-focus-${label.toLowerCase().replace(/\s+/g, "-")}`,
-    shows: `Keyboard focus on toolbar control: ${label}`,
-    async setup(page) {
-      await add(page, ["lion", "tiger"]);
-      await hook(page, "clearToasts");
-      await page.getByRole("button", { name: label, exact: true }).focus();
-      await page.keyboard.press("Shift+Tab");
-      await page.keyboard.press("Tab");
-      await page.waitForTimeout(200);
-    },
-  })),
-  {
-    name: "75-focus-fuse-button",
-    shows: "Keyboard focus on the Fuse button",
-    async setup(page) {
-      await add(page, ["lion", "tiger"]);
-      await hook(page, "clearToasts");
-      await page.locator(".fusion-node__fuse").focus();
-      await page.keyboard.press("Shift+Tab");
-      await page.keyboard.press("Tab");
-      await page.waitForTimeout(200);
+    id: "15-both-picks",
+    title: "Both picks (agent and code ranking disagree)",
+    go: async (p) => {
+      await open(p, "/?creature=crt_mock_b10_split");
+      await p.locator(".cblock--picks").evaluate((el) => el.scrollIntoView({ block: "start" }));
     },
   },
 ];
-
-// ------------------------------------------------------------------ servers
-
-if (args.has("list")) {
-  console.log(
-    JSON.stringify(
-      STATES.map((s) => ({
-        name: s.name,
-        shows: s.shows,
-        core: Boolean(s.core),
-      })),
-    ),
-  );
-  process.exit(0);
-}
-
-function startServers(): ChildProcess[] {
-  const py = process.env.PYTHON ?? join(ROOT, ".venv/bin/python");
-  const env = {
-    ...process.env,
-    CHIMERA_MODE: "mock",
-    MOCK_DELAY_SCALE: "0.1",
-    RETRY_BASE_SECONDS: "0.01",
-    RUNS_PER_MINUTE_PER_SESSION: "10000",
-    DATA_PATH: "backend/tests/fixtures/chimera_data.sample.json",
-    LOCAL_DATA_DIR: join(tmpdir(), `chimera-shots-${Date.now()}`),
-    CORS_ORIGINS: `http://localhost:${WEB}`,
-  };
-  const api = spawn(py, ["-m", "uvicorn", "app.main:app", "--port", String(API), "--log-level", "warning"], {
-    cwd: join(ROOT, "backend"),
-    env,
-    stdio: "ignore",
-  });
-  const web = spawn("npx", ["vite", "--mode", "test", "--port", String(WEB), "--strictPort", "--logLevel", "error"], {
-    cwd: join(ROOT, "frontend"),
-    env: { ...process.env, VITE_API_BASE_URL: `http://localhost:${API}` },
-    stdio: "ignore",
-  });
-  return [api, web];
-}
-
-async function waitFor(url: string) {
-  for (let i = 0; i < 120; i++) {
-    try {
-      const r = await fetch(url);
-      if (r.ok) return;
-    } catch {
-      /* not up yet */
-    }
-    await new Promise((r) => setTimeout(r, 500));
-  }
-  throw new Error(`timed out waiting for ${url}`);
-}
 
 async function main() {
-  const procs = startServers();
-  const stop = () => procs.forEach((p) => p.kill());
-  process.on("exit", stop);
-  let browser: Browser | null = null;
-  const manifest: Array<{
-    file: string;
-    state: string;
-    shows: string;
-    viewport: string;
-    theme: string;
-  }> = [];
-  const failures: string[] = [];
+  const vite = spawn("npx", ["vite", "--mode", "test", "--port", String(WEB), "--strictPort"], { stdio: "ignore", env: { ...process.env, VITE_EVO_TRANSPORT: "mock" } });
   try {
-    await waitFor(`http://localhost:${API}/health`);
-    await waitFor(`http://localhost:${WEB}/`);
-    browser = await chromium.launch();
-    const states = STATES.filter((s) => (!ONLY || ONLY.some((o) => s.name.startsWith(o))) && (args.has("core") ? s.core : true));
+    for (let i = 0; i < 60; i++) {
+      try {
+        if ((await fetch(`http://localhost:${WEB}/`)).ok) break;
+      } catch {
+        /* not up yet */
+      }
+      await new Promise((r) => setTimeout(r, 500));
+    }
+    const browser = await chromium.launch();
+    const manifest: Array<Record<string, string>> = [];
     for (const vp of VIEWPORTS) {
-      const small = vp.width < 1440;
       for (const theme of THEMES) {
         const dir = join(OUT, vp.name, theme);
         mkdirSync(dir, { recursive: true });
-        for (const s of states) {
-          if (small && !s.core && !ONLY) continue; // smaller viewports cover the core states (UI_STANDARD.md)
-          const ctx = await browser.newContext({
-            viewport: { width: vp.width, height: vp.height },
-            deviceScaleFactor: 1,
-          });
+        for (const s of STATES.filter((x) => !ONLY || ONLY.includes(x.id))) {
+          const ctx = await browser.newContext({ viewport: { width: vp.width, height: vp.height }, deviceScaleFactor: 1 });
+          await ctx.addInitScript((t) => localStorage.setItem("chimera.theme", t), theme);
           const page = await ctx.newPage();
           try {
-            await open(page, theme);
-            await s.setup(page);
-            const file = join(dir, `${s.name}.png`);
-            if (s.clip) await page.locator(s.clip).first().screenshot({ path: file, animations: "disabled" });
-            else await page.screenshot({ path: file, animations: "disabled" });
-            manifest.push({
-              file: file.replace(`${ROOT}/`, ""),
-              state: s.name,
-              shows: s.shows,
-              viewport: vp.name,
-              theme,
-            });
-            process.stdout.write(`✓ ${vp.name} ${theme} ${s.name}\n`);
+            await s.go(page);
+            await settle(page);
+            const file = join(dir, `${s.id}.png`);
+            await page.screenshot({ path: file });
+            manifest.push({ state: s.id, title: s.title, viewport: vp.name, theme, file: file.replace(`${ROOT}/`, "") });
+            console.log("ok", vp.name, theme, s.id);
           } catch (e) {
-            failures.push(`${vp.name} ${theme} ${s.name}: ${(e as Error).message.split("\n")[0]}`);
-            process.stdout.write(`✗ ${vp.name} ${theme} ${s.name}\n`);
-          } finally {
-            await ctx.close();
+            console.error("FAILED", vp.name, theme, s.id, String(e).split("\n")[0]);
           }
+          await ctx.close();
         }
       }
     }
+    await browser.close();
+    writeFileSync(join(OUT, "manifest.json"), JSON.stringify(manifest, null, 2));
   } finally {
-    await browser?.close();
-    mkdirSync(OUT, { recursive: true });
-    // Merge with earlier invocations of the same round (e.g. per-viewport runs).
-    const path = join(OUT, "manifest.json");
-    const prev = existsSync(path) ? (JSON.parse(readFileSync(path, "utf8")) as { shots: typeof manifest }) : { shots: [] };
-    const merged = [...prev.shots.filter((p) => !manifest.some((m) => m.file === p.file)), ...manifest].sort((a, b) => a.file.localeCompare(b.file));
-    writeFileSync(path, JSON.stringify({ round: ROUND, captured: merged.length, failures, shots: merged }, null, 2));
-    stop();
+    vite.kill();
   }
-  console.log(`\n${manifest.length} screenshots in docs/visual-qa/${ROUND}${failures.length ? `, ${failures.length} failed:\n${failures.join("\n")}` : ""}`);
-  process.exit(failures.length ? 1 : 0);
 }
 
 void main();

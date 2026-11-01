@@ -5,20 +5,21 @@ import type { ImageInputData } from "../../src/nodes/image-input/types";
 export function img(id: string, over: Partial<ImageInputData> = {}): GraphNode {
   const data: ImageInputData = {
     fileName: `${id}.jpg`,
-    assetId: `ast_${id}`,
+    blobKey: `blob_${id}`,
     sha256: `sha_${id}`,
-    upload: { status: "done", progress: 1, error: null },
+    status: "ready",
+    error: null,
     ...over,
   };
-  return { id, type: "image-input", version: 1, position: { x: 0, y: 0 }, config: {}, data };
+  return { id, type: "image-input", version: 2, position: { x: 0, y: 0 }, config: {}, data };
 }
 
 export function fusion(id = "f", data: Record<string, unknown> = {}): GraphNode {
-  return { id, type: "fusion", version: 1, position: { x: 300, y: 0 }, config: {}, data: { activeRunId: null, runIds: [], ...data } };
+  return { id, type: "fusion", version: 3, position: { x: 300, y: 0 }, config: { mode: "realistic" }, data: { activeRunId: null, runIds: [], names: { a: "", b: "" }, ...data } };
 }
 
 export function result(id = "r", data: Record<string, unknown> = {}): GraphNode {
-  return { id, type: "result", version: 1, position: { x: 600, y: 0 }, config: {}, data: { versions: [], selected: 0, ...data } };
+  return { id, type: "result", version: 2, position: { x: 600, y: 0 }, config: {}, data: { versions: [], selected: 0, ...data } };
 }
 
 export function edge(source: string, target: string, targetPort: string, sourcePort = "out"): GraphEdge {

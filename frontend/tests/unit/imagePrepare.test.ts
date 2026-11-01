@@ -70,10 +70,14 @@ describe("client image checks (TASKSHEET 7.1)", () => {
     expect(codec.encoded).toEqual([[900, 700, "image/png"]]);
   });
 
-  it("passes HEIC through untouched for server-side conversion", async () => {
+  it("HEIC: converted when the browser can decode it, refused as UNSUPPORTED_FILE when it can't (the agent API takes JPEG, PNG, WebP)", async () => {
     const heic = bytes([0, 0, 0, 24, ...ascii("ftypheic")]);
-    const r = await prepareImage(heic);
-    expect(r).toMatchObject({ ok: true, image: { blob: heic, width: null } });
+    const codec = fakeCodec(900, 700);
+    setImageCodec(codec);
+    expect(await prepareImage(heic)).toMatchObject({ ok: true });
+    expect(codec.encoded).toEqual([[900, 700, "image/jpeg"]]);
+    setImageCodec({ ...codec, decode: () => Promise.reject(new Error("no heic")) });
+    expect(await prepareImage(heic)).toMatchObject({ ok: false, error: { code: "UNSUPPORTED_FILE" } });
   });
 
   it("computes target sizes", () => {

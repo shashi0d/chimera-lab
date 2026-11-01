@@ -1,25 +1,29 @@
-import type { RunnableData } from "../../runs/store";
+import { MODES, type Mode } from "../../evo/types";
 
-export const PARTS = ["head", "body", "limbs", "covering", "tail"] as const;
-export type Part = (typeof PARTS)[number];
-export type DonorPin = "auto" | "A" | "B";
-
-export type FusionData = RunnableData;
-
-/** v2 (F1): the user can pin each body part to a parent; "auto" lets the model decide. */
-export interface FusionConfig extends Record<string, unknown> {
-  donors: Record<Part, DonorPin>;
+/** Fields every runnable node keeps in its data (convention shared with the registry). */
+export interface RunnableData extends Record<string, unknown> {
+  activeRunId?: string | null;
+  runIds?: string[];
+  stale?: boolean;
 }
 
-export const AUTO_DONORS: Record<Part, DonorPin> = { head: "auto", body: "auto", limbs: "auto", covering: "auto", tail: "auto" };
+/** v3 (R1): the agent API takes a mode, and a typed animal name for a slot that has no photo. */
+export interface FusionConfig extends Record<string, unknown> {
+  mode: Mode;
+}
 
-/** Tolerant read: anything unexpected becomes "auto". */
-export function readDonors(config: unknown): Record<Part, DonorPin> {
-  const raw = (config as { donors?: Record<string, unknown> } | null)?.donors ?? {};
-  const out = { ...AUTO_DONORS };
-  for (const p of PARTS) {
-    const v = raw[p];
-    if (v === "A" || v === "B" || v === "auto") out[p] = v;
-  }
-  return out;
+export interface FusionData extends RunnableData {
+  /** Typed names, used for a slot with no photo connected (the contract's name fallback). */
+  names?: { a: string; b: string };
+}
+
+export function readMode(config: unknown): Mode {
+  const m = (config as { mode?: unknown } | null)?.mode;
+  return MODES.includes(m as Mode) ? (m as Mode) : "realistic";
+}
+
+/** A name the API can resolve: at least two letters, at most 60 characters. */
+export function cleanName(raw: string | undefined | null): string | null {
+  const n = (raw ?? "").replace(/\s+/g, " ").trim();
+  return n.length >= 2 && n.length <= 60 && /\p{L}/u.test(n) ? n : null;
 }

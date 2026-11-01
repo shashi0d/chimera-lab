@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import type { ConnectivityStatus } from "../connectivity/store";
 import type { GraphDoc, GraphNode, NodeConfig, NodeData, PortSpec } from "../graph/types";
-import type { Run } from "../types/api";
+import type { DerivedRun } from "../evo/runs";
 import type { IconName } from "../ui/Icon";
 
 export interface ValidationIssue {
@@ -53,7 +53,7 @@ export interface NodeDefinition<C = NodeConfig, D = NodeData> {
   runnable: boolean;
   migrate?(oldConfig: unknown, oldData: unknown, fromVersion: number): { config: C; data: D };
   /** Runnable nodes: react to their own run's updates (e.g. write results into the graph). */
-  onRunUpdate?(nodeId: string, run: Run): void;
+  onRunUpdate?(nodeId: string, run: DerivedRun): void;
 }
 
 /** The registry stores definitions with their generics erased. */

@@ -1,11 +1,10 @@
 import { defineNode } from "../types";
 import { ResultView } from "./NodeView";
-import { ResultPanel } from "./Panel";
 import { RESULT_INPUTS, RESULT_OUTPUTS, type ResultConfig, type ResultData } from "./types";
 
 export const resultNode = defineNode<ResultConfig, ResultData>({
   type: "result",
-  version: 1,
+  version: 2, // v2 (R1): versions are agent creatures; v1 pipeline versions can't open a creature card and are dropped
   label: "Result",
   category: "output",
   icon: "result",
@@ -16,6 +15,6 @@ export const resultNode = defineNode<ResultConfig, ResultData>({
   defaultData: () => ({ versions: [], selected: 0 }),
   validate: () => [],
   View: ResultView,
-  Panel: ResultPanel,
   runnable: false,
+  migrate: () => ({ config: {}, data: { versions: [], selected: 0 } }),
 });

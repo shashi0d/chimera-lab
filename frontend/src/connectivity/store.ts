@@ -1,5 +1,6 @@
 import { create } from "zustand";
-import { api, onNetworkResult } from "../api/client";
+import { onNetworkResult } from "../api/client";
+import { evo } from "../evo/index";
 
 export type ConnectivityStatus = "online" | "offline" | "unreachable";
 
@@ -45,7 +46,7 @@ export const useConnectivity = create<ConnectivityState>()((set, get) => ({
     if (inflight) return inflight;
     inflight = (async () => {
       try {
-        const h = await api.health();
+        const h = await evo().health();
         set({ mode: h.mode });
         get().setServerReachable(true);
       } catch {

@@ -9,19 +9,29 @@ const codes = (nodes: GraphNode[], edges = [edge("a", "f", "a"), edge("b", "f", 
   validateFusion(f, { graph: { nodes: [...nodes, f], edges }, connectivity, readOnly: false }).map((i) => i.code);
 
 describe("Fusion pre-run validation (TASKSHEET 7.2)", () => {
-  it("is runnable with two uploaded, distinct images", () => {
+  it("is runnable with two prepared, distinct images", () => {
     expect(codes([img("a"), img("b")])).toEqual([]);
   });
   it("0 or 1 inputs blocks Fuse with a hint", () => {
     expect(codes([], [])).toEqual(["MISSING_INPUTS"]);
     expect(codes([img("a")], [edge("a", "f", "a")])).toEqual(["MISSING_INPUTS"]);
   });
-  it("an input still uploading blocks Fuse", () => {
-    expect(codes([img("a", { upload: { status: "uploading", progress: 0.4 }, assetId: undefined }), img("b")])).toEqual(["INPUT_UPLOADING"]);
+  it("an input still preparing blocks Make creature", () => {
+    expect(codes([img("a", { status: "processing" }), img("b")])).toEqual(["INPUT_PREPARING"]);
+  });
+  it("a typed name stands in for a missing photo (the contract's name fallback)", () => {
+    const named = fusion("f", { names: { a: "", b: "horse" } }) as GraphNode<FusionConfig, FusionData>;
+    const run = (n: GraphNode<FusionConfig, FusionData>, nodes: GraphNode[], edges = [edge("a", "f", "a")]) =>
+      validateFusion(n, { graph: { nodes: [...nodes, n], edges }, connectivity: "online", readOnly: false }).map((i) => i.code);
+    expect(run(named, [img("a")])).toEqual([]);
+    const both = fusion("f", { names: { a: "lion", b: "Lion" } }) as GraphNode<FusionConfig, FusionData>;
+    expect(run(both, [], [])).toEqual(["DUPLICATE_INPUTS"]);
+    const short = fusion("f", { names: { a: "x", b: "horse" } }) as GraphNode<FusionConfig, FusionData>;
+    expect(run(short, [], [])).toEqual(["MISSING_INPUTS"]);
   });
   it("an input in error blocks Fuse and points at it", () => {
     const issues = validateFusion(f, {
-      graph: { nodes: [img("a", { upload: { status: "error", progress: 0 } }), img("b"), f], edges: [edge("a", "f", "a"), edge("b", "f", "b")] },
+      graph: { nodes: [img("a", { status: "error" }), img("b"), f], edges: [edge("a", "f", "a"), edge("b", "f", "b")] },
       connectivity: "online",
       readOnly: false,
     });

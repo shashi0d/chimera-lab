@@ -1,7 +1,7 @@
 import type { ApiError as ApiErrorBody, ErrorCode as ServerErrorCode } from "../types/api";
 
-/** Server codes plus the ones only the client can produce. */
-export type ErrorCode = ServerErrorCode | "NETWORK" | "OFFLINE" | "ABORTED" | "UNKNOWN";
+/** Server codes (plus CAP_REACHED, new in the R1 agent API contract) and the ones only the client can produce. */
+export type ErrorCode = ServerErrorCode | "CAP_REACHED" | "NETWORK" | "OFFLINE" | "ABORTED" | "UNKNOWN";
 
 export interface AppError {
   code: ErrorCode;
@@ -43,9 +43,9 @@ export class ApiRequestError extends Error implements AppError {
   }
 }
 
-export function fromBody(body: ApiErrorBody): AppError {
+export function fromBody(body: ApiErrorBody | (Omit<ApiErrorBody, "code"> & { code: string })): AppError {
   return {
-    code: body.code,
+    code: body.code as ErrorCode,
     message: body.message,
     retryable: body.retryable,
     retryAfterMs: body.retryAfterMs,
