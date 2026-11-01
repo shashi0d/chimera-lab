@@ -449,3 +449,61 @@ The gold-set label for `e4/b_axolotl_x_pangolin` changes from fail ("external gi
   remaining failures on tortoise × goat or beetle × bear.
 - **Open, for the owner:** a covering has no "material and color only" operation (`covering_is_material`).
   `S3c_AGENT.md` proposes one.
+
+**D-092 S5 D1: `set_covering_material_only` (owner decision).**
+- **What it does:** a typed plan operation, `set_covering_material_only(reason)`. The covering transfer gets
+  `form: material_only` and a recorded reason. The host keeps its own covering (fur, skin or feathers), and over the
+  covering's zones that covering takes the donor's colors, gloss, surface texture and pattern. Discrete identity
+  parts are kept.
+- **Compiler:** `covering_clause` and `host_clause` word it without plate, scale or shell nouns. A connected part
+  (a horn) grows from its own anchor, no longer "out of the covering".
+- **Critic:** a material-only covering is checked with `material_look` (yes), `host_cover_kept` (yes) and
+  `donor_pieces` (no). The grown-covering items (grows_out, on_top, continuous, follows_body, sizes, joints,
+  connections) are not asked.
+- **Agent:** the two-failure rule's second route is now this operation. The rule text and the edit-lock hint name
+  it.
+- **Why:** in S3c the rule's "material and color only" route had no operation for a covering. The agent's 4 tries
+  with `set_transfer_class` on the covering were refused (`covering_is_material`).
+
+**D-093 S5 D2: finalizing against the code's ranking needs a reason (owner decision).**
+- **The rule:** code ranks inspected images by fewest structural failures, then fewest failures, then the latest.
+  `finalize` on an image other than the code's best is refused (`needs_why_not_best`) unless it carries
+  `why_not_best`.
+- **The card:** `final_choice` holds `shown_first: agent`, `agree`, `agent_pick` and `code_pick`. Each pick has its
+  image id, stored image key, rank, structural and total failures, and reason (the agent's reason; the code's
+  ranking rule). When the two picks differ, the code's image is stored too.
+- **Why:** in S3c, beetle × bear r2's agent finalized the image the code ranked lower, with no reason recorded.
+
+**D-094 S5 D3: one schema per plan operation; the 15 refused S3c calls (owner decision).**
+- **Tools:** S3c's single `plan_op(op, args)` tool is replaced by one tool per typed operation, 12 in all. Each has
+  its own argument schema:
+  - the operation's own reason is `plan_reason` (at least 12 characters), separate from the call's `reason`;
+  - `set_extent` takes only `extent` and `plan_reason`;
+  - `set_transfer_class` takes only homologous or non_homologous.
+- **Schema checks:** the loop checks every call against its schema before running it (required, unknown keys,
+  enums, minLength, item enums) and refuses a bad call with error `schema`. The plan-operation schemas are built
+  each turn with the current plan's own parts and features as enums. `plan_op` remains as an internal alias for
+  tests, and it is not offered to the agent.
+- **The 15 refused calls**, replayed in `test_s5.py` from `tests/fixtures/s3c_refused_calls.json`:
+
+| # | run, step | call | refused | cause | fix | refused now by |
+|---|---|---|---|---|---|---|
+| 1 | tortoise_goat r1, 10 | set_transfer_class covering → non_homologous | covering_is_material | the rule pointed at set_transfer_class for "material only"; a covering has no class to change | `feature` enum lists the plan's parts only; the description sends a covering to set_covering_material_only | schema |
+| 2 | tortoise_goat r2, 10 | same | covering_is_material | same | same | schema |
+| 3 | tortoise_goat r2, 12 | set_extent without reason | bad_arguments | op args were a free object; the op's reason was invisible | `plan_reason` required (12+ chars) | schema |
+| 4 | fox_owl r1, 8 | set_identity_cues on covering (cues as a list) | not_a_part | free-form `feature`; cues type unchecked | `feature` enum = plan parts; `cues` must be a string; "Parts only" | schema |
+| 5 | fox_owl r1, 12 | drop_part "spots" (a critic's extra_spots) | no_such_part | the agent treated an unplanned feature as a plan part | `part` enum = plan.parts; description and system prompt: an extra_* or third_animal is not a plan part | schema |
+| 6 | crab_wolf r1, 10 | set_extent without reason | bad_arguments | as 3 | as 3 | schema |
+| 7 | crab_wolf r1, 15 | set_transfer_class covering → non_homologous | covering_is_material | as 1 | as 1 | schema |
+| 8 | crab_wolf r2, 9 | drop_part "segmented tail" (a critic's dropped_segmented_tail) | no_such_part | the part was already dropped by the plan; the critic flagged it | as 5 | schema |
+| 9 | crab_wolf r2, 18 | set_transfer_class covering → non_homologous | covering_is_material | as 1 | as 1 | schema |
+| 10 | crab_wolf r2, 20 | set_identity_cues on covering | not_a_part | as 4 | as 4 | schema |
+| 11 | beetle_bear r1, 10 | set_extent without legs, reason silent on legs | unexplained_gap | RC-R10-16 (an exoskeleton covers the limbs unless a reason says why not) was not in the tool description | set_extent description: "name the legs in plan_reason" | code, now explained up front |
+| 12 | beetle_bear r1, 18 | same | unexplained_gap | same | same | code, now explained |
+| 13 | beetle_bear r2, 10 | set_identity_cues on covering | not_a_part | as 4 | as 4 | schema |
+| 14 | beetle_bear r2, 11 | set_extent without reason | bad_arguments | as 3 | as 3 | schema |
+| 15 | beetle_bear r2, 12 | set_extent without legs, reason silent on legs | unexplained_gap | as 11 | as 11 | code, now explained |
+
+12 of the 15 are now stopped by the schema before anything runs. The 3 `unexplained_gap` refusals depend on the
+donor (an exoskeleton), so they stay a code check, and the description now says what that check requires. The test
+also confirms that each one passes once its plan_reason names the legs.

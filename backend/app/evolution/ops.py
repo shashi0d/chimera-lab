@@ -21,6 +21,11 @@ S3c adds (owner decision D4):
 
     set_identity_part(donor, part, reason)  the donor's one identity part, among its own diagnostic parts
 
+S5 adds (D1):
+
+    set_covering_material_only(reason)   the host keeps its own covering; the donor gives only its color, gloss,
+                                         texture and pattern on it (discrete identity parts are kept)
+
 A session stores the accepted operations as intents and rebuilds the plan from the code skeleton on every call
 (seed_plan, the intents, then finish), so code always fills card_trace, labels, checks, audit, licenses,
 render_details and the silhouette. An operation that fails validation, or whose result breaks a hard card, is
@@ -49,8 +54,8 @@ SURFACE_REGIONS = ("neck", "forequarters", "back", "flanks", "belly", "hindquart
 REGION_OPERATORS = {"head": ("PICK",), "tail": ("PICK",), "forelimbs": ("PICK",),
                     **{r: ("PATCH", "OVERLAY", "PICK") for r in SURFACE_REGIONS}}
 OPS = ("set_host", "set_region", "set_habitat", "set_mode", "add_license", "drop_part", "set_transfer_class",
-       "set_extent", "connect_features", "set_identity_cues", "set_identity_part")
-TRANSFER_OPS = OPS[6:10]
+       "set_extent", "connect_features", "set_identity_cues", "set_identity_part", "set_covering_material_only")
+TRANSFER_OPS = (*OPS[6:10], "set_covering_material_only")
 MAX_COMPENSATION = 240
 
 
@@ -155,7 +160,7 @@ class PlanSession:
             "checklist_preview": generated_checklist(g, tax),
             "transfers": [{"feature": t.feature, "class": t.cls, "anchor": t.anchor, "extent": t.extent,
                            "extent_reason": t.extent_reason, "connects": t.connects, "identity_cues": t.identity_cues,
-                           "set_by": t.set_by} for t in g.transfers],
+                           "form": t.form, "set_by": t.set_by} for t in g.transfers],
         }
 
     # ------------------------------------------------------------------ operations
@@ -291,6 +296,10 @@ class PlanSession:
 
     def _set_identity_cues(self, feature: str, cues: str) -> list[str]:
         return self._transfer("set_identity_cues", feature=feature, cues=cues)
+
+    def _set_covering_material_only(self, reason: str) -> list[str]:
+        """S5 (D1): the host keeps its own covering; the donor contributes only its color, gloss, texture and pattern."""
+        return self._transfer("set_covering_material_only", reason=reason)
 
     def _set_identity_part(self, donor: str, part: str, reason: str) -> list[str]:
         """S3c (D4): pick the donor's identity part among its own diagnostic parts, with a reason."""

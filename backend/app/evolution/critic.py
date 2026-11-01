@@ -206,10 +206,23 @@ def questions(g: Genome, tax: Taxonomy) -> list[Question]:
         are, do, it = ("Are there", "Do the", "they") if pl else ("Is there", "Does the", "it")
         # iteration 3: a soft surface patch (skin, feathers) is informational, like the S2 surface item; a
         # protective covering's presence is an integration question
-        qs.append(Question("cover_present", f"{are} {noun} on the {where}?", "yes",
-                           "integration" if donor.covering in PROTECTIVE else "surface",
-                           f"Show the planned {noun} over the {where}; {KEEP}."))
-        if donor.covering in PROTECTIVE:  # iteration 2: RC-R10-12 is about protective coverings only; soft skin or
+        mcov = next((t for t in transfers_of(g, tax) if t.kind == "covering"), None)
+        material_only = mcov is not None and mcov.form == "material_only"
+        protective = donor.covering in PROTECTIVE and not material_only  # a grown protective covering
+        if material_only:  # S5 (D1): the host keeps its own covering and shows the donor's look on it
+            dn = _name(tax, did)
+            look_fix = (f"Keep the {hn}'s own {cover} everywhere; over the {where} it takes only the {dn}'s colors, "
+                        f"gloss and texture; {KEEP}.")
+            qs.append(Question("material_look", f"Does the {cover} on the {where} have a {dn}'s colors and sheen?",
+                               "yes", "integration", look_fix))
+            qs.append(Question("host_cover_kept", f"Is the {where} covered by {cover}?", "yes", "integration",
+                               look_fix))
+            qs.append(Question("donor_pieces", f"Are there {noun} on the body?", "no", "integration", look_fix))
+        else:
+            qs.append(Question("cover_present", f"{are} {noun} on the {where}?", "yes",
+                               "integration" if donor.covering in PROTECTIVE else "surface",
+                               f"Show the planned {noun} over the {where}; {KEEP}."))
+        if protective:  # iteration 2: RC-R10-12 is about protective coverings only; soft skin or
             # feather patches are a surface change, and the owner rated the axolotl skin patches good
             qs.append(Question("grows_out", f"{do} {noun} grow out of the body with a natural transition (for example "
                                f"{cover} stopping at a shield's edge, or skin blending into scales), rather than "
@@ -239,21 +252,21 @@ def questions(g: Genome, tax: Taxonomy) -> list[Question]:
         cov = next((t for t in ts if t.kind == "covering"), None)
         conform_fix = (f"Show the {noun} conforming to the {hn}'s own body shape, grown from its skin over the "
                        f"{where}; {KEEP}.")
-        if donor.covering in PROTECTIVE:  # iteration 3: like the S3a integration items, protective coverings only
+        if protective:  # iteration 3: like the S3a integration items, protective coverings only
             qs.append(Question("follows_body", f"{do} {noun} follow this body's own shape and contours, the way its "
                                "own skin would?", "yes", "integration", conform_fix))
             qs.append(Question("separate_outline", f"{do} {noun} keep the outline of a separate object, such as "
                                "another animal's shell or back, instead of the body's own shape?", "no",
                                "integration", conform_fix))
         rule = transfer_covering_rule(donor) or {}
-        if donor.covering in PROTECTIVE and rule.get("plates"):
+        if protective and rule.get("plates"):
             unit = "scale" if "scale" in noun else "plate"
             size_fix = (f"Show each {unit} sized to the {hn}'s own body segments and muscle masses; {KEEP}.")
             qs.append(Question("sized_to_body", f"Are the {unit}s sized to this animal's body, about as large as its "
                                "own muscles and body segments?", "yes", "integration", size_fix))
             qs.append(Question("wrong_scale", f"Do the {unit}s look made for a much smaller or much larger animal?",
                                "no", "integration", size_fix))
-        if rule.get("joints"):  # armor that is a whole-body system (RC-R10-16)
+        if rule.get("joints") and not material_only:  # armor that is a whole-body system (RC-R10-16)
             cover_fix = (f"Show the {noun} as one system over the {where}, with flexible joints, stopping only where "
                          f"the plan says; {KEEP}.")
             if {"legs"} & set(regs):
@@ -261,7 +274,7 @@ def questions(g: Genome, tax: Taxonomy) -> list[Question]:
                                    "coverage", cover_fix))
             qs.append(Question("abrupt_stop", f"{do} {noun} stop abruptly partway across the body or legs, with no "
                                "visible reason?", "no", "coverage", cover_fix))
-        if cov is not None:
+        if cov is not None and not material_only:
             for t in ts:
                 if t.kind == "part" and cov.feature in t.connects:
                     link_fix = f"Show the {t.feature} growing out of the {noun} at its base, as one system; {KEEP}."

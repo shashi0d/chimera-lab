@@ -228,7 +228,7 @@ async def part_fixed(only: list[str], limit: int | None) -> None:
 
 def status() -> None:
     for part in ("agent", "fixed"):
-        for key, *_rest, n, vdir in todo(part, []):
+        for key, *_rest, _n, vdir in todo(part, []):
             st = "done" if (vdir / "doc.json").exists() else "partial" if vdir.exists() else "to do"
             print(f"{part:6} {key:14} {vdir.name:4} {st}")
 

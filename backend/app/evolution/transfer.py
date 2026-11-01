@@ -379,8 +379,19 @@ def apply_edit(ts: list[Transfer], edit: dict[str, Any], g: Genome, tax: Taxonom
             raise TransferError("names_other_parent", "cues describe the donor's form only", "cues")
         t.identity_cues, t.set_by = cues, "agent"
         return ts
+    if op == "set_covering_material_only":
+        cov = next((t for t in ts if t.kind == "covering"), None)
+        if cov is None:
+            raise TransferError("no_covering", "this plan has no donor covering", "feature")
+        reason = " ".join(str(args.get("reason") or "").split())
+        if len(reason) < 12:
+            raise TransferError("missing_reason", "say why the donor shows by material and color only (one short "
+                                "sentence)", "reason", hint="for example: two edits left the plates looking laid on top")
+        cov.form, cov.form_reason, cov.set_by = "material_only", reason, "agent"
+        return ts
     raise TransferError("unknown_op", f"no transfer operation {op!r}", "op",
-                        valid=["set_transfer_class", "set_extent", "connect_features", "set_identity_cues"])
+                        valid=["set_transfer_class", "set_extent", "connect_features", "set_identity_cues",
+                               "set_covering_material_only"])
 
 
 def build(g: Genome, tax: Taxonomy, edits: list[dict[str, Any]] | None = None, policy: str = "rules") -> list[Transfer]:

@@ -191,6 +191,10 @@ def covering_clause(g: Genome, tax: Taxonomy, cov: Any) -> str:
         cover = (shell_host(tax.animals[g.host]) or {}).get("skin", "scaly skin")
     material = surface(tax.animals[cov.donor])
     where = _join([ZONE_WORDS[z] for z in cov.extent])
+    if cov.form == "material_only":  # S5 (D1): the host's own covering stays; the donor gives its look only
+        donor = _name(tax, cov.donor)
+        return (f"the {host}'s own {cover} stays {cover} everywhere, and over the {where} it takes the {donor}'s "
+                f"colors, gloss, surface texture and pattern; the {host}'s body outline is unchanged")
     kept = _join(_uncovered(g, cov) if not cov.host_shell else ["face"])
     verb = "keeps" if kept == "face" else "keep"
     stops = "stop" if cover.split(" with ")[0].endswith("s") else "stops"
@@ -218,7 +222,7 @@ def part_phrase(g: Genome, tax: Taxonomy, t: Any, shape: str, place: str) -> str
         return f"{shape}{place}, fitted to the {host}'s size"
     noun = t.feature if t.feature.endswith("s") else f"a {t.feature}"
     grown = f"{noun} grown from {t.anchor}"
-    if cov is not None and cov.feature in t.connects:
+    if cov is not None and cov.feature in t.connects and cov.form != "material_only":
         grown += ", out of the covering, which continues from there into the body covering"
     return f"{grown}: {t.identity_cues}" if t.identity_cues else grown
 
@@ -299,6 +303,8 @@ def host_clause(g: Genome, tax: Taxonomy) -> str:
     cov = _covering(g)
     if cov is not None and cov.donor == did and cov.host_shell:  # S3c (RC-R10-17): the shell is skeleton, kept
         coat = "its own shell over the shoulders, back, flanks, belly and hips, and its own scaly skin on the face"
+    elif cov is not None and cov.donor == did and cov.extent and cov.form == "material_only":  # S5 (D1)
+        coat = f"its own {skin} over the whole body, colored as below"
     elif cov is not None and cov.donor == did and cov.extent:  # S3b: the donor covering takes the rest
         where = _join(_uncovered(g, cov))
         coat = f"its own {skin} with {own} on the {where}" if own else f"its own {skin} on the {where}, {PLAIN_COAT}"
@@ -459,7 +465,9 @@ def compile_hosted(g: Genome, tax: Taxonomy) -> str:
     details += code_details(g)
     lines.append("Details: " + "; ".join(details) + ".")
     cov = _covering(g)
-    if cov is not None and cov.extent:
+    if cov is not None and cov.extent and cov.form == "material_only":
+        lines.append("The donor's colors and sheen follow the host's own coat and body shape.")
+    elif cov is not None and cov.extent:
         joints = "joint" in cov.scale
         lines.append("The covering follows the body's own shape" + (" and bends at every joint." if joints else "."))
     else:

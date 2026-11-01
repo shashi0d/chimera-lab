@@ -1,0 +1,418 @@
+[
+ {
+  "run": "s3c/agent/tortoise_goat/r1",
+  "step": 10,
+  "sire": "tortoise",
+  "dam": "domestic goat",
+  "mode": "realistic",
+  "candidate": "C2",
+  "ops_before": [],
+  "op": "set_transfer_class",
+  "args": {
+   "feature": "covering",
+   "cls": "non_homologous"
+  },
+  "reason": "Two-failure rule: covering still fails grows_out/on_top/follows_body after two edits, so moving tortoise shell identity to material/color only (non-homologous) to avoid separate outline while preserving realistic integration per RC-R10-15.",
+  "error": "covering_is_material",
+  "message": "a covering transfers as material (RC-R10-15 a)"
+ },
+ {
+  "run": "s3c/agent/tortoise_goat/r2",
+  "step": 10,
+  "sire": "tortoise",
+  "dam": "domestic goat",
+  "mode": "realistic",
+  "candidate": "C2",
+  "ops_before": [],
+  "op": "set_transfer_class",
+  "args": {
+   "feature": "covering",
+   "cls": "non_homologous"
+  },
+  "reason": "Two covering failures in a row trigger two-failure rule: convert tortoise carapace to non-homologous material/color only to avoid structural plate attachment failures while preserving identity.",
+  "error": "covering_is_material",
+  "message": "a covering transfers as material (RC-R10-15 a)"
+ },
+ {
+  "run": "s3c/agent/tortoise_goat/r2",
+  "step": 12,
+  "sire": "tortoise",
+  "dam": "domestic goat",
+  "mode": "realistic",
+  "candidate": "C2",
+  "ops_before": [
+   {
+    "op": "set_transfer_class",
+    "args": {
+     "feature": "covering",
+     "cls": "material"
+    }
+   }
+  ],
+  "op": "set_extent",
+  "args": {
+   "feature": "covering",
+   "extent": [
+    "back"
+   ]
+  },
+  "reason": "Two-failure rule: reducing covering extent to back only with clear reason to fix scattered plates and leg/shoulder coverage failures.",
+  "error": "bad_arguments",
+  "message": "PlanSession._set_extent() missing 1 required positional argument: 'reason'"
+ },
+ {
+  "run": "s3c/agent/fox_owl/r1",
+  "step": 8,
+  "sire": "red fox",
+  "dam": "barn owl",
+  "mode": "speculative",
+  "candidate": "C1",
+  "ops_before": [],
+  "op": "set_identity_cues",
+  "args": {
+   "feature": "covering",
+   "cues": [
+    "fox muzzle",
+    "pointed ears",
+    "bushy tail"
+   ]
+  },
+  "reason": "Attempt to reinforce red fox identity to fix structural frame failure per inspect guidance.",
+  "error": "not_a_part",
+  "message": "identity cues describe a discrete part"
+ },
+ {
+  "run": "s3c/agent/fox_owl/r1",
+  "step": 12,
+  "sire": "red fox",
+  "dam": "barn owl",
+  "mode": "speculative",
+  "candidate": "C1",
+  "ops_before": [],
+  "op": "drop_part",
+  "args": {
+   "part": "spots",
+   "reason": "remove unplanned spots per inspect failure extra_spots"
+  },
+  "reason": "Attempt to explicitly drop unplanned spots to satisfy covering/structural check.",
+  "error": "no_such_part",
+  "message": "the plan has no part matching 'spots'"
+ },
+ {
+  "run": "s3c/agent/crab_wolf/r1",
+  "step": 10,
+  "sire": "crab",
+  "dam": "gray wolf",
+  "mode": "speculative",
+  "candidate": "C1",
+  "ops_before": [],
+  "op": "set_extent",
+  "args": {
+   "feature": "covering",
+   "extent": [
+    "head",
+    "neck",
+    "forequarters",
+    "back",
+    "flanks",
+    "belly",
+    "hindquarters"
+   ]
+  },
+  "reason": "Structural failures insect_legs and segmented tail suggest leg/tail chitin plates misread as extra limbs/tail per RC-R10-15; reducing covering extent to remove legs and tail.",
+  "error": "bad_arguments",
+  "message": "PlanSession._set_extent() missing 1 required positional argument: 'reason'"
+ },
+ {
+  "run": "s3c/agent/crab_wolf/r1",
+  "step": 15,
+  "sire": "crab",
+  "dam": "gray wolf",
+  "mode": "speculative",
+  "candidate": "C1",
+  "ops_before": [
+   {
+    "op": "set_extent",
+    "args": {
+     "feature": "covering",
+     "extent": [
+      "head",
+      "neck",
+      "forequarters",
+      "back",
+      "flanks",
+      "belly",
+      "hindquarters"
+     ],
+     "reason": "reducing extent to eliminate leg/tail plates causing insect_legs and segmented_tail structural misreads"
+    }
+   }
+  ],
+  "op": "set_transfer_class",
+  "args": {
+   "feature": "covering",
+   "cls": "non_homologous"
+  },
+  "reason": "Moving covering to non-homologous material-only transfer to prevent jointed plates being read as insect legs while retaining chitin color/texture (RC-R10-15).",
+  "error": "covering_is_material",
+  "message": "a covering transfers as material (RC-R10-15 a)"
+ },
+ {
+  "run": "s3c/agent/crab_wolf/r2",
+  "step": 9,
+  "sire": "crab",
+  "dam": "gray wolf",
+  "mode": "speculative",
+  "candidate": "C1",
+  "ops_before": [
+   {
+    "op": "set_mode",
+    "args": {
+     "mode": "speculative"
+    }
+   }
+  ],
+  "op": "drop_part",
+  "args": {
+   "part": "segmented tail",
+   "reason": "inspect failed dropped_segmented_tail structural; enforce host wolf tail only"
+  },
+  "reason": "Fix structural failure dropped_segmented_tail flagged by inspect; enforcing host tail only per audit feedback.",
+  "error": "no_such_part",
+  "message": "the plan has no part matching 'segmented tail'"
+ },
+ {
+  "run": "s3c/agent/crab_wolf/r2",
+  "step": 18,
+  "sire": "crab",
+  "dam": "gray wolf",
+  "mode": "speculative",
+  "candidate": "C1",
+  "ops_before": [
+   {
+    "op": "set_mode",
+    "args": {
+     "mode": "speculative"
+    }
+   },
+   {
+    "op": "set_extent",
+    "args": {
+     "feature": "covering",
+     "extent": [
+      "back",
+      "flanks"
+     ],
+     "reason": "reduce coverage to address multiple covering failures while retaining core identity; structural legs issue also requires reduction"
+    }
+   },
+   {
+    "op": "set_extent",
+    "args": {
+     "feature": "covering",
+     "extent": [
+      "back"
+     ],
+     "reason": "Further reduce covering to back only to eliminate cover_on_legs and cover_on_shoulders and address insect_legs structural artifact on limbs"
+    }
+   }
+  ],
+  "op": "set_transfer_class",
+  "args": {
+   "feature": "covering",
+   "cls": "non_homologous"
+  },
+  "reason": "Third inspect still shows whole_animal separate shell and insect_legs; switching covering to material/color only to reduce structural separate-animal artifacts per two-failure rule.",
+  "error": "covering_is_material",
+  "message": "a covering transfers as material (RC-R10-15 a)"
+ },
+ {
+  "run": "s3c/agent/crab_wolf/r2",
+  "step": 20,
+  "sire": "crab",
+  "dam": "gray wolf",
+  "mode": "speculative",
+  "candidate": "C1",
+  "ops_before": [
+   {
+    "op": "set_mode",
+    "args": {
+     "mode": "speculative"
+    }
+   },
+   {
+    "op": "set_extent",
+    "args": {
+     "feature": "covering",
+     "extent": [
+      "back",
+      "flanks"
+     ],
+     "reason": "reduce coverage to address multiple covering failures while retaining core identity; structural legs issue also requires reduction"
+    }
+   },
+   {
+    "op": "set_extent",
+    "args": {
+     "feature": "covering",
+     "extent": [
+      "back"
+     ],
+     "reason": "Further reduce covering to back only to eliminate cover_on_legs and cover_on_shoulders and address insect_legs structural artifact on limbs"
+    }
+   },
+   {
+    "op": "set_transfer_class",
+    "args": {
+     "feature": "covering",
+     "cls": "material"
+    }
+   }
+  ],
+  "op": "set_identity_cues",
+  "args": {
+   "feature": "covering",
+   "cues": [
+    "reddish-brown carapace sheen",
+    "glossy chitin texture"
+   ]
+  },
+  "reason": "Refining covering cues to dorsal sheen only, removing limb jointed plates that drive insect_legs structural failure per inspect feedback.",
+  "error": "not_a_part",
+  "message": "identity cues describe a discrete part"
+ },
+ {
+  "run": "s3c/agent/beetle_bear/r1",
+  "step": 10,
+  "sire": "rhinoceros beetle",
+  "dam": "brown bear",
+  "mode": "speculative",
+  "candidate": "C1",
+  "ops_before": [],
+  "op": "set_extent",
+  "args": {
+   "feature": "covering",
+   "extent": [
+    "head",
+    "back",
+    "flanks",
+    "forequarters"
+   ],
+   "reason": "two consecutive covering failures; reduce extent from 9 to 4 zones to allow continuous grown-in plates per RC-R10-15"
+  },
+  "reason": "Two inspects with covering failures; per rule reduce covering extent to achievable zones and keep head for horn connection.",
+  "error": "unexplained_gap",
+  "message": "an exoskeleton covers the limbs unless a stated functional reason limits it (RC-R10-16); say why the legs stay bare"
+ },
+ {
+  "run": "s3c/agent/beetle_bear/r1",
+  "step": 18,
+  "sire": "rhinoceros beetle",
+  "dam": "brown bear",
+  "mode": "speculative",
+  "candidate": "C1",
+  "ops_before": [
+   {
+    "op": "set_extent",
+    "args": {
+     "feature": "covering",
+     "extent": [
+      "head",
+      "neck",
+      "forequarters",
+      "back",
+      "flanks",
+      "belly",
+      "hindquarters",
+      "tail"
+     ],
+     "reason": "two consecutive covering failures; reduce extent to exclude legs to improve continuity and joint articulation - legs remain fur-covered for mobility and heat regulation"
+    }
+   },
+   {
+    "op": "set_transfer_class",
+    "args": {
+     "feature": "head horn",
+     "cls": "non_homologous"
+    }
+   }
+  ],
+  "op": "set_extent",
+  "args": {
+   "feature": "covering",
+   "extent": [
+    "back",
+    "flanks"
+   ],
+   "reason": "two consecutive covering failures; limit plates to dorsal trunk only to ensure one continuous grown-in shield with flexible joints; limbs, head and belly retain fur for mobility and heat regulation"
+  },
+  "reason": "Reduce covering drastically to two dorsal zones to achieve continuous grown-in plates per two-failure rule RC-R10-15/16.",
+  "error": "unexplained_gap",
+  "message": "an exoskeleton covers the limbs unless a stated functional reason limits it (RC-R10-16); say why the legs stay bare"
+ },
+ {
+  "run": "s3c/agent/beetle_bear/r2",
+  "step": 10,
+  "sire": "rhinoceros beetle",
+  "dam": "brown bear",
+  "mode": "speculative",
+  "candidate": "C1",
+  "ops_before": [],
+  "op": "set_identity_cues",
+  "args": {
+   "feature": "covering",
+   "cues": [
+    "reddish-brown glossy",
+    "large fused plates"
+   ]
+  },
+  "reason": "Address third-animal pillbug misread by reinforcing beetle-specific covering cues per RC-R10-15.",
+  "error": "not_a_part",
+  "message": "identity cues describe a discrete part"
+ },
+ {
+  "run": "s3c/agent/beetle_bear/r2",
+  "step": 11,
+  "sire": "rhinoceros beetle",
+  "dam": "brown bear",
+  "mode": "speculative",
+  "candidate": "C1",
+  "ops_before": [],
+  "op": "set_extent",
+  "args": {
+   "feature": "covering",
+   "extent": [
+    "back",
+    "flanks",
+    "forequarters",
+    "hindquarters"
+   ]
+  },
+  "reason": "Structural third-animal failure for pillbug; reduce covering extent to dorsal armor only to keep beetle identity without isopod resemblance per RC-R10-15.",
+  "error": "bad_arguments",
+  "message": "PlanSession._set_extent() missing 1 required positional argument: 'reason'"
+ },
+ {
+  "run": "s3c/agent/beetle_bear/r2",
+  "step": 12,
+  "sire": "rhinoceros beetle",
+  "dam": "brown bear",
+  "mode": "speculative",
+  "candidate": "C1",
+  "ops_before": [],
+  "op": "set_extent",
+  "args": {
+   "feature": "covering",
+   "extent": [
+    "back",
+    "flanks",
+    "forequarters",
+    "hindquarters"
+   ],
+   "reason": "Reduce covering to dorsal armor to avoid pillbug third-animal misread while retaining beetle glossy plates; structural fix per RC-R10-12."
+  },
+  "reason": "Structural failure requires plan change; narrowing covering extent.",
+  "error": "unexplained_gap",
+  "message": "an exoskeleton covers the limbs unless a stated functional reason limits it (RC-R10-16); say why the legs stay bare"
+ }
+]

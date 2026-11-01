@@ -172,6 +172,10 @@ class Transfer(_Strict):
     plate_pattern: str = ""
     plate_source: str = ""
     host_shell: str = ""  # S3c (RC-R10-17): on a turtle host, what the shell keeps (its form; only color changes)
+    # S5 (D1): "grown" (the donor's material replaces the host covering) or "material_only" (the host keeps its own
+    # covering; the donor gives only its color, gloss, texture and pattern on it)
+    form: Literal["grown", "material_only"] = "grown"
+    form_reason: str = ""
 
     @model_validator(mode="after")
     def _shape(self) -> Transfer:

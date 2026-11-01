@@ -26,6 +26,7 @@ Reference portraits stay off (ROADMAP 5b). In mock mode a policy brain drives th
 
 from __future__ import annotations
 
+import copy
 import json
 import tempfile
 import time
@@ -51,6 +52,7 @@ from app.evolution.prompt import accept_polish, compile_prompt
 from app.evolution.route import host_tie
 from app.models.schemas import ErrorCode
 
+RANK_RULE = "code ranks inspected images by fewest structural failures, then fewest failures, then the latest"
 COVERING_GROUPS = ("integration", "coverage", "placement", "pattern", "surface")  # an edit may fix these
 RESULT_CHARS = 3500  # a tool result shown to the agent is cut here (the full result is in the trace)
 
@@ -76,12 +78,55 @@ def _fn(name: str, desc: str, props: dict[str, Any], required: list[str]) -> dic
         "type": "object", "properties": props, "required": [*required, "reason"], "additionalProperties": False}}}
 
 
-OP_HELP = ("Typed plan operations (args): set_host(animal); set_region(region, donor, operator) with regions head, "
-           "tail, forelimbs (PICK) or neck, forequarters, back, flanks, belly, hindquarters, legs (PATCH, OVERLAY, "
-           "PICK); set_habitat(name); set_mode(mode); add_license(rule, compensation); drop_part(part, reason); "
-           "set_transfer_class(feature, cls); set_extent(feature, extent, reason); connect_features(a, b); "
-           "set_identity_cues(feature, cues); set_identity_part(donor, part, reason). A failed operation changes "
-           "nothing and returns errors with valid values.")
+_S = {"type": "string"}
+_PLAN_REASON = {"type": "string", "minLength": 12,
+                "description": "The reason recorded in the plan and shown on the card (one short sentence)."}
+
+# S5 (D3): one tool per typed plan operation, each with its own schema, so a call that S3c's single plan_op tool let
+# through (a missing plan reason, a covering where a part is meant, a part the plan does not have) is refused by its
+# schema before it runs. plan_op stays as an internal alias for tests and scripted brains; it is not offered.
+OP_TOOLS = [
+    _fn("set_host", "Make this parent the host (the body frame). Required on a structural host tie.",
+        {"animal": _S}, ["animal"]),
+    _fn("set_region", "Give a body region to a parent. Regions head, tail, forelimbs take PICK; neck, forequarters, "
+        "back, flanks, belly, hindquarters, legs take PATCH, OVERLAY or PICK.",
+        {"region": {"type": "string", "enum": ["head", "tail", "forelimbs", "neck", "forequarters", "back", "flanks",
+                                               "belly", "hindquarters", "legs"]},
+         "donor": _S, "operator": {"type": "string", "enum": ["PICK", "PATCH", "OVERLAY"]}},
+        ["region", "donor", "operator"]),
+    _fn("set_habitat", "Set the creature's habitat (a profiled habitat name).", {"name": _S}, ["name"]),
+    _fn("set_mode", "Set the design mode.", {"mode": {"type": "string", "enum": ["realistic", "speculative",
+                                                                                    "mythic"]}}, ["mode"]),
+    _fn("add_license", "Declare one bendable rule (R9 3.2) the plan really bends, with its compensation, within the "
+        "mode's fiction budget.", {"rule": _S, "compensation": _S}, ["rule", "compensation"]),
+    _fn("drop_part", "Remove one planned donor part. `part` must be one of the plan's parts (plan.parts). An "
+        "unplanned feature the critics report (extra_*, third_animal, a misread) is not a part of the plan and "
+        "cannot be dropped: render again, or accept it and finalize.",
+        {"part": _S, "plan_reason": _PLAN_REASON}, ["part", "plan_reason"]),
+    _fn("set_transfer_class", "Change how a discrete donor part transfers: homologous (its shape where the host "
+        "has the matching structure) or non_homologous (only its material and function). Parts only: the covering "
+        "is always material; to show the donor's covering by color and texture only, use set_covering_material_only.",
+        {"feature": _S, "cls": {"type": "string", "enum": ["homologous", "non_homologous"]}}, ["feature", "cls"]),
+    _fn("set_extent", "Set the body zones the donor covering grows over. `plan_reason` is its functional reason. For "
+        "an exoskeleton donor (beetle, crab), a covering that leaves out the legs must say why the legs stay bare "
+        "(name the legs in plan_reason); otherwise it is refused (RC-R10-16).",
+        {"extent": {"type": "array", "minItems": 1, "items": {"type": "string", "enum": [
+            "head", "neck", "forequarters", "back", "flanks", "belly", "hindquarters", "legs", "tail"]}},
+         "plan_reason": _PLAN_REASON}, ["extent", "plan_reason"]),
+    _fn("connect_features", "Two features of the same donor system grow from each other (for example a horn from "
+        "the covering).", {"a": _S, "b": _S}, ["a", "b"]),
+    _fn("set_identity_cues", "The positive form description that makes a discrete donor part the donor's. Parts "
+        "only, not the covering.", {"feature": _S, "cues": _S}, ["feature", "cues"]),
+    _fn("set_identity_part", "Choose the donor's one identity part among its own diagnostic parts.",
+        {"donor": _S, "part": _S, "plan_reason": _PLAN_REASON}, ["donor", "part", "plan_reason"]),
+    _fn("set_covering_material_only", "The host keeps its own covering (fur, skin, feathers); the donor covering "
+        "contributes only its color, gloss, texture and pattern on it. Discrete identity parts are kept. The "
+        "two-failure rule's second route.", {"plan_reason": _PLAN_REASON}, ["plan_reason"]),
+]
+OP_TOOL_NAMES = [t["function"]["name"] for t in OP_TOOLS]
+assert set(OP_TOOL_NAMES) == set(OPS), "every typed plan operation has its own tool"
+# a tool argument -> the operation's own argument (the tool's `reason` is the call's reason, as on every tool)
+OP_ARG = {"plan_reason": "reason"}
 
 TOOLS = [
     _fn("resolve_animal", "Resolve one parent name to an animal with sourced traits.",
@@ -89,12 +134,11 @@ TOOLS = [
     _fn("propose_candidates", "Ranked plan arrangements for the two resolved parents, each with R10 selection notes "
         "(niche, autonomy, survival, identity) and its reasons. Advice only.", {}, []),
     _fn("choose_candidate", "Adopt one candidate plan by id.", {"candidate_id": {"type": "string"}}, ["candidate_id"]),
-    _fn("plan_op", "Change the current plan with one typed operation. " + OP_HELP,
-        {"op": {"type": "string", "enum": list(OPS)}, "args": {"type": "object"}}, ["op", "args"]),
+    *OP_TOOLS,
     _fn("audit_plan", "Audit the current plan: blocking items (hard cards, an unchosen host tie) and advice (soft "
         "cards, the function audit, the fiction budget). Required before render.", {}, []),
     _fn("render", "Render the audited plan. method single_pass (default) or growth_edit (host first, then one edit "
-        "grows the covering; only for a plan with a donor covering).",
+        "grows the covering; only for a plan with a grown donor covering).",
         {"method": {"type": "string", "enum": ["single_pass", "growth_edit"]}}, ["method"]),
     _fn("inspect", "Inspect an image with the plan-blind critics. Returns pass or the failures, each with a key and "
         "kind (covering or structural).", {"image_id": {"type": "string"}}, ["image_id"]),
@@ -105,31 +149,68 @@ TOOLS = [
     _fn("ask_user", "Ask the user to choose (interactive runs only).",
         {"question": {"type": "string"}, "options": {"type": "array", "items": {"type": "string"}}},
         ["question", "options"]),
-    _fn("finalize", "Finish with this image. Any failures it still has are stated on the card.",
-        {"image_id": {"type": "string"}}, ["image_id"]),
+    _fn("finalize", "Finish with this image. Any failures it still has are stated on the card. If code ranks another "
+        "image higher (best_so_far from inspect), say why yours is better in why_not_best; without it the call is "
+        "refused.",
+        {"image_id": {"type": "string"}, "why_not_best": {"type": "string", "description": "Only when image_id is "
+                                                           "not best_so_far: why this image is better."}},
+        ["image_id"]),
 ]
 TOOL_NAMES = [t["function"]["name"] for t in TOOLS]
+
+
+def check_args(schema: dict[str, Any], args: dict[str, Any]) -> list[str]:
+    """The tool schema checked in code (required, unknown keys, enum, minLength, minItems, item enums). Spark Open
+    is not forced to follow a schema, so the loop enforces it before any tool runs."""
+    p = schema["parameters"]
+    props = p["properties"]
+    errs = [f"missing {k!r}" for k in p["required"] if k not in args or args[k] in (None, "", [])]
+    errs += [f"unknown argument {k!r} (valid: {sorted(props)})" for k in args if k not in props]
+    for k, v in args.items():
+        sp = props.get(k)
+        if sp is None or v is None:
+            continue
+        if "enum" in sp and v not in sp["enum"]:
+            errs.append(f"{k}={v!r} is not one of {sp['enum']}")
+        if sp.get("type") == "string" and not isinstance(v, str):
+            errs.append(f"{k} must be a string")
+        if isinstance(v, str) and len(v.strip()) < sp.get("minLength", 0):
+            errs.append(f"{k} needs at least {sp['minLength']} characters")
+        if sp.get("type") == "array":
+            if not isinstance(v, list):
+                errs.append(f"{k} must be a list")
+                continue
+            if len(v) < sp.get("minItems", 0):
+                errs.append(f"{k} needs at least {sp['minItems']} item(s)")
+            item_enum = (sp.get("items") or {}).get("enum")
+            if item_enum and (bad := [x for x in v if x not in item_enum]):
+                errs.append(f"{k} has values not in {item_enum}: {bad}")
+    return errs
+
 
 SYSTEM = """You are the design agent of Chimera Lab, a natural-history creature engine. You build one creature from \
 two parent animals by calling tools; code tools do the work and check every step.
 
 Rules:
 1. You never write a plan. Pick a candidate from propose_candidates with choose_candidate, and change it only with \
-plan_op (typed operations). Code fills every derived field.
+the typed plan-operation tools (set_host, set_region, set_extent, drop_part, set_covering_material_only and the \
+others). Code fills every derived field. Their enums list the plan's own parts and features: use only those.
 2. Every call has a reason: what you decided and why, citing the rule cards the tools return when they apply.
 3. Order: resolve_animal for each parent, propose_candidates, choose_candidate, audit_plan, render, inspect.
 4. audit_plan: blocking items stop render until fixed; advice is yours to weigh.
 5. After inspect: if it passes, call finalize with that image. If it fails, choose and say why:
    - covering or surface failures (kind "covering"): edit that image with those failure keys;
    - structural failures (kind "structural": counts, extra or missing parts, the frame, part identity or \
-connection, a third animal): change the plan with plan_op or choose another candidate, audit, and render again;
+connection, a third animal): change the plan with a plan operation or choose another candidate, audit, and render \
+again. An unplanned feature the critics report (extra_*, third_animal) is not a plan part: render again or accept it;
    - or accept the failures and finalize, saying why.
-   An edit or a new render can make things worse: compare with images_so_far from inspect, and finalize the best image, not just the latest.
+   An edit or a new render can make things worse: compare with images_so_far from inspect, and finalize the best \
+image. If you finalize an image other than best_so_far, give why_not_best.
    Two-failure rule: after two inspects in a row with covering failures, stop editing the covering. Change the \
-plan with typed operations instead: reduce the covering's extent (plan_op set_extent with feature "covering", fewer \
-zones and a stated reason), or move the donor's identity to material and color only (plan_op set_transfer_class \
-with cls non_homologous, or drop_part, for the donor part that fails). Then audit_plan and render again. edit \
-refuses covering fixes until the plan has changed.
+plan instead: reduce the covering's extent (set_extent with fewer zones and a plan_reason), or show the donor by \
+material and color only (set_covering_material_only with a plan_reason; the host keeps its own covering, the \
+donor's identity parts stay). Then audit_plan and render again. edit refuses covering fixes until the plan has \
+changed.
 6. A host tie: choose the host yourself from the candidates' notes, with a reason{ask}.
 7. Limits: at most {renders} renders and {calls} tool calls. Near a limit, finalize your best inspected image; \
 its remaining failures go on the card.
@@ -294,6 +375,7 @@ class AgentRun:
         self.started = time.time()
         self.image_dir = Path(image_dir) if image_dir else Path(tempfile.mkdtemp(prefix="agent_imgs_"))
         self.image_dir.mkdir(parents=True, exist_ok=True)
+        self._reason = ""
         self.on_step = on_step  # called after every tool step (the live script saves the run to disk there)
 
     # ------------------------------------------------------------------ loop
@@ -302,6 +384,26 @@ class AgentRun:
         ask = " or call ask_user" if self.ask else " (this run is not interactive: ask_user returns no answer)"
         return SYSTEM.replace("{ask}", ask).replace("{renders}", str(self.cfg["max_renders"])).replace(
             "{calls}", str(self.cfg["max_tool_calls"]))
+
+    def tools(self) -> list[dict[str, Any]]:
+        """The tool schemas for this turn: the plan-operation tools list the current plan's own parts and features
+        as enums (S5, D3), so a part the plan does not have, or the covering where a part is meant, fails the schema."""
+        if self.session is None:
+            return TOOLS
+        g = self.session.plan
+        parts = list(self.session.summary()["parts"])
+        part_feats = [t.feature for t in g.transfers if t.kind == "part"]
+        feats = [t.feature for t in g.transfers]
+        enums = {("drop_part", "part"): parts, ("set_transfer_class", "feature"): part_feats,
+                 ("set_identity_cues", "feature"): part_feats, ("connect_features", "a"): feats,
+                 ("connect_features", "b"): feats}
+        out = copy.deepcopy(TOOLS)
+        for t in out:
+            fn = t["function"]
+            for (tool, arg), values in enums.items():
+                if fn["name"] == tool:
+                    fn["parameters"]["properties"][arg] = {"type": "string", "enum": values or ["(none in this plan)"]}
+        return out
 
     def task_prompt(self) -> str:
         return (f"Build one creature from the parents '{self.sire_name}' (sire) and '{self.dam_name}' (dam) in "
@@ -316,7 +418,7 @@ class AgentRun:
                 self.state.stop = f"tool-call cap reached ({self.cfg['max_tool_calls']})"
                 break
             try:
-                turn = await self.brain.next(self.messages, TOOLS)
+                turn = await self.brain.next(self.messages, self.tools())
             except ChimeraError as e:
                 if e.code == ErrorCode.BUDGET_EXCEEDED:
                     raise
@@ -352,15 +454,26 @@ class AgentRun:
         self.state.calls += 1
         args = dict(args or {})
         reason = str(args.pop("reason", "") or "").strip()
+        self._reason = reason  # the current call's reason (finalize stores it on the card)
         t0 = time.time()
         step: dict[str, Any] = {"n": self.state.calls, "tool": name, "arguments": args, "reason": reason,
                                 "agent_text": said[:600] if said else ""}
         try:
-            if name not in TOOL_NAMES:
+            if name not in TOOL_NAMES and name != "plan_op":  # plan_op: internal alias (tests, scripted brains)
                 raise AgentError("unknown_tool", f"no tool {name!r}", valid=TOOL_NAMES)
             if not reason:
                 raise AgentError("missing_reason", "every call needs a reason", hint="add a short reason")
-            result = await getattr(self, f"t_{name}")(**args)
+            if name != "plan_op":
+                schema = next(t["function"] for t in self.tools() if t["function"]["name"] == name)
+                if errs := check_args(schema, {**args, "reason": reason}):
+                    raise AgentError("schema", "; ".join(errs), hint=schema["description"][:300])
+            if name in OP_TOOL_NAMES:
+                op_args = {OP_ARG.get(k, k): v for k, v in args.items()}
+                if name == "set_extent":
+                    op_args["feature"] = "covering"
+                result = await self.t_plan_op(name, op_args)
+            else:
+                result = await getattr(self, f"t_{name}")(**args)
             out = {"ok": True, **result}
         except AgentError as e:
             out = {"ok": False, "error": e.code, "message": e.message, "hint": e.hint, **({"valid": e.valid} if e.valid
@@ -680,9 +793,9 @@ class AgentRun:
             return None
         self.state.edit_lock = _content_key(self._need_session().plan)
         return (f"two-failure rule: {self.state.covering_streak} inspects in a row with covering failures. Stop "
-                "editing the covering; change the plan (set_extent with fewer zones and a reason, or "
-                "set_transfer_class non_homologous / drop_part so the donor shows by material and color only), "
-                "audit and render again")
+                "editing the covering; change the plan (set_extent with fewer zones and a plan_reason, or "
+                "set_covering_material_only so the host keeps its own covering and the donor shows by material and "
+                "color only), audit and render again")
 
     def _plan_changed(self) -> None:
         self.state.covering_streak, self.state.edit_lock = 0, None
@@ -732,9 +845,10 @@ class AgentRun:
         if self.state.edit_lock is not None and self.state.edit_lock == _content_key(self._need_session().plan):
             raise AgentError("two_failure_rule", "two inspects in a row failed on covering items: covering edits "
                              "stop until the plan changes",
-                             hint="plan_op set_extent (feature covering, fewer zones, a reason) or set_transfer_class "
-                             "non_homologous / drop_part (the donor by material and color only), then audit_plan "
-                             "and render", valid=["plan_op", "choose_candidate", "finalize"])
+                             hint="set_extent (fewer zones, a plan_reason) or set_covering_material_only (the host "
+                             "keeps its own covering; the donor by material and color only), then audit_plan and "
+                             "render", valid=["set_extent", "set_covering_material_only", "choose_candidate",
+                                              "finalize"])
         fails = {f["key"]: f for f in (im.raw_inspect or {}).get("failures", [])}
         keys = [k for k in failure_keys if k in fails]
         if not keys:
@@ -761,28 +875,37 @@ class AgentRun:
         ans = await self.ask(question, list(options))
         return {"answer": ans}
 
-    async def t_finalize(self, image_id: str) -> dict[str, Any]:
+    async def t_finalize(self, image_id: str, why_not_best: str = "") -> dict[str, Any]:
         im = self._image(image_id)
         if im.inspect is None:
             raise AgentError("not_inspected", "inspect the image before finalizing it")
         best = self.best_image_id()
-        doc = await self._finish(im, "finalized by the agent")
-        if best and best != im.id:
-            doc["card"]["agent"]["note"] = f"the agent finalized {im.id}; by failure counts {best} was better"
-        return {"creature_id": doc["genome"]["id"], "remaining_failures": doc["card"]["remaining_failures"]}
+        why = " ".join((why_not_best or "").split())
+        if best and best != im.id and len(why) < 12:
+            raise AgentError("needs_why_not_best", f"code ranks {best} above {im.id} ({self._counts(best)} vs "
+                             f"{self._counts(im.id)}; {RANK_RULE})",
+                             hint=f"finalize {best}, or pass why_not_best: why {im.id} is better", valid=[best, im.id])
+        doc = await self._finish(im, "finalized by the agent", why or self._reason)
+        return {"creature_id": doc["genome"]["id"], "remaining_failures": doc["card"]["remaining_failures"],
+                "final_choice": {k: doc["card"]["final_choice"][k] for k in ("agree", "shown_first")}}
+
+    def _counts(self, iid: str) -> str:
+        f = self.state.images[iid].inspect["failures"]  # type: ignore[index]
+        return f"{sum(x['kind'] == 'structural' for x in f)} structural, {len(f)} failures"
+
+    def _rank(self) -> list[str]:
+        done = [i for i in self.state.order if self.state.images[i].inspect is not None]
+        return sorted(done, key=lambda i: self._rank_key(self.state.images[i]))
+
+    def _rank_key(self, im: Image) -> tuple[int, int, int]:
+        f = im.inspect["failures"]  # type: ignore[index]
+        return (sum(x["kind"] == "structural" for x in f), len(f), -self.state.order.index(im.id))
 
     # ------------------------------------------------------------------ finish
 
     def best_image_id(self) -> str | None:
-        done = [self.state.images[i] for i in self.state.order if self.state.images[i].inspect is not None]
-        if not done:
-            return None
-
-        def rank(im: Image) -> tuple[int, int, int]:
-            f = im.inspect["failures"]  # type: ignore[index]
-            return (sum(x["kind"] == "structural" for x in f), len(f), -self.state.order.index(im.id))
-
-        return min(done, key=rank).id
+        ranked = self._rank()
+        return ranked[0] if ranked else None
 
     async def _code_finalize(self) -> None:
         best = self.best_image_id()
@@ -798,9 +921,10 @@ class AgentRun:
                            "reason": f"code: {self.state.stop or 'the agent ended without finalize'}; the best "
                            "inspected image (fewest structural, then fewest failures)",
                            "summary": f"finalized {best} by code", "cards": []})
-        await self._finish(self.state.images[best], f"finalized by code: {self.state.stop}")
+        await self._finish(self.state.images[best], f"finalized by code: {self.state.stop}",
+                           f"code: {self.state.stop or 'the agent ended without finalize'}")
 
-    async def _finish(self, im: Image, how: str) -> dict[str, Any]:
+    async def _finish(self, im: Image, how: str, agent_reason: str = "") -> dict[str, Any]:
         s, eng = self._need_session(), self.engine
         g = self._plan_for(im)
         data = im.load()
@@ -818,6 +942,7 @@ class AgentRun:
         card["agent"] = {"brain": getattr(self.brain, "model_id", "?"), "renders": self.state.renders,
                          "edits": self.state.edits, "tool_calls": self.state.calls, "stop": how,
                          "candidate": self.state.chosen}
+        card["final_choice"] = await self._final_choice(im, key, agent_reason, g.id)
         doc = {"genome": g.model_dump(), "prompt": im.prompt,
                "prompt_compiled": im.extra.get("prompt_compiled") or compile_prompt(g, eng.tax),
                "image_key": key, "image_id": im.id, "image_kind": im.kind, "judge": verdict, "card": card,
@@ -827,6 +952,27 @@ class AgentRun:
         eng.store.put("creatures", g.id, doc)
         self.state.finalized = doc
         return doc
+
+    async def _final_choice(self, im: Image, key: str, agent_reason: str, gid: str) -> dict[str, Any]:
+        """S5 (D2): the agent's pick and the code's pick, each with its rank, counts, image and reason, the agent's
+        first. When they differ, the code's image is stored too."""
+        ranked = self._rank()
+        best = ranked[0] if ranked else im.id
+
+        def entry(i: str, image_key: str, reason: str) -> dict[str, Any]:
+            f = self.state.images[i].inspect["failures"]  # type: ignore[index]
+            return {"image_id": i, "image_key": image_key, "rank": ranked.index(i) + 1 if i in ranked else None,
+                    "of": len(ranked), "structural": sum(x["kind"] == "structural" for x in f),
+                    "failures": len(f), "reason": reason}
+
+        best_key = key
+        if best != im.id:
+            best_key = f"evo/{gid}.agent.{best}.webp"
+            await self.engine.services.storage.put(best_key, self.state.images[best].load(),
+                                                   self.state.images[best].content_type)
+        return {"shown_first": "agent", "agree": best == im.id,
+                "agent_pick": entry(im.id, key, agent_reason),
+                "code_pick": entry(best, best_key, RANK_RULE)}
 
     # ------------------------------------------------------------------ views
 
@@ -890,7 +1036,7 @@ def _summary(name: str, out: dict[str, Any]) -> str:
     if name == "choose_candidate":
         p = out.get("plan") or {}
         return f"{out.get('chosen')}: host {p.get('host')}, parts {p.get('parts')}"
-    if name == "plan_op":
+    if name == "plan_op" or name in OP_TOOL_NAMES:
         return f"{out.get('op')} ok" + (f"; warnings {out.get('warnings')}" if out.get("warnings") else "")
     if name == "audit_plan":
         return (f"renderable={out.get('renderable')}; blocking {[b['card'] for b in out.get('blocking', [])]}; "
