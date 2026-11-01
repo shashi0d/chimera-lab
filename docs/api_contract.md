@@ -1,6 +1,6 @@
 # Chimera Lab agent API contract (R1)
 
-Version 1, 2026-11-01. Owner: the lead agent. A stream that needs a change stops and reports to the lead; the lead
+Version 1.1, 2026-11-01 (1.1: clarifications from Stream A, listed at the end). Owner: the lead agent. A stream that needs a change stops and reports to the lead; the lead
 updates this file and `docs/api_fixtures/`, and the other streams pull.
 
 ## Basics
@@ -67,6 +67,9 @@ every fixture:
 - `cap`: the run stops at the render cap
 - `error`: the run fails mid-way
 - `queued`: the run waits in the queue behind 2 runs before starting
+- `refused_animal`: the POST returns the NOT_AN_ANIMAL refusal
+- `cap_daily`: the POST returns `cap_daily.json`; `GET /evo/agent/limits` with the same header returns the capped state
+- `agent`: the engine's real agent loop over the mock adapters (real identify of the photos; `X-Mock-Fault` honoured)
 - `identify_choice`: the POST returns needs_choice
 - `refused_human`, `refused_type`, `refused_size`: the POST returns the refusal
 
@@ -161,7 +164,7 @@ The JSON always has `{"id", "type", "runId", "at"}` (`at` is an ISO 8601 UTC tim
 
 | type | payload | when |
 |---|---|---|
-| `queued` | `position` (1-based), `ahead` (runs before this one) | at creation when the concurrent limit is full, and each time the position changes |
+| `queued` | `position` (1-based), `ahead` (how many runs must leave the queue or finish before this one starts; equal to `position` while every slot is busy) | at creation when the concurrent limit is full, and each time the position changes |
 | `started` | `sire`, `dam` (`Parent`), `mode`, `caps: {"renders", "toolCalls", "seconds"}` | the run leaves the queue |
 | `step` | `n`, `tool`, `args` (short: each value cut to 120 characters), `summary`, `reason`, `cards` (e.g. `["RC-R10-01"]`), `ok`, `error`\|null (a refusal code) | after every tool call |
 | `render` | `n`, `imageId`, `url`, `kind`, `parent`\|null, `method`, `rendersUsed`, `rendersLeft` | after a render or edit adds an image (a growth render sends two: the host image, then the grown one) |
@@ -206,3 +209,15 @@ The events are exactly what the SSE stream sends (the `data` objects, in order).
 | `gallery.json` | `GET /evo/gallery` with the six showcase creatures |
 | `creature_b09.json` | `GET /evo/creatures/{id}` for the success fixture |
 | `limits.json` | `GET /evo/agent/limits`, open and capped |
+
+## Clarifications in 1.1
+
+- `queued.ahead` equals `position` while every slot is busy (the only reading the queued fixture fits).
+- Extra mock scenarios `refused_animal`, `cap_daily` and `agent` are listed above.
+- Every agent `ask_user` is sent as `needs_choice` with `kind: "host_tie"`, the only kind. A non-tie question would
+  need a new kind; none is used today.
+- A live identify `needs_choice` has one option (the v1 identify step returns one name) plus `allowOther: true`.
+  The fixture's three options come from the mock scenario.
+- A request larger than 2 x 8 MB + 2 MB in total is refused before the form is read, so its `413` has
+  `details.slot: null`. A single oversize file gets its slot.
+- Error bodies also carry `retryAfterMs: null` and `errorId: null` (the existing envelope). Clients ignore them.

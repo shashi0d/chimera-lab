@@ -205,7 +205,7 @@ The shared counter (`docs/live/budget.json`) went from image 162, Meta Spark 637
    "pillbug" in b02 and b11 pipeline). The agent cannot fix a misread with a plan operation, so it re-rolls, and in
    b06 it spent all 4 renders.
 4. **The image model's archetypes override the plan.** Lion × eagle (mythic) is drawn as the classic griffin with an
-   eagle's head, although the plan keeps the lion's head. Both critics passed it in both systems (b03). In the
+   eagle's head, although the plan keeps the lion's head [corrected in R1: the plan picks the eagle's head, see the note below]. Both critics passed it in both systems (b03). In the
    realistic b04, the agent's eagle host left the lion as color only.
 5. **The anatomy map finds the body and coverings poorly** (torso 3/22, coverings 5/20). It colors by the plan's
    parent, not by what is drawn.
@@ -352,3 +352,12 @@ reasons cut to fit.
 - 16. `render` {"method": "single_pass"}: "Material-only plan most likely to pass critics while retaining wolf frame and crab claw identity." → img4 (single_pass), renders used 3
 - 17. `inspect`: img4: fail - material_look (covering, fail); donor_pieces (covering, fail); extra_spots (structural, fail)
 - 18. `finalize` {"image_id": "img4"}: "Speculative wolf-host chimera best achievable after two covering failures and extent reduction then material-only; img4 is best_so_far with 1 structural 2 covering fails, retaining wolf frame, crab claw pincers, dorsal …" → crt_20286d65d31d; remaining failures 3
+
+## Correction (R1, 2026-11-01)
+
+Known limit 4 is wrong for b03. `live/s5/b03/agent/plan.json` (and the fixed pipeline's plan) sets `head` to
+`PICK golden_eagle` with the note "myth-style head swap", and the compiled prompt asks for it, so the image follows
+the plan. b03 is not an example of the image model ignoring a correct prompt. Better examples: b08 (the same
+compiled prompt gave 1 failure, then extra legs), b06 (four renders from one prompt, all failed) and b02 (the prompt
+says the plates grow from the skin; both systems drew armor). A related open issue: b03's anatomy map colors the
+head as the lion's although the plan's head comes from the eagle. Found by R1 Stream C.
