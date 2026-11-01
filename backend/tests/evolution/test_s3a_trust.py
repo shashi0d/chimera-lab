@@ -106,7 +106,7 @@ async def test_questions_are_balanced_and_plan_blind(e4_engine):
     assert not any(w in q.text for q in qs for w in plan_words)  # visible features only
     ids = {q.id for q in qs}
     assert {"frame", "head", "no_wings", "whole_animal", "insect_legs", "grows_out", "on_top", "continuous",
-            "scattered", "cover_on_legs", "cover_on_shoulders"} <= ids
+            "scattered"} <= ids  # S3b: legs and shoulders are inside the exoskeleton extent (RC-R10-16)
 
 
 async def test_integration_questions_use_the_owner_wording(e4_engine):

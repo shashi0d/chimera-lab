@@ -10,6 +10,13 @@ operations, each validated on its own:
     add_license(rule, compensation)      a bendable rule (R9 3.2) the plan really bends, within the mode's budget
     drop_part(part, reason)              remove a donor part
 
+S3b adds four transfer operations (RC-R10-15, RC-R10-16; transfer.py validates them):
+
+    set_transfer_class(feature, cls)     material | homologous | non_homologous
+    set_extent(feature, extent, reason)  a covering's body zones, with a functional reason
+    connect_features(a, b)               two features of one donor system grow from each other
+    set_identity_cues(feature, cues)     the positive form description that makes a part the donor's
+
 A session stores the accepted operations as intents and rebuilds the plan from the code skeleton on every call
 (seed_plan, the intents, then finish), so code always fills card_trace, labels, checks, audit, licenses,
 render_details and the silhouette. An operation that fails validation, or whose result breaks a hard card, is
@@ -31,12 +38,15 @@ from app.evolution.judge import generated_checklist
 from app.evolution.parts import best_part, dorsal_wings, flies_with_wings, specs
 from app.evolution.prompt import has_franchise
 from app.evolution.route import Route, is_real_hybrid
+from app.evolution.transfer import TransferError
 from app.models.schemas import ErrorCode
 
 SURFACE_REGIONS = ("neck", "forequarters", "back", "flanks", "belly", "hindquarters", "legs")
 REGION_OPERATORS = {"head": ("PICK",), "tail": ("PICK",), "forelimbs": ("PICK",),
                     **{r: ("PATCH", "OVERLAY", "PICK") for r in SURFACE_REGIONS}}
-OPS = ("set_host", "set_region", "set_habitat", "set_mode", "add_license", "drop_part")
+OPS = ("set_host", "set_region", "set_habitat", "set_mode", "add_license", "drop_part", "set_transfer_class",
+       "set_extent", "connect_features", "set_identity_cues")
+TRANSFER_OPS = OPS[6:]
 MAX_COMPENSATION = 240
 
 
@@ -82,6 +92,7 @@ class PlanSession:
         self.regions: list[dict[str, str]] = []  # set_region intents, in order
         self.licenses: list[tuple[str, str]] = []  # add_license intents (bendable id, compensation)
         self.drops: list[dict[str, str]] = []  # drop_part intents
+        self.transfer_edits: list[dict[str, Any]] = []  # S3b transfer intents, re-applied on every build
         self.log: list[dict[str, Any]] = []
         self.plan, self.route = self._build()
 
@@ -102,6 +113,9 @@ class PlanSession:
         except OpRejected as e:
             self._restore(saved)
             return self._result(op, args, e.errors)
+        except TransferError as e:
+            self._restore(saved)
+            return self._result(op, args, [OpError(e.code, e.message, e.field, e.hint, e.valid)])
         except TypeError as e:  # wrong or missing arguments
             self._restore(saved)
             return self._result(op, args, [OpError("bad_arguments", str(e)[:200], hint=f"see the {op} signature")])
@@ -130,6 +144,9 @@ class PlanSession:
             "dropped": [f[len(DROPPED):] for f in g.traits["body"].flags if f.startswith(DROPPED)],
             "audit": {i.function: i.result for i in g.audit},
             "checklist_preview": generated_checklist(g, tax),
+            "transfers": [{"feature": t.feature, "class": t.cls, "anchor": t.anchor, "extent": t.extent,
+                           "extent_reason": t.extent_reason, "connects": t.connects, "identity_cues": t.identity_cues,
+                           "set_by": t.set_by} for t in g.transfers],
         }
 
     # ------------------------------------------------------------------ operations
@@ -247,6 +264,22 @@ class PlanSession:
 
     # ------------------------------------------------------------------ build
 
+    def _transfer(self, op: str, **args: Any) -> list[str]:
+        self.transfer_edits = [*self.transfer_edits, {"op": op, "args": args}]
+        return []
+
+    def _set_transfer_class(self, feature: str, cls: str) -> list[str]:
+        return self._transfer("set_transfer_class", feature=feature, cls=cls)
+
+    def _set_extent(self, feature: str, extent: list[str], reason: str) -> list[str]:
+        return self._transfer("set_extent", feature=feature, extent=list(extent or []), reason=reason)
+
+    def _connect_features(self, a: str, b: str) -> list[str]:
+        return self._transfer("connect_features", a=a, b=b)
+
+    def _set_identity_cues(self, feature: str, cues: str) -> list[str]:
+        return self._transfer("set_identity_cues", feature=feature, cues=cues)
+
     def _build(self) -> tuple[Genome, Route]:
         eng = self.engine
         g, r = eng.seed_plan(self.sire, self.dam, host_pick=self.host_pick, habitat=self.habitat, seed=self.seed,
@@ -255,12 +288,12 @@ class PlanSession:
             self._apply_region(g, intent)
         for d in self.drops:
             self._apply_drop(g, d["part"])
-        g = eng.finish(g, r, license_requests=self.licenses)
+        g = eng.finish(g, r, license_requests=self.licenses, transfer_edits=self.transfer_edits)
         for d in self.drops:  # a part finish() re-created (dorsal wings) is dropped again, then re-finished
             if any(norm(d["part"]) in norm(p) for _w, p in donor_parts(g)) or (
                     "wing" in d["part"] and dorsal_wings(g, eng.tax)):
                 self._apply_drop(g, d["part"])
-                g = eng.finish(g, r, license_requests=self.licenses)
+                g = eng.finish(g, r, license_requests=self.licenses, transfer_edits=self.transfer_edits)
         return g, r
 
     def _apply_region(self, g: Genome, it: dict[str, str]) -> None:
@@ -350,10 +383,12 @@ class PlanSession:
         return list(tr.region or []) if tr.op == "PATCH" else []
 
     def _state(self) -> tuple[Any, ...]:
-        return (self.mode, self.host_pick, self.habitat, list(self.regions), list(self.licenses), list(self.drops))
+        return (self.mode, self.host_pick, self.habitat, list(self.regions), list(self.licenses), list(self.drops),
+                list(self.transfer_edits))
 
     def _restore(self, s: tuple[Any, ...]) -> None:
-        self.mode, self.host_pick, self.habitat, self.regions, self.licenses, self.drops = s
+        (self.mode, self.host_pick, self.habitat, self.regions, self.licenses, self.drops,
+         self.transfer_edits) = s
 
     def _result(self, op: str, args: dict[str, Any], errors: list[OpError], warnings: list[str] | None = None) -> OpResult:
         res = OpResult(ok=not errors, op=op, errors=errors, warnings=warnings or [], summary=self.summary())

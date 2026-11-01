@@ -11,7 +11,7 @@ from dataclasses import dataclass
 from typing import Any
 
 from app.evolution.data import Taxonomy, cards, config
-from app.evolution.genome import BEYOND, HEAD_GROUP, MEASUREMENT_TAGS, SURFACE_TAGS, Genome
+from app.evolution.genome import BEYOND, HEAD_GROUP, LAYER, MEASUREMENT_TAGS, SURFACE_TAGS, Genome
 from app.evolution.physics import LABEL_ARTHROPOD, LABEL_SIX, arthropod_parts
 from app.evolution.route import (
     LABEL_CHIMERA,
@@ -212,7 +212,7 @@ def soft_penalties(g: Genome, r: Route, tax: Taxonomy) -> tuple[list[dict[str, A
         hits.append(("RC-R2-05", 1.0, "size beyond both parents without a documented case"))
     for tag, tr in t.items():
         if tr.op == "PATCH":
-            if len(tr.region or []) > config()["thresholds"]["max_patches"]:
+            if len(tr.region or []) > config()["thresholds"]["max_patches"] and LAYER not in tr.flags:  # S3b
                 hits.append(("RC-R1-10", 0.5, f"{tag}: too many patches"))
             if tr.strength is not None and tr.strength < 1.0:
                 hits.append(("RC-R5-04", 0.5, f"{tag}: donor patch below full strength"))

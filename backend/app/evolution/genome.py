@@ -145,6 +145,39 @@ class License(_Strict):
     reason: str
 
 
+TransferClass = Literal["material", "homologous", "non_homologous"]  # RC-R10-15 (a), (b), (c)
+EXTENT_ZONES: tuple[str, ...] = ("head", "neck", "forequarters", "back", "flanks", "belly", "hindquarters", "legs",
+                                 "tail")
+LAYER = "layer (RC-R10-06)"  # a covering over a whole body zone, not separate patches
+
+
+class Transfer(_Strict):
+    """S3b (RC-R10-15): how one donor feature reaches the host. A covering is material that grows on the host and
+    conforms to its body; a homologous part sits where the host has the matching structure, fitted to host scale;
+    a non-homologous part transfers only its material and function. Code derives every transfer from data in
+    finish(); the agent changes one through the typed operations (set_by "agent")."""
+    feature: str
+    donor: str
+    kind: Literal["covering", "part"]
+    cls: TransferClass
+    anchor: str
+    extent: list[str] = Field(default_factory=list)  # coverings: body zones (EXTENT_ZONES)
+    extent_reason: str = ""
+    scale: str = ""  # coverings: plates sized to the host, on its segments and muscle masses, flexible at joints
+    connects: list[str] = Field(default_factory=list)  # features of the same donor system this one grows from or into
+    identity_cues: str = ""  # parts: the form that makes the part the donor's (positive wording only)
+    set_by: Literal["code", "agent"] = "code"
+
+    @model_validator(mode="after")
+    def _shape(self) -> Transfer:
+        if self.kind == "covering" and self.cls != "material":
+            raise ValueError("a covering transfers as material (RC-R10-15 a)")
+        bad = [z for z in self.extent if z not in EXTENT_ZONES]
+        if bad:
+            raise ValueError(f"unknown extent zone {bad}")
+        return self
+
+
 class Genome(_Strict):
     id: str
     parents: Parents
@@ -170,6 +203,7 @@ class Genome(_Strict):
     # S2: visual details code adds while checking and repairing the plan (a deep keel, thicker limb bones). With
     # the structured fields and data tables, this is all the prompt compiler reads: notes never reach the prompt.
     render_details: list[str] = Field(default_factory=list)
+    transfers: list[Transfer] = Field(default_factory=list)  # S3b: one per donor feature (code-derived in finish)
 
     @model_validator(mode="after")
     def _consistent(self) -> Genome:

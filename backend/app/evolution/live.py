@@ -79,7 +79,8 @@ PLAN_SCHEMA: dict[str, Any] = _obj({
     "traits": _obj({t: _TRAIT for t in TRAIT_TAGS}),
 })  # S2: labels, processes and card_trace are code-filled (S1: an unbounded card_trace ran Spark Open away)
 CODE_FIELDS = ("id", "seed", "lineage", "checks", "scores", "design_mode", "audit", "licenses",  # E4: code-owned
-               "render_details", "labels", "processes", "card_trace")  # S2: derived lists are code-filled
+               "render_details", "labels", "processes", "card_trace",  # S2: derived lists are code-filled
+               "transfers")  # S3b: code-derived; the agent edits them through typed operations
 
 POLISH_SCHEMA = _obj({"prompt": _STR})
 CRITIC_SCHEMA = _obj({"animals": _STRS, "creatures": {"type": "integer"}, "notes": _STR})

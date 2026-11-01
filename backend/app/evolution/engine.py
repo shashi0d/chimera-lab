@@ -38,6 +38,8 @@ from app.evolution.resolve import LearnedStore, Resolution, Resolver
 from app.evolution.route import Route, choose_host, is_real_hybrid, route, silhouette, silhouette_issues
 from app.evolution.routing import summarize
 from app.evolution.traits import build_traits, contribution, gate
+from app.evolution.transfer import build as build_transfers
+from app.evolution.transfer import fold_shapes, sync_regions
 from app.models.schemas import ErrorCode
 from app.services import Services
 
@@ -168,7 +170,8 @@ class EvoEngine:
         g.silhouette = silhouette(g, self.tax, r.pair)
         return g, r
 
-    def finish(self, g: Genome, r: Route, license_requests: list[tuple[str, str]] | None = None) -> Genome:
+    def finish(self, g: Genome, r: Route, license_requests: list[tuple[str, str]] | None = None,
+               transfer_edits: list[dict[str, Any]] | None = None) -> Genome:
         """4.4 habitat and 4.5 physical checks, then derived fields. Idempotent. `license_requests` (S2): an
         agent's add_license calls, granted first within the budget."""
         g = g.model_copy(deep=True)
@@ -181,11 +184,17 @@ class EvoEngine:
         phys_cards = run_checks(g, self.tax)
         audit_cards, needs = run_audit(g, self.tax, r)  # 4.5b, after the physical checks (RC-R9-02)
         audit_cards += settle(g, needs, self.tax, license_requests)  # 4.5c fiction budget
+        # S3b (RC-R10-15, 16): transfer records from the finished parts; the covering's extent becomes its regions
+        fold_shapes(g, self.tax)
+        g.transfers = build_transfers(g, self.tax, transfer_edits)
+        sync_regions(g)
         g.silhouette = silhouette(g, self.tax, r.pair)  # last, from the final limb plan (S2: RC-R7-06)
         assert not silhouette_issues(g, self.tax), silhouette_issues(g, self.tax)
         g.identity_balance = contribution(g.traits, g.limb_plan, g.host or g.parents.sire)
         g.labels = _dedupe([*r.labels, *g.labels])
-        g.card_trace = _dedupe(g.card_trace + gate_cards + hab_cards + phys_cards + audit_cards
+        tcards = (["RC-R10-15"] if g.transfers else []) + (
+            ["RC-R10-16"] if any("RC-R10-16" in t.extent_reason for t in g.transfers) else [])
+        g.card_trace = _dedupe(g.card_trace + gate_cards + hab_cards + phys_cards + audit_cards + tcards
                                + [c for c in PROMPT_CARDS if not (real and c == "RC-R4-11")])
         assert g.limb_plan.requested_wings is None, "limb budget left a wing request unresolved (RC-R3-01)"
         g.id = plan_id(g)

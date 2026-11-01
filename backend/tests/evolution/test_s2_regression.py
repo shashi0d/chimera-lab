@@ -51,7 +51,7 @@ async def test_beetle_bear_with_the_full_fix_pack(e4_engine):
     # 6 (S3a): inspect ran the plan-blind protocol: structure, integration and placement questions, counts
     keys = {it["key"] for it in doc["inspect"]["before"]["items"]}
     assert {"frame", "head", "no_wings", "whole_animal", "insect_legs", "grows_out", "on_top", "continuous",
-            "scattered", "cover_on_legs", "walking_legs", "separate_bodies"} <= keys
+            "scattered", "walking_legs", "separate_bodies"} <= keys  # S3b: the exoskeleton covers the legs (RC-R10-16)
     assert doc["inspect"]["before"]["sam_calls"] == 1  # the head horn; absences are never SAM-tested
 
 
