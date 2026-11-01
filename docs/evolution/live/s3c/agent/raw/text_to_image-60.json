@@ -1,0 +1,109 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Silhouette: Four-legged gray wolf frame. Host frame: the gray wolf sets the outline, body size and overall frame. A single creature combining a crab and a gray wolf. The head is that of the gray wolf, fully visible and uncluttered, with clear, discernible eyes. Details: gray wolf body and legs with its own dense fur on the face, neck, shoulders, belly, hips, legs and tail; plain coat with no stripes or spots. From the crab, as parts and materials on the gray wolf's own body, claws grown from the front feet — each front foot ends in a pincer held folded against the foot when the animal walks — heavy, knobbed, hard-shelled claws with a fixed and a moving finger; large, evenly sized claws with black tips; hard, glossy chitin plates with fine seams in its own colors, grown from the skin as the gray wolf's own covering over the back and flanks. This covering replaces the gray wolf's dense fur there and conforms to the gray wolf's body: one broad, fused carapace shield over the gray wolf's shoulders and back, its edge like the donor's pie-crust frilled edge with rounded lobes, with short jointed plates on each limb section sized to the gray wolf's body and joined by flexible cuticle at every joint. Every covered part keeps the gray wolf's own length and shape; the dense fur stops at the covering's edge, and the face, neck, shoulders, belly, hips, legs and tail keep the gray wolf's own dense fur. The covering follows the body's own shape and bends at every joint. Declared fiction: arthropod parts at large size, shown with thick supporting legs. Bilaterally symmetrical, recognizable limbs, visible sense organs. Habitat cue (rocky coast): dark back and light belly (strong countershading). Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "id": "resp_6ae78bd2026604870c474534",
+  "access_programs": null,
+  "created_at": 1793559506.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae78bd236b69b7ccbc0411b",
+    "summary": [
+     {
+      "text": "**Designing crab-wolf hybrid**\nI'm planning a single creature with a gray wolf silhouette and body, adding crab claws on the front feet and keeping the wolf head clear with visible eyes and dense fur.\n**Drafting natural history illustration**\nI'm planning a side three-quarter view of the wolf with a chitin carapace over the back and flanks, pincer front feet, jointed limb plates, and countershaded fur, set on a plain light background with natural lighting.\n**Refining creature illustration**\nI'm preparing another generation to make the creature look more natural and integrated, adding fur on the legs and belly while keeping the carapace over the back and flanks and jointed plates on the front legs.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae78bd27409fdebf71d4747",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0J2ZXZEUS1vUE9lUGVFRkFBWDFLYzZRVnJabmJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczo2MzMwN2Y2Yy00MTJkLTQ5MTctYWQ0Ny0yODI3ZGI5NGNjNTc6R01QX3V6UVVfRGxvUTJRR0FJSWpzNi1DWjhzbmJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM1NTk1MDZ9.Q8WLFwGuTG7xf_SXMyWpearjNYHK",
+    "result": "<elided> (678720 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 22160,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 17344
+   },
+   "output_tokens": 3498,
+   "output_tokens_details": {
+    "reasoning_tokens": 941
+   },
+   "total_tokens": 25658
+  },
+  "user": null
+ }
+}

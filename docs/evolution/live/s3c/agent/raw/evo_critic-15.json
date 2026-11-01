@@ -1,0 +1,105 @@
+{
+ "purpose": "evo_critic",
+ "request": {
+  "model": "meta-models/muse-spark-open-1026",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture with no other context. animals: the real animal species whose features you can clearly see in it, as everyday English common names, most prominent first, at most three. If it looks like one ordinary animal, list only that animal. creatures: how many separate creatures are in the picture. notes: one short sentence on what you see."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "What animals do you see, and how many creatures?"
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (678743 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "readability_critic",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "animals",
+      "creatures",
+      "notes"
+     ],
+     "properties": {
+      "animals": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "creatures": {
+       "type": "integer"
+      },
+      "notes": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0,
+  "max_tokens": 4000
+ },
+ "response": {
+  "id": "chatcmpl-95960c02527048b39254d5361770b2ee",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\n  \"animals\": [\"wolf\", \"crab\"],\n  \"creatures\": 1,\n  \"notes\": \"A single hybrid creature with a wolf's head, fur, and hind legs combined with a crab's armored shell and large front pincers.\"\n}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null,
+     "reasoning_content": "<elided> (4134 chars)"
+    }
+   }
+  ],
+  "created": 1793559782,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 1001,
+   "prompt_tokens": 3595,
+   "total_tokens": 4596,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 719,
+    "audio_tokens": 0,
+    "reasoning_tokens": 936,
+    "rejected_prediction_tokens": 1255,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 0,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}
