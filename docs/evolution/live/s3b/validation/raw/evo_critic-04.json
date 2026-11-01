@@ -1,0 +1,105 @@
+{
+ "purpose": "evo_critic",
+ "request": {
+  "model": "meta-models/muse-spark-open-1026",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture with no other context. animals: the real animal species whose features you can clearly see in it, as everyday English common names, most prominent first, at most three. If it looks like one ordinary animal, list only that animal. creatures: how many separate creatures are in the picture. notes: one short sentence on what you see."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "What animals do you see, and how many creatures?"
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (726199 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "readability_critic",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "animals",
+      "creatures",
+      "notes"
+     ],
+     "properties": {
+      "animals": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "creatures": {
+       "type": "integer"
+      },
+      "notes": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0,
+  "max_tokens": 4000
+ },
+ "response": {
+  "id": "chatcmpl-b4010380fc4d41e4b342cafc462d2f7a",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\"animals\": [\"bear\", \"beetle\"], \"creatures\": 1, \"notes\": \"A single hybrid creature with a brown bear's head, fur and paws covered in glossy, segmented beetle-like armor with a large curved horn on its forehead.\"}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null,
+     "reasoning_content": "We need to answer: What animals do you see, and how many creatures?\n\nWe look at one picture with no other context. animals: the real animal species whose features you can clearly see in it, as everyday English common names, most prominent first, at most three. If it looks like one ordinary animal, list only that animal. creatures: how many separate creatures are in the picture. notes: one short sentence on what you see.\n\nWe have a hybrid creature: bear + beetle? The image shows a bear with armor that looks like a rhinoceros beetle? Or stag beetle? The armor is like a beetle exoskeleton, with a horn. So animals: bear, beetle? Or maybe isopod? The armor looks like a beetle or maybe a woodlouse? But most prominent is bear. The armor is beetle-like.\n\nWe need to list real animal species whose features you can clearly see. So bear is clear. Beetle is clear (the exoskeleton and horn). Could also be maybe? The armor resembles a rhinoceros beetle.\n\nWe need to provide animals: most prominent first, at most three. So [\"bear\", \"rhinoceros beetle\"] or [\"bear\", \"beetle\"].\n\nCreatures: how many separate creatures are in the picture. There's one hybrid creature. So 1.\n\nNotes: one short sentence on what you see.\n\nWe must follow format? The user asks: What animals do you see, and how many creatures? But system says we need to output with fields: animals, creatures, notes. Probably JSON? The instruction: animals: ... creatures: ... notes: ...\n\nWe should output JSON with those keys.\n\nWe need to be careful: \"If it looks like one ordinary animal, list only that animal.\" This does NOT look like one ordinary animal; it's a hybrid fantasy. So list multiple.\n\nWe should list bear first, then beetle.\n\nPossibly also include? The armor could be interpreted as isopod? But beetle is more accurate due to horn.\n\nWe should answer with everyday English common names.\n\nSo animals: [\"bear\", \"beetle\"] or [\"bear\", \"rhinoceros beetle\"]\n\nBetter to use \"beetle\" as common name.\n\nCreatures: 1\n\nNotes: A bear wearing glossy beetle-like exoskeleton armor with a curved horn on its head.\n\nWe must ensure we comply with reasoning strength 512.\n\nWe need to output in required format. Probably JSON.\n\nWe should provide:\n\n{\n  \"animals\": [\"bear\", \"beetle\"],\n  \"creatures\": 1,\n  \"notes\": \"A single hybrid creature with a bear's body and face covered in dark, glossy beetle-like armor and a horn.\"\n}\n\nCheck instruction: at most three. So two is fine.\n\nMake sure to use everyday English common names.\n\nPotential nuance: The armor looks like a trilobite? No.\n\nCould also be \"rhinoceros beetle\" is a specific species. But \"beetle\" is safer.\n\nWe should ensure we answer correctly.\n\nWe must not hallucinate.\n\nWe should provide final answer.\n\nProbably need to follow exact output format: maybe bullet? But system says animals: ... creatures: ... notes: ...\n\nWe will output JSON.\n\nMake sure to be concise.\n\nWe should also consider if the creature counts as 1. Yes.\n\nWe should not list more than 3.\n\nWe should ensure we mention most prominent first: bear is most prominent.\n\nThus final answer: animals = [\"bear\", \"beetle\"], creatures = 1, notes = \"A bear-like creature covered in shiny, segmented beetle armor with a large horn on its head.\"\n\nWe should ensure we comply with policy: no disallowed content. It's fine.\n\nWe should output in final channel."
+    }
+   }
+  ],
+  "created": 1793545484,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 856,
+   "prompt_tokens": 3595,
+   "total_tokens": 4451,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 611,
+    "audio_tokens": 0,
+    "reasoning_tokens": 790,
+    "rejected_prediction_tokens": 1104,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 0,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

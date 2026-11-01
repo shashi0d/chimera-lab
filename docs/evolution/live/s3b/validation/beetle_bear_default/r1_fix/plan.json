@@ -1,0 +1,438 @@
+{
+ "id": "crt_ca3bd0509f54",
+ "parents": {
+  "sire": "european_rhinoceros_beetle",
+  "dam": "brown_bear"
+ },
+ "lineage": {
+  "parent_ids": [],
+  "generation": 0
+ },
+ "mode": "chimera",
+ "known_pair": null,
+ "host": "brown_bear",
+ "identity_balance": 0.8,
+ "habitat": {
+  "name": "forest",
+  "source": "shared",
+  "adjustments": [
+   "dark back and light belly (mild countershading)"
+  ],
+  "visible_trait": "dark back and light belly (mild countershading)"
+ },
+ "size": {
+  "mass_kg": 340.0,
+  "flags": []
+ },
+ "silhouette": "four-legged brown bear frame",
+ "limb_plan": {
+  "forelimbs": {
+   "kind": "legs",
+   "donor": "brown_bear"
+  },
+  "hindlimbs": {
+   "kind": "legs",
+   "donor": "brown_bear"
+  },
+  "extra_wings": null,
+  "appendages": [
+   "european rhinoceros beetle head horn"
+  ],
+  "wing_use": "none",
+  "requested_wings": null
+ },
+ "traits": {
+  "behavior": {
+   "op": "PICK",
+   "donor": "brown_bear",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "Follows the head/brain donor brown bear: solitary forest foraging",
+   "flags": []
+  },
+  "body": {
+   "op": "PICK",
+   "donor": "brown_bear",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "Brown bear torso and frame; beetle contributes only surface patches and head horn, blend only at patch edges; thick supporting legs and visible breathing openings along the flanks",
+   "flags": [
+    "dropped part: wings"
+   ]
+  },
+  "coat_color": {
+   "op": "PATCH",
+   "donor": "european_rhinoceros_beetle",
+   "value": null,
+   "strength": 1.0,
+   "region": [
+    "head",
+    "neck",
+    "forequarters",
+    "back",
+    "flanks",
+    "belly",
+    "hindquarters",
+    "legs",
+    "tail"
+   ],
+   "part": null,
+   "note": "Beetle reddish-brown to black color at full strength inside patches",
+   "flags": [
+    "layer (RC-R10-06)"
+   ]
+  },
+  "coat_pattern": {
+   "op": "PATCH",
+   "donor": "european_rhinoceros_beetle",
+   "value": null,
+   "strength": 1.0,
+   "region": [
+    "head",
+    "neck",
+    "forequarters",
+    "back",
+    "flanks",
+    "belly",
+    "hindquarters",
+    "legs",
+    "tail"
+   ],
+   "part": null,
+   "note": "Few large beetle blocks with clear edges on host back and flank skin regions, no blending inside blocks",
+   "flags": [
+    "layer (RC-R10-06)"
+   ]
+  },
+  "coat_texture": {
+   "op": "PATCH",
+   "donor": "european_rhinoceros_beetle",
+   "value": null,
+   "strength": 1.0,
+   "region": [
+    "head",
+    "neck",
+    "forequarters",
+    "back",
+    "flanks",
+    "belly",
+    "hindquarters",
+    "legs",
+    "tail"
+   ],
+   "part": null,
+   "note": "Beetle exoskeleton surface at full strength inside patches",
+   "flags": [
+    "layer (RC-R10-06)"
+   ]
+  },
+  "ears": {
+   "op": "PICK",
+   "donor": "brown_bear",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "Brown bear small rounded ears",
+   "flags": []
+  },
+  "face": {
+   "op": "PICK",
+   "donor": "brown_bear",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "Brown bear muzzle and face for feeding",
+   "flags": []
+  },
+  "feet": {
+   "op": "PICK",
+   "donor": "brown_bear",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "Brown bear plantigrade feet; no insect tarsi at this size",
+   "flags": []
+  },
+  "head": {
+   "op": "PICK",
+   "donor": "brown_bear",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "Brown bear head and brain tissue with grafted beetle head horn as signature part",
+   "flags": []
+  },
+  "limbs": {
+   "op": "PICK",
+   "donor": "brown_bear",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "Four brown bear legs for support at host mass; no jointed insect legs at this size; thick supporting legs and visible breathing openings along the flanks",
+   "flags": []
+  },
+  "mane": {
+   "op": "PICK",
+   "donor": "brown_bear",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "Brown bear neck ruff only; no beetle mane",
+   "flags": []
+  },
+  "size": {
+   "op": "PICK",
+   "donor": "brown_bear",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "Host brown bear size; sire x dam order kept, not an average",
+   "flags": []
+  },
+  "skull": {
+   "op": "PICK",
+   "donor": "brown_bear",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "Brown bear skull to carry weight and support horn graft",
+   "flags": []
+  },
+  "tail": {
+   "op": "PICK",
+   "donor": "brown_bear",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "Brown bear short tail; no insect segments",
+   "flags": []
+  }
+ },
+ "labels": [
+  "speculative chimera, no real-world precedent",
+  "speculative: arthropod parts at large size (insect breathing limits size)"
+ ],
+ "processes": [
+  "chimera patchwork: each region is one parent's tissue"
+ ],
+ "card_trace": [
+  "RC-R2-01",
+  "RC-R1-14",
+  "RC-R2-16",
+  "RC-R5-10",
+  "RC-R6-01",
+  "RC-R5-02",
+  "RC-R1-01",
+  "RC-R1-09",
+  "RC-R1-10",
+  "RC-R5-01",
+  "RC-R5-03",
+  "RC-R5-04",
+  "RC-R5-05",
+  "RC-R5-06",
+  "RC-R5-07",
+  "RC-R6-02",
+  "RC-R6-05",
+  "RC-R4-01",
+  "RC-R4-02",
+  "RC-R4-05",
+  "RC-R4-11",
+  "RC-R4-10",
+  "RC-R3-12",
+  "RC-R3-09",
+  "RC-R9-02",
+  "RC-R9-04",
+  "RC-R9-08",
+  "RC-R6-03",
+  "RC-R6-04",
+  "RC-R9-10",
+  "RC-R10-15",
+  "RC-R10-16",
+  "RC-R7-06",
+  "RC-R7-07",
+  "RC-R6-07",
+  "RC-R7-10"
+ ],
+ "checks": [
+  {
+   "step": "class_parts",
+   "result": "repaired",
+   "detail": "'jointed tail segments' is not an Insecta part; replaced by the European rhinoceros beetle's head horn (class_parts.json)",
+   "cards": [
+    "RC-R6-05"
+   ]
+  },
+  {
+   "step": "body_plan_class",
+   "result": "pass",
+   "detail": "host class: vertebrate (quadruped)",
+   "cards": []
+  },
+  {
+   "step": "limb_budget",
+   "result": "pass",
+   "detail": "European rhinoceros beetle wings are insect wings, not forelimbs (RC-R3-01 and RC-R3-02 cover vertebrate wing donors only): they sit on a dorsal mount and all four legs stay; the mount is a body-plan license",
+   "cards": [
+    "RC-R3-12"
+   ]
+  },
+  {
+   "step": "size_ceiling",
+   "result": "labeled",
+   "detail": "arthropod parts at 340.0 kg",
+   "cards": [
+    "RC-R3-09"
+   ]
+  },
+  {
+   "step": "flight_anatomy",
+   "result": "pass",
+   "detail": "no wings",
+   "cards": []
+  },
+  {
+   "step": "posture",
+   "result": "pass",
+   "detail": "legs match the body size",
+   "cards": []
+  },
+  {
+   "step": "part_rendering",
+   "result": "pass",
+   "detail": "no soft parts",
+   "cards": []
+  }
+ ],
+ "scores": {
+  "critic": 0.857,
+  "silhouette": 0.93,
+  "thumbnail": 0.714,
+  "soft_penalty": 0.0,
+  "quality": 0.893
+ },
+ "seed": 0,
+ "design_mode": "speculative",
+ "audit": [
+  {
+   "function": "breathing",
+   "result": "pass",
+   "detail": "lungs suit a land habitat",
+   "cards": [],
+   "source": "code"
+  },
+  {
+   "function": "feeding",
+   "result": "pass",
+   "detail": "mixed teeth fit an omnivore diet",
+   "cards": [
+    "RC-R9-04"
+   ],
+   "source": "code"
+  },
+  {
+   "function": "support",
+   "result": "licensed",
+   "detail": "arthropod parts at 340.0 kg, far above the Meganeura scale (about 70 cm); the oxygen explanation for giant insects is debated, not settled (RC-R9-09); licensed: arthropod parts at large size, shown with thick supporting legs and visible breathing openings along the flanks",
+   "cards": [
+    "RC-R3-09",
+    "RC-R9-08",
+    "RC-R9-10"
+   ],
+   "source": "code"
+  },
+  {
+   "function": "movement",
+   "result": "repaired",
+   "detail": "european rhinoceros beetle membranous wings on a dorsal mount: insect wings on a vertebrate body plan; european rhinoceros beetle head horn: push, defend and display; european rhinoceros beetle membranous wings on a dorsal mount: fly, glide or display; over budget: the insect wings are dropped (all four legs stay)",
+   "cards": [
+    "RC-R3-09",
+    "RC-R9-10"
+   ],
+   "source": "code"
+  },
+  {
+   "function": "heat",
+   "result": "pass",
+   "detail": "temperate forest habitat: no heat adjustment needed",
+   "cards": [
+    "RC-R4-11"
+   ],
+   "source": "code"
+  },
+  {
+   "function": "senses",
+   "result": "pass",
+   "detail": "brown bear head and eyes kept fully visible",
+   "cards": [
+    "RC-R6-03",
+    "RC-R6-04"
+   ],
+   "source": "code"
+  }
+ ],
+ "licenses": [
+  {
+   "id": "arthropod_large",
+   "card": "RC-R3-09",
+   "rule": "arthropod parts at large size",
+   "compensation": "thick supporting legs and visible breathing openings along the flanks",
+   "reason": "arthropod parts at 340.0 kg"
+  }
+ ],
+ "render_details": [],
+ "transfers": [
+  {
+   "feature": "head horn",
+   "donor": "european_rhinoceros_beetle",
+   "kind": "part",
+   "cls": "non_homologous",
+   "anchor": "the frontal bone of the head, above and between the eyes",
+   "extent": [],
+   "extent_reason": "",
+   "scale": "",
+   "connects": [
+    "covering"
+   ],
+   "identity_cues": "smooth, glossy dark cuticle, one horn curving upward and back from the head",
+   "set_by": "code"
+  },
+  {
+   "feature": "covering",
+   "donor": "european_rhinoceros_beetle",
+   "kind": "covering",
+   "cls": "material",
+   "anchor": "the skin, as the host's own covering",
+   "extent": [
+    "head",
+    "neck",
+    "forequarters",
+    "back",
+    "flanks",
+    "belly",
+    "hindquarters",
+    "legs",
+    "tail"
+   ],
+   "extent_reason": "RC-R10-16: an exoskeleton is a whole-body system, plates on every segment and limb section; the face keeps the host's own skin so the eyes, nose and mouth stay readable",
+   "scale": "each plate sized to the brown bear's own body segments and muscle masses, one plate per segment or muscle mass, joined by flexible cuticle at every joint",
+   "connects": [
+    "head horn"
+   ],
+   "identity_cues": "",
+   "set_by": "code"
+  }
+ ]
+}

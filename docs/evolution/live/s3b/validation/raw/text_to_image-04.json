@@ -1,0 +1,110 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Show the planned hard, glossy chitin plates with fine seams over the head, neck, shoulders, back, flanks, belly, hips, legs and tail; keep everything else the same. Show the hard, glossy chitin plates with fine seams as one continuous covering over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, not scattered pieces; the brown bear's fur stays on the belly and legs; keep everything else the same. Show the head horn growing out of the hard, glossy chitin plates with fine seams at its base, as one system; keep everything else the same.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ],
+  "previous_response_id": "resp_6ae75469f6213a2197a04758"
+ },
+ "response": {
+  "id": "resp_6ae754da64c36351e7c04011",
+  "access_programs": null,
+  "created_at": 1793545434.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae754dac544924941324e73",
+    "summary": [
+     {
+      "text": "**Refining chitin armor design**\nI'm updating the image to add hard, glossy chitin plates with fine seams as one continuous covering over the head, neck, shoulders, back, flanks, hips, legs and tail, while keeping the brown bear fur on the belly and legs and adding a horn growing from the plates.\n**Refining chitin head plates**\nI'm updating the bear's head with glossy chitin plates and fine seams, growing the horn from that base while keeping fur on the belly and legs and leaving the rest unchanged.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae754dac2e97ad7fdc948cc",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0ozdWpqUThWTldXcE9ZREFKd3liUWdUVHFvSGJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczo3ZGI0MDAyMC02ZGFiLTRkYTQtODBjZS00ZTFjOTZmNjViY2M6R0J1OUF6VG1ZREhPaDFVRkFLSzVCTWpvc2ROcGJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM1NDU0MzR9.Q8WLFwGP4Fea2KB4okTqxtG1EuIR",
+    "result": "<elided> (726176 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": "resp_6ae75469f6213a2197a04758",
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 22308,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 20800
+   },
+   "output_tokens": 1261,
+   "output_tokens_details": {
+    "reasoning_tokens": 389
+   },
+   "total_tokens": 23569
+  },
+  "user": null
+ }
+}

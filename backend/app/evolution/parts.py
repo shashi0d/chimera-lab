@@ -173,12 +173,26 @@ def _an(word: str) -> str:
 
 
 def part_owner(g: Any, tax: Any, text: str) -> Animal | None:
-    """The parent an appendage text belongs to: it starts with that parent's common name."""
+    """The parent an appendage text belongs to: it starts with that parent's common name (or, as a model plan may
+    write it, its id: "european_rhinoceros_beetle head horn"; S3b validation finding)."""
     low = text.lower()
     for pid in (g.parents.sire, g.parents.dam):
-        if low.startswith(tax.animals[pid].common_name.lower() + " "):
+        if low.startswith(tax.animals[pid].common_name.lower() + " ") or low.startswith(pid.lower() + " "):
             return tax.animals[pid]
     return None
+
+
+def normalize_appendages(g: Any, tax: Any) -> None:
+    """Rewrite an id-prefixed appendage to the parent's common name, so every reader sees one spelling."""
+    out = []
+    for a in g.limb_plan.appendages:
+        for pid in (g.parents.sire, g.parents.dam):
+            if a.lower().startswith(pid.lower() + " "):
+                a = tax.animals[pid].common_name.lower() + a[len(pid):]
+                break
+        if a not in out:
+            out.append(a)
+    g.limb_plan.appendages = out
 
 
 def dorsal_wings(g: Any, tax: Any) -> list[str]:

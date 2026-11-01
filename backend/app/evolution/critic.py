@@ -438,6 +438,8 @@ def planned_concepts(g: Genome, tax: Taxonomy) -> tuple[set[str], set[str]]:
     bodies = [host] if host else [tax.animals[g.parents.sire], tax.animals[g.parents.dam]]
     for a in bodies:
         exp |= CLASS_BASE.get(a.tax_class, set())
+        if a.order == "Testudines":  # S3b validation: turtles and tortoises have a beak
+            exp.add("beak")
         if a.covering in COVER_CONCEPT:
             exp.add(COVER_CONCEPT[a.covering])
         exp |= concepts_in(" ".join(a.features))

@@ -1,0 +1,83 @@
+{
+ "purpose": "evo_polish",
+ "request": {
+  "model": "meta-models/muse-spark-open-1026",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You lightly edit a text-to-image prompt for readability. Keep the first sentence word for word. Do not add, remove or change any animal, body part, color, count, strength, habitat or view. Do not add brand or franchise names. Stay within 20 percent of the original length. Return the edited prompt only."
+   },
+   {
+    "role": "user",
+    "content": "Silhouette: Four-legged horse frame. Host frame: the horse sets the outline, body size and overall frame. A single creature that combines a indian pangolin and a horse. Head of the horse, fully visible and uncluttered, with clear, discernible eyes. Details: horse body and legs, with its own dense fur on the face and belly, plain coat, no stripes or spots; from the indian pangolin, as parts and materials on the horse's own body: large overlapping keratin scales in its own colors, grown from the skin as the horse's own covering over the crown of the head, neck, shoulders, back, flanks, hips, legs and tail: it replaces the horse's dense fur there and conforms to the horse's body, each scale sized to the horse's own body segments and muscle masses, one scale per segment or muscle mass; the dense fur stops at the covering's edge, and the face and belly keep the horse's own dense fur. The covering follows the body's own shape. Bilaterally symmetrical, recognizable limbs, visible sense organs. Habitat cue (grassland): dark back and light belly (strong countershading). Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration."
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "polished_prompt",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "prompt"
+     ],
+     "properties": {
+      "prompt": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0.2,
+  "max_tokens": 15000
+ },
+ "response": {
+  "id": "chatcmpl-3f446cc6fccc4d0caffff6266be903a7",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\"prompt\":\"Silhouette: Four-legged horse frame. Host frame: the horse sets the outline, body size and overall frame. A single creature combining an indian pangolin and a horse. The head is that of the horse, fully visible and uncluttered, with clear, discernible eyes. Details: horse body and legs, with its own dense fur on the face and belly, plain coat with no stripes or spots; from the indian pangolin, as parts and materials on the horse's own body, large overlapping keratin scales in its own colors, grown from the skin as the horse's own covering over the crown of the head, neck, shoulders, back, flanks, hips, legs and tail; it replaces the horse's dense fur there and conforms to the horse's body, each scale sized to the horse's own body segments and muscle masses, one scale per segment or muscle mass; the dense fur stops at the covering's edge, and the face and belly keep the horse's own dense fur. The covering follows the body's own shape. Bilaterally symmetrical, with recognizable limbs and visible sense organs. Habitat cue (grassland): dark back and light belly (strong countershading). Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration.\"}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null,
+     "reasoning_content": "<elided> (15302 chars)"
+    }
+   }
+  ],
+  "created": 1793547805,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 4501,
+   "prompt_tokens": 502,
+   "total_tokens": 5003,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 3684,
+    "audio_tokens": 0,
+    "reasoning_tokens": 4193,
+    "rejected_prediction_tokens": 2028,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 128,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

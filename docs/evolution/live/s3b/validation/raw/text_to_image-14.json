@@ -1,0 +1,110 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Show the planned crab contribution only as hard, glossy chitin plates with fine seams on the gray wolf's own body over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, not as separate animals; keep everything else the same. Show the planned hard, glossy chitin plates with fine seams over the head, neck, shoulders, back, flanks, belly, hips, legs and tail; keep everything else the same. Show the hard, glossy chitin plates with fine seams grown in the skin over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, as one covering that replaces the gray wolf's fur there; the fur stops at its edge; keep everything else the same.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ],
+  "previous_response_id": "resp_6ae75b117d66a2f710894702"
+ },
+ "response": {
+  "id": "resp_6ae75b8caa321c45e5e442cd",
+  "access_programs": null,
+  "created_at": 1793547148.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae75b8c3de4132ffb5c4c1d",
+    "summary": [
+     {
+      "text": "**Editing wolf with chitin armor**\nI'm updating the image to add chitin plates across the head, neck, shoulders, back, flanks, belly, hips, legs, and tail, while keeping the wolf's face, eyes, and overall look the same.\n**Composing hybrid wolf design**\nI'm shaping the image around a wolf with chitin covering the head while keeping the snout and other wolf features visible, and preparing to generate the final artwork.\n**Refining hybrid wolf design**\nI'm adjusting the edit to keep fur on the lower muzzle while adding chitin plates to the head, and I'm preparing another generation with that balance.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae75b8c97590fe69f544b1f",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0t0UndqUXYxazA1WEhjR0FJRFB1enZvMFNzYmJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczo4OGE0ZmZlNS05OTg2LTQxMTQtOTA2YS1iZDgwMWQwZjFkMDk6R0Vma2J6VDNxLVp3WXI0R0FEel9LWWFyMVE1Q2JnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM1NDcxNDh9.Q8WLFwF8_FaJQh5TvmsV8eGcTttR",
+    "result": "<elided> (744712 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": "resp_6ae75b117d66a2f710894702",
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 32723,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 17920
+   },
+   "output_tokens": 1521,
+   "output_tokens_details": {
+    "reasoning_tokens": 212
+   },
+   "total_tokens": 34244
+  },
+  "user": null
+ }
+}

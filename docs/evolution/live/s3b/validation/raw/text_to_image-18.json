@@ -1,0 +1,109 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Silhouette: Four-legged horse frame. Host frame: the horse sets the outline, body size and overall frame. A single creature combining an indian pangolin and a horse. The head is that of the horse, fully visible and uncluttered, with clear, discernible eyes. Details: horse body and legs, with its own dense fur on the face and belly and a plain coat with no stripes or spots; from the indian pangolin, as parts and materials on the horse's own body, large overlapping keratin scales in its own colors, grown from the skin as the horse's own covering over the crown of the head, neck, shoulders, back, flanks, hips, legs and tail. This covering replaces the horse's dense fur there and conforms to the horse's body, each scale sized to the horse's own body segments and muscle masses, one scale per segment or muscle mass; the dense fur stops at the covering's edge, while the face and belly retain the horse's own dense fur. The covering follows the body's own shape. Bilaterally symmetrical, with recognizable limbs and visible sense organs. Habitat cue (forest): dark back and light belly (mild countershading). Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "id": "resp_6ae75eecba44e582b41f47d1",
+  "access_programs": null,
+  "created_at": 1793548012.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae75eeca695d750d16c4a11",
+    "summary": [
+     {
+      "text": "**Designing hybrid creature silhouette**\nI'm planning a text-to-image of a horse-framed silhouette with a horse head and clear eyes, then layering large overlapping pangolin keratin scales over the body while keeping the legs, fur on face and belly, and plain coat.\n**Finding pangolin reference images**\nI'm looking up Indian pangolin references to guide the illustration, focusing on scale patterns, body proportions, and countershading for the horse-like creature.\n**Generating pangolin hybrid image**\nI'm preparing to generate the media using the pangolin references, focusing on the hybrid creature's silhouette, texture, and overall design.\n**Refining lighting and texture**\nI'm preparing one more version with softer lighting and clearer scales and fur, while keeping the plain light background and adding subtle forest cues.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae75eecfc184161bbbc496b",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0U4VHBUU21hMkNib2I4R0FJbzd5WlRLNzZvT2JnMWlBUUJlIiwicmVzdW1lX2lkIjoiczpmZTFmMmU2OS1jNGY3LTQ5NTItOTE4OC03MjUxODBmZjdjNjA6R0R5RXZEUklOQzZQdU8wREFQTFI1TERYTmlnUWJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM1NDgwMTJ9.Q8WLFwFci6s-OhrhcBp_RVXpXW9b",
+    "result": "<elided> (768264 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 28750,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 23744
+   },
+   "output_tokens": 2588,
+   "output_tokens_details": {
+    "reasoning_tokens": 427
+   },
+   "total_tokens": 31338
+  },
+  "user": null
+ }
+}

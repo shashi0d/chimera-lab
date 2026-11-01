@@ -1,0 +1,109 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Silhouette: Four-legged tortoise frame. Host frame: the tortoise sets the outline, body size and overall frame. A single creature combining a tortoise and a domestic goat. The head is that of the tortoise, fully visible and uncluttered, with clear, discernible eyes. Details: tortoise body and legs, with its own hard shell plates on the face, neck, shoulders, belly, legs and tail; plain coat with no stripes or spots. From the domestic goat, as parts and materials on the tortoise's own body: dense fur in its own colors, grown from the skin as the tortoise's own covering over the back, flanks and hips, replacing the tortoise's hard shell plates there and conforming to the tortoise's body, sized to the tortoise's body and following its contours. The hard shell plates stop at the covering's edge, while the face, neck, shoulders, belly, legs and tail retain the tortoise's own hard shell plates. The covering follows the body's own shape. Bilaterally symmetrical, with recognizable limbs and visible sense organs. Habitat cue (grassland): dark back and light belly (strong countershading). Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "id": "resp_6ae75fb4a82de9ac42f84d13",
+  "access_programs": null,
+  "created_at": 1793548212.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae75fb40505cc61b85c4fd6",
+    "summary": [
+     {
+      "text": "**Designing tortoise-goat hybrid**\nI'm planning a single creature with a tortoise silhouette and frame, giving it a fully visible tortoise head with clear eyes and a hard shell, then adding dense goat fur as its own covering over the back.\n**Composing natural history illustration**\nI'm assembling a watercolor, side three-quarter view of the hybrid: tortoise head and limbs with shell plates, dorsal carapace replaced by dense goat fur, countershading, firm ground contact, and soft shadow on a plain light background.\n**Refining goat fur detail**\nI'm preparing another image generation to emphasize the goat and add more visible fur, keeping the natural history style while improving clarity.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae75fb4b29d3dba673d47f3",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0RYeEF6U3FsRm9QT3lJRUFIM29jd3RQSzJJcmJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczozMzI3MjljZS04OTRiLTQzN2ItYjEzYy1kYTdhNGRjZTk2MWY6R1BIdkF6Um10UThLcTRjRUFQQWNyTzg0dnA0SmJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM1NDgyMTJ9.Q8WLFwHiPowTP0SQw1hkCfA0pIoR",
+    "result": "<elided> (884364 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 20842,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 16448
+   },
+   "output_tokens": 2966,
+   "output_tokens_details": {
+    "reasoning_tokens": 677
+   },
+   "total_tokens": 23808
+  },
+  "user": null
+ }
+}

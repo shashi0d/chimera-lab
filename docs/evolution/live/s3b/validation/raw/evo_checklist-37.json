@@ -1,0 +1,130 @@
+{
+ "purpose": "evo_checklist",
+ "request": {
+  "model": "meta-models/muse-spark-open-1026",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture of an animal and check it against a list of visible features. For each item, answer yes if the feature is clearly visible, no if the picture clearly shows otherwise, or unclear if you cannot tell. Copy each item's text exactly, in the given order. Judge only what is visible. creatures: how many separate creatures are in the picture. animals: the real animal species whose features you can clearly see, as everyday English common names, at most three. notes: one short sentence."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "Features to check:\n1. a tortoise body shape\n2. a tortoise head with visible eyes\n3. only parts and materials of the domestic goat, no whole domestic goat animals on the body\n4. dense fur patches on the back and flanks"
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (927255 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "feature_checklist",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "answers",
+      "creatures",
+      "animals",
+      "notes"
+     ],
+     "properties": {
+      "answers": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "item",
+         "answer"
+        ],
+        "properties": {
+         "item": {
+          "type": "string"
+         },
+         "answer": {
+          "type": "string",
+          "enum": [
+           "yes",
+           "no",
+           "unclear"
+          ]
+         }
+        }
+       }
+      },
+      "creatures": {
+       "type": "integer"
+      },
+      "animals": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "notes": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0,
+  "max_tokens": 6000
+ },
+ "response": {
+  "id": "chatcmpl-04d7d9e0985f486ba6d022168028fc01",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\n  \"answers\": [\n    {\n      \"item\": \"a tortoise body shape\",\n      \"answer\": \"yes\"\n    },\n    {\n      \"item\": \"a tortoise head with visible eyes\",\n      \"answer\": \"yes\"\n    },\n    {\n      \"item\": \"only parts and materials of the domestic goat, no whole domestic goat animals on the body\",\n      \"answer\": \"unclear\"\n    },\n    {\n      \"item\": \"dense fur patches on the back and flanks\",\n      \"answer\": \"yes\"\n    }\n  ],\n  \"creatures\": 1,\n  \"animals\": [\"tortoise\"],\n  \"notes\": \"Single tortoise shown in profile with thick brown wool covering the carapace and no whole goats visible, but the wool species cannot be confirmed as goat from image alone.\"\n}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null,
+     "reasoning_content": "<elided> (11669 chars)"
+    }
+   }
+  ],
+  "created": 1793548599,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 2824,
+   "prompt_tokens": 3668,
+   "total_tokens": 6492,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 2054,
+    "audio_tokens": 0,
+    "reasoning_tokens": 2640,
+    "rejected_prediction_tokens": 3336,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 128,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

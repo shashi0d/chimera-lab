@@ -29,12 +29,12 @@ from app.evolution.fiction import settle
 from app.evolution.gbif import FixtureGbif, GbifClient
 from app.evolution.genome import DESIGN_MODES, TRAIT_TAGS, Genome, Trait, validate_plan
 from app.evolution.growth import drift as growth_drift
-from app.evolution.growth import has_covering, host_first
+from app.evolution.growth import has_covering, host_first, planned_counts
 from app.evolution.growth import instruction as growth_instruction
 from app.evolution.habitat import apply_habitat, choose_habitat, clear_habitat
 from app.evolution.inspect import Item, edit_instruction, inspect, inspect_checklist, plan_items
 from app.evolution.judge import judge
-from app.evolution.parts import fix_parts
+from app.evolution.parts import fix_parts, normalize_appendages
 from app.evolution.physics import run_checks
 from app.evolution.prompt import PROMPT_CARDS, accept_polish, compile_prompt
 from app.evolution.resolve import LearnedStore, Resolution, Resolver
@@ -180,6 +180,7 @@ class EvoEngine:
         g = g.model_copy(deep=True)
         g.render_details = []  # S2: rebuilt by the code steps below; model text never enters it
         locked = bool(r.pair and r.pair.get("locked"))
+        normalize_appendages(g, self.tax)  # S3b: a model plan may prefix a part with the parent's id
         g.checks += fix_parts(g, self.tax)  # S2 (E4c): a model plan's parts are checked against the class too
         gate_cards = gate(g.traits, r, g.host, self.tax)  # E2b: a model plan cannot undo GATE (e.g. a mane on feathers)
         real = is_real_hybrid(r)
@@ -336,7 +337,7 @@ class EvoEngine:
         img2 = await self.meter.call("image", "edit", self.renderer.generate(instr, [], "1:1", img1.response_id))
         if self.mock:
             self.registry.note(img2.data, full)
-        d = await growth_drift(img1.data, img2.data, critics_for(self.spark), self.meter)
+        d = await growth_drift(img1.data, img2.data, critics_for(self.spark), self.meter, planned_counts(g, self.tax))
         growth = {"first_prompt": first_prompt, "instruction": instr, "first_image_key": first_key,
                   "previous_response_id": img1.response_id, "drift": d, "used": not d["drifted"]}
         prompt_used = f"{first_prompt}\n\n[edit turn]\n{instr}"

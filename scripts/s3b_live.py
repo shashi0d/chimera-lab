@@ -163,15 +163,16 @@ async def choose(eng: Any, name: str) -> tuple[str, str]:
 
 
 async def part_validate() -> None:
-    eng, calls, before = S.setup("validation", "s3b_validate")
+    eng, calls, before = S.setup("validation", os.environ.get("S3B_CACHE", "s3b_validate"))  # a fresh cache for reruns
     await S.learned(eng)
     only = sys.argv[2:]  # optional run keys
     summary = []
     for key, sire, dam, mode, host, growth, tuned in RUNS:
         if only and key not in only:
             continue
-        for n in range(1, REPEATS + 1):
-            vdir = OUT / "validation" / key / f"r{n}"
+        tag = os.environ.get("S3B_TAG", "")  # a rerun after a fix is stored beside the original (r1_fix)
+        for n in range(1, int(os.environ.get("S3B_REPEATS", REPEATS)) + 1):
+            vdir = OUT / "validation" / key / f"r{n}{tag}"
             if (vdir / "doc.json").exists():
                 print("cached", key, n)
                 continue

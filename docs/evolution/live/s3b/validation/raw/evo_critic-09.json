@@ -1,0 +1,105 @@
+{
+ "purpose": "evo_critic",
+ "request": {
+  "model": "meta-models/muse-spark-open-1026",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture with no other context. animals: the real animal species whose features you can clearly see in it, as everyday English common names, most prominent first, at most three. If it looks like one ordinary animal, list only that animal. creatures: how many separate creatures are in the picture. notes: one short sentence on what you see."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "What animals do you see, and how many creatures?"
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (895415 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "readability_critic",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "animals",
+      "creatures",
+      "notes"
+     ],
+     "properties": {
+      "animals": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "creatures": {
+       "type": "integer"
+      },
+      "notes": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0,
+  "max_tokens": 4000
+ },
+ "response": {
+  "id": "chatcmpl-b14491cc23f14ba3adf95459e34aa7ab",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{ \"animals\": [\"pangolin\", \"axolotl\"], \"creatures\": 1, \"notes\": \"A single illustrated hybrid creature with a pangolin's scaly armored body and an axolotl's pink feathery gills and pale face stands in profile.\" }",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null,
+     "reasoning_content": "We need to answer: What animals do you see, and how many creatures?\n\nWe look at one picture with no other context. animals: the real animal species whose features you can clearly see in it, as everyday English common names, most prominent first, at most three. If it looks like one ordinary animal, list only that animal. creatures: how many separate creatures are in the picture. notes: one short sentence on what you see.\n\nWe have a hybrid creature: pangolin scales + axolotl gills/face. So animals: pangolin, axolotl. Need to list as everyday English common names, most prominent first, at most three. So pangolin is most prominent (body covered in scales), axolotl second (gills, face). Could also be salamander? But axolotl is specific. Use axolotl.\n\nCreatures: how many separate creatures are in the picture. There's one creature depicted, though it's a hybrid. So count = 1.\n\nNotes: one short sentence on what you see.\n\nWe must follow instruction: animals: the real animal species whose features you can clearly see in it, as everyday English common names, most prominent first, at most three. If it looks like one ordinary animal, list only that animal.\n\nSo we should output something like JSON? The prompt says: animals: ... creatures: ... notes: ... Probably need to provide structured output.\n\nWe should provide:\n\nanimals: [\"pangolin\", \"axolotl\"]\ncreatures: 1\nnotes: \"A single fantastical hybrid creature with pangolin armor and axolotl gills stands on a patch of ground.\"\n\nNeed to ensure we follow format. The user asks: What animals do you see, and how many creatures? So answer in that format.\n\nProbably respond with:\n\nanimals: pangolin, axolotl\ncreatures: 1\nnotes: ...\n\nMake sure to be concise.\n\nWe should not hallucinate. The image shows one creature that is a composite. So we list two animals.\n\nPotentially also could argue it's pangolin and salamander. But axolotl is more accurate due to external gills. Use axolotl.\n\nCheck policy: No disallowed content. It's fine.\n\nWe should ensure we answer correctly.\n\nWe might want to provide JSON.\n\nThe instruction: \"animals: the real animal species whose features you can clearly see in it, as everyday English common names, most prominent first, at most three. If it looks like one ordinary animal, list only that animal. creatures: how many separate creatures are in the picture. notes: one short sentence on what you see.\"\n\nSo output should have those three fields.\n\nProbably best to output:\n\nanimals: pangolin, axolotl\ncreatures: 1\nnotes: A digitally illustrated hybrid creature combining a pangolin's scaly body with an axolotl's pink external gills and pale face.\n\nMake sure notes is one short sentence.\n\nWe should not add extra fluff.\n\nWe should comply with reasoning strength 512 - but we have already reasoned.\n\nWe should ensure we don't claim it's a real animal; it's a hybrid.\n\nWe should answer succinctly.\n\nPotential nuance: The creature count is 1. Some might count as 1.\n\nWe should not list more than three animals. Two is fine.\n\nWe should use everyday English common names: pangolin, axolotl are common names.\n\nWe should ensure we list most prominent first: pangolin is most prominent due to body coverage.\n\nWe should provide final answer.\n\nWe must not add disallowed content.\n\nWe should output in plain text.\n\nProbably use bullet list or JSON.\n\nI'll output:\n\nanimals: [\"pangolin\", \"axolotl\"]\ncreatures: 1\nnotes: \"One chimeric creature with a pangolin's scaled body and an axolotl's feathery pink gills is shown in profile.\"\n\nThat satisfies.\n\nWe should ensure we follow the instruction to look at one picture with no other context.\n\nWe should not mention cutoff date.\n\nWe should answer directly.\n\nWe should not add extra explanation beyond notes.\n\nWe should provide final answer in requested format.\n\nWe should ensure we don't hallucinate multiple creatures.\n\nWe should be helpful.\n\nWe should output final."
+    }
+   }
+  ],
+  "created": 1793546857,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 936,
+   "prompt_tokens": 3595,
+   "total_tokens": 4531,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 680,
+    "audio_tokens": 0,
+    "reasoning_tokens": 866,
+    "rejected_prediction_tokens": 1112,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 128,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

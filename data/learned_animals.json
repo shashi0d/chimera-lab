@@ -1315,6 +1315,897 @@
     }
    },
    "citations_verified_at": "2026-11-01T03:52:55+00:00"
+  },
+  "crab": {
+   "id": "crab",
+   "common_name": "crab",
+   "scientific_name": "Cancer pagurus",
+   "kind": "species",
+   "breed": "",
+   "note": "'crab' names several species; chose the crab (Cancer pagurus), the most common reading. Alternatives are listed.",
+   "inputs": [
+    "crab"
+   ],
+   "alternatives": [
+    {
+     "scientific_name": "Carcinus maenas",
+     "common_name": "European green crab"
+    },
+    {
+     "scientific_name": "Callinectes sapidus",
+     "common_name": "Atlantic blue crab"
+    },
+    {
+     "scientific_name": "Paralithodes camtschaticus",
+     "common_name": "red king crab"
+    },
+    {
+     "scientific_name": "Ocypode quadrata",
+     "common_name": "Atlantic ghost crab"
+    }
+   ],
+   "taxonomy": {
+    "class": "Malacostraca",
+    "order": "Decapoda",
+    "family": "Cancridae",
+    "genus": "Cancer",
+    "gbif_key": "2222085"
+   },
+   "taxonomy_source": "gbif",
+   "traits": {
+    "body_plan": [
+     "multi_legged"
+    ],
+    "primary_locomotor_part": "multiple legs",
+    "covering": "exoskeleton",
+    "movement": [
+     "walk"
+    ],
+    "habitat": [
+     "marine"
+    ],
+    "climate": [
+     "temperate"
+    ],
+    "diet": "carnivore",
+    "active_time": [
+     "nocturnal"
+    ],
+    "body_mass_kg": {
+     "min": 0.5,
+     "max": 3.0
+    },
+    "body_length_m": {
+     "min": 0.15,
+     "max": 0.25
+    },
+    "visible_features": [
+     "broad reddish-brown oval carapace",
+     "pie-crust frilled edge with rounded lobes",
+     "large evenly sized claws with black tips",
+     "four pairs of small walking legs"
+    ],
+    "mouthparts": "mandibles",
+    "breathing": "gills"
+   },
+   "details": {
+    "mouthparts": "Paired crushing mandibles behind maxillules, maxillae and three pairs of maxillipeds; powerful chelae crush and shatter mollusc shells and crustacean carapaces",
+    "breathing": "Paired gills in branchial chambers beneath the sides of the carapace, ventilated to extract oxygen from seawater"
+   },
+   "claims": [],
+   "provenance": {
+    "body_plan": "model-estimated (citation not accepted: page could not be fetched: HTTPStatusError: Client error '403 Forbidden' for url 'https://www.britannica.com/animal/crab/Behaviour-and-ecology'\n)",
+    "primary_locomotor_part": "model-estimated (citation not accepted: page could not be fetched: HTTPStatusError: Client error '403 Forbidden' for url 'https://www.britannica.com/animal/crab/Behaviour-and-ecology'\n)",
+    "covering": "model-estimated (citation not accepted: d.docksci.com: domain not in data/source_tiers.json)",
+    "movement": "model-estimated (citation not accepted: page could not be fetched: HTTPStatusError: Client error '403 Forbidden' for url 'https://www.britannica.com/animal/crab/Behaviour-and-ecology'\n)",
+    "habitat": "model-estimated (citation not accepted: fao.org: domain not in data/source_tiers.json)",
+    "climate": "model-estimated (citation not accepted: page could not be fetched: ConnectError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not va)",
+    "diet": "model-estimated (citation not accepted: page could not be fetched: ConnectError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not va)",
+    "active_time": "model-estimated (citation not accepted: scarboroughmuseumsandgalleries.org.uk: domain not in data/source_tiers.json)",
+    "body_mass_kg": "model-estimated (citation not accepted: artsandculture.google.com: domain not in data/source_tiers.json)",
+    "body_length_m": "model-estimated (citation not accepted: scarboroughmuseumsandgalleries.org.uk: domain not in data/source_tiers.json)",
+    "visible_features": "model-estimated (citation not accepted: www2.habitas.org.uk: domain not in data/source_tiers.json)",
+    "mouthparts": "model-estimated (citation not accepted: page could not be fetched: HTTPStatusError: Client error '403 Forbidden' for url 'https://www.britannica.com/animal/crab/Behaviour-and-ecology'\n)",
+    "breathing": "model-estimated (citation not accepted: page could not be fetched: HTTPStatusError: Client error '403 Forbidden' for url 'https://www.britannica.com/animal/crab/Behaviour-and-ecology'\n)",
+    "class": "gbif",
+    "order": "gbif",
+    "family": "gbif",
+    "genus": "gbif",
+    "gbif_key": "gbif",
+    "scientific_name": "gbif",
+    "common_name": "model-estimated"
+   },
+   "citations": {},
+   "traits_note": "0 of 13 fields web-cited (source tier and quote checked)",
+   "citation_checks": {
+    "body_plan": {
+     "field": "body_plan",
+     "url": "https://www.britannica.com/animal/crab/Behaviour-and-ecology",
+     "host": "britannica.com",
+     "tier": 2,
+     "source_status": "tier2",
+     "quote": "The presence of five pairs of thoracic legs (pereiopods) is the basis for the name decapod (from the Greek meaning “10 legs”).",
+     "quote_status": "fetch_failed",
+     "status": "fetch_failed",
+     "provenance": "model-estimated",
+     "reason": "page could not be fetched: HTTPStatusError: Client error '403 Forbidden' for url 'https://www.britannica.com/animal/crab/Behaviour-and-ecology'\n",
+     "short_quote": false
+    },
+    "primary_locomotor_part": {
+     "field": "primary_locomotor_part",
+     "url": "https://www.britannica.com/animal/crab/Behaviour-and-ecology",
+     "host": "britannica.com",
+     "tier": 2,
+     "source_status": "tier2",
+     "quote": "The anterior thoracic appendages serve as mouthparts, while the posterior pairs are the walking legs, or pereiopods.",
+     "quote_status": "fetch_failed",
+     "status": "fetch_failed",
+     "provenance": "model-estimated",
+     "reason": "page could not be fetched: HTTPStatusError: Client error '403 Forbidden' for url 'https://www.britannica.com/animal/crab/Behaviour-and-ecology'\n",
+     "short_quote": false
+    },
+    "covering": {
+     "field": "covering",
+     "url": "https://d.docksci.com/download/characterization-and-anti-settlement-aspects-of-surface-micro-structures-from-ca_5a8b329fd64ab2ee92dab3af.html",
+     "host": "d.docksci.com",
+     "tier": null,
+     "source_status": "unlisted",
+     "quote": "the exoskeleton of C. pagurus is heavily biomineralized, consisting of varying amounts of chitin (15-40%) and proteins (20-40%)",
+     "quote_status": "not_checked",
+     "status": "unlisted_source",
+     "provenance": "model-estimated",
+     "reason": "d.docksci.com: domain not in data/source_tiers.json",
+     "short_quote": false
+    },
+    "movement": {
+     "field": "movement",
+     "url": "https://www.britannica.com/animal/crab/Behaviour-and-ecology",
+     "host": "britannica.com",
+     "tier": 2,
+     "source_status": "tier2",
+     "quote": "For locomotion, most crabs walk or crawl",
+     "quote_status": "fetch_failed",
+     "status": "fetch_failed",
+     "provenance": "model-estimated",
+     "reason": "page could not be fetched: HTTPStatusError: Client error '403 Forbidden' for url 'https://www.britannica.com/animal/crab/Behaviour-and-ecology'\n",
+     "short_quote": false
+    },
+    "habitat": {
+     "field": "habitat",
+     "url": "https://www.fao.org/figis/pdf/fishery/species/2627/en?title=FAO%20Fisheries%20%26%20Aquaculture%20-%20Species%20Fact%20Sheets%20-%20Cancer%20pagurus%20(Linnaeus%2C%201758)",
+     "host": "fao.org",
+     "tier": null,
+     "source_status": "unlisted",
+     "quote": "Benthic, lives on a wide range on bottoms of sand, gravel and rocky, in depths of 6 to 100 m",
+     "quote_status": "not_checked",
+     "status": "unlisted_source",
+     "provenance": "model-estimated",
+     "reason": "fao.org: domain not in data/source_tiers.json",
+     "short_quote": false
+    },
+    "climate": {
+     "field": "climate",
+     "url": "https://marlin.ac.uk/biotic/browse.php?sp=4129&show=all",
+     "host": "marlin.ac.uk",
+     "tier": 1,
+     "source_status": "tier1",
+     "quote": "From Norway throughout the North Sea and English Channel to the coast of Portugal.",
+     "quote_status": "fetch_failed",
+     "status": "fetch_failed",
+     "provenance": "model-estimated",
+     "reason": "page could not be fetched: ConnectError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not va",
+     "short_quote": false
+    },
+    "diet": {
+     "field": "diet",
+     "url": "https://marlin.ac.uk/biotic/browse.php?sp=4129&show=all",
+     "host": "marlin.ac.uk",
+     "tier": 1,
+     "source_status": "tier1",
+     "quote": "It is an active predator and consumes a variety of crustaceans",
+     "quote_status": "fetch_failed",
+     "status": "fetch_failed",
+     "provenance": "model-estimated",
+     "reason": "page could not be fetched: ConnectError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not va",
+     "short_quote": false
+    },
+    "active_time": {
+     "field": "active_time",
+     "url": "http://scarboroughmuseumsandgalleries.org.uk/object/brown-crab/",
+     "host": "scarboroughmuseumsandgalleries.org.uk",
+     "tier": null,
+     "source_status": "unlisted",
+     "quote": "The adult edible crab is a nocturnal creature, spending most of the day buried in sand on the seabed, or hiding in cracks and holes in the rocks, then venturing out at night to forage for food.",
+     "quote_status": "not_checked",
+     "status": "unlisted_source",
+     "provenance": "model-estimated",
+     "reason": "scarboroughmuseumsandgalleries.org.uk: domain not in data/source_tiers.json",
+     "short_quote": false
+    },
+    "body_mass_kg": {
+     "field": "body_mass_kg",
+     "url": "https://artsandculture.google.com/asset/brown-crab-cancer-pagurus/DwEDntscVBAWfg",
+     "host": "artsandculture.google.com",
+     "tier": null,
+     "source_status": "unlisted",
+     "quote": "A mature adult may have a carapace width up to 25 cm and weigh up to 3 kg.",
+     "quote_status": "not_checked",
+     "status": "unlisted_source",
+     "provenance": "model-estimated",
+     "reason": "artsandculture.google.com: domain not in data/source_tiers.json",
+     "short_quote": false
+    },
+    "body_length_m": {
+     "field": "body_length_m",
+     "url": "http://scarboroughmuseumsandgalleries.org.uk/object/brown-crab/",
+     "host": "scarboroughmuseumsandgalleries.org.uk",
+     "tier": null,
+     "source_status": "unlisted",
+     "quote": "generally measures at full adulthood around 15cm, or six inches, wide, with those reaching 25cm, or 10 inches, wide, considered exceptional",
+     "quote_status": "not_checked",
+     "status": "unlisted_source",
+     "provenance": "model-estimated",
+     "reason": "scarboroughmuseumsandgalleries.org.uk: domain not in data/source_tiers.json",
+     "short_quote": false
+    },
+    "visible_features": {
+     "field": "visible_features",
+     "url": "https://www2.habitas.org.uk/marbiop-ni/species.php?item=S26460",
+     "host": "www2.habitas.org.uk",
+     "tier": null,
+     "source_status": "unlisted",
+     "quote": "A large reddish-brown crab with carapace measuring up to 25 cm across. There are distinctive rounded lobes around the edge of the carapace which give it a 'pie-crust' appearance. The chelipeds bear large (usually) evenly sized claws with black tips",
+     "quote_status": "not_checked",
+     "status": "unlisted_source",
+     "provenance": "model-estimated",
+     "reason": "www2.habitas.org.uk: domain not in data/source_tiers.json",
+     "short_quote": false
+    },
+    "mouthparts": {
+     "field": "mouthparts",
+     "url": "https://www.britannica.com/animal/crab/Behaviour-and-ecology",
+     "host": "britannica.com",
+     "tier": 2,
+     "source_status": "tier2",
+     "quote": "The remaining three head appendages are either the crushing and chewing mandibles or the flattened, multilobed food manipulators.",
+     "quote_status": "fetch_failed",
+     "status": "fetch_failed",
+     "provenance": "model-estimated",
+     "reason": "page could not be fetched: HTTPStatusError: Client error '403 Forbidden' for url 'https://www.britannica.com/animal/crab/Behaviour-and-ecology'\n",
+     "short_quote": false
+    },
+    "breathing": {
+     "field": "breathing",
+     "url": "https://www.britannica.com/animal/crab/Behaviour-and-ecology",
+     "host": "britannica.com",
+     "tier": 2,
+     "source_status": "tier2",
+     "quote": "As a rule, crabs breathe by gills, which are lodged in a pair of cavities beneath the sides of the carapace.",
+     "quote_status": "fetch_failed",
+     "status": "fetch_failed",
+     "provenance": "model-estimated",
+     "reason": "page could not be fetched: HTTPStatusError: Client error '403 Forbidden' for url 'https://www.britannica.com/animal/crab/Behaviour-and-ecology'\n",
+     "short_quote": false
+    }
+   },
+   "learned_at": "2026-11-01T15:29:31+00:00"
+  },
+  "indian_pangolin": {
+   "id": "indian_pangolin",
+   "common_name": "indian pangolin",
+   "scientific_name": "Manis crassicaudata",
+   "kind": "species",
+   "breed": "",
+   "note": "",
+   "inputs": [
+    "indian pangolin"
+   ],
+   "alternatives": [],
+   "taxonomy": {
+    "class": "Mammalia",
+    "order": "Pholidota",
+    "family": "Manidae",
+    "genus": "Manis",
+    "gbif_key": "5219633"
+   },
+   "taxonomy_source": "gbif",
+   "traits": {
+    "body_plan": [
+     "quadruped"
+    ],
+    "primary_locomotor_part": "four legs",
+    "covering": "scales",
+    "movement": [
+     "walk",
+     "climb",
+     "burrow"
+    ],
+    "habitat": [
+     "grassland",
+     "forest",
+     "desert"
+    ],
+    "climate": [
+     "temperate",
+     "tropical",
+     "arid"
+    ],
+    "diet": "insectivore",
+    "active_time": [
+     "nocturnal"
+    ],
+    "body_mass_kg": {
+     "min": 8.0,
+     "max": 17.0
+    },
+    "body_length_m": {
+     "min": 0.45,
+     "max": 1.47
+    },
+    "visible_features": [
+     "overlapping keratin armour scales",
+     "thick muscular tapering tail",
+     "cone-shaped head with long snout",
+     "powerful limbs with long curved foreclaws",
+     "small dark eyes"
+    ],
+    "mouthparts": "toothless tongue",
+    "breathing": "lungs"
+   },
+   "details": {
+    "mouthparts": "No teeth at any age; small toothless mouth with very long sticky tongue extending ~25 cm from mouth (42.5 cm total) to lap ants and termites; food ground in muscular gizzard-like stomach with gastroliths and keratinous spines.",
+    "breathing": "Terrestrial mammal (Class Mammalia) that breathes air with diaphragm-driven bellows lungs typical of mammals."
+   },
+   "claims": [],
+   "provenance": {
+    "body_plan": "web-cited",
+    "primary_locomotor_part": "web-cited",
+    "covering": "web-cited",
+    "movement": "web-cited",
+    "habitat": "web-cited",
+    "climate": "model-estimated (citation not accepted: the quote does not appear on the page)",
+    "diet": "web-cited",
+    "active_time": "web-cited",
+    "body_mass_kg": "web-cited",
+    "body_length_m": "web-cited",
+    "visible_features": "model-estimated (citation not accepted: en.wikipedia.org: a general wiki or wiki-style aggregator)",
+    "mouthparts": "web-cited",
+    "breathing": "model-estimated (citation not accepted: en.wikipedia.org: a general wiki or wiki-style aggregator)",
+    "class": "gbif",
+    "order": "gbif",
+    "family": "gbif",
+    "genus": "gbif",
+    "gbif_key": "gbif",
+    "scientific_name": "gbif",
+    "common_name": "model-estimated"
+   },
+   "citations": {
+    "body_plan": {
+     "url": "https://animaldiversity.org/accounts/Manis_crassicaudata/",
+     "evidence": "Each of their four limbs have soft, spongy pads on the palmar sides of their feet with strong claws on each of their digits"
+    },
+    "primary_locomotor_part": {
+     "url": "https://animaldiversity.org/accounts/Manis_crassicaudata/",
+     "evidence": "Each of their four limbs have soft, spongy pads on the palmar sides of their feet with strong claws on each of their digits"
+    },
+    "covering": {
+     "url": "https://animaldiversity.org/accounts/Manis_crassicaudata/",
+     "evidence": "their blonde striated scales, with 11 to 13 rows of 280 to 305 scales covering their dorsal sides and their fore and hind limbs. These scales are composed of keratin"
+    },
+    "movement": {
+     "url": "https://animaldiversity.org/accounts/Manis_crassicaudata/",
+     "evidence": "They use their forelimbs to dig up dirt and their hind limbs to remove dirt from the dig site. To pursue food they will walk around on the forest floor... They also climb up trees, using their strong foreclaws to grip the tree and their tails for support"
+    },
+    "habitat": {
+     "url": "https://animaldiversity.org/accounts/Manis_crassicaudata/",
+     "evidence": "Indian pangolins are well adapted to desert regions and prefer barren, hilly areas. They reside in subtropical thorn forests... survive in various types of tropical forests, open land, grasslands"
+    },
+    "diet": {
+     "url": "https://animaldiversity.org/accounts/Manis_crassicaudata/",
+     "evidence": "myrmecophagous, meaning their diet consists mainly of ants and termites, but they will also eat beetles."
+    },
+    "active_time": {
+     "url": "https://animaldiversity.org/accounts/Manis_crassicaudata/",
+     "evidence": "Indian pangolins are mostly nocturnal and a majority of their activity occurs during the night."
+    },
+    "body_mass_kg": {
+     "url": "https://animaldiversity.org/accounts/Manis_crassicaudata/",
+     "evidence": "Adult Indian pangolins weigh anywhere from 8 to 17 kg, with the highest recorded weight at 20 kg."
+    },
+    "body_length_m": {
+     "url": "https://animaldiversity.org/accounts/Manis_crassicaudata/",
+     "evidence": "The total body length of fully grown Indian pangolins ranges from 45 to 147 cm. Their tails can be 33 to 45 cm long."
+    },
+    "mouthparts": {
+     "url": "https://animaldiversity.org/accounts/Manis_crassicaudata/",
+     "evidence": "While they do not have any teeth, they do have a long tongue, which they use to capture prey."
+    }
+   },
+   "traits_note": "10 of 13 fields web-cited (source tier and quote checked)",
+   "citation_checks": {
+    "body_plan": {
+     "field": "body_plan",
+     "url": "https://animaldiversity.org/accounts/Manis_crassicaudata/",
+     "host": "animaldiversity.org",
+     "tier": 1,
+     "source_status": "tier1",
+     "quote": "Each of their four limbs have soft, spongy pads on the palmar sides of their feet with strong claws on each of their digits",
+     "quote_status": "found",
+     "status": "supported",
+     "provenance": "web-cited",
+     "reason": "tier 1 source; quote found on the page",
+     "short_quote": false
+    },
+    "primary_locomotor_part": {
+     "field": "primary_locomotor_part",
+     "url": "https://animaldiversity.org/accounts/Manis_crassicaudata/",
+     "host": "animaldiversity.org",
+     "tier": 1,
+     "source_status": "tier1",
+     "quote": "Each of their four limbs have soft, spongy pads on the palmar sides of their feet with strong claws on each of their digits",
+     "quote_status": "found",
+     "status": "supported",
+     "provenance": "web-cited",
+     "reason": "tier 1 source; quote found on the page",
+     "short_quote": false
+    },
+    "covering": {
+     "field": "covering",
+     "url": "https://animaldiversity.org/accounts/Manis_crassicaudata/",
+     "host": "animaldiversity.org",
+     "tier": 1,
+     "source_status": "tier1",
+     "quote": "their blonde striated scales, with 11 to 13 rows of 280 to 305 scales covering their dorsal sides and their fore and hind limbs. These scales are composed of keratin",
+     "quote_status": "found",
+     "status": "supported",
+     "provenance": "web-cited",
+     "reason": "tier 1 source; quote found on the page",
+     "short_quote": false
+    },
+    "movement": {
+     "field": "movement",
+     "url": "https://animaldiversity.org/accounts/Manis_crassicaudata/",
+     "host": "animaldiversity.org",
+     "tier": 1,
+     "source_status": "tier1",
+     "quote": "They use their forelimbs to dig up dirt and their hind limbs to remove dirt from the dig site. To pursue food they will walk around on the forest floor... They also climb up trees, using their strong foreclaws to grip the tree and their tails for support",
+     "quote_status": "found",
+     "status": "supported",
+     "provenance": "web-cited",
+     "reason": "tier 1 source; quote found on the page",
+     "short_quote": false
+    },
+    "habitat": {
+     "field": "habitat",
+     "url": "https://animaldiversity.org/accounts/Manis_crassicaudata/",
+     "host": "animaldiversity.org",
+     "tier": 1,
+     "source_status": "tier1",
+     "quote": "Indian pangolins are well adapted to desert regions and prefer barren, hilly areas. They reside in subtropical thorn forests... survive in various types of tropical forests, open land, grasslands",
+     "quote_status": "found",
+     "status": "supported",
+     "provenance": "web-cited",
+     "reason": "tier 1 source; quote found on the page",
+     "short_quote": false
+    },
+    "climate": {
+     "field": "climate",
+     "url": "https://animaldiversity.org/accounts/Manis_crassicaudata/",
+     "host": "animaldiversity.org",
+     "tier": 1,
+     "source_status": "tier1",
+     "quote": "Indian pangolins are well adapted to desert regions and prefer barren, hilly areas. They reside in subtropical thorn forests as well as the Salt Range. Indian pangolins have also been shown to survive in various types of tropical forests",
+     "quote_status": "not_found",
+     "status": "quote_not_found",
+     "provenance": "model-estimated",
+     "reason": "the quote does not appear on the page",
+     "short_quote": false
+    },
+    "diet": {
+     "field": "diet",
+     "url": "https://animaldiversity.org/accounts/Manis_crassicaudata/",
+     "host": "animaldiversity.org",
+     "tier": 1,
+     "source_status": "tier1",
+     "quote": "myrmecophagous, meaning their diet consists mainly of ants and termites, but they will also eat beetles.",
+     "quote_status": "found",
+     "status": "supported",
+     "provenance": "web-cited",
+     "reason": "tier 1 source; quote found on the page",
+     "short_quote": false
+    },
+    "active_time": {
+     "field": "active_time",
+     "url": "https://animaldiversity.org/accounts/Manis_crassicaudata/",
+     "host": "animaldiversity.org",
+     "tier": 1,
+     "source_status": "tier1",
+     "quote": "Indian pangolins are mostly nocturnal and a majority of their activity occurs during the night.",
+     "quote_status": "found",
+     "status": "supported",
+     "provenance": "web-cited",
+     "reason": "tier 1 source; quote found on the page",
+     "short_quote": false
+    },
+    "body_mass_kg": {
+     "field": "body_mass_kg",
+     "url": "https://animaldiversity.org/accounts/Manis_crassicaudata/",
+     "host": "animaldiversity.org",
+     "tier": 1,
+     "source_status": "tier1",
+     "quote": "Adult Indian pangolins weigh anywhere from 8 to 17 kg, with the highest recorded weight at 20 kg.",
+     "quote_status": "found",
+     "status": "supported",
+     "provenance": "web-cited",
+     "reason": "tier 1 source; quote found on the page",
+     "short_quote": false
+    },
+    "body_length_m": {
+     "field": "body_length_m",
+     "url": "https://animaldiversity.org/accounts/Manis_crassicaudata/",
+     "host": "animaldiversity.org",
+     "tier": 1,
+     "source_status": "tier1",
+     "quote": "The total body length of fully grown Indian pangolins ranges from 45 to 147 cm. Their tails can be 33 to 45 cm long.",
+     "quote_status": "found",
+     "status": "supported",
+     "provenance": "web-cited",
+     "reason": "tier 1 source; quote found on the page",
+     "short_quote": false
+    },
+    "visible_features": {
+     "field": "visible_features",
+     "url": "https://en.wikipedia.org/wiki/Indian_pangolin",
+     "host": "en.wikipedia.org",
+     "tier": null,
+     "source_status": "rejected",
+     "quote": "possesses a cone-shaped head with small, dark eyes, and a long muzzle... It has powerful limbs, tipped with sharp, clawed digits. The most noticeable characteristic of the pangolin is its massive, scaled armour... It has 160-200 scales in total, about 40-46% of which are located on the tail.",
+     "quote_status": "not_checked",
+     "status": "rejected_source",
+     "provenance": "model-estimated",
+     "reason": "en.wikipedia.org: a general wiki or wiki-style aggregator",
+     "short_quote": false
+    },
+    "mouthparts": {
+     "field": "mouthparts",
+     "url": "https://animaldiversity.org/accounts/Manis_crassicaudata/",
+     "host": "animaldiversity.org",
+     "tier": 1,
+     "source_status": "tier1",
+     "quote": "While they do not have any teeth, they do have a long tongue, which they use to capture prey.",
+     "quote_status": "found",
+     "status": "supported",
+     "provenance": "web-cited",
+     "reason": "tier 1 source; quote found on the page",
+     "short_quote": false
+    },
+    "breathing": {
+     "field": "breathing",
+     "url": "https://en.wikipedia.org/wiki/Mammal",
+     "host": "en.wikipedia.org",
+     "tier": null,
+     "source_status": "rejected",
+     "quote": "The lungs of mammals are spongy and honeycombed. Breathing is mainly achieved with the diaphragm",
+     "quote_status": "not_checked",
+     "status": "rejected_source",
+     "provenance": "model-estimated",
+     "reason": "en.wikipedia.org: a general wiki or wiki-style aggregator",
+     "short_quote": false
+    }
+   },
+   "learned_at": "2026-11-01T15:43:13+00:00"
+  },
+  "tortoise": {
+   "id": "tortoise",
+   "common_name": "tortoise",
+   "scientific_name": "Testudo graeca",
+   "kind": "species",
+   "breed": "",
+   "note": "'tortoise' names several species; chose the tortoise (Testudo graeca), the most common reading. Alternatives are listed.",
+   "inputs": [
+    "tortoise"
+   ],
+   "alternatives": [
+    {
+     "scientific_name": "Chelonoidis niger",
+     "common_name": "Galápagos giant tortoise"
+    },
+    {
+     "scientific_name": "Centrochelys sulcata",
+     "common_name": "African spurred tortoise"
+    },
+    {
+     "scientific_name": "Testudo hermanni",
+     "common_name": "Hermann's tortoise"
+    },
+    {
+     "scientific_name": "Agrionemys horsfieldii",
+     "common_name": "Russian tortoise"
+    }
+   ],
+   "taxonomy": {
+    "class": "Testudines",
+    "order": "",
+    "family": "Testudinidae",
+    "genus": "Testudo",
+    "gbif_key": "2441461"
+   },
+   "taxonomy_source": "chimera_data.json tier2 (gbif)",
+   "traits": {
+    "body_plan": [
+     "quadruped"
+    ],
+    "primary_locomotor_part": "four legs",
+    "covering": "shell",
+    "movement": [
+     "walk"
+    ],
+    "habitat": [
+     "grassland",
+     "forest",
+     "desert"
+    ],
+    "climate": [
+     "temperate",
+     "arid"
+    ],
+    "diet": "herbivore",
+    "active_time": [
+     "diurnal"
+    ],
+    "body_mass_kg": {
+     "min": 0.2,
+     "max": 3.0
+    },
+    "body_length_m": {
+     "min": 0.15,
+     "max": 0.36
+    },
+    "visible_features": [
+     "high-domed brown-yellow carapace",
+     "distinct thigh spurs",
+     "sturdy scaly legs",
+     "strong claws"
+    ],
+    "mouthparts": "beak",
+    "breathing": "lungs"
+   },
+   "details": {
+    "mouthparts": "Toothless keratinous beak (rhamphotheca) forming a V-shaped jaw with serrated edge and median tomium for cropping and tearing vegetation; no teeth.",
+    "breathing": "Breathes with paired multicameral faveolar lungs ventilated by a flank-muscle pump (M. obliquus and M. transversus abdominis) moving the limb flanks, not by rib-cage expansion, because ribs are fused to the rigid carapace."
+   },
+   "claims": [
+    "Testudo hermanni"
+   ],
+   "provenance": {
+    "body_plan": "web-cited",
+    "primary_locomotor_part": "web-cited",
+    "covering": "web-cited",
+    "movement": "web-cited",
+    "habitat": "model-estimated (citation not accepted: monaconatureencyclopedia.com: domain not in data/source_tiers.json)",
+    "climate": "web-cited",
+    "diet": "web-cited",
+    "active_time": "model-estimated (citation not accepted: monaconatureencyclopedia.com: domain not in data/source_tiers.json)",
+    "body_mass_kg": "model-estimated (citation not accepted: saskatoon.ca: domain not in data/source_tiers.json)",
+    "body_length_m": "model-estimated (citation not accepted: monaconatureencyclopedia.com: domain not in data/source_tiers.json)",
+    "visible_features": "model-estimated (citation not accepted: the quote does not appear on the page)",
+    "mouthparts": "web-cited",
+    "breathing": "web-cited",
+    "class": "chimera_data.json tier2 (gbif)",
+    "order": "chimera_data.json tier2 (gbif)",
+    "family": "chimera_data.json tier2 (gbif)",
+    "genus": "chimera_data.json tier2 (gbif)",
+    "gbif_key": "chimera_data.json tier2 (gbif)",
+    "scientific_name": "chimera_data.json tier2 (gbif)",
+    "common_name": "model-estimated"
+   },
+   "citations": {
+    "body_plan": {
+     "url": "https://www.nature.com/articles/s41598-021-04273-w",
+     "evidence": "Tortoises locomote with diagonally opposite feet moving together so that two feet are in contact with the ground at almost all times"
+    },
+    "primary_locomotor_part": {
+     "url": "https://www.nature.com/articles/s41598-021-04273-w",
+     "evidence": "Tortoises locomote with diagonally opposite feet moving together so that two feet are in contact with the ground at almost all times"
+    },
+    "covering": {
+     "url": "https://karachizoo.gov.pk/animals/the-spur-thighed-tortoise-testudo-graeca/",
+     "evidence": "identifiable by its high-domed shell, which provides excellent protection against predators."
+    },
+    "movement": {
+     "url": "https://www.nature.com/articles/s41598-021-04273-w",
+     "evidence": "The use of only one gait (walking) over their entire limited speed range during locomotion"
+    },
+    "climate": {
+     "url": "https://karachizoo.gov.pk/animals/the-spur-thighed-tortoise-testudo-graeca/",
+     "evidence": "Native to North Africa, Southern Europe, and parts of the Middle East, it thrives in arid and semi-arid habitats."
+    },
+    "diet": {
+     "url": "https://karachizoo.gov.pk/animals/the-spur-thighed-tortoise-testudo-graeca/",
+     "evidence": "They have a herbivorous diet, primarily feeding on grasses, leafy greens, flowers, and occasionally fruits."
+    },
+    "mouthparts": {
+     "url": "https://karachizoo.gov.pk/animals/the-spur-thighed-tortoise-testudo-graeca/",
+     "evidence": "They graze on low-lying vegetation, using their strong beaks to crop and tear grass blades."
+    },
+    "breathing": {
+     "url": "https://www.nature.com/articles/s41598-021-04273-w",
+     "evidence": "Dorsally, the lungs are broadly fused to the inner side of the carapace"
+    }
+   },
+   "traits_note": "8 of 13 fields web-cited (source tier and quote checked)",
+   "citation_checks": {
+    "body_plan": {
+     "field": "body_plan",
+     "url": "https://www.nature.com/articles/s41598-021-04273-w",
+     "host": "nature.com",
+     "tier": 1,
+     "source_status": "tier1",
+     "quote": "Tortoises locomote with diagonally opposite feet moving together so that two feet are in contact with the ground at almost all times",
+     "quote_status": "found",
+     "status": "supported",
+     "provenance": "web-cited",
+     "reason": "tier 1 source; quote found on the page",
+     "short_quote": false
+    },
+    "primary_locomotor_part": {
+     "field": "primary_locomotor_part",
+     "url": "https://www.nature.com/articles/s41598-021-04273-w",
+     "host": "nature.com",
+     "tier": 1,
+     "source_status": "tier1",
+     "quote": "Tortoises locomote with diagonally opposite feet moving together so that two feet are in contact with the ground at almost all times",
+     "quote_status": "found",
+     "status": "supported",
+     "provenance": "web-cited",
+     "reason": "tier 1 source; quote found on the page",
+     "short_quote": false
+    },
+    "covering": {
+     "field": "covering",
+     "url": "https://karachizoo.gov.pk/animals/the-spur-thighed-tortoise-testudo-graeca/",
+     "host": "karachizoo.gov.pk",
+     "tier": 2,
+     "source_status": "tier2",
+     "quote": "identifiable by its high-domed shell, which provides excellent protection against predators.",
+     "quote_status": "found",
+     "status": "supported",
+     "provenance": "web-cited",
+     "reason": "tier 2 source; quote found on the page",
+     "short_quote": false
+    },
+    "movement": {
+     "field": "movement",
+     "url": "https://www.nature.com/articles/s41598-021-04273-w",
+     "host": "nature.com",
+     "tier": 1,
+     "source_status": "tier1",
+     "quote": "The use of only one gait (walking) over their entire limited speed range during locomotion",
+     "quote_status": "found",
+     "status": "supported",
+     "provenance": "web-cited",
+     "reason": "tier 1 source; quote found on the page",
+     "short_quote": false
+    },
+    "habitat": {
+     "field": "habitat",
+     "url": "https://www.monaconatureencyclopedia.com/testudo-graeca/",
+     "host": "monaconatureencyclopedia.com",
+     "tier": null,
+     "source_status": "unlisted",
+     "quote": "vive principalmente in zone aperte, particolarmente calde e secche, ma anche in boschi termofili, che offrono un'alternanza di zone soleggiate e ombreggianti.",
+     "quote_status": "not_checked",
+     "status": "unlisted_source",
+     "provenance": "model-estimated",
+     "reason": "monaconatureencyclopedia.com: domain not in data/source_tiers.json",
+     "short_quote": false
+    },
+    "climate": {
+     "field": "climate",
+     "url": "https://karachizoo.gov.pk/animals/the-spur-thighed-tortoise-testudo-graeca/",
+     "host": "karachizoo.gov.pk",
+     "tier": 2,
+     "source_status": "tier2",
+     "quote": "Native to North Africa, Southern Europe, and parts of the Middle East, it thrives in arid and semi-arid habitats.",
+     "quote_status": "found",
+     "status": "supported",
+     "provenance": "web-cited",
+     "reason": "tier 2 source; quote found on the page",
+     "short_quote": false
+    },
+    "diet": {
+     "field": "diet",
+     "url": "https://karachizoo.gov.pk/animals/the-spur-thighed-tortoise-testudo-graeca/",
+     "host": "karachizoo.gov.pk",
+     "tier": 2,
+     "source_status": "tier2",
+     "quote": "They have a herbivorous diet, primarily feeding on grasses, leafy greens, flowers, and occasionally fruits.",
+     "quote_status": "found",
+     "status": "supported",
+     "provenance": "web-cited",
+     "reason": "tier 2 source; quote found on the page",
+     "short_quote": false
+    },
+    "active_time": {
+     "field": "active_time",
+     "url": "https://www.monaconatureencyclopedia.com/testudo-graeca/",
+     "host": "monaconatureencyclopedia.com",
+     "tier": null,
+     "source_status": "unlisted",
+     "quote": "È una specie diurna, con due fasi principali di attività durante la giornata, una la mattina ed una il pomeriggio.",
+     "quote_status": "not_checked",
+     "status": "unlisted_source",
+     "provenance": "model-estimated",
+     "reason": "monaconatureencyclopedia.com: domain not in data/source_tiers.json",
+     "short_quote": false
+    },
+    "body_mass_kg": {
+     "field": "body_mass_kg",
+     "url": "https://Saskatoon.ca/parks-recreation-attractions/events-attractions/saskatoon-forestry-farm-park-zoo/zoo-animals/greek-tortoise",
+     "host": "saskatoon.ca",
+     "tier": null,
+     "source_status": "unlisted",
+     "quote": "Weight: 200g to 3 kg depending on subspecies.",
+     "quote_status": "not_checked",
+     "status": "unlisted_source",
+     "provenance": "model-estimated",
+     "reason": "saskatoon.ca: domain not in data/source_tiers.json",
+     "short_quote": false
+    },
+    "body_length_m": {
+     "field": "body_length_m",
+     "url": "https://www.monaconatureencyclopedia.com/testudo-graeca/",
+     "host": "monaconatureencyclopedia.com",
+     "tier": null,
+     "source_status": "unlisted",
+     "quote": "presenta dimorfismo sessuale nelle dimensioni corporee, con maschi più piccoli delle femmine (15-25 cm per i maschi e 20-36 cm per le femmine)",
+     "quote_status": "not_checked",
+     "status": "unlisted_source",
+     "provenance": "model-estimated",
+     "reason": "monaconatureencyclopedia.com: domain not in data/source_tiers.json",
+     "short_quote": false
+    },
+    "visible_features": {
+     "field": "visible_features",
+     "url": "https://karachizoo.gov.pk/animals/the-spur-thighed-tortoise-testudo-graeca/",
+     "host": "karachizoo.gov.pk",
+     "tier": 2,
+     "source_status": "tier2",
+     "quote": "Their domed carapace (upper shell) is usually brown or yellowish-brown in color, with prominent growth rings and scutes. They have distinctive spurs on their thighs. Their legs are sturdy and adapted for terrestrial locomotion, ending in strong claws",
+     "quote_status": "not_found",
+     "status": "quote_not_found",
+     "provenance": "model-estimated",
+     "reason": "the quote does not appear on the page",
+     "short_quote": false
+    },
+    "mouthparts": {
+     "field": "mouthparts",
+     "url": "https://karachizoo.gov.pk/animals/the-spur-thighed-tortoise-testudo-graeca/",
+     "host": "karachizoo.gov.pk",
+     "tier": 2,
+     "source_status": "tier2",
+     "quote": "They graze on low-lying vegetation, using their strong beaks to crop and tear grass blades.",
+     "quote_status": "found",
+     "status": "supported",
+     "provenance": "web-cited",
+     "reason": "tier 2 source; quote found on the page",
+     "short_quote": false
+    },
+    "breathing": {
+     "field": "breathing",
+     "url": "https://www.nature.com/articles/s41598-021-04273-w",
+     "host": "nature.com",
+     "tier": 1,
+     "source_status": "tier1",
+     "quote": "Dorsally, the lungs are broadly fused to the inner side of the carapace",
+     "quote_status": "found",
+     "status": "supported",
+     "provenance": "web-cited",
+     "reason": "tier 1 source; quote found on the page",
+     "short_quote": false
+    }
+   },
+   "learned_at": "2026-11-01T15:49:19+00:00"
   }
  },
  "aliases": {
@@ -1369,6 +2260,55 @@
     {
      "scientific_name": "Dynastes tityus",
      "common_name": "Eastern Hercules beetle"
+    }
+   ]
+  },
+  "crab": {
+   "id": "crab",
+   "note": "'crab' names several species; chose the crab (Cancer pagurus), the most common reading. Alternatives are listed.",
+   "alternatives": [
+    {
+     "scientific_name": "Carcinus maenas",
+     "common_name": "European green crab"
+    },
+    {
+     "scientific_name": "Callinectes sapidus",
+     "common_name": "Atlantic blue crab"
+    },
+    {
+     "scientific_name": "Paralithodes camtschaticus",
+     "common_name": "red king crab"
+    },
+    {
+     "scientific_name": "Ocypode quadrata",
+     "common_name": "Atlantic ghost crab"
+    }
+   ]
+  },
+  "indian pangolin": {
+   "id": "indian_pangolin",
+   "note": "",
+   "alternatives": []
+  },
+  "tortoise": {
+   "id": "tortoise",
+   "note": "'tortoise' names several species; chose the tortoise (Testudo graeca), the most common reading. Alternatives are listed.",
+   "alternatives": [
+    {
+     "scientific_name": "Chelonoidis niger",
+     "common_name": "Galápagos giant tortoise"
+    },
+    {
+     "scientific_name": "Centrochelys sulcata",
+     "common_name": "African spurred tortoise"
+    },
+    {
+     "scientific_name": "Testudo hermanni",
+     "common_name": "Hermann's tortoise"
+    },
+    {
+     "scientific_name": "Agrionemys horsfieldii",
+     "common_name": "Russian tortoise"
     }
    ]
   }

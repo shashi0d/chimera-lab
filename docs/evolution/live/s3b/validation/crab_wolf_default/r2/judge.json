@@ -1,0 +1,105 @@
+{
+ "scores": {
+  "critic": 1.0,
+  "silhouette": 0.749,
+  "thumbnail": 0.667,
+  "soft_penalty": 0.0,
+  "quality": 0.891
+ },
+ "critic": {
+  "answers": [
+   {
+    "item": "a gray wolf body shape",
+    "answer": "yes"
+   },
+   {
+    "item": "a gray wolf head with visible eyes",
+    "answer": "yes"
+   },
+   {
+    "item": "thick supporting legs and visible breathing openings along the flanks",
+    "answer": "yes"
+   },
+   {
+    "item": "a ringed, armored tail of overlapping shell segments in place of the tail",
+    "answer": "yes"
+   },
+   {
+    "item": "only parts and materials of the crab, no whole crab animals on the body",
+    "answer": "yes"
+   },
+   {
+    "item": "hard, glossy chitin plates with fine seams patches on the head, neck, forequarters, back, flanks, belly, hindquarters, legs and tail",
+    "answer": "yes"
+   }
+  ],
+  "creatures": 1,
+  "animals": [
+   "gray wolf",
+   "giant isopod"
+  ],
+  "notes": "Single wolf-crustacean chimera with wolf head and paws and isopod-like armored plating over the entire body."
+ },
+ "critic_thumbnail": {
+  "answers": [
+   {
+    "item": "a gray wolf body shape",
+    "answer": "yes"
+   },
+   {
+    "item": "a gray wolf head with visible eyes",
+    "answer": "yes"
+   },
+   {
+    "item": "thick supporting legs and visible breathing openings along the flanks",
+    "answer": "no"
+   },
+   {
+    "item": "a ringed, armored tail of overlapping shell segments in place of the tail",
+    "answer": "yes"
+   },
+   {
+    "item": "only parts and materials of the crab, no whole crab animals on the body",
+    "answer": "yes"
+   },
+   {
+    "item": "hard, glossy chitin plates with fine seams patches on the head, neck, forequarters, back, flanks, belly, hindquarters, legs and tail",
+    "answer": "no"
+   }
+  ],
+  "creatures": 1,
+  "animals": [
+   "gray wolf",
+   "isopod"
+  ],
+  "notes": "A single wolf-like hybrid is shown in profile with segmented armor covering the body and tail but a furry wolf head."
+ },
+ "mask": {
+  "fill": 0.392,
+  "aspect": 0.949,
+  "components": 1
+ },
+ "soft_cards": [],
+ "third_animal": [
+  "giant isopod"
+ ],
+ "sam_prompt": "animal",
+ "critic_mode": "checklist",
+ "checklist": [
+  "a gray wolf body shape",
+  "a gray wolf head with visible eyes",
+  "thick supporting legs and visible breathing openings along the flanks",
+  "a ringed, armored tail of overlapping shell segments in place of the tail",
+  "only parts and materials of the crab, no whole crab animals on the body",
+  "hard, glossy chitin plates with fine seams patches on the head, neck, forequarters, back, flanks, belly, hindquarters, legs and tail"
+ ],
+ "checklist_source": "generated from the plan",
+ "open_critic": {
+  "animals": [
+   "wolf",
+   "woodlouse"
+  ],
+  "creatures": 1,
+  "notes": "A single hybrid creature with a wolf's head and paws on a heavily armored segmented isopod-like body."
+ }
+}

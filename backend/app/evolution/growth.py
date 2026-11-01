@@ -57,7 +57,18 @@ def _counts(d: dict[str, Any]) -> dict[str, Any]:
     return {k: d.get(k) for k in DRIFT_KEYS}
 
 
-async def drift(before: bytes, after: bytes, critics: dict[str, Any], meter: Any) -> dict[str, Any]:
+def planned_counts(g: Genome, tax: Any) -> dict[str, int]:
+    """What the plan says the host shows: one head, its walking legs, and one tail unless its class has none."""
+    from app.evolution.critic import legs_planned
+    from app.evolution.parts import class_entry
+
+    host = tax.animals[g.host]
+    never = set((class_entry(host) or {}).get("never") or [])
+    return {"heads": 1, "walking_legs": legs_planned(g), "tails": 0 if "tail" in never else 1}
+
+
+async def drift(before: bytes, after: bytes, critics: dict[str, Any], meter: Any,
+                planned: dict[str, int] | None = None) -> dict[str, Any]:
     """Host drift across the edit: a count that changes in every critic's description (heads, walking legs, tails).
     A critic that fails counts as no evidence; one critic seeing a change while another does not is reported but
     not called drift (the critics disagree on single images about as often)."""
@@ -76,7 +87,10 @@ async def drift(before: bytes, after: bytes, critics: dict[str, Any], meter: Any
             rows[name] = {"error": f"{type(e).__name__}: {str(e)[:120]}"}
             continue
         rows[name] = {"before": b, "after": a}
-        changed_by[name] = [k for k in DRIFT_KEYS if isinstance(b[k], int) and isinstance(a[k], int) and b[k] != a[k]]
+        # a count drifts when it changed AND now differs from the plan (S3b validation: the plates made a bear's
+        # short tail visible, 0 -> 1 tails, which is the plan, not drift)
+        changed_by[name] = [k for k in DRIFT_KEYS if isinstance(b[k], int) and isinstance(a[k], int) and b[k] != a[k]
+                            and (planned is None or a[k] != planned.get(k))]
     agreed = sorted(set.intersection(*(set(v) for v in changed_by.values()))) if changed_by else []
     return {"drifted": bool(agreed), "changed": agreed, "by_critic": rows,
             "any_change": sorted({k for v in changed_by.values() for k in v})}

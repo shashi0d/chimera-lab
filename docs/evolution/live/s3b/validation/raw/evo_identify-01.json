@@ -1,0 +1,129 @@
+{
+ "purpose": "evo_identify",
+ "request": {
+  "model": "meta-models/muse-spark-open-1026",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You identify an animal from a name (common, scientific, misspelled or regional) or a photo. Return the scientific name of the species exactly as a taxonomist writes it (genus species, or genus species subspecies for a domestic form). kind: species; breed (a domestic breed: give the species' scientific name and the breed name in breed); extinct (a species known only from fossils or records); ambiguous (the name covers several species: pick the most common or best-known species as scientific_name and list up to four others in alternatives); not_animal; plant; human (any person or human group); mythic (a creature of myth, legend or fiction). For a misspelling, answer for the intended animal. Never invent a species; if unsure, say ambiguous and list candidates. note: one short sentence."
+   },
+   {
+    "role": "user",
+    "content": "Identify this animal name: crab"
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "identify_animal",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "kind",
+      "scientific_name",
+      "common_name",
+      "breed",
+      "alternatives",
+      "note"
+     ],
+     "properties": {
+      "kind": {
+       "type": "string",
+       "enum": [
+        "species",
+        "breed",
+        "extinct",
+        "ambiguous",
+        "not_animal",
+        "plant",
+        "human",
+        "mythic"
+       ]
+      },
+      "scientific_name": {
+       "type": "string"
+      },
+      "common_name": {
+       "type": "string"
+      },
+      "breed": {
+       "type": "string"
+      },
+      "alternatives": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "scientific_name",
+         "common_name"
+        ],
+        "properties": {
+         "scientific_name": {
+          "type": "string"
+         },
+         "common_name": {
+          "type": "string"
+         }
+        }
+       }
+      },
+      "note": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0,
+  "max_tokens": 5000
+ },
+ "response": {
+  "id": "chatcmpl-7eec6852ec63478f98e6bca202769e5c",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\"kind\": \"ambiguous\", \"scientific_name\": \"Cancer pagurus\", \"common_name\": \"crab\", \"breed\": \"\", \"alternatives\": [{\"scientific_name\": \"Carcinus maenas\", \"common_name\": \"European green crab\"}, {\"scientific_name\": \"Callinectes sapidus\", \"common_name\": \"Atlantic blue crab\"}, {\"scientific_name\": \"Paralithodes camtschaticus\", \"common_name\": \"red king crab\"}, {\"scientific_name\": \"Ocypode quadrata\", \"common_name\": \"Atlantic ghost crab\"}], \"note\": \"Crab is a common name for nearly 7,000 species in infraorder Brachyura, not a single species.\"}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null,
+     "reasoning_content": "<elided> (5844 chars)"
+    }
+   }
+  ],
+  "created": 1793546904,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 1440,
+   "prompt_tokens": 323,
+   "total_tokens": 1763,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 1051,
+    "audio_tokens": 0,
+    "reasoning_tokens": 1280,
+    "rejected_prediction_tokens": 1672,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 0,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

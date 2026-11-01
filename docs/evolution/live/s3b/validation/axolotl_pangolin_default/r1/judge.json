@@ -1,0 +1,85 @@
+{
+ "scores": {
+  "critic": 0.75,
+  "silhouette": 1.0,
+  "thumbnail": 1.0,
+  "soft_penalty": 0.0,
+  "quality": 0.9
+ },
+ "critic": {
+  "answers": [
+   {
+    "item": "a axolotl body shape",
+    "answer": "no"
+   },
+   {
+    "item": "a axolotl head with visible eyes",
+    "answer": "yes"
+   },
+   {
+    "item": "only parts and materials of the chinese pangolin, no whole chinese pangolin animals on the body",
+    "answer": "yes"
+   },
+   {
+    "item": "large overlapping keratin scales patches on the head, neck, forequarters, back, flanks, hindquarters, legs and tail",
+    "answer": "yes"
+   }
+  ],
+  "creatures": 1,
+  "animals": [
+   "axolotl",
+   "Chinese pangolin"
+  ],
+  "notes": "Single illustrated hybrid with a pale axolotl head and pink external gills covered in extensive pangolin scale armor."
+ },
+ "critic_thumbnail": {
+  "answers": [
+   {
+    "item": "a axolotl body shape",
+    "answer": "yes"
+   },
+   {
+    "item": "a axolotl head with visible eyes",
+    "answer": "yes"
+   },
+   {
+    "item": "only parts and materials of the chinese pangolin, no whole chinese pangolin animals on the body",
+    "answer": "yes"
+   },
+   {
+    "item": "large overlapping keratin scales patches on the head, neck, forequarters, back, flanks, hindquarters, legs and tail",
+    "answer": "yes"
+   }
+  ],
+  "creatures": 1,
+  "animals": [
+   "axolotl",
+   "Chinese pangolin"
+  ],
+  "notes": "The image shows a single composite creature with an axolotl head and body covered in pangolin scales."
+ },
+ "mask": {
+  "fill": 0.434,
+  "aspect": 1.465,
+  "components": 1
+ },
+ "soft_cards": [],
+ "third_animal": [],
+ "sam_prompt": "animal",
+ "critic_mode": "checklist",
+ "checklist": [
+  "a axolotl body shape",
+  "a axolotl head with visible eyes",
+  "only parts and materials of the chinese pangolin, no whole chinese pangolin animals on the body",
+  "large overlapping keratin scales patches on the head, neck, forequarters, back, flanks, hindquarters, legs and tail"
+ ],
+ "checklist_source": "generated from the plan",
+ "open_critic": {
+  "animals": [
+   "pangolin",
+   "axolotl"
+  ],
+  "creatures": 1,
+  "notes": "A single hybrid creature with a pangolin's scaled armored body and an axolotl's pale head with pink feathery external gills is shown in profile."
+ }
+}
