@@ -125,3 +125,35 @@ Every real Meta API call made by L1 (appended automatically by `backend/app/adap
 | 2026-11-01T00:39:41+00:00 | e4:b_axolotl_x_pangolin_rerender:try1 | sam | sam-3.1 | 3589 | 0 | 0 | 0 | ok | resp_6ae68a4ad975fe0b9ccd4ce2 |
 | 2026-11-01T00:39:55+00:00 | e4:b_axolotl_x_pangolin_rerender:try1 | evo_checklist | muse-spark-1.3 | 7062 | 384 | 1481 | 1865 | ok | chatcmpl-01a1948c-71cc-728c-8d1d-540708883cb3 |
 | 2026-11-01T00:40:00+00:00 | e4:b_axolotl_x_pangolin_rerender:try1 | evo_critic | muse-spark-1.3 | 4417 | 3526 | 644 | 4170 | ok | chatcmpl-01a1948c-82fd-70db-af52-0d713e3f9205 |
+| 2026-11-01T01:20:21+00:00 | s1:spark:probe_json_identify | probe_json_identify | meta-models/muse-spark-open-1026 | 3671 | 325 | 661 | 986 | ok | chatcmpl-e364773fc9ba4a5bbc9cee748dd8c563 |
+| 2026-11-01T01:20:31+00:00 | s1:spark:probe_json_traits | probe_json_traits | meta-models/muse-spark-open-1026 | 9625 | 279 | 2813 | 3092 | ok | chatcmpl-16fb705e208f4388a939b2e4b0e03d01 |
+| 2026-11-01T01:20:41+00:00 | s1:spark:probe_json_audit | probe_json_audit | meta-models/muse-spark-open-1026 | 10604 | 328 | 2589 | 2917 | ok | chatcmpl-557e98a9e564431cb4be59df6d7e976f |
+| 2026-11-01T01:20:54+00:00 | s1:spark:probe_image_identify | probe_image_identify | meta-models/muse-spark-open-1026 | 12168 | 3690 | 1046 | 4736 | ok | chatcmpl-40e90db494ed4ec8b25b298b9ce19cd6 |
+| 2026-11-01T01:21:09+00:00 | s1:spark:probe_image_critic | probe_image_critic | meta-models/muse-spark-open-1026 | 15768 | 3595 | 1182 | 4777 | ok | chatcmpl-ab22511962184998b5f1c0de76e78cb1 |
+| 2026-11-01T01:21:10+00:00 | s1:spark:probe_tools | probe_tools | meta-models/muse-spark-open-1026 | 1059 | 904 | 272 | 1176 | ok | chatcmpl-969b5ee9fb6b418d960626454243fa68 |
+| 2026-11-01T01:21:11+00:00 | s1:spark:probe_tools | probe_tools | meta-models/muse-spark-open-1026 | 909 | 1079 | 198 | 1277 | ok | chatcmpl-17bfe3cea47c46c982a6b3815442341e |
+| 2026-11-01T01:21:12+00:00 | s1:spark:probe_tools | probe_tools | meta-models/muse-spark-open-1026 | 888 | 1212 | 166 | 1378 | ok | chatcmpl-173bb82c4a4f4b00b1b4dfb43ca8b6b7 |
+| 2026-11-01T01:21:14+00:00 | s1:spark:probe_tools | probe_tools | meta-models/muse-spark-open-1026 | 1978 | 1289 | 212 | 1501 | ok | chatcmpl-b2b2d2f467434289b12259fb55edcec9 |
+| 2026-11-01T01:22:14+00:00 | s1:spark:probe_refusal_plan | probe_refusal_plan | meta-models/muse-spark-open-1026 | 60004 | 0 | 0 | 0 | TIMEOUT_CANCELLED |  |
+| 2026-11-01T01:23:15+00:00 | s1:spark:probe_refusal_plan | probe_refusal_plan | meta-models/muse-spark-open-1026 | 59992 | 0 | 0 | 0 | TIMEOUT_CANCELLED |  |
+| 2026-11-01T01:24:17+00:00 | s1:spark:probe_refusal_plan | probe_refusal_plan | meta-models/muse-spark-open-1026 | 60007 | 0 | 0 | 0 | TIMEOUT_CANCELLED |  |
+| 2026-11-01T01:25:17+00:00 | s1:spark:probe_refusal_plan | probe_refusal_plan | meta-models/muse-spark-open-1026 | 60001 | 0 | 0 | 0 | TIMEOUT_CANCELLED |  |
+| 2026-11-01T01:26:19+00:00 | s1:spark:probe_refusal_plan | probe_refusal_plan | meta-models/muse-spark-open-1026 | 59995 | 0 | 0 | 0 | TIMEOUT_CANCELLED |  |
+| 2026-11-01T01:27:21+00:00 | s1:spark:probe_refusal_plan | probe_refusal_plan | meta-models/muse-spark-open-1026 | 59997 | 0 | 0 | 0 | TIMEOUT_CANCELLED |  |
+| 2026-11-01T01:28:21+00:00 | s1:spark:probe_refusal_plan | probe_refusal_plan | meta-models/muse-spark-open-1026 | 60001 | 0 | 0 | 0 | TIMEOUT_CANCELLED |  |
+| 2026-11-01T01:29:22+00:00 | s1:spark:probe_refusal_plan | probe_refusal_plan | meta-models/muse-spark-open-1026 | 59998 | 0 | 0 | 0 | TIMEOUT_CANCELLED |  |
+| 2026-11-01T01:30:24+00:00 | s1:spark:probe_refusal_plan | probe_refusal_plan | meta-models/muse-spark-open-1026 | 60005 | 0 | 0 | 0 | TIMEOUT_CANCELLED |  |
+| 2026-11-01T01:31:02+00:00 | s1:spark:probe_json_identify | probe_json_identify | meta-models/muse-spark-open-1026 | 2470 | 325 | 632 | 957 | ok | chatcmpl-8b6e1f6bb7634d6ea9ab08f9c36b8443 |
+| 2026-11-01T01:34:14+00:00 | s1:spark:probe_json_traits | probe_json_traits | meta-models/muse-spark-open-1026 | 192514 | 279 | 32768 | 33047 | ok | chatcmpl-a228d387b6574ec6a358ea18e4d22ec4 |
+| 2026-11-01T01:34:23+00:00 | s1:spark:probe_json_audit | probe_json_audit | meta-models/muse-spark-open-1026 | 8381 | 328 | 2108 | 2436 | ok | chatcmpl-4705813f2d754e538f23caed6d9cb4e7 |
+| 2026-11-01T01:34:34+00:00 | s1:spark:probe_image_identify | probe_image_identify | meta-models/muse-spark-open-1026 | 11531 | 3690 | 882 | 4572 | ok | chatcmpl-e3f4198675cf4294b6ce6c4b9342e970 |
+| 2026-11-01T01:34:46+00:00 | s1:spark:probe_image_critic | probe_image_critic | meta-models/muse-spark-open-1026 | 11763 | 3595 | 1185 | 4780 | ok | chatcmpl-bd66e4b0e101424f96117e7d6164006f |
+| 2026-11-01T01:34:47+00:00 | s1:spark:probe_tools | probe_tools | meta-models/muse-spark-open-1026 | 939 | 904 | 200 | 1104 | ok | chatcmpl-8bae419c1add45cb91086ac1641cf108 |
+| 2026-11-01T01:34:48+00:00 | s1:spark:probe_tools | probe_tools | meta-models/muse-spark-open-1026 | 900 | 1079 | 191 | 1270 | ok | chatcmpl-1385a12cbee04243a5b641ea0c478d5c |
+| 2026-11-01T01:34:49+00:00 | s1:spark:probe_tools | probe_tools | meta-models/muse-spark-open-1026 | 860 | 1212 | 166 | 1378 | ok | chatcmpl-429afa042b414601a1b2aebe6e28d433 |
+| 2026-11-01T01:34:50+00:00 | s1:spark:probe_tools | probe_tools | meta-models/muse-spark-open-1026 | 1339 | 1289 | 219 | 1508 | ok | chatcmpl-3ea0f139560d463f9cebbcd4d0b7ed4c |
+| 2026-11-01T01:35:50+00:00 | s1:spark:probe_refusal_plan | probe_refusal_plan | meta-models/muse-spark-open-1026 | 60453 | 2367 | 32768 | 35135 | ok | chatcmpl-d77f3cc299ed4bcbae71fb982208cde2 |
+| 2026-11-01T01:36:45+00:00 | s1:spark:probe_refusal_plan | probe_refusal_plan | meta-models/muse-spark-open-1026 | 54507 | 2467 | 15246 | 17713 | ok | chatcmpl-25fa0cae26d14bd4b5d31fecc584cd94 |
+| 2026-11-01T01:37:52+00:00 | s1:spark:probe_refusal_plan | probe_refusal_plan | meta-models/muse-spark-open-1026 | 66960 | 2609 | 32768 | 35377 | ok | chatcmpl-8a542d8d5e3a4a6e9dc86f9ec1519a5e |
+| 2026-11-01T01:38:59+00:00 | s1:spark:probe_refusal_plan | probe_refusal_plan | meta-models/muse-spark-open-1026 | 67230 | 2430 | 32768 | 35198 | ok | chatcmpl-787b51304ba04b4da1768e4c06459f22 |
+| 2026-11-01T01:40:01+00:00 | s1:spark:probe_refusal_plan | probe_refusal_plan | meta-models/muse-spark-open-1026 | 61438 | 2383 | 32768 | 35151 | ok | chatcmpl-89fc86203e2a4683b9c230906510620a |

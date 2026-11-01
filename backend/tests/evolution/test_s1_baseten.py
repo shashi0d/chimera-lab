@@ -53,6 +53,7 @@ def test_adapter_targets_baseten_with_the_exact_model():
     assert a.model_id == "meta-models/muse-spark-open-1026" and a.kind == KIND == "spark_baseten"
     assert str(a.http.client.base_url).rstrip("/") == "https://inference.baseten.co/v1"
     assert a.http.client.max_retries == 0  # call_with_retry is the only retry layer
+    assert a.timeout == 300.0 and a.http.client.timeout == 300.0  # S1: plans need minutes, not 60 s
     missing = [m for m in ("write_plan", "vary", "polish", "critic", "checklist", "identify", "learn_traits",
                            "judge_functions") if not callable(getattr(a, m, None))]
     assert not missing and set(EvoSpark.__annotations__) <= set(dir(a))

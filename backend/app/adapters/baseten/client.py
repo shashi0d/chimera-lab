@@ -31,7 +31,7 @@ class BasetenEvoSpark(LiveEvoSpark):
     def __init__(self, settings: Settings) -> None:
         if not settings.baseten_api_key:
             raise RuntimeError("Spark Open needs BASETEN_API_KEY_MODEL_MUSE_SPARK_OPEN_26")
-        _Retrying.__init__(self, settings, settings.plan_timeout_seconds)
+        _Retrying.__init__(self, settings, settings.baseten_timeout_seconds)  # reasoning model: slower
         self.model_id = settings.baseten_spark_model
         self.http = _MetaClient(settings.baseten_base_url, settings.baseten_api_key, self.timeout)
 

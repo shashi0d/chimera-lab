@@ -284,3 +284,11 @@ Short entries per phase: what was built, what was tested, what was deferred. New
 `docs/evolution/ROADMAP.md` is not in the repo (neither evo nor main), so S1 follows the task text alone.
 
 **Part 1:** Baseten adapter `backend/app/adapters/baseten/` (`BasetenEvoSpark`). It is the existing EvoSpark interface over `https://inference.baseten.co/v1`, model `meta-models/muse-spark-open-1026`, and reuses the Meta request builders, parsers, `_MetaClient` (live-budget guard, usage records, key-free recordings), error mapping and `call_with_retry`. New budget kind `spark_baseten`, capped by `CHIMERA_LIVE_MAX_SPARK_BASETEN` (default 300, a runaway guard only). Recordings now refuse the Baseten key as well as the Meta key. The key is read from `BASETEN_API_KEY_MODEL_MUSE_SPARK_OPEN_26`; `.env.example` added with placeholders. No route uses the adapter yet. Tests: 11 new; full suite 696 passed, 6 skipped.
+
+**Part 2 (live, Spark Open on Baseten):** `scripts/s1_probe.py spark`, outputs in `docs/evolution/live/s1/spark/`.
+- First run: plan-sized calls hit the 60 s per-attempt timeout (8 attempts, `TIMEOUT_CANCELLED`). Stopped; the Baseten adapter now has its own 300 s timeout (`baseten_timeout_seconds`). The aborted run's recordings were removed; its attempts stay in `LIVE_LOG.md` and the counter.
+- Strict JSON: identify and audit are clean, schema-valid JSON (2.5 s, 8.4 s). The enum-heavy traits call ran to `finish_reason: length` after 193 s. In the aborted run the same call returned valid JSON with nonsense duplicates (axolotl body plan "quadruped, biped, winged, finned, …").
+- Image input: works. The lion x eagle render was identified as a griffin (kind mythic), and the critic answered eagle and lion, 1 creature.
+- Tool calling: fully correct in 4 turns. It made both resolve calls in parallel, passed the returned ids to the audit, passed the audit id to the render, and the final reply contains the image id.
+- Refusals: 0 of 5 planning prompts. But 4 of 5 ran away to 43,000 to 52,600 characters, cut off at the 32,768-token output limit (about 60 s each), so the JSON was unreadable. Only lion x goldfish (mythic) produced a plan, and it was accepted with no locked field changed.
+- Redacted fixtures (4) are in `backend/tests/fixtures/recorded/baseten/`, with 5 replay tests. The suite is 701 passed, 6 skipped. Baseten spark counter: 19 → 33.

@@ -27,6 +27,9 @@ class Settings(BaseSettings):
     baseten_base_url: str = "https://inference.baseten.co/v1"
     baseten_api_key: str | None = Field(default=None, validation_alias="BASETEN_API_KEY_MODEL_MUSE_SPARK_OPEN_26")
     baseten_spark_model: str = "meta-models/muse-spark-open-1026"
+    # S1 live: Spark Open reasons before answering (2.4k reasoning tokens for a short traits answer); a ~9k-char
+    # plan prompt did not finish inside the Meta plan timeout of 60 s on any of 8 attempts. Per-attempt limit:
+    baseten_timeout_seconds: float = 300.0
 
     supabase_url: str | None = None
     supabase_service_key: str | None = None

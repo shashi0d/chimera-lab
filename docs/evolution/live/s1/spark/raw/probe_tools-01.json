@@ -1,0 +1,155 @@
+{
+ "purpose": "probe_tools",
+ "request": {
+  "model": "meta-models/muse-spark-open-1026",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You operate a creature engine through tools. Call tools to do the work; use the ids the tools return."
+   },
+   {
+    "role": "user",
+    "content": "Make a realistic creature from an axolotl and a pangolin, with the axolotl as sire and the pangolin as dam. Resolve both animals, run the audit on the resolved pair, then render it. When the render is done, reply with the image id."
+   }
+  ],
+  "tools": [
+   {
+    "type": "function",
+    "function": {
+     "name": "resolve_animal",
+     "description": "Look up one animal by its common name. Returns its id.",
+     "parameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+       "name"
+      ],
+      "properties": {
+       "name": {
+        "type": "string",
+        "description": "common name of one animal"
+       }
+      }
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "run_audit",
+     "description": "Audit whether a creature fused from two resolved animals can live. Needs both animal ids from resolve_animal. Returns an audit_id.",
+     "parameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+       "sire_id",
+       "dam_id",
+       "mode"
+      ],
+      "properties": {
+       "sire_id": {
+        "type": "string"
+       },
+       "dam_id": {
+        "type": "string"
+       },
+       "mode": {
+        "type": "string",
+        "enum": [
+         "realistic",
+         "speculative",
+         "mythic"
+        ]
+       }
+      }
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "render",
+     "description": "Render the audited creature. Needs the audit_id from run_audit. Returns an image_id.",
+     "parameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+       "audit_id"
+      ],
+      "properties": {
+       "audit_id": {
+        "type": "string"
+       }
+      }
+     }
+    }
+   }
+  ],
+  "tool_choice": "auto",
+  "temperature": 0,
+  "parallel_tool_calls": true
+ },
+ "response": {
+  "id": "chatcmpl-8bae419c1add45cb91086ac1641cf108",
+  "choices": [
+   {
+    "finish_reason": "tool_calls",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": null,
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": [
+      {
+       "id": "chatcmpl-tool-6e507325530947d7be174f1352960efc",
+       "function": {
+        "arguments": "{\"name\": \"axolotl\"}",
+        "name": "resolve_animal"
+       },
+       "type": "function"
+      },
+      {
+       "id": "chatcmpl-tool-18823d85e1a4468db3607d483f2f3091",
+       "function": {
+        "arguments": "{\"name\": \"pangolin\"}",
+        "name": "resolve_animal"
+       },
+       "type": "function"
+      }
+     ],
+     "reasoning_content": "Need to follow steps:\n1. Resolve both animals: axolotl and pangolin\n2. Run audit with sire=axolotl, dam=pangolin, mode=realistic\n3. Render with audit_id\n4. Reply with image id\n\nWe need to call resolve_animal for both. Can do parallel.\n\n"
+    }
+   }
+  ],
+  "created": 1793496885,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 200,
+   "prompt_tokens": 904,
+   "total_tokens": 1104,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 148,
+    "audio_tokens": 0,
+    "reasoning_tokens": 67,
+    "rejected_prediction_tokens": 209,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 896,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

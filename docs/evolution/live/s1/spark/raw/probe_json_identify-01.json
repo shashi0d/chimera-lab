@@ -1,0 +1,128 @@
+{
+ "purpose": "probe_json_identify",
+ "request": {
+  "model": "meta-models/muse-spark-open-1026",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You identify an animal from a name (common, scientific, misspelled or regional) or a photo. Return the scientific name of the species exactly as a taxonomist writes it (genus species, or genus species subspecies for a domestic form). kind: species; breed (a domestic breed: give the species' scientific name and the breed name in breed); extinct (a species known only from fossils or records); ambiguous (the name covers several species: pick the most common or best-known species as scientific_name and list up to four others in alternatives); not_animal; plant; human (any person or human group); mythic (a creature of myth, legend or fiction). For a misspelling, answer for the intended animal. Never invent a species; if unsure, say ambiguous and list candidates. note: one short sentence."
+   },
+   {
+    "role": "user",
+    "content": "Identify this animal name: axolotl"
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "identify_animal",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "kind",
+      "scientific_name",
+      "common_name",
+      "breed",
+      "alternatives",
+      "note"
+     ],
+     "properties": {
+      "kind": {
+       "type": "string",
+       "enum": [
+        "species",
+        "breed",
+        "extinct",
+        "ambiguous",
+        "not_animal",
+        "plant",
+        "human",
+        "mythic"
+       ]
+      },
+      "scientific_name": {
+       "type": "string"
+      },
+      "common_name": {
+       "type": "string"
+      },
+      "breed": {
+       "type": "string"
+      },
+      "alternatives": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "scientific_name",
+         "common_name"
+        ],
+        "properties": {
+         "scientific_name": {
+          "type": "string"
+         },
+         "common_name": {
+          "type": "string"
+         }
+        }
+       }
+      },
+      "note": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0
+ },
+ "response": {
+  "id": "chatcmpl-8b6e1f6bb7634d6ea9ab08f9c36b8443",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\"kind\": \"species\", \"scientific_name\": \"Ambystoma mexicanum\", \"common_name\": \"axolotl\", \"breed\": \"\", \"alternatives\": [], \"note\": \"A neotenic salamander native to Mexico that retains its external gills into adulthood.\"}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null,
+     "reasoning_content": "We need to identify animal name: axolotl. Return scientific name exactly as taxonomist writes it. kind: species; breed etc. note: one short sentence.\n\nAxolotl is Ambystoma mexicanum. It's a species. Provide scientific name.\n\nWe need to output JSON? The instruction says Return the scientific name ... kind: species; breed ... note: one short sentence.\n\nProbably need to output JSON with fields: scientific_name, kind, note, alternatives? The system says Identify an animal from a name ... Return the scientific name ... kind: species; breed ... note: one short sentence.\n\nWe need to infer expected output format. Probably JSON object with scientific_name, kind, note. Possibly alternatives.\n\nWe should output something like:\n{\n  \"scientific_name\": \"Ambystoma mexicanum\",\n  \"kind\": \"species\",\n  \"note\": \"Neotenic salamander native to lakes near Mexico City.\"\n}\n\nWe need to ensure correct formatting. The user says Identify this animal name: axolotl\n\nWe should respond with scientific name exactly as taxonomist writes it (genus species...). So Ambystoma mexicanum.\n\nkind: species\n\nnote: one short sentence.\n\nWe should also consider ambiguous? No.\n\nWe should provide answer.\n\nProbably need to follow strict JSON? The instruction says Return the scientific name ... kind: species; breed ... note: one short sentence.\n\nWe should output JSON.\n\nWe must not invent species.\n\nWe should ensure correct capitalization: Ambystoma mexicanum\n\nWe should provide note.\n\nWe should ensure we comply with system.\n\nWe should output JSON with fields scientific_name, kind, note.\n\nPossibly also need to handle extinct etc.\n\nWe should answer.\n\nWe should ensure we don't add extra fluff.\n\nWe should provide final answer.\n\nWe should consider if axolotl is ambiguous? No, it's Ambystoma mexicanum.\n\nWe should provide note: one short sentence.\n\nWe should output.\n\nWe should ensure we use correct JSON syntax.\n\nWe should not add alternatives unless ambiguous.\n\nWe should output:\n\n{\n  \"scientific_name\": \"Ambystoma mexicanum\",\n  \"kind\": \"species\",\n  \"note\": \"A neotenic salamander that retains its larval gills into adulthood.\"\n}\n\nThat satisfies.\n\nWe should ensure we follow instruction: Never invent a species; if unsure, say ambiguous and list candidates.\n\nWe are sure.\n\nWe should output final.\n\nWe should ensure we don't add extra text outside JSON? Might be okay to add JSON only. The instruction says Return the scientific name ... Probably expects JSON. We should output JSON.\n\nWe should ensure we include kind exactly as \"species\".\n\nWe should provide note.\n\nWe should answer.\n\nWe should ensure we don't misinterpret.\n\nWe should output final answer."
+    }
+   }
+  ],
+  "created": 1793496658,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 632,
+   "prompt_tokens": 325,
+   "total_tokens": 957,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 467,
+    "audio_tokens": 0,
+    "reasoning_tokens": 563,
+    "rejected_prediction_tokens": 688,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 256,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}
