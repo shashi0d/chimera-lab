@@ -1,0 +1,111 @@
+{
+ "purpose": "evo_ask",
+ "request": {
+  "model": "muse-spark-1.3",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture of a creature and answer numbered questions about it. Answer each question on its own: yes if the picture clearly shows it, no if it clearly does not, unclear if you cannot tell. Many questions describe things that should not be there, so do not lean toward yes. Judge only what is visible. answers: one word per question (yes, no or unclear), in the same order as the questions, nothing else. origins: for each listed part, in order, the one real animal that part looks like it came from, as an everyday English common name (or unclear); empty if no parts are listed. notes: one short sentence."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "Questions:\n1. Is the overall body shape that of a brown bear?\n2. Does it have a brown bear head with visible eyes?\n3. Does it have european rhinoceros beetle wings in place of its front legs?\n4. Does it stand on four walking legs and also have wings?\n5. Is there european rhinoceros beetle jointed tail segments in place of the tail?\n6. Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?\n7. Is there a second head anywhere?\n8. Are there jointed, insect-like leg pieces on or along the legs?\n9. Does it have more than 2 walking legs?\n10. Are there long curved head horn anywhere on the creature?\n11. Does it have a full mane of long hair around the head and neck?\n12. Does the fur show stripes or spots?\n13. Are there hard, glossy chitin plates with fine seams on the shoulders and neck?\n14. Do the hard, glossy chitin plates with fine seams grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending into scales), rather than looking attached on top?\n15. Do the hard, glossy chitin plates with fine seams look like separate pieces laid on top of the fur, with a raised rim or a gap at the edge?\n16. Do the hard, glossy chitin plates with fine seams form one continuous structure over the shoulders and neck, rather than scattered pieces?\n17. Are the hard, glossy chitin plates with fine seams scattered as separate pieces over different parts of the body?\n18. Are there hard, glossy chitin plates with fine seams on the legs?\n19. Do the hard, glossy chitin plates with fine seams follow this body's own shape and contours, the way its own skin would?\n20. Do the hard, glossy chitin plates with fine seams keep the outline of a separate object, such as another animal's shell or back, instead of the body's own shape?\n21. Are the plates sized to this animal's body, about as large as its own muscles and body segments?\n22. Do the plates look made for a much smaller or much larger animal?\n23. Do the hard, glossy chitin plates with fine seams stop abruptly partway across the body or legs, with no visible reason?\n24. Does the membranous wings grow out of the hard, glossy chitin plates with fine seams at its base, so they look like one connected system?\n25. Does the membranous wings look stuck on separately, with no connection to the hard, glossy chitin plates with fine seams?\n\nParts (which animal does each look like it came from?):\n1. the membranous wings\n2. the jointed tail segments"
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (774463 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "balanced_checklist",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "answers",
+      "origins",
+      "notes"
+     ],
+     "properties": {
+      "answers": {
+       "type": "array",
+       "items": {
+        "type": "string",
+        "enum": [
+         "yes",
+         "no",
+         "unclear"
+        ]
+       }
+      },
+      "origins": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "notes": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0
+ },
+ "response": {
+  "id": "chatcmpl-01a19762-3178-716d-9c7e-fef4c53eb2b5",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\"answers\": [\"yes\", \"yes\", \"no\", \"yes\", \"yes\", \"yes\", \"no\", \"no\", \"yes\", \"no\", \"no\", \"no\", \"yes\", \"no\", \"yes\", \"no\", \"yes\", \"no\", \"no\", \"yes\", \"yes\", \"no\", \"yes\", \"yes\", \"no\"], \"notes\": \"A bear with beetle shells and wings stuck on top of its fur.\", \"origins\": [\"European rhinoceros beetle\", \"European rhinoceros beetle\"]}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null
+    }
+   }
+  ],
+  "created": 1793541157,
+  "model": "muse-spark-1.3",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 2393,
+   "prompt_tokens": 4175,
+   "total_tokens": 6568,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": null,
+    "audio_tokens": null,
+    "reasoning_tokens": 2265,
+    "rejected_prediction_tokens": null,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": null,
+    "cache_write_tokens": null,
+    "cached_tokens": 241,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

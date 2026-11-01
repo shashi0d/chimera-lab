@@ -1,0 +1,154 @@
+{
+ "purpose": "evo_describe",
+ "request": {
+  "model": "muse-spark-1.3",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture with no other context and describe exactly what is drawn, like a careful field naturalist. Do not guess what was intended; describe only what is visible. description: a free paragraph describing the whole creature first. parts: every body part you see, one entry each (head, horns, ears, mane, legs, feet, tail, wings, gills, tentacles, shell, plates, scales, feathers, markings), with what it looks like and where it is. attached_objects: anything that looks attached to or sitting on the body rather than part of it, such as an object, an armor piece or a whole small animal; empty if none. animals: every real animal whose features you can see, as everyday English common names, at most four; include any animal that only one part resembles. Then count, looking carefully: separate_bodies: separate animal bodies or body-shaped objects in the picture, including any whole animal or animal-shaped object attached to or sitting on the main creature. heads: heads of any kind. walking_legs: legs the creature stands or walks on, including hidden ones you can infer. wings: wings of any kind. extra_limb_pieces: jointed leg-like, claw-like or tentacle-like pieces other than the walking legs and the tail. tails: tails of any kind (0 if none)."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "Describe this creature, then count."
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (803119 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "plan_blind_describe",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "description",
+      "parts",
+      "attached_objects",
+      "animals",
+      "separate_bodies",
+      "heads",
+      "walking_legs",
+      "wings",
+      "extra_limb_pieces",
+      "tails"
+     ],
+     "properties": {
+      "description": {
+       "type": "string"
+      },
+      "parts": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "part",
+         "looks_like",
+         "where"
+        ],
+        "properties": {
+         "part": {
+          "type": "string"
+         },
+         "looks_like": {
+          "type": "string"
+         },
+         "where": {
+          "type": "string"
+         }
+        }
+       }
+      },
+      "attached_objects": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "animals": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "separate_bodies": {
+       "type": "integer"
+      },
+      "heads": {
+       "type": "integer"
+      },
+      "walking_legs": {
+       "type": "integer"
+      },
+      "wings": {
+       "type": "integer"
+      },
+      "extra_limb_pieces": {
+       "type": "integer"
+      },
+      "tails": {
+       "type": "integer"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0
+ },
+ "response": {
+  "id": "chatcmpl-01a1974a-60bd-71ad-aaa3-12cd9a31f822",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\"animals\": [\"eagle\", \"lion\"], \"attached_objects\": [], \"description\": \"A large standing quadruped with the feathered head, chest and outstretched wings of a bird of prey merging into the furred body, legs and tufted tail of a large feline. The front upper part including the head, neck and chest is covered in brown, golden-brown and cream feathers, with a hooked beak and a fierce yellow eye, and two large spread feathered wings rise from the shoulders. The mid-body, hindquarters and four sturdy limbs are covered in short tawny fur with paler underparts and large pawed feet, ending in a long thin tail with a dark tuft.\", \"extra_limb_pieces\": 0, \"heads\": 1, \"parts\": [{\"looks_like\": \"feathered eagle-like head with golden-brown plumage\", \"part\": \"head\", \"where\": \"at the front top of the body, facing to the right\"}, {\"looks_like\": \"hooked eagle-like beak, yellow at the base and dark gray at the tip\", \"part\": \"beak\", \"where\": \"on the front of the head\"}, {\"looks_like\": \"yellow eagle-like eye with dark pupil and stern brow\", \"part\": \"eye\", \"where\": \"on the side of the head above the beak\"}, {\"looks_like\": \"large broad eagle-like wings with layered golden-brown, tan and dark brown feathers\", \"part\": \"wings\", \"where\": \"on the upper back behind the neck, spread upward and outward\"}, {\"looks_like\": \"dense brown, dark brown and cream eagle-like feathers\", \"part\": \"feathers\", \"where\": \"covering the neck, throat and upper chest down to between the front legs\"}, {\"looks_like\": \"muscular tawny lion-like body with short fur and pale belly\", \"part\": \"body\", \"where\": \"in the middle and rear, under the wings\"}, {\"looks_like\": \"four muscular tawny lion-like legs\", \"part\": \"legs\", \"where\": \"underneath the body, two in front and two in back\"}, {\"looks_like\": \"large feline-like paws with pale fur and short dark claws\", \"part\": \"feet\", \"where\": \"at the bottom ends of the legs on the ground\"}, {\"looks_like\": \"long thin lion-like tail with short tawny fur and a dark tuft at the end\", \"part\": \"tail\", \"where\": \"extending down from the rear of the body on the left side\"}], \"separate_bodies\": 1, \"tails\": 1, \"walking_legs\": 4, \"wings\": 2}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null
+    }
+   }
+  ],
+  "created": 1793539596,
+  "model": "muse-spark-1.3",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 2214,
+   "prompt_tokens": 3852,
+   "total_tokens": 6066,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": null,
+    "audio_tokens": null,
+    "reasoning_tokens": 1630,
+    "rejected_prediction_tokens": null,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": null,
+    "cache_write_tokens": null,
+    "cached_tokens": 369,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

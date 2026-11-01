@@ -114,7 +114,7 @@ async def test_integration_questions_use_the_owner_wording(e4_engine):
     q = {x.id: x for x in C.questions(g, e4_engine.tax)}
     assert "grow out of the body with a natural transition" in q["grows_out"].text
     assert "fur stopping at a shield's edge" in q["grows_out"].text and q["grows_out"].expect == "yes"
-    assert "attached on top of the fur" in q["on_top"].text and q["on_top"].expect == "no"
+    assert "laid on top of the fur, with a raised rim or a gap" in q["on_top"].text and q["on_top"].expect == "no"  # S3b
     assert "one continuous structure" in q["continuous"].text and q["scattered"].expect == "no"
     assert q["grows_out"].fix.startswith("Show the hard, glossy chitin plates")  # worded from the plan, not a symptom
 

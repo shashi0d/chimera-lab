@@ -1,0 +1,156 @@
+{
+ "purpose": "evo_describe",
+ "request": {
+  "model": "meta-models/muse-spark-open-1026",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture with no other context and describe exactly what is drawn, like a careful field naturalist. Do not guess what was intended; describe only what is visible. description: a free paragraph describing the whole creature first. parts: every body part you see, one entry each (head, horns, ears, mane, legs, feet, tail, wings, gills, tentacles, shell, plates, scales, feathers, markings), with what it looks like and where it is. attached_objects: anything that looks attached to or sitting on the body rather than part of it, such as an object, an armor piece or a whole small animal; empty if none. animals: every real animal whose features you can see, as everyday English common names, at most four; include any animal that only one part resembles. Then count, looking carefully: separate_bodies: separate animal bodies or body-shaped objects in the picture, including any whole animal or animal-shaped object attached to or sitting on the main creature. heads: heads of any kind. walking_legs: legs the creature stands or walks on, including hidden ones you can infer. wings: wings of any kind. extra_limb_pieces: jointed leg-like, claw-like or tentacle-like pieces other than the walking legs and the tail. tails: tails of any kind (0 if none)."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "Describe this creature, then count."
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (671039 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "plan_blind_describe",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "description",
+      "parts",
+      "attached_objects",
+      "animals",
+      "separate_bodies",
+      "heads",
+      "walking_legs",
+      "wings",
+      "extra_limb_pieces",
+      "tails"
+     ],
+     "properties": {
+      "description": {
+       "type": "string"
+      },
+      "parts": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "part",
+         "looks_like",
+         "where"
+        ],
+        "properties": {
+         "part": {
+          "type": "string"
+         },
+         "looks_like": {
+          "type": "string"
+         },
+         "where": {
+          "type": "string"
+         }
+        }
+       }
+      },
+      "attached_objects": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "animals": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "separate_bodies": {
+       "type": "integer"
+      },
+      "heads": {
+       "type": "integer"
+      },
+      "walking_legs": {
+       "type": "integer"
+      },
+      "wings": {
+       "type": "integer"
+      },
+      "extra_limb_pieces": {
+       "type": "integer"
+      },
+      "tails": {
+       "type": "integer"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0,
+  "max_tokens": 8000
+ },
+ "response": {
+  "id": "chatcmpl-fbec803221a9451490027f05364c5fe6",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{ \"description\": \"The creature is a single quadrupedal hybrid shown in right-facing profile against a plain off-white background. It has the pale pink, smooth-skinned head, face, underbelly and limbs of an axolotl combined with the overlapping armored back and tail of a pangolin. The head is broad and flat with a blunt snout, small nostrils and large dark eyes, with six pink feathery external gills protruding from behind the head. The dorsal surface from the back of the neck to the tip of the long tapering tail is covered in large overlapping brown and gray scales, while the ventral surface, throat, and limbs are pale pink with wrinkled, fleshy skin. It stands on four thick limbs with clawed feet, casting a soft shadow on the ground.\", \"parts\": [ { \"part\": \"head\", \"looks_like\": \"broad, flat, pale pink axolotl head with a blunt snout, small pink nostril, large dark eye with a light blue-gray iris, and a slightly upturned mouth, located at the front right end of the body\", \"where\": \"front right\" }, { \"part\": \"gills\", \"looks_like\": \"six pink feathery external gills with many fine filamentous branches on pink stalks, three on each side of the head behind the eye\", \"where\": \"both sides of the head just behind and above the neck\" }, { \"part\": \"scales\", \"looks_like\": \"large overlapping keratinous scales in rows, brown-gray with darker edges and lighter centers, covering the entire dorsal surface\", \"where\": \"from the back of the neck over the back and sides down to the tail\" }, { \"part\": \"legs\", \"looks_like\": \"four thick, fleshy, pale pink limbs with wrinkled skin and visible folds at the joints\", \"where\": \"under the body, two forelegs under the chest and two hindlegs under the mid-body\" }, { \"part\": \"feet\", \"looks_like\": \"splayed feet with five short digits each tipped with small dark claws\", \"where\": \"at the ends of all four legs resting on the ground\" }, { \"part\": \"tail\", \"looks_like\": \"long, thick, tapering tail, scaly on top and pale wrinkled skin underneath, extending to the left\", \"where\": \"rear left of the body\" }, { \"part\": \"markings\", \"looks_like\": \"small scattered dark gray spots\", \"where\": \"on the top and side of the head and cheek area\" } ], \"attached_objects\": [], \"animals\": [\"axolotl\", \"pangolin\"], \"separate_bodies\": 1, \"heads\": 1, \"walking_legs\": 4, \"wings\": 0, \"extra_limb_pieces\": 0, \"tails\": 1 }",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null,
+     "reasoning_content": "<elided> (6946 chars)"
+    }
+   }
+  ],
+  "created": 1793540440,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 2287,
+   "prompt_tokens": 3795,
+   "total_tokens": 6082,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 1601,
+    "audio_tokens": 0,
+    "reasoning_tokens": 1665,
+    "rejected_prediction_tokens": 3201,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 384,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

@@ -8,7 +8,11 @@
     "grizzly_bear": "brown_bear",
     "zebra": "plains_zebra",
     "camel": "dromedary_camel",
-    "dromedary": "dromedary_camel"
+    "dromedary": "dromedary_camel",
+    "grey wolf": "gray_wolf",
+    "grey_wolf": "gray_wolf",
+    "wolf": "gray_wolf",
+    "goat": "domestic_goat"
   },
   "class_groups": {
     "vertebrate": [
@@ -374,6 +378,8 @@
     }
   },
   "routing_about": "S2 (ROADMAP 5b): the provider per Spark call type. baseten = Muse Spark Open (meta-models/muse-spark-open-1026, OpenAI-compatible); meta = Muse Spark 1.3 on the Meta API. max_tokens caps a Spark Open answer at about 3x the largest output seen in S1 (reasoning tokens count): identify 1634, checklist 1848, polish 4881, open critic 1185. A failed or cut-off Baseten call falls back to Meta, logged. Plans (the legacy full-plan path), plain and web-cited traits, the function audit and vary stay on Meta (S1: Spark Open runs away on long JSON and trait lists).",
+  "critic_decision_about": "S3b recalibration (benchmark/calibration_s3b/ITERATIONS.md): on 33 owner-labeled images, Meta Spark 1.3 alone caught 18/18 failures with 3/15 false alarms; Spark Open alone 18/18 with 11/15 (it calls grown pangolin scales on an axolotl 'laid on top' in 8 of the 10 owner-good images); the S3a pair rule (disagreement is a fail signal) inherits Spark Open's false alarms, 11/15. So Meta decides; Spark Open still answers every image and its disagreements are kept on each row as pair_status. Set mode to 'pair' for the S3a rule. Pending owner confirmation.",
+  "critic_decision": {"mode": "primary", "primary": "meta_spark"},
   "routing": {
     "fallback": "meta",
     "identify": {"provider": "baseten", "max_tokens": 5000},

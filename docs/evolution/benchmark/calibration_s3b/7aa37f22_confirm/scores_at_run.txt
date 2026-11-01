@@ -1,0 +1,271 @@
+critics: ['spark_open', 'meta_spark'] | version 7aa37f22_confirm
+done e2/1_donkey_x_horse {'spark_open': 'ok', 'meta_spark': 'ok'}
+done e2/3_lion_x_eagle {'spark_open': 'ok', 'meta_spark': 'ok'}
+done e4/b_axolotl_x_pangolin {'spark_open': 'ok', 'meta_spark': 'ok'}
+done e4/d_rhinoceros_beetle_x_brown_bear {'spark_open': 'ok', 'meta_spark': 'ok'}
+done s2/beetlebear_run1 {'spark_open': 'ok', 'meta_spark': 'ok'}
+done s2/beetlebear {'spark_open': 'ok', 'meta_spark': 'ok'}
+done e2/2_lion_x_tiger {'spark_open': 'ok', 'meta_spark': 'ok'}
+done e4/c_lion_x_eagle {'spark_open': 'ok', 'meta_spark': 'ok'}
+done e2/4_eagle_x_octopus {'spark_open': 'ok', 'meta_spark': 'ok'}
+done e2c/1_donkey_x_horse {'spark_open': 'ok', 'meta_spark': 'ok'}
+done e4/b_axolotl_x_pangolin_rerender {'spark_open': 'ok', 'meta_spark': 'ok'}
+done s3a/beetle_bear/V0_r1 {'spark_open': 'ok', 'meta_spark': 'ok'}
+done s3a/beetle_bear/V0_r2 {'spark_open': 'ok', 'meta_spark': 'ok'}
+done s3a/beetle_bear/V1_r1 {'spark_open': 'ok', 'meta_spark': 'ok'}
+done s3a/beetle_bear/V1_r2 {'spark_open': 'ok', 'meta_spark': 'ok'}
+done s3a/beetle_bear/V2_r1 {'spark_open': 'ok', 'meta_spark': 'ok'}
+done s3a/beetle_bear/V2_r2 {'spark_open': 'ok', 'meta_spark': 'ok'}
+done s3a/beetle_bear/V3_r1 {'spark_open': 'ok', 'meta_spark': 'ok'}
+done s3a/beetle_bear/V3_r2 {'spark_open': 'ok', 'meta_spark': 'ok'}
+done s3a/beetle_bear/V4_r1 {'spark_open': 'ok', 'meta_spark': 'ok'}
+done s3a/beetle_bear/V4_r2 {'spark_open': 'ok', 'meta_spark': 'ok'}
+done s3a/beetle_bear/V5_r1 {'spark_open': 'ok', 'meta_spark': 'ok'}
+done s3a/beetle_bear/V5_r2 {'spark_open': 'ok', 'meta_spark': 'ok'}
+done s3a/axolotl_pangolin/V1_r1 {'spark_open': 'ok', 'meta_spark': 'ok'}
+done s3a/axolotl_pangolin/V1_r2 {'spark_open': 'ok', 'meta_spark': 'ok'}
+done s3a/axolotl_pangolin/V2_r1 {'spark_open': 'ok', 'meta_spark': 'ok'}
+done s3a/axolotl_pangolin/V2_r2 {'spark_open': 'ok', 'meta_spark': 'ok'}
+done s3a/axolotl_pangolin/V3_r1 {'spark_open': 'ok', 'meta_spark': 'ok'}
+done s3a/axolotl_pangolin/V3_r2 {'spark_open': 'ok', 'meta_spark': 'ok'}
+done s3a/axolotl_pangolin/V4_r1 {'spark_open': 'ok', 'meta_spark': 'ok'}
+done s3a/axolotl_pangolin/V4_r2 {'spark_open': 'ok', 'meta_spark': 'ok'}
+done s3a/axolotl_pangolin/V5_r1 {'spark_open': 'ok', 'meta_spark': 'ok'}
+done s3a/axolotl_pangolin/V5_r2 {'spark_open': 'ok', 'meta_spark': 'ok'}
+s3a_pair         caught 18/18  false alarms 9/15
+s3b_spark_open   caught 18/18  false alarms 9/15
+s3b_meta_spark   caught 18/18  false alarms 3/15
+s3b_pair         caught 18/18  false alarms 9/15
+s3b_configured   caught 18/18  false alarms 3/15
+
+e2/1_donkey_x_horse [fail] 
+   s3a_pair: fail [('frame', 'fail'), ('third_animal', 'fail')]
+   s3b_spark_open: fail [('frame', 'fail'), ('third_animal', 'fail')]
+   s3b_meta_spark: fail [('frame', 'fail'), ('third_animal', 'fail')]
+   s3b_pair: fail [('frame', 'fail'), ('third_animal', 'fail')]
+   s3b_configured: fail [('frame', 'fail'), ('third_animal', 'fail')]
+
+e2/3_lion_x_eagle [fail] 
+   s3a_pair: fail [('frame', 'fail'), ('no_mane', 'fail'), ('plain_fur', 'fail'), ('extra_mane', 'fail'), ('extra_spots', 'fail'), ('third_animal', 'fail')]
+   s3b_spark_open: fail [('frame', 'fail'), ('no_mane', 'fail'), ('plain_fur', 'fail'), ('extra_mane', 'fail'), ('extra_spots', 'fail'), ('third_animal', 'fail')]
+   s3b_meta_spark: fail [('frame', 'fail'), ('no_mane', 'fail'), ('plain_fur', 'fail'), ('extra_mane', 'fail'), ('extra_spots', 'fail'), ('third_animal', 'fail')]
+   s3b_pair: fail [('frame', 'fail'), ('no_mane', 'fail'), ('plain_fur', 'fail'), ('extra_mane', 'fail'), ('extra_spots', 'fail'), ('third_animal', 'fail')]
+   s3b_configured: fail [('frame', 'fail'), ('no_mane', 'fail'), ('plain_fur', 'fail'), ('extra_mane', 'fail'), ('extra_spots', 'fail'), ('third_animal', 'fail')]
+
+e4/b_axolotl_x_pangolin [fail] 
+   s3a_pair: fail [('unplanned_three_pairs_of_feathery_extern', 'fail'), ('extra_gills', 'fail')]
+   s3b_spark_open: fail [('unplanned_three_pairs_of_feathery_extern', 'fail'), ('extra_gills', 'fail')]
+   s3b_meta_spark: fail [('unplanned_three_pairs_of_feathery_extern', 'fail'), ('extra_gills', 'fail')]
+   s3b_pair: fail [('unplanned_three_pairs_of_feathery_extern', 'fail'), ('extra_gills', 'fail')]
+   s3b_configured: fail [('unplanned_three_pairs_of_feathery_extern', 'fail'), ('extra_gills', 'fail')]
+
+e4/d_rhinoceros_beetle_x_brown_bear [fail] 
+   s3a_pair: fail [('wings_front', 'fail'), ('legs_and_wings', 'fail'), ('whole_animal', 'fail'), ('extra_legs', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('continuous', 'fail'), ('scattered', 'fail'), ('walking_legs', 'fail'), ('extra_gills', 'uncertain')]
+   s3b_spark_open: fail [('wings_front', 'fail'), ('legs_and_wings', 'fail'), ('whole_animal', 'fail'), ('extra_legs', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('continuous', 'fail'), ('scattered', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('sized_to_body', 'fail'), ('wrong_scale', 'fail')]
+   s3b_meta_spark: fail [('wings_front', 'fail'), ('legs_and_wings', 'fail'), ('whole_animal', 'fail'), ('extra_legs', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('continuous', 'fail'), ('scattered', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail'), ('walking_legs', 'fail')]
+   s3b_pair: fail [('wings_front', 'fail'), ('legs_and_wings', 'fail'), ('whole_animal', 'fail'), ('extra_legs', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('continuous', 'fail'), ('scattered', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('sized_to_body', 'uncertain'), ('wrong_scale', 'uncertain')]
+   s3b_configured: fail [('wings_front', 'fail'), ('legs_and_wings', 'fail'), ('whole_animal', 'fail'), ('extra_legs', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('continuous', 'fail'), ('scattered', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail'), ('walking_legs', 'fail')]
+
+s2/beetlebear_run1 [fail] 
+   s3a_pair: fail [('whole_animal', 'fail'), ('insect_legs', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('continuous', 'fail'), ('scattered', 'fail')]
+   s3b_spark_open: fail [('whole_animal', 'fail'), ('insect_legs', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('continuous', 'fail'), ('scattered', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('sized_to_body', 'fail'), ('wrong_scale', 'fail'), ('abrupt_stop', 'fail')]
+   s3b_meta_spark: fail [('whole_animal', 'fail'), ('insect_legs', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('continuous', 'fail'), ('scattered', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('sized_to_body', 'fail'), ('wrong_scale', 'fail'), ('abrupt_stop', 'fail')]
+   s3b_pair: fail [('whole_animal', 'fail'), ('insect_legs', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('continuous', 'fail'), ('scattered', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('sized_to_body', 'fail'), ('wrong_scale', 'fail'), ('abrupt_stop', 'fail')]
+   s3b_configured: fail [('whole_animal', 'fail'), ('insect_legs', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('continuous', 'fail'), ('scattered', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('sized_to_body', 'fail'), ('wrong_scale', 'fail'), ('abrupt_stop', 'fail')]
+
+s2/beetlebear [fail] 
+   s3a_pair: fail [('grows_out', 'fail'), ('on_top', 'fail'), ('continuous', 'fail'), ('scattered', 'fail')]
+   s3b_spark_open: fail [('grows_out', 'fail'), ('on_top', 'fail'), ('continuous', 'fail'), ('scattered', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail')]
+   s3b_meta_spark: fail [('grows_out', 'fail'), ('on_top', 'fail'), ('continuous', 'fail'), ('scattered', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail')]
+   s3b_pair: fail [('grows_out', 'fail'), ('on_top', 'fail'), ('continuous', 'fail'), ('scattered', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail')]
+   s3b_configured: fail [('grows_out', 'fail'), ('on_top', 'fail'), ('continuous', 'fail'), ('scattered', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail')]
+
+e2/2_lion_x_tiger [good] 
+   s3a_pair: pass []
+   s3b_spark_open: pass []
+   s3b_meta_spark: pass []
+   s3b_pair: pass []
+   s3b_configured: pass []
+
+e4/c_lion_x_eagle [good] mythic
+   s3a_pair: pass []
+   s3b_spark_open: pass []
+   s3b_meta_spark: pass []
+   s3b_pair: pass []
+   s3b_configured: pass []
+
+e2/4_eagle_x_octopus [good] 
+   s3a_pair: pass []
+   s3b_spark_open: pass []
+   s3b_meta_spark: pass []
+   s3b_pair: pass []
+   s3b_configured: pass []
+
+e2c/1_donkey_x_horse [good] 
+   s3a_pair: fail [('frame', 'fail')]
+   s3b_spark_open: fail [('frame', 'fail')]
+   s3b_meta_spark: fail [('frame', 'fail')]
+   s3b_pair: fail [('frame', 'fail')]
+   s3b_configured: fail [('frame', 'fail')]
+
+e4/b_axolotl_x_pangolin_rerender [good] except: axolotl barely visible
+   s3a_pair: pass []
+   s3b_spark_open: pass []
+   s3b_meta_spark: pass []
+   s3b_pair: pass []
+   s3b_configured: pass []
+
+s3a/beetle_bear/V0_r1 [fail] shell pasted on, not an extension; hind legs disregarded; insect scale
+   s3a_pair: fail [('whole_animal', 'uncertain'), ('grows_out', 'fail'), ('on_top', 'fail'), ('continuous', 'fail'), ('scattered', 'fail')]
+   s3b_spark_open: fail [('grows_out', 'fail'), ('on_top', 'fail'), ('continuous', 'fail'), ('scattered', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('sized_to_body', 'fail'), ('wrong_scale', 'fail'), ('abrupt_stop', 'fail')]
+   s3b_meta_spark: fail [('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('continuous', 'fail'), ('scattered', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail')]
+   s3b_pair: fail [('whole_animal', 'uncertain'), ('grows_out', 'fail'), ('on_top', 'fail'), ('continuous', 'fail'), ('scattered', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('sized_to_body', 'uncertain'), ('wrong_scale', 'uncertain'), ('abrupt_stop', 'fail')]
+   s3b_configured: fail [('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('continuous', 'fail'), ('scattered', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail')]
+
+s3a/beetle_bear/V0_r2 [fail] shell pasted on, not an extension; hind legs disregarded; insect scale
+   s3a_pair: fail [('whole_animal', 'fail'), ('insect_legs', 'uncertain'), ('grows_out', 'fail'), ('on_top', 'fail'), ('continuous', 'fail'), ('scattered', 'fail'), ('extra_mane', 'uncertain')]
+   s3b_spark_open: fail [('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('continuous', 'fail'), ('scattered', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('sized_to_body', 'fail'), ('wrong_scale', 'fail'), ('abrupt_stop', 'fail'), ('extra_mane', 'fail')]
+   s3b_meta_spark: fail [('whole_animal', 'fail'), ('insect_legs', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('continuous', 'fail'), ('scattered', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail')]
+   s3b_pair: fail [('whole_animal', 'fail'), ('insect_legs', 'uncertain'), ('grows_out', 'fail'), ('on_top', 'fail'), ('continuous', 'fail'), ('scattered', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('sized_to_body', 'uncertain'), ('wrong_scale', 'uncertain'), ('abrupt_stop', 'fail'), ('extra_mane', 'uncertain')]
+   s3b_configured: fail [('whole_animal', 'fail'), ('insect_legs', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('continuous', 'fail'), ('scattered', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail')]
+
+s3a/beetle_bear/V1_r1 [fail] the first does not look like a beetle; the second is good in terms of 
+   s3a_pair: fail [('whole_animal', 'uncertain'), ('grows_out', 'fail'), ('on_top', 'fail'), ('third_animal', 'uncertain')]
+   s3b_spark_open: fail [('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail')]
+   s3b_meta_spark: fail [('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail'), ('third_animal', 'fail')]
+   s3b_pair: fail [('whole_animal', 'uncertain'), ('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail'), ('third_animal', 'uncertain')]
+   s3b_configured: fail [('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail'), ('third_animal', 'fail')]
+
+s3a/beetle_bear/V1_r2 [fail] the first does not look like a beetle; the second is good in terms of 
+   s3a_pair: fail [('grows_out', 'fail'), ('on_top', 'fail')]
+   s3b_spark_open: fail [('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail')]
+   s3b_meta_spark: fail [('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail')]
+   s3b_pair: fail [('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'uncertain')]
+   s3b_configured: fail [('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail')]
+
+s3a/beetle_bear/V2_r1 [fail] same problem as V1 (pasted shell, legs bare)
+   s3a_pair: fail [('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail')]
+   s3b_spark_open: fail [('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail')]
+   s3b_meta_spark: fail [('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail')]
+   s3b_pair: fail [('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail')]
+   s3b_configured: fail [('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail')]
+
+s3a/beetle_bear/V2_r2 [fail] same problem as V1 (pasted shell, legs bare)
+   s3a_pair: fail [('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail')]
+   s3b_spark_open: fail [('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail')]
+   s3b_meta_spark: fail [('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail')]
+   s3b_pair: fail [('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail')]
+   s3b_configured: fail [('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail')]
+
+s3a/beetle_bear/V3_r1 [fail] same as V1 and V2
+   s3a_pair: fail [('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail')]
+   s3b_spark_open: fail [('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail')]
+   s3b_meta_spark: fail [('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail')]
+   s3b_pair: fail [('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail')]
+   s3b_configured: fail [('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail')]
+
+s3a/beetle_bear/V3_r2 [fail] same as V1 and V2
+   s3a_pair: fail [('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail')]
+   s3b_spark_open: fail [('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail')]
+   s3b_meta_spark: fail [('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail')]
+   s3b_pair: fail [('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail')]
+   s3b_configured: fail [('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail')]
+
+s3a/beetle_bear/V4_r1 [fail] same; worst variant
+   s3a_pair: fail [('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('extra_mane', 'uncertain')]
+   s3b_spark_open: fail [('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail'), ('extra_mane', 'fail')]
+   s3b_meta_spark: fail [('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail')]
+   s3b_pair: fail [('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail'), ('extra_mane', 'uncertain')]
+   s3b_configured: fail [('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail')]
+
+s3a/beetle_bear/V4_r2 [fail] same; worst variant
+   s3a_pair: fail [('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail')]
+   s3b_spark_open: fail [('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail')]
+   s3b_meta_spark: fail [('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail')]
+   s3b_pair: fail [('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail')]
+   s3b_configured: fail [('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail')]
+
+s3a/beetle_bear/V5_r1 [fail] the horn moved to the nose and it reads as a rhinoceros x bear, not a 
+   s3a_pair: fail [('part_european_rhinoceros_beetle_head_horn', 'fail'), ('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail')]
+   s3b_spark_open: fail [('part_european_rhinoceros_beetle_head_horn', 'fail'), ('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail')]
+   s3b_meta_spark: fail [('part_european_rhinoceros_beetle_head_horn', 'fail'), ('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail')]
+   s3b_pair: fail [('part_european_rhinoceros_beetle_head_horn', 'fail'), ('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail')]
+   s3b_configured: fail [('part_european_rhinoceros_beetle_head_horn', 'fail'), ('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail')]
+
+s3a/beetle_bear/V5_r2 [fail] the horn moved to the nose and it reads as a rhinoceros x bear, not a 
+   s3a_pair: fail [('part_european_rhinoceros_beetle_head_horn', 'fail'), ('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail')]
+   s3b_spark_open: fail [('part_european_rhinoceros_beetle_head_horn', 'fail'), ('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail')]
+   s3b_meta_spark: fail [('part_european_rhinoceros_beetle_head_horn', 'fail'), ('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail')]
+   s3b_pair: fail [('part_european_rhinoceros_beetle_head_horn', 'fail'), ('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail')]
+   s3b_configured: fail [('part_european_rhinoceros_beetle_head_horn', 'fail'), ('whole_animal', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('abrupt_stop', 'fail')]
+
+s3a/axolotl_pangolin/V1_r1 [good] can potentially be an animal (second image especially)
+   s3a_pair: fail [('grows_out', 'fail'), ('on_top', 'fail'), ('third_animal', 'uncertain')]
+   s3b_spark_open: fail [('grows_out', 'fail'), ('on_top', 'fail'), ('third_animal', 'fail')]
+   s3b_meta_spark: fail [('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail')]
+   s3b_pair: fail [('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'uncertain'), ('separate_outline', 'uncertain'), ('third_animal', 'uncertain')]
+   s3b_configured: fail [('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail')]
+
+s3a/axolotl_pangolin/V1_r2 [good] can potentially be an animal (second image especially)
+   s3a_pair: fail [('grows_out', 'uncertain'), ('on_top', 'uncertain')]
+   s3b_spark_open: fail [('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail')]
+   s3b_meta_spark: pass []
+   s3b_pair: fail [('grows_out', 'uncertain'), ('on_top', 'uncertain'), ('follows_body', 'uncertain'), ('separate_outline', 'uncertain')]
+   s3b_configured: pass []
+
+s3a/axolotl_pangolin/V2_r1 [good] good conceptual rendering; best variant
+   s3a_pair: fail [('grows_out', 'uncertain'), ('on_top', 'uncertain'), ('extra_spots', 'uncertain')]
+   s3b_spark_open: fail [('grows_out', 'fail'), ('on_top', 'fail'), ('extra_spots', 'fail')]
+   s3b_meta_spark: pass []
+   s3b_pair: fail [('grows_out', 'uncertain'), ('on_top', 'uncertain'), ('extra_spots', 'uncertain')]
+   s3b_configured: pass []
+
+s3a/axolotl_pangolin/V2_r2 [good] good conceptual rendering; best variant
+   s3a_pair: fail [('grows_out', 'fail'), ('on_top', 'fail'), ('extra_spots', 'fail')]
+   s3b_spark_open: fail [('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail'), ('extra_spots', 'fail')]
+   s3b_meta_spark: fail [('grows_out', 'fail'), ('on_top', 'fail'), ('extra_spots', 'fail')]
+   s3b_pair: fail [('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'uncertain'), ('separate_outline', 'uncertain'), ('extra_spots', 'fail')]
+   s3b_configured: fail [('grows_out', 'fail'), ('on_top', 'fail'), ('extra_spots', 'fail')]
+
+s3a/axolotl_pangolin/V3_r1 [good] good
+   s3a_pair: fail [('grows_out', 'uncertain'), ('on_top', 'uncertain')]
+   s3b_spark_open: fail [('grows_out', 'fail'), ('on_top', 'fail')]
+   s3b_meta_spark: pass []
+   s3b_pair: fail [('grows_out', 'uncertain'), ('on_top', 'uncertain')]
+   s3b_configured: pass []
+
+s3a/axolotl_pangolin/V3_r2 [good] good
+   s3a_pair: fail [('grows_out', 'uncertain'), ('on_top', 'uncertain')]
+   s3b_spark_open: fail [('grows_out', 'fail'), ('on_top', 'fail')]
+   s3b_meta_spark: pass []
+   s3b_pair: fail [('grows_out', 'uncertain'), ('on_top', 'uncertain')]
+   s3b_configured: pass []
+
+s3a/axolotl_pangolin/V4_r1 [good] tail looks odd; rest of the concept is great
+   s3a_pair: fail [('grows_out', 'uncertain'), ('on_top', 'uncertain')]
+   s3b_spark_open: fail [('grows_out', 'fail'), ('on_top', 'fail'), ('follows_body', 'fail'), ('separate_outline', 'fail')]
+   s3b_meta_spark: pass []
+   s3b_pair: fail [('grows_out', 'uncertain'), ('on_top', 'uncertain'), ('follows_body', 'uncertain'), ('separate_outline', 'uncertain')]
+   s3b_configured: pass []
+
+s3a/axolotl_pangolin/V4_r2 [good] tail looks odd; rest of the concept is great
+   s3a_pair: fail [('grows_out', 'uncertain'), ('on_top', 'uncertain')]
+   s3b_spark_open: fail [('grows_out', 'fail'), ('on_top', 'fail')]
+   s3b_meta_spark: pass []
+   s3b_pair: fail [('grows_out', 'uncertain'), ('on_top', 'uncertain')]
+   s3b_configured: pass []
+
+s3a/axolotl_pangolin/V5_r1 [good] tail a little bigger; closer to a real hybrid
+   s3a_pair: pass []
+   s3b_spark_open: pass []
+   s3b_meta_spark: pass []
+   s3b_pair: pass []
+   s3b_configured: pass []
+
+s3a/axolotl_pangolin/V5_r2 [good] tail a little bigger; closer to a real hybrid
+   s3a_pair: pass []
+   s3b_spark_open: pass []
+   s3b_meta_spark: pass []
+   s3b_pair: pass []
+   s3b_configured: pass []
+EXIT 0

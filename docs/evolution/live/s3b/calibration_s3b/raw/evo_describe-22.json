@@ -1,0 +1,156 @@
+{
+ "purpose": "evo_describe",
+ "request": {
+  "model": "meta-models/muse-spark-open-1026",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture with no other context and describe exactly what is drawn, like a careful field naturalist. Do not guess what was intended; describe only what is visible. description: a free paragraph describing the whole creature first. parts: every body part you see, one entry each (head, horns, ears, mane, legs, feet, tail, wings, gills, tentacles, shell, plates, scales, feathers, markings), with what it looks like and where it is. attached_objects: anything that looks attached to or sitting on the body rather than part of it, such as an object, an armor piece or a whole small animal; empty if none. animals: every real animal whose features you can see, as everyday English common names, at most four; include any animal that only one part resembles. Then count, looking carefully: separate_bodies: separate animal bodies or body-shaped objects in the picture, including any whole animal or animal-shaped object attached to or sitting on the main creature. heads: heads of any kind. walking_legs: legs the creature stands or walks on, including hidden ones you can infer. wings: wings of any kind. extra_limb_pieces: jointed leg-like, claw-like or tentacle-like pieces other than the walking legs and the tail. tails: tails of any kind (0 if none)."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "Describe this creature, then count."
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (670679 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "plan_blind_describe",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "description",
+      "parts",
+      "attached_objects",
+      "animals",
+      "separate_bodies",
+      "heads",
+      "walking_legs",
+      "wings",
+      "extra_limb_pieces",
+      "tails"
+     ],
+     "properties": {
+      "description": {
+       "type": "string"
+      },
+      "parts": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "part",
+         "looks_like",
+         "where"
+        ],
+        "properties": {
+         "part": {
+          "type": "string"
+         },
+         "looks_like": {
+          "type": "string"
+         },
+         "where": {
+          "type": "string"
+         }
+        }
+       }
+      },
+      "attached_objects": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "animals": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "separate_bodies": {
+       "type": "integer"
+      },
+      "heads": {
+       "type": "integer"
+      },
+      "walking_legs": {
+       "type": "integer"
+      },
+      "wings": {
+       "type": "integer"
+      },
+      "extra_limb_pieces": {
+       "type": "integer"
+      },
+      "tails": {
+       "type": "integer"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0,
+  "max_tokens": 8000
+ },
+ "response": {
+  "id": "chatcmpl-b219b9f29abd4f6a9cd7fdf57fc50b9b",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\n  \"description\": \"The creature is a quadrupedal, pangolin-like animal shown in right-facing profile against a plain light background, standing on all four limbs with its body arched and its long tail extended horizontally behind it. Most of its dorsal and lateral surfaces, the top of its elongated snout, its limbs, and its tail are covered in overlapping, dark brown to grayish, keeled scales with lighter edges. Large, irregular patches of pale pink, wrinkled, fleshy skin are exposed where scales are missing on the mid-back, the mid-flank, and the lower rear flank. The head is elongated into a tapered snout with a dark nostril at the tip and fine whiskers, a small dark round eye on the side, and a small rounded ear behind the eye. The limbs are short and thick, ending in broad feet with long, curved, dark claws, and the tail is thick at the base and tapers to a point.\",\n  \"parts\": [\n    {\n      \"part\": \"head\",\n      \"looks_like\": \"elongated and tapered to a blunt snout with a dark nostril at the tip, fine whiskers at the muzzle, a small dark round eye on the side, and wrinkled gray-brown skin on the face; the crown and bridge of the snout are covered in small overlapping scales\",\n      \"where\": \"at the front right end of the body, extending forward from the scaled neck\"\n    },\n    {\n      \"part\": \"ears\",\n      \"looks_like\": \"small, rounded, fleshy ear with a visible inner ridge and fine hairs around the margin, pale gray-brown\",\n      \"where\": \"on the side of the head just behind and slightly above the eye, at the edge of the scaled cap\"\n    },\n    {\n      \"part\": \"eyes\",\n      \"looks_like\": \"small, round, glossy black eye with a faint pale ring and fine wrinkles around it\",\n      \"where\": \"on the side of the head, forward of the ear and below the scaled crown\"\n    },\n    {\n      \"part\": \"legs\",\n      \"looks_like\": \"four short, thick, muscular legs with pale, wrinkled skin on the lower portions and overlapping dark scales on the upper and outer portions; the forelimbs are positioned under the chest and the hindlimbs under the rear\",\n      \"where\": \"two forelimbs extending down from the chest, two hindlimbs extending down from the rear underside, supporting the body above the ground\"\n    },\n    {\n      \"part\": \"feet\",\n      \"looks_like\": \"broad, fleshy feet with thick pads and three to four long, thick, curved, dark brown-black claws per foot; the skin is pale with dark speckling and dirt around the claws\",\n      \"where\": \"at the distal ends of each leg, in contact with the ground\"\n    },\n    {\n      \"part\": \"tail\",\n      \"looks_like\": \"long, thick at the base and tapering to a blunt point, covered dorsally and laterally in overlapping dark scales with visible segmentation underneath\",\n      \"where\": \"extending horizontally to the rear from behind the hind legs, lying just above the ground\"\n    },\n    {\n      \"part\": \"scales\",\n      \"looks_like\": \"overlapping, rounded-triangular, keeled keratinous scales, dark brown to gray with lighter tan edges and fine striations, larger on the back and sides and smaller on the head, limbs, and tail\",\n      \"where\": \"covering the dorsal surface, sides, top of head and snout, outer limbs, and tail, except where interrupted by pink skin patches\"\n    },\n    {\n      \"part\": \"markings\",\n      \"looks_like\": \"large, irregular, pale pink, fleshy, wrinkled patches of exposed skin with soft folds, lacking scales\",\n      \"where\": \"one large patch on the mid-dorsal back, one on the mid-lateral flank above the forelimb, and a smaller lobed patch on the lower rear flank above the hind leg\"\n    }\n  ],\n  \"attached_objects\": [],\n  \"animals\": [\"pangolin\"],\n  \"separate_bodies\": 1,\n  \"heads\": 1,\n  \"walking_legs\": 4,\n  \"wings\": 0,\n  \"extra_limb_pieces\": 0,\n  \"tails\": 1\n}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null,
+     "reasoning_content": "<elided> (6942 chars)"
+    }
+   }
+  ],
+  "created": 1793539684,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 2528,
+   "prompt_tokens": 3795,
+   "total_tokens": 6323,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 1771,
+    "audio_tokens": 0,
+    "reasoning_tokens": 1591,
+    "rejected_prediction_tokens": 3528,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 384,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

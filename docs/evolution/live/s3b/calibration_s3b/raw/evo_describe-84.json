@@ -1,0 +1,156 @@
+{
+ "purpose": "evo_describe",
+ "request": {
+  "model": "meta-models/muse-spark-open-1026",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture with no other context and describe exactly what is drawn, like a careful field naturalist. Do not guess what was intended; describe only what is visible. description: a free paragraph describing the whole creature first. parts: every body part you see, one entry each (head, horns, ears, mane, legs, feet, tail, wings, gills, tentacles, shell, plates, scales, feathers, markings), with what it looks like and where it is. attached_objects: anything that looks attached to or sitting on the body rather than part of it, such as an object, an armor piece or a whole small animal; empty if none. animals: every real animal whose features you can see, as everyday English common names, at most four; include any animal that only one part resembles. Then count, looking carefully: separate_bodies: separate animal bodies or body-shaped objects in the picture, including any whole animal or animal-shaped object attached to or sitting on the main creature. heads: heads of any kind. walking_legs: legs the creature stands or walks on, including hidden ones you can infer. wings: wings of any kind. extra_limb_pieces: jointed leg-like, claw-like or tentacle-like pieces other than the walking legs and the tail. tails: tails of any kind (0 if none)."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "Describe this creature, then count."
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (654207 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "plan_blind_describe",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "description",
+      "parts",
+      "attached_objects",
+      "animals",
+      "separate_bodies",
+      "heads",
+      "walking_legs",
+      "wings",
+      "extra_limb_pieces",
+      "tails"
+     ],
+     "properties": {
+      "description": {
+       "type": "string"
+      },
+      "parts": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "part",
+         "looks_like",
+         "where"
+        ],
+        "properties": {
+         "part": {
+          "type": "string"
+         },
+         "looks_like": {
+          "type": "string"
+         },
+         "where": {
+          "type": "string"
+         }
+        }
+       }
+      },
+      "attached_objects": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "animals": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "separate_bodies": {
+       "type": "integer"
+      },
+      "heads": {
+       "type": "integer"
+      },
+      "walking_legs": {
+       "type": "integer"
+      },
+      "wings": {
+       "type": "integer"
+      },
+      "extra_limb_pieces": {
+       "type": "integer"
+      },
+      "tails": {
+       "type": "integer"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0,
+  "max_tokens": 8000
+ },
+ "response": {
+  "id": "chatcmpl-174a6f8063bb422db3faaaa8fbbd152c",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{ \n\"description\": \"A large standing creature is shown in strict right-facing profile against a plain off-white background. The forward and dorsal two-thirds is that of a brown eagle: the head has a hooked beak yellow at the base and dark gray-black at the tip, a yellow cere, and a large amber-brown eye; the head, neck, chest, back, folded wings and upper legs are covered in dense overlapping brown feathers varying from golden-brown to dark brown with darker feather tips. Two thick feathered legs support the body and end in large yellow scaly feet with long curved black talons. At the rear, where a bird's rectrices would be, there is no feathered tail; instead a cluster of thick fleshy brown tentacles with rows of circular suckers hangs down and curls at the tips. Similar pale circular sucker-like bumps are visible on the skin of the thighs and shins beneath the leg feathers.\",\n\"parts\": [\n  {\"part\": \"head\", \"looks_like\": \"eagle-like, at the top right facing right, covered in short brown feathers with a slightly shaggy nape, a large amber eye with dark pupil, a strongly hooked beak yellow at the cere and base and dark gray-black at the hooked tip, with small bristles at the gape\", \"where\": \"top right, atop the neck\"},\n  {\"part\": \"wings\", \"looks_like\": \"two large folded wings with overlapping layered brown feathers, darker brown-black at the primary tips and lighter golden-brown on the coverts, individual feathers with visible barbs and scalloped edges\", \"where\": \"on the left and right sides of the torso, the left wing fully visible in profile, the right wing partially visible behind the body on the far side\"},\n  {\"part\": \"legs\", \"looks_like\": \"two thick upright legs, feathered in brown down to the ankle, the feathered skin bearing raised pale circular sucker-like bumps with central pits, especially on the outer thigh and shin\", \"where\": \"beneath the body, extending vertically to the feet\"},\n  {\"part\": \"feet\", \"looks_like\": \"two large yellow feet with reticulated scaly skin and four toes each bearing long, sharply curved black talons, the scales and toe pads detailed\", \"where\": \"at the bottom of the legs, in contact with the ground\"},\n  {\"part\": \"tail\", \"looks_like\": \"no conventional feathered bird tail is visible; the rear of the body terminates in a cluster of tentacles occupying the tail position\", \"where\": \"at the posterior end of the body, beneath the folded wing tips\"},\n  {\"part\": \"tentacles\", \"looks_like\": \"seven thick tapering fleshy brown tentacles, each lined on the inner surface with two rows of pale circular suckers with central pits, the distal tips curling outward or inward\", \"where\": \"emerging from the rear/ventral tail area and hanging down behind the legs, tips at the lower left\"},\n  {\"part\": \"feathers\", \"looks_like\": \"dense plumage covering head, neck, body, wings and upper legs, layered and overlapping, color from light golden-brown on the neck and wing coverts to dark brown on the back and primaries\", \"where\": \"over the entire body except the beak, eye, feet/talons and tentacle sucker surfaces\"},\n  {\"part\": \"scales\", \"looks_like\": \"yellow, small polygonal reticulated scales with wrinkled texture\", \"where\": \"covering the dorsal and plantar surfaces of both feet and toes\"},\n  {\"part\": \"markings\", \"looks_like\": \"pale-rimmed circular sucker marks with a central dot, matching the suckers on the tentacles, scattered in patches\", \"where\": \"on the feathered skin of both thighs and both shins\"}\n],\n\"attached_objects\": [],\n\"animals\": [\"eagle\", \"octopus\"],\n\"separate_bodies\": 1,\n\"heads\": 1,\n\"walking_legs\": 2,\n\"wings\": 2,\n\"extra_limb_pieces\": 7,\n\"tails\": 0\n}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null,
+     "reasoning_content": "<elided> (21694 chars)"
+    }
+   }
+  ],
+  "created": 1793541307,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 6039,
+   "prompt_tokens": 3795,
+   "total_tokens": 9834,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 4292,
+    "audio_tokens": 0,
+    "reasoning_tokens": 5152,
+    "rejected_prediction_tokens": 7930,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 3712,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

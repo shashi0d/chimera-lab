@@ -36,7 +36,8 @@ SAM_PROMPT = "animal"
 # Group words a critic may use for a parent ("bird" for an eagle): (taxonomy field, value).
 GROUP_WORDS = {"bird": ("tax_class", "Aves"), "raptor": ("tax_class", "Aves"), "cat": ("family", "Felidae"),
                "big cat": ("family", "Felidae"), "feline": ("family", "Felidae"), "equine": ("family", "Equidae"),
-               "equid": ("family", "Equidae"), "bear": ("family", "Ursidae"), "camelid": ("family", "Camelidae")}
+               "equid": ("family", "Equidae"), "bear": ("family", "Ursidae"), "camelid": ("family", "Camelidae"),
+               "salamander": ("tax_class", "Amphibia")}  # S3b: an axolotl is a salamander
 
 
 def third_animals(result: dict[str, Any], sire: Animal, dam: Animal, tax: Taxonomy, r: Route | None = None) -> list[str]:

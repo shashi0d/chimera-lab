@@ -110,8 +110,8 @@ class RoutedSpark:
     async def describe(self, image: bytes) -> dict[str, Any]:
         return await self._call("describe", image)
 
-    async def ask(self, image: bytes, questions: list[str]) -> dict[str, Any]:
-        return await self._call("ask", image, questions)
+    async def ask(self, image: bytes, questions: list[str], parts: list[str] | None = None) -> dict[str, Any]:
+        return await self._call("ask", image, questions, parts)
 
 
 def summarize(log: list[dict[str, Any]]) -> dict[str, Any]:

@@ -210,14 +210,20 @@ class MockEvoSpark:
                                        "extra_limb_pieces": 1 if "tentacle" in low else 0,
                                        "tails": 0 if "no tail" in low else 1})
 
-    async def ask(self, image: bytes, questions: list[str]) -> dict[str, Any]:
+    async def ask(self, image: bytes, questions: list[str], parts: list[str] | None = None) -> dict[str, Any]:
         """Mock balanced checklist (S3a): a recognized render answers every question as the plan expects; an
-        unrecognized image is unclear throughout."""
+        unrecognized image is unclear throughout. S3b: each listed part looks like it came from the donor the prompt
+        names ("from the <donor>, as parts and materials")."""
         from app.evolution.critic import EXPECTED
 
-        known = self.registry.lookup(image) is not None
+        prompt = self.registry.lookup(image)
+        known = prompt is not None
         answers = [{"item": q, "answer": EXPECTED.get(q, "yes") if known else "unclear"} for q in questions]
-        return self._wire("describe", {"answers": answers, "notes": "mock balanced checklist"})
+        m = re.search(r"from the ([a-z' -]+?), as parts and materials", prompt or "")
+        origins = [m.group(1) if m else "unclear" for _p in parts or []]
+        out = self._wire("describe", {"answers": answers, "origins": origins, "notes": "mock balanced checklist"})
+        out["origins"] = dict(zip(parts or [], out.get("origins") or [], strict=False))
+        return out
 
     # E4 open world (mock knowledge: tests/fixtures/recorded/open_world.json)
 

@@ -1,0 +1,156 @@
+{
+ "purpose": "evo_describe",
+ "request": {
+  "model": "meta-models/muse-spark-open-1026",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture with no other context and describe exactly what is drawn, like a careful field naturalist. Do not guess what was intended; describe only what is visible. description: a free paragraph describing the whole creature first. parts: every body part you see, one entry each (head, horns, ears, mane, legs, feet, tail, wings, gills, tentacles, shell, plates, scales, feathers, markings), with what it looks like and where it is. attached_objects: anything that looks attached to or sitting on the body rather than part of it, such as an object, an armor piece or a whole small animal; empty if none. animals: every real animal whose features you can see, as everyday English common names, at most four; include any animal that only one part resembles. Then count, looking carefully: separate_bodies: separate animal bodies or body-shaped objects in the picture, including any whole animal or animal-shaped object attached to or sitting on the main creature. heads: heads of any kind. walking_legs: legs the creature stands or walks on, including hidden ones you can infer. wings: wings of any kind. extra_limb_pieces: jointed leg-like, claw-like or tentacle-like pieces other than the walking legs and the tail. tails: tails of any kind (0 if none)."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "Describe this creature, then count."
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (781975 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "plan_blind_describe",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "description",
+      "parts",
+      "attached_objects",
+      "animals",
+      "separate_bodies",
+      "heads",
+      "walking_legs",
+      "wings",
+      "extra_limb_pieces",
+      "tails"
+     ],
+     "properties": {
+      "description": {
+       "type": "string"
+      },
+      "parts": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "part",
+         "looks_like",
+         "where"
+        ],
+        "properties": {
+         "part": {
+          "type": "string"
+         },
+         "looks_like": {
+          "type": "string"
+         },
+         "where": {
+          "type": "string"
+         }
+        }
+       }
+      },
+      "attached_objects": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "animals": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "separate_bodies": {
+       "type": "integer"
+      },
+      "heads": {
+       "type": "integer"
+      },
+      "walking_legs": {
+       "type": "integer"
+      },
+      "wings": {
+       "type": "integer"
+      },
+      "extra_limb_pieces": {
+       "type": "integer"
+      },
+      "tails": {
+       "type": "integer"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0,
+  "max_tokens": 8000
+ },
+ "response": {
+  "id": "chatcmpl-036142f9581b4334868e24d41bcdabdb",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\n  \"description\": \"The image shows a single large, robust felid standing in profile on a plain off-white background with a soft gray shadow beneath its feet, facing to the right with its head turned three-quarters toward the viewer. It has a muscular, deep-chested body covered in short dense tawny golden-brown fur that is paler cream-white on the chin, chest, belly and inner legs, with faint to moderate dark brown striping and spotting across the body. The head is broad with a short muzzle, the neck and chest bear longer shaggy fur forming a ruff, and the limbs are thick and sturdy ending in large rounded paws. A short thin tail with dark banding and a dark tip extends from the rear. The overall stance is calm and alert, with all four feet on the ground.\",\n  \"parts\": [\n    {\n      \"part\": \"head\",\n      \"looks_like\": \"large broad felid head with a short muzzle, pinkish-brown nose, white fur on the chin, lower lip and whisker pads, long white whiskers on the muzzle, amber-brown eyes with white patches and dark outlines below, and a forehead with faint dark spots and short stripes\",\n      \"where\": \"at the anterior/front end of the body, turned slightly toward the viewer\"\n    },\n    {\n      \"part\": \"ears\",\n      \"looks_like\": \"two small rounded ears with tawny fur, lighter fur on the edges and inside, and a distinct dark blackish patch on the back of each ear\",\n      \"where\": \"on top of the head, set wide apart\"\n    },\n    {\n      \"part\": \"mane\",\n      \"looks_like\": \"longer shaggy fur forming a ruff, tawny on the sides of the neck and paler cream-white and more elongated on the throat and central chest, with a slightly tousled texture\",\n      \"where\": \"around the neck, throat and upper chest, extending down the front of the chest\"\n    },\n    {\n      \"part\": \"legs\",\n      \"looks_like\": \"four thick muscular legs covered in tawny fur with darker horizontal transverse stripes, most distinct on the lower segments, especially the hind legs; forelimbs are straight and vertical, hindlimbs are angled at the hock\",\n      \"where\": \"beneath the body, two forelimbs under the chest and two hindlimbs under the hindquarters\"\n    },\n    {\n      \"part\": \"feet\",\n      \"looks_like\": \"four large rounded paws with visible toe lobes and short dark claws, fur lighter on the paws, front paws viewed frontally and larger, hind paws viewed in profile\",\n      \"where\": \"at the distal ends of each leg, in contact with the ground\"\n    },\n    {\n      \"part\": \"tail\",\n      \"looks_like\": \"short slender tail covered in tawny fur with dark transverse bands and a dark bushy tip that is blackish with a small white patch\",\n      \"where\": \"extending from the dorsal posterior end of the body at the hindquarters, hanging down and slightly to the left\"\n    },\n    {\n      \"part\": \"markings\",\n      \"looks_like\": \"faint to moderately distinct dark brown to black transverse stripes and small spots, more concentrated and darker on the lower hind legs, hindquarters and lower forelimbs, fainter and diffuse along the back, sides and torso, with small spots and short stripes on the forehead and face\",\n      \"where\": \"distributed across the body, head, legs and tail, most visible on the legs and rear\"\n    }\n  ],\n  \"attached_objects\": [],\n  \"animals\": [\"lion\", \"tiger\"],\n  \"separate_bodies\": 1,\n  \"heads\": 1,\n  \"walking_legs\": 4,\n  \"wings\": 0,\n  \"extra_limb_pieces\": 0,\n  \"tails\": 1\n}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null,
+     "reasoning_content": "<elided> (11644 chars)"
+    }
+   }
+  ],
+  "created": 1793543333,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 3441,
+   "prompt_tokens": 3795,
+   "total_tokens": 7236,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 2455,
+    "audio_tokens": 0,
+    "reasoning_tokens": 2599,
+    "rejected_prediction_tokens": 4447,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 3712,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

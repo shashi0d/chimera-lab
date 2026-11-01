@@ -1,0 +1,156 @@
+{
+ "purpose": "evo_describe",
+ "request": {
+  "model": "meta-models/muse-spark-open-1026",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture with no other context and describe exactly what is drawn, like a careful field naturalist. Do not guess what was intended; describe only what is visible. description: a free paragraph describing the whole creature first. parts: every body part you see, one entry each (head, horns, ears, mane, legs, feet, tail, wings, gills, tentacles, shell, plates, scales, feathers, markings), with what it looks like and where it is. attached_objects: anything that looks attached to or sitting on the body rather than part of it, such as an object, an armor piece or a whole small animal; empty if none. animals: every real animal whose features you can see, as everyday English common names, at most four; include any animal that only one part resembles. Then count, looking carefully: separate_bodies: separate animal bodies or body-shaped objects in the picture, including any whole animal or animal-shaped object attached to or sitting on the main creature. heads: heads of any kind. walking_legs: legs the creature stands or walks on, including hidden ones you can infer. wings: wings of any kind. extra_limb_pieces: jointed leg-like, claw-like or tentacle-like pieces other than the walking legs and the tail. tails: tails of any kind (0 if none)."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "Describe this creature, then count."
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (565595 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "plan_blind_describe",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "description",
+      "parts",
+      "attached_objects",
+      "animals",
+      "separate_bodies",
+      "heads",
+      "walking_legs",
+      "wings",
+      "extra_limb_pieces",
+      "tails"
+     ],
+     "properties": {
+      "description": {
+       "type": "string"
+      },
+      "parts": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "part",
+         "looks_like",
+         "where"
+        ],
+        "properties": {
+         "part": {
+          "type": "string"
+         },
+         "looks_like": {
+          "type": "string"
+         },
+         "where": {
+          "type": "string"
+         }
+        }
+       }
+      },
+      "attached_objects": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "animals": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "separate_bodies": {
+       "type": "integer"
+      },
+      "heads": {
+       "type": "integer"
+      },
+      "walking_legs": {
+       "type": "integer"
+      },
+      "wings": {
+       "type": "integer"
+      },
+      "extra_limb_pieces": {
+       "type": "integer"
+      },
+      "tails": {
+       "type": "integer"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0,
+  "max_tokens": 8000
+ },
+ "response": {
+  "id": "chatcmpl-c98af445982343709c33c377c72c5852",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\n  \"description\": \"The creature is shown in side profile facing right against a plain light background. It has a low, elongated quadrupedal body with a broad flat head, four short fleshy limbs, and a long broad tapering tail. The ventral skin and limbs are pale pinkish-gray with wrinkled texture and darker mottling on the head, while the entire dorsal surface from the back of the neck to the tip of the tail is covered in overlapping large brown keratinous scales. Six feathery external gills extend from the sides of the neck behind the head.\",\n  \"parts\": [\n    {\n      \"part\": \"head\",\n      \"looks_like\": \"broad, flat and rounded at the snout, pale pinkish-gray with darker gray mottled spots, small dark eyes on the sides of the head, small nostrils at the tip of the snout, and a thin closed mouth line\",\n      \"where\": \"at the front right end of the body\"\n    },\n    {\n      \"part\": \"gills\",\n      \"looks_like\": \"six feathery external gills, pinkish-red stalks with fine red filamentous branches, three on each side\",\n      \"where\": \"protruding outward from the neck immediately behind the head, three on the near side and three on the far side\"\n    },\n    {\n      \"part\": \"scales\",\n      \"looks_like\": \"large, overlapping, rounded keratinous scales in shades of brown with lighter edges and fine striations, arranged in diagonal rows\",\n      \"where\": \"covering the entire dorsal and lateral surfaces from the back of the neck along the back and over the dorsal side of the tail to the tip\"\n    },\n    {\n      \"part\": \"legs\",\n      \"looks_like\": \"four short, thick, fleshy limbs with wrinkled pale pinkish-gray skin and visible folds at the joints\",\n      \"where\": \"two under the front third of the body and two under the rear third of the body, supporting the body above the ground\"\n    },\n    {\n      \"part\": \"feet\",\n      \"looks_like\": \"small feet with short distinct digits tipped with tiny claws, skin wrinkled and pale\",\n      \"where\": \"at the distal ends of each of the four legs, in contact with the ground\"\n    },\n    {\n      \"part\": \"tail\",\n      \"looks_like\": \"long, broad, dorsoventrally flattened and tapering to a rounded tip, dorsally covered in the same overlapping brown scales and ventrally pale smooth skin with a thin dorsal fin-like ridge along the top midline near the base\",\n      \"where\": \"extending to the left from the rear of the body\"\n    },\n    {\n      \"part\": \"markings\",\n      \"looks_like\": \"mottled darker gray spots and pale wrinkled transverse folds on the underbelly and throat\",\n      \"where\": \"on the head, throat, and ventral surface of the body between the limbs\"\n    }\n  ],\n  \"attached_objects\": [],\n  \"animals\": [\"axolotl\", \"pangolin\"],\n  \"separate_bodies\": 1,\n  \"heads\": 1,\n  \"walking_legs\": 4,\n  \"wings\": 0,\n  \"extra_limb_pieces\": 0,\n  \"tails\": 1\n}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null,
+     "reasoning_content": "<elided> (7982 chars)"
+    }
+   }
+  ],
+  "created": 1793540656,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 2608,
+   "prompt_tokens": 3795,
+   "total_tokens": 6403,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 1861,
+    "audio_tokens": 0,
+    "reasoning_tokens": 1895,
+    "rejected_prediction_tokens": 3368,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 0,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

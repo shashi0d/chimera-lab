@@ -1,0 +1,156 @@
+{
+ "purpose": "evo_describe",
+ "request": {
+  "model": "meta-models/muse-spark-open-1026",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture with no other context and describe exactly what is drawn, like a careful field naturalist. Do not guess what was intended; describe only what is visible. description: a free paragraph describing the whole creature first. parts: every body part you see, one entry each (head, horns, ears, mane, legs, feet, tail, wings, gills, tentacles, shell, plates, scales, feathers, markings), with what it looks like and where it is. attached_objects: anything that looks attached to or sitting on the body rather than part of it, such as an object, an armor piece or a whole small animal; empty if none. animals: every real animal whose features you can see, as everyday English common names, at most four; include any animal that only one part resembles. Then count, looking carefully: separate_bodies: separate animal bodies or body-shaped objects in the picture, including any whole animal or animal-shaped object attached to or sitting on the main creature. heads: heads of any kind. walking_legs: legs the creature stands or walks on, including hidden ones you can infer. wings: wings of any kind. extra_limb_pieces: jointed leg-like, claw-like or tentacle-like pieces other than the walking legs and the tail. tails: tails of any kind (0 if none)."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "Describe this creature, then count."
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (688299 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "plan_blind_describe",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "description",
+      "parts",
+      "attached_objects",
+      "animals",
+      "separate_bodies",
+      "heads",
+      "walking_legs",
+      "wings",
+      "extra_limb_pieces",
+      "tails"
+     ],
+     "properties": {
+      "description": {
+       "type": "string"
+      },
+      "parts": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "part",
+         "looks_like",
+         "where"
+        ],
+        "properties": {
+         "part": {
+          "type": "string"
+         },
+         "looks_like": {
+          "type": "string"
+         },
+         "where": {
+          "type": "string"
+         }
+        }
+       }
+      },
+      "attached_objects": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "animals": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "separate_bodies": {
+       "type": "integer"
+      },
+      "heads": {
+       "type": "integer"
+      },
+      "walking_legs": {
+       "type": "integer"
+      },
+      "wings": {
+       "type": "integer"
+      },
+      "extra_limb_pieces": {
+       "type": "integer"
+      },
+      "tails": {
+       "type": "integer"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0,
+  "max_tokens": 8000
+ },
+ "response": {
+  "id": "chatcmpl-252e58092c8d4d688468dd942758e951",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\n  \"description\": \"The creature is shown in right-facing lateral profile against a plain off-white background, standing on four limbs with its body held low to the ground. It has a pale, smooth, rounded head with large dark eyes and a slightly smiling mouth, six feathery reddish-pink external gills projecting from the sides of the neck, a low elongated trunk covered dorsally by large overlapping dark brown scales and ventrally by highly wrinkled pale pink skin with transverse folds, four short thick wrinkled pink legs ending in broad five-toed clawed feet, and a thick tapering tail that extends to the left and is cropped by the edge of the image. The overall appearance combines a soft, naked-skinned ventral body and limbs with a heavily armored scaly back.\",\n  \"parts\": [\n    {\n      \"part\": \"head\",\n      \"looks_like\": \"pale pink, smooth and slightly glossy, rounded with a blunt snout, small nostril openings at the tip, large round dark eyes with pale bluish-grey irises positioned dorsolaterally, and a faint upturned mouth line; located at the anterior right end of the body\"\n    ,\n      \"where\": \"anterior right end, in front of the gills and scales\"\n    },\n    {\n      \"part\": \"eyes\",\n      \"looks_like\": \"large, round, prominent, dark pupil with a light bluish-grey iris and a small highlight, with slightly wrinkled skin around the orbit\",\n      \"where\": \"on the sides of the head, one clearly visible in profile on the right side\"\n    },\n    {\n      \"part\": \"gills\",\n      \"looks_like\": \"six external, feathery, branched, reddish-pink filaments with fine lateral fimbriae, fleshy at the base and feathery toward the tips, three on each side of the neck\",\n      \"where\": \"projecting outward and slightly backward from the posterior sides of the head at the neck junction, just in front of the scaly back\"\n    },\n    {\n      \"part\": \"scales\",\n      \"looks_like\": \"large, overlapping, keratinous, teardrop to rounded plates, dark brown in the center with lighter tan-brown edges and fine radial striations, arranged in diagonal rows\",\n      \"where\": \"covering the entire dorsal surface from immediately behind the gills over the arched back to the dorsal side of the tail\"\n    },\n    {\n      \"part\": \"legs\",\n      \"looks_like\": \"four short, thick, columnar limbs with deeply wrinkled, folded pale pink skin, muscular upper segments and narrower lower segments\",\n      \"where\": \"two forelimbs under the anterior chest and two hindlimbs under the mid-posterior belly, supporting the body above the ground\"\n    },\n    {\n      \"part\": \"feet\",\n      \"looks_like\": \"broad, splayed, five-toed with short pale yellowish claws/nails at the tip of each digit, wrinkled pink skin on the dorsal surface\",\n      \"where\": \"at the distal ends of each of the four legs, in contact with the ground\"\n    },\n    {\n      \"part\": \"tail\",\n      \"looks_like\": \"thick at the base and tapering, scaly dark brown on the dorsal side continuing the back armor and wrinkled pale pink on the ventral side, partially cropped\",\n      \"where\": \"extending leftward from the posterior body, with only the base and mid-section visible at the left edge of the image\"\n    },\n    {\n      \"part\": \"skin / markings\",\n      \"looks_like\": \"pale pink, highly wrinkled and folded with transverse ridges along the belly and looser folds on the neck and limbs, with faint mottled greyish patches on the top of the head\",\n      \"where\": \"on the ventral body, neck, sides of the head, and all four limbs, exposed wherever scales are absent\"\n    }\n  ],\n  \"attached_objects\": [],\n  \"animals\": [\"axolotl\", \"pangolin\"],\n  \"separate_bodies\": 1,\n  \"heads\": 1,\n  \"walking_legs\": 4,\n  \"wings\": 0,\n  \"extra_limb_pieces\": 0,\n  \"tails\": 1\n}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null,
+     "reasoning_content": "<elided> (9507 chars)"
+    }
+   }
+  ],
+  "created": 1793542175,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 3224,
+   "prompt_tokens": 3795,
+   "total_tokens": 7019,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 2282,
+    "audio_tokens": 0,
+    "reasoning_tokens": 2309,
+    "rejected_prediction_tokens": 4312,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 3712,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

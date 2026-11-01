@@ -150,13 +150,15 @@ DESCRIBE_INSTRUCTIONS = (
 )
 # S3a iteration 2: a bare list of answers in question order. Copying each question's text into the answer (iteration
 # 1) made Spark Open run away to its 8000-token cap on 4 of 11 images.
-ASK_SCHEMA = _obj({"answers": {"type": "array", "items": {"type": "string", "enum": list(ANSWERS)}}, "notes": _STR})
+ASK_SCHEMA = _obj({"answers": {"type": "array", "items": {"type": "string", "enum": list(ANSWERS)}},
+                   "origins": _STRS, "notes": _STR})  # S3b: one animal name per listed part
 ASK_INSTRUCTIONS = (
     "You look at one picture of a creature and answer numbered questions about it. Answer each question on its own: "
     "yes if the picture clearly shows it, no if it clearly does not, unclear if you cannot tell. Many questions "
     "describe things that should not be there, so do not lean toward yes. Judge only what is visible. answers: one "
-    "word per question (yes, no or unclear), in the same order as the questions, nothing else. notes: one short "
-    "sentence."
+    "word per question (yes, no or unclear), in the same order as the questions, nothing else. origins: for each "
+    "listed part, in order, the one real animal that part looks like it came from, as an everyday English common "
+    "name (or unclear); empty if no parts are listed. notes: one short sentence."
 )
 
 
@@ -168,11 +170,15 @@ def build_describe_request(model: str, image: bytes) -> dict[str, Any]:
     ], "response_format": _json_schema("plan_blind_describe", DESCRIBE_SCHEMA), "temperature": 0}
 
 
-def build_ask_request(model: str, image: bytes, questions: list[str]) -> dict[str, Any]:
+def build_ask_request(model: str, image: bytes, questions: list[str], parts: list[str] | None = None) -> dict[str, Any]:
     listing = "\n".join(f"{i}. {q}" for i, q in enumerate(questions, 1))
+    text = f"Questions:\n{listing}"
+    if parts:
+        text += "\n\nParts (which animal does each look like it came from?):\n" + "\n".join(
+            f"{i}. {p}" for i, p in enumerate(parts, 1))
     return {"model": model, "messages": [
         {"role": "system", "content": ASK_INSTRUCTIONS},
-        {"role": "user", "content": [{"type": "text", "text": f"Questions:\n{listing}"},
+        {"role": "user", "content": [{"type": "text", "text": text},
                                      {"type": "image_url", "image_url": {"url": _data_url(image)}}]},
     ], "response_format": _json_schema("balanced_checklist", ASK_SCHEMA), "temperature": 0}
 
@@ -196,15 +202,17 @@ def parse_describe_response(payload: dict[str, Any]) -> dict[str, Any]:
     return out
 
 
-def parse_ask_response(payload: dict[str, Any], questions: list[str]) -> dict[str, Any]:
-    """Matched by order, like the checklist; a missing or invalid answer is "unclear"."""
+def parse_ask_response(payload: dict[str, Any], questions: list[str], parts: list[str] | None = None) -> dict[str, Any]:
+    """Matched by order, like the checklist; a missing or invalid answer is "unclear". Origins by part order."""
     data = _message_json(payload)
     got = [a.get("answer", "") if isinstance(a, dict) else a for a in data.get("answers") or []]
     answers = []
     for i, q in enumerate(questions):
         a = str(got[i]).strip().lower() if i < len(got) else ""
         answers.append({"item": q, "answer": a if a in ANSWERS else "unclear"})
-    return {"answers": answers, "notes": str(data.get("notes") or ""), "answered": len(got)}
+    org = [str(x) for x in data.get("origins") or []]
+    origins = {p: (org[i].strip() if i < len(org) else "unclear") for i, p in enumerate(parts or [])}
+    return {"answers": answers, "origins": origins, "notes": str(data.get("notes") or ""), "answered": len(got)}
 
 
 # ------------------------------------------------------------------ E4: open world and audit
@@ -592,10 +600,10 @@ class LiveEvoSpark(_Retrying):
         """S3a: the plan-blind free description plus counts."""
         return parse_describe_response(await self._chat("evo_describe", build_describe_request(self.model_id, image)))
 
-    async def ask(self, image: bytes, questions: list[str]) -> dict[str, Any]:
-        """S3a: the balanced checklist (expected answers are never sent)."""
-        body = build_ask_request(self.model_id, image, questions)
-        return parse_ask_response(await self._chat("evo_ask", body), questions)
+    async def ask(self, image: bytes, questions: list[str], parts: list[str] | None = None) -> dict[str, Any]:
+        """S3a: the balanced checklist (expected answers are never sent). S3b: plus one origin answer per part."""
+        body = build_ask_request(self.model_id, image, questions, parts)
+        return parse_ask_response(await self._chat("evo_ask", body), questions, parts)
 
     async def identify(self, name: str | None = None, image: bytes | None = None) -> dict[str, Any]:
         return parse_identify_response(await self._chat("evo_identify", build_identify_request(self.model_id, name, image)))

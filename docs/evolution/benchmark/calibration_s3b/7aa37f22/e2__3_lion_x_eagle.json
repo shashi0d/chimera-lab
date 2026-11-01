@@ -1,0 +1,275 @@
+{
+ "id": "e2/3_lion_x_eagle",
+ "questions": [
+  {
+   "id": "frame",
+   "text": "Is the overall body shape that of a lion?",
+   "expect": "yes",
+   "group": "structure",
+   "fix": "Show the planned lion body shape and outline; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "head",
+   "text": "Does it have a lion head with visible eyes?",
+   "expect": "yes",
+   "group": "structure",
+   "fix": "Show the planned lion head, fully visible with clear eyes; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "wings_front",
+   "text": "Does it have golden eagle wings in place of its front legs?",
+   "expect": "yes",
+   "group": "structure",
+   "fix": "Show the planned golden eagle wings in place of the front legs, standing on two hind legs; keep everything else the same.",
+   "sam": "wings"
+  },
+  {
+   "id": "legs_and_wings",
+   "text": "Does it stand on four walking legs and also have wings?",
+   "expect": "no",
+   "group": "structure",
+   "fix": "The plan has wings in place of the front legs: show two hind legs only; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "whole_animal",
+   "text": "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?",
+   "expect": "no",
+   "group": "structure",
+   "fix": "Show the planned golden eagle contribution only as layered contour feathers on the lion's own body over the shoulders and neck, not as separate animals; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "second_head",
+   "text": "Is there a second head anywhere?",
+   "expect": "no",
+   "group": "structure",
+   "fix": "Show one single head, as planned; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "extra_legs",
+   "text": "Does it have more than 2 walking legs?",
+   "expect": "no",
+   "group": "structure",
+   "fix": "Show exactly 2 walking legs, as planned; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "no_mane",
+   "text": "Does it have a full mane of long hair around the head and neck?",
+   "expect": "no",
+   "group": "structure",
+   "fix": "The plan has no mane: show the planned neck with no mane; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "plain_fur",
+   "text": "Does the fur show stripes or spots?",
+   "expect": "no",
+   "group": "pattern",
+   "fix": "Show a plain coat with no stripes or spots, as planned; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "cover_present",
+   "text": "Are there layered contour feathers on the shoulders and neck?",
+   "expect": "yes",
+   "group": "surface",
+   "fix": "Show the planned layered contour feathers over the shoulders and neck; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "connects_feathered_wings",
+   "text": "Does the feathered wings grow out of the layered contour feathers at its base, so they look like one connected system?",
+   "expect": "yes",
+   "group": "connection",
+   "fix": "Show the feathered wings growing out of the layered contour feathers at its base, as one system; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "separate_feathered_wings",
+   "text": "Does the feathered wings look stuck on separately, with no connection to the layered contour feathers?",
+   "expect": "no",
+   "group": "connection",
+   "fix": "Show the feathered wings growing out of the layered contour feathers at its base, as one system; keep everything else the same.",
+   "sam": null
+  }
+ ],
+ "parts": [
+  "the feathered wings"
+ ],
+ "raw": {
+  "spark_open": {
+   "describe": {
+    "description": "The creature is a large upright-standing chimera shown in profile facing right, with the head and shaggy mane of a lion on top, a spotted feline body and hindquarters, and two large outstretched feathered wings in place of forelimbs. Its upper chest and neck are covered in overlapping brown and tan feathers, its lower torso, hind legs and long tail are covered in tawny fur with dark rosette spots, and it stands on two muscular hind legs with its wings spread wide to the sides.",
+    "parts": [
+     {
+      "part": "head",
+      "looks_like": "lion-like head with tawny fur, yellow eyes, a dark pink-brown nose, white fur on the muzzle and chin, and small dark whisker spots",
+      "where": "at the top front of the body, facing right in profile"
+     },
+     {
+      "part": "ears",
+      "looks_like": "two small rounded ears with light brown fur and darker inner shading",
+      "where": "on top of the head, set into the mane, one more visible than the other"
+     },
+     {
+      "part": "mane",
+      "looks_like": "thick, shaggy, layered mane of long hair in shades of light tan to dark brown with a tousled texture",
+      "where": "encircling the head, neck, and extending down to the upper chest"
+     },
+     {
+      "part": "legs",
+      "looks_like": "two thick muscular hind legs covered in tawny fur with dark brown rosette spots",
+      "where": "at the lower middle and rear of the body, supporting the body in an upright bipedal stance"
+     },
+     {
+      "part": "feet",
+      "looks_like": "large paw-like feet with rounded toes and short blunt claws, covered in spotted fur",
+      "where": "at the bottom ends of the two hind legs, flat on the ground"
+     },
+     {
+      "part": "tail",
+      "looks_like": "long slender tail covered in spotted tawny fur with a dark brown to black tuft at the tip, curved in a U-shape",
+      "where": "extending from the rear of the hindquarters, curving down then up"
+     },
+     {
+      "part": "wings",
+      "looks_like": "two large broad wings with layered feathers in tan, light brown and dark brown, with darker tips on the outer primaries",
+      "where": "attached to the sides of the upper back and chest, spread outward to the left and right"
+     },
+     {
+      "part": "feathers",
+      "looks_like": "dense overlapping leaf-shaped feathers in brown and tan with darker brown tips on the lower chest, and long flight feathers on the wings",
+      "where": "covering both wings and the front of the neck and chest down to the upper belly"
+     },
+     {
+      "part": "markings",
+      "looks_like": "dark brown and black rosette and solid spots of varying size on a tan background",
+      "where": "covering the torso, hind legs, and tail, denser on the back and sides and lighter on the belly"
+     }
+    ],
+    "attached_objects": [],
+    "animals": [
+     "lion",
+     "leopard",
+     "bird"
+    ],
+    "separate_bodies": 1,
+    "heads": 1,
+    "walking_legs": 2,
+    "wings": 2,
+    "extra_limb_pieces": 0,
+    "tails": 1
+   },
+   "answers": {
+    "Is the overall body shape that of a lion?": "no",
+    "Does it have a lion head with visible eyes?": "yes",
+    "Does it have golden eagle wings in place of its front legs?": "yes",
+    "Does it stand on four walking legs and also have wings?": "no",
+    "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?": "no",
+    "Is there a second head anywhere?": "no",
+    "Does it have more than 2 walking legs?": "no",
+    "Does it have a full mane of long hair around the head and neck?": "yes",
+    "Does the fur show stripes or spots?": "yes",
+    "Are there layered contour feathers on the shoulders and neck?": "yes",
+    "Does the feathered wings grow out of the layered contour feathers at its base, so they look like one connected system?": "yes",
+    "Does the feathered wings look stuck on separately, with no connection to the layered contour feathers?": "no"
+   },
+   "origins": {
+    "the feathered wings": "golden eagle"
+   },
+   "error": null
+  },
+  "meta_spark": {
+   "describe": {
+    "description": "A large upright creature with the head and shaggy mane of a male lion, a neck and upper chest covered in dense overlapping brown-gold feathers, two large outspread feathered bird wings, a lean spotted feline torso and hindquarters, standing on two muscular spotted hind legs ending in feline paws, with a long slender spotted tail ending in a dark tuft. No forelimbs are visible.",
+    "parts": [
+     {
+      "part": "head",
+      "looks_like": "lion head with tan fur, pale muzzle, dark nose and yellow eyes",
+      "where": "at the top front of the body facing to the right"
+     },
+     {
+      "part": "ears",
+      "looks_like": "small rounded lion ears",
+      "where": "on the sides of the head set in the mane"
+     },
+     {
+      "part": "mane",
+      "looks_like": "shaggy full brown-tan fur",
+      "where": "around the head and neck"
+     },
+     {
+      "part": "wings",
+      "looks_like": "large broad bird wings with layered brown, tan and dark brown flight feathers",
+      "where": "extending outward from the sides of the upper back"
+     },
+     {
+      "part": "feathers",
+      "looks_like": "dense overlapping brown-gold scale-like feathers",
+      "where": "covering the neck, upper chest and leading edge of the wings"
+     },
+     {
+      "part": "torso",
+      "looks_like": "lean muscular feline torso with short spotted fur",
+      "where": "in the middle of the body between the feathered chest and the hind legs"
+     },
+     {
+      "part": "legs",
+      "looks_like": "muscular spotted feline hind legs bent at the hock",
+      "where": "at the lower rear of the body supporting the upright posture"
+     },
+     {
+      "part": "feet",
+      "looks_like": "large feline paws with short pale claws",
+      "where": "at the ends of the two hind legs on the ground"
+     },
+     {
+      "part": "markings",
+      "looks_like": "dark rosette spots on tan fur",
+      "where": "covering the torso, hind legs and tail"
+     },
+     {
+      "part": "tail",
+      "looks_like": "long slender spotted tail with a dark fluffy tuft at the tip",
+      "where": "extending from the rear and curving to the left"
+     }
+    ],
+    "attached_objects": [],
+    "animals": [
+     "lion",
+     "leopard",
+     "eagle"
+    ],
+    "separate_bodies": 1,
+    "heads": 1,
+    "walking_legs": 2,
+    "wings": 2,
+    "extra_limb_pieces": 0,
+    "tails": 1
+   },
+   "answers": {
+    "Is the overall body shape that of a lion?": "no",
+    "Does it have a lion head with visible eyes?": "yes",
+    "Does it have golden eagle wings in place of its front legs?": "yes",
+    "Does it stand on four walking legs and also have wings?": "no",
+    "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?": "no",
+    "Is there a second head anywhere?": "no",
+    "Does it have more than 2 walking legs?": "no",
+    "Does it have a full mane of long hair around the head and neck?": "yes",
+    "Does the fur show stripes or spots?": "yes",
+    "Are there layered contour feathers on the shoulders and neck?": "yes",
+    "Does the feathered wings grow out of the layered contour feathers at its base, so they look like one connected system?": "yes",
+    "Does the feathered wings look stuck on separately, with no connection to the layered contour feathers?": "no"
+   },
+   "origins": {
+    "the feathered wings": "golden eagle"
+   },
+   "error": null
+  }
+ }
+}

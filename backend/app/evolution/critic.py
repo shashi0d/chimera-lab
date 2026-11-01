@@ -214,8 +214,10 @@ def questions(g: Genome, tax: Taxonomy) -> list[Question]:
             qs.append(Question("grows_out", f"{do} {noun} grow out of the body with a natural transition (for example "
                                f"{cover} stopping at a shield's edge, or skin blending into scales), rather than "
                                "looking attached on top?", "yes", "integration", grow_fix))
+            # S3b iteration 3: the visible difference between pasted and grown is the edge (a raised rim or a gap)
             qs.append(Question("on_top", f"{do} {noun} look like {'separate pieces' if pl else 'a separate piece'} "
-                               f"attached on top of the {cover}?", "no", "integration", grow_fix))
+                               f"laid on top of the {cover}, with a raised rim or a gap at the edge?", "no",
+                               "integration", grow_fix))
             one_fix = (f"Show the {noun} as one continuous covering over the {where}, not scattered pieces; the "
                        f"{hn}'s {cover} stays on the belly and legs; {KEEP}.")
             qs.append(Question("continuous", f"Do the {noun} form one continuous structure over the {where}, "
@@ -223,12 +225,93 @@ def questions(g: Genome, tax: Taxonomy) -> list[Question]:
             qs.append(Question("scattered", f"Are the {noun} scattered as separate pieces over different parts of the "
                                "body?", "no", "integration", one_fix))
             keep_fix = f"Keep the {hn}'s own {cover} on the legs and shoulders; the {noun} only over the {where}; {KEEP}."
+            # S3b: going past an extent is a signal only when the extent has a reason (donor system or agent); an
+            # older plan's bare regions are informational (the owner rated the S3a axolotl images good although the
+            # scales reached the shoulders)
+            ext = next((t for t in transfers_of(g, tax) if t.kind == "covering"), None)
+            grp = "surface" if ext is None or ext.extent_reason.startswith("plan regions") else "placement"
             if not {"legs", "forelimbs", "hindlimbs"} & set(regs):
-                qs.append(Question("cover_on_legs", f"Are there {noun} on the legs?", "no", "placement", keep_fix))
+                qs.append(Question("cover_on_legs", f"Are there {noun} on the legs?", "no", grp, keep_fix))
             if "forequarters" not in regs:
-                qs.append(Question("cover_on_shoulders", f"Are there {noun} on the shoulders?", "no", "placement",
-                                   keep_fix))
+                qs.append(Question("cover_on_shoulders", f"Are there {noun} on the shoulders?", "no", grp, keep_fix))
+        # S3b (RC-R10-15, 16): trait transfer, not shape transfer. Visible-feature wording only.
+        ts = transfers_of(g, tax)
+        cov = next((t for t in ts if t.kind == "covering"), None)
+        conform_fix = (f"Show the {noun} conforming to the {hn}'s own body shape, grown from its skin over the "
+                       f"{where}; {KEEP}.")
+        if donor.covering in PROTECTIVE:  # iteration 3: like the S3a integration items, protective coverings only
+            qs.append(Question("follows_body", f"{do} {noun} follow this body's own shape and contours, the way its "
+                               "own skin would?", "yes", "integration", conform_fix))
+            qs.append(Question("separate_outline", f"{do} {noun} keep the outline of a separate object, such as "
+                               "another animal's shell or back, instead of the body's own shape?", "no",
+                               "integration", conform_fix))
+        rule = transfer_covering_rule(donor) or {}
+        if donor.covering in PROTECTIVE and rule.get("plates"):
+            unit = "scale" if "scale" in noun else "plate"
+            size_fix = (f"Show each {unit} sized to the {hn}'s own body segments and muscle masses; {KEEP}.")
+            qs.append(Question("sized_to_body", f"Are the {unit}s sized to this animal's body, about as large as its "
+                               "own muscles and body segments?", "yes", "integration", size_fix))
+            qs.append(Question("wrong_scale", f"Do the {unit}s look made for a much smaller or much larger animal?",
+                               "no", "integration", size_fix))
+        if rule.get("joints"):  # armor that is a whole-body system (RC-R10-16)
+            cover_fix = (f"Show the {noun} as one system over the {where}, with flexible joints, stopping only where "
+                         f"the plan says; {KEEP}.")
+            if {"legs"} & set(regs):
+                qs.append(Question("legs_covered", f"Are the legs covered by the {noun} as well as the body?", "yes",
+                                   "coverage", cover_fix))
+            qs.append(Question("abrupt_stop", f"{do} {noun} stop abruptly partway across the body or legs, with no "
+                               "visible reason?", "no", "coverage", cover_fix))
+        if cov is not None:
+            for t in ts:
+                if t.kind == "part" and cov.feature in t.connects:
+                    link_fix = f"Show the {t.feature} growing out of the {noun} at its base, as one system; {KEEP}."
+                    qs.append(Question(f"connects_{_slug(t.feature)}", f"Does the {t.feature} grow out of the {noun} "
+                                       "at its base, so they look like one connected system?", "yes", "connection",
+                                       link_fix))
+                    qs.append(Question(f"separate_{_slug(t.feature)}", f"Does the {t.feature} look stuck on "
+                                       f"separately, with no connection to the {noun}?", "no", "connection", link_fix))
     return _balance(_dedupe(qs), g)
+
+
+def transfers_of(g: Genome, tax: Taxonomy) -> list[Any]:
+    """The plan's transfer records; an older plan without them is read as it was rendered (extent = its regions)."""
+    from app.evolution.transfer import derive
+
+    return list(g.transfers) or derive(g, tax, "regions")
+
+
+def transfer_covering_rule(donor: Animal) -> dict[str, Any] | None:
+    from app.evolution.transfer import covering_rule
+
+    return covering_rule(donor)
+
+
+def origin_parts(g: Genome, tax: Taxonomy) -> list[tuple[str, str]]:
+    """(feature, visible name) for each discrete donor part: the critic names the animal it looks like it came from
+    (an open question, answered by name; code scores it)."""
+    return [(t.feature, f"the {t.feature}") for t in transfers_of(g, tax) if t.kind == "part"]
+
+
+GROUP_ORIGIN = {"Insecta": ("insect", "beetle"), "Malacostraca": ("crab", "crustacean", "lobster"),
+                "Arachnida": ("arachnid", "scorpion", "spider"), "Aves": ("bird", "raptor"),
+                "Cephalopoda": ("octopus", "cephalopod", "squid"), "Amphibia": ("amphibian", "salamander"),
+                "Reptilia": ("reptile",)}
+
+
+def origin_outcome(said: str, donor: Animal) -> str:
+    """ok when the answer names the donor (its full name, the last word of its name, or its group word); bad when it
+    names another animal; unk when empty or unclear. "rhinoceros" for a rhinoceros beetle's horn is bad: the last
+    word, "beetle", is what makes it the donor's."""
+    s = (said or "").strip().lower()
+    if not s or s in ("unclear", "unknown", "none", "n/a"):
+        return "unk"
+    name = donor.common_name.lower()
+    head = name.split()[-1]
+    if name in s or re.search(rf"\b{re.escape(head)}s?\b", s):
+        return "ok"
+    if any(re.search(rf"\b{w}s?\b", s) for w in GROUP_ORIGIN.get(donor.tax_class, ())):
+        return "ok"
+    return "bad"
 
 
 def _one_body_fix(g: Genome, tax: Taxonomy) -> str:
@@ -340,6 +423,7 @@ def seen_concepts(text: str) -> set[str]:
     t = NEGATED.sub(" ", text)
     t = re.sub(r"\bmane\b(?=[^.;|]{0,80}feather)", "ruff", t, flags=re.I)
     t = re.sub(r"(feather[^.;|]{0,40})\bmane\b", r"\1ruff", t, flags=re.I)
+    t = re.sub(r"\bsucker[- ]?(like )?spots?\b", "suckers", t, flags=re.I)  # S3b: an octopus sucker is not a spot
     # iteration 3: one line along the spine (an equid's dorsal or eel stripe) is not a striped coat pattern
     t = re.sub(r"\b(thin |narrow |dark |faint |single )*(dorsal|eel|spinal|back) stripe\b", "dorsal line", t, flags=re.I)
     return concepts_in(t)
@@ -408,9 +492,17 @@ class _NoSpec:
 
 
 def description_text(d: dict[str, Any]) -> str:
+    # S3b: a part listed with an empty description is the critic saying it is absent ("gills: " in Spark Open)
     parts = " | ".join(f"{p.get('part', '')}: {p.get('looks_like', '')} ({p.get('where', '')})"
-                       for p in d.get("parts") or [] if isinstance(p, dict))
+                       for p in d.get("parts") or [] if isinstance(p, dict) and _present(p))
     return " | ".join([str(d.get("description") or ""), parts, " | ".join(map(str, d.get("attached_objects") or []))])
+
+
+ABSENT_WORDS = re.compile(r"^\s*($|(none|no|not|absent|n/?a)\b)", re.I)  # empty, or starts with a negation
+
+
+def _present(p: dict[str, Any]) -> bool:
+    return not ABSENT_WORDS.match(str(p.get("looks_like") or ""))
 
 
 def match_description(d: dict[str, Any], g: Genome, tax: Taxonomy) -> dict[str, Any]:
@@ -450,13 +542,45 @@ class Raw:
     """One critic's two answers for one image."""
     describe: dict[str, Any] = field(default_factory=dict)
     answers: dict[str, str] = field(default_factory=dict)  # question text -> yes | no | unclear
+    origins: dict[str, str] = field(default_factory=dict)  # S3b: part name -> the animal it looks like it came from
     error: str | None = None
 
 
+def decision_rule() -> dict[str, Any]:
+    """S3b: how two critics decide (data/evo_config.json `critic_decision`). "pair" is the S3a rule (agreement
+    decides; disagreement is uncertain, a fail signal). "primary": the named critic decides; the other critic still
+    answers every image and its disagreement is kept on the row as `pair_status` (information)."""
+    from app.evolution.data import config
+
+    return dict(config().get("critic_decision") or {"mode": "pair"})
+
+
 def evaluate(raws: dict[str, Raw], g: Genome, tax: Taxonomy, route: Any = None,
-             qs: list[Question] | None = None) -> dict[str, Any]:
+             qs: list[Question] | None = None, decision: str | None = None) -> dict[str, Any]:
     """Score the critics' raw answers against the plan. Pure: calibration re-scores the same raw answers for each
-    critic alone and for the pair without new calls."""
+    critic alone and for the pair without new calls. `decision` overrides the configured rule ("pair" or
+    "primary")."""
+    rule = decision_rule()
+    mode = decision or rule.get("mode", "pair")
+    primary = rule.get("primary")
+    res = _evaluate(raws, g, tax, route, qs)
+    if mode != "primary" or len(raws) < 2 or primary not in raws:
+        res["decision"] = {"mode": "pair"}
+        return res
+    prim = _evaluate({primary: raws[primary]}, g, tax, route, qs)
+    pst = {r["key"]: r["status"] for r in prim["rows"]}
+    for r in res["rows"]:
+        r["pair_status"] = r["status"]
+        r["status"] = pst.get(r["key"], "pass")  # a row only the other critic raised is information
+    res["signals"] = [r for r in res["rows"] if r["status"] != "pass" and r["group"] != "surface"]
+    res["verdict"] = "fail" if res["signals"] else "pass"
+    res["decision"] = {"mode": "primary", "primary": primary,
+                       "disagreements": [r["key"] for r in res["rows"] if r["pair_status"] != r["status"]]}
+    return res
+
+
+def _evaluate(raws: dict[str, Raw], g: Genome, tax: Taxonomy, route: Any = None,
+              qs: list[Question] | None = None) -> dict[str, Any]:
     qs = qs if qs is not None else questions(g, tax)
     names = list(raws)
     rows: list[dict[str, Any]] = []
@@ -495,6 +619,17 @@ def evaluate(raws: dict[str, Raw], g: Genome, tax: Taxonomy, route: Any = None,
                      "group": "structure", "expect": "present",
                      "answers": {c: o not in matches[c]["omissions"] for c in names}, "status": combine(outs),
                      "fix": f"Show the planned {o} clearly; {KEEP}.", "sam": None})
+    donor = tax.animals[g.other(g.host)] if g.host else None
+    for feature, pname in origin_parts(g, tax) if donor else []:
+        said = {c: raws[c].origins.get(pname, "") for c in names}
+        if not any(said.values()):
+            continue  # an older answer set without origins: not asked, not scored
+        outs = [origin_outcome(v, donor) for v in said.values()]
+        rows.append({"source": "origin", "key": f"origin_{_slug(feature)}", "text": f"which animal {pname} came from",
+                     "group": "identity", "expect": donor.common_name.lower(), "answers": said,
+                     "status": combine(outs), "sam": None,
+                     "fix": f"Show the {feature} with its own form ({next((t.identity_cues for t in transfers_of(g, tax) if t.feature == feature), '')}), "
+                            f"in its planned place; {KEEP}."})
     animals = sorted({x for v in thirds.values() for x in v})
     if animals:
         outs = ["bad" if thirds[c] else "ok" for c in names]
@@ -552,14 +687,21 @@ async def _try(meter: Any, purpose: str, make: Any) -> Any:
     raise AssertionError("unreachable")
 
 
-async def run_critic(name: str, spark: Any, image: bytes, qs: list[Question], meter: Any) -> tuple[str, Raw]:
+async def run_critic(name: str, spark: Any, image: bytes, qs: list[Question], meter: Any,
+                     parts: list[str] | None = None) -> tuple[str, Raw]:
     """One critic, two calls: the free description (plan-blind) first, then the balanced checklist. A failure after
     the retry becomes an "uncertain" row, never a crash (a budget stop is raised)."""
     raw = Raw()
     try:
         raw.describe = await _try(meter, f"describe:{name}", lambda: spark.describe(image))
-        got = await _try(meter, f"ask:{name}", lambda: spark.ask(image, [q.text for q in qs]))
+        texts = [q.text for q in qs]
+        import inspect as _inspect
+
+        takes_parts = len(_inspect.signature(spark.ask).parameters) >= 3  # an older adapter asks questions only
+        got = await _try(meter, f"ask:{name}", lambda: spark.ask(image, texts, parts) if parts and takes_parts else
+                         spark.ask(image, texts))
         raw.answers = {a["item"]: a["answer"] for a in got.get("answers") or [] if isinstance(a, dict)}
+        raw.origins = {str(k): str(v) for k, v in (got.get("origins") or {}).items()}
     except Exception as e:  # noqa: BLE001
         from app.errors import ChimeraError
         from app.models.schemas import ErrorCode
@@ -574,7 +716,8 @@ async def protocol(image: bytes, g: Genome, tax: Taxonomy, critics: dict[str, An
                    route: Any = None) -> tuple[dict[str, Any], dict[str, Raw]]:
     """Run every critic independently (in parallel) and evaluate. Returns (result, raw answers)."""
     qs = questions(g, tax)
-    done = await asyncio.gather(*(run_critic(n, s, image, qs, meter) for n, s in critics.items()))
+    parts = [name for _f, name in origin_parts(g, tax)]
+    done = await asyncio.gather(*(run_critic(n, s, image, qs, meter, parts) for n, s in critics.items()))
     raws = dict(done)
     return evaluate(raws, g, tax, route, qs), raws
 

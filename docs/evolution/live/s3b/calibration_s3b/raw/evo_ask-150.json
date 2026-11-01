@@ -1,0 +1,113 @@
+{
+ "purpose": "evo_ask",
+ "request": {
+  "model": "meta-models/muse-spark-open-1026",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture of a creature and answer numbered questions about it. Answer each question on its own: yes if the picture clearly shows it, no if it clearly does not, unclear if you cannot tell. Many questions describe things that should not be there, so do not lean toward yes. Judge only what is visible. answers: one word per question (yes, no or unclear), in the same order as the questions, nothing else. origins: for each listed part, in order, the one real animal that part looks like it came from, as an everyday English common name (or unclear); empty if no parts are listed. notes: one short sentence."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "Questions:\n1. Is the overall body shape that of a golden eagle?\n2. Does it have a golden eagle head with visible eyes?\n3. Does it have golden eagle wings in place of its front legs?\n4. Does it stand on four walking legs and also have wings?\n5. Is there long, muscular arms lined with round suckers in place of the tail?\n6. Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?\n7. Is there a second head anywhere?\n8. Does it have more than 2 walking legs?\n9. Is there soft, color-changing skin with fine bumps on the belly and flanks?\n10. Is there a human figure or a human body part?\n\nParts (which animal does each look like it came from?):\n1. the tentacles"
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (654207 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "balanced_checklist",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "answers",
+      "origins",
+      "notes"
+     ],
+     "properties": {
+      "answers": {
+       "type": "array",
+       "items": {
+        "type": "string",
+        "enum": [
+         "yes",
+         "no",
+         "unclear"
+        ]
+       }
+      },
+      "origins": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "notes": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0,
+  "max_tokens": 8000
+ },
+ "response": {
+  "id": "chatcmpl-3b134709368f482bb028f9df8db27e50",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\n\"answers\": [\n\"yes\",\n\"yes\",\n\"yes\",\n\"no\",\n\"yes\",\n\"no\",\n\"no\",\n\"no\",\n\"yes\",\n\"no\"\n],\n\"origins\": [\n\"octopus\"\n],\n\"notes\": \"Golden eagle body retains head, wings and talons but tail is replaced by octopus tentacles with suckered skin extending onto legs.\"\n}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null,
+     "reasoning_content": "<elided> (6963 chars)"
+    }
+   }
+  ],
+  "created": 1793543561,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 1741,
+   "prompt_tokens": 3825,
+   "total_tokens": 5566,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 1285,
+    "audio_tokens": 0,
+    "reasoning_tokens": 1653,
+    "rejected_prediction_tokens": 1907,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 256,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}
