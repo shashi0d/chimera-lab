@@ -157,3 +157,14 @@ Every real Meta API call made by L1 (appended automatically by `backend/app/adap
 | 2026-11-01T01:37:52+00:00 | s1:spark:probe_refusal_plan | probe_refusal_plan | meta-models/muse-spark-open-1026 | 66960 | 2609 | 32768 | 35377 | ok | chatcmpl-8a542d8d5e3a4a6e9dc86f9ec1519a5e |
 | 2026-11-01T01:38:59+00:00 | s1:spark:probe_refusal_plan | probe_refusal_plan | meta-models/muse-spark-open-1026 | 67230 | 2430 | 32768 | 35198 | ok | chatcmpl-787b51304ba04b4da1768e4c06459f22 |
 | 2026-11-01T01:40:01+00:00 | s1:spark:probe_refusal_plan | probe_refusal_plan | meta-models/muse-spark-open-1026 | 61438 | 2383 | 32768 | 35151 | ok | chatcmpl-89fc86203e2a4683b9c230906510620a |
+| 2026-11-01T01:43:05+00:00 | s1:parity:parity_plan | parity_plan | meta-models/muse-spark-open-1026 | 63896 | 2516 | 32768 | 35284 | ok | chatcmpl-158dcc1f2473466096360acf81e22dd9 |
+| 2026-11-01T01:44:51+00:00 | s1:parity:parity_plan | parity_plan | meta-models/muse-spark-open-1026 | 67530 | 2516 | 32768 | 35284 | ok | chatcmpl-040f723a4b604c4988204966da97173e |
+| 2026-11-01T01:45:54+00:00 | s1:parity:parity_plan | parity_plan | meta-models/muse-spark-open-1026 | 62796 | 2465 | 32768 | 35233 | ok | chatcmpl-9fd5461fed8c472ab879dd9b0b41be17 |
+| 2026-11-01T01:46:56+00:00 | s1:parity:parity_plan | parity_plan | meta-models/muse-spark-open-1026 | 61990 | 2540 | 32768 | 35308 | ok | chatcmpl-65e3b2a8b90a499387e95915f6c234bc |
+| 2026-11-01T01:47:07+00:00 | s1:parity:parity_polish | parity_polish | meta-models/muse-spark-open-1026 | 10827 | 547 | 4881 | 5428 | ok | chatcmpl-05235145955243dcb29d3ddd96571b75 |
+| 2026-11-01T01:47:15+00:00 | s1:parity:parity_polish | parity_polish | meta-models/muse-spark-open-1026 | 8016 | 480 | 3657 | 4137 | ok | chatcmpl-b30498aa2001428ba89cba42dc24fb91 |
+| 2026-11-01T01:47:18+00:00 | s1:parity:parity_identify | parity_identify | meta-models/muse-spark-open-1026 | 2501 | 326 | 704 | 1030 | ok | chatcmpl-a8165649df154f3680e3e4b1c2eda4b4 |
+| 2026-11-01T01:47:23+00:00 | s1:parity:parity_identify | parity_identify | meta-models/muse-spark-open-1026 | 5700 | 324 | 1634 | 1958 | ok | chatcmpl-2dc4591ecfc74eeca32d0f1c0d46b680 |
+| 2026-11-01T01:47:34+00:00 | s1:parity:parity_checklist | parity_checklist | meta-models/muse-spark-open-1026 | 11035 | 3707 | 1175 | 4882 | ok | chatcmpl-ccdd32ac2b094ff4845ff53606a3d4dc |
+| 2026-11-01T01:47:47+00:00 | s1:parity:parity_checklist | parity_checklist | meta-models/muse-spark-open-1026 | 12507 | 3722 | 1375 | 5097 | ok | chatcmpl-7abc78b567bc40ba981e5b302bd34f27 |
+| 2026-11-01T01:48:00+00:00 | s1:parity:parity_checklist | parity_checklist | meta-models/muse-spark-open-1026 | 13377 | 3756 | 1848 | 5604 | ok | chatcmpl-4278ee5ff380466ebc09a6e268169606 |

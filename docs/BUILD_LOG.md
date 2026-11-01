@@ -292,3 +292,10 @@ Short entries per phase: what was built, what was tested, what was deferred. New
 - Tool calling: fully correct in 4 turns. It made both resolve calls in parallel, passed the returned ids to the audit, passed the audit id to the render, and the final reply contains the image id.
 - Refusals: 0 of 5 planning prompts. But 4 of 5 ran away to 43,000 to 52,600 characters, cut off at the 32,768-token output limit (about 60 s each), so the JSON was unreadable. Only lion x goldfish (mythic) produced a plan, and it was accepted with no locked field changed.
 - Redacted fixtures (4) are in `backend/tests/fixtures/recorded/baseten/`, with 5 replay tests. The suite is 701 passed, 6 skipped. Baseten spark counter: 19 → 33.
+
+**Part 3 (parity, 10 recorded Meta Spark requests replayed on Baseten):** `scripts/s1_probe.py parity`, outputs in `docs/evolution/live/s1/parity/`. The three plan requests were rebuilt from code and match the recorded prompt lengths exactly (9004, 8815, 9096 characters). The other seven are the recorded bodies with only `model` changed (images re-attached for the checklists).
+- Plans: 0 of 3 usable. Every answer ran to the output limit (about 49,000 to 50,500 characters, 62 to 68 s), looping inside `card_trace`. Meta's results for the same requests: b accepted, c and d fell back to the code skeleton.
+- Polish: 2 of 2 accepted, as with Meta, within 13 characters of Meta's length.
+- Resolver: 2 of 2 with the same kind and scientific name (woolly mammoth extinct; pangolin ambiguous, *Manis pentadactyla*), with 3 of 4 alternatives the same.
+- Checklist: 15 of 15 items agree. Forced choice, animals and creature count are identical, items were echoed in order, and the JSON is schema-valid.
+- A first parity attempt made 1 plan call (b) and then the script crashed on the unreadable answer (fixed); it is noted in `live/s1/parity_try1/NOTE.txt`. Baseten spark counter: 33 → 44.

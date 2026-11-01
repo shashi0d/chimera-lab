@@ -1,0 +1,128 @@
+{
+ "purpose": "parity_identify",
+ "request": {
+  "model": "meta-models/muse-spark-open-1026",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You identify an animal from a name (common, scientific, misspelled or regional) or a photo. Return the scientific name of the species exactly as a taxonomist writes it (genus species, or genus species subspecies for a domestic form). kind: species; breed (a domestic breed: give the species' scientific name and the breed name in breed); extinct (a species known only from fossils or records); ambiguous (the name covers several species: pick the most common or best-known species as scientific_name and list up to four others in alternatives); not_animal; plant; human (any person or human group); mythic (a creature of myth, legend or fiction). For a misspelling, answer for the intended animal. Never invent a species; if unsure, say ambiguous and list candidates. note: one short sentence."
+   },
+   {
+    "role": "user",
+    "content": "Identify this animal name: woolly mammoth"
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "identify_animal",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "kind",
+      "scientific_name",
+      "common_name",
+      "breed",
+      "alternatives",
+      "note"
+     ],
+     "properties": {
+      "kind": {
+       "type": "string",
+       "enum": [
+        "species",
+        "breed",
+        "extinct",
+        "ambiguous",
+        "not_animal",
+        "plant",
+        "human",
+        "mythic"
+       ]
+      },
+      "scientific_name": {
+       "type": "string"
+      },
+      "common_name": {
+       "type": "string"
+      },
+      "breed": {
+       "type": "string"
+      },
+      "alternatives": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "scientific_name",
+         "common_name"
+        ],
+        "properties": {
+         "scientific_name": {
+          "type": "string"
+         },
+         "common_name": {
+          "type": "string"
+         }
+        }
+       }
+      },
+      "note": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0
+ },
+ "response": {
+  "id": "chatcmpl-a8165649df154f3680e3e4b1c2eda4b4",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\"kind\": \"extinct\", \"scientific_name\": \"Mammuthus primigenius\", \"common_name\": \"woolly mammoth\", \"breed\": \"\", \"alternatives\": [], \"note\": \"Extinct cold-adapted elephant that lived across northern Eurasia and North America during the Pleistocene.\"}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null,
+     "reasoning_content": "We need to identify animal name: woolly mammoth\n\nReturn scientific name exactly as taxonomist writes it (genus species, or genus species subspecies for domestic form). kind: species; breed; extinct; ambiguous; not_animal; plant; human; mythic.\n\nWoolly mammoth is extinct species. Scientific name: Mammuthus primigenius\n\nkind: extinct\n\nnote: one short sentence.\n\nWe need to output JSON? The instruction says Return the scientific name ... kind ... note ... Probably need to output JSON format. The system says Identify an animal from a name ... Return the scientific name ... kind ... note ...\n\nWe need to infer expected output format. Probably JSON with fields: scientific_name, kind, note, alternatives? Let's see typical tasks: Might expect JSON like {\"scientific_name\": \"...\", \"kind\": \"...\", \"note\": \"...\"}\n\nWe should provide that.\n\nWoolly mammoth: Mammuthus primigenius, extinct.\n\nCheck spelling: Mammuthus primigenius (Blumenbach, 1799). Yes.\n\nkind: extinct\n\nnote: one short sentence. e.g., \"Extinct elephantid that lived during the Pleistocene across northern Eurasia and North America.\"\n\nWe should ensure correct capitalization: genus capitalized, species lowercase.\n\nAlso need to consider alternatives? Not needed.\n\nWe should output JSON.\n\nPossibly also need to handle breed etc. But for this, extinct.\n\nMake sure to follow instruction: Never invent a species; if unsure, say ambiguous and list candidates.\n\nWe are sure.\n\nProvide output.\n\nProbably format:\n\n{\n  \"scientific_name\": \"Mammuthus primigenius\",\n  \"kind\": \"extinct\",\n  \"note\": \"Woolly mammoth was a cold-adapted elephant that went extinct around 4,000 years ago.\"\n}\n\nShould we include alternatives? Not needed.\n\nEnsure kind is exactly one of allowed values: species; breed; extinct; ambiguous; not_animal; plant; human; mythic\n\nSo \"extinct\" is correct.\n\nAdd note one short sentence.\n\nWe should answer concisely.\n\nPotential nuance: woolly mammoth is extinct, but some might consider species. But instruction says extinct (a species known only from fossils or records). So use extinct.\n\nReturn scientific name exactly as taxonomist writes it (genus species...). So \"Mammuthus primigenius\"\n\nWe should not add author.\n\nProvide final answer.\n\nProbably need to ensure JSON valid.\n\nWe might also need to consider that user just gave name, we identify.\n\nWe should respond with JSON.\n\nMake sure to not add extra fluff? The instruction says Return the scientific name ... Probably expects JSON. Provide that.\n\nWe should do that.\n\nPotential edge: woolly mammoth could be ambiguous? No.\n\nThus final output: scientific_name Mammuthus primigenius, kind extinct.\n\nAdd note.\n\nWe should ensure we follow system: You identify an animal from a name ... Return the scientific name ... kind ... note ...\n\nSo output JSON with those fields.\n\nLet's produce final answer."
+    }
+   }
+  ],
+  "created": 1793497634,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 704,
+   "prompt_tokens": 326,
+   "total_tokens": 1030,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 509,
+    "audio_tokens": 0,
+    "reasoning_tokens": 627,
+    "rejected_prediction_tokens": 856,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 256,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

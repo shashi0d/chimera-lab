@@ -121,6 +121,16 @@ def json_report(payload: dict[str, Any], schema: dict[str, Any] | None) -> dict[
     return out
 
 
+def runaway_field(payload: dict[str, Any]) -> str | None:
+    """For an answer cut at the output limit: the JSON key whose value was still open when the text ended."""
+    choice = (payload.get("choices") or [{}])[0]
+    if choice.get("finish_reason") != "length":
+        return None
+    text = str((choice.get("message") or {}).get("content") or "")
+    keys = re.findall(r'"(\w+)":', text)
+    return keys[-1] if keys else None
+
+
 REFUSAL_WORDS = re.compile(r"\b(i can(?:no|')t|i'm unable|i am unable|i won't|cannot help|not able to|sorry|"
                            r"policy|inappropriate|unethical|harmful)\b", re.IGNORECASE)
 
@@ -395,7 +405,8 @@ async def part_spark() -> None:
         d_rows.append({"pair": f"{sire} x {dam}", "mode": mode, "route": r.mode, "prompt_chars": len(prompt),
                        "error": err, "attempts": att, "refusal": refusal_of(payload, err),
                        **(json_report(payload, live.PLAN_SCHEMA) if payload else {}),
-                       **({"plan": plan_verdict(eng, payload, skel, r)} if payload else {})})
+                       **({"plan": plan_verdict(eng, payload, skel, r),
+                           "runaway_field": runaway_field(payload)} if payload else {})})
         print(" ", sire, "x", dam, mode, "->", d_rows[-1]["refusal"] or "no refusal",
               d_rows[-1].get("plan", {}).get("accepted"))
     res["d_refusals"] = {"rows": d_rows, "refusals": sum(1 for x in d_rows if x["refusal"])}
@@ -447,7 +458,9 @@ async def part_parity() -> None:
         row["request_identical_length"] = row["rebuilt_prompt_chars"] == row["recorded_prompt_chars"]
         if payload:
             row.update(json=json_report(payload, live.PLAN_SCHEMA), baseten_plan=plan_verdict(eng, payload, skel, r))
-            w(run.dir / "plans" / f"{folder.name}.json", _message_json(payload))
+            if row["json"].get("json_valid"):
+                w(run.dir / "plans" / f"{folder.name}.json", _message_json(payload))
+            row["runaway_field"] = runaway_field(payload)
         res["plans"].append(row)
         print("plan", label, "->", row.get("baseten_plan"))
 

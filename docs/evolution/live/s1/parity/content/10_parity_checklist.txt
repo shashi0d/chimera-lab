@@ -1,0 +1,13 @@
+{ "answers": [
+  {"item": "a brown bear body shape", "answer": "yes"},
+  {"item": "a brown bear head with visible eyes", "answer": "yes"},
+  {"item": "thick supporting legs and visible breathing openings along the flanks", "answer": "yes"},
+  {"item": "european rhinoceros beetle wings in place of the front legs", "answer": "no"},
+  {"item": "european rhinoceros beetle jointed tail segments in place of the tail", "answer": "yes"},
+  {"item": "european rhinoceros beetle exoskeleton patches on the forequarters and neck", "answer": "yes"}
+],
+"choice": "a mix of both",
+"creatures": 1,
+"animals": ["brown bear", "european rhinoceros beetle"],
+"notes": "The image shows a single hybrid creature with a brown bear body and head combined with beetle wings, shell patches, and tail."
+}

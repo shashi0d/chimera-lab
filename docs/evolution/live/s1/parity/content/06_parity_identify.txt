@@ -1,0 +1,1 @@
+{"kind": "extinct", "scientific_name": "Mammuthus primigenius", "common_name": "woolly mammoth", "breed": "", "alternatives": [], "note": "Extinct cold-adapted elephant that lived across northern Eurasia and North America during the Pleistocene."}
