@@ -407,3 +407,18 @@ The gold-set label for `e4/b_axolotl_x_pangolin` changes from fail ("external gi
   - `verify_research`: the same 2 failures as S3b, both the unreachable `ria.ua.pt` source. `rule_cards.json` has 126 cards (18 hard).
 - **Found while testing (e):** GBIF files turtles under class Testudines, so the shell check, the class part list and the vertebrate group all missed the tortoise. Testudines, Squamata and Crocodylia are now reptile aliases (`class_parts.json`, `evo_config.json class_groups`).
 - **Test hygiene:** `test_real_mode_refuses_before_any_call` passed only when an earlier test had cleared the env, because a `.env` META key made it order-dependent. It now sets `meta_api_key=""`.
+
+**D-089 The agent core: Spark Open picks, code guards (S3c part 2, `agent.py`).**
+- **Tools:** the brief's eight tools, plus `choose_candidate` (adopt a candidate; its typed operations are replayed) and `plan_op` (one PlanSession operation). The agent can only pick and apply typed operations. It never sends plan JSON, and code fills card_trace and every derived field.
+- **Candidates:** `propose_candidates` is code. It returns one plan per host option, both as equals on a tie and the less structured host marked "advised against" (RC-R6-08, soft) otherwise. It adds a variant with the donor's second diagnostic identity part when one exists. Each candidate has R10 notes (niche, autonomy, survival, identity) and a score that only ranks the notes.
+- **Guardrails in code:**
+  - a plan must pass `audit_plan` (by content) before `render`;
+  - hard cards and an unchosen tie are blocking;
+  - `edit` takes only covering or surface failure keys (integration, coverage, placement, pattern, surface groups); structural ones (counts, frame, extra or missing parts, identity, connection, a third animal) return `structural_failure`, with the hint to change the plan and re-render;
+  - after any edit, `inspect` compares the critics' head, walking-leg and tail counts with the parent image (S3b drift rule) and adds a `host_drift` structural failure.
+- **Caps (`evo_config agent`):** 4 renders, 30 tool calls, 6 edits, `max_tokens` 8000 on every Spark Open agent call. At a cap, or when the agent stops calling tools (3 nudges), code finalizes the best inspected image (fewest structural, then fewest failures) and the card lists the remaining failures.
+- **Every call needs a `reason`.** The trace records the tool, arguments, reason, result summary, cards cited and any text the agent wrote. Reference portraits stay off.
+- **Fixed pipeline:** `fuse` keeps the fixed pipeline, and `agent_fuse` is the agent path.
+- **Smoke-run fixes:** the live smoke run on beetle x bear (kept as `live/s3c/agent/beetle_bear/smoke_r1`) found two gaps, both fixed before the validation runs:
+  - the agent repeated an operation that changed nothing and re-rendered the same plan, so `plan_op` now says `changed: false`;
+  - it finalized its sixth image although its first was better, so inspect now returns every image's failure counts and the best so far, and the system prompt says to finalize the best image, not the latest.

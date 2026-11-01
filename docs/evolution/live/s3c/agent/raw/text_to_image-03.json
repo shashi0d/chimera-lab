@@ -1,0 +1,110 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Show the hard, glossy chitin plates with fine seams grown in the skin over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, as one covering that replaces the brown bear's fur there; the fur stops at its edge; keep everything else the same. Show the hard, glossy chitin plates with fine seams as one continuous covering over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, not scattered pieces; the brown bear's fur stays on the belly and legs; keep everything else the same.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ],
+  "previous_response_id": "resp_6ae77367a2865a62a75f4c91"
+ },
+ "response": {
+  "id": "resp_6ae773a256c1ce01ede64965",
+  "access_programs": null,
+  "created_at": 1793553314.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae773a22fa39962f1844050",
+    "summary": [
+     {
+      "text": "**Refining image edit details**\nI'm clarifying the edit plan using the base image, keeping fur on the legs, belly, flanks, hips, and tail while leaving everything else unchanged before regenerating.\n**Refining chitin armor coverage**\nI'm updating the edit plan so the glossy chitin plates cover the head, neck, shoulders, back, flanks, hips, and tail, while keeping the brown bear's fur on the belly and legs and leaving everything else unchanged.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae773a224048dc22ecd4696",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0ZrcWtEVFpOcXNlb1dZREFMQVNPb094TWhvWmJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczowMTVkODc5OS0xNGZlLTQyNGMtOGM2Yy04OGY3ZTBiOWQyYzM6R0M0bER6UEVBWWx3NXd3RUFNUXh5c1hlS09kWmJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM1NTMzMTR9.Q8WLFwF1Kh9jyjJ59txs7bDcF3sO",
+    "result": "<elided> (782436 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": "resp_6ae77367a2865a62a75f4c91",
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 26411,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 10240
+   },
+   "output_tokens": 998,
+   "output_tokens_details": {
+    "reasoning_tokens": 185
+   },
+   "total_tokens": 27409
+  },
+  "user": null
+ }
+}
