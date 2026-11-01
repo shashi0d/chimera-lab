@@ -27,9 +27,11 @@ Reference portraits stay off (ROADMAP 5b). In mock mode a policy brain drives th
 from __future__ import annotations
 
 import json
+import tempfile
 import time
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Any
 
 from app.errors import ChimeraError
@@ -220,8 +222,10 @@ def default_policy(run: AgentRun) -> tuple[str, dict[str, Any]] | None:
 
 @dataclass
 class Image:
+    """An image of the run. Its bytes live on disk only (`path`); a tool loads them for one call and drops them, so
+    neither the run nor the agent's history holds image data (S3c memory fix)."""
     id: str
-    data: bytes
+    path: Path
     content_type: str
     response_id: str | None
     prompt: str
@@ -233,6 +237,10 @@ class Image:
     inspect: dict[str, Any] | None = None
     raw_inspect: dict[str, Any] | None = None
     extra: dict[str, Any] = field(default_factory=dict)
+    size: int = 0
+
+    def load(self) -> bytes:
+        return self.path.read_bytes()
 
 
 @dataclass
@@ -250,6 +258,8 @@ class State:
     calls: int = 0
     finalized: dict[str, Any] | None = None
     stop: str | None = None
+    covering_streak: int = 0  # inspects in a row with covering failures (reset by a plan change or a clean inspect)
+    edit_lock: str | None = None  # the plan content on which the two-failure rule stopped covering edits
 
 
 class AgentError(Exception):
@@ -263,7 +273,8 @@ class AgentError(Exception):
 class AgentRun:
     def __init__(self, engine: Any, sire_name: str, dam_name: str, mode: str = "speculative", seed: int = 0,
                  brain: Any = None, ask: Callable[[str, list[str]], Awaitable[str]] | None = None,
-                 growth_default: bool = False) -> None:
+                 growth_default: bool = False, image_dir: Path | None = None,
+                 on_step: Callable[[AgentRun, dict[str, Any]], None] | None = None) -> None:
         self.engine, self.sire_name, self.dam_name, self.mode, self.seed = engine, sire_name, dam_name, mode, seed
         self.cfg = settings()
         self.brain = brain or PolicyBrain(default_policy)
@@ -276,6 +287,9 @@ class AgentRun:
         self.trace: list[dict[str, Any]] = []
         self.messages: list[dict[str, Any]] = []
         self.started = time.time()
+        self.image_dir = Path(image_dir) if image_dir else Path(tempfile.mkdtemp(prefix="agent_imgs_"))
+        self.image_dir.mkdir(parents=True, exist_ok=True)
+        self.on_step = on_step  # called after every tool step (the live script saves the run to disk there)
 
     # ------------------------------------------------------------------ loop
 
@@ -355,6 +369,8 @@ class AgentRun:
         step.update(ok=out["ok"], result=out, cards=_cards_in(out), seconds=round(time.time() - t0, 1),
                     summary=_summary(name, out))
         self.trace.append(step)
+        if self.on_step is not None:
+            self.on_step(self, step)
         return out
 
     def _log_text(self, turn: Turn) -> None:
@@ -560,8 +576,13 @@ class AgentRun:
 
     def _add_image(self, img: Any, prompt: str, kind: str, plan: Any, parent: str | None = None,
                    **extra: Any) -> Image:
+        """Write the image to disk and keep only its path; the caller drops the downloaded bytes."""
         iid = f"img{len(self.state.order) + 1}"
-        im = Image(iid, img.data, img.content_type, img.response_id, prompt, kind, plan.id, plan, parent, extra=extra)
+        ext = {"image/png": "png", "image/jpeg": "jpg"}.get(img.content_type, "webp")
+        path = self.image_dir / f"{iid}.{ext}"
+        path.write_bytes(img.data)
+        im = Image(iid, path, img.content_type, img.response_id, prompt, kind, plan.id, plan, parent, extra=extra,
+                   size=len(img.data))
         self.state.images[iid] = im
         self.state.order.append(iid)
         return im
@@ -579,12 +600,14 @@ class AgentRun:
             img1 = await self._render(first, refs)
             self.state.renders += 1
             im1 = self._add_image(img1, first, "growth_host", g)
+            del img1
             instr = growth_instruction(g, eng.tax)
-            img2 = await self._render(instr, [], img1.response_id)
+            img2 = await self._render(instr, [], im1.response_id)
             self.state.edits += 1
             full = compile_prompt(g, eng.tax)
             im = self._add_image(img2, f"{first}\n\n[edit turn]\n{instr}", "growth", g, parent=im1.id,
                                  prompt_compiled=full)
+            del img2
             return {"image_id": im.id, "method": method, "host_image_id": im1.id, "renders_used": self.state.renders,
                     "note": "growth edit done: inspect checks host drift against the host image",
                     "cards": ["RC-R10-12", "RC-R10-15"]}
@@ -595,6 +618,7 @@ class AgentRun:
         self.state.renders += 1
         im = self._add_image(img, final, "render", g, prompt_compiled=prompt,
                              polish="accepted" if not why else f"rejected: {why}")
+        del img
         return {"image_id": im.id, "method": method, "renders_used": self.state.renders,
                 "renders_left": self.cfg["max_renders"] - self.state.renders, "polish": im.extra["polish"]}
 
@@ -610,7 +634,11 @@ class AgentRun:
         g = im.plan
         if im.inspect is not None:
             return {"image_id": image_id, "cached": True, **im.inspect}
-        insp = await self.engine._inspect(im.data, g, s.route, {})
+        data = im.load()  # loaded for the critics' calls only
+        try:
+            insp = await self.engine._inspect(data, g, s.route, {})
+        finally:
+            del data
         rows = []
         for f in insp["failures"]:
             rows.append({"key": f["key"], "kind": failure_kind(f), "status": f["status"], "text": f["text"][:160],
@@ -648,7 +676,7 @@ class AgentRun:
             descs = {}
             for name, spark in critics_for(self.engine.spark).items():
                 try:
-                    descs[name] = await self.engine.meter.call("spark", f"drift_before:{name}", spark.describe(before.data))
+                    descs[name] = await self.engine.meter.call("spark", f"drift_before:{name}", spark.describe(before.load()))
                 except ChimeraError as e:
                     if e.code == ErrorCode.BUDGET_EXCEEDED:
                         raise
@@ -691,6 +719,7 @@ class AgentRun:
         self.state.edits += 1
         new = self._add_image(img, f"{im.prompt}\n\n[edit turn]\n{instr}", "edit", im.plan, parent=im.id,
                               instruction=instr, prompt_compiled=im.extra.get("prompt_compiled"))
+        del img
         return {"image_id": new.id, "instruction": instr, "edits_used": self.state.edits,
                 "next": "inspect the new image (host drift is checked there)"}
 
@@ -742,10 +771,14 @@ class AgentRun:
     async def _finish(self, im: Image, how: str) -> dict[str, Any]:
         s, eng = self._need_session(), self.engine
         g = self._plan_for(im)
-        verdict = await judge(im.data, g, s.route, eng.tax, eng.spark, eng.segmenter, eng.meter)
-        g = g.model_copy(update={"scores": verdict["scores"]})
-        key = f"evo/{g.id}.agent.{im.id}.webp"
-        await eng.services.storage.put(key, im.data, im.content_type)
+        data = im.load()
+        try:
+            verdict = await judge(data, g, s.route, eng.tax, eng.spark, eng.segmenter, eng.meter)
+            g = g.model_copy(update={"scores": verdict["scores"]})
+            key = f"evo/{g.id}.agent.{im.id}.webp"
+            await eng.services.storage.put(key, data, im.content_type)
+        finally:
+            del data
         im.key = key
         card = output_card(g, s.route, eng.tax)
         remaining = [{"key": f["key"], "kind": f["kind"], "text": f["text"]} for f in im.inspect["failures"]]  # type: ignore[index]

@@ -67,7 +67,7 @@ def save_agent(vdir: Path, doc: dict[str, Any], run: Any) -> None:
     imgs = {}
     for iid in run.state.order:
         im = run.state.images[iid]
-        w(vdir / f"{iid}.webp", im.data)
+        w(vdir / f"{iid}.webp", im.load())
         w(vdir / f"{iid}_prompt.txt", im.prompt)
         if im.extra.get("prompt_compiled"):
             w(vdir / f"{iid}_prompt_compiled.txt", im.extra["prompt_compiled"])
@@ -79,7 +79,7 @@ def save_agent(vdir: Path, doc: dict[str, Any], run: Any) -> None:
     w(vdir / "critic.json", imgs)
     if doc.get("genome"):
         w(vdir / "plan.json", doc["genome"])
-        w(vdir / "image.webp", run.state.images[doc["image_id"]].data)
+        w(vdir / "image.webp", run.state.images[doc["image_id"]].load())
         w(vdir / "prompt_final.txt", doc["prompt"])
         w(vdir / "prompt_compiled.txt", doc["prompt_compiled"])
     w(vdir / "doc.json", {k: v for k, v in doc.items() if k not in ("genome", "inspect", "trace")})

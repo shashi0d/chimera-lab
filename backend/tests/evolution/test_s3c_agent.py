@@ -442,3 +442,37 @@ async def test_a_plan_op_that_changes_nothing_says_so_and_keeps_the_audit(eng):
                                      "reason": "connect the horn"})
     assert out["ok"] and out["changed"] is False and "unchanged" in out["note"]
     assert (await run.call("render", {"method": "single_pass", "reason": "still audited"}))["ok"]
+
+
+# ------------------------------------------------------------------ S3c finish: memory, the two-failure rule
+
+
+def _has_image_data(obj: Any) -> bool:
+    if isinstance(obj, (bytes, bytearray)):
+        return True
+    text = json.dumps(obj, default=lambda o: f"<{type(o).__name__}>")
+    return "data:image/" in text or "UklGR" in text or "iVBORw0K" in text  # data URLs, base64 webp or png
+
+
+async def test_the_agent_history_never_holds_image_data(eng, tmp_path):
+    seen: list[list[dict[str, Any]]] = []
+
+    class Watching(A.PolicyBrain):
+        async def next(self, messages, tools):
+            seen.append(json.loads(json.dumps(messages)))
+            return await super().next(messages, tools)
+
+    def policy(run: A.AgentRun):
+        s = run.state
+        if s.renders == 0 or (s.renders < 2 and s.images[s.order[-1]].inspect is not None):
+            return A.default_policy(run) if s.renders == 0 else ("render", {"method": "growth_edit", "reason": "grow"})
+        return A.default_policy(run)
+
+    doc, run = await eng.agent_fuse("rhinoceros beetle", "brown bear", brain=Watching(policy),
+                                    image_dir=tmp_path / "imgs")
+    assert len(run.state.order) >= 3 and seen
+    for im in run.state.images.values():
+        assert not hasattr(im, "data") and im.path.parent == tmp_path / "imgs" and im.path.stat().st_size == im.size
+        assert not any(isinstance(v, (bytes, bytearray)) for v in vars(im).values())
+    assert not any(_has_image_data(m) for m in seen) and not _has_image_data(run.messages)
+    assert not _has_image_data(run.trace) and not _has_image_data(doc)

@@ -444,7 +444,8 @@ class EvoEngine:
                 "meta_calls": self.meter.since(before)}
 
     async def agent_fuse(self, sire_name: str, dam_name: str, mode: str = "speculative", seed: int = 0,
-                         brain: Any = None, ask: Any = None, growth_default: bool = False) -> tuple[dict[str, Any], Any]:
+                         brain: Any = None, ask: Any = None, growth_default: bool = False, image_dir: Any = None,
+                         on_step: Any = None) -> tuple[dict[str, Any], Any]:
         """S3c: the agent builds the creature (agent.AgentRun). Live, the brain is Muse Spark Open on Baseten; mock
         mode uses the policy brain. Returns (creature doc, the run with its trace)."""
         from app.evolution.agent import AgentRun, SparkOpenBrain
@@ -460,7 +461,7 @@ class EvoEngine:
                 raise ChimeraError(ErrorCode.UPSTREAM_ERROR, "The agent brain is Muse Spark Open on Baseten; "
                                    "BASETEN_API_KEY_MODEL_MUSE_SPARK_OPEN_26 is not set.", retryable=False)
             brain = SparkOpenBrain(baseten, int(agent_settings()["max_tokens"]))
-        run = AgentRun(self, sire_name, dam_name, mode, seed, brain, ask, growth_default)
+        run = AgentRun(self, sire_name, dam_name, mode, seed, brain, ask, growth_default, image_dir, on_step)
         start = len(self._spark_log())
         token = _LOG_MARK.set(start)
         try:
