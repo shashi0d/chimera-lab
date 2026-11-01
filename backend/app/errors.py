@@ -28,6 +28,7 @@ HTTP_STATUS: dict[ErrorCode, int] = {
     ErrorCode.RUN_INTERRUPTED: 409,
     ErrorCode.NOT_FOUND: 404,
     ErrorCode.INTERNAL: 500,
+    ErrorCode.CAP_REACHED: 429,
 }
 
 DEFAULT_MESSAGES: dict[ErrorCode, str] = {
@@ -55,9 +56,17 @@ class ChimeraError(Exception):
         self.details = details or {}
         super().__init__(f"{code.value}: {self.message}")
 
+    status_override: int | None = None
+
     @property
     def status(self) -> int:
-        return HTTP_STATUS.get(self.code, 500)
+        return self.status_override or HTTP_STATUS.get(self.code, 500)
+
+    def with_status(self, status: int) -> ChimeraError:
+        """The agent API (docs/api_contract.md) fixes some statuses differently from v1 (UNSUPPORTED_FILE is 422,
+        an answered choice is 409); v1 keeps its own."""
+        self.status_override = status
+        return self
 
     def to_api(self) -> ApiError:
         return ApiError(

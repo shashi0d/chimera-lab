@@ -37,4 +37,4 @@ async def run(ctx: RunContext) -> str:
             )
     ctx.state["readings"] = {inp.slot: r for inp, r in zip(ctx.inputs, readings)}
     names = [r.common_name or "unknown animal" for r in readings]
-    return f"{names[0]} and {names[1]}"
+    return " and ".join(names)  # R1: the agent API may identify one photo (the other parent given by name)
