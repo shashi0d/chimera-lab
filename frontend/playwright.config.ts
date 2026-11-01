@@ -1,10 +1,8 @@
 import { defineConfig, devices } from "@playwright/test";
-import { tmpdir } from "node:os";
-import { join } from "node:path";
 
-const API_PORT = 8100;
+// R1: the e2e suite runs the app in test mode against the fixture-backed mock transport (src/evo/mock.ts,
+// docs/api_fixtures/), so no backend is started and no model is called. Port 8100 stays reserved for a backend.
 const WEB_PORT = 5174;
-const PY = process.env.PYTHON ?? "../.venv/bin/python";
 
 export default defineConfig({
   testDir: "tests/e2e",
@@ -23,25 +21,10 @@ export default defineConfig({
   },
   webServer: [
     {
-      command: `${PY} -m uvicorn app.main:app --port ${API_PORT}`,
-      cwd: "../backend",
-      url: `http://localhost:${API_PORT}/health`,
-      reuseExistingServer: false,
-      env: {
-        CHIMERA_MODE: "mock",
-        MOCK_DELAY_SCALE: "0.1",
-        RETRY_BASE_SECONDS: "0.01",
-        RUNS_PER_MINUTE_PER_SESSION: "1000",
-        DATA_PATH: "backend/tests/fixtures/chimera_data.sample.json",
-        LOCAL_DATA_DIR: join(tmpdir(), `chimera-e2e-${Date.now()}`),
-        CORS_ORIGINS: `http://localhost:${WEB_PORT}`,
-      },
-    },
-    {
       command: `npx vite --mode test --port ${WEB_PORT} --strictPort`,
       url: `http://localhost:${WEB_PORT}`,
       reuseExistingServer: false,
-      env: { VITE_API_BASE_URL: `http://localhost:${API_PORT}` },
+      env: { VITE_EVO_TRANSPORT: "mock" },
     },
   ],
 });

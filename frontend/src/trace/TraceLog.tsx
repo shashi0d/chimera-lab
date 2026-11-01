@@ -151,11 +151,14 @@ function Row({ item, run }: { item: TraceItem; run: DerivedRun }) {
 export function TraceLog({ run, label }: { run: DerivedRun; label: string }) {
   if (!run.items.length) return null;
   return (
-    <ol className="trace-log" role="log" aria-live="polite" aria-relevant="additions" aria-label={label}>
-      {run.items.map((item) => (
-        <Row key={item.key} item={item} run={run} />
-      ))}
-    </ol>
+    // role="log" sits on a wrapper so the <ol> keeps its list semantics.
+    <div role="log" aria-live="polite" aria-relevant="additions" aria-label={label}>
+      <ol className="trace-log">
+        {run.items.map((item) => (
+          <Row key={item.key} item={item} run={run} />
+        ))}
+      </ol>
+    </div>
   );
 }
 

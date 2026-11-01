@@ -206,12 +206,12 @@ export function TracePanel({ runId }: { runId: string }) {
       </header>
       {run && !done && !rec?.loadError ? (
         // What is happening now (and a question for you) stays in view while the steps scroll below.
-        <div className="trace__now">
+        <div className="trace__now" tabIndex={0} role="region" aria-label={t.nowLabel}>
           <NowCard run={run} reconnecting={rec?.stream === "reconnecting"} />
           {run.pendingChoice ? <ChoiceCard runId={runId} choice={run.pendingChoice} /> : null}
         </div>
       ) : null}
-      <div className="trace__scroll" ref={scroller} onScroll={onScroll}>
+      <div className="trace__scroll" ref={scroller} onScroll={onScroll} tabIndex={0} role="region" aria-label={t.scrollLabel}>
         {rec?.loadError && !run?.items.length ? (
           <section className="now-card now-card--error">
             <ErrorBlock err={rec.loadError.code === "NOT_FOUND" ? { ...rec.loadError, code: "RUN_NOT_FOUND" } : rec.loadError} />

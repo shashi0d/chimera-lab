@@ -1713,6 +1713,7 @@ p.image-node__banner { display: flex; align-items: flex-start; gap: var(--space-
 .trace__now { display: grid; gap: var(--space-5); max-height: 60%; overflow-y: auto; padding: var(--space-6) var(--space-9); border-bottom: 1px solid var(--line-input); background: var(--well); }
 .trace__now .now-card { gap: var(--space-3); padding: var(--space-6); }
 .trace__scroll { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; display: grid; align-content: start; gap: var(--space-7); padding: var(--space-7) var(--space-9) var(--space-11); }
+.trace__scroll:focus-visible, .trace__now:focus-visible { outline-offset: -2px; }
 .trace__log-title { font: var(--type-kicker); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); }
 
 .now-card { display: grid; gap: var(--space-4); padding: var(--space-7); background: var(--surface-card); border: var(--border-card); border-radius: var(--radius-2xl); box-shadow: var(--shadow-card); }

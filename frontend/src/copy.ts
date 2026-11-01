@@ -183,6 +183,8 @@ export const copy = {
     untitled: "New creature",
     hide: "Hide trace",
     logLabel: "Agent steps",
+    nowLabel: "Run status",
+    scrollLabel: "Trace",
     steps: "Steps so far",
     howMade: (n: number) => `How the agent made it (${plural(n, "step")})`,
     duration: "A creature takes about 5 minutes.",
