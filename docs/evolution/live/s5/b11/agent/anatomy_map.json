@@ -1,0 +1,83 @@
+{
+ "parts": [
+  {
+   "part": "head",
+   "sam_label": "head",
+   "parent": "gray_wolf",
+   "parent_role": "host",
+   "parent_name": "gray wolf",
+   "mask_area": 0.049,
+   "found": true,
+   "status": "found",
+   "color": "#268bd2"
+  },
+  {
+   "part": "body",
+   "sam_label": "torso",
+   "parent": "gray_wolf",
+   "parent_role": "host",
+   "parent_name": "gray wolf",
+   "mask_area": 0.0,
+   "found": false,
+   "status": "not located",
+   "color": null
+  },
+  {
+   "part": "legs",
+   "sam_label": "legs",
+   "parent": "gray_wolf",
+   "parent_role": "host",
+   "parent_name": "gray wolf",
+   "mask_area": 0.1092,
+   "found": true,
+   "status": "found",
+   "color": "#268bd2"
+  },
+  {
+   "part": "crab claws",
+   "sam_label": "claws",
+   "parent": "crab",
+   "parent_role": "donor",
+   "parent_name": "crab",
+   "mask_area": 0.0225,
+   "found": true,
+   "status": "found",
+   "color": "#e66e28"
+  },
+  {
+   "part": "tail",
+   "sam_label": "tail",
+   "parent": "gray_wolf",
+   "parent_role": "host",
+   "parent_name": "gray wolf",
+   "mask_area": 0.0245,
+   "found": true,
+   "status": "found",
+   "color": "#268bd2"
+  },
+  {
+   "part": "crab covering (color only)",
+   "sam_label": "glossy chitin plates",
+   "parent": "crab",
+   "parent_role": "donor",
+   "parent_name": "crab",
+   "mask_area": 0.0,
+   "found": false,
+   "status": "not located",
+   "color": null
+  }
+ ],
+ "colors": {
+  "host": "#268bd2",
+  "donor": "#e66e28",
+  "blend": "#825ac8"
+ },
+ "present_fill": 0.002,
+ "found": 4,
+ "not_located": 2,
+ "image_size": [
+  1600,
+  1600
+ ],
+ "overlay_key": "evo/crt_20286d65d31d.agent.img4.anatomy.png"
+}

@@ -1,0 +1,13 @@
+{
+ "calls": 18,
+ "renders": 3,
+ "edits": 1,
+ "images": [
+  "img1",
+  "img2",
+  "img3",
+  "img4"
+ ],
+ "finalized": true,
+ "saved_at": "2026-11-01T16:53:28"
+}

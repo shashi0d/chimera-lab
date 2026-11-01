@@ -1,0 +1,1356 @@
+{
+ "cases": {
+  "b01": {
+   "agent": {
+    "case": "b01",
+    "kind": "agent",
+    "full_match": true,
+    "failures": {
+     "total": 0,
+     "structure": 0,
+     "identity": 0,
+     "integration": 0
+    },
+    "failure_keys": [],
+    "identity": {
+     "sire": {
+      "parent": "axolotl",
+      "named": true,
+      "named_by_spark_open": true,
+      "meta_animals": [
+       "pangolin",
+       "axolotl"
+      ],
+      "spark_open_animals": [
+       "pangolin",
+       "axolotl"
+      ]
+     },
+     "dam": {
+      "parent": "Chinese pangolin",
+      "named": true,
+      "named_by_spark_open": true,
+      "meta_animals": [
+       "pangolin",
+       "axolotl"
+      ],
+      "spark_open_animals": [
+       "pangolin",
+       "axolotl"
+      ]
+     }
+    },
+    "both_parents_named": true,
+    "donor_part_origin": [],
+    "renders": 2,
+    "edits": 0,
+    "tool_calls": 10,
+    "calls_by_provider": {
+     "baseten": 19,
+     "meta": 12
+    },
+    "calls_total": 31,
+    "wall_seconds": 236.0,
+    "host": "axolotl",
+    "note": null
+   },
+   "fixed": {
+    "case": "b01",
+    "kind": "fixed",
+    "full_match": true,
+    "failures": {
+     "total": 0,
+     "structure": 0,
+     "identity": 0,
+     "integration": 0
+    },
+    "failure_keys": [],
+    "identity": {
+     "sire": {
+      "parent": "axolotl",
+      "named": true,
+      "named_by_spark_open": true,
+      "meta_animals": [
+       "pangolin",
+       "axolotl"
+      ],
+      "spark_open_animals": [
+       "pangolin",
+       "axolotl"
+      ]
+     },
+     "dam": {
+      "parent": "Chinese pangolin",
+      "named": true,
+      "named_by_spark_open": true,
+      "meta_animals": [
+       "pangolin",
+       "axolotl"
+      ],
+      "spark_open_animals": [
+       "pangolin",
+       "axolotl"
+      ]
+     }
+    },
+    "both_parents_named": true,
+    "donor_part_origin": [],
+    "renders": 1,
+    "edits": 0,
+    "tool_calls": null,
+    "calls_by_provider": {
+     "meta": 10,
+     "baseten": 6
+    },
+    "calls_total": 16,
+    "wall_seconds": 152.2,
+    "host": "axolotl",
+    "note": "needs_choice on a structural tie (D-085); fused with host=sire (the old rule) to compare"
+   }
+  },
+  "b02": {
+   "agent": {
+    "case": "b02",
+    "kind": "agent",
+    "full_match": false,
+    "failures": {
+     "total": 7,
+     "structure": 0,
+     "identity": 0,
+     "integration": 7
+    },
+    "failure_keys": [
+     "grows_out (integration, fail)",
+     "on_top (integration, fail)",
+     "continuous (integration, fail)",
+     "scattered (integration, fail)",
+     "follows_body (integration, fail)",
+     "separate_outline (integration, fail)",
+     "abrupt_stop (coverage, fail)"
+    ],
+    "identity": {
+     "sire": {
+      "parent": "rhinoceros beetle",
+      "named": true,
+      "named_by_spark_open": true,
+      "meta_animals": [
+       "bear",
+       "beetle"
+      ],
+      "spark_open_animals": [
+       "bear",
+       "rhinoceros beetle"
+      ]
+     },
+     "dam": {
+      "parent": "brown bear",
+      "named": true,
+      "named_by_spark_open": true,
+      "meta_animals": [
+       "bear",
+       "beetle"
+      ],
+      "spark_open_animals": [
+       "bear",
+       "rhinoceros beetle"
+      ]
+     }
+    },
+    "both_parents_named": true,
+    "donor_part_origin": [
+     {
+      "key": "origin_head_horn",
+      "expect": "european rhinoceros beetle",
+      "answers": {
+       "spark_open": "european rhinoceros beetle",
+       "meta_spark": "european rhinoceros beetle"
+      },
+      "status": "pass"
+     }
+    ],
+    "renders": 3,
+    "edits": 1,
+    "tool_calls": 18,
+    "calls_by_provider": {
+     "baseten": 32,
+     "meta": 24
+    },
+    "calls_total": 56,
+    "wall_seconds": 474.0,
+    "host": "brown_bear",
+    "note": null
+   },
+   "fixed": {
+    "case": "b02",
+    "kind": "fixed",
+    "full_match": false,
+    "failures": {
+     "total": 7,
+     "structure": 2,
+     "identity": 0,
+     "integration": 5
+    },
+    "failure_keys": [
+     "insect_legs (structure, fail)",
+     "cover_present (integration, fail)",
+     "continuous (integration, fail)",
+     "scattered (integration, fail)",
+     "connects_head_horn (connection, fail)",
+     "separate_head_horn (connection, fail)",
+     "third_animal (structure, fail)"
+    ],
+    "identity": {
+     "sire": {
+      "parent": "rhinoceros beetle",
+      "named": true,
+      "named_by_spark_open": true,
+      "meta_animals": [
+       "bear",
+       "rhinoceros beetle",
+       "pillbug"
+      ],
+      "spark_open_animals": [
+       "bear",
+       "beetle"
+      ]
+     },
+     "dam": {
+      "parent": "brown bear",
+      "named": true,
+      "named_by_spark_open": true,
+      "meta_animals": [
+       "bear",
+       "rhinoceros beetle",
+       "pillbug"
+      ],
+      "spark_open_animals": [
+       "bear",
+       "beetle"
+      ]
+     }
+    },
+    "both_parents_named": true,
+    "donor_part_origin": [
+     {
+      "key": "origin_head_horn",
+      "expect": "european rhinoceros beetle",
+      "answers": {
+       "spark_open": "european rhinoceros beetle",
+       "meta_spark": "european rhinoceros beetle"
+      },
+      "status": "pass"
+     }
+    ],
+    "renders": 1,
+    "edits": 1,
+    "tool_calls": null,
+    "calls_by_provider": {
+     "meta": 17,
+     "baseten": 11
+    },
+    "calls_total": 28,
+    "wall_seconds": 275.2,
+    "host": "brown_bear",
+    "note": null
+   }
+  },
+  "b03": {
+   "agent": {
+    "case": "b03",
+    "kind": "agent",
+    "full_match": true,
+    "failures": {
+     "total": 0,
+     "structure": 0,
+     "identity": 0,
+     "integration": 0
+    },
+    "failure_keys": [],
+    "identity": {
+     "sire": {
+      "parent": "lion",
+      "named": true,
+      "named_by_spark_open": true,
+      "meta_animals": [
+       "eagle",
+       "lion"
+      ],
+      "spark_open_animals": [
+       "eagle",
+       "lion"
+      ]
+     },
+     "dam": {
+      "parent": "golden eagle",
+      "named": true,
+      "named_by_spark_open": true,
+      "meta_animals": [
+       "eagle",
+       "lion"
+      ],
+      "spark_open_animals": [
+       "eagle",
+       "lion"
+      ]
+     }
+    },
+    "both_parents_named": true,
+    "donor_part_origin": [
+     {
+      "key": "origin_feathered_wings",
+      "expect": "golden eagle",
+      "answers": {
+       "spark_open": "golden eagle",
+       "meta_spark": "golden eagle"
+      },
+      "status": "pass"
+     }
+    ],
+    "renders": 1,
+    "edits": 0,
+    "tool_calls": 8,
+    "calls_by_provider": {
+     "baseten": 14,
+     "meta": 12
+    },
+    "calls_total": 26,
+    "wall_seconds": 171.3,
+    "host": "lion",
+    "note": null
+   },
+   "fixed": {
+    "case": "b03",
+    "kind": "fixed",
+    "full_match": true,
+    "failures": {
+     "total": 0,
+     "structure": 0,
+     "identity": 0,
+     "integration": 0
+    },
+    "failure_keys": [],
+    "identity": {
+     "sire": {
+      "parent": "lion",
+      "named": true,
+      "named_by_spark_open": true,
+      "meta_animals": [
+       "eagle",
+       "lion"
+      ],
+      "spark_open_animals": [
+       "eagle",
+       "lion"
+      ]
+     },
+     "dam": {
+      "parent": "golden eagle",
+      "named": true,
+      "named_by_spark_open": true,
+      "meta_animals": [
+       "eagle",
+       "lion"
+      ],
+      "spark_open_animals": [
+       "eagle",
+       "lion"
+      ]
+     }
+    },
+    "both_parents_named": true,
+    "donor_part_origin": [
+     {
+      "key": "origin_feathered_wings",
+      "expect": "golden eagle",
+      "answers": {
+       "spark_open": "golden eagle",
+       "meta_spark": "golden eagle"
+      },
+      "status": "pass"
+     }
+    ],
+    "renders": 1,
+    "edits": 1,
+    "tool_calls": null,
+    "calls_by_provider": {
+     "meta": 19,
+     "baseten": 11
+    },
+    "calls_total": 30,
+    "wall_seconds": 289.3,
+    "host": "lion",
+    "note": "needs_choice on a structural tie (D-085); fused with host=sire (the old rule) to compare"
+   }
+  },
+  "b04": {
+   "agent": {
+    "case": "b04",
+    "kind": "agent",
+    "full_match": true,
+    "failures": {
+     "total": 0,
+     "structure": 0,
+     "identity": 0,
+     "integration": 0
+    },
+    "failure_keys": [],
+    "identity": {
+     "sire": {
+      "parent": "lion",
+      "named": false,
+      "named_by_spark_open": true,
+      "meta_animals": [
+       "eagle"
+      ],
+      "spark_open_animals": [
+       "eagle",
+       "lion"
+      ]
+     },
+     "dam": {
+      "parent": "golden eagle",
+      "named": true,
+      "named_by_spark_open": true,
+      "meta_animals": [
+       "eagle"
+      ],
+      "spark_open_animals": [
+       "eagle",
+       "lion"
+      ]
+     }
+    },
+    "both_parents_named": false,
+    "donor_part_origin": [],
+    "renders": 1,
+    "edits": 0,
+    "tool_calls": 8,
+    "calls_by_provider": {
+     "baseten": 14,
+     "meta": 10
+    },
+    "calls_total": 24,
+    "wall_seconds": 170.2,
+    "host": "golden_eagle",
+    "note": null
+   },
+   "fixed": {
+    "case": "b04",
+    "kind": "fixed",
+    "full_match": true,
+    "failures": {
+     "total": 0,
+     "structure": 0,
+     "identity": 0,
+     "integration": 0
+    },
+    "failure_keys": [],
+    "identity": {
+     "sire": {
+      "parent": "lion",
+      "named": true,
+      "named_by_spark_open": true,
+      "meta_animals": [
+       "lion",
+       "bird"
+      ],
+      "spark_open_animals": [
+       "lion",
+       "eagle"
+      ]
+     },
+     "dam": {
+      "parent": "golden eagle",
+      "named": false,
+      "named_by_spark_open": true,
+      "meta_animals": [
+       "lion",
+       "bird"
+      ],
+      "spark_open_animals": [
+       "lion",
+       "eagle"
+      ]
+     }
+    },
+    "both_parents_named": false,
+    "donor_part_origin": [
+     {
+      "key": "origin_feathered_wings",
+      "expect": "golden eagle",
+      "answers": {
+       "spark_open": "golden eagle",
+       "meta_spark": "golden eagle"
+      },
+      "status": "pass"
+     }
+    ],
+    "renders": 1,
+    "edits": 1,
+    "tool_calls": null,
+    "calls_by_provider": {
+     "meta": 17,
+     "baseten": 11
+    },
+    "calls_total": 28,
+    "wall_seconds": 258.6,
+    "host": "lion",
+    "note": "needs_choice on a structural tie (D-085); fused with host=sire (the old rule) to compare"
+   }
+  },
+  "b05": {
+   "agent": {
+    "case": "b05",
+    "kind": "agent",
+    "full_match": true,
+    "failures": {
+     "total": 0,
+     "structure": 0,
+     "identity": 0,
+     "integration": 0
+    },
+    "failure_keys": [],
+    "identity": {
+     "sire": {
+      "parent": "donkey",
+      "named": true,
+      "named_by_spark_open": true,
+      "meta_animals": [
+       "donkey"
+      ],
+      "spark_open_animals": [
+       "donkey"
+      ]
+     },
+     "dam": {
+      "parent": "horse",
+      "named": false,
+      "named_by_spark_open": false,
+      "meta_animals": [
+       "donkey"
+      ],
+      "spark_open_animals": [
+       "donkey"
+      ]
+     }
+    },
+    "both_parents_named": false,
+    "donor_part_origin": [],
+    "renders": 1,
+    "edits": 0,
+    "tool_calls": 8,
+    "calls_by_provider": {
+     "baseten": 14,
+     "meta": 11
+    },
+    "calls_total": 25,
+    "wall_seconds": 140.7,
+    "host": "horse",
+    "note": null
+   },
+   "fixed": {
+    "case": "b05",
+    "kind": "fixed",
+    "full_match": true,
+    "failures": {
+     "total": 0,
+     "structure": 0,
+     "identity": 0,
+     "integration": 0
+    },
+    "failure_keys": [],
+    "identity": {
+     "sire": {
+      "parent": "donkey",
+      "named": true,
+      "named_by_spark_open": true,
+      "meta_animals": [
+       "donkey"
+      ],
+      "spark_open_animals": [
+       "donkey"
+      ]
+     },
+     "dam": {
+      "parent": "horse",
+      "named": false,
+      "named_by_spark_open": false,
+      "meta_animals": [
+       "donkey"
+      ],
+      "spark_open_animals": [
+       "donkey"
+      ]
+     }
+    },
+    "both_parents_named": false,
+    "donor_part_origin": [],
+    "renders": 1,
+    "edits": 0,
+    "tool_calls": null,
+    "calls_by_provider": {
+     "meta": 12,
+     "baseten": 6
+    },
+    "calls_total": 18,
+    "wall_seconds": 150.4,
+    "host": "horse",
+    "note": null
+   }
+  },
+  "b06": {
+   "agent": {
+    "case": "b06",
+    "kind": "agent",
+    "full_match": false,
+    "failures": {
+     "total": 1,
+     "structure": 1,
+     "identity": 0,
+     "integration": 0
+    },
+    "failure_keys": [
+     "third_animal (structure, fail)"
+    ],
+    "identity": {
+     "sire": {
+      "parent": "common octopus",
+      "named": false,
+      "named_by_spark_open": false,
+      "meta_animals": [
+       "horse",
+       "toad"
+      ],
+      "spark_open_animals": [
+       "horse",
+       "toad"
+      ]
+     },
+     "dam": {
+      "parent": "horse",
+      "named": true,
+      "named_by_spark_open": true,
+      "meta_animals": [
+       "horse",
+       "toad"
+      ],
+      "spark_open_animals": [
+       "horse",
+       "toad"
+      ]
+     }
+    },
+    "both_parents_named": false,
+    "donor_part_origin": [],
+    "renders": 4,
+    "edits": 0,
+    "tool_calls": 18,
+    "calls_by_provider": {
+     "baseten": 33,
+     "meta": 18
+    },
+    "calls_total": 51,
+    "wall_seconds": 350.7,
+    "host": "horse",
+    "note": null
+   },
+   "fixed": {
+    "case": "b06",
+    "kind": "fixed",
+    "full_match": true,
+    "failures": {
+     "total": 0,
+     "structure": 0,
+     "identity": 0,
+     "integration": 0
+    },
+    "failure_keys": [],
+    "identity": {
+     "sire": {
+      "parent": "common octopus",
+      "named": false,
+      "named_by_spark_open": false,
+      "meta_animals": [
+       "horse"
+      ],
+      "spark_open_animals": [
+       "horse"
+      ]
+     },
+     "dam": {
+      "parent": "horse",
+      "named": true,
+      "named_by_spark_open": true,
+      "meta_animals": [
+       "horse"
+      ],
+      "spark_open_animals": [
+       "horse"
+      ]
+     }
+    },
+    "both_parents_named": false,
+    "donor_part_origin": [],
+    "renders": 1,
+    "edits": 1,
+    "tool_calls": null,
+    "calls_by_provider": {
+     "meta": 14,
+     "baseten": 11
+    },
+    "calls_total": 25,
+    "wall_seconds": 236.5,
+    "host": "horse",
+    "note": null
+   }
+  },
+  "b07": {
+   "agent": {
+    "case": "b07",
+    "kind": "agent",
+    "full_match": false,
+    "failures": {
+     "total": 3,
+     "structure": 2,
+     "identity": 0,
+     "integration": 1
+    },
+    "failure_keys": [
+     "plain_fur (pattern, fail)",
+     "extra_spots (structure, fail)",
+     "extra_stripes (structure, fail)"
+    ],
+    "identity": {
+     "sire": {
+      "parent": "emperor penguin",
+      "named": false,
+      "named_by_spark_open": false,
+      "meta_animals": [
+       "cheetah",
+       "bird"
+      ],
+      "spark_open_animals": [
+       "cheetah",
+       "jackal",
+       "bird"
+      ]
+     },
+     "dam": {
+      "parent": "cheetah",
+      "named": true,
+      "named_by_spark_open": true,
+      "meta_animals": [
+       "cheetah",
+       "bird"
+      ],
+      "spark_open_animals": [
+       "cheetah",
+       "jackal",
+       "bird"
+      ]
+     }
+    },
+    "both_parents_named": false,
+    "donor_part_origin": [],
+    "renders": 3,
+    "edits": 2,
+    "tool_calls": 18,
+    "calls_by_provider": {
+     "baseten": 34,
+     "meta": 21
+    },
+    "calls_total": 55,
+    "wall_seconds": 464.3,
+    "host": "cheetah",
+    "note": null
+   },
+   "fixed": {
+    "case": "b07",
+    "kind": "fixed",
+    "full_match": false,
+    "failures": {
+     "total": 3,
+     "structure": 3,
+     "identity": 0,
+     "integration": 0
+    },
+    "failure_keys": [
+     "no_wings (structure, fail)",
+     "wings (structure, fail)",
+     "extra_wings (structure, fail)"
+    ],
+    "identity": {
+     "sire": {
+      "parent": "emperor penguin",
+      "named": true,
+      "named_by_spark_open": true,
+      "meta_animals": [
+       "penguin"
+      ],
+      "spark_open_animals": [
+       "penguin"
+      ]
+     },
+     "dam": {
+      "parent": "cheetah",
+      "named": false,
+      "named_by_spark_open": false,
+      "meta_animals": [
+       "penguin"
+      ],
+      "spark_open_animals": [
+       "penguin"
+      ]
+     }
+    },
+    "both_parents_named": false,
+    "donor_part_origin": [],
+    "renders": 1,
+    "edits": 1,
+    "tool_calls": null,
+    "calls_by_provider": {
+     "meta": 14,
+     "baseten": 11
+    },
+    "calls_total": 25,
+    "wall_seconds": 250.2,
+    "host": "emperor_penguin",
+    "note": "needs_choice on a structural tie (D-085); fused with host=sire (the old rule) to compare"
+   }
+  },
+  "b08": {
+   "agent": {
+    "case": "b08",
+    "kind": "agent",
+    "full_match": false,
+    "failures": {
+     "total": 1,
+     "structure": 1,
+     "identity": 0,
+     "integration": 0
+    },
+    "failure_keys": [
+     "extra_spots (structure, fail)"
+    ],
+    "identity": {
+     "sire": {
+      "parent": "red fox",
+      "named": true,
+      "named_by_spark_open": true,
+      "meta_animals": [
+       "fox",
+       "barn owl"
+      ],
+      "spark_open_animals": [
+       "fox",
+       "owl"
+      ]
+     },
+     "dam": {
+      "parent": "barn owl",
+      "named": true,
+      "named_by_spark_open": true,
+      "meta_animals": [
+       "fox",
+       "barn owl"
+      ],
+      "spark_open_animals": [
+       "fox",
+       "owl"
+      ]
+     }
+    },
+    "both_parents_named": true,
+    "donor_part_origin": [
+     {
+      "key": "origin_feathered_wings",
+      "expect": "barn owl",
+      "answers": {
+       "spark_open": "barn owl",
+       "meta_spark": "barn owl"
+      },
+      "status": "pass"
+     }
+    ],
+    "renders": 2,
+    "edits": 0,
+    "tool_calls": 10,
+    "calls_by_provider": {
+     "baseten": 19,
+     "meta": 15
+    },
+    "calls_total": 34,
+    "wall_seconds": 222.4,
+    "host": "red_fox",
+    "note": null
+   },
+   "fixed": {
+    "case": "b08",
+    "kind": "fixed",
+    "full_match": false,
+    "failures": {
+     "total": 2,
+     "structure": 2,
+     "identity": 0,
+     "integration": 0
+    },
+    "failure_keys": [
+     "frame (structure, fail)",
+     "extra_spots (structure, fail)"
+    ],
+    "identity": {
+     "sire": {
+      "parent": "red fox",
+      "named": true,
+      "named_by_spark_open": true,
+      "meta_animals": [
+       "fox",
+       "barn owl"
+      ],
+      "spark_open_animals": [
+       "fox",
+       "barn owl"
+      ]
+     },
+     "dam": {
+      "parent": "barn owl",
+      "named": true,
+      "named_by_spark_open": true,
+      "meta_animals": [
+       "fox",
+       "barn owl"
+      ],
+      "spark_open_animals": [
+       "fox",
+       "barn owl"
+      ]
+     }
+    },
+    "both_parents_named": true,
+    "donor_part_origin": [
+     {
+      "key": "origin_feathered_wings",
+      "expect": "barn owl",
+      "answers": {
+       "spark_open": "barn owl",
+       "meta_spark": "barn owl"
+      },
+      "status": "pass"
+     }
+    ],
+    "renders": 1,
+    "edits": 1,
+    "tool_calls": null,
+    "calls_by_provider": {
+     "meta": 17,
+     "baseten": 11
+    },
+    "calls_total": 28,
+    "wall_seconds": 250.9,
+    "host": "red_fox",
+    "note": "needs_choice on a structural tie (D-085); fused with host=sire (the old rule) to compare"
+   }
+  },
+  "b09": {
+   "agent": {
+    "case": "b09",
+    "kind": "agent",
+    "full_match": true,
+    "failures": {
+     "total": 0,
+     "structure": 0,
+     "identity": 0,
+     "integration": 0
+    },
+    "failure_keys": [],
+    "identity": {
+     "sire": {
+      "parent": "Indian pangolin",
+      "named": true,
+      "named_by_spark_open": true,
+      "meta_animals": [
+       "horse",
+       "pangolin"
+      ],
+      "spark_open_animals": [
+       "horse",
+       "pangolin"
+      ]
+     },
+     "dam": {
+      "parent": "horse",
+      "named": true,
+      "named_by_spark_open": true,
+      "meta_animals": [
+       "horse",
+       "pangolin"
+      ],
+      "spark_open_animals": [
+       "horse",
+       "pangolin"
+      ]
+     }
+    },
+    "both_parents_named": true,
+    "donor_part_origin": [],
+    "renders": 1,
+    "edits": 1,
+    "tool_calls": 10,
+    "calls_by_provider": {
+     "baseten": 17,
+     "meta": 12
+    },
+    "calls_total": 29,
+    "wall_seconds": 213.2,
+    "host": "horse",
+    "note": null
+   },
+   "fixed": {
+    "case": "b09",
+    "kind": "fixed",
+    "full_match": true,
+    "failures": {
+     "total": 0,
+     "structure": 0,
+     "identity": 0,
+     "integration": 0
+    },
+    "failure_keys": [],
+    "identity": {
+     "sire": {
+      "parent": "Indian pangolin",
+      "named": true,
+      "named_by_spark_open": true,
+      "meta_animals": [
+       "pangolin"
+      ],
+      "spark_open_animals": [
+       "pangolin",
+       "pig"
+      ]
+     },
+     "dam": {
+      "parent": "horse",
+      "named": false,
+      "named_by_spark_open": false,
+      "meta_animals": [
+       "pangolin"
+      ],
+      "spark_open_animals": [
+       "pangolin",
+       "pig"
+      ]
+     }
+    },
+    "both_parents_named": false,
+    "donor_part_origin": [],
+    "renders": 1,
+    "edits": 0,
+    "tool_calls": null,
+    "calls_by_provider": {
+     "meta": 11,
+     "baseten": 6
+    },
+    "calls_total": 17,
+    "wall_seconds": 172.7,
+    "host": "indian_pangolin",
+    "note": "needs_choice on a structural tie (D-085); fused with host=sire (the old rule) to compare"
+   }
+  },
+  "b10": {
+   "agent": {
+    "case": "b10",
+    "kind": "agent",
+    "full_match": false,
+    "failures": {
+     "total": 5,
+     "structure": 1,
+     "identity": 0,
+     "integration": 4
+    },
+    "failure_keys": [
+     "plain_fur (pattern, fail)",
+     "material_look (integration, fail)",
+     "host_cover_kept (integration, fail)",
+     "donor_pieces (integration, fail)",
+     "extra_horn (structure, fail)"
+    ],
+    "identity": {
+     "sire": {
+      "parent": "tortoise",
+      "named": true,
+      "named_by_spark_open": true,
+      "meta_animals": [
+       "goat",
+       "tortoise"
+      ],
+      "spark_open_animals": [
+       "goat",
+       "tortoise"
+      ]
+     },
+     "dam": {
+      "parent": "domestic goat",
+      "named": true,
+      "named_by_spark_open": true,
+      "meta_animals": [
+       "goat",
+       "tortoise"
+      ],
+      "spark_open_animals": [
+       "goat",
+       "tortoise"
+      ]
+     }
+    },
+    "both_parents_named": true,
+    "donor_part_origin": [],
+    "renders": 2,
+    "edits": 2,
+    "tool_calls": 16,
+    "calls_by_provider": {
+     "baseten": 29,
+     "meta": 18
+    },
+    "calls_total": 47,
+    "wall_seconds": 381.6,
+    "host": "domestic_goat",
+    "note": null
+   },
+   "fixed": {
+    "case": "b10",
+    "kind": "fixed",
+    "full_match": false,
+    "failures": {
+     "total": 2,
+     "structure": 2,
+     "identity": 0,
+     "integration": 0
+    },
+    "failure_keys": [
+     "extra_beak (structure, fail)",
+     "extra_stripes (structure, fail)"
+    ],
+    "identity": {
+     "sire": {
+      "parent": "tortoise",
+      "named": true,
+      "named_by_spark_open": true,
+      "meta_animals": [
+       "tortoise"
+      ],
+      "spark_open_animals": [
+       "tortoise"
+      ]
+     },
+     "dam": {
+      "parent": "domestic goat",
+      "named": false,
+      "named_by_spark_open": false,
+      "meta_animals": [
+       "tortoise"
+      ],
+      "spark_open_animals": [
+       "tortoise"
+      ]
+     }
+    },
+    "both_parents_named": false,
+    "donor_part_origin": [],
+    "renders": 1,
+    "edits": 1,
+    "tool_calls": null,
+    "calls_by_provider": {
+     "meta": 14,
+     "baseten": 11
+    },
+    "calls_total": 25,
+    "wall_seconds": 244.0,
+    "host": "tortoise",
+    "note": "needs_choice on a structural tie (D-085); fused with host=sire (the old rule) to compare"
+   }
+  },
+  "b11": {
+   "agent": {
+    "case": "b11",
+    "kind": "agent",
+    "full_match": false,
+    "failures": {
+     "total": 3,
+     "structure": 1,
+     "identity": 0,
+     "integration": 2
+    },
+    "failure_keys": [
+     "material_look (integration, fail)",
+     "donor_pieces (integration, fail)",
+     "extra_spots (structure, fail)"
+    ],
+    "identity": {
+     "sire": {
+      "parent": "crab",
+      "named": true,
+      "named_by_spark_open": true,
+      "meta_animals": [
+       "wolf",
+       "crab"
+      ],
+      "spark_open_animals": [
+       "wolf",
+       "crab"
+      ]
+     },
+     "dam": {
+      "parent": "gray wolf",
+      "named": true,
+      "named_by_spark_open": true,
+      "meta_animals": [
+       "wolf",
+       "crab"
+      ],
+      "spark_open_animals": [
+       "wolf",
+       "crab"
+      ]
+     }
+    },
+    "both_parents_named": true,
+    "donor_part_origin": [
+     {
+      "key": "origin_claws",
+      "expect": "crab",
+      "answers": {
+       "spark_open": "crab",
+       "meta_spark": "crab"
+      },
+      "status": "pass"
+     }
+    ],
+    "renders": 3,
+    "edits": 1,
+    "tool_calls": 18,
+    "calls_by_provider": {
+     "baseten": 31,
+     "meta": 23
+    },
+    "calls_total": 54,
+    "wall_seconds": 424.2,
+    "host": "gray_wolf",
+    "note": null
+   },
+   "fixed": {
+    "case": "b11",
+    "kind": "fixed",
+    "full_match": false,
+    "failures": {
+     "total": 7,
+     "structure": 1,
+     "identity": 0,
+     "integration": 6
+    },
+    "failure_keys": [
+     "grows_out (integration, fail)",
+     "on_top (integration, fail)",
+     "follows_body (integration, fail)",
+     "separate_outline (integration, fail)",
+     "legs_covered (coverage, fail)",
+     "abrupt_stop (coverage, fail)",
+     "third_animal (structure, fail)"
+    ],
+    "identity": {
+     "sire": {
+      "parent": "crab",
+      "named": true,
+      "named_by_spark_open": true,
+      "meta_animals": [
+       "wolf",
+       "crab",
+       "pillbug"
+      ],
+      "spark_open_animals": [
+       "wolf",
+       "crab"
+      ]
+     },
+     "dam": {
+      "parent": "gray wolf",
+      "named": true,
+      "named_by_spark_open": true,
+      "meta_animals": [
+       "wolf",
+       "crab",
+       "pillbug"
+      ],
+      "spark_open_animals": [
+       "wolf",
+       "crab"
+      ]
+     }
+    },
+    "both_parents_named": true,
+    "donor_part_origin": [
+     {
+      "key": "origin_claws",
+      "expect": "crab",
+      "answers": {
+       "spark_open": "crab",
+       "meta_spark": "crab"
+      },
+      "status": "pass"
+     }
+    ],
+    "renders": 1,
+    "edits": 1,
+    "tool_calls": null,
+    "calls_by_provider": {
+     "meta": 17,
+     "baseten": 11
+    },
+    "calls_total": 28,
+    "wall_seconds": 283.9,
+    "host": "gray_wolf",
+    "note": null
+   }
+  }
+ },
+ "totals": {
+  "agent": {
+   "creatures": 11,
+   "full_matches": 5,
+   "both_parents_named": 7,
+   "avg_failures": 1.82,
+   "avg_by_group": {
+    "structure": 0.55,
+    "identity": 0.0,
+    "integration": 1.27
+   },
+   "avg_renders": 2.09,
+   "avg_tool_calls": 12.91,
+   "avg_calls_by_provider": {
+    "baseten": 23.27,
+    "meta": 16.0
+   },
+   "avg_calls": 39.27,
+   "avg_wall_seconds": 295.3
+  },
+  "fixed": {
+   "creatures": 11,
+   "full_matches": 6,
+   "both_parents_named": 5,
+   "avg_failures": 1.91,
+   "avg_by_group": {
+    "structure": 0.91,
+    "identity": 0.0,
+    "integration": 1.0
+   },
+   "avg_renders": 1.0,
+   "avg_tool_calls": null,
+   "avg_calls_by_provider": {
+    "baseten": 9.64,
+    "meta": 14.73
+   },
+   "avg_calls": 24.36,
+   "avg_wall_seconds": 233.1
+  }
+ }
+}
