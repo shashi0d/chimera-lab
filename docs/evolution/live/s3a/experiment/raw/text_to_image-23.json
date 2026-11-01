@@ -1,0 +1,109 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Silhouette: Four-legged axolotl frame. Host frame: the axolotl sets the outline, body size and overall frame. A single axolotl. Head of the axolotl, fully visible and uncluttered, with clear, discernible eyes. Details: axolotl body and legs, with its own smooth skin everywhere, plain coat. Bilaterally symmetrical, recognizable limbs, visible sense organs. Habitat cue (river forest): dark back and light belly (mild countershading). Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "id": "resp_6ae6c29990e34818e3404406",
+  "access_programs": null,
+  "created_at": 1793507993.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae6c299dceafef0ff4040a3",
+    "summary": [
+     {
+      "text": "**Drafting axolotl silhouette image**\nI'm planning a single axolotl silhouette with a clear head, visible eyes, and smooth skin, set in a side three-quarter view against a plain light background with natural lighting and soft ground shadow.\n**Refining natural history illustration**\nI'm planning a side three-quarter axolotl with countershading, dark back and light belly, four legs with claws, feet on the ground with a soft shadow, on a plain light background.\n**Refining illustration style**\nI'm planning another version with fewer gills and a cleaner, more classic look, keeping the natural history feel while simplifying details for a clearer result.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae6c2992a7ea547a5774959",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0VBeG96UWdXaWZnS2VFR0FQOElBNVVRbVRBOWJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczozNTgwYjA3Ni00YTY5LTRkMWYtOTdkMy0zZDBjNzIwMWMyZjc6R0Qzb3B6UjNQeTM5LTBrRkFGU0FpY29oZEFWSmJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM1MDc5OTN9.Q8WLFwFAfYzSjzfWGlp6E9_oJRaw",
+    "result": "<elided> (653528 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 19572,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 15488
+   },
+   "output_tokens": 2407,
+   "output_tokens_details": {
+    "reasoning_tokens": 584
+   },
+   "total_tokens": 21979
+  },
+  "user": null
+ }
+}

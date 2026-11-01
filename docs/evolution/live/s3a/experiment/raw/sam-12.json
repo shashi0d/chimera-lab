@@ -1,0 +1,70 @@
+{
+ "purpose": "sam",
+ "request": {
+  "model": "sam-3.1",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "head horn"
+     },
+     {
+      "type": "input_image",
+      "image_url": "<elided> (771123 chars)"
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "top_logprobs": 0,
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "service_tier": "auto",
+  "model": "sam-3.1",
+  "background": false,
+  "tools": [],
+  "tool_choice": "auto",
+  "truncation": "disabled",
+  "id": "resp_6ae6c00fad4787a36abe4abf",
+  "object": "response",
+  "status": "completed",
+  "created_at": 1793507343.0,
+  "completed_at": 1793507343.0,
+  "error": null,
+  "incomplete_details": null,
+  "output": [
+   {
+    "type": "message",
+    "id": "msg_c21d15d6-2fb1-4d95-a98a-e845f5dab663",
+    "role": "assistant",
+    "content": [
+     {
+      "type": "output_text",
+      "text": "<0f>0<|box;x1=1457;y1=335;x2=1556;y2=542;w=1600;h=1600|><|mask;x=0;y=0;data=208,100,~!!!?*!0cYXn-5c{y+l{X`dC4wBGXqWqL?-gkbH6_CA-NWeVQ$j[vLxOkUHekZsEnU_QsbSHf2KFX?1lV2XOOzUsAA=_]h&0C)xl&Y8J6(4lbi)G.W%Q[@f)-P?A5Z=&i?NvKLw0%wzLZcU-wS2!x'TWV(^_sngnr.*9Eqq^0mqOwA[C(PyhBeF6TP8+$Rum)=p9C/)ig/sSQ4v+v^Vf*Sj7SUdPn:5ty@7*$G+A$]%$d=IwRv2W#6uC0voDw{D4$r_/4=t2.`-ZKjwYDe1:Xb$h_Tb1SS6'4&&66Os-GZlt^=`OA{?iJPhBb=^*8p0z1^GXTk/MRv2&9ymNKaNpC.lQI/Uo#:v7`V=kC9]YR6z#QUS5*6ah{FPXe.Nwh45?f#EU6aX?/.zKHux1B@j37x%^V7u&FE-3XC7@_p_A!B7Ay3wURS28'_o1/vA6F-pf&0{=ynk?2L-`.k2t+Dw]*23bMVTQIe`)!`g@G[wY/&9kb+sY/Iq{vi-dhL]fu$'NqLtccR!aP2$=xN3twtOqfXskv.$icq%Yk%:zJVc@!A5IvP^)A2bnb)t8JGgH2QCIIG/(9Jv1n_H:uO42/Sin.s-^S#FFW0S-QcHGhRiAlbn#!?0_g3G/1dHqi#:s%#bsefHR:dXuPuxCh6bIVw!?:xB]B7+Ky&'d&(S@S##.ythLpq.^)!#iKccx%@TM`7s?$8^gB`:EU6Z{-LBu^?F9OEBy&Ieww&fuUdbB`3u/UErhzwrw?lkN**v/m8PixXHO6Z7A?qVVmSFF$.IM+xSV'az=&.RWtF)'_^s=$U^/.^{98&Ts31L^3m1:kAbHu:h0IDbilA^Za(sErC`UEg_S:(^rEH##HuitV6l8[`zD[A8&f=o&8^+Y'+A6?N?06k8=b{C)idDC4%L7Jadu59r]57kBXCbTYokYhhUV)imflFGwju!oz$'wuAURt[BPhX3Oo5dF-A_KuVQ9lF]VSd/jJ2TD&$Lh5y'nKHxD4@]OB'-giZsd:6NQNy)S7P%9:W[#K/O-VcP:#0?#xjAV+Zt`dO1{Z*W'&s:!#y)maTY77yHNpsL2)i9t?a1brZNQfKHua-ZN7gAUk^!N%sL=i%dnJTaJF0^][A'O1DWnx]7EpNx$M(9c7T$vzEi#QO^d[Rc3vN:Sb.C%b$&vFqHQ#^pGfGFwS?QJD6/hN4@xRVBiMR$jD1d`t(LF0P2hwO)53il-kcFk-%BRy{T#2vFg:p{(-V)uVPe`y0bjHpgElwj{&sA$VEB0lW2T_3Qu_`ZF#J{l:U{KyznfVRzg0v^1N#p9YCo!x2bTi&zsUHj[FVX[9SWUYg31=OH^wjc[T85_6W6:C+D&gp8utfq#79QEj!{]9vr{0w=`G8e36hBTO?oW`prqR''l[NZl+a*#pL`6iQGsYq88ll`ghS$ia0`L3:-gWu+vh:6?AL.s]OuI-$+3NLzi($SkXBc-PY[QR^1whaZmf^k4.b8m2wG6V9mSO':'x5HHtt[h+^qs5[?y=#Ff8D&mQX[irCxK`PZ6D(@pq9SNngMiVrIS2oV(8Y79u%2d*ddRI2gpT[b%*l=P8#h@pD#HU0'bfIQ@sFjY$0@^u9_Klsg/ou(u[KR?b+%PsCmD$mVWLH!8Gu4!=M6$rt_X*l@eK4QCBbbVA/889pZ3N3TQ&'(O./]Xj1DPjezb3o='(I`**Hx%9l54&.edL6:.He#^pECD@mr^a2N8g!%3Z*5YBBf^IL.=XZ2N`6G!nXL4Q'%'YujCLmMBKpLbXmQ)KKaHfPHLnjJ-[u_]q8r)A7^vU]pxEnuSLBA/KrN?9zC4F#5D*cKWz8NLqZY@!HnLWrhG&V(9TMk@@B*MS6xa?z!zBb-g+!xSqjZDI![dZajK$@-(X8[Z#+(zR@qRjgz&0VXUV9G_X#@l&1]AnA29t4C-7r`1wZArxIpgjU$c=)%x5j9Dhs4+[hhKtOCpL4fZ?/[??[(Z!6Au!%p!FywS)O)y$.VmLLWTUTbJ4Ft-8'Z_h*R9XYjCob2vNN'XsF-p#kjxA6?MxD4t([46*kSwKSURY_QOmEYPexgfhDVt&49Nh_v#im^/(ZGOsF.#U]8{#1zibdWEY_Z4v/WyRzA-%Y#e`'H+dmo2`c7MSnr6E6QPL`'m4gNSFlf+tkC.-M5#I+W[bS8?DDX{0zcifuTRJ9Sdk`RRIg8e8-H*{w.Hjhh(F4RlF$2`QGL1[wuY0._^Sw%TWDnnc]3X{/4y(HvK+ISi(Zpya#rzI+%GM1jO%Z?M]a+()mvKFj^iP'@gMb3OA=[7&yjbV6ND91L:nKtDA!LTezUuL`PZLIUJ2xr9+7kA.Uxc&)5vu]Gjg8ecxXSmU+W6su'n'6^Cv24WSbwx*ffWQUa^R#F5hlbFce`Kkqa9n7$AW${z.78UOA?b#1:=m$:'wA!'.`Ie5Nuuf[Tg#ebFsvnR0ZLc7vYZf#ET`R{^X!I+2=nO&^{+][pkeMQ.goGTE[*^W?i/QybSY25=Wo?.]PC#Y3p0.`INafcVa_70)S4so#8vT!9ds)aQ?!a'XwJ&kTq]1Y-)!O`[NHByYXm_FDg9JY@e=M5rjTW@1l:w90T@+JbMDg$^Z3KwYx+N@He5?UYxsMbbRXa31b!dT&bMq_QyzZFX&pUkXBA^nk!MfMYj%&[(vqFY5a2vP6GQ{Of*6G(!!|>\n",
+      "annotations": [],
+      "logprobs": []
+     }
+    ],
+    "status": "completed"
+   }
+  ],
+  "instructions": null,
+  "usage": {
+   "input_tokens": 0,
+   "input_tokens_details": {
+    "cached_tokens": 0
+   },
+   "output_tokens": 0,
+   "output_tokens_details": {
+    "reasoning_tokens": 0
+   },
+   "total_tokens": 0,
+   "images_processed": 1
+  },
+  "parallel_tool_calls": true,
+  "store": true
+ }
+}

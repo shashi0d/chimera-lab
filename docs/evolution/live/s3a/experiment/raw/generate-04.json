@@ -1,0 +1,113 @@
+{
+ "purpose": "generate",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Silhouette: Four-legged axolotl frame. Host frame: the axolotl sets the outline, body size and overall frame. A single creature that combines a axolotl and a chinese pangolin. Head of the axolotl, fully visible and uncluttered, with clear, discernible eyes. Details: axolotl body and legs, with its own smooth, moist skin everywhere else, plain coat, no stripes or spots; from the chinese pangolin, as parts and materials on the axolotl's own body: a covering of large overlapping keratin scales in its own colors that replaces the axolotl's smooth skin over the back and flanks: it grows in the skin as the axolotl's own covering there, not as pieces added on top; the smooth skin stops at the covering's edge, and the belly and legs keep the axolotl's own smooth skin; the scales are a pangolin's scale layer grown in the skin: overlapping keratin scales rooted in the skin like a pangolin's, in rows that overlap from head to tail like roof tiles, one continuous layer over the back and flanks. The covering follows the body outline. Bilaterally symmetrical, recognizable limbs, visible sense organs. Habitat cue (river forest): dark back and light belly (mild countershading). Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration. Material reference: use @Image1 only for the material of the keratin scales: their color, surface texture and seams. Do not copy its body, head, legs or shape; the creature is the axolotl described above.\nAspect ratio: 1:1."
+     },
+     {
+      "type": "input_image",
+      "image_url": "<elided> (670943 chars)"
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "id": "resp_6ae6c267f6596d03eb274aa5",
+  "access_programs": null,
+  "created_at": 1793507943.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae6c267c1b86a39a34d4c29",
+    "summary": [
+     {
+      "text": "**Designing hybrid silhouette**\nI'm planning a single creature that uses an axolotl outline and head with clear eyes, then layers large overlapping keratin scales from a pangolin across the back and flanks while keeping smooth, plain skin elsewhere.\n**Preparing hybrid illustration plan**\nI'm organizing the hybrid creature details, using the pangolin scale material from the reference and planning to look up axolotl head features to complete the natural history illustration.\n**Composing natural history illustration**\nI'm combining the axolotl head with feathery gills and scaled back and flanks from the reference, keeping smooth belly and legs, in a side three-quarter view on a light background for a natural history illustration.\n**Finalizing natural history illustration**\nI'm preparing the single illustration for delivery, confirming it's the first and only version before sharing the media with the user.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae6c267ae8dbe1637ab45f0",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0swV3BUUnlwam03dzkwRkFId09OelhxYS1jbmJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczo3ZGM5NDQ0OC05Mzc0LTQ5YTUtODdhYS1iYWE3ZmE5MDA1NTM6R0w5V21EVFJFRnRhQTJzTEFBc2swb01GSUxNU2JnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM1MDc5NDN9.Q8WLFwFTkAzvwSQlCy86gEJEl5pH",
+    "result": "<elided> (803960 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 35449,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 29952
+   },
+   "output_tokens": 2947,
+   "output_tokens_details": {
+    "reasoning_tokens": 556
+   },
+   "total_tokens": 38396
+  },
+  "user": null
+ }
+}

@@ -7,6 +7,7 @@ Branch `evo`, 2026-11-01. ROADMAP section 5b (S2 and S3a rows). Not merged. Live
 - **Citations:** cited traits are now checked in code (source tier, quote found on the fetched page, page names the animal). Of the 50 stored S2 citations for the 4 animals, 16 survive. The rest fall back to model-estimated, with the reason recorded.
 - **Research cards:** RC-R10-12 to 14 are in `rule_cards.json` (112 cards). The research scripts were silently skipping any doc number above 9.
 - **Tests:** 869 passed, 6 skipped (37 new S3a tests).
+- **Experiment (part 8):** rewording the donor covering as a replacement of the host's covering (V1, V2) turns scattered pieces into one continuous structure on both pairs. A hard shell over fur still looks laid on top; the report locates that as mostly an image-model limit. The default compiler is unchanged until the owner rates `benchmark/s3a_review.html`.
 
 ## 1. Gold set
 
@@ -115,3 +116,76 @@ What this shows:
   - Cards: R10 in the rule book, and two-digit doc numbers in the builder.
 - **Updated:** S2 inspect tests now cover `inspect_checklist`. The engine edit-turn tests script the protocol's answers. Call counts rose by 4 Spark calls per render. The card count is 112.
 - **Full suite:** 869 passed, 6 skipped. ruff is clean.
+
+## 8. Integration experiment (live)
+
+`scripts/s3a_live.py experiment`, outputs in `docs/evolution/live/s3a/experiment/<pair>/<variant>_r<n>/`: each holds the image, the exact prompt (`prompt.txt`) and the full inspect record (`inspect.json`). `prompts.json` holds every variant's text, and `plan.json` holds the one plan per pair.
+
+**Plans (code skeleton, no model plan, identical across variants):**
+- **Beetle x bear** (speculative, bear host): the beetle's head horn on the brow; chitin plates on the back and flanks; wings dropped; the arthropod-size license.
+- **Axolotl x Chinese pangolin** (realistic, axolotl host set with `host_pick="sire"`): pangolin keratin scales on the back and flanks.
+
+**Variants:**
+- V0: the current compiled prompt.
+- V1: the covering phrase reworded as replacement (RC-R10-12).
+- V2: V1 plus the analogy (RC-R10-13).
+- V3: V2 plus anchors (RC-R10-14).
+- V4: V2 plus a generated donor portrait as `@Image1`, for the material only.
+- V5: a plain host render, then one edit turn (`previous_response_id`) that grows the V2 covering. For the bear it also grows the planned horn, which the plain host lacks.
+
+Two repeats each. The default compiler is unchanged.
+
+**Calls:**
+- 30 images: 20 renders, 4 plain host renders and 4 edit turns for V5, and 2 portraits.
+- 49 Spark Open and 48 Meta Spark critic calls; one Spark Open call was retried.
+- 12 SAM calls (the horn).
+- 0 failures.
+- Budget counter: images 28→58, Meta Spark 170→218, Spark Open 129→178, SAM 33→45.
+
+**Critic integration answers** (two critics; P pass, F fail, U uncertain, i.e. the critics disagree; r1 / r2):
+
+| Pair | Variant | grows out | on top | continuous | scattered | on legs | on shoulders | other signals (r1; r2) |
+|---|---|---|---|---|---|---|---|---|
+| beetle x bear | V0 | U / F | U / F | F / F | F / F | F / U | F / F | mane U; whole animal F, insect-leg pieces F |
+| beetle x bear | V1 | P / U | P / U | P / P | P / P | P / P | F / F | third animal F (both: "pill bug"); none |
+| beetle x bear | V2 | P / U | P / U | P / P | P / P | P / P | F / F | mane U; none |
+| beetle x bear | V3 | F / U | F / U | P / P | P / P | P / P | U / F | none; none |
+| beetle x bear | V4 | F / U | F / U | P / P | P / P | P / P | F / F | mane U; whole animal U |
+| beetle x bear | V5 | U / U | U / U | P / P | P / P | P / P | F / F | whole animal U; none |
+| axolotl x pangolin | V0 | F / F | F / F | P / F | F / F | U / P | U / F | none; none |
+| axolotl x pangolin | V1 | P / P | P / P | P / P | P / P | P / P | F / F | none; none |
+| axolotl x pangolin | V2 | P / P | P / P | P / P | P / P | P / P | F / U | extra limb pieces U; spots U |
+| axolotl x pangolin | V3 | P / P | P / P | P / P | P / P | P / P | U / U | none; none |
+| axolotl x pangolin | V4 | P / P | P / P | P / P | P / P | P / P | F / P | none; none |
+| axolotl x pangolin | V5 | P / P | P / P | P / P | P / P | P / P | F / U | third animal U; none |
+
+On the bear, the "grows out" uncertainties are always Spark Open yes and Meta no. Meta never accepts the bear's shell as grown in, except on V1 r1 and V2 r1. The contact sheet is `docs/evolution/benchmark/s3a_contact_sheet.png`.
+
+**My judgment (to be checked against the owner's ratings):**
+- **V0 → V1 is the big step, for both pairs.** The same plan, reworded from "a few large patches … with clean edges" to "a covering that replaces the host's covering in its zone", turns scattered pieces into one continuous structure. On the bear, the leg pieces and the whole-beetle reading go away. Every V0 image fails continuity or scattering; no V1 to V5 image does.
+- **The best variant for integration is V2, with V5 a close second on the bear only.**
+  - **V2 bear:** one domed shield in two halves and the fewest signals in r1. It looks like a beetle's shield, not a pill-bug saddle; V1 r1 reads as a pill bug to both critics.
+  - **V3 and V4:** they add a pronotum-like front plate, and the shield starts to read as a whole beetle lying on the bear's back (V4 r2 "whole animal" uncertain). Anchors and the portrait made the beetle more literal, not more integrated.
+  - **V5:** on the bear, it gives the most skin-like edge, with fur clearly meeting the shell rim. But the edit turn also restyled the host. The bear took a rhinoceros-like nose horn; the axolotl turned dark grey and scaly on the head, and r1 has an odd extra tail lobe.
+  - **Axolotl:** V1 to V4 are all good and close. V4 r1 tapers most naturally and is the only clean pass (r2).
+- **Where the failure sits:**
+  - **Scattering is mostly a plan-representation and wording problem.** The plan's PATCH operation is compiled as "patches", and the image model draws exactly that. The wording change alone fixes it.
+  - **"On top" on the bear is mostly an image-model limit.** Every wording and the edit turn still give a shell that sits over the fur like a saddle, with a raised rim. Only the V5 edit softens the edge, and it costs host identity. For the axolotl (scales on skin), every non-V0 variant passes, so the limit is specific to a hard shell over fur.
+  - **The shoulders signal is a plan conflict, not a render fault.** The plan says back and flanks, but RC-R10-13 says "from the shoulders to the hips". 21 of the 24 images put the covering on the shoulders, and the critic flags it because the plan excludes `forequarters`. If the owner prefers RC-R10-13, the fix is in the plan, which should add the shoulders for a dorsal shield. It is not in the wording or the critic.
+- **Recommendation for the compiler (after the owner's ratings):**
+  - Compile a protective covering with the V2 wording: replacement plus a functional analogy.
+  - Leave the anchors (V3) and material references (V4) off by default.
+  - Try V5 only as a repair edit when inspect flags "on top", and judge it on identity as well as integration.
+  - Plan side: give a dorsal-shield covering the region shoulders to hips (back, flanks and forequarters).
+
+## 9. Review sheet
+
+`docs/evolution/benchmark/s3a_review.html` is self-contained (2.1 MB, images embedded as JPEG). Every image from part 8 is grouped by pair and variant. Each card shows:
+- the critic verdict;
+- the integration and placement answers per critic;
+- all fail signals;
+- both plan-blind descriptions;
+- the exact prompt, plus the edit instruction for V5 and the reference note for V4;
+- rating fields for the owner: integrated (1-5), placement correct (1-5), looks like a real animal (1-5), notes.
+
+Ratings are kept in the browser (localStorage, with try/catch) and exported with "Export ratings (JSON)". The grid is also exported as one PNG: `docs/evolution/benchmark/s3a_contact_sheet.png` (6 variants × 2 repeats per pair, labeled with the critic result).
