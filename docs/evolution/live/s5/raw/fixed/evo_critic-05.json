@@ -1,0 +1,105 @@
+{
+ "purpose": "evo_critic",
+ "request": {
+  "model": "meta-models/muse-spark-open-1026",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture with no other context. animals: the real animal species whose features you can clearly see in it, as everyday English common names, most prominent first, at most three. If it looks like one ordinary animal, list only that animal. creatures: how many separate creatures are in the picture. notes: one short sentence on what you see."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "What animals do you see, and how many creatures?"
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (901987 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "readability_critic",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "animals",
+      "creatures",
+      "notes"
+     ],
+     "properties": {
+      "animals": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "creatures": {
+       "type": "integer"
+      },
+      "notes": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0,
+  "max_tokens": 4000
+ },
+ "response": {
+  "id": "chatcmpl-79613db20e2940d5b340561e7fc72674",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{ \"animals\": [\"eagle\", \"lion\"], \"creatures\": 1, \"notes\": \"A single griffin-like hybrid with an eagle's head and wings on a lion's body standing in profile.\" }",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null,
+     "reasoning_content": "We need to answer: What animals do you see, and how many creatures?\n\nWe look at one picture with no other context. animals: the real animal species whose features you can clearly see in it, as everyday English common names, most prominent first, at most three. If it looks like one ordinary animal, list only that animal. creatures: how many separate creatures are in the picture. notes: one short sentence on what you see.\n\nWe have a griffin: eagle head/wings + lion body. So animals: eagle, lion. Or golden eagle? But everyday English common names: eagle, lion. Most prominent first: eagle head is prominent, but lion body also. Which is most prominent? The head is eagle, wings eagle. So eagle first, then lion.\n\nCreatures: how many separate creatures are in the picture. There's one griffin creature. So 1.\n\nNotes: one short sentence on what you see.\n\nWe must follow instruction: animals: list as everyday English common names, most prominent first, at most three. If it looks like one ordinary animal, list only that animal. This is not ordinary, it's hybrid.\n\nSo answer should be structured? Probably JSON? The prompt says: animals: ... creatures: ... notes: ...\n\nWe should provide those fields.\n\nWe need to be careful: The instruction says \"You look at one picture with no other context. animals: the real animal species whose features you can clearly see in it, as everyday English common names, most prominent first, at most three. If it looks like one ordinary animal, list only that animal. creatures: how many separate creatures are in the picture. notes: one short sentence on what you see.\"\n\nSo we should output something like:\n\nanimals: [\"eagle\", \"lion\"]\ncreatures: 1\nnotes: A griffin-like hybrid with an eagle's head and wings on a lion's body.\n\nWe must ensure we don't hallucinate. Provide at most three.\n\nPotentially also need to consider that it's a mythical creature, but we list real animal species whose features you can clearly see.\n\nSo eagle and lion.\n\nShould we say \"golden eagle\"? But everyday common name is eagle. Could also be \"hawk\" but it's eagle.\n\nMake sure to follow format exactly? Might need to output JSON.\n\nProbably output:\n\nanimals: eagle, lion\ncreatures: 1\nnotes: ...\n\nWe should provide clear answer.\n\nWe must not add extra animals. The creature has eagle features and lion features. That's two.\n\nCreatures: 1 separate creature.\n\nNotes: one short sentence.\n\nWe should ensure we comply with policy: no issues.\n\nWe should answer concisely.\n\nPotential nuance: Some might argue it's one creature, but it's a composite. So creatures = 1.\n\nWe should not claim it's a real animal.\n\nWe should provide final answer in requested structure.\n\nProbably use bullet list.\n\nWe should ensure we don't say \"griffin\" as animal? Griffin is mythical, not real. So we list eagle and lion.\n\nMake sure to say most prominent first: eagle head and wings dominate upper half, so eagle first.\n\nWe should output as:\n\nanimals: [\"eagle\", \"lion\"]\ncreatures: 1\nnotes: A single griffin-like hybrid standing in profile with an eagle's head and wings and a lion's body and legs.\n\nThat satisfies.\n\nWe must not add extra commentary.\n\nWe should ensure we follow the instruction to list at most three. We have two.\n\nWe should not list \"bird\" generic; use eagle.\n\nWe could also consider \"lion\" vs \"lioness\"? It's lion.\n\nWe should answer.\n\nWe need to ensure we don't violate any policy about mythical creatures. It's fine.\n\nWe should provide final answer."
+    }
+   }
+  ],
+  "created": 1793565802,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 818,
+   "prompt_tokens": 3595,
+   "total_tokens": 4413,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 603,
+    "audio_tokens": 0,
+    "reasoning_tokens": 763,
+    "rejected_prediction_tokens": 902,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 128,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

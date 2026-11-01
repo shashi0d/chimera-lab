@@ -1,0 +1,110 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Show the planned golden eagle head, fully visible with clear eyes; keep everything else the same. The plan has no mane: show the planned neck with no mane; keep everything else the same. The plan has no mane: show the lion's own body there instead; keep everything else the same.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ],
+  "previous_response_id": "resp_6ae7a3d8d38ff540080b4e79"
+ },
+ "response": {
+  "id": "resp_6ae7a441b7e539187f7e431a",
+  "access_programs": null,
+  "created_at": 1793565761.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae7a441f0f8f75e2d374df7",
+    "summary": [
+     {
+      "text": "**Editing image to eagle head**\nI'm swapping the lion head for a fully visible golden eagle head with clear eyes, keeping the body, neck feathers, and all other details the same.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae7a441a55612fd83194b65",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0xSQUJqU1ROczZ4aW5RSEFLUlE4d1dPWDF0dWJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczoyZjI0MmM0MS0yNGI2LTQzNjgtODcxNi1kMTUxYmFkZTg5MTI6R0xkTEJqVEExal9iczdrR0FEVFV1MV9KYVhFZGJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM1NjU3NjF9.Q8WLFwGZK9izVExWNB8tAbHWd4qr",
+    "result": "<elided> (901964 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": "resp_6ae7a3d8d38ff540080b4e79",
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 20833,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 13952
+   },
+   "output_tokens": 741,
+   "output_tokens_details": {
+    "reasoning_tokens": 78
+   },
+   "total_tokens": 21574
+  },
+  "user": null
+ }
+}

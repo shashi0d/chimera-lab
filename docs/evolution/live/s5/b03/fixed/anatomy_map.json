@@ -1,0 +1,82 @@
+{
+ "parts": [
+  {
+   "part": "head",
+   "sam_label": "head",
+   "parent": "lion",
+   "parent_role": "host",
+   "parent_name": "lion",
+   "mask_area": 0.0261,
+   "found": true,
+   "status": "found",
+   "color": "#268bd2"
+  },
+  {
+   "part": "body",
+   "sam_label": "torso",
+   "parent": "lion",
+   "parent_role": "host",
+   "parent_name": "lion",
+   "mask_area": 0.0,
+   "found": false,
+   "status": "not located",
+   "color": null
+  },
+  {
+   "part": "legs",
+   "sam_label": "legs",
+   "parent": "lion",
+   "parent_role": "host",
+   "parent_name": "lion",
+   "mask_area": 0.0995,
+   "found": true,
+   "status": "found",
+   "color": "#268bd2"
+  },
+  {
+   "part": "wings (extra pair)",
+   "sam_label": "wings",
+   "parent": "golden_eagle",
+   "parent_role": "donor",
+   "parent_name": "golden eagle",
+   "mask_area": 0.2241,
+   "found": true,
+   "status": "found",
+   "color": "#e66e28"
+  },
+  {
+   "part": "tail",
+   "sam_label": "tail",
+   "parent": "lion",
+   "parent_role": "host",
+   "parent_name": "lion",
+   "mask_area": 0.0107,
+   "found": true,
+   "status": "found",
+   "color": "#268bd2"
+  },
+  {
+   "part": "golden eagle covering",
+   "sam_label": "layered contour feathers",
+   "parent": "golden_eagle",
+   "parent_role": "donor",
+   "parent_name": "golden eagle",
+   "mask_area": 0.0,
+   "found": false,
+   "status": "not located",
+   "color": null
+  }
+ ],
+ "colors": {
+  "host": "#268bd2",
+  "donor": "#e66e28",
+  "blend": "#825ac8"
+ },
+ "present_fill": 0.002,
+ "found": 4,
+ "not_located": 2,
+ "image_size": [
+  1600,
+  1600
+ ]
+}
