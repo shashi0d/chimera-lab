@@ -1,0 +1,194 @@
+{
+ "about": "S3a gold set for critic calibration. Existing images only; no new renders. Every label is human-provided via chat review (the owner), not a model judgment.",
+ "label_source": "human-provided via chat review",
+ "created": "2026-11-01",
+ "counts": {
+  "fail": 6,
+  "good": 5
+ },
+ "items": [
+  {
+   "id": "e2/1_donkey_x_horse",
+   "image": "docs/evolution/live/e2/1_donkey_x_horse/image.webp",
+   "plan": "docs/evolution/live/e2/1_donkey_x_horse/plan.json",
+   "pair": [
+    "donkey",
+    "horse"
+   ],
+   "host": "horse",
+   "design_mode": null,
+   "label": "fail",
+   "failures": [
+    "zebra-type stripes",
+    "third animal"
+   ],
+   "note": "",
+   "label_source": "human-provided via chat review"
+  },
+  {
+   "id": "e2/3_lion_x_eagle",
+   "image": "docs/evolution/live/e2/3_lion_x_eagle/image.webp",
+   "plan": "docs/evolution/live/e2/3_lion_x_eagle/plan.json",
+   "pair": [
+    "lion",
+    "golden_eagle"
+   ],
+   "host": "lion",
+   "design_mode": null,
+   "label": "fail",
+   "failures": [
+    "leopard spots",
+    "third animal",
+    "full mane present although planned out"
+   ],
+   "note": "",
+   "label_source": "human-provided via chat review"
+  },
+  {
+   "id": "e4/b_axolotl_x_pangolin",
+   "image": "docs/evolution/live/e4/b_axolotl_x_pangolin/image.webp",
+   "plan": "docs/evolution/live/e4/b_axolotl_x_pangolin/plan.json",
+   "pair": [
+    "axolotl",
+    "chinese_pangolin"
+   ],
+   "host": "chinese_pangolin",
+   "design_mode": "realistic",
+   "label": "fail",
+   "failures": [
+    "external gills on a land creature"
+   ],
+   "note": "",
+   "label_source": "human-provided via chat review"
+  },
+  {
+   "id": "e4/d_rhinoceros_beetle_x_brown_bear",
+   "image": "docs/evolution/live/e4/d_rhinoceros_beetle_x_brown_bear/image.webp",
+   "plan": "docs/evolution/live/e4/d_rhinoceros_beetle_x_brown_bear/plan.json",
+   "pair": [
+    "european_rhinoceros_beetle",
+    "brown_bear"
+   ],
+   "host": "brown_bear",
+   "design_mode": "speculative",
+   "label": "fail",
+   "failures": [
+    "whole beetle bodies attached",
+    "wings over four legs"
+   ],
+   "note": "",
+   "label_source": "human-provided via chat review"
+  },
+  {
+   "id": "s2/beetlebear_run1",
+   "image": "docs/evolution/live/s2/beetlebear_run1/image.webp",
+   "plan": "docs/evolution/live/s2/beetlebear_run1/plan.json",
+   "pair": [
+    "european_rhinoceros_beetle",
+    "brown_bear"
+   ],
+   "host": "brown_bear",
+   "design_mode": "speculative",
+   "label": "fail",
+   "failures": [
+    "a plate reads as a whole beetle body",
+    "insect-leg pieces on the bear's legs"
+   ],
+   "note": "",
+   "label_source": "human-provided via chat review"
+  },
+  {
+   "id": "s2/beetlebear",
+   "image": "docs/evolution/live/s2/beetlebear/image.webp",
+   "plan": "docs/evolution/live/s2/beetlebear/plan.json",
+   "pair": [
+    "european_rhinoceros_beetle",
+    "brown_bear"
+   ],
+   "host": "brown_bear",
+   "design_mode": "speculative",
+   "label": "fail",
+   "failures": [
+    "donor parts sit on top of the fur like armor pieces, with no transition",
+    "donor parts scattered over shoulders and legs instead of forming one dorsal shield"
+   ],
+   "note": "",
+   "label_source": "human-provided via chat review"
+  },
+  {
+   "id": "e2/2_lion_x_tiger",
+   "image": "docs/evolution/live/e2/2_lion_x_tiger/image.webp",
+   "plan": "docs/evolution/live/e2/2_lion_x_tiger/plan.json",
+   "pair": [
+    "lion",
+    "tiger"
+   ],
+   "host": "lion",
+   "design_mode": null,
+   "label": "good",
+   "failures": [],
+   "note": "",
+   "label_source": "human-provided via chat review"
+  },
+  {
+   "id": "e4/c_lion_x_eagle",
+   "image": "docs/evolution/live/e4/c_lion_x_eagle/image.webp",
+   "plan": "docs/evolution/live/e4/c_lion_x_eagle/plan.json",
+   "pair": [
+    "lion",
+    "golden_eagle"
+   ],
+   "host": "lion",
+   "design_mode": "mythic",
+   "label": "good",
+   "failures": [],
+   "note": "mythic",
+   "label_source": "human-provided via chat review"
+  },
+  {
+   "id": "e2/4_eagle_x_octopus",
+   "image": "docs/evolution/live/e2/4_eagle_x_octopus/image.webp",
+   "plan": "docs/evolution/live/e2/4_eagle_x_octopus/plan.json",
+   "pair": [
+    "golden_eagle",
+    "common_octopus"
+   ],
+   "host": "golden_eagle",
+   "design_mode": null,
+   "label": "good",
+   "failures": [],
+   "note": "",
+   "label_source": "human-provided via chat review"
+  },
+  {
+   "id": "e2c/1_donkey_x_horse",
+   "image": "docs/evolution/live/e2c/1_donkey_x_horse/image.webp",
+   "plan": "docs/evolution/live/e2c/1_donkey_x_horse/plan.json",
+   "pair": [
+    "donkey",
+    "horse"
+   ],
+   "host": "horse",
+   "design_mode": null,
+   "label": "good",
+   "failures": [],
+   "note": "",
+   "label_source": "human-provided via chat review"
+  },
+  {
+   "id": "e4/b_axolotl_x_pangolin_rerender",
+   "image": "docs/evolution/live/e4/b_axolotl_x_pangolin_rerender/image.webp",
+   "plan": "docs/evolution/live/e4/b_axolotl_x_pangolin_rerender/plan.json",
+   "pair": [
+    "axolotl",
+    "chinese_pangolin"
+   ],
+   "host": "chinese_pangolin",
+   "design_mode": "realistic",
+   "label": "good",
+   "failures": [],
+   "note": "except: axolotl barely visible",
+   "label_source": "human-provided via chat review"
+  }
+ ]
+}
