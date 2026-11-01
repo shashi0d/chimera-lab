@@ -184,3 +184,8 @@ Every real Meta API call made by L1 (appended automatically by `backend/app/adap
 | 2026-11-01T01:50:55+00:00 | s1:image:edit:judge | sam | sam-3.1 | 4277 | 0 | 0 | 0 | ok | resp_6ae69afa74fe5306901f4a73 |
 | 2026-11-01T01:51:24+00:00 | s1:image:edit:judge | evo_checklist | muse-spark-1.3 | 21649 | 437 | 4689 | 5126 | ok | chatcmpl-01a194cd-e164-73f4-b165-185c693b67eb |
 | 2026-11-01T01:51:34+00:00 | s1:image:edit:judge | evo_critic | muse-spark-1.3 | 9994 | 3526 | 1417 | 4943 | ok | chatcmpl-01a194ce-085c-744d-8596-f2aede66b242 |
+| 2026-11-01T01:52:08+00:00 | s1:sam:c_lion_x_eagle:wings | sam | sam-3.1 | 2190 | 0 | 0 | 0 | ok | resp_6ae69b46def8d06229914b79 |
+| 2026-11-01T01:52:21+00:00 | s1:sam:c_lion_x_eagle:eagle head | sam | sam-3.1 | 3404 | 0 | 0 | 0 | ok | resp_6ae69b52aee2a43964db4a22 |
+| 2026-11-01T01:52:24+00:00 | s1:sam:c_lion_x_eagle:lion legs | sam | sam-3.1 | 1462 | 0 | 0 | 0 | ok | resp_6ae69b579b584aa8f37c4519 |
+| 2026-11-01T01:52:31+00:00 | s1:sam:b_axolotl_x_pangolin_rerender:external gills | sam | sam-3.1 | 1171 | 0 | 0 | 0 | ok | resp_6ae69b5d4f905501534b4a4f |
+| 2026-11-01T01:52:34+00:00 | s1:sam:d_rhinoceros_beetle_x_brown_bear:beetle | sam | sam-3.1 | 3105 | 0 | 0 | 0 | ok | resp_6ae69b5fc9d4129d8616478b |

@@ -305,3 +305,9 @@ Short entries per phase: what was built, what was tested, what was deferred. New
 - Reference render (the E4 axolotl x pangolin compiled prompt plus both portraits, 25 s): quality 0.975, the same as the text-only re-render. The references carried the axolotl's speckled skin and the portraits' engraving style into the patches but changed no anatomy (no gills, still pangolin-shaped). The open critic still answered "pangolin" only.
 - Edit turn (`previous_response_id` of the E4 beetle x bear render, made a day earlier, 20 s): it edited the same creature. Only 3.7% of pixels changed by more than 32 levels, and the pose, wings, tail and breathing openings are identical. The beetle bodies are gone, but they were how the model drew the planned "exoskeleton patches on the forequarters", so that item now fails and quality dropped from 0.845 to 0.778. The "wings in place of the front legs" item still fails, as before.
 - Budget counter: image 22 → 26, spark 89 → 97, sam 12 → 16.
+
+**Part 5 (SAM 3.1 part prompts, live):** `scripts/s1_probe.py sam`, outputs in `docs/evolution/live/s1/sam/` (mask and overlay per prompt).
+- Lion x eagle: "wings" gave 2 objects, exactly both wings; "eagle head" gave 1 object, exactly the head; "lion legs" gave 4 objects, exactly the four legs.
+- Axolotl re-render: "external gills" gave 0 objects, a correct miss.
+- Beetle x bear: "beetle" gave 0 objects, a false miss. Five glossy beetle bodies sit on the shoulders; SAM does not treat a beetle body grown into fur as a "beetle".
+- Latency 1.2 to 3.4 s. SAM counter 16 → 21.
