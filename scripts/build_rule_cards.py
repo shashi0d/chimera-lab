@@ -15,7 +15,7 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
-CARD_RE = re.compile(r"^### (RC-R\d-\d+)\s*$")
+CARD_RE = re.compile(r"^### (RC-R\d+-\d+)\s*$")  # S3a: R10 and later have two-digit doc numbers
 FIELD_RE = re.compile(r"^(rule|applies_to|strength|status|source):\s*(.*)$")
 FIELDS = ("rule", "applies_to", "strength", "status", "source")
 
@@ -62,7 +62,7 @@ def build(research_dir: Path) -> list[dict]:
     dupes = {i for i in ids if ids.count(i) > 1}
     if dupes:
         raise ValueError(f"duplicate card ids: {sorted(dupes)}")
-    return sorted(cards, key=lambda c: (c["id"].split("-")[1], int(c["id"].split("-")[2])))
+    return sorted(cards, key=lambda c: (int(c["id"].split("-")[1][1:]), int(c["id"].split("-")[2])))  # R10 after R9
 
 
 def main(argv: list[str]) -> int:

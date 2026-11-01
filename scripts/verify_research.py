@@ -5,7 +5,7 @@ Usage: python scripts/verify_research.py [folder]   (default: docs/evolution/res
 
 Checks every .md file in the folder:
   1. every http(s) link resolves with status < 400 (403s reported separately)
-  2. every "### RC-R<digit>-<number>" card has rule, applies_to, strength, status, source
+  2. every "### RC-R<doc number>-<number>" card has rule, applies_to, strength, status, source
   3. strength is hard|soft, status is VERIFIED|UNVERIFIED
   4. no card is strength: hard with status: UNVERIFIED
   5. a VERIFIED card whose source link is dead (not a 403) is flagged
@@ -35,7 +35,7 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 FIELDS = ("rule", "applies_to", "strength", "status", "source")
-CARD_RE = re.compile(r"^### (RC-R\d-\d+)\s*$")
+CARD_RE = re.compile(r"^### (RC-R\d+-\d+)\s*$")  # S3a: R10 and later have two-digit doc numbers
 HEADING_RE = re.compile(r"^#{1,6} ")
 FIELD_RE = re.compile(r"^(rule|applies_to|strength|status|source):\s*(.*)$")
 URL_RE = re.compile(r"https?://[^\s<>\"'`]+")

@@ -1311,5 +1311,40 @@
     "strength": "soft",
     "status": "UNVERIFIED",
     "source": "https://www.sf-encyclopedia.com/entry/wellss_law"
+  },
+  {
+    "id": "RC-R10-12",
+    "doc": "R10_chimera_science_landscape.md",
+    "rule": "A donor's protective covering (shell, carapace, scales, exoskeleton) is applied as a covering that replaces the host's covering in its zone and grows in the skin, not as pieces added on top; the host's covering stops at its edge, and the belly and legs keep the host's covering unless planned otherwise",
+    "applies_to": [
+      "coat_texture",
+      "body"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://www.nationalgeographic.com/animals/article/animals-armor-bioinspiration"
+  },
+  {
+    "id": "RC-R10-13",
+    "doc": "R10_chimera_science_landscape.md",
+    "rule": "A beetle donor's shield is its elytra: hardened forewings forming one close-fitting cover over the back; on a vertebrate host it maps to one domed dorsal shield from shoulders to hips, in two halves meeting at a midline seam, never as scattered plates",
+    "applies_to": [
+      "body",
+      "coat_texture"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9975656/"
+  },
+  {
+    "id": "RC-R10-14",
+    "doc": "R10_chimera_science_landscape.md",
+    "rule": "Every donor part has an anatomical anchor on the host chosen by function (a horn anchors on the nasal or frontal bone as in a rhinoceros; a dorsal shield anchors along the spine); the plan records the anchor and the prompt states it",
+    "applies_to": [
+      "all_traits"
+    ],
+    "strength": "soft",
+    "status": "UNVERIFIED",
+    "source": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9975656/"
   }
 ]
