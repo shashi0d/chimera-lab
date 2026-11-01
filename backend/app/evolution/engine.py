@@ -469,7 +469,9 @@ def citation_verifier(mock: bool) -> Any:
     async def fixture_page(url: str) -> str:
         from app.evolution.live import CITE_FIELDS
 
-        return "<html><body>" + " ".join(f"<p>mock evidence for {f}.</p>" for f in CITE_FIELDS) + "</body></html>"
+        subject = url.rstrip("/").rsplit("/", 1)[-1].replace("_", " ")  # the mock URL ends with the binomial
+        return (f"<html><body><h1>{subject}</h1>" + " ".join(f"<p>mock evidence for {f}.</p>" for f in CITE_FIELDS)
+                + "</body></html>")
 
     return CitationVerifier(fixture_page, extra_tiers={"example.org": 1})
 
