@@ -1,0 +1,119 @@
+{
+ "purpose": "evo_ask",
+ "request": {
+  "model": "meta-models/muse-spark-open-1026",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture of a creature and answer questions about it. Answer each question on its own: yes if the picture clearly shows it, no if it clearly does not, unclear if you cannot tell. Many questions describe things that should not be there, so do not lean toward yes. Judge only what is visible. Copy each question's text exactly into item, in the given order. notes: one short sentence."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "Questions:\n1. Is the overall body shape that of a horse?\n2. Does it have a donkey head with visible eyes?\n3. Are there wings anywhere on the body?\n4. Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?\n5. Is there a second head anywhere?\n6. Does it have more than 4 walking legs?\n7. Does the fur show stripes or spots?"
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (463083 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "balanced_checklist",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "answers",
+      "notes"
+     ],
+     "properties": {
+      "answers": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "item",
+         "answer"
+        ],
+        "properties": {
+         "item": {
+          "type": "string"
+         },
+         "answer": {
+          "type": "string",
+          "enum": [
+           "yes",
+           "no",
+           "unclear"
+          ]
+         }
+        }
+       }
+      },
+      "notes": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0,
+  "max_tokens": 8000
+ },
+ "response": {
+  "id": "chatcmpl-15a5e40007624ac59514170c694e01d4",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\"answers\": [{\"item\": \"Is the overall body shape that of a horse?\", \"answer\": \"no\" }, {\"item\": \"Does it have a donkey head with visible eyes?\", \"answer\": \"yes\" }, {\"item\": \"Are there wings anywhere on the body?\", \"answer\": \"no\" }, {\"item\": \"Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?\", \"answer\": \"no\" }, {\"item\": \"Is there a second head anywhere?\", \"answer\": \"no\" }, {\"item\": \"Does it have more than 4 walking legs?\", \"answer\": \"no\" }, {\"item\": \"Does the fur show stripes or spots?\", \"answer\": \"no\" }], \"notes\": \"Image shows a single donkey/mule in profile with four legs and solid brown coat and no extra features.\"}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null,
+     "reasoning_content": "We need to answer each question on its own: yes if picture clearly shows it, no if clearly does not, unclear if cannot tell. Many questions describe things that should not be there, so do not lean toward yes. Judge only what is visible. Copy each question's text exactly into item, in given order. notes: one short sentence.\n\nWe have image of a donkey/mule. Let's answer:\n\n1. Is the overall body shape that of a horse? The animal looks like a donkey/mule, which is equine but not horse? Overall body shape that of a horse? Could be considered similar but donkey shape is slightly different. However overall body shape is equine, similar to horse. But question: Is the overall body shape that of a horse? The animal is a donkey, not a horse. So answer no? Or unclear? The body shape is that of an equid, which includes horse. But strictly, it's a donkey. So we should say no, it's a donkey/mule shape. Provide note.\n\n2. Does it have a donkey head with visible eyes? Yes, donkey head with visible eye.\n\n3. Are there wings anywhere on the body? No.\n\n4. Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body? No.\n\n5. Is there a second head anywhere? No.\n\n6. Does it have more than 4 walking legs? No, has 4 legs.\n\n7. Does the fur show stripes or spots? No, solid brown.\n\nWe need to copy each question's text exactly into item, in given order. notes: one short sentence.\n\nWe need to output JSON? The instruction: Copy each question's text exactly into item, in the given order. notes: one short sentence.\n\nProbably need to produce list of items with fields: item, answer, notes? The example not given. Likely format: [{\"item\": \"Is the overall body shape that of a horse?\", \"answer\": \"no\", \"notes\": \"...\"}, ...]\n\nWe must ensure answer is yes/no/unclear lowercase.\n\nWe need to judge only what is visible.\n\nProvide notes one short sentence.\n\nLet's craft notes:\n\n1. Animal is a donkey/mule, not a horse, with donkey proportions and features.\n2. Donkey head in profile with one eye clearly visible.\n3. No wings visible on body or background.\n4. No additional animal or animal-shaped object attached to body.\n5. Only one head is visible.\n6. Four legs visible, no extra limbs.\n7. Coat is solid brown without stripes or spots.\n\nMake sure to be precise.\n\nCheck question 1: Is the overall body shape that of a horse? Could argue yes because donkey and horse share similar body shape. But the instruction says many questions describe things that should not be there, so do not lean toward yes. So we should be conservative. The body shape is that of a donkey, which is distinct from horse (smaller, different proportions). So answer no.\n\nAlternatively could answer unclear? But clearly it's not a horse shape? Might be considered horse-like. However to be safe, answer no.\n\nWe should provide final output in required format. Probably JSON array.\n\nWe need to ensure we copy each question's text exactly.\n\nQuestions list:\n\n1. Is the overall body shape that of a horse?\n2. Does it have a donkey head with visible eyes?\n3. Are there wings anywhere on the body?\n4. Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?\n5. Is there a second head anywhere?\n6. Does it have more than 4 walking legs?\n7. Does the fur show stripes or spots?\n\nWe need to output each.\n\nProbably format:\n\n[\n  {\"item\": \"Is the overall body shape that of a horse?\", \"answer\": \"no\", \"notes\": \"...\"},\n  ...\n]\n\nEnsure notes one short sentence.\n\nLet's produce final answer."
+    }
+   }
+  ],
+  "created": 1793505434,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 1038,
+   "prompt_tokens": 3696,
+   "total_tokens": 4734,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 781,
+    "audio_tokens": 0,
+    "reasoning_tokens": 836,
+    "rejected_prediction_tokens": 1018,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 0,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

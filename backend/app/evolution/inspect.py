@@ -162,7 +162,7 @@ async def inspect(image: bytes, g: Genome, tax: Taxonomy, critics: dict[str, Any
             row["sam_found"] = row["sam_fill"] >= PRESENT_FILL
             if row["status"] != "pass" and row["sam_found"]:
                 row["status"], row["note"] = "pass", "SAM confirms presence"
-    failures = [r for r in result["rows"] if r["status"] in ("fail", "uncertain")]
+    failures = [r for r in result["rows"] if r["status"] in ("fail", "uncertain") and r["group"] != "surface"]
     return {"protocol": "plan-blind (S3a)", "critics": result["critics"], "items": result["rows"],
             "failures": failures, "structural_failures": len(failures),
             "uncertain": sum(1 for r in failures if r["status"] == "uncertain"), "sam_calls": sam_calls,

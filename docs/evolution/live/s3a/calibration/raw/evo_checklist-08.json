@@ -1,0 +1,130 @@
+{
+ "purpose": "evo_checklist",
+ "request": {
+  "model": "meta-models/muse-spark-open-1026",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture of an animal and check it against a list of visible features. For each item, answer yes if the feature is clearly visible, no if the picture clearly shows otherwise, or unclear if you cannot tell. Copy each item's text exactly, in the given order. Judge only what is visible. creatures: how many separate creatures are in the picture. animals: the real animal species whose features you can clearly see, as everyday English common names, at most three. notes: one short sentence."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "Features to check:\n1. a lion body shape\n2. a golden eagle head with visible eyes\n3. wings rooted in a heavy shoulder structure that can carry them, not floating\n4. four legs plus a separate pair of golden eagle wings\n5. only parts and materials of the golden eagle, no whole golden eagle animals on the body\n6. layered contour feathers patches on the forequarters and neck"
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (803119 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "feature_checklist",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "answers",
+      "creatures",
+      "animals",
+      "notes"
+     ],
+     "properties": {
+      "answers": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "item",
+         "answer"
+        ],
+        "properties": {
+         "item": {
+          "type": "string"
+         },
+         "answer": {
+          "type": "string",
+          "enum": [
+           "yes",
+           "no",
+           "unclear"
+          ]
+         }
+        }
+       }
+      },
+      "creatures": {
+       "type": "integer"
+      },
+      "animals": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "notes": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0,
+  "max_tokens": 6000
+ },
+ "response": {
+  "id": "chatcmpl-ddc18eb2c7f24adf9e726cd1ea58b753",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\n\"answers\": [\n  {\"item\": \"a lion body shape\", \"answer\": \"yes\"},\n  {\"item\": \"a golden eagle head with visible eyes\", \"answer\": \"yes\"},\n  {\"item\": \"wings rooted in a heavy shoulder structure that can carry them, not floating\", \"answer\": \"yes\"},\n  {\"item\": \"four legs plus a separate pair of golden eagle wings\", \"answer\": \"yes\"},\n  {\"item\": \"only parts and materials of the golden eagle, no whole golden eagle animals on the body\", \"answer\": \"yes\"},\n  {\"item\": \"layered contour feathers patches on the forequarters and neck\", \"answer\": \"yes\"}\n],\n\"creatures\": 1,\n\"animals\": [\"lion\", \"golden eagle\"],\n\"notes\": \"The image shows a single griffin combining a lion body with golden eagle head, wings and feathering.\"\n}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null,
+     "reasoning_content": "<elided> (7417 chars)"
+    }
+   }
+  ],
+  "created": 1793505341,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 1836,
+   "prompt_tokens": 3698,
+   "total_tokens": 5534,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 1373,
+    "audio_tokens": 0,
+    "reasoning_tokens": 1637,
+    "rejected_prediction_tokens": 1868,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 0,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

@@ -1,0 +1,117 @@
+{
+ "purpose": "evo_ask",
+ "request": {
+  "model": "muse-spark-1.3",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture of a creature and answer questions about it. Answer each question on its own: yes if the picture clearly shows it, no if it clearly does not, unclear if you cannot tell. Many questions describe things that should not be there, so do not lean toward yes. Judge only what is visible. Copy each question's text exactly into item, in the given order. notes: one short sentence."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "Questions:\n1. Is the overall body shape that of a lion?\n2. Does it have a lion head with visible eyes?\n3. Are there wings anywhere on the body?\n4. Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?\n5. Is there a second head anywhere?\n6. Does it have more than 4 walking legs?\n7. Does the fur show bold, high-contrast stripes or spots over most of the body, more than faint markings?"
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (781975 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "balanced_checklist",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "answers",
+      "notes"
+     ],
+     "properties": {
+      "answers": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "item",
+         "answer"
+        ],
+        "properties": {
+         "item": {
+          "type": "string"
+         },
+         "answer": {
+          "type": "string",
+          "enum": [
+           "yes",
+           "no",
+           "unclear"
+          ]
+         }
+        }
+       }
+      },
+      "notes": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0
+ },
+ "response": {
+  "id": "chatcmpl-01a1953e-9bcd-70e4-99e9-5c95d68ed00e",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\"answers\": [{\"answer\": \"yes\", \"item\": \"Is the overall body shape that of a lion?\"}, {\"answer\": \"yes\", \"item\": \"Does it have a lion head with visible eyes?\"}, {\"answer\": \"no\", \"item\": \"Are there wings anywhere on the body?\"}, {\"answer\": \"no\", \"item\": \"Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?\"}, {\"answer\": \"no\", \"item\": \"Is there a second head anywhere?\"}, {\"answer\": \"no\", \"item\": \"Does it have more than 4 walking legs?\"}, {\"answer\": \"no\", \"item\": \"Does the fur show bold, high-contrast stripes or spots over most of the body, more than faint markings?\"}], \"notes\": \"Single lion-like felid with only faint striping visible.\"}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null
+    }
+   }
+  ],
+  "created": 1793505270,
+  "model": "muse-spark-1.3",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 1016,
+   "prompt_tokens": 3666,
+   "total_tokens": 4682,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": null,
+    "audio_tokens": null,
+    "reasoning_tokens": 812,
+    "rejected_prediction_tokens": null,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": null,
+    "cache_write_tokens": null,
+    "cached_tokens": 0,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

@@ -1,0 +1,117 @@
+{
+ "purpose": "evo_ask",
+ "request": {
+  "model": "muse-spark-1.3",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture of a creature and answer questions about it. Answer each question on its own: yes if the picture clearly shows it, no if it clearly does not, unclear if you cannot tell. Many questions describe things that should not be there, so do not lean toward yes. Judge only what is visible. Copy each question's text exactly into item, in the given order. notes: one short sentence."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "Questions:\n1. Is the overall body shape that of a lion?\n2. Does it have a lion head with visible eyes?\n3. Does it have golden eagle wings in place of its front legs?\n4. Does it stand on four walking legs and also have wings?\n5. Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?\n6. Is there a second head anywhere?\n7. Does it have more than 2 walking legs?\n8. Does it have a full mane of long hair around the head and neck?\n9. Does the fur show stripes or spots?\n10. Are there layered contour feathers on the shoulders and neck?\n11. Do the layered contour feathers grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending into scales), rather than looking attached on top?\n12. Do the layered contour feathers look like separate pieces attached on top of the fur?"
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (707231 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "balanced_checklist",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "answers",
+      "notes"
+     ],
+     "properties": {
+      "answers": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "item",
+         "answer"
+        ],
+        "properties": {
+         "item": {
+          "type": "string"
+         },
+         "answer": {
+          "type": "string",
+          "enum": [
+           "yes",
+           "no",
+           "unclear"
+          ]
+         }
+        }
+       }
+      },
+      "notes": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0
+ },
+ "response": {
+  "id": "chatcmpl-01a1953a-4fc3-7594-922b-7db87a0b4730",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\"answers\": [{\"answer\": \"no\", \"item\": \"Is the overall body shape that of a lion?\"}, {\"answer\": \"yes\", \"item\": \"Does it have a lion head with visible eyes?\"}, {\"answer\": \"yes\", \"item\": \"Does it have golden eagle wings in place of its front legs?\"}, {\"answer\": \"no\", \"item\": \"Does it stand on four walking legs and also have wings?\"}, {\"answer\": \"no\", \"item\": \"Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?\"}, {\"answer\": \"no\", \"item\": \"Is there a second head anywhere?\"}, {\"answer\": \"no\", \"item\": \"Does it have more than 2 walking legs?\"}, {\"answer\": \"yes\", \"item\": \"Does it have a full mane of long hair around the head and neck?\"}, {\"answer\": \"yes\", \"item\": \"Does the fur show stripes or spots?\"}, {\"answer\": \"yes\", \"item\": \"Are there layered contour feathers on the shoulders and neck?\"}, {\"answer\": \"yes\", \"item\": \"Do the layered contour feathers grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending into scales), rather than looking attached on top?\"}, {\"answer\": \"no\", \"item\": \"Do the layered contour feathers look like separate pieces attached on top of the fur?\"}], \"notes\": \"The image shows a two-legged winged lion-headed creature with spotted fur.\"}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null
+    }
+   }
+  ],
+  "created": 1793504989,
+  "model": "muse-spark-1.3",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 2134,
+   "prompt_tokens": 3758,
+   "total_tokens": 5892,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": null,
+    "audio_tokens": null,
+    "reasoning_tokens": 1789,
+    "rejected_prediction_tokens": null,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": null,
+    "cache_write_tokens": null,
+    "cached_tokens": 0,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

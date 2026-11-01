@@ -1,0 +1,282 @@
+{
+ "id": "s2/beetlebear",
+ "questions": [
+  {
+   "id": "frame",
+   "text": "Is the overall body shape that of a brown bear?",
+   "expect": "yes",
+   "group": "structure",
+   "fix": "Show the planned brown bear body shape and outline; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "head",
+   "text": "Does it have a brown bear head with visible eyes?",
+   "expect": "yes",
+   "group": "structure",
+   "fix": "Show the planned brown bear head, fully visible with clear eyes; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "no_wings",
+   "text": "Are there wings anywhere on the body?",
+   "expect": "no",
+   "group": "structure",
+   "fix": "The plan has no wings: show the brown bear's own body there instead; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "part_european_rhinoceros_beetle_head_horn",
+   "text": "Is there a single curved horn of hard, glossy chitin rising from the brow?",
+   "expect": "yes",
+   "group": "structure",
+   "fix": "Show the planned a single curved horn of hard, glossy chitin rising from the brow, on the brown bear's own body; keep everything else the same.",
+   "sam": "head horn"
+  },
+  {
+   "id": "whole_animal",
+   "text": "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?",
+   "expect": "no",
+   "group": "structure",
+   "fix": "Show the planned european rhinoceros beetle contribution only as hard, glossy chitin plates with fine seams on the brown bear's own body over the back and flanks, not as separate animals; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "second_head",
+   "text": "Is there a second head anywhere?",
+   "expect": "no",
+   "group": "structure",
+   "fix": "Show one single head, as planned; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "insect_legs",
+   "text": "Are there jointed, insect-like leg pieces on or along the legs?",
+   "expect": "no",
+   "group": "structure",
+   "fix": "Show the brown bear's own legs with its own fur, with no insect leg pieces; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "extra_legs",
+   "text": "Does it have more than 4 walking legs?",
+   "expect": "no",
+   "group": "structure",
+   "fix": "Show exactly 4 walking legs, as planned; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "plain_fur",
+   "text": "Does the fur show stripes or spots?",
+   "expect": "no",
+   "group": "pattern",
+   "fix": "Show a plain coat with no stripes or spots, as planned; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "cover_present",
+   "text": "Are there hard, glossy chitin plates with fine seams on the back and flanks?",
+   "expect": "yes",
+   "group": "integration",
+   "fix": "Show the planned hard, glossy chitin plates with fine seams over the back and flanks; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "grows_out",
+   "text": "Do the hard, glossy chitin plates with fine seams grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending into scales), rather than looking attached on top?",
+   "expect": "yes",
+   "group": "integration",
+   "fix": "Show the hard, glossy chitin plates with fine seams grown in the skin over the back and flanks, as one covering that replaces the brown bear's fur there; the fur stops at its edge; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "on_top",
+   "text": "Do the hard, glossy chitin plates with fine seams look like separate pieces attached on top of the fur?",
+   "expect": "no",
+   "group": "integration",
+   "fix": "Show the hard, glossy chitin plates with fine seams grown in the skin over the back and flanks, as one covering that replaces the brown bear's fur there; the fur stops at its edge; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "continuous",
+   "text": "Do the hard, glossy chitin plates with fine seams form one continuous structure over the back and flanks, rather than scattered pieces?",
+   "expect": "yes",
+   "group": "integration",
+   "fix": "Show the hard, glossy chitin plates with fine seams as one continuous covering over the back and flanks, not scattered pieces; the brown bear's fur stays on the belly and legs; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "scattered",
+   "text": "Are the hard, glossy chitin plates with fine seams scattered as separate pieces over different parts of the body?",
+   "expect": "no",
+   "group": "integration",
+   "fix": "Show the hard, glossy chitin plates with fine seams as one continuous covering over the back and flanks, not scattered pieces; the brown bear's fur stays on the belly and legs; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "cover_on_legs",
+   "text": "Are there hard, glossy chitin plates with fine seams on the legs?",
+   "expect": "no",
+   "group": "placement",
+   "fix": "Keep the brown bear's own fur on the legs and shoulders; the hard, glossy chitin plates with fine seams only over the back and flanks; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "cover_on_shoulders",
+   "text": "Are there hard, glossy chitin plates with fine seams on the shoulders?",
+   "expect": "no",
+   "group": "placement",
+   "fix": "Keep the brown bear's own fur on the legs and shoulders; the hard, glossy chitin plates with fine seams only over the back and flanks; keep everything else the same.",
+   "sam": null
+  }
+ ],
+ "raw": {
+  "spark_open": {
+   "describe": {
+    "description": "The creature is a large quadrupedal mammal shown in right-facing profile standing on a pale background with small tufts of grass under its feet. It has the overall body shape, dense shaggy fur, head and paws of a brown bear, with dark brown fur on the back, head and limbs and paler cream-tan fur on the muzzle, chest and belly. A single long, glossy, dark reddish-black curved horn projects upward and forward from the center of its forehead, and multiple large, shiny, dark reddish-brown chitinous plates resembling beetle elytra are set into the fur on the neck, back, sides, hips and outer leg joints. A row of six small oval black openings is visible in the light fur on the lower side beneath the largest lateral plate.",
+    "parts": [
+     {
+      "part": "head",
+      "looks_like": "bear-like head with dense brown fur, lighter tan fur on the muzzle and around the mouth, a large black nose at the tip of the snout, small dark brown eyes on the side of the face, and a closed mouth with a visible lower lip and whiskers",
+      "where": "at the front of the body facing to the right"
+     },
+     {
+      "part": "horns",
+      "looks_like": "single large glossy dark brown to black horn tapering to a sharp point and curving upward and forward, with two small pointed tooth-like projections on the inner concave edge near the tip and a thick base embedded in the fur of the forehead",
+      "where": "arising from the midline of the forehead between the ears"
+     },
+     {
+      "part": "ears",
+      "looks_like": "two small rounded ears covered in thick brown fur with slightly darker edges",
+      "where": "on top of the head, one on each side of the horn base"
+     },
+     {
+      "part": "legs",
+      "looks_like": "four thick sturdy legs covered in long shaggy dark brown fur that is lighter on the inner chest and belly",
+      "where": "two forelegs under the chest and shoulders and two hind legs under the hips supporting the body"
+     },
+     {
+      "part": "feet",
+      "looks_like": "four broad paws with dark fur and five visible light tan curved claws on each paw that contact the ground",
+      "where": "at the distal ends of the four legs"
+     },
+     {
+      "part": "plates",
+      "looks_like": "multiple large glossy dark reddish-brown chitinous plates with segmented transverse ridges and bright specular highlights, resembling beetle wing covers; includes two narrow curved plates on the lower neck/shoulder, two small oval plates on the upper back, one very large rectangular segmented plate on the mid-side, one large curved segmented plate on the hip, and one smaller rounded plate on the outer joint of each visible leg; the light fur directly below the large mid-side plate shows a row of six small vertically oval black openings",
+      "where": "distributed across the dorsal and lateral surfaces of the neck, back, sides, hips and outer leg joints, set into the fur"
+     },
+     {
+      "part": "markings",
+      "looks_like": "paler cream to light tan fur contrasting with the darker brown fur",
+      "where": "on the muzzle, lower jaw, chest and belly/underside"
+     }
+    ],
+    "attached_objects": [],
+    "animals": [
+     "bear",
+     "beetle"
+    ],
+    "separate_bodies": 1,
+    "heads": 1,
+    "walking_legs": 4,
+    "wings": 0,
+    "extra_limb_pieces": 0
+   },
+   "answers": {
+    "Is the overall body shape that of a brown bear?": "yes",
+    "Does it have a brown bear head with visible eyes?": "yes",
+    "Are there wings anywhere on the body?": "no",
+    "Is there a single curved horn of hard, glossy chitin rising from the brow?": "yes",
+    "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?": "no",
+    "Is there a second head anywhere?": "no",
+    "Are there jointed, insect-like leg pieces on or along the legs?": "no",
+    "Does it have more than 4 walking legs?": "no",
+    "Does the fur show stripes or spots?": "no",
+    "Are there hard, glossy chitin plates with fine seams on the back and flanks?": "yes",
+    "Do the hard, glossy chitin plates with fine seams grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending into scales), rather than looking attached on top?": "no",
+    "Do the hard, glossy chitin plates with fine seams look like separate pieces attached on top of the fur?": "yes",
+    "Do the hard, glossy chitin plates with fine seams form one continuous structure over the back and flanks, rather than scattered pieces?": "no",
+    "Are the hard, glossy chitin plates with fine seams scattered as separate pieces over different parts of the body?": "yes",
+    "Are there hard, glossy chitin plates with fine seams on the legs?": "yes",
+    "Are there hard, glossy chitin plates with fine seams on the shoulders?": "yes"
+   },
+   "error": null
+  },
+  "meta_spark": {
+   "describe": {
+    "description": "A large four-legged animal with the body, head, fur and paws of a brown bear standing in side view facing right. Thick shaggy brown fur covers the body with paler cream fur on the lower side and chest. A single long glossy black curved horn with small barbs rises from the center of the forehead. Multiple glossy dark reddish-brown segmented beetle-like shell plates are set into the fur on the back, upper side, rump, shoulders, neck and upper legs, with a row of six small black oval spots on the pale side fur below the large mid-side plate.",
+    "parts": [
+     {
+      "part": "head",
+      "looks_like": "a brown bear head with tan muzzle, black nose and small dark eyes",
+      "where": "at the front of the body"
+     },
+     {
+      "part": "horn",
+      "looks_like": "a long glossy black curved beetle horn with small barbs on the inner curve",
+      "where": "growing from the center of the forehead"
+     },
+     {
+      "part": "ears",
+      "looks_like": "small rounded furry brown bear ears",
+      "where": "on top of the head on either side of the horn"
+     },
+     {
+      "part": "fur",
+      "looks_like": "thick shaggy brown fur with pale cream fur on the underside",
+      "where": "covering the entire body and legs"
+     },
+     {
+      "part": "legs",
+      "looks_like": "four thick shaggy bear legs",
+      "where": "under the body, two in front and two in back"
+     },
+     {
+      "part": "feet",
+      "looks_like": "broad furry paws with long claws",
+      "where": "at the ends of the four legs on the ground"
+     },
+     {
+      "part": "plates",
+      "looks_like": "glossy dark reddish-brown segmented beetle shell plates",
+      "where": "on the back, sides, rump, shoulders, neck and upper legs"
+     },
+     {
+      "part": "markings",
+      "looks_like": "a row of six small black oval spots",
+      "where": "on the pale fur of the mid-side below the large side plate"
+     }
+    ],
+    "attached_objects": [],
+    "animals": [
+     "bear",
+     "beetle"
+    ],
+    "separate_bodies": 1,
+    "heads": 1,
+    "walking_legs": 4,
+    "wings": 0,
+    "extra_limb_pieces": 0
+   },
+   "answers": {
+    "Is the overall body shape that of a brown bear?": "yes",
+    "Does it have a brown bear head with visible eyes?": "yes",
+    "Are there wings anywhere on the body?": "no",
+    "Is there a single curved horn of hard, glossy chitin rising from the brow?": "yes",
+    "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?": "no",
+    "Is there a second head anywhere?": "no",
+    "Are there jointed, insect-like leg pieces on or along the legs?": "no",
+    "Does it have more than 4 walking legs?": "no",
+    "Does the fur show stripes or spots?": "no",
+    "Are there hard, glossy chitin plates with fine seams on the back and flanks?": "yes",
+    "Do the hard, glossy chitin plates with fine seams grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending into scales), rather than looking attached on top?": "no",
+    "Do the hard, glossy chitin plates with fine seams look like separate pieces attached on top of the fur?": "yes",
+    "Do the hard, glossy chitin plates with fine seams form one continuous structure over the back and flanks, rather than scattered pieces?": "no",
+    "Are the hard, glossy chitin plates with fine seams scattered as separate pieces over different parts of the body?": "yes",
+    "Are there hard, glossy chitin plates with fine seams on the legs?": "yes",
+    "Are there hard, glossy chitin plates with fine seams on the shoulders?": "yes"
+   },
+   "error": null
+  }
+ }
+}

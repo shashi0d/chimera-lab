@@ -1,0 +1,130 @@
+{
+ "purpose": "evo_checklist",
+ "request": {
+  "model": "meta-models/muse-spark-open-1026",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture of an animal and check it against a list of visible features. For each item, answer yes if the feature is clearly visible, no if the picture clearly shows otherwise, or unclear if you cannot tell. Copy each item's text exactly, in the given order. Judge only what is visible. creatures: how many separate creatures are in the picture. animals: the real animal species whose features you can clearly see, as everyday English common names, at most three. notes: one short sentence."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "Features to check:\n1. a chinese pangolin body shape\n2. a chinese pangolin head with visible eyes\n3. no external gills\n4. only parts and materials of the axolotl, no whole axolotl animals on the body\n5. smooth, moist skin patches on the back and flanks"
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (670679 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "feature_checklist",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "answers",
+      "creatures",
+      "animals",
+      "notes"
+     ],
+     "properties": {
+      "answers": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "item",
+         "answer"
+        ],
+        "properties": {
+         "item": {
+          "type": "string"
+         },
+         "answer": {
+          "type": "string",
+          "enum": [
+           "yes",
+           "no",
+           "unclear"
+          ]
+         }
+        }
+       }
+      },
+      "creatures": {
+       "type": "integer"
+      },
+      "animals": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "notes": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0,
+  "max_tokens": 6000
+ },
+ "response": {
+  "id": "chatcmpl-99b9fbb2aca84754b66c231d29ae23b8",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{ \"answers\": [\n  {\"item\": \"a chinese pangolin body shape\", \"answer\": \"yes\"},\n  {\"item\": \"a chinese pangolin head with visible eyes\", \"answer\": \"yes\"},\n  {\"item\": \"no external gills\", \"answer\": \"yes\"},\n  {\"item\": \"only parts and materials of the axolotl, no whole axolotl animals on the body\", \"answer\": \"yes\"},\n  {\"item\": \"smooth, moist skin patches on the back and flanks\", \"answer\": \"yes\"}\n],\n\"creatures\": 1,\n\"animals\": [\"chinese pangolin\", \"axolotl\"],\n\"notes\": \"Single hybrid creature combines pangolin scales and body with pink axolotl-like skin patches and no external gills visible.\"\n}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null,
+     "reasoning_content": "<elided> (6161 chars)"
+    }
+   }
+  ],
+  "created": 1793505494,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 1641,
+   "prompt_tokens": 3681,
+   "total_tokens": 5322,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 1241,
+    "audio_tokens": 0,
+    "reasoning_tokens": 1464,
+    "rejected_prediction_tokens": 1559,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 0,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

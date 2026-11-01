@@ -146,14 +146,15 @@ DESCRIBE_INSTRUCTIONS = (
     "wings: wings of any kind. extra_limb_pieces: jointed leg-like, claw-like or tentacle-like pieces other than the "
     "walking legs and the tail."
 )
-ASK_SCHEMA = _obj({"answers": {"type": "array", "items": _obj({"item": _STR, "answer": {"type": "string",
-                                                                                     "enum": list(ANSWERS)}})},
-                   "notes": _STR})
+# S3a iteration 2: a bare list of answers in question order. Copying each question's text into the answer (iteration
+# 1) made Spark Open run away to its 8000-token cap on 4 of 11 images.
+ASK_SCHEMA = _obj({"answers": {"type": "array", "items": {"type": "string", "enum": list(ANSWERS)}}, "notes": _STR})
 ASK_INSTRUCTIONS = (
-    "You look at one picture of a creature and answer questions about it. Answer each question on its own: yes if "
-    "the picture clearly shows it, no if it clearly does not, unclear if you cannot tell. Many questions describe "
-    "things that should not be there, so do not lean toward yes. Judge only what is visible. Copy each question's "
-    "text exactly into item, in the given order. notes: one short sentence."
+    "You look at one picture of a creature and answer numbered questions about it. Answer each question on its own: "
+    "yes if the picture clearly shows it, no if it clearly does not, unclear if you cannot tell. Many questions "
+    "describe things that should not be there, so do not lean toward yes. Judge only what is visible. answers: one "
+    "word per question (yes, no or unclear), in the same order as the questions, nothing else. notes: one short "
+    "sentence."
 )
 
 
@@ -196,12 +197,12 @@ def parse_describe_response(payload: dict[str, Any]) -> dict[str, Any]:
 def parse_ask_response(payload: dict[str, Any], questions: list[str]) -> dict[str, Any]:
     """Matched by order, like the checklist; a missing or invalid answer is "unclear"."""
     data = _message_json(payload)
-    got = [a for a in data.get("answers") or [] if isinstance(a, dict)]
+    got = [a.get("answer", "") if isinstance(a, dict) else a for a in data.get("answers") or []]
     answers = []
     for i, q in enumerate(questions):
-        a = str(got[i].get("answer", "")).lower() if i < len(got) else ""
+        a = str(got[i]).strip().lower() if i < len(got) else ""
         answers.append({"item": q, "answer": a if a in ANSWERS else "unclear"})
-    return {"answers": answers, "notes": str(data.get("notes") or "")}
+    return {"answers": answers, "notes": str(data.get("notes") or ""), "answered": len(got)}
 
 
 # ------------------------------------------------------------------ E4: open world and audit

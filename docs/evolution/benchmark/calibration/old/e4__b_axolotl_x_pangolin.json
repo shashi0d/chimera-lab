@@ -1,0 +1,86 @@
+{
+ "checklist": [
+  "a chinese pangolin body shape",
+  "a chinese pangolin head with visible eyes",
+  "only parts and materials of the axolotl, no whole axolotl animals on the body",
+  "smooth, moist skin patches on the back and flanks"
+ ],
+ "critic": {
+  "answers": [
+   {
+    "item": "a chinese pangolin body shape",
+    "answer": "yes"
+   },
+   {
+    "item": "a chinese pangolin head with visible eyes",
+    "answer": "yes"
+   },
+   {
+    "item": "only parts and materials of the axolotl, no whole axolotl animals on the body",
+    "answer": "yes"
+   },
+   {
+    "item": "smooth, moist skin patches on the back and flanks",
+    "answer": "yes"
+   }
+  ],
+  "creatures": 1,
+  "animals": [
+   "Chinese pangolin",
+   "axolotl"
+  ],
+  "notes": "Single illustrated hybrid with pangolin scales and body plus axolotl external gills and pale skin patches."
+ },
+ "third": [],
+ "inspect": {
+  "items": [
+   {
+    "text": "a chinese pangolin body shape",
+    "kind": "frame",
+    "structural": true,
+    "sam": null,
+    "fix": "Show the planned chinese pangolin body shape and outline; keep everything else the same.",
+    "answer": "yes",
+    "sam_found": null,
+    "sam_fill": null,
+    "status": "pass"
+   },
+   {
+    "text": "a chinese pangolin head with visible eyes",
+    "kind": "head",
+    "structural": true,
+    "sam": null,
+    "fix": "Show the planned chinese pangolin head, fully visible with clear eyes; keep everything else the same.",
+    "answer": "yes",
+    "sam_found": null,
+    "sam_fill": null,
+    "status": "pass"
+   },
+   {
+    "text": "only parts and materials of the axolotl, no whole axolotl animals on the body",
+    "kind": "one_body",
+    "structural": true,
+    "sam": null,
+    "fix": "Show the planned axolotl contribution only as smooth, moist skin on the chinese pangolin's own body over the back and flanks, not as separate animals; keep everything else the same.",
+    "answer": "yes",
+    "sam_found": null,
+    "sam_fill": null,
+    "status": "pass"
+   },
+   {
+    "text": "smooth, moist skin patches on the back and flanks",
+    "kind": "surface",
+    "structural": false,
+    "sam": null,
+    "fix": "",
+    "answer": "yes",
+    "sam_found": null,
+    "sam_fill": null,
+    "status": "info"
+   }
+  ],
+  "failures": [],
+  "structural_failures": 0,
+  "sam_calls": 0
+ }
+}

@@ -1,0 +1,152 @@
+{
+ "purpose": "evo_describe",
+ "request": {
+  "model": "meta-models/muse-spark-open-1026",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture with no other context and describe exactly what is drawn, like a careful field naturalist. Do not guess what was intended; describe only what is visible. description: a free paragraph describing the whole creature first. parts: every body part you see, one entry each (head, horns, ears, mane, legs, feet, tail, wings, gills, tentacles, shell, plates, scales, feathers, markings), with what it looks like and where it is. attached_objects: anything that looks attached to or sitting on the body rather than part of it, such as an object, an armor piece or a whole small animal; empty if none. animals: every real animal whose features you can see, as everyday English common names, at most four; include any animal that only one part resembles. Then count, looking carefully: separate_bodies: separate animal bodies or body-shaped objects in the picture, including any whole animal or animal-shaped object attached to or sitting on the main creature. heads: heads of any kind. walking_legs: legs the creature stands or walks on, including hidden ones you can infer. wings: wings of any kind. extra_limb_pieces: jointed leg-like, claw-like or tentacle-like pieces other than the walking legs and the tail."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "Describe this creature, then count."
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (509631 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "plan_blind_describe",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "description",
+      "parts",
+      "attached_objects",
+      "animals",
+      "separate_bodies",
+      "heads",
+      "walking_legs",
+      "wings",
+      "extra_limb_pieces"
+     ],
+     "properties": {
+      "description": {
+       "type": "string"
+      },
+      "parts": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "part",
+         "looks_like",
+         "where"
+        ],
+        "properties": {
+         "part": {
+          "type": "string"
+         },
+         "looks_like": {
+          "type": "string"
+         },
+         "where": {
+          "type": "string"
+         }
+        }
+       }
+      },
+      "attached_objects": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "animals": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "separate_bodies": {
+       "type": "integer"
+      },
+      "heads": {
+       "type": "integer"
+      },
+      "walking_legs": {
+       "type": "integer"
+      },
+      "wings": {
+       "type": "integer"
+      },
+      "extra_limb_pieces": {
+       "type": "integer"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0,
+  "max_tokens": 8000
+ },
+ "response": {
+  "id": "chatcmpl-48badd711c604a8d97c02cc0675505c2",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\n  \"description\": \"The creature is shown in right-facing profile against a plain off-white background, standing on all four legs. It has the overall body shape of a slender equid with a long neck, narrow torso, and long legs. Its coat is coarse and shaggy, predominantly brownish-gray with a lighter, off-white underbelly and muzzle, a short upright bristly mane along the neck, a thin hanging tail with a dark tuft at the tip, and faint irregular dark striping across the torso, hindquarters, shoulders, neck and lower legs, plus a dark dorsal stripe along the back and a dark vertical stripe over the shoulder.\",\n  \"parts\": [\n    {\n      \"part\": \"head\",\n      \"looks_like\": \"elongated equid head at the front of the neck, facing right, with brown fur on the forehead and cheeks, a white muzzle around the nose and mouth, a visible dark nostril, a dark eye with a pale ring around it, and short whiskers on the lower lip\",\n      \"where\": \"at the anterior end of the neck, highest point of the front of the body\"\n    },\n    {\n      \"part\": \"ears\",\n      \"looks_like\": \"two large, upright, pointed ears with dark outer edges and lighter inner fur, the inner surface showing dark markings\",\n      \"where\": \"on top of the head, one slightly behind the other in profile view\"\n    },\n    {\n      \"part\": \"mane\",\n      \"looks_like\": \"short, stiff, upright tufted hair forming a bristly crest, dark brown to black with lighter tips giving a striped appearance\",\n      \"where\": \"along the dorsal midline of the neck from just behind the ears to the top of the shoulders\"\n    },\n    {\n      \"part\": \"legs\",\n      \"looks_like\": \"four long, slender legs with light tan to off-white fur on the lower portions and faint dark horizontal striping, the two forelegs straight under the chest and the two hindlegs slightly angled under the rump\",\n      \"where\": \"two forelegs beneath the chest at the front of the body and two hindlegs beneath the hindquarters at the rear\"\n    },\n    {\n      \"part\": \"feet\",\n      \"looks_like\": \"four single-toed hooves, dark gray-brown, rounded and slightly flared at the base, with a small tuft of hair at the fetlock above each hoof\",\n      \"where\": \"at the distal tip of each leg, contacting the ground line\"\n    },\n    {\n      \"part\": \"tail\",\n      \"looks_like\": \"thin, medium-length tail with short hair along its length and a longer, darker tuft of hair at the tip, hanging straight down\",\n      \"where\": \"extending from the rear of the rump at the back of the body\"\n    },\n    {\n      \"part\": \"markings\",\n      \"looks_like\": \"irregular faint dark brown to black stripes of varying width and length across the torso, hindquarters, shoulders, neck and lower legs, plus a solid dark dorsal stripe running along the spine and a solid dark vertical shoulder stripe; the stripes are most distinct on the hindquarters and lower legs and more diffuse on the mid-body\",\n      \"where\": \"distributed over the sides of the body, hindquarters, shoulders, neck, and encircling the lower legs, with the dorsal stripe on the mid-back and the shoulder stripe just behind the neck\"\n    }\n  ],\n  \"attached_objects\": [],\n  \"animals\": [\n    \"donkey\",\n    \"zebra\"\n  ],\n  \"separate_bodies\": 1,\n  \"heads\": 1,\n  \"walking_legs\": 4,\n  \"wings\": 0,\n  \"extra_limb_pieces\": 0\n}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null,
+     "reasoning_content": "<elided> (11195 chars)"
+    }
+   }
+  ],
+  "created": 1793505655,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 3324,
+   "prompt_tokens": 3784,
+   "total_tokens": 7108,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 2376,
+    "audio_tokens": 0,
+    "reasoning_tokens": 2515,
+    "rejected_prediction_tokens": 4281,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 3712,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

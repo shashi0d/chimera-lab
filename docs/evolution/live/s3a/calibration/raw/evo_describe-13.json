@@ -1,0 +1,150 @@
+{
+ "purpose": "evo_describe",
+ "request": {
+  "model": "muse-spark-1.3",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture with no other context and describe exactly what is drawn, like a careful field naturalist. Do not guess what was intended; describe only what is visible. description: a free paragraph describing the whole creature first. parts: every body part you see, one entry each (head, horns, ears, mane, legs, feet, tail, wings, gills, tentacles, shell, plates, scales, feathers, markings), with what it looks like and where it is. attached_objects: anything that looks attached to or sitting on the body rather than part of it, such as an object, an armor piece or a whole small animal; empty if none. animals: every real animal whose features you can see, as everyday English common names, at most four; include any animal that only one part resembles. Then count, looking carefully: separate_bodies: separate animal bodies or body-shaped objects in the picture, including any whole animal or animal-shaped object attached to or sitting on the main creature. heads: heads of any kind. walking_legs: legs the creature stands or walks on, including hidden ones you can infer. wings: wings of any kind. extra_limb_pieces: jointed leg-like, claw-like or tentacle-like pieces other than the walking legs and the tail."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "Describe this creature, then count."
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (781975 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "plan_blind_describe",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "description",
+      "parts",
+      "attached_objects",
+      "animals",
+      "separate_bodies",
+      "heads",
+      "walking_legs",
+      "wings",
+      "extra_limb_pieces"
+     ],
+     "properties": {
+      "description": {
+       "type": "string"
+      },
+      "parts": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "part",
+         "looks_like",
+         "where"
+        ],
+        "properties": {
+         "part": {
+          "type": "string"
+         },
+         "looks_like": {
+          "type": "string"
+         },
+         "where": {
+          "type": "string"
+         }
+        }
+       }
+      },
+      "attached_objects": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "animals": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "separate_bodies": {
+       "type": "integer"
+      },
+      "heads": {
+       "type": "integer"
+      },
+      "walking_legs": {
+       "type": "integer"
+      },
+      "wings": {
+       "type": "integer"
+      },
+      "extra_limb_pieces": {
+       "type": "integer"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0
+ },
+ "response": {
+  "id": "chatcmpl-01a1953e-8b37-71f0-9eef-62d4542006ca",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\"animals\": [\"lion\", \"tiger\"], \"attached_objects\": [], \"description\": \"A large, powerfully built four-legged felid shown in side view with its head turned toward the viewer. It has a tawny golden-brown coat that is pale cream-white on the muzzle, chin, chest and belly, with faint dark striping on the torso and forehead and bolder dark striping on the lower legs and tail. The head is broad and lion-like with rounded ears, the neck and chest are deep with slightly longer ruffed fur, the body is long and muscular, and it stands on four sturdy legs ending in large paws, with a short slender tail tipped dark extending behind.\", \"extra_limb_pieces\": 0, \"heads\": 1, \"parts\": [{\"looks_like\": \"broad lion-like felid head with short tawny fur, white around the eyes, muzzle and chin, dark nose, dark mouth lines and long whiskers\", \"part\": \"head\", \"where\": \"at the front of the body, turned slightly toward the viewer\"}, {\"looks_like\": \"small rounded furry ears with dark marks on the backs\", \"part\": \"ears\", \"where\": \"on the top sides of the head\"}, {\"looks_like\": \"slightly longer shaggy tawny and pale fur forming a light ruff\", \"part\": \"mane\", \"where\": \"around the sides of the neck, throat and chest\"}, {\"looks_like\": \"thick muscular felid legs covered in short tawny fur\", \"part\": \"legs\", \"where\": \"two under the front chest and two under the rear hips\"}, {\"looks_like\": \"large rounded paws with distinct toes and short claws\", \"part\": \"feet\", \"where\": \"at the ends of the four legs on the ground\"}, {\"looks_like\": \"short slender furry tail with dark rings and a dark tip\", \"part\": \"tail\", \"where\": \"extending from the rear of the hindquarters to the left\"}, {\"looks_like\": \"faint dark vertical stripes on the back, sides and forehead and bolder dark horizontal stripes on the hindquarters and lower legs\", \"part\": \"markings\", \"where\": \"over the torso, forehead, legs and tail\"}], \"separate_bodies\": 1, \"walking_legs\": 4, \"wings\": 0}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null
+    }
+   }
+  ],
+  "created": 1793505266,
+  "model": "muse-spark-1.3",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 2183,
+   "prompt_tokens": 3833,
+   "total_tokens": 6016,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": null,
+    "audio_tokens": null,
+    "reasoning_tokens": 1672,
+    "rejected_prediction_tokens": null,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": null,
+    "cache_write_tokens": null,
+    "cached_tokens": 0,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

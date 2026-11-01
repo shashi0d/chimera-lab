@@ -1,0 +1,106 @@
+{
+ "purpose": "evo_ask",
+ "request": {
+  "model": "meta-models/muse-spark-open-1026",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture of a creature and answer numbered questions about it. Answer each question on its own: yes if the picture clearly shows it, no if it clearly does not, unclear if you cannot tell. Many questions describe things that should not be there, so do not lean toward yes. Judge only what is visible. answers: one word per question (yes, no or unclear), in the same order as the questions, nothing else. notes: one short sentence."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "Questions:\n1. Is the overall body shape that of a chinese pangolin?\n2. Does it have a chinese pangolin head with visible eyes?\n3. Are there wings anywhere on the body?\n4. Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?\n5. Is there a second head anywhere?\n6. Does it have more than 4 walking legs?\n7. Are there feathery external gills anywhere on the creature?\n8. Does it have a full mane of long hair around the head and neck?\n9. Is there smooth, moist skin on the back and flanks?"
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (909823 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "balanced_checklist",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "answers",
+      "notes"
+     ],
+     "properties": {
+      "answers": {
+       "type": "array",
+       "items": {
+        "type": "string",
+        "enum": [
+         "yes",
+         "no",
+         "unclear"
+        ]
+       }
+      },
+      "notes": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0,
+  "max_tokens": 8000
+ },
+ "response": {
+  "id": "chatcmpl-e719f8cebbc44f56a1cfa21581b11aed",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{ \"answers\": [\"yes\", \"yes\", \"no\", \"no\", \"no\", \"no\", \"yes\", \"no\", \"no\"], \"notes\": \"The image shows a pangolin-like body with prominent pink feathery external gills on the neck and head.\" }",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null,
+     "reasoning_content": "We need to answer numbered questions about creature picture. Provide one word per question (yes, no or unclear), in same order, nothing else. notes: one short sentence.\n\nWe have 9 questions.\n\nWe need to look at picture: It's a pangolin-like creature but with feathery external gills (axolotl-like) on head/neck. So it's a hybrid.\n\nQuestions:\n\n1. Is the overall body shape that of a chinese pangolin? The body shape looks like pangolin, yes. So yes.\n\n2. Does it have a chinese pangolin head with visible eyes? It has pangolin-like head with visible eye, yes. So yes.\n\n3. Are there wings anywhere on the body? No wings. So no.\n\n4. Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body? No, there is no separate animal attached. So no.\n\n5. Is there a second head anywhere? No.\n\n6. Does it have more than 4 walking legs? It has 4 legs. So no.\n\n7. Are there feathery external gills anywhere on the creature? Yes, pink feathery gills on neck/head.\n\n8. Does it have a full mane of long hair around the head and neck? No.\n\n9. Is there smooth, moist skin on the back and flanks? No, it's covered in scales, not smooth moist skin. So no.\n\nWe need to answer each question on its own: yes if picture clearly shows it, no if clearly does not, unclear if cannot tell. Many questions describe things that should not be there, so do not lean toward yes. Judge only what is visible. answers: one word per question (yes, no or unclear), in same order as questions, nothing else. notes: one short sentence.\n\nSo we need to output 9 lines? Or one word per question in same order, nothing else. Probably each on new line numbered? The instruction says answers: one word per question (yes, no or unclear), in the same order as the questions, nothing else. notes: one short sentence.\n\nSo we need to provide answers list and notes.\n\nProbably format:\n\n1. yes\n2. yes\n...\n\nBut instruction says nothing else. Might mean just list yes/no. However notes: one short sentence. So we need to provide answers and a notes sentence.\n\nWe should provide numbered answers.\n\nWe must be careful: The creature has external gills, so question 7 yes.\n\nQuestion 9: Is there smooth, moist skin on the back and flanks? The back and flanks are covered with scales, not smooth moist skin. So no.\n\nQuestion 1: Is overall body shape that of a chinese pangolin? Yes, it is pangolin-shaped.\n\nQuestion 2: Does it have a chinese pangolin head with visible eyes? Yes, eye visible.\n\nWe should answer accordingly.\n\nPotential nuance: Chinese pangolin head? The head has gills, but still pangolin head. So yes.\n\nWe need to provide notes: one short sentence. Perhaps describing the hybrid.\n\nWe must ensure we output exactly one word per question in order. Probably like:\n\nyes\nyes\nno\nno\nno\nno\nyes\nno\nno\n\nAnd then notes: ...\n\nThe instruction says \"answers: one word per question (yes, no or unclear), in the same order as the questions, nothing else. notes: one short sentence.\"\n\nSo we need to separate answers and notes.\n\nWe should output answers numbered? The safest is to output each answer on new line without numbering? But \"in the same order as the questions\" suggests we need to keep order. Numbering might be considered extra words? However typical tasks expect numbered list.\n\nThe instruction: \"Answer each question on its own: yes if the picture clearly shows it, no if it clearly does not, unclear if you cannot tell.\" So each question on its own line.\n\nProbably format:\n\n1. yes\n2. yes\n3. no\n...\n\nWe will do that.\n\nMake sure to not add extra explanation.\n\nWe also need notes: one short sentence. Provide after answers.\n\nLet's craft notes: Creature is a pangolin with axolotl-like external gills.\n\nWe must ensure notes is one sentence.\n\nProceed to final."
+    }
+   }
+  ],
+  "created": 1793505741,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 958,
+   "prompt_tokens": 3747,
+   "total_tokens": 4705,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 718,
+    "audio_tokens": 0,
+    "reasoning_tokens": 889,
+    "rejected_prediction_tokens": 962,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 128,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

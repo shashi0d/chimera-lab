@@ -99,7 +99,7 @@ def questions(g: Genome, tax: Taxonomy) -> list[Question]:
     qs: list[Question] = []
 
     # structure, expected yes
-    if hn:
+    if hn and not g.known_pair:  # iteration 2: a mule's body is not "a horse body shape" to either critic
         qs.append(Question("frame", f"Is the overall body shape that of a {hn}?", "yes", "structure",
                            f"Show the planned {hn} body shape and outline; {KEEP}."))
     else:
@@ -204,14 +204,18 @@ def questions(g: Genome, tax: Taxonomy) -> list[Question]:
                     f"{cover} there; the {cover} stops at its edge; {KEEP}.")
         pl = noun.split(" with ")[0].endswith("s")
         are, do, it = ("Are there", "Do the", "they") if pl else ("Is there", "Does the", "it")
-        qs.append(Question("cover_present", f"{are} {noun} on the {where}?", "yes", "integration",
+        # iteration 3: a soft surface patch (skin, feathers) is informational, like the S2 surface item; a
+        # protective covering's presence is an integration question
+        qs.append(Question("cover_present", f"{are} {noun} on the {where}?", "yes",
+                           "integration" if donor.covering in PROTECTIVE else "surface",
                            f"Show the planned {noun} over the {where}; {KEEP}."))
-        qs.append(Question("grows_out", f"{do} {noun} grow out of the body with a natural transition (for example "
-                           f"{cover} stopping at a shield's edge, or skin blending into scales), rather than looking "
-                           "attached on top?", "yes", "integration", grow_fix))
-        qs.append(Question("on_top", f"{do} {noun} look like {'separate pieces' if pl else 'a separate piece'} "
-                           f"attached on top of the {cover}?", "no", "integration", grow_fix))
-        if donor.covering in PROTECTIVE:
+        if donor.covering in PROTECTIVE:  # iteration 2: RC-R10-12 is about protective coverings only; soft skin or
+            # feather patches are a surface change, and the owner rated the axolotl skin patches good
+            qs.append(Question("grows_out", f"{do} {noun} grow out of the body with a natural transition (for example "
+                               f"{cover} stopping at a shield's edge, or skin blending into scales), rather than "
+                               "looking attached on top?", "yes", "integration", grow_fix))
+            qs.append(Question("on_top", f"{do} {noun} look like {'separate pieces' if pl else 'a separate piece'} "
+                               f"attached on top of the {cover}?", "no", "integration", grow_fix))
             one_fix = (f"Show the {noun} as one continuous covering over the {where}, not scattered pieces; the "
                        f"{hn}'s {cover} stays on the belly and legs; {KEEP}.")
             qs.append(Question("continuous", f"Do the {noun} form one continuous structure over the {where}, "
@@ -296,7 +300,7 @@ def expected_counts(g: Genome, tax: Taxonomy) -> dict[str, int | None]:
 # ------------------------------------------------------------------ description matching (f)
 
 CONCEPTS: dict[str, str] = {
-    "wings": r"\bwings?\b|\bwinged\b",
+    "wings": r"\bwings?\b(?![- ]?(cases?|covers?|cover-like|case-like))|\bwinged\b",  # wing cases are plates
     "gills": r"\bgills?\b",
     "horn": r"\bhorns?\b|\bhorned\b",
     "mane": r"\bmane\b|\bmaned\b",
@@ -325,6 +329,20 @@ MANED = ("Felidae", "Equidae")
 def concepts_in(text: str) -> set[str]:
     low = text.lower()
     return {c for c, rx in CONCEPTS.items() if re.search(rx, low)}
+
+
+NEGATED = re.compile(r"\b(no|not|without|none|lacks?|lacking|nor|neither|absent)\b[^.;:|]*", re.I)
+
+
+def seen_concepts(text: str) -> set[str]:
+    """Concepts a description reports as present (iteration 2): negated clauses ("no distinct spots or stripes",
+    "No wings, tentacles, or additional limbs") are dropped, and a "mane" of feathers is a feather ruff."""
+    t = NEGATED.sub(" ", text)
+    t = re.sub(r"\bmane\b(?=[^.;|]{0,80}feather)", "ruff", t, flags=re.I)
+    t = re.sub(r"(feather[^.;|]{0,40})\bmane\b", r"\1ruff", t, flags=re.I)
+    # iteration 3: one line along the spine (an equid's dorsal or eel stripe) is not a striped coat pattern
+    t = re.sub(r"\b(thin |narrow |dark |faint |single )*(dorsal|eel|spinal|back) stripe\b", "dorsal line", t, flags=re.I)
+    return concepts_in(t)
 
 
 def planned_concepts(g: Genome, tax: Taxonomy) -> tuple[set[str], set[str]]:
@@ -390,14 +408,14 @@ class _NoSpec:
 
 
 def description_text(d: dict[str, Any]) -> str:
-    parts = " ".join(f"{p.get('part', '')} {p.get('looks_like', '')} {p.get('where', '')}" for p in d.get("parts") or []
-                     if isinstance(p, dict))
-    return " ".join([str(d.get("description") or ""), parts, " ".join(map(str, d.get("attached_objects") or []))])
+    parts = " | ".join(f"{p.get('part', '')}: {p.get('looks_like', '')} ({p.get('where', '')})"
+                       for p in d.get("parts") or [] if isinstance(p, dict))
+    return " | ".join([str(d.get("description") or ""), parts, " | ".join(map(str, d.get("attached_objects") or []))])
 
 
 def match_description(d: dict[str, Any], g: Genome, tax: Taxonomy) -> dict[str, Any]:
     exp, req = planned_concepts(g, tax)
-    seen = concepts_in(description_text(d))
+    seen = seen_concepts(description_text(d))
     extras = sorted((seen - exp) & set(STRUCTURAL_EXTRAS))
     omissions = sorted(req - seen)
     return {"seen": sorted(seen), "expected": sorted(exp), "extras": extras, "omissions": omissions}
@@ -483,7 +501,7 @@ def evaluate(raws: dict[str, Raw], g: Genome, tax: Taxonomy, route: Any = None,
         rows.append({"source": "description", "key": "third_animal", "text": "an animal other than the two parents",
                      "group": "structure", "expect": "none", "answers": thirds, "status": combine(outs),
                      "fix": _one_body_fix(g, tax), "sam": None})
-    signals = [r for r in rows if r["status"] != "pass"]
+    signals = [r for r in rows if r["status"] != "pass" and r["group"] != "surface"]  # surface rows: info only
     return {"critics": names, "questions": [asdict(q) for q in qs], "expected_counts": exp_counts, "rows": rows,
             "descriptions": {c: raws[c].describe for c in names}, "matches": matches, "third_animals": thirds,
             "signals": signals, "verdict": "fail" if signals else "pass",
@@ -515,13 +533,34 @@ def _extra_fix(concept: str, g: Genome, tax: Taxonomy) -> str:
 # ------------------------------------------------------------------ running the critics
 
 
+TRIES = 2  # iteration 2: one retry when an answer is unreadable (cut off at the output cap)
+
+
+async def _try(meter: Any, purpose: str, make: Any) -> Any:
+    from app.errors import ChimeraError
+    from app.models.schemas import ErrorCode
+
+    for n in range(TRIES):
+        try:
+            return await meter.call("spark", purpose, make())
+        except ChimeraError as e:
+            if e.code == ErrorCode.BUDGET_EXCEEDED or n == TRIES - 1:
+                raise
+        except (ValueError, KeyError, TypeError):
+            if n == TRIES - 1:
+                raise
+    raise AssertionError("unreachable")
+
+
 async def run_critic(name: str, spark: Any, image: bytes, qs: list[Question], meter: Any) -> tuple[str, Raw]:
+    """One critic, two calls: the free description (plan-blind) first, then the balanced checklist. A failure after
+    the retry becomes an "uncertain" row, never a crash (a budget stop is raised)."""
     raw = Raw()
     try:
-        raw.describe = await meter.call("spark", f"describe:{name}", spark.describe(image))
-        got = await meter.call("spark", f"ask:{name}", spark.ask(image, [q.text for q in qs]))
+        raw.describe = await _try(meter, f"describe:{name}", lambda: spark.describe(image))
+        got = await _try(meter, f"ask:{name}", lambda: spark.ask(image, [q.text for q in qs]))
         raw.answers = {a["item"]: a["answer"] for a in got.get("answers") or [] if isinstance(a, dict)}
-    except Exception as e:  # noqa: BLE001 - a failed critic becomes an "uncertain" row, never a crash
+    except Exception as e:  # noqa: BLE001
         from app.errors import ChimeraError
         from app.models.schemas import ErrorCode
 

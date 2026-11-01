@@ -1,0 +1,102 @@
+{
+ "checklist": [
+  "a golden eagle body shape",
+  "a golden eagle head with visible eyes",
+  "long, muscular arms lined with round suckers in place of the tail",
+  "only parts and materials of the common octopus, no whole common octopus animals on the body",
+  "soft, color-changing skin with fine bumps patches on the belly and flanks"
+ ],
+ "critic": {
+  "answers": [
+   {
+    "item": "a golden eagle body shape",
+    "answer": "yes"
+   },
+   {
+    "item": "a golden eagle head with visible eyes",
+    "answer": "yes"
+   },
+   {
+    "item": "long, muscular arms lined with round suckers in place of the tail",
+    "answer": "yes"
+   },
+   {
+    "item": "only parts and materials of the common octopus, no whole common octopus animals on the body",
+    "answer": "yes"
+   },
+   {
+    "item": "soft, color-changing skin with fine bumps patches on the belly and flanks",
+    "answer": "yes"
+   }
+  ],
+  "creatures": 1,
+  "animals": [
+   "golden eagle",
+   "common octopus"
+  ],
+  "notes": "Single hybrid creature with eagle body and head and octopus tentacles and skin patches replacing tail and on legs."
+ },
+ "third": [],
+ "inspect": {
+  "items": [
+   {
+    "text": "a golden eagle body shape",
+    "kind": "frame",
+    "structural": true,
+    "sam": null,
+    "fix": "Show the planned golden eagle body shape and outline; keep everything else the same.",
+    "answer": "yes",
+    "sam_found": null,
+    "sam_fill": null,
+    "status": "pass"
+   },
+   {
+    "text": "a golden eagle head with visible eyes",
+    "kind": "head",
+    "structural": true,
+    "sam": null,
+    "fix": "Show the planned golden eagle head, fully visible with clear eyes; keep everything else the same.",
+    "answer": "yes",
+    "sam_found": null,
+    "sam_fill": null,
+    "status": "pass"
+   },
+   {
+    "text": "long, muscular arms lined with round suckers in place of the tail",
+    "kind": "part",
+    "structural": true,
+    "sam": "tentacles",
+    "fix": "Show the planned long, muscular arms lined with round suckers in place of the tail; keep everything else the same.",
+    "answer": "yes",
+    "sam_found": true,
+    "sam_fill": 0.0412,
+    "status": "pass"
+   },
+   {
+    "text": "only parts and materials of the common octopus, no whole common octopus animals on the body",
+    "kind": "one_body",
+    "structural": true,
+    "sam": null,
+    "fix": "Show the planned common octopus contribution only as soft, color-changing skin with fine bumps on the golden eagle's own body over the belly and flanks, not as separate animals; keep everything else the same.",
+    "answer": "yes",
+    "sam_found": null,
+    "sam_fill": null,
+    "status": "pass"
+   },
+   {
+    "text": "soft, color-changing skin with fine bumps patches on the belly and flanks",
+    "kind": "surface",
+    "structural": false,
+    "sam": null,
+    "fix": "",
+    "answer": "yes",
+    "sam_found": null,
+    "sam_fill": null,
+    "status": "info"
+   }
+  ],
+  "failures": [],
+  "structural_failures": 0,
+  "sam_calls": 1
+ }
+}
