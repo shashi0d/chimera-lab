@@ -526,3 +526,20 @@ also confirms that each one passes once its plan_reason names the legs.
   - the agent is the demo path, because it chooses the host on a tie and shows its trace;
   - showcase: b09, b01, b03, b08, b11 and b05;
   - the material-only critic items get gold labels before their failures are trusted.
+
+**D-096 R1 owner decisions (the submission build).**
+- **Scope:** goal mode (roadmap step 6) is cut for the submission. The demo path is the agent.
+- **Hosting:** not decided and not tied to Modal. The backend is one FastAPI app (uvicorn) that serves the built
+  frontend at `/` and the API under `/evo`: one URL and no CORS setup. `modal_app.py` keeps working, but nothing may
+  depend on Modal-only features.
+- **Runs:** a run takes about 5 minutes, and that stays. The gallery is the first screen, the live trace shows every
+  step, and a run can be left and resumed.
+- **Public caps:** configurable. Defaults are 50 agent runs per day in total and 3 per visitor per day.
+- **Card:** the material-only critic checks (`material_look`, `host_cover_kept`, `donor_pieces`) are hidden until
+  they have owner labels; all other critic results show as they are.
+- **v1 fusion path:** removed from the UI. Its backend endpoints stay, unused.
+- **Engine:** frozen. No engine logic or wording changes, and no paid model calls in R1: everything runs in mock mode
+  against fixtures.
+- **Process:** `docs/api_contract.md` and `docs/api_fixtures/` are the lead's (changes go through the lead). Three
+  streams work in parallel on git worktrees (r1-api: backend/, r1-ui: frontend/, r1-docs: docs/submission/). Each
+  writes its notes to `docs/r1/`.

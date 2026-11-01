@@ -1,0 +1,90 @@
+{
+ "name": "identify_choice",
+ "description": "POST with two photos; the sire photo is not identified with confidence. No run is created; the client posts again with names.",
+ "request": {
+  "method": "POST",
+  "path": "/evo/agent/runs",
+  "contentType": "multipart/form-data",
+  "fields": {
+   "mode": "realistic"
+  },
+  "files": {
+   "sireImage": "<photo of a tortoise>",
+   "damImage": "<photo of a domestic goat>"
+  }
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "status": "needs_choice",
+   "choice": {
+    "kind": "identify",
+    "slot": "sire",
+    "question": "Which animal is in the first photo?",
+    "options": [
+     {
+      "commonName": "tortoise",
+      "scientificName": "Testudo graeca",
+      "confidence": 0.54
+     },
+     {
+      "commonName": "Galápagos tortoise",
+      "scientificName": "Chelonoidis niger",
+      "confidence": 0.29
+     },
+     {
+      "commonName": "box turtle",
+      "scientificName": "Terrapene carolina",
+      "confidence": 0.11
+     }
+    ],
+    "allowOther": true
+   },
+   "identified": {
+    "sire": null,
+    "dam": {
+     "commonName": "domestic goat",
+     "scientificName": "Capra hircus",
+     "source": "image",
+     "confidence": 0.95
+    }
+   }
+  }
+ },
+ "followUp": {
+  "request": {
+   "method": "POST",
+   "path": "/evo/agent/runs",
+   "contentType": "multipart/form-data",
+   "fields": {
+    "mode": "realistic",
+    "sireName": "tortoise",
+    "damName": "domestic goat"
+   },
+   "files": {}
+  },
+  "response": {
+   "status": 202,
+   "body": {
+    "runId": "run_fx_host_tie",
+    "status": "running",
+    "position": null,
+    "eventsUrl": "/evo/agent/runs/run_fx_host_tie/events",
+    "runUrl": "/evo/agent/runs/run_fx_host_tie",
+    "sire": {
+     "commonName": "tortoise",
+     "scientificName": "Testudo graeca",
+     "source": "name",
+     "confidence": null
+    },
+    "dam": {
+     "commonName": "domestic goat",
+     "scientificName": "Capra hircus",
+     "source": "name",
+     "confidence": null
+    },
+    "mode": "realistic"
+   }
+  }
+ }
+}

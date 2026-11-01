@@ -1,0 +1,1403 @@
+{
+ "name": "run_success",
+ "description": "Real S5 run b09 Indian pangolin x horse (realistic), converted to the event stream.",
+ "request": {
+  "method": "POST",
+  "path": "/evo/agent/runs",
+  "contentType": "multipart/form-data",
+  "fields": {
+   "mode": "realistic"
+  },
+  "files": {
+   "sireImage": "<photo of a Indian pangolin>",
+   "damImage": "<photo of a horse>"
+  }
+ },
+ "response": {
+  "status": 202,
+  "body": {
+   "runId": "run_fx_success",
+   "status": "running",
+   "position": null,
+   "eventsUrl": "/evo/agent/runs/run_fx_success/events",
+   "runUrl": "/evo/agent/runs/run_fx_success",
+   "sire": {
+    "commonName": "Indian pangolin",
+    "scientificName": "Manis crassicaudata",
+    "source": "image",
+    "confidence": 0.93
+   },
+   "dam": {
+    "commonName": "horse",
+    "scientificName": "Equus caballus",
+    "source": "image",
+    "confidence": 0.93
+   },
+   "mode": "realistic"
+  }
+ },
+ "events": [
+  {
+   "id": 1,
+   "type": "started",
+   "runId": "run_fx_success",
+   "at": "2026-11-02T15:00:01Z",
+   "sire": {
+    "commonName": "Indian pangolin",
+    "scientificName": "Manis crassicaudata",
+    "source": "image",
+    "confidence": 0.93
+   },
+   "dam": {
+    "commonName": "horse",
+    "scientificName": "Equus caballus",
+    "source": "image",
+    "confidence": 0.93
+   },
+   "mode": "realistic",
+   "caps": {
+    "renders": 4,
+    "toolCalls": 30,
+    "seconds": 900
+   }
+  },
+  {
+   "id": 2,
+   "type": "step",
+   "runId": "run_fx_success",
+   "at": "2026-11-02T15:00:02Z",
+   "n": 1,
+   "tool": "resolve_animal",
+   "args": {
+    "name": "Indian pangolin"
+   },
+   "summary": "resolved: indian pangolin (Manis crassicaudata)",
+   "reason": "First parent sire as requested; resolving traits for Indian pangolin",
+   "cards": [],
+   "ok": true,
+   "error": null
+  },
+  {
+   "id": 3,
+   "type": "step",
+   "runId": "run_fx_success",
+   "at": "2026-11-02T15:00:03Z",
+   "n": 2,
+   "tool": "resolve_animal",
+   "args": {
+    "name": "horse"
+   },
+   "summary": "resolved: horse (Equus caballus)",
+   "reason": "Second parent dam as requested; resolving traits for horse",
+   "cards": [],
+   "ok": true,
+   "error": null
+  },
+  {
+   "id": 4,
+   "type": "step",
+   "runId": "run_fx_success",
+   "at": "2026-11-02T15:00:04Z",
+   "n": 3,
+   "tool": "propose_candidates",
+   "args": {},
+   "summary": "2 candidates; host tie ['indian pangolin', 'horse']: C1 host indian pangolin, identity -, score 2.5; C2 host horse, identity -, score 2.5",
+   "reason": "Both parents resolved; generating candidate plans blending pangolin and horse",
+   "cards": [
+    "RC-R10-01",
+    "RC-R10-15",
+    "RC-R6-08",
+    "RC-R6-09"
+   ],
+   "ok": true,
+   "error": null
+  },
+  {
+   "id": 5,
+   "type": "step",
+   "runId": "run_fx_success",
+   "at": "2026-11-02T15:00:05Z",
+   "n": 4,
+   "tool": "choose_candidate",
+   "args": {
+    "candidate_id": "C2"
+   },
+   "summary": "C2: host horse, parts []",
+   "reason": "Chosen horse as host for realistic mode - horse body carries autonomous function, grassland niche shared, and full scale covering provides clear pangolin identity per RC-R10",
+   "cards": [],
+   "ok": true,
+   "error": null
+  },
+  {
+   "id": 6,
+   "type": "step",
+   "runId": "run_fx_success",
+   "at": "2026-11-02T15:00:06Z",
+   "n": 5,
+   "tool": "audit_plan",
+   "args": {},
+   "summary": "renderable=True; blocking []; 0 advice items",
+   "reason": "Need audit before render to check blocking issues and licenses",
+   "cards": [],
+   "ok": true,
+   "error": null
+  },
+  {
+   "id": 7,
+   "type": "step",
+   "runId": "run_fx_success",
+   "at": "2026-11-02T15:00:42.800000Z",
+   "n": 6,
+   "tool": "render",
+   "args": {
+    "method": "single_pass"
+   },
+   "summary": "img1 (single_pass), renders used 1",
+   "reason": "Plan passes audit; rendering horse host with pangolin scale covering",
+   "cards": [],
+   "ok": true,
+   "error": null
+  },
+  {
+   "id": 8,
+   "type": "render",
+   "runId": "run_fx_success",
+   "at": "2026-11-02T15:00:42.900000Z",
+   "n": 6,
+   "imageId": "img1",
+   "url": "images/b09_img1.jpg",
+   "kind": "render",
+   "parent": null,
+   "method": "single_pass",
+   "rendersUsed": 1,
+   "rendersLeft": 3
+  },
+  {
+   "id": 9,
+   "type": "step",
+   "runId": "run_fx_success",
+   "at": "2026-11-02T15:01:17.300000Z",
+   "n": 7,
+   "tool": "inspect",
+   "args": {
+    "image_id": "img1"
+   },
+   "summary": "img1: fail - cover_present (covering, fail); continuous (covering, fail); sized_to_body (covering, fail); wrong_scale (covering, fail)",
+   "reason": "Inspecting render for structural and covering accuracy",
+   "cards": [
+    "RC-R10-12",
+    "RC-R10-15",
+    "RC-R10-16"
+   ],
+   "ok": true,
+   "error": null
+  },
+  {
+   "id": 10,
+   "type": "inspect",
+   "runId": "run_fx_success",
+   "at": "2026-11-02T15:01:17.400000Z",
+   "n": 7,
+   "imageId": "img1",
+   "verdict": "fail",
+   "failures": [
+    {
+     "key": "cover_present",
+     "kind": "covering",
+     "text": "Are there large overlapping keratin scales on the head, neck, shoulders, back, flanks, hips, legs and tail?"
+    },
+    {
+     "key": "continuous",
+     "kind": "covering",
+     "text": "Do the large overlapping keratin scales form one continuous structure over the head, neck, shoulders, back, flanks, hips, legs and tail, rather than scattered p"
+    },
+    {
+     "key": "sized_to_body",
+     "kind": "covering",
+     "text": "Are the scales sized to this animal's body, about as large as its own muscles and body segments?"
+    },
+    {
+     "key": "wrong_scale",
+     "kind": "covering",
+     "text": "Do the scales look made for a much smaller or much larger animal?"
+    }
+   ],
+   "hiddenChecks": 0,
+   "bestSoFar": "img1",
+   "rule": null
+  },
+  {
+   "id": 11,
+   "type": "step",
+   "runId": "run_fx_success",
+   "at": "2026-11-02T15:01:36.700000Z",
+   "n": 8,
+   "tool": "edit",
+   "args": {
+    "image_id": "img1",
+    "failure_keys": [
+     "cover_present",
+     "continuous",
+     "sized_to_body",
+     "wrong_scale"
+    ]
+   },
+   "summary": "img2 from an edit: Show the planned large overlapping keratin scales over the head, neck, shoulders, back, flanks, hips, legs and tail; keep everything else the same. Show the lar",
+   "reason": "Covering failures require edit to show continuous large overlapping keratin scales sized to horse body per RC-R10",
+   "cards": [],
+   "ok": true,
+   "error": null
+  },
+  {
+   "id": 12,
+   "type": "render",
+   "runId": "run_fx_success",
+   "at": "2026-11-02T15:01:36.800000Z",
+   "n": 8,
+   "imageId": "img2",
+   "url": "images/b09_img2.jpg",
+   "kind": "edit",
+   "parent": "img1",
+   "method": "edit",
+   "rendersUsed": null,
+   "rendersLeft": null
+  },
+  {
+   "id": 13,
+   "type": "step",
+   "runId": "run_fx_success",
+   "at": "2026-11-02T15:02:11.700000Z",
+   "n": 9,
+   "tool": "inspect",
+   "args": {
+    "image_id": "img2"
+   },
+   "summary": "img2: pass",
+   "reason": "Re-inspecting edited image to verify covering fixes",
+   "cards": [],
+   "ok": true,
+   "error": null
+  },
+  {
+   "id": 14,
+   "type": "inspect",
+   "runId": "run_fx_success",
+   "at": "2026-11-02T15:02:11.800000Z",
+   "n": 9,
+   "imageId": "img2",
+   "verdict": "pass",
+   "failures": [],
+   "hiddenChecks": 0,
+   "bestSoFar": "img2",
+   "rule": null
+  },
+  {
+   "id": 15,
+   "type": "step",
+   "runId": "run_fx_success",
+   "at": "2026-11-02T15:03:25Z",
+   "n": 10,
+   "tool": "finalize",
+   "args": {
+    "image_id": "img2"
+   },
+   "summary": "crt_b5948c4c441f; remaining failures 0",
+   "reason": "Image passes inspection with horse host and continuous pangolin scale covering correctly rendered",
+   "cards": [],
+   "ok": true,
+   "error": null
+  },
+  {
+   "id": 16,
+   "type": "finalize",
+   "runId": "run_fx_success",
+   "at": "2026-11-02T15:03:29Z",
+   "creatureId": "crt_fx_b09",
+   "imageId": "img2",
+   "imageUrl": "images/b09_img2.jpg",
+   "remainingFailures": [],
+   "hiddenChecks": 0,
+   "agree": true,
+   "stop": "finalized by the agent"
+  }
+ ],
+ "creature": {
+  "creatureId": "crt_fx_b09",
+  "createdAt": "2026-11-01T21:00:00Z",
+  "title": "Indian pangolin × horse",
+  "sire": {
+   "commonName": "Indian pangolin",
+   "scientificName": "Manis crassicaudata",
+   "source": "name",
+   "confidence": null
+  },
+  "dam": {
+   "commonName": "horse",
+   "scientificName": "Equus caballus",
+   "source": "name",
+   "confidence": null
+  },
+  "mode": "realistic",
+  "generatedLabel": "Generated fusion",
+  "realHybrid": false,
+  "showcase": true,
+  "imageUrl": "images/b09_img2.jpg",
+  "host": {
+   "commonName": "horse",
+   "reason": "Chosen horse as host for realistic mode - horse body carries autonomous function, grassland niche shared, and full scale covering provides clear pangolin identity per RC-R10",
+   "tie": true,
+   "chosenBy": "agent"
+  },
+  "canItLive": {
+   "summary": "6 of 6 life functions work; no fiction licenses",
+   "functions": [
+    {
+     "function": "breathing",
+     "result": "pass",
+     "detail": "lungs suit a land habitat"
+    },
+    {
+     "function": "feeding",
+     "result": "pass",
+     "detail": "grinding teeth fit a herbivore diet"
+    },
+    {
+     "function": "support",
+     "result": "pass",
+     "detail": "legs match the body size"
+    },
+    {
+     "function": "movement",
+     "result": "pass",
+     "detail": "walks on four legs"
+    },
+    {
+     "function": "heat",
+     "result": "pass",
+     "detail": "warm grassland habitat: no heat adjustment needed"
+    },
+    {
+     "function": "senses",
+     "result": "pass",
+     "detail": "horse head and eyes kept fully visible"
+    }
+   ],
+   "licenses": []
+  },
+  "remainingFailures": [],
+  "hiddenChecks": 0,
+  "finalChoice": {
+   "shownFirst": "agent",
+   "agree": true,
+   "agentPick": {
+    "imageId": "img2",
+    "imageUrl": "images/b09_img2.jpg",
+    "rank": 1,
+    "of": 2,
+    "structural": 0,
+    "failures": 0,
+    "reason": "Image passes inspection with horse host and continuous pangolin scale covering correctly rendered"
+   },
+   "codePick": {
+    "imageId": "img2",
+    "imageUrl": "images/b09_img2.jpg",
+    "rank": 1,
+    "of": 2,
+    "structural": 0,
+    "failures": 0,
+    "reason": "code ranks inspected images by fewest structural failures, then fewest failures, then the latest"
+   }
+  },
+  "anatomyMap": {
+   "overlayUrl": "images/b09_anatomy.jpg",
+   "colors": {
+    "host": "#268bd2",
+    "donor": "#e66e28",
+    "blend": "#825ac8"
+   },
+   "parts": [
+    {
+     "part": "head",
+     "parent": "horse",
+     "parentRole": "host",
+     "status": "found",
+     "color": "#268bd2",
+     "maskArea": 0.0432
+    },
+    {
+     "part": "body",
+     "parent": "horse",
+     "parentRole": "host",
+     "status": "found",
+     "color": "#268bd2",
+     "maskArea": 0.0332
+    },
+    {
+     "part": "legs",
+     "parent": "horse",
+     "parentRole": "host",
+     "status": "found",
+     "color": "#268bd2",
+     "maskArea": 0.097
+    },
+    {
+     "part": "tail",
+     "parent": "horse",
+     "parentRole": "host",
+     "status": "found",
+     "color": "#268bd2",
+     "maskArea": 0.0156
+    },
+    {
+     "part": "indian pangolin covering",
+     "parent": "indian pangolin",
+     "parentRole": "donor",
+     "status": "not located",
+     "color": null,
+     "maskArea": 0.0
+    }
+   ]
+  },
+  "images": [
+   {
+    "imageId": "img1",
+    "url": "images/b09_img1.jpg",
+    "kind": "render",
+    "verdict": "fail"
+   },
+   {
+    "imageId": "img2",
+    "url": "images/b09_img2.jpg",
+    "kind": "edit",
+    "verdict": "pass"
+   }
+  ],
+  "runId": "run_fx_success",
+  "stats": {
+   "renders": 1,
+   "edits": 1,
+   "toolCalls": 10,
+   "seconds": 213.2
+  },
+  "card": {
+   "kind": "chimera",
+   "design_mode": "realistic",
+   "label": "speculative chimera, no real-world precedent",
+   "check_labels": [],
+   "processes": [
+    "chimera patchwork: each region is one parent's tissue",
+    "coat and extremities shaped by a grassland habitat"
+   ],
+   "resemblances": [],
+   "why": [
+    {
+     "card": "RC-R2-01",
+     "rule": "Parent order is biological. Store fusions as (sire, dam) and never treat A x B as identical to B x A, because reciprocal crosses can differ in size and appearance",
+     "strength": "hard",
+     "status": "VERIFIED",
+     "source": "https://lsi.princeton.edu/research/faculty-publications/genomic-imprinting-disrupted-interspecific-peromyscus-hybrids"
+    },
+    {
+     "card": "RC-R1-14",
+     "rule": "Genetics-based operators only predict real outcomes for parents that can interbreed; for any other pair the fusion must be labeled speculative design, not a predicted animal",
+     "strength": "hard",
+     "status": "VERIFIED",
+     "source": "https://www.ucl.ac.uk/taxome/jim/pap/mallet07_hybspn_Nature.pdf"
+    },
+    {
+     "card": "RC-R2-16",
+     "rule": "Use the real-hybrid path only for pairs with a documented hybrid or a close relationship (same genus); all other pairs go to the chimera path and are labeled speculative",
+     "strength": "hard",
+     "status": "VERIFIED",
+     "source": "https://www.ucl.ac.uk/taxome/jim/pap/mallet07_hybspn_Nature.pdf"
+    },
+    {
+     "card": "RC-R5-10",
+     "rule": "Documented interspecies chimeras pair close relatives only; any chimera between distant groups must be labeled a speculative design with no real-world precedent",
+     "strength": "hard",
+     "status": "VERIFIED",
+     "source": "https://www.nature.com/articles/nmeth1110-872.pdf"
+    },
+    {
+     "card": "RC-R6-01",
+     "rule": "The body silhouette donor sets the creature's identity for human viewers; choose it deliberately (or expose it as a user control), never as a side effect of input order",
+     "strength": "soft",
+     "status": "VERIFIED",
+     "source": "https://arxiv.org/abs/1811.12231v3"
+    },
+    {
+     "card": "RC-R5-02",
+     "rule": "The host parent sets silhouette, body size and overall frame; the donor contributes regions, organs or patches",
+     "strength": "soft",
+     "status": "VERIFIED",
+     "source": "https://pubmed.ncbi.nlm.nih.gov/20813264/"
+    },
+    {
+     "card": "RC-R1-01",
+     "rule": "Decide inheritance per trait, never per animal; the engine must not assign one parent as dominant for the whole creature, because dominance is defined between alleles of a single gene",
+     "strength": "hard",
+     "status": "VERIFIED",
+     "source": "https://slcc.pressbooks.pub/collegebiology1/chapter/incomplete-dominance-and-codominance/"
+    },
+    {
+     "card": "RC-R1-09",
+     "rule": "PATCH is a valid coat mode: distinct blocks with clear edges, each block fully one version, no blending inside a block, as in tortoiseshell and calico cats",
+     "strength": "soft",
+     "status": "VERIFIED",
+     "source": "https://catalog.lib.kyushu-u.ac.jp/opac_download_md/7390840/7390840.pdf"
+    },
+    {
+     "card": "RC-R1-10",
+     "rule": "Each mosaic patch grows from a single cell lineage, so patches should be few and large rather than fine speckles",
+     "strength": "soft",
+     "status": "VERIFIED",
+     "source": "https://digitalcommons.usm.maine.edu/thinking_matters/173"
+    },
+    {
+     "card": "RC-R5-01",
+     "rule": "On the chimera path, each region is fully one parent's tissue; blend between regions only at the edges, never within a patch",
+     "strength": "hard",
+     "status": "VERIFIED",
+     "source": "https://sdbonline.org/archive/dbcinema/ledouarin/ledouarin.html"
+    },
+    {
+     "card": "RC-R5-03",
+     "rule": "Chimeras are not 50:50; allow the donor share to vary between runs, and never present a fixed even split as the biological norm",
+     "strength": "soft",
+     "status": "VERIFIED",
+     "source": "https://www.nature.com/articles/nmeth1110-872.pdf"
+    },
+    {
+     "card": "RC-R5-04",
+     "rule": "Donor regions keep the donor's own color and surface (feathers, hair, skin), shown at full strength inside the region",
+     "strength": "soft",
+     "status": "VERIFIED",
+     "source": "https://sdbonline.org/archive/dbcinema/ledouarin/ledouarin.html"
+    },
+    {
+     "card": "RC-R5-05",
+     "rule": "Where donor pattern appears follows the host's body layout (its skin and feather regions), not the donor's own pattern layout",
+     "strength": "soft",
+     "status": "VERIFIED",
+     "source": "https://discovery-pp.ucl.ac.uk/id/eprint/10108322"
+    },
+    {
+     "card": "RC-R5-06",
+     "rule": "Donor regions align with body segments or regions (the level of a graft), not random scattered fragments",
+     "strength": "soft",
+     "status": "VERIFIED",
+     "source": "https://sdbonline.org/archive/dbcinema/ledouarin/ledouarin.html"
+    },
+    {
+     "card": "RC-R5-07",
+     "rule": "Behavior can follow the parent that supplied the brain or head tissue",
+     "strength": "soft",
+     "status": "VERIFIED",
+     "source": "https://agris.fao.org/search/en/records/65dfe6754c5aef494fe67490"
+    },
+    {
+     "card": "RC-R6-02",
+     "rule": "Carry the second parent mainly through surface texture, pattern and selected signature parts, which tell viewers which other animal is involved without changing what the creature is",
+     "strength": "soft",
+     "status": "VERIFIED",
+     "source": "https://arxiv.org/abs/1811.12231v3"
+    },
+    {
+     "card": "RC-R4-01",
+     "rule": "Fit coat pattern to the fusion's habitat: closed, forested or tree-climbing lifestyles lean patterned and irregular; open habitats lean plain",
+     "strength": "soft",
+     "status": "VERIFIED",
+     "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3061134"
+    },
+    {
+     "card": "RC-R4-02",
+     "rule": "Habitat may adjust pattern strength and complexity beyond what either parent shows, because coat pattern tracks ecology more than ancestry",
+     "strength": "soft",
+     "status": "VERIFIED",
+     "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3061134"
+    },
+    {
+     "card": "RC-R4-05",
+     "rule": "Default to a dark-back, light-belly gradient, stronger in open, sunny habitats and smaller bodies; describe it as a common pattern, not proven camouflage",
+     "strength": "soft",
+     "status": "VERIFIED",
+     "source": "https://datadryad.org/dataset/doi:10.5061/dryad.4291n"
+    },
+    {
+     "card": "RC-R4-11",
+     "rule": "At least one habitat-linked trait must be visible in the image, so the ecology appears in the creature and not only in the text",
+     "strength": "soft",
+     "status": "UNVERIFIED",
+     "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3061134"
+    },
+    {
+     "card": "RC-R4-10",
+     "rule": "Habitat adjusts plastic traits (pattern, shading, extremity size, eye size) but never the body-plan class or limb count; those stay with R3",
+     "strength": "soft",
+     "status": "UNVERIFIED",
+     "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3061134"
+    },
+    {
+     "card": "RC-R3-12",
+     "rule": "Physical checks run after trait selection in a fixed order (body-plan class, limb budget, size ceiling, posture, part rendering); a failed check either changes the design or adds a visible speculative label, never a silent pass",
+     "strength": "soft",
+     "status": "UNVERIFIED",
+     "source": "https://biewenerlab.oeb.harvard.edu/publications/biomechanical-consequences-scaling"
+    },
+    {
+     "card": "RC-R9-02",
+     "rule": "Run a function audit after the physical checks and before rendering, covering breathing, feeding, support, movement, heat and senses; each function ends as pass, repaired or labeled, never silently failed",
+     "strength": "hard",
+     "status": "VERIFIED",
+     "source": "https://www.cs.utexas.edu/~witchel/S25-380L/papers/right-size.html"
+    },
+    {
+     "card": "RC-R9-04",
+     "rule": "Diet follows the head donor's mouthparts; for a mammal head, grinding molars go with plant diets and bladed, shearing cheek teeth go with meat, and a mismatch is repaired or flagged",
+     "strength": "soft",
+     "status": "VERIFIED",
+     "source": "https://fds.duke.edu/db/aas/BAA/faculty%20all/krs75/publications/371619"
+    },
+    {
+     "card": "RC-R9-06",
+     "rule": "A creature scaled well above its leg donor must change shape to carry its weight, with short thick legs or splayed legs; the same shape at much larger size is not allowed",
+     "strength": "hard",
+     "status": "VERIFIED",
+     "source": "https://www.cs.utexas.edu/~witchel/S25-380L/papers/right-size.html"
+    },
+    {
+     "card": "RC-R6-03",
+     "rule": "Keep the head fully visible and uncluttered; the head and eyes draw the earliest and most looks, so the head donor dominates the first impression",
+     "strength": "soft",
+     "status": "VERIFIED",
+     "source": "https://eprints.lancs.ac.uk/id/eprint/50885/"
+    },
+    {
+     "card": "RC-R6-04",
+     "rule": "Every creature must have clearly discernible eyes; viewers search for eyes wherever they are, so extra or displaced eyes are used only on purpose",
+     "strength": "soft",
+     "status": "VERIFIED",
+     "source": "https://repository.essex.ac.uk/9355/"
+    },
+    {
+     "card": "RC-R9-10",
+     "rule": "Fiction budget: a realistic design takes no licenses; a speculative design bends at most one rule on purpose and obeys every other rule strictly; every bent rule is declared on the card with its compensation",
+     "strength": "hard",
+     "status": "VERIFIED",
+     "source": "https://www.sf-encyclopedia.com/entry/wellss_law"
+    },
+    {
+     "card": "RC-R10-15",
+     "rule": "Transfer traits, not shapes. Classify each donor feature as (a) material or covering, which grows on the host and conforms to the host's body shape; (b) homologous structure, placed where the host has the matching structure, keeping its form but fitted to host scale; (c) non-homologous structure, never transferred as a shape, only its material or function",
+     "strength": "soft",
+     "status": "VERIFIED",
+     "source": "https://evolution.berkeley.edu/evolution-101/the-history-of-life-looking-at-the-patterns/homologies-and-analogies/"
+    },
+    {
+     "card": "RC-R7-06",
+     "rule": "State the intended silhouette in the plan and validate the render with a silhouette-only check; the creature must read with no interior detail",
+     "strength": "soft",
+     "status": "VERIFIED",
+     "source": "https://www.cs.princeton.edu/courses/archive/fall07/cos597B/papers/mitchell-team-fortress.pdf"
+    },
+    {
+     "card": "RC-R6-05",
+     "rule": "Signature parts that draw looks on the real animal (a tail tuft, a trunk, an udder-like feature) are the best carriers of the second parent's identity",
+     "strength": "soft",
+     "status": "VERIFIED",
+     "source": "https://eprints.lancs.ac.uk/id/eprint/50885/"
+    },
+    {
+     "card": "RC-R7-07",
+     "rule": "Interior detail (pattern lines, texture flow) should echo the silhouette's shapes rather than cut across them",
+     "strength": "soft",
+     "status": "VERIFIED",
+     "source": "https://www.cs.princeton.edu/courses/archive/fall07/cos597B/papers/mitchell-team-fortress.pdf"
+    },
+    {
+     "card": "RC-R6-07",
+     "rule": "Keep bilateral symmetry, visible sense organs and recognizable limbs unless the user explicitly asks for an alien design, because these are what make an invented creature read as an animal",
+     "strength": "soft",
+     "status": "VERIFIED",
+     "source": "https://link.springer.com/content/pdf/10.3758%2FBF03195281.pdf"
+    },
+    {
+     "card": "RC-R7-10",
+     "rule": "Show myth and fiction resemblances as \"resembles X (culture or work)\", tagged unverified; never render or name-match a franchise character as an output",
+     "strength": "soft",
+     "status": "UNVERIFIED",
+     "source": "https://classics.stanford.edu/publications/first-fossil-hunters-dinosaurs-mammoths-and-myth-greek-and-roman-times"
+    }
+   ],
+   "lineage": {
+    "sire": "indian pangolin",
+    "dam": "horse",
+    "parent_ids": [],
+    "generation": 0
+   },
+   "caveats": [
+    "This is a design, not a prediction: no claim is made that such a creature would be not claimed to be healthy or viable."
+   ],
+   "can_it_live": [
+    {
+     "function": "breathing",
+     "result": "pass",
+     "detail": "lungs suit a land habitat",
+     "cards": [],
+     "decided_by": "code (rule cards)"
+    },
+    {
+     "function": "feeding",
+     "result": "pass",
+     "detail": "grinding teeth fit a herbivore diet",
+     "cards": [
+      "RC-R9-04"
+     ],
+     "decided_by": "code (rule cards)"
+    },
+    {
+     "function": "support",
+     "result": "pass",
+     "detail": "legs match the body size",
+     "cards": [
+      "RC-R9-06"
+     ],
+     "decided_by": "code (rule cards)"
+    },
+    {
+     "function": "movement",
+     "result": "pass",
+     "detail": "walks on four legs",
+     "cards": [],
+     "decided_by": "code (rule cards)"
+    },
+    {
+     "function": "heat",
+     "result": "pass",
+     "detail": "warm grassland habitat: no heat adjustment needed",
+     "cards": [
+      "RC-R4-11"
+     ],
+     "decided_by": "code (rule cards)"
+    },
+    {
+     "function": "senses",
+     "result": "pass",
+     "detail": "horse head and eyes kept fully visible",
+     "cards": [
+      "RC-R6-03",
+      "RC-R6-04"
+     ],
+     "decided_by": "code (rule cards)"
+    }
+   ],
+   "licenses": [],
+   "identity_parts": [],
+   "provenance": {
+    "sire": {
+     "animal": "indian pangolin",
+     "scientific_name": "Manis crassicaudata",
+     "kind": "species",
+     "source": "learned",
+     "facts": {
+      "active_time": "web-cited",
+      "body_length_m": "web-cited",
+      "body_mass_kg": "web-cited",
+      "body_plan": "web-cited",
+      "breathing": "model-estimated (citation not accepted: en.wikipedia.org: a general wiki or wiki-style aggregator)",
+      "class": "gbif",
+      "climate": "model-estimated (citation not accepted: the quote does not appear on the page)",
+      "common_name": "model-estimated",
+      "covering": "web-cited",
+      "diet": "web-cited",
+      "family": "gbif",
+      "gbif_key": "gbif",
+      "genus": "gbif",
+      "habitat": "web-cited",
+      "mouthparts": "web-cited",
+      "movement": "web-cited",
+      "order": "gbif",
+      "primary_locomotor_part": "web-cited",
+      "scientific_name": "gbif",
+      "visible_features": "model-estimated (citation not accepted: en.wikipedia.org: a general wiki or wiki-style aggregator)"
+     },
+     "citations": {
+      "active_time": "https://animaldiversity.org/accounts/Manis_crassicaudata/",
+      "body_length_m": "https://animaldiversity.org/accounts/Manis_crassicaudata/",
+      "body_mass_kg": "https://animaldiversity.org/accounts/Manis_crassicaudata/",
+      "body_plan": "https://animaldiversity.org/accounts/Manis_crassicaudata/",
+      "covering": "https://animaldiversity.org/accounts/Manis_crassicaudata/",
+      "diet": "https://animaldiversity.org/accounts/Manis_crassicaudata/",
+      "habitat": "https://animaldiversity.org/accounts/Manis_crassicaudata/",
+      "mouthparts": "https://animaldiversity.org/accounts/Manis_crassicaudata/",
+      "movement": "https://animaldiversity.org/accounts/Manis_crassicaudata/",
+      "primary_locomotor_part": "https://animaldiversity.org/accounts/Manis_crassicaudata/"
+     },
+     "unverified_claims": []
+    },
+    "dam": {
+     "animal": "horse",
+     "scientific_name": "Equus caballus",
+     "kind": "species",
+     "source": "database",
+     "facts": {
+      "common_name": "chimera_data.json",
+      "scientific_name": "chimera_data.json",
+      "class": "chimera_data.json",
+      "order": "chimera_data.json",
+      "family": "chimera_data.json",
+      "gbif_key": "chimera_data.json",
+      "body_plan": "chimera_data.json",
+      "primary_locomotor_part": "chimera_data.json",
+      "covering": "chimera_data.json",
+      "movement": "chimera_data.json",
+      "active_time": "chimera_data.json",
+      "habitat": "chimera_data.json",
+      "climate": "chimera_data.json",
+      "diet": "chimera_data.json",
+      "body_mass_kg": "chimera_data.json",
+      "body_length_m": "chimera_data.json",
+      "breathing": "project default (evo_config.json function_defaults)",
+      "mouthparts": "project default (evo_config.json function_defaults)"
+     },
+     "citations": {},
+     "unverified_claims": []
+    }
+   },
+   "agent": {
+    "brain": "meta-models/muse-spark-open-1026",
+    "renders": 1,
+    "edits": 1,
+    "tool_calls": 10,
+    "stop": "finalized by the agent",
+    "candidate": "C2"
+   },
+   "final_choice": {
+    "shown_first": "agent",
+    "agree": true,
+    "agent_pick": {
+     "image_id": "img2",
+     "image_key": "evo/crt_b5948c4c441f.agent.img2.webp",
+     "rank": 1,
+     "of": 2,
+     "structural": 0,
+     "failures": 0,
+     "reason": "Image passes inspection with horse host and continuous pangolin scale covering correctly rendered"
+    },
+    "code_pick": {
+     "image_id": "img2",
+     "image_key": "evo/crt_b5948c4c441f.agent.img2.webp",
+     "rank": 1,
+     "of": 2,
+     "structural": 0,
+     "failures": 0,
+     "reason": "code ranks inspected images by fewest structural failures, then fewest failures, then the latest"
+    }
+   },
+   "anatomy_map": {
+    "parts": [
+     {
+      "part": "head",
+      "sam_label": "head",
+      "parent": "horse",
+      "parent_role": "host",
+      "parent_name": "horse",
+      "mask_area": 0.0432,
+      "found": true,
+      "status": "found",
+      "color": "#268bd2"
+     },
+     {
+      "part": "body",
+      "sam_label": "torso",
+      "parent": "horse",
+      "parent_role": "host",
+      "parent_name": "horse",
+      "mask_area": 0.0332,
+      "found": true,
+      "status": "found",
+      "color": "#268bd2"
+     },
+     {
+      "part": "legs",
+      "sam_label": "legs",
+      "parent": "horse",
+      "parent_role": "host",
+      "parent_name": "horse",
+      "mask_area": 0.097,
+      "found": true,
+      "status": "found",
+      "color": "#268bd2"
+     },
+     {
+      "part": "tail",
+      "sam_label": "tail",
+      "parent": "horse",
+      "parent_role": "host",
+      "parent_name": "horse",
+      "mask_area": 0.0156,
+      "found": true,
+      "status": "found",
+      "color": "#268bd2"
+     },
+     {
+      "part": "indian pangolin covering",
+      "sam_label": "large overlapping keratin scales",
+      "parent": "indian_pangolin",
+      "parent_role": "donor",
+      "parent_name": "indian pangolin",
+      "mask_area": 0.0,
+      "found": false,
+      "status": "not located",
+      "color": null
+     }
+    ],
+    "colors": {
+     "host": "#268bd2",
+     "donor": "#e66e28",
+     "blend": "#825ac8"
+    },
+    "present_fill": 0.002,
+    "found": 4,
+    "not_located": 1,
+    "image_size": [
+     1600,
+     1600
+    ],
+    "overlay_key": "evo/crt_b5948c4c441f.agent.img2.anatomy.png"
+   },
+   "providers": {
+    "by_call": {
+     "polish": [
+      "baseten:meta-models/muse-spark-open-1026"
+     ],
+     "checklist": [
+      "baseten:meta-models/muse-spark-open-1026"
+     ],
+     "critic": [
+      "baseten:meta-models/muse-spark-open-1026"
+     ]
+    },
+    "fallbacks": [],
+    "render": "meta:muse-image-1.0",
+    "segment": "meta:sam-3.1"
+   },
+   "remaining_failures": []
+  },
+  "plan": {
+   "id": "crt_b5948c4c441f",
+   "parents": {
+    "sire": "indian_pangolin",
+    "dam": "horse"
+   },
+   "lineage": {
+    "parent_ids": [],
+    "generation": 0
+   },
+   "mode": "chimera",
+   "known_pair": null,
+   "host": "horse",
+   "identity_balance": 0.822,
+   "habitat": {
+    "name": "grassland",
+    "source": "shared",
+    "adjustments": [
+     "dark back and light belly (strong countershading)"
+    ],
+    "visible_trait": "dark back and light belly (strong countershading)"
+   },
+   "size": {
+    "mass_kg": 563.5,
+    "flags": []
+   },
+   "silhouette": "four-legged horse frame",
+   "limb_plan": {
+    "forelimbs": {
+     "kind": "legs",
+     "donor": "horse"
+    },
+    "hindlimbs": {
+     "kind": "legs",
+     "donor": "horse"
+    },
+    "extra_wings": null,
+    "appendages": [],
+    "wing_use": "none",
+    "requested_wings": null
+   },
+   "traits": {
+    "size": {
+     "op": "PICK",
+     "donor": "horse",
+     "value": null,
+     "strength": null,
+     "region": null,
+     "part": null,
+     "note": "host value; donor parts scaled to host size",
+     "flags": []
+    },
+    "body": {
+     "op": "PICK",
+     "donor": "horse",
+     "value": null,
+     "strength": null,
+     "region": null,
+     "part": null,
+     "note": "host value; donor parts scaled to host size",
+     "flags": []
+    },
+    "limbs": {
+     "op": "PICK",
+     "donor": "horse",
+     "value": null,
+     "strength": null,
+     "region": null,
+     "part": null,
+     "note": null,
+     "flags": []
+    },
+    "tail": {
+     "op": "PICK",
+     "donor": "horse",
+     "value": null,
+     "strength": null,
+     "region": null,
+     "part": null,
+     "note": "host value; donor parts scaled to host size",
+     "flags": []
+    },
+    "ears": {
+     "op": "PICK",
+     "donor": "horse",
+     "value": null,
+     "strength": null,
+     "region": null,
+     "part": null,
+     "note": null,
+     "flags": []
+    },
+    "skull": {
+     "op": "PICK",
+     "donor": "horse",
+     "value": null,
+     "strength": null,
+     "region": null,
+     "part": null,
+     "note": null,
+     "flags": []
+    },
+    "head": {
+     "op": "PICK",
+     "donor": "horse",
+     "value": null,
+     "strength": null,
+     "region": null,
+     "part": null,
+     "note": null,
+     "flags": []
+    },
+    "face": {
+     "op": "PICK",
+     "donor": "horse",
+     "value": null,
+     "strength": null,
+     "region": null,
+     "part": null,
+     "note": null,
+     "flags": []
+    },
+    "mane": {
+     "op": "PICK",
+     "donor": "horse",
+     "value": null,
+     "strength": null,
+     "region": null,
+     "part": null,
+     "note": "present only if the host has one",
+     "flags": []
+    },
+    "feet": {
+     "op": "PICK",
+     "donor": "horse",
+     "value": null,
+     "strength": null,
+     "region": null,
+     "part": null,
+     "note": null,
+     "flags": []
+    },
+    "coat_pattern": {
+     "op": "PATCH",
+     "donor": "indian_pangolin",
+     "value": null,
+     "strength": 1.0,
+     "region": [
+      "head",
+      "neck",
+      "forequarters",
+      "back",
+      "flanks",
+      "hindquarters",
+      "legs",
+      "tail"
+     ],
+     "part": null,
+     "note": "indian pangolin-type surface, no stripes or spots in few large patches following the horse's body regions",
+     "flags": [
+      "layer (RC-R10-06)"
+     ]
+    },
+    "coat_color": {
+     "op": "PATCH",
+     "donor": "indian_pangolin",
+     "value": null,
+     "strength": 1.0,
+     "region": [
+      "head",
+      "neck",
+      "forequarters",
+      "back",
+      "flanks",
+      "hindquarters",
+      "legs",
+      "tail"
+     ],
+     "part": null,
+     "note": "indian pangolin color in few large patches following the horse's body regions",
+     "flags": [
+      "layer (RC-R10-06)"
+     ]
+    },
+    "coat_texture": {
+     "op": "PATCH",
+     "donor": "indian_pangolin",
+     "value": null,
+     "strength": 1.0,
+     "region": [
+      "head",
+      "neck",
+      "forequarters",
+      "back",
+      "flanks",
+      "hindquarters",
+      "legs",
+      "tail"
+     ],
+     "part": null,
+     "note": "indian pangolin scales in few large patches following the horse's body regions",
+     "flags": [
+      "layer (RC-R10-06)"
+     ]
+    },
+    "behavior": {
+     "op": "PICK",
+     "donor": "horse",
+     "value": null,
+     "strength": null,
+     "region": null,
+     "part": null,
+     "note": "follows the head donor",
+     "flags": []
+    }
+   },
+   "labels": [
+    "speculative chimera, no real-world precedent"
+   ],
+   "processes": [
+    "chimera patchwork: each region is one parent's tissue"
+   ],
+   "card_trace": [
+    "RC-R2-01",
+    "RC-R1-14",
+    "RC-R2-16",
+    "RC-R5-10",
+    "RC-R6-01",
+    "RC-R5-02",
+    "RC-R1-01",
+    "RC-R1-09",
+    "RC-R1-10",
+    "RC-R5-01",
+    "RC-R5-03",
+    "RC-R5-04",
+    "RC-R5-05",
+    "RC-R5-06",
+    "RC-R5-07",
+    "RC-R6-02",
+    "RC-R4-01",
+    "RC-R4-02",
+    "RC-R4-05",
+    "RC-R4-11",
+    "RC-R4-10",
+    "RC-R3-12",
+    "RC-R9-02",
+    "RC-R9-04",
+    "RC-R9-06",
+    "RC-R6-03",
+    "RC-R6-04",
+    "RC-R9-10",
+    "RC-R10-15",
+    "RC-R7-06",
+    "RC-R6-05",
+    "RC-R7-07",
+    "RC-R6-07",
+    "RC-R7-10"
+   ],
+   "checks": [
+    {
+     "step": "body_plan_class",
+     "result": "pass",
+     "detail": "host class: vertebrate (quadruped)",
+     "cards": []
+    },
+    {
+     "step": "limb_budget",
+     "result": "pass",
+     "detail": "4 limbs",
+     "cards": []
+    },
+    {
+     "step": "size_ceiling",
+     "result": "pass",
+     "detail": "within ceilings",
+     "cards": []
+    },
+    {
+     "step": "flight_anatomy",
+     "result": "pass",
+     "detail": "no wings",
+     "cards": []
+    },
+    {
+     "step": "posture",
+     "result": "pass",
+     "detail": "legs match the body size",
+     "cards": []
+    },
+    {
+     "step": "part_rendering",
+     "result": "pass",
+     "detail": "no soft parts",
+     "cards": []
+    }
+   ],
+   "scores": {
+    "critic": 1.0,
+    "silhouette": 0.783,
+    "thumbnail": 1.0,
+    "soft_penalty": 0.0,
+    "quality": 0.935
+   },
+   "seed": 0,
+   "design_mode": "realistic",
+   "audit": [
+    {
+     "function": "breathing",
+     "result": "pass",
+     "detail": "lungs suit a land habitat",
+     "cards": [],
+     "source": "code"
+    },
+    {
+     "function": "feeding",
+     "result": "pass",
+     "detail": "grinding teeth fit a herbivore diet",
+     "cards": [
+      "RC-R9-04"
+     ],
+     "source": "code"
+    },
+    {
+     "function": "support",
+     "result": "pass",
+     "detail": "legs match the body size",
+     "cards": [
+      "RC-R9-06"
+     ],
+     "source": "code"
+    },
+    {
+     "function": "movement",
+     "result": "pass",
+     "detail": "walks on four legs",
+     "cards": [],
+     "source": "code"
+    },
+    {
+     "function": "heat",
+     "result": "pass",
+     "detail": "warm grassland habitat: no heat adjustment needed",
+     "cards": [
+      "RC-R4-11"
+     ],
+     "source": "code"
+    },
+    {
+     "function": "senses",
+     "result": "pass",
+     "detail": "horse head and eyes kept fully visible",
+     "cards": [
+      "RC-R6-03",
+      "RC-R6-04"
+     ],
+     "source": "code"
+    }
+   ],
+   "licenses": [],
+   "render_details": [],
+   "transfers": [
+    {
+     "feature": "covering",
+     "donor": "indian_pangolin",
+     "kind": "covering",
+     "cls": "material",
+     "anchor": "the skin, as the host's own covering",
+     "extent": [
+      "head",
+      "neck",
+      "forequarters",
+      "back",
+      "flanks",
+      "hindquarters",
+      "legs",
+      "tail"
+     ],
+     "extent_reason": "as on the donor: overlapping scales cover the crown, back, flanks, outer limbs and tail, and the belly and face stay soft-skinned",
+     "scale": "each scale sized to the horse's own body segments and muscle masses, one scale per segment or muscle mass",
+     "connects": [],
+     "identity_cues": "",
+     "set_by": "code",
+     "plate_pattern": "many overlapping scales in rows (from 'overlapping keratin armour scales')",
+     "plate_source": "model-estimated",
+     "host_shell": "",
+     "form": "grown",
+     "form_reason": ""
+    }
+   ],
+   "identity_parts": []
+  }
+ },
+ "snapshot": {
+  "runId": "run_fx_success",
+  "status": "succeeded",
+  "position": null,
+  "sire": {
+   "commonName": "Indian pangolin",
+   "scientificName": "Manis crassicaudata",
+   "source": "name",
+   "confidence": null
+  },
+  "dam": {
+   "commonName": "horse",
+   "scientificName": "Equus caballus",
+   "source": "name",
+   "confidence": null
+  },
+  "mode": "realistic",
+  "createdAt": "2026-11-02T15:00:00Z",
+  "updatedAt": "2026-11-02T15:03:29Z",
+  "lastEventId": 16,
+  "creatureId": "crt_fx_b09",
+  "error": null,
+  "pendingChoice": null
+ }
+}
