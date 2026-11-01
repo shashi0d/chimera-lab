@@ -179,7 +179,7 @@ def test_e4_beetle_plan_replayed(e4_engine):
     assert [x.id for x in g.licenses] == ["arthropod_large"]
     p = compile_prompt(g, e4_engine.tax)
     assert "jointed tail" not in p and "in place of the forelegs" not in p and "two hind legs" not in p
-    assert "horn of hard, glossy chitin" in p and not silhouette_issues(g, e4_engine.tax)
+    assert "glossy dark cuticle" in p and not silhouette_issues(g, e4_engine.tax)  # S3b: identity cues
 
 
 # ------------------------------------------------------------------ c) grouped donor clause
@@ -192,7 +192,7 @@ def test_each_donor_is_named_once_in_one_grouped_clause(engine, sire, dam, mode)
     g, _ = _mode(engine, sire, dam, mode)
     donor = engine.tax.animals[g.other(g.host)].common_name.lower()
     p = compile_prompt(g, engine.tax)
-    details = p[p.index("Details:"):p.index(". Coat texture")]
+    details = p[p.index("Details:"):re.search(r"\. (Coat texture|The covering follows)", p).start()]  # S3b
     named = len(re.findall(rf"\b{re.escape(donor)}\b(?!-type)", details))
     assert named == 1, details
     assert details.count(f"from the {donor}, as parts and materials on the") == 1
@@ -202,7 +202,10 @@ async def test_donor_surfaces_are_materials_and_shapes(e4_engine):
     g, _ = _mode(e4_engine, "european_rhinoceros_beetle", "brown bear", "speculative")
     clause = donor_clause(g, e4_engine.tax)
     assert "chitin plates" in clause and "exoskeleton" not in clause and "beetle head horn" not in clause
-    assert match(e4_engine.tax.resolve("european_rhinoceros_beetle"), "head horn").shape in clause
+    # S3b (RC-R10-15): the horn is a non-homologous part: grown from its functional anchor out of the covering,
+    # described by its identity cues, not by the beetle's whole-part shape
+    assert "head horn grown from the frontal bone" in clause and "smooth, glossy dark cuticle" in clause
+    assert match(e4_engine.tax.resolve("european_rhinoceros_beetle"), "head horn").shape not in clause
 
 
 # ------------------------------------------------------------------ d) silhouette matches the limb plan

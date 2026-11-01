@@ -19,6 +19,7 @@ other parent once in one grouped clause of features. No habitat cue (D-056).
 from __future__ import annotations
 
 import re
+from typing import Any
 
 from app.evolution.audit import dropped_parts
 from app.evolution.data import PLAIN_COAT, Taxonomy, config, pattern_phrase
@@ -165,6 +166,50 @@ def license_clause(g: Genome) -> str:
     return "Declared fiction: " + "; ".join(f"{lic.rule}, shown with {lic.compensation}" for lic in g.licenses) + "."
 
 
+ZONE_WORDS = {"head": "crown of the head", "neck": "neck", "forequarters": "shoulders", "back": "back",
+              "flanks": "flanks", "belly": "belly", "hindquarters": "hips", "legs": "legs", "tail": "tail"}
+
+
+def _covering(g: Genome) -> Any:
+    return next((t for t in g.transfers if t.kind == "covering"), None)
+
+
+def _uncovered(g: Genome, cov: Any) -> list[str]:
+    """Host zones the covering leaves to the host (the face always stays the host's, so its senses stay visible)."""
+    return ["face"] + [ZONE_WORDS[z] for z in ZONE_WORDS if z not in cov.extent and z != "head"]
+
+
+def covering_clause(g: Genome, tax: Taxonomy, cov: Any) -> str:
+    """S3b default for a donor covering (RC-R10-12, 15, 16): the V2 replacement wording (the owner's best in S3a)
+    built from the transfer record: material, extent, host-scaled plates and joints, conforming to the host's body.
+    No donor-icon shape words (no elytra, shields or domes): the covering takes the host's shape."""
+    host = _name(tax, g.host)
+    cover = surface(tax.animals[g.host])
+    material = surface(tax.animals[cov.donor])
+    where = _join([ZONE_WORDS[z] for z in cov.extent])
+    kept = _join(_uncovered(g, cov))
+    verb = "keeps" if kept == "face" else "keep"
+    stops = "stop" if cover.split(" with ")[0].endswith("s") else "stops"
+    return (f"{material} in its own colors, grown from the skin as the {host}'s own covering over the {where}: it "
+            f"replaces the {host}'s {cover} there and conforms to the {host}'s body, {cov.scale}; the {cover} {stops} "
+            f"at the covering's edge, and the {kept} {verb} the {host}'s own {cover}")
+
+
+def part_phrase(g: Genome, tax: Taxonomy, t: Any, shape: str, place: str) -> str:
+    """S3b: a discrete part from its transfer record. Homologous: its shape where the host has the matching
+    structure, fitted to host size. Non-homologous: grown from its functional anchor, out of the donor covering
+    when they connect, described by its identity cues."""
+    host = _name(tax, g.host)
+    cov = _covering(g)
+    if t.cls == "homologous":
+        return f"{shape}{place}, fitted to the {host}'s size"
+    noun = t.feature if t.feature.endswith("s") else f"a {t.feature}"
+    grown = f"{noun} grown from {t.anchor}"
+    if cov is not None and cov.feature in t.connects:
+        grown += ", out of the covering, which continues from there into the body covering"
+    return f"{grown}: {t.identity_cues}" if t.identity_cues else grown
+
+
 def donor_clause(g: Genome, tax: Taxonomy) -> str | None:
     """S2 (E4c): everything the non-host parent gives, in one grouped clause that names it once. Parts are
     described as materials and shapes on the host's own body (class_parts.json), so the image model draws parts,
@@ -192,18 +237,30 @@ def donor_clause(g: Genome, tax: Taxonomy) -> str | None:
         bits.append({"powered": "wings sized for flight", "borderline": "large wings, flight looks effortful",
                      "gliding_or_display": "wings held for display or gliding, not powered flight",
                      "none": ""}[use])
+    tr_by = {x.feature: x for x in g.transfers if x.kind == "part"}
     for tag, tr in t.items():
         if tr.part and tr.donor == did:
             s = match(d, tr.part)
-            bits.append(f"{s.shape if s else tr.part} in place of the {tag}")
+            shape, xf = (s.shape if s else tr.part), tr_by.get(s.part if s else tr.part)
+            bits.append(part_phrase(g, tax, xf, shape, f" in place of the {tag}") if xf else f"{shape} in place of the {tag}")
     for app_ in lp.appendages:
         if app_.endswith(")") or app_ in dorsal_wings(g, tax) or part_owner(g, tax, app_) is not d:
             continue
         s = match(d, app_)
         shape = s.shape if s else app_[len(d.common_name) + 1:]
-        bits.append(f"{shape}, as small display frills" if s and "gill" in s.part else shape)
+        xf = tr_by.get(s.part if s else app_)
+        if s and "gill" in s.part:
+            bits.append(f"{shape}, as small display frills")
+        else:
+            bits.append(part_phrase(g, tax, xf, shape, "") if xf else shape)
     tex = t["coat_texture"]
-    if tex.op == "PATCH" and tex.donor == did:
+    cov = _covering(g)
+    if cov is not None and cov.donor == did and cov.extent:
+        bits.append(covering_clause(g, tax, cov))
+        pat = t["coat_pattern"]
+        if pat.op == "PATCH" and pat.donor == did and (ph := pattern_phrase(_name(tax, did), did)):
+            bits.append(f"{ph} on the covering")
+    elif tex.op == "PATCH" and tex.donor == did:
         bits.append(f"{surface(d)} in its own colors, in a few large patches over the {_regions(tex.region)}, with "
                     "clean edges, color and surface unchanged inside each patch")
         pat = t["coat_pattern"]
@@ -226,7 +283,11 @@ def host_clause(g: Genome, tax: Taxonomy) -> str:
     pat = g.traits["coat_pattern"]
     own = pattern_phrase(host, g.host)
     skin = surface(tax.animals[g.host]) if g.host else "coat"
-    if pat.op == "OVERLAY" and pat.donor == did and (ph := pattern_phrase(_name(tax, did), did)):
+    cov = _covering(g)
+    if cov is not None and cov.donor == did and cov.extent:  # S3b: the donor covering takes the rest
+        where = _join(_uncovered(g, cov))
+        coat = f"its own {skin} with {own} on the {where}" if own else f"its own {skin} on the {where}, {PLAIN_COAT}"
+    elif pat.op == "OVERLAY" and pat.donor == did and (ph := pattern_phrase(_name(tax, did), did)):
         pct = int(round((pat.strength or 0) * 100))
         coat = f"its own {skin} with a faint {ph} at about {pct} percent strength on the {_regions(pat.region)}"
     elif own:
@@ -382,7 +443,12 @@ def compile_hosted(g: Genome, tax: Taxonomy) -> str:
         details.append(group)
     details += code_details(g)
     lines.append("Details: " + "; ".join(details) + ".")
-    lines.append("Coat texture and patches follow the body outline.")
+    cov = _covering(g)
+    if cov is not None and cov.extent:
+        joints = "joint" in cov.scale
+        lines.append("The covering follows the body's own shape" + (" and bends at every joint." if joints else "."))
+    else:
+        lines.append("Coat texture and patches follow the body outline.")
     if g.licenses:
         lines.append(license_clause(g))
     lines.append("Bilaterally symmetrical, recognizable limbs, visible sense organs.")

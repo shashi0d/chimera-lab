@@ -37,7 +37,7 @@ async def test_beetle_bear_with_the_full_fix_pack(e4_engine):
     assert not tax.resolve("european_rhinoceros_beetle").winged
     # 1c: the donor is named once in one grouped clause, as materials and shapes
     p = doc["prompt_compiled"]
-    details = p[p.index("Details:"):p.index(". Coat texture")]
+    details = p[p.index("Details:"):re.search(r"\. (Coat texture|The covering follows)", p).start()]  # S3b
     assert len(re.findall(r"european rhinoceros beetle(?!-type)", details)) == 1
     assert "chitin plates" in details and "exoskeleton" not in details
     # 1d: the silhouette matches the limb plan

@@ -158,9 +158,9 @@ def scale_rule(g: Genome, tax: Taxonomy, donor: Animal, rule: dict[str, Any] | N
     host = _name(tax, g.host)
     if not rule or not rule.get("plates"):
         return f"sized to the {host}'s body and following its contours"
-    s = (f"each plate sized to the {host}: as large relative to the {host} as the {donor.common_name.lower()}'s are "
-         f"to the {donor.common_name.lower()}, laid over the {host}'s own body segments and muscle masses")
-    return s + (", joined by flexible bands at every joint" if rule.get("joints") else "")
+    unit = "scale" if "scale" in surface(donor) else "plate"
+    s = f"each {unit} sized to the {host}'s own body segments and muscle masses, one {unit} per segment or muscle mass"
+    return s + (", joined by flexible cuticle at every joint" if rule.get("joints") else "")  # "bands" reads as a pattern
 
 
 def derive(g: Genome, tax: Taxonomy, policy: str = "rules") -> list[Transfer]:
