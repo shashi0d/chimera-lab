@@ -50,7 +50,7 @@ export function ToolRail({ onAddFiles }: { onAddFiles: (files: File[]) => void }
       <IconButton variant="tool" icon="undo" label={t.undo} onClick={() => useGraph.getState().undo()} disabled={!canUndo} />
       <IconButton variant="tool" icon="redo" label={t.redo} onClick={() => useGraph.getState().redo()} disabled={!canRedo} />
       <span className="tool-rail__sep" aria-hidden="true" />
-      <IconButton variant="tool" icon="fit" label={t.fitView} onClick={() => void flow.fitView({ padding: 0.2, duration: 250 })} />
+      <IconButton variant="tool" icon="fit" label={t.fitView} onClick={() => void flow.fitView({ padding: 0.2, duration: 250, maxZoom: 1 })} />
       <IconButton variant="tool" icon="map" label={minimap ? t.minimapHide : t.minimapShow} pressed={minimap} onClick={toggleMinimap} />
     </nav>
   );

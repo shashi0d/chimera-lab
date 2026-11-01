@@ -1,5 +1,7 @@
 import { create } from "zustand";
+import { presentError } from "../../api/errorMessages";
 import { ApiRequestError, toAppError, type AppError } from "../../api/errors";
+import { toast } from "../../ui/toastStore";
 import { navigate } from "../../app/route";
 import { copy } from "../../copy";
 import { useLimits } from "../../evo/data";
@@ -92,6 +94,11 @@ function accepted(nodeId: string, res: RunAccepted): void {
 function handleError(nodeId: string, e: unknown): void {
   const err = toAppError(e);
   setError(nodeId, err);
+  // On a phone the canvas is zoomed out, so the node's error block is small: say it in a toast too.
+  if (typeof window !== "undefined" && window.matchMedia?.("(max-width: 1023px)").matches) {
+    const p = presentError(err);
+    toast.error(`${p.title}${p.fix ? ` ${p.fix}` : ""}`);
+  }
   const slot = (err.details as { slot?: Slot } | undefined)?.slot ?? null;
   if (err.code === "HUMAN_DETECTED") flagSlot(nodeId, slot, copy.nodes.imageInput.highlightHuman);
   else if (["NOT_AN_ANIMAL", "UNSUPPORTED_FILE", "FILE_TOO_LARGE", "IMAGE_CORRUPT"].includes(err.code)) flagSlot(nodeId, slot, copy.nodes.imageInput.highlight);

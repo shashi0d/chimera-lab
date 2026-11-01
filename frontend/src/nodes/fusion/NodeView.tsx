@@ -143,6 +143,8 @@ export function FusionView({ node, selected, issues }: NodeViewProps<FusionConfi
   const countdown = useCountdown(shownError, () => void startFusion(node.id));
   const traceOpen = route.view === "lab" && route.runId === runId;
   const disabledReason = blocking[0]?.message ?? (capped ? t.capped : null);
+  // The CAP_REACHED error already says it; don't repeat it as a hint.
+  const showHint = Boolean(disabledReason) && !(shownError?.code === "CAP_REACHED" && !blocking.length);
 
   const make = () => {
     useFusionStart.getState().clearError(node.id);
@@ -184,7 +186,7 @@ export function FusionView({ node, selected, issues }: NodeViewProps<FusionConfi
               icon="fusion"
               className="nodrag fusion-node__make"
               disabled={Boolean(disabledReason) || countdown !== null}
-              aria-describedby={disabledReason ? `${node.id}-hint` : undefined}
+              aria-describedby={showHint ? `${node.id}-hint` : undefined}
               onClick={make}
             >
               {label}
@@ -228,11 +230,11 @@ export function FusionView({ node, selected, issues }: NodeViewProps<FusionConfi
           <p className="node__note">
             <Icon name="info" size={14} /> {run?.status === "queued" && run.position ? copy.trace.queuedLine(run.position) : copy.trace.duration}
           </p>
-        ) : disabledReason ? (
+        ) : showHint ? (
           <p id={`${node.id}-hint`} className="node__hint">
             <Icon name="info" size={14} /> {disabledReason}
           </p>
-        ) : (
+        ) : disabledReason ? null : (
           <p className="node__hint node__hint--quiet">{copy.trace.duration}</p>
         )}
         {connectivity !== "online" && active ? (

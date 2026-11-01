@@ -161,6 +161,7 @@ export const copy = {
       waiting: "The creature appears here when the agent finishes.",
       noImageYet: "No creature this time. The trace explains what happened.",
       openCard: "Open creature card",
+      latest: (id: string) => `Latest attempt · ${id} · Generated fusion`,
     },
   },
   status: {

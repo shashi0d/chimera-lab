@@ -83,6 +83,7 @@ export function ResultView({ node, selected }: NodeViewProps<ResultConfig, Resul
   const creature = useCreature(version?.creatureId);
   const name = version?.title || t.untitledTitle;
   const failed = run && (run.status === "failed" || run.status === "interrupted");
+  const latest = run?.images[run.images.length - 1];
 
   let status: NodeStatus | undefined;
   if (active) status = { tone: "running", label: t.generating.replace("…", "") };
@@ -99,6 +100,14 @@ export function ResultView({ node, selected }: NodeViewProps<ResultConfig, Resul
         </div>
       ) : null}
     </div>
+  ) : active && latest ? (
+    // While the agent works, its latest attempt stands in for the hero, clearly marked as work in progress.
+    <figure className="plate plate--wip">
+      <div className="plate__frame">
+        <img className="plate__img is-loaded" src={evo().imageUrl(latest.url)} alt={copy.trace.imageAlt(latest.imageId)} draggable={false} />
+      </div>
+      <figcaption className="plate__overlay-label plate__wip-label">{t.latest(latest.imageId)}</figcaption>
+    </figure>
   ) : active ? (
     <div className="plate plate--skeleton" aria-label={t.generating}>
       <span className="skeleton skeleton--fill" />

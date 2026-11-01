@@ -38,8 +38,17 @@ export const errorMessages: Record<ErrorCode, ErrorPresentation> = {
   UNKNOWN: { title: "Something unexpected happened.", retry: true },
 };
 
+/** "00:00 UTC" from an ISO time. */
+function utc(iso: unknown): string | null {
+  if (typeof iso !== "string" || Number.isNaN(Date.parse(iso))) return null;
+  const d = new Date(iso);
+  return `${String(d.getUTCHours()).padStart(2, "0")}:${String(d.getUTCMinutes()).padStart(2, "0")} UTC`;
+}
+
 export function presentError(err: AppError): ErrorPresentation & { errorId?: string } {
-  const p = errorMessages[err.code] ?? errorMessages.UNKNOWN;
+  let p = errorMessages[err.code] ?? errorMessages.UNKNOWN;
+  const at = err.code === "CAP_REACHED" ? utc((err.details as { resetsAt?: unknown } | undefined)?.resetsAt) : null;
+  if (at) p = { ...p, fix: `The gallery is still open; new runs open again at ${at}.` };
   const errorId = err.code === "INTERNAL" || err.code === "UNKNOWN" ? err.errorId ?? undefined : undefined;
   return { ...p, retry: p.retry && err.retryable !== false, errorId };
 }

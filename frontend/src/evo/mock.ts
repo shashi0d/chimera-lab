@@ -318,7 +318,8 @@ export const mockTransport: EvoTransport = {
     const f = fx(run.fixture);
     const body = f.response!.body as unknown as RunAccepted;
     const events = releasedEvents(runId, run);
-    const { status, position } = statusOf(events);
+    // Before its first event a run is as the POST described it (e.g. queued at position 2).
+    const { status, position } = events.length ? statusOf(events) : { status: body.status as RunStatus, position: body.position };
     const fin = events.find((e) => e.type === "finalize");
     const err = events.find((e) => e.type === "error");
     const resolved = new Set(events.filter((e) => e.type === "choice_resolved").map((e) => (e as { choiceId: string }).choiceId));

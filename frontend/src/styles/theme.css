@@ -1492,6 +1492,8 @@ p.image-node__banner { display: flex; align-items: flex-start; gap: var(--space-
 /* Nothing generated yet: a short well, not a 500px empty square. */
 .plate--empty { aspect-ratio: auto; min-height: 220px; background: var(--well); }
 .plate--empty.is-muted .icon { opacity: .6; }
+.plate--wip { position: relative; }
+.plate__wip-label { position: absolute; left: var(--space-5); bottom: var(--space-5); }
 .plate__overlay { position: absolute; inset: 0; display: grid; place-items: center; }
 .plate__overlay-label {
   position: relative;
@@ -1811,10 +1813,9 @@ p.image-node__banner { display: flex; align-items: flex-start; gap: var(--space-
 .identify__option { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 2px var(--space-4); min-height: 48px; padding: var(--space-4) var(--space-5); border: 1px solid var(--line-input-strong); border-radius: var(--radius-md); background: var(--surface-card); cursor: pointer; }
 .identify__option.is-checked { border-color: var(--accent); box-shadow: var(--focus-ring); }
 .identify__option input { grid-row: span 2; width: 18px; height: 18px; margin: 0; accent-color: var(--indigo-600); }
-.identify__name { font: var(--type-body); font-weight: 600; color: var(--text-strong); text-transform: capitalize; }
+.identify__name { font: var(--type-body); font-weight: 600; color: var(--text-strong); }
 .identify__sci { grid-column: 2; font: var(--type-caption); color: var(--text-body); }
 .identify__conf { grid-column: 3; grid-row: 1 / span 2; font: var(--type-meta); color: var(--text-body); }
-.identify__option--other .identify__name { text-transform: none; }
 .identify__other { display: grid; gap: var(--space-2); margin-top: var(--space-5); }
 .identify__note { margin-top: var(--space-6); font: var(--type-caption); color: var(--text-muted); }
 .identify .modal__actions { gap: var(--space-4); }
