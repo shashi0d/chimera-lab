@@ -228,3 +228,69 @@ async def test_anatomy_map_parts_follow_the_plan(eng):
     h = await eng.plan_session("donkey", "horse", "realistic")
     hp = {p["part"]: p["parent"] for p in planned_parts(h.plan, eng.tax)}
     assert hp["head"] == "donkey" and hp["body"] == "horse" and hp["tail"] == "blend"
+
+
+# ------------------------------------------------------------------ part 3: the fixed benchmark and its scores
+
+
+FROZEN = "c36c202e5402ffa7c295153d8e1378a1c6d8072054a097ec7cbcb9433e42559f"
+
+
+def test_the_benchmark_has_the_11_cases_and_never_changes():
+    import hashlib
+
+    from app.evolution.benchmark import BENCHMARK, cases
+
+    data = json.loads(BENCHMARK.read_text(encoding="utf-8"))
+    assert hashlib.sha256(json.dumps(data, sort_keys=True).encode()).hexdigest() == FROZEN
+    assert [(c["sire"], c["dam"], c["mode"]) for c in cases()] == [
+        ("axolotl", "Chinese pangolin", "realistic"), ("rhinoceros beetle", "brown bear", "speculative"),
+        ("lion", "golden eagle", "mythic"), ("lion", "golden eagle", "realistic"), ("donkey", "horse", "realistic"),
+        ("common octopus", "horse", "realistic"), ("emperor penguin", "cheetah", "realistic"),
+        ("red fox", "barn owl", "speculative"), ("Indian pangolin", "horse", "realistic"),
+        ("tortoise", "domestic goat", "realistic"), ("crab", "gray wolf", "speculative")]
+    assert data["caps"] == {"max_renders": 4, "max_tool_calls": 30, "max_edits": 6}
+
+
+def test_names_parent_matches_the_name_or_its_last_word_only():
+    from app.evolution.benchmark import names_parent
+
+    assert names_parent("Chinese pangolin", ["pangolin", "axolotl"])
+    assert names_parent("red fox", ["Foxes"]) and names_parent("barn owl", "a barn owl")
+    assert not names_parent("horse", ["seahorse", "zebra"]) and not names_parent("barn owl", ["bird"])
+    assert not names_parent("gray wolf", None)
+
+
+def _save(folder: Path, inspect: dict[str, Any], **meta: Any) -> None:
+    folder.mkdir(parents=True)
+    (folder / "inspect_final.json").write_text(json.dumps(inspect), encoding="utf-8")
+    (folder / "meta.json").write_text(json.dumps(meta), encoding="utf-8")
+
+
+def test_scores_are_computed_from_the_saved_results(tmp_path, monkeypatch):
+    from app.evolution import benchmark as B
+
+    monkeypatch.setattr(B, "cases", lambda: [{"id": "b11", "sire": "crab", "dam": "gray wolf", "mode": "speculative"}])
+    rows = [{"key": "on_top", "group": "integration", "status": "fail"},
+            {"key": "abrupt_stop", "group": "coverage", "status": "fail"},
+            {"key": "third_animal", "group": "structure", "status": "uncertain"},
+            {"key": "identity_claws", "group": "identity", "status": "fail"}]
+    descs = {"meta_spark": {"animals": ["wolf", "lobster"]}, "spark_open": {"animals": ["crab", "wolf"]}}
+    _save(tmp_path / "b11" / "agent", {"failures": rows, "items": rows + [
+        {"key": "origin_claws", "group": "identity", "status": "fail", "expect": "crab", "answers": {"meta_spark": "lobster"}}],
+        "descriptions": descs}, case="b11", kind="agent", wall_seconds=300, renders=3, edits=1, tool_calls=21,
+        calls_by_provider={"baseten": {"evo_agent": 20, "evo_ask": 4}, "meta": {"text_to_image": 4}})
+    _save(tmp_path / "b11" / "fixed", {"failures": [], "items": [], "descriptions": {
+        "meta_spark": {"animals": ["gray wolf", "crab"]}}}, case="b11", kind="fixed", wall_seconds=100, renders=1,
+        edits=0, tool_calls=None, calls_by_provider={"baseten": {"evo_ask": 2}, "meta": {"text_to_image": 1}})
+    out = B.score_all(tmp_path)
+    a, f = out["cases"]["b11"]["agent"], out["cases"]["b11"]["fixed"]
+    assert a["full_match"] is False and a["failures"] == {"total": 4, "structure": 1, "identity": 1, "integration": 2}
+    assert a["identity"]["sire"]["named"] is False and a["identity"]["sire"]["named_by_spark_open"] is True
+    assert a["identity"]["dam"]["named"] is True and a["both_parents_named"] is False
+    assert a["donor_part_origin"][0]["answers"] == {"meta_spark": "lobster"}
+    assert a["calls_by_provider"] == {"baseten": 24, "meta": 4} and a["calls_total"] == 28
+    assert f["full_match"] and f["both_parents_named"]
+    t = out["totals"]
+    assert (t["agent"]["full_matches"], t["fixed"]["full_matches"]) == (0, 1)
+    assert t["agent"]["avg_tool_calls"] == 21 and t["fixed"]["avg_tool_calls"] is None
