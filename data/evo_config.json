@@ -21,7 +21,10 @@
       "Reptilia",
       "Amphibia",
       "Actinopterygii",
-      "Elasmobranchii"
+      "Elasmobranchii",
+      "Testudines",
+      "Squamata",
+      "Crocodylia"
     ],
     "arthropod": [
       "Insecta",
@@ -296,8 +299,10 @@
       "id": "arthropod_large",
       "card": "RC-R3-09",
       "rule": "arthropod parts at large size",
-      "compensation": "thick supporting legs and visible breathing openings along the flanks",
-      "repairable": false
+      "compensation": "thick supporting legs",
+      "compensation_from_traits": "breathing",
+      "repairable": false,
+      "note": "S3c: the respiratory clause comes from the donor's own breathing trait (visible_breathing), never from its phylum. A crab breathes with gills under its carapace, so it shows no flank openings."
     },
     {
       "id": "insect_wings",
@@ -336,6 +341,16 @@
       "repairable": false
     }
   ],
+  "visible_breathing_about": "S3c: what a donor's breathing organ shows on the outside, by its resolved breathing trait. null: nothing visible to draw (gills inside a gill chamber, book lungs under the abdomen, lungs). A value is added to a license compensation only when the donor's own trait names that organ. Source: the donor's breathing provenance (web-cited, model-estimated or project default), recorded on the license.",
+  "visible_breathing": {
+    "tracheae": "rows of small breathing openings (spiracles) along the flanks",
+    "gills": null,
+    "book lungs": null,
+    "lungs": null,
+    "skin and lungs": null,
+    "external gills and lungs": null,
+    "other": null
+  },
   "never_licensable": {
     "honesty": [
       "RC-R1-14",

@@ -413,3 +413,7 @@ Read `docs/evolution/ROADMAP.md` (now committed) sections 4, 5 and 5b. Caps for 
 - **Part 7:** `test_s3b_traits.py` (30 tests). Suite 900 passed, 6 skipped; ruff clean.
 - **Part 8:** `docs/evolution/S3b_TRAITS.md` (no review page, per the task).
 - **Budget counter over S3b:** image 58→84, Meta Spark 284→483, Spark Open 244→507, SAM 45→80.
+
+## S3c: agent core, plus plan fixes from the S3b images (evo)
+
+- **Part 1:** plan fixes (D-084 to D-088). `identity.py` (one identity part per donor from its own traits), `set_identity_part`, the trait-based license compensation, plate patterns and the turtle-shell rule in `transfer.py`, the host tie as `needs_choice`, RC-R10-17 (126 cards), and the D3 gold-set relabel. `scripts/s3c_preview.py` prints a pair's plan and prompt with no calls. Suite 900 passed, 6 skipped (19 tie tests now name the host).

@@ -154,13 +154,49 @@ def cue_for(f: Feature, donor: Animal) -> str:
     return s.strip().rstrip(",")
 
 
+def _word_match(pattern: str, text: str) -> bool:
+    return re.search(rf"\b(?:{pattern})", text, re.I) is not None
+
+
+def plate_pattern(donor: Animal) -> tuple[dict[str, Any] | None, str, str]:
+    """S3c: the donor's own plate layout, (pattern spec, the donor's words it came from, source). The first visible
+    feature of the donor that names a layout wins (a beetle's "glossy wing cases": a few large fused plates; a crab's
+    "oval carapace": one carapace shield; a pangolin's "overlapping scales in 18 rows"). Banded rings only when the
+    donor's own features say bands or rings. With no match, the class default, marked model-estimated."""
+    pats = rules().get("plate_patterns") or []
+    for feat in donor.features:
+        for p in pats:
+            if _word_match(p["match"], feat):
+                return p, feat, donor.source_of("visible_features", "features")
+    defaults = rules().get("plate_defaults") or {}
+    pid = defaults.get(f"{donor.tax_class}:{donor.covering}") or defaults.get(donor.covering or "")
+    p = next((x for x in pats if x["id"] == pid), None)
+    return p, "", ("model-estimated (transfer_rules.json class default; the donor's own features name no plate layout)"
+                   if p else "")
+
+
 def scale_rule(g: Genome, tax: Taxonomy, donor: Animal, rule: dict[str, Any] | None) -> str:
     host = _name(tax, g.host)
     if not rule or not rule.get("plates"):
         return f"sized to the {host}'s body and following its contours"
     unit = "scale" if "scale" in surface(donor) else "plate"
-    s = f"each {unit} sized to the {host}'s own body segments and muscle masses, one {unit} per segment or muscle mass"
+    pat, _feat, _src = plate_pattern(donor)
+    if pat is None:
+        s = f"each {unit} sized to the {host}'s own body segments and muscle masses, one {unit} per segment or muscle mass"
+    else:
+        det = [f for f in donor.features if _word_match(rules().get("plate_detail_match", "edge"), f)
+               and not _word_match(pat["match"], f)]
+        detail = f", its edge like the donor's {det[0]}" if det and "{detail}" in pat["wording"] else ""
+        s = pat["wording"].format(host=host, unit=unit, detail=detail)
     return s + (", joined by flexible cuticle at every joint" if rule.get("joints") else "")  # "bands" reads as a pattern
+
+
+def shell_host(host: Animal) -> dict[str, Any] | None:
+    """S3c (RC-R10-17): a turtle or tortoise host: its shell is skeleton, not a skin covering."""
+    spec = rules().get("shell_hosts") or {}
+    if host.covering in spec.get("coverings", []) and host.tax_class in spec.get("classes", []):
+        return spec
+    return None
 
 
 def derive(g: Genome, tax: Taxonomy, policy: str = "rules") -> list[Transfer]:
@@ -179,13 +215,33 @@ def derive(g: Genome, tax: Taxonomy, policy: str = "rules") -> list[Transfer]:
             zones, reason = ((list(rule["zones"]), rule["reason"]) if rule else
                              (regions, "plan regions" + (" (as rendered)" if policy == "regions" else
                                                          ": the donor covering is a surface patch, not a body system")))
+            pat, feat, psrc = plate_pattern(donor)
+            shell, shell_note = shell_host(host), ""
+            if shell and policy == "rules":  # RC-R10-17: only the skin zones take the donor covering
+                skin = [z for z in zones if z in shell["skin_zones"]]
+                zones = skin or list(shell["skin_zones"])
+                reason = f"{reason}; {shell['reason']}"
+                shell_note = (f"the {host.common_name.lower()}'s shell keeps its own form and bony plates, with only "
+                              f"its color taken from the {donor.common_name.lower()}")
             out.append(Transfer(feature=COVERING, donor=f.donor, kind="covering", cls="material",
                                 anchor=anchor_for(f), extent=zones, extent_reason=reason,
-                                scale=scale_rule(g, tax, donor, rule or covering_rule(donor))))
+                                scale=scale_rule(g, tax, donor, rule or covering_rule(donor)),
+                                plate_pattern=(pat or {}).get("pattern", "") + (f" (from {feat!r})" if feat and pat else ""),
+                                plate_source=psrc if pat else "", host_shell=shell_note))
         else:
             out.append(Transfer(feature=f.feature, donor=f.donor, kind="part", cls=cls, anchor=anchor_for(f),
-                                identity_cues=cue_for(f, donor)))
+                                identity_cues=identity_cue(g, f, donor)))
     return connect(out, policy)
+
+
+def identity_cue(g: Genome, f: Feature, donor: Animal) -> str:
+    """The part's cues; for the declared identity part (S3c, D4), the donor's own words for it are added."""
+    cue = cue_for(f, donor)
+    ip = next((p for p in g.identity_parts if p.donor == donor.id and p.part == f.feature), None)
+    if ip and ip.feature and ip.feature.lower() not in cue.lower() and not NEGATION.search(ip.feature):
+        both = f"{cue}; {ip.feature}" if cue else ip.feature
+        cue = both if len(both) <= MAX_CUES else cue
+    return cue
 
 
 HEAD_SLOTS = {"head horn", "horns", "head horns", "antlers", "antennae", "crest", "casque", "stalked eyes",
@@ -284,6 +340,11 @@ def apply_edit(ts: list[Transfer], edit: dict[str, Any], g: Genome, tax: Taxonom
         if len(reason) < 12:
             raise TransferError("missing_reason", "an extent needs a functional reason (one short sentence)",
                                 "reason", hint="for example: the legs stay furred for warmth in a cold habitat")
+        shell = shell_host(host) if host is not None else None
+        if shell and (off := [z for z in zones if z not in shell["skin_zones"]]):
+            raise TransferError("shell_is_skeleton", f"the {host.common_name}'s shell is skeleton, not a skin covering "
+                                f"(RC-R10-17): {off} cannot take a donor covering", "extent",
+                                valid=list(shell["skin_zones"]))
         rule = covering_rule(tax.animals[t.donor]) or {}
         if rule.get("joints") and "legs" not in zones and "leg" not in reason.lower():
             raise TransferError("unexplained_gap", "an exoskeleton covers the limbs unless a stated functional reason "

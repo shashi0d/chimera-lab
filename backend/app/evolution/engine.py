@@ -32,13 +32,14 @@ from app.evolution.growth import drift as growth_drift
 from app.evolution.growth import has_covering, host_first, planned_counts
 from app.evolution.growth import instruction as growth_instruction
 from app.evolution.habitat import apply_habitat, choose_habitat, clear_habitat
+from app.evolution.identity import apply as apply_identity
 from app.evolution.inspect import Item, edit_instruction, inspect, inspect_checklist, plan_items
 from app.evolution.judge import judge
 from app.evolution.parts import fix_parts, normalize_appendages
 from app.evolution.physics import run_checks
 from app.evolution.prompt import PROMPT_CARDS, accept_polish, compile_prompt
 from app.evolution.resolve import LearnedStore, Resolution, Resolver
-from app.evolution.route import Route, choose_host, is_real_hybrid, route, silhouette, silhouette_issues
+from app.evolution.route import Route, choose_host, host_tie, is_real_hybrid, route, silhouette, silhouette_issues
 from app.evolution.routing import summarize
 from app.evolution.traits import build_traits, contribution, gate
 from app.evolution.transfer import build as build_transfers
@@ -174,14 +175,17 @@ class EvoEngine:
         return g, r
 
     def finish(self, g: Genome, r: Route, license_requests: list[tuple[str, str]] | None = None,
-               transfer_edits: list[dict[str, Any]] | None = None) -> Genome:
+               transfer_edits: list[dict[str, Any]] | None = None,
+               identity_picks: dict[str, tuple[str, str]] | None = None) -> Genome:
         """4.4 habitat and 4.5 physical checks, then derived fields. Idempotent. `license_requests` (S2): an
-        agent's add_license calls, granted first within the budget."""
+        agent's add_license calls, granted first within the budget. `identity_picks` (S3c): an agent's
+        set_identity_part calls, {donor id: (part, reason)}."""
         g = g.model_copy(deep=True)
         g.render_details = []  # S2: rebuilt by the code steps below; model text never enters it
         locked = bool(r.pair and r.pair.get("locked"))
         normalize_appendages(g, self.tax)  # S3b: a model plan may prefix a part with the parent's id
         g.checks += fix_parts(g, self.tax)  # S2 (E4c): a model plan's parts are checked against the class too
+        id_cards = apply_identity(g, self.tax, identity_picks)  # S3c (D4): one identity part per donor
         gate_cards = gate(g.traits, r, g.host, self.tax)  # E2b: a model plan cannot undo GATE (e.g. a mane on feathers)
         real = is_real_hybrid(r)
         hab_cards = clear_habitat(g) if real else apply_habitat(g, self.tax, locked)  # E2c, D-056
@@ -198,7 +202,8 @@ class EvoEngine:
         g.labels = _dedupe([*r.labels, *g.labels])
         tcards = (["RC-R10-15"] if g.transfers else []) + (
             ["RC-R10-16"] if any("RC-R10-16" in t.extent_reason for t in g.transfers) else [])
-        g.card_trace = _dedupe(g.card_trace + gate_cards + hab_cards + phys_cards + audit_cards + tcards
+        tcards += ["RC-R10-17"] if any(t.host_shell for t in g.transfers) else []
+        g.card_trace = _dedupe(g.card_trace + id_cards + gate_cards + hab_cards + phys_cards + audit_cards + tcards
                                + [c for c in PROMPT_CARDS if not (real and c == "RC-R4-11")])
         assert g.limb_plan.requested_wings is None, "limb budget left a wing request unresolved (RC-R3-01)"
         g.id = plan_id(g)
@@ -409,6 +414,12 @@ class EvoEngine:
             return {**doc, "cached": True, "cache_key": key, "meta_calls": self.meter.since(before)}
 
         skeleton, r = self.seed_plan(sire, dam, myth, host, habitat, seed, design)
+        if host not in ("sire", "dam") and (tie := host_tie(r)):  # S3c (D2): a structural tie is a choice, not a rule
+            raise ChimeraError(ErrorCode.VALIDATION_FAILED, "needs_choice: the parents tie on body structure, so the "
+                               "host must be chosen (pass host='sire' or host='dam', or use the agent).",
+                               details={"needs_choice": "host", "options": [
+                                   {"slot": slot, "animal": self.tax.animals[i].common_name}
+                                   for slot, i in zip(("sire", "dam"), tie)], "card": "RC-R10-01"})
         model_note = "accepted"
         try:
             raw = await self.meter.call("spark", "first_plan", self.spark.write_plan(

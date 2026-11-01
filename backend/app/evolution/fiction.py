@@ -44,6 +44,54 @@ def make_license(need_id: str, reason: str, compensation: str | None = None) -> 
                    compensation=(compensation or spec["compensation"]).strip(), reason=reason)
 
 
+RESPIRATORY_WORDS = ("breathing opening", "spiracle", "gill slit", "gill opening", "breathing hole", "air hole")
+
+
+def _arthropod_donor(g: Genome, tax: Taxonomy) -> Any:
+    """The parent whose arthropod parts the license covers: the non-host arthropod parent (or either one)."""
+    ids = [p for p in (g.parents.sire, g.parents.dam) if tax.animals[p].group == "arthropod"]
+    non_host = [p for p in ids if p != g.host]
+    pick = (non_host or ids or [None])[0]
+    return tax.animals[pick] if pick else None
+
+
+def visible_breathing(donor: Any) -> str | None:
+    """S3c: the outside sign of the donor's own breathing organ (evo_config visible_breathing), or None."""
+    return (config().get("visible_breathing") or {}).get((donor.breathing or "").strip().lower()) if donor else None
+
+
+def trait_compensation(need_id: str, g: Genome, tax: Taxonomy) -> tuple[str, str]:
+    """S3c: (compensation, where its clauses came from). A license's compensation is built from the donor's own
+    resolved traits, never from its phylum: the respiratory clause is added only when the donor's breathing trait
+    has an outside sign (tracheae: spiracles; a crab's gills sit under the carapace, so nothing)."""
+    spec = bendable()[need_id]
+    base = spec["compensation"]
+    if spec.get("compensation_from_traits") != "breathing":
+        return base, "evo_config.json bendable"
+    donor = _arthropod_donor(g, tax)
+    if donor is None:
+        return base, "evo_config.json bendable (no arthropod donor)"
+    src = donor.source_of("breathing")
+    clause = visible_breathing(donor)
+    name = donor.common_name.lower()
+    if clause:
+        return f"{base} and {clause}", f"respiratory clause from the {name}'s breathing ({donor.breathing}; {src})"
+    return base, (f"no respiratory clause: the {name} breathes with {donor.breathing or 'an unrecorded organ'} "
+                  f"({src}), which shows nothing on the outside")
+
+
+def respiratory_claim_error(text: str, g: Genome, tax: Taxonomy) -> str | None:
+    """S3c: an agent's compensation may name a visible breathing organ only if the donor's own trait has one."""
+    low = (text or "").lower()
+    if not any(w in low for w in RESPIRATORY_WORDS):
+        return None
+    donor = _arthropod_donor(g, tax) or (tax.animals[g.other(g.host)] if g.host else None)
+    if donor is not None and visible_breathing(donor):
+        return None
+    what = f"{donor.common_name} breathes with {donor.breathing or 'an unrecorded organ'}" if donor else "no donor"
+    return f"the compensation names a visible breathing opening, but the {what} ({donor.source_of('breathing') if donor else ''})"
+
+
 def check_licensable(card: str) -> bool:
     return card not in never_licensable() and any(b["card"] == card for b in bendable().values())
 
@@ -103,7 +151,9 @@ def settle(g: Genome, needs: list[Need], tax: Taxonomy, requests: list[tuple[str
     for n, need in enumerate(ranked):
         card = spec[need.id]["card"]
         if n < allowed:
-            lic = make_license(need.id, need.detail, asked.get(need.id))
+            comp, why = (asked[need.id], "the agent's wording") if asked.get(need.id) else trait_compensation(
+                need.id, g, tax)
+            lic = make_license(need.id, f"{need.detail}; compensation: {why}", comp)
             g.licenses.append(lic)
             _compensate(g, lic, locked)
             _set_audit(g, need.function, "licensed", f"licensed: {lic.rule}, shown with {lic.compensation}",

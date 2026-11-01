@@ -141,7 +141,7 @@ def _size(image: bytes) -> int:
 @pytest.mark.parametrize("sire,dam,name", [("donkey", "horse", "mule"), ("lion", "tiger", "liger")])
 async def test_real_hybrid_uses_the_checklist_for_full_image_and_thumbnail(engine, sire, dam, name):
     seen = _spy(engine)
-    doc = await engine.fuse(sire_name=sire, dam_name=dam)
+    doc = await engine.fuse(sire_name=sire, dam_name=dam, host="sire" if (sire, dam) == ("lion", "eagle") else None)  # S3c (D2)
     assert len(seen["critic"]) == 1 and seen["critic"][0] > THUMB_PX  # E4: open critic logged, full image only
     (full, items), (thumb, items2) = seen["checklist"][:2]
     assert full > THUMB_PX and thumb == THUMB_PX
@@ -160,7 +160,7 @@ async def test_other_routes_use_a_generated_checklist(engine, sire, dam):
     # E4 supersedes E2d item 4: every route now gets a checklist (generated from the plan); the open
     # critic runs once as a logged second opinion and is not scored.
     seen = _spy(engine)
-    doc = await engine.fuse(sire_name=sire, dam_name=dam)
+    doc = await engine.fuse(sire_name=sire, dam_name=dam, host="sire" if (sire, dam) == ("lion", "eagle") else None)  # S3c (D2)
     assert len(seen["checklist"]) == 2 and len(seen["critic"]) == 1
     j = doc["judge"]
     assert j["critic_mode"] == "checklist" and j["checklist_source"] == "generated from the plan"

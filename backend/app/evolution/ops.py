@@ -17,6 +17,10 @@ S3b adds four transfer operations (RC-R10-15, RC-R10-16; transfer.py validates t
     connect_features(a, b)               two features of one donor system grow from each other
     set_identity_cues(feature, cues)     the positive form description that makes a part the donor's
 
+S3c adds (owner decision D4):
+
+    set_identity_part(donor, part, reason)  the donor's one identity part, among its own diagnostic parts
+
 A session stores the accepted operations as intents and rebuilds the plan from the code skeleton on every call
 (seed_plan, the intents, then finish), so code always fills card_trace, labels, checks, audit, licenses,
 render_details and the silhouette. An operation that fails validation, or whose result breaks a hard card, is
@@ -32,12 +36,12 @@ from typing import Any
 from app.errors import ChimeraError
 from app.evolution.audit import DROPPED, _drop, donor_parts
 from app.evolution.data import Animal, config, norm
-from app.evolution.fiction import bendable, budget, never_licensable
+from app.evolution.fiction import bendable, budget, never_licensable, respiratory_claim_error
 from app.evolution.genome import DESIGN_MODES, SURFACE_TAGS, Genome, LimbSlot, Trait
 from app.evolution.judge import generated_checklist
 from app.evolution.parts import best_part, dorsal_wings, flies_with_wings, specs
 from app.evolution.prompt import has_franchise
-from app.evolution.route import Route, is_real_hybrid
+from app.evolution.route import Route, host_tie, is_real_hybrid
 from app.evolution.transfer import TransferError
 from app.models.schemas import ErrorCode
 
@@ -45,8 +49,8 @@ SURFACE_REGIONS = ("neck", "forequarters", "back", "flanks", "belly", "hindquart
 REGION_OPERATORS = {"head": ("PICK",), "tail": ("PICK",), "forelimbs": ("PICK",),
                     **{r: ("PATCH", "OVERLAY", "PICK") for r in SURFACE_REGIONS}}
 OPS = ("set_host", "set_region", "set_habitat", "set_mode", "add_license", "drop_part", "set_transfer_class",
-       "set_extent", "connect_features", "set_identity_cues")
-TRANSFER_OPS = OPS[6:]
+       "set_extent", "connect_features", "set_identity_cues", "set_identity_part")
+TRANSFER_OPS = OPS[6:10]
 MAX_COMPENSATION = 240
 
 
@@ -93,8 +97,10 @@ class PlanSession:
         self.licenses: list[tuple[str, str]] = []  # add_license intents (bendable id, compensation)
         self.drops: list[dict[str, str]] = []  # drop_part intents
         self.transfer_edits: list[dict[str, Any]] = []  # S3b transfer intents, re-applied on every build
+        self.identity_picks: dict[str, tuple[str, str]] = {}  # S3c (D4): donor id -> (part, reason)
         self.log: list[dict[str, Any]] = []
         self.plan, self.route = self._build()
+        self.tie: list[str] = host_tie(self.route)  # S3c (D2): a structural tie; the host must be chosen
 
     # ------------------------------------------------------------------ public
 
@@ -132,6 +138,9 @@ class PlanSession:
         surf = g.traits["coat_texture"]
         return {
             "plan_id": g.id, "route": g.mode, "design_mode": g.design_mode, "host": name(g.host),
+            "host_tie": ([name(i) for i in self.tie] if self.tie and self.host_pick is None else None),
+            "identity_parts": [{"donor": name(p.donor), "part": p.part, "from_trait": p.feature, "source": p.source,
+                                "set_by": p.set_by} for p in g.identity_parts],
             "habitat": g.habitat.name, "silhouette": g.silhouette, "labels": g.labels,
             "licenses": [{"rule": x.id, "card": x.card, "compensation": x.compensation} for x in g.licenses],
             "license_budget": budget(g.design_mode),
@@ -243,6 +252,9 @@ class PlanSession:
             raise OpRejected(OpError("bad_compensation", "a license needs a short, visible compensation "
                                      f"(1 to {MAX_COMPENSATION} characters, no franchise names)", field="compensation",
                                      hint=f"for example: {spec[rid]['compensation']}"))
+        if why := respiratory_claim_error(comp, self.plan, self.engine.tax):  # S3c: from the donor's own traits
+            raise OpRejected(OpError("not_a_donor_trait", why, field="compensation",
+                                     hint="name only features the donor's resolved traits include"))
         held = [x for x, _c in self.licenses if x != rid]
         if len(held) + 1 > budget(self.mode):
             raise OpRejected(OpError("over_budget", f"{self.mode} mode allows {budget(self.mode)} license(s)",
@@ -280,6 +292,23 @@ class PlanSession:
     def _set_identity_cues(self, feature: str, cues: str) -> list[str]:
         return self._transfer("set_identity_cues", feature=feature, cues=cues)
 
+    def _set_identity_part(self, donor: str, part: str, reason: str) -> list[str]:
+        """S3c (D4): pick the donor's identity part among its own diagnostic parts, with a reason."""
+        from app.evolution.identity import IdentityError, validate_pick
+
+        did = self._parent(donor, "donor")
+        if did == (self.plan.host or self.sire.id):
+            raise OpRejected(OpError("donor_is_host", "the host has no identity part; name the other parent",
+                                     field="donor"))
+        if not (reason or "").strip():
+            raise OpRejected(OpError("missing_reason", "say why this part shows the donor best", field="reason"))
+        try:
+            c = validate_pick(self.engine.tax.animals[did], part)
+        except IdentityError as e:
+            raise OpRejected(OpError(e.code, e.message, field="part", valid=e.valid)) from e
+        self.identity_picks = {**self.identity_picks, did: (c.part, reason.strip())}
+        return []
+
     def _build(self) -> tuple[Genome, Route]:
         eng = self.engine
         g, r = eng.seed_plan(self.sire, self.dam, host_pick=self.host_pick, habitat=self.habitat, seed=self.seed,
@@ -288,12 +317,14 @@ class PlanSession:
             self._apply_region(g, intent)
         for d in self.drops:
             self._apply_drop(g, d["part"])
-        g = eng.finish(g, r, license_requests=self.licenses, transfer_edits=self.transfer_edits)
+        g = eng.finish(g, r, license_requests=self.licenses, transfer_edits=self.transfer_edits,
+                       identity_picks=self.identity_picks)
         for d in self.drops:  # a part finish() re-created (dorsal wings) is dropped again, then re-finished
             if any(norm(d["part"]) in norm(p) for _w, p in donor_parts(g)) or (
                     "wing" in d["part"] and dorsal_wings(g, eng.tax)):
                 self._apply_drop(g, d["part"])
-                g = eng.finish(g, r, license_requests=self.licenses, transfer_edits=self.transfer_edits)
+                g = eng.finish(g, r, license_requests=self.licenses, transfer_edits=self.transfer_edits,
+                               identity_picks=self.identity_picks)
         return g, r
 
     def _apply_region(self, g: Genome, it: dict[str, str]) -> None:
@@ -305,7 +336,8 @@ class PlanSession:
                 t[tag] = Trait(op="PICK", donor=did, note="set by the agent (set_region head)")
         elif region == "tail":
             part = None if did == host else best_part(tax.animals[did], ("tail",))
-            t["tail"] = Trait(op="PICK", donor=did, part=part.part if part else None)
+            t["tail"] = Trait(op="PICK", donor=did, part=part.part if part else None,
+                              note="set by the agent (set_region tail)")  # S3c: identity never overrides it
             g.limb_plan.appendages = [a for a in g.limb_plan.appendages if not a.endswith("(tail)")]
             if part:
                 g.limb_plan.appendages.append(f"{part.part} (tail)")
@@ -384,11 +416,11 @@ class PlanSession:
 
     def _state(self) -> tuple[Any, ...]:
         return (self.mode, self.host_pick, self.habitat, list(self.regions), list(self.licenses), list(self.drops),
-                list(self.transfer_edits))
+                list(self.transfer_edits), dict(self.identity_picks))
 
     def _restore(self, s: tuple[Any, ...]) -> None:
         (self.mode, self.host_pick, self.habitat, self.regions, self.licenses, self.drops,
-         self.transfer_edits) = s
+         self.transfer_edits, self.identity_picks) = s
 
     def _result(self, op: str, args: dict[str, Any], errors: list[OpError], warnings: list[str] | None = None) -> OpResult:
         res = OpResult(ok=not errors, op=op, errors=errors, warnings=warnings or [], summary=self.summary())

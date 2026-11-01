@@ -1,5 +1,5 @@
 {
-  "about": "S3b (RC-R10-15, RC-R10-16): how donor features transfer to a host. Covering extents with a reason per donor covering ('Class:covering' overrides 'covering'), anchors by slot (RC-R10-14), and identity cues for discrete parts ('Class:part'; positive wording only). A part without a cue gets one derived from its class_parts shape with the placement words removed. Model-estimated, reviewed by the engineer; the extents follow the donor's own body, never one reviewed image.",
+  "about": "S3b (RC-R10-15, RC-R10-16): how donor features transfer to a host. Covering extents with a reason per donor covering ('Class:covering' overrides 'covering'), anchors by slot (RC-R10-14), and identity cues for discrete parts ('Class:part'; positive wording only). A part without a cue gets one derived from its class_parts shape with the placement words removed. Model-estimated, reviewed by the engineer; the extents follow the donor's own body, never one reviewed image. S3c: plate_patterns read the donor's own plate layout from its visible features (the first feature that matches; banded only when the donor has bands); plate_defaults are class defaults, marked model-estimated. shell_hosts (RC-R10-17): a turtle host's shell is skeleton, so a donor covering grows only on the skin zones.",
   "provenance": "model-estimated, reviewed (S3b)",
   "covering_extents": {
     "exoskeleton": {
@@ -28,6 +28,28 @@
       "plates": true, "joints": false
     }
   },
+  "plate_patterns": [
+    {"id": "fused_shields", "match": "wing ?cases?|elytr|pronot|fused", "pattern": "a few large fused plates", "banded": false,
+     "wording": "a few large, smooth, fused plates, each spanning a whole body region of the {host} (the shoulders, the back, the hips, each limb section), sized to the {host}'s body"},
+    {"id": "carapace", "match": "carapace|shell plate", "pattern": "one broad carapace shield with short jointed plates on the limbs", "banded": false,
+     "wording": "one broad, fused carapace shield over the {host}'s shoulders and back{detail}, with short jointed plates on each limb section, sized to the {host}'s body"},
+    {"id": "bands", "match": "bands?|banded|rings?|girdles?", "pattern": "repeated transverse bands", "banded": true,
+     "wording": "repeated transverse bands, one per body segment, each sized to the {host}'s own body segments"},
+    {"id": "overlapping", "match": "overlapping|imbricat|in [0-9]+ rows", "pattern": "many overlapping scales in rows", "banded": false,
+     "wording": "each {unit} sized to the {host}'s own body segments and muscle masses, one {unit} per segment or muscle mass"}
+  ],
+  "plate_detail_match": "edge|rim|margin|knobs?|knobbed|tubercles?|spines?|lobes?",
+  "plate_match_about": "Each match is a list of alternatives, matched at a word start in a donor feature (code adds the word boundary).",
+  "plate_defaults_about": "Class defaults when the donor's own features name no plate layout. Model-estimated, reviewed.",
+  "plate_defaults": {
+    "Insecta:exoskeleton": "fused_shields", "Arachnida:exoskeleton": "fused_shields", "Malacostraca:exoskeleton": "carapace",
+    "Mammalia:scales": "overlapping", "Reptilia:scales": "overlapping", "Reptilia:shell": "carapace",
+    "exoskeleton": "fused_shields", "scales": "overlapping", "shell": "carapace"
+  },
+  "shell_hosts": {
+    "coverings": ["shell"], "classes": ["Reptilia", "Testudines"], "skin_zones": ["head", "neck", "legs", "tail"], "skin": "scaly skin",
+    "reason": "RC-R10-17: the shell is skeleton (bony plates continuous with the ribs and vertebrae), so the covering grows only on the skin zones, and the shell keeps its form with only its color changed"
+  },
   "anchors": {
     "slots": {
       "head": "the top of the skull",
@@ -46,8 +68,8 @@
       "antennae": "the forehead",
       "tusks": "the upper jaw",
       "trunk": "the snout",
-      "claws": "the end of the forelimbs",
-      "pincers": "the end of the forelimbs",
+      "claws": "the front feet: each front foot ends in a pincer, held folded against the foot when the animal walks",
+      "pincers": "the front feet: each front foot ends in a pincer, held folded against the foot when the animal walks",
       "feathered wings": "the shoulder girdle",
       "membranous wings": "a raised mount between the shoulder blades",
       "external gills": "the sides of the head behind the jaw"

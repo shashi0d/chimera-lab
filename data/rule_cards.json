@@ -1502,5 +1502,17 @@
     "strength": "soft",
     "status": "VERIFIED",
     "source": "https://genent.cals.ncsu.edu/bug-bytes/arthropods/"
+  },
+  {
+    "id": "RC-R10-17",
+    "doc": "R10_chimera_science_landscape.md",
+    "rule": "A turtle or tortoise shell is part of the skeleton (bony plates continuous with the ribs and vertebrae), not a skin covering. A donor covering cannot replace it; on a turtle host, donor coverings apply only to skin zones (head, neck, limbs, tail), and the shell keeps its form with only its color or surface texture changed.",
+    "applies_to": [
+      "body",
+      "coat_texture"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://ideas.repec.org/a/nat/natcom/v4y2013i1d10.1038_ncomms3107.html"
   }
 ]

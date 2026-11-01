@@ -106,7 +106,7 @@ def test_every_call_record_names_its_provider(tmp_path, monkeypatch):
 
 
 async def test_the_card_names_the_providers(engine):
-    doc = await engine.fuse(sire_name="lion", dam_name="eagle")
+    doc = await engine.fuse(sire_name="lion", dam_name="eagle", host="sire")  # S3c (D2): a tie needs a host choice
     prov = doc["card"]["providers"]
     assert prov == doc["providers"] and prov["render"].startswith("meta:") and prov["segment"].startswith("meta:")
     assert prov["by_call"]  # mock mode: one mock entry

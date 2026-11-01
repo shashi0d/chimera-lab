@@ -87,7 +87,7 @@ def test_example_4_eagle_x_octopus_chimera(engine, seed):
 
 @pytest.mark.parametrize("sire,dam", [("donkey", "horse"), ("lion", "tiger"), ("lion", "eagle"), ("eagle", "octopus")])
 async def test_worked_examples_through_fuse(engine, sire, dam):
-    doc = await engine.fuse(sire_name=sire, dam_name=dam)
+    doc = await engine.fuse(sire_name=sire, dam_name=dam, host="sire" if (sire, dam) == ("lion", "eagle") else None)  # S3c (D2)
     prompt = doc["prompt"]
     if doc["route"]["known_pair"]:  # E2c: real hybrids open with name and cross, and get no habitat cue
         assert prompt.startswith(f"A {doc['route']['known_pair']} (") and "Habitat cue" not in prompt

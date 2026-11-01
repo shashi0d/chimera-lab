@@ -190,6 +190,19 @@ class Animal:
         return {"quadruped": 3, "winged": 3, "biped": 3, "finned": 2, "serpentine": 2,
                 "arthropod": 1, "other": 1, "soft_bodied": 0}[self.frame]
 
+    def source_of(self, *fields: str) -> str:
+        """S3c: where a trait came from, short: "web-cited (<url>)", "model-estimated", or the data file. The first
+        field with a record wins (learned animals store visible features as "visible_features", the database as
+        "features")."""
+        cites, prov = dict(self.citations), dict(self.provenance)
+        for f in fields:
+            if f in cites:
+                return f"web-cited ({cites[f]})"
+            if f in prov:
+                p = prov[f]
+                return "model-estimated" if p.startswith("model-estimated") else p
+        return "model-estimated (no source recorded)"
+
     def public(self) -> dict[str, Any]:
         return {"id": self.id, "common_name": self.common_name, "scientific_name": self.scientific_name,
                 "class": self.tax_class, "order": self.order, "family": self.family, "genus": self.genus,

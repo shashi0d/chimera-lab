@@ -167,6 +167,11 @@ class Transfer(_Strict):
     connects: list[str] = Field(default_factory=list)  # features of the same donor system this one grows from or into
     identity_cues: str = ""  # parts: the form that makes the part the donor's (positive wording only)
     set_by: Literal["code", "agent"] = "code"
+    # S3c: the donor's own plate layout (few large fused plates, one carapace shield, many overlapping scales, bands)
+    # from its traits, with the source or a model-estimated mark; banded rings only when the donor has them
+    plate_pattern: str = ""
+    plate_source: str = ""
+    host_shell: str = ""  # S3c (RC-R10-17): on a turtle host, what the shell keeps (its form; only color changes)
 
     @model_validator(mode="after")
     def _shape(self) -> Transfer:
@@ -176,6 +181,21 @@ class Transfer(_Strict):
         if bad:
             raise ValueError(f"unknown extent zone {bad}")
         return self
+
+
+class IdentityPart(_Strict):
+    """S3c (D4): the one part that says which animal a donor is. Chosen from the donor's own diagnostic traits
+    (its visible features, with their source or a model-estimated mark), anchored by function (RC-R10-14) and
+    listed in the fiction budget. Speculative and mythic only; realistic mode shows identity by color, texture and
+    material."""
+    donor: str
+    part: str
+    slot: str
+    job: str = ""
+    feature: str = ""  # the donor's own words for it ("large evenly sized claws with black tips")
+    source: str = ""  # web-cited (url) | model-estimated | data file
+    reason: str = ""
+    set_by: Literal["code", "agent"] = "code"
 
 
 class Genome(_Strict):
@@ -204,6 +224,7 @@ class Genome(_Strict):
     # the structured fields and data tables, this is all the prompt compiler reads: notes never reach the prompt.
     render_details: list[str] = Field(default_factory=list)
     transfers: list[Transfer] = Field(default_factory=list)  # S3b: one per donor feature (code-derived in finish)
+    identity_parts: list[IdentityPart] = Field(default_factory=list)  # S3c (D4): at most one per donor
 
     @model_validator(mode="after")
     def _consistent(self) -> Genome:

@@ -166,5 +166,5 @@ async def test_a_session_plan_renders_like_any_plan(engine):
 
 
 async def test_legacy_full_plan_path_still_works(engine):
-    doc = await engine.fuse(sire_name="lion", dam_name="eagle")
+    doc = await engine.fuse(sire_name="lion", dam_name="eagle", host="sire")  # S3c (D2): a tie needs a host choice
     assert doc["model_plan"] == "accepted" and doc["genome"]["card_trace"]

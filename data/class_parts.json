@@ -2,7 +2,7 @@
  "about": "S2 (E4c): the visible parts each animal class can have, plus the body plans, coverings, mouthparts and breathing organs that class allows. Every donor part and every saved trait is checked against its class here; an invalid part is replaced by the donor's most recognizable valid part (parts are listed most recognizable first, and the donor's own visible_features are tried first). 'shape' is the prompt wording: materials and shapes, never the donor's name. 'slot': where the part attaches on a host (head, face, back, tail, wings, limbs, surface). 'never': words naming parts the class cannot have (checked in free-text features too). 'job' feeds the part-job audit (RC-R9-12).",
  "provenance": "model-estimated, reviewed",
  "review": "Written by Claude (S2, 2026-11-01) from standard comparative anatomy and checked against the classes in chimera_data.json; reviewed for consistency with the database body plans (all insects multi_legged) and with the learned animals. Owner review pending.",
- "class_aliases": {"Elasmobranchii": "Chondrichthyes"},
+ "class_aliases": {"Elasmobranchii": "Chondrichthyes", "Testudines": "Reptilia", "Squamata": "Reptilia", "Crocodylia": "Reptilia"},
  "surfaces": {
   "fur": "dense fur",
   "feathers": "layered contour feathers",

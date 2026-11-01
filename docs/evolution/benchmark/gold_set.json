@@ -3,8 +3,8 @@
  "label_source": "human-provided via chat review",
  "created": "2026-11-01",
  "counts": {
-  "fail": 6,
-  "good": 5
+  "fail": 5,
+  "good": 6
  },
  "items": [
   {
@@ -54,12 +54,10 @@
    ],
    "host": "chinese_pangolin",
    "design_mode": "realistic",
-   "label": "fail",
-   "failures": [
-    "external gills on a land creature"
-   ],
-   "note": "",
-   "label_source": "human-provided via chat review"
+   "label": "good",
+   "failures": [],
+   "note": "owner decision S3c (D3): external gills stay as the axolotl's identity part; the label was 'fail' for 'external gills on a land creature' and now matches the decision",
+   "label_source": "human-provided via chat review; relabeled by owner decision S3c (D3)"
   },
   {
    "id": "e4/d_rhinoceros_beetle_x_brown_bear",

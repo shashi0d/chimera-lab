@@ -371,3 +371,39 @@ Held-out and live runs exposed three general bugs:
 - Turtles and tortoises have beaks, which the description matcher did not expect.
 
 Each has a test. The two affected runs were rerun beside the originals (`r1_fix`, fresh cache; the first rerun attempt hit the engine's fuse cache and was discarded).
+
+**D-084 Owner decision D1: Meta Spark decides inspect (S3c).**
+`critic_decision` stays `primary: meta_spark` by default, confirming D-082. Spark Open still answers every item; its answers are kept on each row (`pair_status`) as information, never as a fail signal. `mode: pair` still restores the S3a rule.
+
+**D-085 Owner decision D2: no tie rule for the host (S3c, RC-R10-01).**
+The first-named-parent rule from D-077 is removed. On a structural tie, `route.host_tie` reports both parents. `propose_candidates` (the agent) returns a candidate for each host, and the agent picks one with a stated reason, or calls `ask_user` in an interactive run. The fixed pipeline no longer chooses: `fuse` on a tie without `host` returns `needs_choice` with both options (VALIDATION_FAILED, details `needs_choice: host`). The plan is still built on the sire as a provisional frame so the candidates can be compared.
+- Tests that fused a tied pair (lion x eagle) only to exercise something else now pass `host="sire"`. None of them was about host choice.
+- *Alternative:* keep a default for the fixed pipeline. Rejected: any default is a tie rule by another name.
+
+**D-086 Owner decision D3: the axolotl's external gills are its identity part (S3c).**
+The gold-set label for `e4/b_axolotl_x_pangolin` changes from fail ("external gills on a land creature") to good, marked "owner decision S3c (D3)", in `gold_set.json` (now 5 fail, 6 good) and `gold_set_s3b.json` (17 fail, 16 good). The S3a and S3b calibration numbers were computed on the old label and are not recomputed here.
+
+**D-087 Owner decision D4: one declared identity part per donor (S3c, `identity.py`).**
+- **Choice:** the identity part comes from the donor's own visible features, in their listed order. It is the first feature that names a class part the donor has in that form. Coverings and back shapes (carapace, wing cases) are material, not parts. A sex or age qualifier ("in males") is dropped from the wording. The source is the donor's provenance for that field (web-cited URL, model-estimated, or the data file).
+- **Fallback:** a donor with no recorded features at all may keep a class part already in the plan, marked model-estimated. It never gets a part added.
+- **Enforcement:** where the donor has no homologous structure on the host (an arthropod on a vertebrate):
+  - speculative and mythic modes keep exactly the identity part and drop every other donor-shaped part, including a class signature tail and dorsal insect wings. Each drop is logged as a Check;
+  - realistic mode drops them all, so identity is shown only by color, texture and material.
+- **Vertebrate donors:** keep the existing homologous-part rules. Their identity part is declared from the parts already in the plan, never added or dropped.
+- **Agent pick:** the agent changes the identity part with `set_identity_part(donor, part, reason)`, validated against the same candidates. Code never re-adds a part the agent cleared or dropped.
+- **"Listed in the fiction budget":** read as "listed with the licenses on the card" (`card.identity_parts`). It does not take a license slot, because it bends no R9 3.2 card.
+- **Critic:** a named item per identity part: "Does the <part> look like it came from a <donor>?" The open "which animal" answer still comes with every part.
+
+**D-088 Plan fixes from the S3b images (S3c part 1). General rules only.**
+- **(a) Fiction clauses come from the donor's traits.** The arthropod-size compensation is "thick supporting legs", plus a respiratory clause only when the donor's breathing trait has an outside sign (`evo_config visible_breathing`: tracheae → spiracles; gills, book lungs, lungs → none). The license `reason` records where the clause came from. An agent's compensation that names breathing openings the donor lacks is rejected (`not_a_donor_trait`).
+- **(b) A covering keeps the host's outline.** The covering clause says every covered part keeps the host's own length and shape, and the tail stays the host's own tail. A donor-shaped appendage survives only as the identity part (D-087).
+- **(c) Plate layout from the donor.**
+  - The covering transfer carries `plate_pattern` and `plate_source`, from the first donor feature that names a layout (`transfer_rules.json plate_patterns`): wing cases → a few large fused plates; carapace → one carapace shield with jointed limb plates; overlapping scales → many scales in rows; bands or rings → bands, the only banded layout.
+  - With no match, a class default, marked model-estimated.
+  - The compiler words the plates from the pattern, and the S3b "one plate per segment or muscle mass" wording now applies only to overlapping scales.
+- **(d) Identity part selection and the critic item:** D-087.
+- **(e) RC-R10-17:** the turtle shell is skeleton (Hirasawa, Nagashima and Kuratani 2013, Nature Communications; the RePEc abstract states that the costal and neural plates are continuous with the ribs and vertebrae). VERIFIED against the fetched page.
+  - On a turtle host the covering grows only on the skin zones (head, neck, legs, tail). The shell keeps its form, and only its color changes. `set_extent` rejects shell zones.
+  - `verify_research`: the same 2 failures as S3b, both the unreachable `ria.ua.pt` source. `rule_cards.json` has 126 cards (18 hard).
+- **Found while testing (e):** GBIF files turtles under class Testudines, so the shell check, the class part list and the vertebrate group all missed the tortoise. Testudines, Squamata and Crocodylia are now reptile aliases (`class_parts.json`, `evo_config.json class_groups`).
+- **Test hygiene:** `test_real_mode_refuses_before_any_call` passed only when an earlier test had cleared the env, because a `.env` META key made it order-dependent. It now sets `meta_api_key=""`.

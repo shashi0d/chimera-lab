@@ -135,10 +135,20 @@ def choose_host(r: Route, user_host: str | None = None) -> tuple[str | None, lis
     if s.structure_rank != d.structure_rank:
         host = s if s.structure_rank > d.structure_rank else d
         return host.id, ["RC-R6-08", "RC-R6-09", "RC-R5-02"], f"{host.common_name} has the more structured body schema"
-    # S3b (RC-R10-01, hard): size and mass never decide which parent wins. On equal structure the first-named parent
-    # hosts by default; the user or the agent switches it (set_host) when the other body serves the pair better.
+    # S3c (owner decision D2; RC-R10-01, hard): neither size, mass nor name order decides a structural tie. The plan
+    # is built on the sire as a provisional frame only; host_tie() reports the tie, propose_candidates returns both
+    # host options, and the agent picks one with a stated reason (or asks the user). engine.fuse refuses to render a
+    # tied plan without a host choice.
     return s.id, ["RC-R6-08", "RC-R6-09", "RC-R5-02", "RC-R10-01"], (
-        f"equal schema structure; {s.common_name} (the first-named parent) hosts by default, never by size (RC-R10-01)")
+        f"structural tie between the {s.common_name} and the {d.common_name}: the host must be chosen (D2); "
+        "provisional frame only, never by size, mass or name order (RC-R10-01)")
+
+
+def host_tie(r: Route) -> list[str]:
+    """S3c (D2): both parents' ids when a hosted route has a structural tie, else []."""
+    if r.mode == "hybrid" or r.sire.structure_rank != r.dam.structure_rank:
+        return []
+    return [r.sire.id, r.dam.id]
 
 
 FRAME_WORDS = {

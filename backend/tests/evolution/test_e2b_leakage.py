@@ -130,7 +130,7 @@ async def test_rejected_polish_falls_back_to_the_compiled_prompt(engine):
         return prompt + " Leopard rosettes on the flanks."
 
     engine.spark.polish = leaky  # type: ignore[method-assign]
-    doc = await engine.fuse(sire_name="lion", dam_name="eagle")
+    doc = await engine.fuse(sire_name="lion", dam_name="eagle", host="sire")  # S3c (D2): a tie needs a host choice
     assert doc["polish"].startswith("rejected: adds an animal that is not a parent: leopard")
     assert doc["prompt"] == doc["prompt_compiled"]
 
@@ -174,7 +174,7 @@ def _scripted_critic(engine, answers: list[list[str]]):
 async def test_third_animal_gets_one_plan_worded_edit_turn(engine):
     # S2: the E2b re-render became the inspect step's single edit turn (previous_response_id), worded from the plan.
     _scripted_critic(engine, [["lion", "leopard", "golden eagle"], ["lion", "golden eagle"]])
-    doc = await engine.fuse(sire_name="lion", dam_name="eagle")
+    doc = await engine.fuse(sire_name="lion", dam_name="eagle", host="sire")  # S3c (D2): a tie needs a host choice
     assert [a["third_animal"] for a in doc["render_attempts"]] == [["leopard"], []]
     edit = doc["render_attempts"][1]
     assert edit["prompt"] == "edit" and "leopard" not in edit["instruction"].lower()
@@ -191,7 +191,7 @@ async def test_third_animal_gets_one_plan_worded_edit_turn(engine):
 async def test_third_animal_twice_is_kept_with_a_warning(engine):
     # E2d: the mule now gets the checklist critic, so the open critic is scripted on a chimera.
     _scripted_critic(engine, [["lion", "golden eagle", "zebra"]])
-    doc = await engine.fuse(sire_name="lion", dam_name="eagle")
+    doc = await engine.fuse(sire_name="lion", dam_name="eagle", host="sire")  # S3c (D2): a tie needs a host choice
     assert len(doc["render_attempts"]) == 2  # exactly one edit turn, no loop
     assert doc["warnings"] == ["structural miss after one edit turn: an animal other than the two parents"]
     assert doc["meta_calls"]["image"] == 2

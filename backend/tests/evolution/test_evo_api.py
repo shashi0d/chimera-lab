@@ -28,7 +28,7 @@ def test_loader_matches_committed_cards(tmp_path):
     assert res.returncode == 0, res.stdout + res.stderr
     built = json.loads(out.read_text(encoding="utf-8"))
     assert built == json.loads((REPO_ROOT / "data/rule_cards.json").read_text(encoding="utf-8"))
-    assert len(built) == 125  # E4: R9 adds 15 cards; S3a: R10 adds 3; S3b: R10 01-11 and 15-16
+    assert len(built) == 126  # E4: R9 adds 15 cards; S3a: R10 adds 3; S3b: R10 01-11 and 15-16; S3c: R10-17
     assert {c["doc"].split("_")[0] for c in built} == {f"R{i}" for i in range(1, 11)}  # RESEARCH_SUMMARY skipped
     assert all({"id", "doc", "rule", "applies_to", "strength", "status", "source"} <= set(c) <= {
         "id", "doc", "rule", "applies_to", "strength", "status", "source", "superseded_by"} for c in built)  # S3b
@@ -55,7 +55,8 @@ def test_card_wording_guards():
 
 
 async def test_real_mode_refuses_before_any_call(tmp_path):
-    svc = SimpleNamespace(settings=make_settings(tmp_path, chimera_mode="real"), image_gen=None)  # no META_API_KEY
+    svc = SimpleNamespace(settings=make_settings(tmp_path, chimera_mode="real", meta_api_key=""),  # no META_API_KEY
+                          image_gen=None)  # S3c: hermetic (a .env key made this test order-dependent)
     eng = EvoEngine(svc)  # type: ignore[arg-type]
     with pytest.raises(ChimeraError):
         await eng.fuse(sire_name="lion", dam_name="tiger")
@@ -64,9 +65,9 @@ async def test_real_mode_refuses_before_any_call(tmp_path):
 
 async def test_evo_endpoints(client):
     r = await client.get("/evo/cards")
-    assert r.status_code == 200 and r.json()["count"] == 125 and len(r.json()["hard"]) == 18
+    assert r.status_code == 200 and r.json()["count"] == 126 and len(r.json()["hard"]) == 18
 
-    r = await client.post("/evo/fuse", json={"sire": {"name": "lion"}, "dam": {"name": "eagle"}})
+    r = await client.post("/evo/fuse", json={"sire": {"name": "lion"}, "dam": {"name": "eagle"}, "host": "sire"})
     assert r.status_code == 200, r.text
     body = r.json()
     cid = body["genome"]["id"]

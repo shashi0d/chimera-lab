@@ -117,7 +117,7 @@ def test_rc_r9_10_budget_and_licensability_are_hard(engine):
 
 
 async def test_compare_renders_realistic_plus_the_chosen_mode(engine):
-    out = await engine.fuse(sire_name="lion", dam_name="eagle", mode="compare", compare_with="mythic")
+    out = await engine.fuse(sire_name="lion", dam_name="eagle", host="sire", mode="compare", compare_with="mythic")
     a, b = out["pair"]
     assert out["modes"] == ["realistic", "mythic"]
     assert a["genome"]["design_mode"] == "realistic" and b["genome"]["design_mode"] == "mythic"
@@ -126,8 +126,8 @@ async def test_compare_renders_realistic_plus_the_chosen_mode(engine):
 
 
 async def test_mode_is_part_of_the_cache_key(engine):
-    a = await engine.fuse(sire_name="lion", dam_name="eagle", mode="realistic")
-    b = await engine.fuse(sire_name="lion", dam_name="eagle", mode="speculative")
+    a = await engine.fuse(sire_name="lion", dam_name="eagle", host="sire", mode="realistic")
+    b = await engine.fuse(sire_name="lion", dam_name="eagle", host="sire", mode="speculative")
     assert a["cache_key"] != b["cache_key"] and not b["cached"]
 
 
@@ -135,10 +135,10 @@ async def test_unknown_mode_is_refused(engine):
     from app.errors import ChimeraError
 
     with pytest.raises(ChimeraError):
-        await engine.fuse(sire_name="lion", dam_name="eagle", mode="fantasy")
+        await engine.fuse(sire_name="lion", dam_name="eagle", host="sire", mode="fantasy")
 
 
 async def test_fuse_endpoint_compare(client):
-    r = await client.post("/evo/fuse", json={"sire": {"name": "lion"}, "dam": {"name": "eagle"}, "mode": "compare"})
+    r = await client.post("/evo/fuse", json={"sire": {"name": "lion"}, "dam": {"name": "eagle"}, "host": "sire", "mode": "compare"})
     assert r.status_code == 200, r.text
     assert [d["genome"]["design_mode"] for d in r.json()["pair"]] == ["realistic", "speculative"]

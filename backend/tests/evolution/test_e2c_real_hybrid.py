@@ -179,7 +179,7 @@ async def test_fuse_chimera_does_not_accept_a_hybrid_name(engine):
                 "animals": ["liger"], "notes": "s"}
 
     engine.spark.checklist = checklist  # type: ignore[method-assign]
-    doc = await engine.fuse(sire_name="lion", dam_name="eagle")
+    doc = await engine.fuse(sire_name="lion", dam_name="eagle", host="sire")  # S3c (D2): a tie needs a host choice
     assert doc["render_attempts"][0]["third_animal"] == ["liger"]
 
 

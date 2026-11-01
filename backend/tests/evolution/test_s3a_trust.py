@@ -379,5 +379,5 @@ def test_build_rule_cards_reads_two_digit_research_numbers(tmp_path):
                           str(REPO / "docs/evolution/research"), str(out)], capture_output=True, text=True)
     assert res.returncode == 0, res.stdout + res.stderr
     ids = [c["id"] for c in json.loads(out.read_text(encoding="utf-8"))]
-    assert ids[-16:] == [f"RC-R10-{i:02d}" for i in range(1, 17)]  # sorted by doc number, R10 after R9
+    assert ids[-17:] == [f"RC-R10-{i:02d}" for i in range(1, 18)]  # sorted by doc number, R10 after R9
     assert out.read_text(encoding="utf-8") == (REPO / "data/rule_cards.json").read_text(encoding="utf-8")

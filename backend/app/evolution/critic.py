@@ -270,6 +270,15 @@ def questions(g: Genome, tax: Taxonomy) -> list[Question]:
                                        link_fix))
                     qs.append(Question(f"separate_{_slug(t.feature)}", f"Does the {t.feature} look stuck on "
                                        f"separately, with no connection to the {noun}?", "no", "connection", link_fix))
+    # S3c (D4): each declared identity part is asked by name ("Does this part look like it came from <donor>?"); the
+    # open "which animal did it come from" answer (origins) is still asked for every part and names the animal if not.
+    for ip in g.identity_parts:
+        t_ = next((x for x in transfers_of(g, tax) if x.kind == "part" and x.feature == ip.part), None)
+        cues = (t_.identity_cues if t_ else "") or ip.feature
+        do_ = "Do" if ip.part.endswith("s") else "Does"
+        qs.append(Question(f"identity_{_slug(ip.part)}", f"{do_} the {ip.part} look like {'they' if do_ == 'Do' else 'it'} "
+                           f"came from a {_name(tax, ip.donor)}?", "yes", "identity",
+                           f"Show the {ip.part} with its own form ({cues}), in its planned place; {KEEP}."))
     return _balance(_dedupe(qs), g)
 
 
@@ -298,6 +307,13 @@ GROUP_ORIGIN = {"Insecta": ("insect", "beetle"), "Malacostraca": ("crab", "crust
                 "Reptilia": ("reptile",)}
 
 
+def _cls(tax_class: str) -> str:
+    """S3c: GBIF classes such as Testudines read as their class_parts class (Reptilia)."""
+    from app.evolution.parts import class_key
+
+    return class_key(tax_class) or tax_class
+
+
 def origin_outcome(said: str, donor: Animal) -> str:
     """ok when the answer names the donor (its full name, the last word of its name, or its group word); bad when it
     names another animal; unk when empty or unclear. "rhinoceros" for a rhinoceros beetle's horn is bad: the last
@@ -309,7 +325,7 @@ def origin_outcome(said: str, donor: Animal) -> str:
     head = name.split()[-1]
     if name in s or re.search(rf"\b{re.escape(head)}s?\b", s):
         return "ok"
-    if any(re.search(rf"\b{w}s?\b", s) for w in GROUP_ORIGIN.get(donor.tax_class, ())):
+    if any(re.search(rf"\b{w}s?\b", s) for w in GROUP_ORIGIN.get(_cls(donor.tax_class), ())):
         return "ok"
     return "bad"
 
@@ -437,7 +453,7 @@ def planned_concepts(g: Genome, tax: Taxonomy) -> tuple[set[str], set[str]]:
     req: set[str] = set()
     bodies = [host] if host else [tax.animals[g.parents.sire], tax.animals[g.parents.dam]]
     for a in bodies:
-        exp |= CLASS_BASE.get(a.tax_class, set())
+        exp |= CLASS_BASE.get(_cls(a.tax_class), set())
         if a.order == "Testudines":  # S3b validation: turtles and tortoises have a beak
             exp.add("beak")
         if a.covering in COVER_CONCEPT:
@@ -445,7 +461,7 @@ def planned_concepts(g: Genome, tax: Taxonomy) -> tuple[set[str], set[str]]:
         exp |= concepts_in(" ".join(a.features))
     head = t["head"].donor if isinstance(t["head"].donor, str) else None
     if head:
-        exp |= CLASS_BASE.get(tax.animals[head].tax_class, set()) & {"beak", "feathers"}
+        exp |= CLASS_BASE.get(_cls(tax.animals[head].tax_class), set()) & {"beak", "feathers"}
     if wings_planned(g, tax):
         exp.add("wings")
         req.add("wings")

@@ -63,7 +63,7 @@ def test_hand_written_checklists_take_priority(engine):
 
 
 async def test_judge_keeps_count_third_animal_and_logs_the_open_critic(engine):
-    doc = await engine.fuse(sire_name="lion", dam_name="eagle")
+    doc = await engine.fuse(sire_name="lion", dam_name="eagle", host="sire")  # S3c (D2): a tie needs a host choice
     j = doc["judge"]
     assert j["critic"]["creatures"] == 1 and "animals" in j["critic"] and j["third_animal"] == []
     assert j["checklist"] == generated_checklist(validate_plan(doc["genome"]), engine.tax)
@@ -74,7 +74,7 @@ async def test_judge_keeps_count_third_animal_and_logs_the_open_critic(engine):
 
 
 async def test_card_has_can_it_live_panel_licenses_kind_and_provenance(engine):
-    doc = await engine.fuse(sire_name="lion", dam_name="eagle", mode="mythic")
+    doc = await engine.fuse(sire_name="lion", dam_name="eagle", host="sire", mode="mythic")
     card = doc["card"]
     assert card["kind"] == "mythic composite" and card["design_mode"] == "mythic"
     assert [p["function"] for p in card["can_it_live"]] == ["breathing", "feeding", "support", "movement", "heat",
@@ -86,7 +86,7 @@ async def test_card_has_can_it_live_panel_licenses_kind_and_provenance(engine):
 
 
 async def test_card_provenance_marks_gbif_and_model_estimated_facts(engine):
-    doc = await engine.fuse(sire_name="woolly mammoth", dam_name="lion")
+    doc = await engine.fuse(sire_name="woolly mammoth", dam_name="lion", host="sire")  # S3c (D2)
     facts = doc["card"]["provenance"]["sire"]
     assert facts["kind"] == "extinct" and facts["source"] == "learned"
     assert facts["facts"]["family"] == "gbif" and facts["facts"]["diet"] == "web-cited"  # S2

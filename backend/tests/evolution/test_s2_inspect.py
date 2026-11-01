@@ -202,7 +202,7 @@ class NoSeg:
 async def test_a_structural_miss_gets_one_edit_and_is_fixed(engine):
     engine.segmenter = NoSeg()
     _script(engine, [{"wings_front": "no"}, {}])
-    doc = await engine.fuse(sire_name="lion", dam_name="eagle")
+    doc = await engine.fuse(sire_name="lion", dam_name="eagle", host="sire")  # S3c (D2): a tie needs a host choice
     assert [a["prompt"] for a in doc["render_attempts"]][1] == "edit" and doc["inspect"]["kept"] == "edited"
     assert doc["inspect"]["after"]["failures"] == [] and doc["warnings"] == []
     assert doc["inspect"]["edit"]["instruction"].startswith("Show the planned golden eagle wings")
@@ -212,7 +212,7 @@ async def test_a_structural_miss_gets_one_edit_and_is_fixed(engine):
 async def test_still_failing_after_one_edit_is_kept_with_a_warning(engine):
     engine.segmenter = NoSeg()
     _script(engine, [{"wings_front": "no"}])
-    doc = await engine.fuse(sire_name="lion", dam_name="eagle")
+    doc = await engine.fuse(sire_name="lion", dam_name="eagle", host="sire")  # S3c (D2): a tie needs a host choice
     assert len(doc["render_attempts"]) == 2 and doc["meta_calls"]["image"] == 2  # one edit, no loop
     assert doc["warnings"] == ["structural miss after one edit turn: Does it have golden eagle wings in place of its "
                                "front legs?"]
@@ -222,7 +222,7 @@ async def test_still_failing_after_one_edit_is_kept_with_a_warning(engine):
 async def test_an_edit_that_makes_it_worse_keeps_the_first_render(engine):
     engine.segmenter = NoSeg()
     _script(engine, [{"wings_front": "no"}, {"wings_front": "no", "frame": "no"}])
-    doc = await engine.fuse(sire_name="lion", dam_name="eagle")
+    doc = await engine.fuse(sire_name="lion", dam_name="eagle", host="sire")  # S3c (D2): a tie needs a host choice
     assert doc["inspect"]["kept"] == "first" and doc["image_key"] != doc["first_image_key"]
     assert "first render kept" in doc["warnings"][0]
 
@@ -238,7 +238,7 @@ async def test_a_failed_edit_call_keeps_the_first_render(engine, monkeypatch):
         return await real(prompt, refs, aspect)
 
     monkeypatch.setattr(engine.renderer, "generate", gen)
-    doc = await engine.fuse(sire_name="lion", dam_name="eagle")
+    doc = await engine.fuse(sire_name="lion", dam_name="eagle", host="sire")  # S3c (D2): a tie needs a host choice
     assert len(doc["render_attempts"]) == 1 and "edit turn failed" in doc["warnings"][0]
 
 
@@ -254,11 +254,11 @@ async def test_a_budget_stop_during_the_edit_is_raised(engine, monkeypatch):
 
     monkeypatch.setattr(engine.renderer, "generate", gen)
     with pytest.raises(ChimeraError):
-        await engine.fuse(sire_name="lion", dam_name="eagle")
+        await engine.fuse(sire_name="lion", dam_name="eagle", host="sire")  # S3c (D2): a tie needs a host choice
 
 
 async def test_a_clean_render_makes_no_edit(engine):
-    doc = await engine.fuse(sire_name="lion", dam_name="eagle")
+    doc = await engine.fuse(sire_name="lion", dam_name="eagle", host="sire")  # S3c (D2): a tie needs a host choice
     assert doc["inspect"]["edit"] is None and len(doc["render_attempts"]) == 1
 
 

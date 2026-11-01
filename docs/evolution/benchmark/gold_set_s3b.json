@@ -1,8 +1,8 @@
 {
  "about": "S3b recalibration set: the S3a gold set (11 images, chat-review labels) plus the 22 S3a experiment images the owner reviewed (s3a_owner_review.md). Beetle-bear: best none, so all 12 are failures. Axolotl-pangolin: all V1 to V5 work, so all 10 are goods. Axolotl V0 (2 images) has no owner comment and is excluded.",
  "counts": {
-  "fail": 18,
-  "good": 15
+  "fail": 17,
+  "good": 16
  },
  "items": [
   {
@@ -52,12 +52,10 @@
    ],
    "host": "chinese_pangolin",
    "design_mode": "realistic",
-   "label": "fail",
-   "failures": [
-    "external gills on a land creature"
-   ],
-   "note": "",
-   "label_source": "human-provided via chat review"
+   "label": "good",
+   "failures": [],
+   "note": "owner decision S3c (D3): external gills stay as the axolotl's identity part; the label was 'fail' for 'external gills on a land creature' and now matches the decision",
+   "label_source": "human-provided via chat review; relabeled by owner decision S3c (D3)"
   },
   {
    "id": "e4/d_rhinoceros_beetle_x_brown_bear",

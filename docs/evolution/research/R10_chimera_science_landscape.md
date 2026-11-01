@@ -1,7 +1,7 @@
 # R10. Chimera science landscape: how real chimeras decide which species wins each part
 
 Doc: docs/evolution/research/R10_chimera_science_landscape.md
-Status: research, first pass (Oct 31, 2026); cards 12 to 14 added in S3a, 15 and 16 in S3b (Nov 1, 2026); RC-R10-13 superseded by RC-R10-15
+Status: research, first pass (Oct 31, 2026); cards 12 to 14 added in S3a, 15 and 16 in S3b, 17 in S3c (Nov 1, 2026); RC-R10-13 superseded by RC-R10-15
 Feeds: ALGORITHM.md (host and region selection, plan-level evolution, new LAYER operator, multi-parent trees, evolve carry-over)
 Related: R1 (dominance per gene), R5 (real chimeras), R8 (generative evolution), R9 (function audit)
 
@@ -232,3 +232,10 @@ applies_to: [coat_texture, body, limbs]
 strength: soft
 status: VERIFIED
 source: https://genent.cals.ncsu.edu/bug-bytes/arthropods/
+
+### RC-R10-17
+rule: A turtle or tortoise shell is part of the skeleton (bony plates continuous with the ribs and vertebrae), not a skin covering. A donor covering cannot replace it; on a turtle host, donor coverings apply only to skin zones (head, neck, limbs, tail), and the shell keeps its form with only its color or surface texture changed.
+applies_to: [body, coat_texture]
+strength: soft
+status: VERIFIED
+source: https://ideas.repec.org/a/nat/natcom/v4y2013i1d10.1038_ncomms3107.html

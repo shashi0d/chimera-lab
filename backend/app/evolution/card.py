@@ -89,5 +89,9 @@ def output_card(g: Genome, r: Route, tax: Taxonomy) -> dict[str, Any]:
         "can_it_live": can_it_live(g, distant),
         "licenses": [{"rule": lic.rule, "card": lic.card, "compensation": lic.compensation, "reason": lic.reason}
                      for lic in g.licenses],
+        # S3c (D4): the declared identity part is listed with the fiction budget, with its source
+        "identity_parts": [{"donor": tax.animals[p.donor].common_name, "part": p.part, "job": p.job,
+                            "from_trait": p.feature, "source": p.source, "reason": p.reason, "set_by": p.set_by}
+                           for p in g.identity_parts],
         "provenance": provenance(g, tax),
     }

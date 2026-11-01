@@ -185,14 +185,27 @@ def covering_clause(g: Genome, tax: Taxonomy, cov: Any) -> str:
     No donor-icon shape words (no elytra, shields or domes): the covering takes the host's shape."""
     host = _name(tax, g.host)
     cover = surface(tax.animals[g.host])
+    if cov.host_shell:  # S3c (RC-R10-17): on a turtle host the covering grows on the skin, never over the shell
+        from app.evolution.transfer import shell_host
+
+        cover = (shell_host(tax.animals[g.host]) or {}).get("skin", "scaly skin")
     material = surface(tax.animals[cov.donor])
     where = _join([ZONE_WORDS[z] for z in cov.extent])
-    kept = _join(_uncovered(g, cov))
+    kept = _join(_uncovered(g, cov) if not cov.host_shell else ["face"])
     verb = "keeps" if kept == "face" else "keep"
     stops = "stop" if cover.split(" with ")[0].endswith("s") else "stops"
+    # S3c: a covering never changes a part's length or shape (a bear's short tail stays short when covered)
+    outline = (f"; every covered part keeps the {host}'s own length and shape"
+               + (f", and the tail stays the {host}'s own tail" if "tail" in cov.extent and not _donor_tail(g) else ""))
+    shell = f"; {cov.host_shell}" if cov.host_shell else ""
     return (f"{material} in its own colors, grown from the skin as the {host}'s own covering over the {where}: it "
-            f"replaces the {host}'s {cover} there and conforms to the {host}'s body, {cov.scale}; the {cover} {stops} "
-            f"at the covering's edge, and the {kept} {verb} the {host}'s own {cover}")
+            f"replaces the {host}'s {cover} there and conforms to the {host}'s body, {cov.scale}{outline}; the {cover} "
+            f"{stops} at the covering's edge, and the {kept} {verb} the {host}'s own {cover}{shell}")
+
+
+def _donor_tail(g: Genome) -> bool:
+    tail = g.traits.get("tail")
+    return bool(tail and tail.part and tail.donor != g.host)
 
 
 def part_phrase(g: Genome, tax: Taxonomy, t: Any, shape: str, place: str) -> str:
@@ -284,7 +297,9 @@ def host_clause(g: Genome, tax: Taxonomy) -> str:
     own = pattern_phrase(host, g.host)
     skin = surface(tax.animals[g.host]) if g.host else "coat"
     cov = _covering(g)
-    if cov is not None and cov.donor == did and cov.extent:  # S3b: the donor covering takes the rest
+    if cov is not None and cov.donor == did and cov.host_shell:  # S3c (RC-R10-17): the shell is skeleton, kept
+        coat = "its own shell over the shoulders, back, flanks, belly and hips, and its own scaly skin on the face"
+    elif cov is not None and cov.donor == did and cov.extent:  # S3b: the donor covering takes the rest
         where = _join(_uncovered(g, cov))
         coat = f"its own {skin} with {own} on the {where}" if own else f"its own {skin} on the {where}, {PLAIN_COAT}"
     elif pat.op == "OVERLAY" and pat.donor == did and (ph := pattern_phrase(_name(tax, did), did)):

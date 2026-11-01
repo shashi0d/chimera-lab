@@ -228,7 +228,7 @@ def test_rc_r5_01_no_blend_inside_a_patch(engine, sire, dam):
 
 
 async def test_rc_r5_01_invalid_offspring_are_filtered_before_render(engine):
-    seed = await engine.fuse(sire_name="lion", dam_name="eagle")
+    seed = await engine.fuse(sire_name="lion", dam_name="eagle", host="sire")  # S3c (D2): a tie needs a host choice
     engine.spark.invalid_every = 2
     before = engine.meter.snapshot()
     out = await engine.evolve(seed["genome"]["id"], rounds=1, batch=4)
