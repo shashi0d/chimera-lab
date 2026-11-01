@@ -76,12 +76,9 @@ PLAN_SCHEMA: dict[str, Any] = _obj({
                        "wing_use": {"type": "string", "enum": ["powered", "borderline", "gliding_or_display", "none"]},
                        "requested_wings": _STR_N}),
     "traits": _obj({t: _TRAIT for t in TRAIT_TAGS}),
-    "labels": _STRS,
-    "processes": _STRS,
-    "card_trace": _STRS,
-})
+})  # S2: labels, processes and card_trace are code-filled (S1: an unbounded card_trace ran Spark Open away)
 CODE_FIELDS = ("id", "seed", "lineage", "checks", "scores", "design_mode", "audit", "licenses",  # E4: code-owned
-               "render_details")  # S2
+               "render_details", "labels", "processes", "card_trace")  # S2: derived lists are code-filled
 
 POLISH_SCHEMA = _obj({"prompt": _STR})
 CRITIC_SCHEMA = _obj({"animals": _STRS, "creatures": {"type": "integer"}, "notes": _STR})

@@ -125,6 +125,14 @@ class EvoEngine:
                                details={"resolution": res.public()})
         return res.animal
 
+    async def plan_session(self, sire_name: str, dam_name: str, mode: str = "speculative", seed: int = 0) -> Any:
+        """S2: a plan built by typed operations (ops.PlanSession), for the step-3 agent."""
+        from app.evolution.ops import PlanSession
+
+        sire = await self.resolve_parent(sire_name, None, "sire")
+        dam = await self.resolve_parent(dam_name, None, "dam")
+        return PlanSession(self, sire, dam, mode, seed)
+
     def route_for(self, g: Genome) -> Route:
         return route(self.tax.animals[g.parents.sire], self.tax.animals[g.parents.dam], self.tax, myth=g.mode == "mythic")
 
@@ -154,8 +162,9 @@ class EvoEngine:
         g.silhouette = silhouette(g, self.tax, r.pair)
         return g, r
 
-    def finish(self, g: Genome, r: Route) -> Genome:
-        """4.4 habitat and 4.5 physical checks, then derived fields. Idempotent."""
+    def finish(self, g: Genome, r: Route, license_requests: list[tuple[str, str]] | None = None) -> Genome:
+        """4.4 habitat and 4.5 physical checks, then derived fields. Idempotent. `license_requests` (S2): an
+        agent's add_license calls, granted first within the budget."""
         g = g.model_copy(deep=True)
         g.render_details = []  # S2: rebuilt by the code steps below; model text never enters it
         locked = bool(r.pair and r.pair.get("locked"))
@@ -165,7 +174,7 @@ class EvoEngine:
         hab_cards = clear_habitat(g) if real else apply_habitat(g, self.tax, locked)  # E2c, D-056
         phys_cards = run_checks(g, self.tax)
         audit_cards, needs = run_audit(g, self.tax, r)  # 4.5b, after the physical checks (RC-R9-02)
-        audit_cards += settle(g, needs, self.tax)  # 4.5c fiction budget
+        audit_cards += settle(g, needs, self.tax, license_requests)  # 4.5c fiction budget
         g.silhouette = silhouette(g, self.tax, r.pair)  # last, from the final limb plan (S2: RC-R7-06)
         assert not silhouette_issues(g, self.tax), silhouette_issues(g, self.tax)
         g.identity_balance = contribution(g.traits, g.limb_plan, g.host or g.parents.sire)

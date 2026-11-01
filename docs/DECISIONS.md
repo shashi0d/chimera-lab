@@ -237,3 +237,17 @@ Chimera and mythic prompts (`prompt.compile_hosted`) now give:
 - **Notes:** trait notes, which a model plan can write, are kept for the card and logs but are never read by the compiler.
 - **Hybrid extremes:** the beyond-both-parents note on hybrids is now phrased from the BLEND value and flag.
 - **Forced choice:** removed from the checklist schema, instructions, request, parser (an old recording's `choice` is ignored), the EvoSpark protocol (`checklist(image, items)`), the mock and the judge verdict. It answered "a mix of both" on every image and was never scored.
+
+**D-067 The plan as six typed operations; code fills every derived list (S2, ROADMAP 5b).**
+The step-3 agent never writes a whole plan: S1 showed Spark Open looping inside an unbounded `card_trace` array until it hit the output-token limit. `ops.PlanSession` (opened with `engine.plan_session`) edits a plan through six operations:
+- **`set_host(animal)`:** chimera and mythic routes only.
+- **`set_region(region, donor, operator)`:** head, tail and forelimbs take PICK; the surface regions take PATCH, OVERLAY, or PICK with the host to give a region back. At most `max_patches` patch regions; an overlay needs a donor that has a coat pattern; a tail part must be in the donor's class list; forelimbs only from a wing-bearing donor. Hybrids take head or tail only, and real hybrids take none.
+- **`set_habitat(name)`:** one of the profiled habitats.
+- **`set_mode(mode)`:** license requests beyond the new budget are removed, with a warning.
+- **`add_license(rule, compensation)`:** the rule is a bendable id or its card; it must be a rule the plan really bends, within the budget, never an honesty or floor rule, and the compensation is 1 to 240 characters with no franchise names. Requested licenses take the budget first, with the agent's own compensation wording (`settle(requests=…)`).
+- **`drop_part(part, reason)`:** the part must be in the plan, and the reason is required.
+
+How a call works:
+- **Rebuild:** the session keeps the accepted operations as intents and rebuilds from `seed_plan` plus the intents plus `finish` on every call, so code always fills `card_trace`, labels, checks, audit, licenses, `render_details` and the silhouette.
+- **Errors:** an operation with bad arguments, or one whose result breaks a hard card, is not applied. It returns `OpError`s (code, message, field, hint, valid values) and leaves the session unchanged. Every call is logged.
+- **Legacy path:** for the step-5 comparison it keeps working, but `labels`, `processes` and `card_trace` are now code-owned (`CODE_FIELDS`) and are no longer in the model's plan schema.

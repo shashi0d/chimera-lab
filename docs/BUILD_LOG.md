@@ -330,3 +330,9 @@ Read `docs/evolution/ROADMAP.md` (now committed) sections 4, 5 and 5b. Caps for 
 - **Prompt sources:** the prompt is compiled only from structured fields plus the code-owned `render_details`; trait notes never reach it on any route.
 - **Forced choice:** removed from the schema, instructions, request, parser, protocol, mock and verdict. The `e2d_rescore`, `e4_live` and `s1_probe` scripts were updated to match.
 - **Tests:** 13 new (`test_s2_prompt_hygiene.py`: poisoned notes on 6 routes, a model plan full of notes, code repairs present, compensation shown once, model-judged repair kept off the prompt, `render_details` code-owned and rebuilt). E2d tests rewritten for no choice. Full suite 752 passed, 6 skipped.
+
+**Part 3 (typed operations, D-067):** `app/evolution/ops.py` (`PlanSession`, `engine.plan_session`) provides six operations: `set_host`, `set_region`, `set_habitat`, `set_mode`, `add_license` and `drop_part`.
+- **Validation:** each is validated on its own and returns structured errors (code, field, valid values, hint). A failure, including a hard-card failure, leaves the session unchanged.
+- **Derived fields:** code rebuilds every derived field on each call.
+- **Legacy schema:** `labels`, `processes` and `card_trace` left the model's plan schema and became code-owned.
+- **Tests:** 27 new (`test_s2_ops.py`); full suite 779 passed, 6 skipped.

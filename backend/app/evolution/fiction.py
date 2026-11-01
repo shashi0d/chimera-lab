@@ -32,14 +32,16 @@ def budget(mode: str) -> int:
     return int(config()["fiction_budget"][mode])
 
 
-def make_license(need_id: str, reason: str) -> License:
-    """The only way a license is made. Refuses anything R9 3.2 does not list, and every honesty or floor rule."""
+def make_license(need_id: str, reason: str, compensation: str | None = None) -> License:
+    """The only way a license is made. Refuses anything R9 3.2 does not list, and every honesty or floor rule.
+    S2: an agent's `add_license` may word the compensation itself; otherwise the data's wording is used."""
     spec = bendable().get(need_id)
     if spec is None:
         raise ValueError(f"{need_id!r} is not a bendable rule (R9 3.2)")
     if spec["card"] in never_licensable():
         raise ValueError(f"{spec['card']} is an honesty or believability-floor rule and can never be licensed")
-    return License(id=need_id, card=spec["card"], rule=spec["rule"], compensation=spec["compensation"], reason=reason)
+    return License(id=need_id, card=spec["card"], rule=spec["rule"],
+                   compensation=(compensation or spec["compensation"]).strip(), reason=reason)
 
 
 def check_licensable(card: str) -> bool:
@@ -84,19 +86,24 @@ def _set_audit(g: Genome, function: str, result: str, extra: str, cards: list[st
                                                  "cards": list(dict.fromkeys([*item.cards, *cards]))})
 
 
-def settle(g: Genome, needs: list[Need], tax: Taxonomy) -> list[str]:
-    """Grant licenses up to the mode's budget, repair the rest where possible, label what is left."""
+def settle(g: Genome, needs: list[Need], tax: Taxonomy, requests: list[tuple[str, str]] | None = None) -> list[str]:
+    """Grant licenses up to the mode's budget, repair the rest where possible, label what is left.
+    S2: `requests` [(bendable id, compensation)] are an agent's add_license calls; they take the budget first,
+    in order, with the agent's compensation wording. Unrequested needs follow (unrepairable first)."""
     locked = locked_tags(g, tax)
     g.licenses = []
     spec = bendable()
     order = list(spec)
-    ranked = sorted(needs, key=lambda n: (spec[n.id]["repairable"], order.index(n.id)))
+    asked = {rid: comp for rid, comp in requests or []}
+    first = [rid for rid, _c in requests or []]
+    ranked = sorted(needs, key=lambda n: (n.id not in asked, first.index(n.id) if n.id in asked else 0,
+                                          spec[n.id]["repairable"], order.index(n.id)))
     allowed = budget(g.design_mode)
     cards: list[str] = ["RC-R9-10"]
     for n, need in enumerate(ranked):
         card = spec[need.id]["card"]
         if n < allowed:
-            lic = make_license(need.id, need.detail)
+            lic = make_license(need.id, need.detail, asked.get(need.id))
             g.licenses.append(lic)
             _compensate(g, lic, locked)
             _set_audit(g, need.function, "licensed", f"licensed: {lic.rule}, shown with {lic.compensation}",
