@@ -1,0 +1,63 @@
+{
+ "reports": [
+  {
+   "query": "axolotl",
+   "animal": "axolotl",
+   "source": "database",
+   "summary": {
+    "fetch_failed": 6,
+    "supported": 6,
+    "unlisted_source": 1
+   },
+   "stored": "comparison only: chimera_data.json stays the source of truth"
+  },
+  {
+   "query": "chinese pangolin",
+   "animal": "chinese_pangolin",
+   "source": "learned",
+   "summary": {
+    "supported": 7,
+    "rejected_source": 5,
+    "fetch_failed": 1
+   },
+   "stored": "data/learned_animals.json (failing citations moved to rejected_citations)"
+  },
+  {
+   "query": "rhinoceros beetle",
+   "animal": "european_rhinoceros_beetle",
+   "source": "learned",
+   "summary": {
+    "unlisted_source": 6,
+    "rejected_source": 6
+   },
+   "stored": "data/learned_animals.json (failing citations moved to rejected_citations)"
+  },
+  {
+   "query": "woolly mammoth",
+   "animal": "woolly_mammoth",
+   "source": "learned",
+   "summary": {
+    "rejected_source": 5,
+    "fetch_failed": 3,
+    "supported": 3,
+    "off_subject": 1
+   },
+   "stored": "data/learned_animals.json (failing citations moved to rejected_citations)"
+  }
+ ],
+ "budget": {
+  "before": {
+   "image": 28,
+   "spark": 114,
+   "sam": 28,
+   "spark_baseten": 66
+  },
+  "after": {
+   "image": 28,
+   "spark": 114,
+   "sam": 28,
+   "spark_baseten": 66
+  }
+ },
+ "calls": {}
+}

@@ -106,7 +106,8 @@ class EvoEngine:
         learned = Path(st.evo_learned_path) if st.evo_learned_path else (
             st.resolved_local_dir() / "evo" / "learned_animals.json" if self.mock else DATA / "learned_animals.json")
         self.gbif = FixtureGbif() if self.mock else GbifClient(timeout=st.gbif_timeout_seconds)
-        self.resolver = Resolver(self.tax, self.spark, self.gbif, LearnedStore(learned), self.meter.call)
+        self.resolver = Resolver(self.tax, self.spark, self.gbif, LearnedStore(learned), self.meter.call,
+                                 verifier=citation_verifier(self.mock))
         self.resolutions: dict[str, Resolution] = {}
 
     # ------------------------------------------------------------------ guards and lookups
@@ -456,6 +457,21 @@ class EvoEngine:
                                details={"violations": why})
         out = await self.realize(g, r, [])
         return {**out, "meta_calls": self.meter.since(before)}
+
+
+def citation_verifier(mock: bool) -> Any:
+    """S3a: live pages are fetched in code; mock mode serves a fixture page that holds every mock quote."""
+    from app.evolution.citecheck import CitationVerifier, http_fetch
+
+    if not mock:
+        return CitationVerifier(http_fetch)
+
+    async def fixture_page(url: str) -> str:
+        from app.evolution.live import CITE_FIELDS
+
+        return "<html><body>" + " ".join(f"<p>mock evidence for {f}.</p>" for f in CITE_FIELDS) + "</body></html>"
+
+    return CitationVerifier(fixture_page, extra_tiers={"example.org": 1})
 
 
 def _texts(insp: dict[str, Any]) -> str:

@@ -154,19 +154,19 @@
     "Mammuthus columbi"
    ],
    "provenance": {
-    "body_plan": "web-cited",
-    "primary_locomotor_part": "web-cited",
-    "covering": "web-cited",
-    "movement": "web-cited",
-    "habitat": "web-cited",
+    "body_plan": "model-estimated (citation not accepted: museumstore.hmns.org: a store or shop page)",
+    "primary_locomotor_part": "model-estimated (citation not accepted: museumstore.hmns.org: a store or shop page)",
+    "covering": "model-estimated (citation not accepted: kids.britannica.com: a children's encyclopedia)",
+    "movement": "model-estimated (citation not accepted: museumstore.hmns.org: a store or shop page)",
+    "habitat": "model-estimated (citation not accepted: page could not be fetched: HTTPStatusError: Client error '403 Forbidden' for url 'https://www.si.edu/newsdesk/snapshot/berezovka-woolly-mammoth-)",
     "climate": "web-cited",
-    "diet": "web-cited",
+    "diet": "model-estimated (citation not accepted: page could not be fetched: HTTPStatusError: Client error '403 Forbidden' for url 'https://www.amnh.org/explore/news-blogs/mammoth-mastodon-diffe)",
     "active_time": "web-cited",
     "body_mass_kg": "web-cited",
     "body_length_m": "model-estimated",
-    "visible_features": "web-cited",
-    "mouthparts": "web-cited",
-    "breathing": "web-cited",
+    "visible_features": "model-estimated (citation not accepted: kids.britannica.com: a children's encyclopedia)",
+    "mouthparts": "model-estimated (citation not accepted: page could not be fetched: HTTPStatusError: Client error '403 Forbidden' for url 'https://www.amnh.org/explore/news-blogs/mammoth-mastodon-diffe)",
+    "breathing": "model-estimated (citation not accepted: the quote is on the page, but the page never names the animal (woolly mammoth))",
     "class": "gbif",
     "order": "gbif",
     "family": "gbif",
@@ -177,33 +177,9 @@
    },
    "learned_at": "2026-10-31T20:13:33+00:00",
    "citations": {
-    "body_plan": {
-     "url": "https://museumstore.hmns.org/products/woolly-mammoth",
-     "evidence": "It walked on four legs and was about the same size as a modern African elephant."
-    },
-    "primary_locomotor_part": {
-     "url": "https://museumstore.hmns.org/products/woolly-mammoth",
-     "evidence": "It walked on four legs and was about the same size as a modern African elephant."
-    },
-    "covering": {
-     "url": "https://kids.britannica.com/kids/article/mammoth-and-mastodon/275651",
-     "evidence": "and a coat of dense, furry, short hair overlain by longer, bristly hair."
-    },
-    "movement": {
-     "url": "https://museumstore.hmns.org/products/woolly-mammoth",
-     "evidence": "It walked on four legs and was about the same size as a modern African elephant."
-    },
-    "habitat": {
-     "url": "https://www.si.edu/newsdesk/snapshot/berezovka-woolly-mammoth-flesh-jar",
-     "evidence": "roamed the tundra and steppe grasslands of Europe, Africa, Asia and North America."
-    },
     "climate": {
      "url": "https://www.jacksonvillezoo.org/woolly-mammoth",
      "evidence": "The haemoglobin of the Woolly Mammoth was adapted to the cold, with three mutations to improve oxygen delivery around the body and prevent freezing."
-    },
-    "diet": {
-     "url": "https://www.amnh.org/explore/news-blogs/mammoth-mastodon-differences",
-     "evidence": "So, how can we tell these extinct behemoth herbivores apart? It’s all in the head!"
     },
     "active_time": {
      "url": "https://ucmp.berkeley.edu/mammal/mesaxonia/elephantidae.php",
@@ -212,18 +188,6 @@
     "body_mass_kg": {
      "url": "https://ucmp.berkeley.edu/mammal/mesaxonia/elephantidae.php",
      "evidence": "Woolly mammoths were 9-11 feet tall when fully grown and weighed 4-6 tons."
-    },
-    "visible_features": {
-     "url": "https://kids.britannica.com/kids/article/mammoth-and-mastodon/275651",
-     "evidence": "Perfectly adapted to its cold environment, the woolly mammoth had small ears, a short, goatlike tail, and a coat of dense, furry, short hair overlain by longer, bristly hair. It had a humplike reserve of fat on its back. Its long, dexterous trunk was used to gather grass and leaves. Its tusks were a"
-    },
-    "mouthparts": {
-     "url": "https://www.amnh.org/explore/news-blogs/mammoth-mastodon-differences",
-     "evidence": "Mammoths, on the other hand, had ridged teeth—ideal for grazing and grinding tough grasses into small bits, like modern elephants."
-    },
-    "breathing": {
-     "url": "https://naturalhistory.si.edu/sites/default/files/media/file/whale-evolution-activity-facilitation-guide-v2.pdf",
-     "evidence": "whales are mammals like us. They produce milk, give birth to live young, use their lungs to breathe air, and are warm-blooded"
     }
    },
    "corrections": [
@@ -274,7 +238,231 @@
     "https://www.jacksonvillezoo.org/woolly-mammoth",
     "https://www.si.edu/newsdesk/snapshot/berezovka-woolly-mammoth-flesh-jar",
     "https://www.si.edu/spotlight/berezovka-woolly-mammoth"
-   ]
+   ],
+   "rejected_citations": {
+    "body_plan": {
+     "url": "https://museumstore.hmns.org/products/woolly-mammoth",
+     "evidence": "It walked on four legs and was about the same size as a modern African elephant.",
+     "status": "rejected_source",
+     "reason": "museumstore.hmns.org: a store or shop page",
+     "at": "2026-11-01T03:52:57+00:00"
+    },
+    "primary_locomotor_part": {
+     "url": "https://museumstore.hmns.org/products/woolly-mammoth",
+     "evidence": "It walked on four legs and was about the same size as a modern African elephant.",
+     "status": "rejected_source",
+     "reason": "museumstore.hmns.org: a store or shop page",
+     "at": "2026-11-01T03:52:57+00:00"
+    },
+    "covering": {
+     "url": "https://kids.britannica.com/kids/article/mammoth-and-mastodon/275651",
+     "evidence": "and a coat of dense, furry, short hair overlain by longer, bristly hair.",
+     "status": "rejected_source",
+     "reason": "kids.britannica.com: a children's encyclopedia",
+     "at": "2026-11-01T03:52:57+00:00"
+    },
+    "movement": {
+     "url": "https://museumstore.hmns.org/products/woolly-mammoth",
+     "evidence": "It walked on four legs and was about the same size as a modern African elephant.",
+     "status": "rejected_source",
+     "reason": "museumstore.hmns.org: a store or shop page",
+     "at": "2026-11-01T03:52:57+00:00"
+    },
+    "habitat": {
+     "url": "https://www.si.edu/newsdesk/snapshot/berezovka-woolly-mammoth-flesh-jar",
+     "evidence": "roamed the tundra and steppe grasslands of Europe, Africa, Asia and North America.",
+     "status": "fetch_failed",
+     "reason": "page could not be fetched: HTTPStatusError: Client error '403 Forbidden' for url 'https://www.si.edu/newsdesk/snapshot/berezovka-woolly-mammoth-",
+     "at": "2026-11-01T03:52:57+00:00"
+    },
+    "diet": {
+     "url": "https://www.amnh.org/explore/news-blogs/mammoth-mastodon-differences",
+     "evidence": "So, how can we tell these extinct behemoth herbivores apart? It’s all in the head!",
+     "status": "fetch_failed",
+     "reason": "page could not be fetched: HTTPStatusError: Client error '403 Forbidden' for url 'https://www.amnh.org/explore/news-blogs/mammoth-mastodon-diffe",
+     "at": "2026-11-01T03:52:57+00:00"
+    },
+    "visible_features": {
+     "url": "https://kids.britannica.com/kids/article/mammoth-and-mastodon/275651",
+     "evidence": "Perfectly adapted to its cold environment, the woolly mammoth had small ears, a short, goatlike tail, and a coat of dense, furry, short hair overlain by longer, bristly hair. It had a humplike reserve of fat on its back. Its long, dexterous trunk was used to gather grass and leaves. Its tusks were a",
+     "status": "rejected_source",
+     "reason": "kids.britannica.com: a children's encyclopedia",
+     "at": "2026-11-01T03:52:57+00:00"
+    },
+    "mouthparts": {
+     "url": "https://www.amnh.org/explore/news-blogs/mammoth-mastodon-differences",
+     "evidence": "Mammoths, on the other hand, had ridged teeth—ideal for grazing and grinding tough grasses into small bits, like modern elephants.",
+     "status": "fetch_failed",
+     "reason": "page could not be fetched: HTTPStatusError: Client error '403 Forbidden' for url 'https://www.amnh.org/explore/news-blogs/mammoth-mastodon-diffe",
+     "at": "2026-11-01T03:52:57+00:00"
+    },
+    "breathing": {
+     "url": "https://naturalhistory.si.edu/sites/default/files/media/file/whale-evolution-activity-facilitation-guide-v2.pdf",
+     "evidence": "whales are mammals like us. They produce milk, give birth to live young, use their lungs to breathe air, and are warm-blooded",
+     "status": "off_subject",
+     "reason": "the quote is on the page, but the page never names the animal (woolly mammoth)",
+     "at": "2026-11-01T03:52:57+00:00"
+    }
+   },
+   "citation_checks": {
+    "body_plan": {
+     "field": "body_plan",
+     "url": "https://museumstore.hmns.org/products/woolly-mammoth",
+     "host": "museumstore.hmns.org",
+     "tier": null,
+     "source_status": "rejected",
+     "quote": "It walked on four legs and was about the same size as a modern African elephant.",
+     "quote_status": "not_checked",
+     "status": "rejected_source",
+     "provenance": "model-estimated",
+     "reason": "museumstore.hmns.org: a store or shop page",
+     "short_quote": false
+    },
+    "primary_locomotor_part": {
+     "field": "primary_locomotor_part",
+     "url": "https://museumstore.hmns.org/products/woolly-mammoth",
+     "host": "museumstore.hmns.org",
+     "tier": null,
+     "source_status": "rejected",
+     "quote": "It walked on four legs and was about the same size as a modern African elephant.",
+     "quote_status": "not_checked",
+     "status": "rejected_source",
+     "provenance": "model-estimated",
+     "reason": "museumstore.hmns.org: a store or shop page",
+     "short_quote": false
+    },
+    "covering": {
+     "field": "covering",
+     "url": "https://kids.britannica.com/kids/article/mammoth-and-mastodon/275651",
+     "host": "kids.britannica.com",
+     "tier": null,
+     "source_status": "rejected",
+     "quote": "and a coat of dense, furry, short hair overlain by longer, bristly hair.",
+     "quote_status": "not_checked",
+     "status": "rejected_source",
+     "provenance": "model-estimated",
+     "reason": "kids.britannica.com: a children's encyclopedia",
+     "short_quote": false
+    },
+    "movement": {
+     "field": "movement",
+     "url": "https://museumstore.hmns.org/products/woolly-mammoth",
+     "host": "museumstore.hmns.org",
+     "tier": null,
+     "source_status": "rejected",
+     "quote": "It walked on four legs and was about the same size as a modern African elephant.",
+     "quote_status": "not_checked",
+     "status": "rejected_source",
+     "provenance": "model-estimated",
+     "reason": "museumstore.hmns.org: a store or shop page",
+     "short_quote": false
+    },
+    "habitat": {
+     "field": "habitat",
+     "url": "https://www.si.edu/newsdesk/snapshot/berezovka-woolly-mammoth-flesh-jar",
+     "host": "si.edu",
+     "tier": 1,
+     "source_status": "tier1",
+     "quote": "roamed the tundra and steppe grasslands of Europe, Africa, Asia and North America.",
+     "quote_status": "fetch_failed",
+     "status": "fetch_failed",
+     "provenance": "model-estimated",
+     "reason": "page could not be fetched: HTTPStatusError: Client error '403 Forbidden' for url 'https://www.si.edu/newsdesk/snapshot/berezovka-woolly-mammoth-",
+     "short_quote": false
+    },
+    "climate": {
+     "field": "climate",
+     "url": "https://www.jacksonvillezoo.org/woolly-mammoth",
+     "host": "jacksonvillezoo.org",
+     "tier": 2,
+     "source_status": "tier2",
+     "quote": "The haemoglobin of the Woolly Mammoth was adapted to the cold, with three mutations to improve oxygen delivery around the body and prevent freezing.",
+     "quote_status": "found",
+     "status": "supported",
+     "provenance": "web-cited",
+     "reason": "tier 2 source; quote found on the page",
+     "short_quote": false
+    },
+    "diet": {
+     "field": "diet",
+     "url": "https://www.amnh.org/explore/news-blogs/mammoth-mastodon-differences",
+     "host": "amnh.org",
+     "tier": 1,
+     "source_status": "tier1",
+     "quote": "So, how can we tell these extinct behemoth herbivores apart? It’s all in the head!",
+     "quote_status": "fetch_failed",
+     "status": "fetch_failed",
+     "provenance": "model-estimated",
+     "reason": "page could not be fetched: HTTPStatusError: Client error '403 Forbidden' for url 'https://www.amnh.org/explore/news-blogs/mammoth-mastodon-diffe",
+     "short_quote": false
+    },
+    "active_time": {
+     "field": "active_time",
+     "url": "https://ucmp.berkeley.edu/mammal/mesaxonia/elephantidae.php",
+     "host": "ucmp.berkeley.edu",
+     "tier": 1,
+     "source_status": "tier1",
+     "quote": "Spend 16 to 18 hours a day either feeding or moving toward a source of food or water.",
+     "quote_status": "found",
+     "status": "supported",
+     "provenance": "web-cited",
+     "reason": "tier 1 source; quote found on the page",
+     "short_quote": false
+    },
+    "body_mass_kg": {
+     "field": "body_mass_kg",
+     "url": "https://ucmp.berkeley.edu/mammal/mesaxonia/elephantidae.php",
+     "host": "ucmp.berkeley.edu",
+     "tier": 1,
+     "source_status": "tier1",
+     "quote": "Woolly mammoths were 9-11 feet tall when fully grown and weighed 4-6 tons.",
+     "quote_status": "found",
+     "status": "supported",
+     "provenance": "web-cited",
+     "reason": "tier 1 source; quote found on the page",
+     "short_quote": false
+    },
+    "visible_features": {
+     "field": "visible_features",
+     "url": "https://kids.britannica.com/kids/article/mammoth-and-mastodon/275651",
+     "host": "kids.britannica.com",
+     "tier": null,
+     "source_status": "rejected",
+     "quote": "Perfectly adapted to its cold environment, the woolly mammoth had small ears, a short, goatlike tail, and a coat of dense, furry, short hair overlain by longer, bristly hair. It had a humplike reserve of fat on its back. Its long, dexterous trunk was used to gather grass and leaves. Its tusks were a",
+     "quote_status": "not_checked",
+     "status": "rejected_source",
+     "provenance": "model-estimated",
+     "reason": "kids.britannica.com: a children's encyclopedia",
+     "short_quote": false
+    },
+    "mouthparts": {
+     "field": "mouthparts",
+     "url": "https://www.amnh.org/explore/news-blogs/mammoth-mastodon-differences",
+     "host": "amnh.org",
+     "tier": 1,
+     "source_status": "tier1",
+     "quote": "Mammoths, on the other hand, had ridged teeth—ideal for grazing and grinding tough grasses into small bits, like modern elephants.",
+     "quote_status": "fetch_failed",
+     "status": "fetch_failed",
+     "provenance": "model-estimated",
+     "reason": "page could not be fetched: HTTPStatusError: Client error '403 Forbidden' for url 'https://www.amnh.org/explore/news-blogs/mammoth-mastodon-diffe",
+     "short_quote": false
+    },
+    "breathing": {
+     "field": "breathing",
+     "url": "https://naturalhistory.si.edu/sites/default/files/media/file/whale-evolution-activity-facilitation-guide-v2.pdf",
+     "host": "naturalhistory.si.edu",
+     "tier": 1,
+     "source_status": "tier1",
+     "quote": "whales are mammals like us. They produce milk, give birth to live young, use their lungs to breathe air, and are warm-blooded",
+     "quote_status": "found",
+     "status": "off_subject",
+     "provenance": "model-estimated",
+     "reason": "the quote is on the page, but the page never names the animal (woolly mammoth)",
+     "short_quote": false
+    }
+   },
+   "citations_verified_at": "2026-11-01T03:52:57+00:00"
   },
   "chinese_pangolin": {
    "id": "chinese_pangolin",
@@ -362,16 +550,16 @@
     "body_plan": "web-cited",
     "primary_locomotor_part": "web-cited",
     "covering": "web-cited",
-    "movement": "web-cited",
-    "habitat": "web-cited",
+    "movement": "model-estimated (citation not accepted: animalia.bio: a general wiki or wiki-style aggregator)",
+    "habitat": "model-estimated (citation not accepted: animalia.bio: a general wiki or wiki-style aggregator)",
     "climate": "web-cited",
     "diet": "web-cited",
     "active_time": "web-cited",
-    "body_mass_kg": "web-cited",
-    "body_length_m": "web-cited",
-    "visible_features": "web-cited",
+    "body_mass_kg": "model-estimated (citation not accepted: animalia.bio: a general wiki or wiki-style aggregator)",
+    "body_length_m": "model-estimated (citation not accepted: en.wikipedia.org: a general wiki or wiki-style aggregator)",
+    "visible_features": "model-estimated (citation not accepted: animalia.bio: a general wiki or wiki-style aggregator)",
     "mouthparts": "web-cited",
-    "breathing": "web-cited",
+    "breathing": "model-estimated (citation not accepted: page could not be fetched: HTTPStatusError: Client error '403 Forbidden' for url 'https://www.britannica.com/animal/mammal'\nFor more information)",
     "class": "chimera_data.json tier2 (gbif)",
     "order": "chimera_data.json tier2 (gbif)",
     "family": "chimera_data.json tier2 (gbif)",
@@ -394,14 +582,6 @@
      "url": "https://animaldiversity.org/accounts/Manidae/",
      "evidence": "Pangolin bodies are covered in keratinous scales that act as body armor."
     },
-    "movement": {
-     "url": "https://animalia.bio/chinese-pangolin",
-     "evidence": "despite being highly terrestrial, it can climb trees and swim capably. Occasionally, when walking, it will rise onto its hind legs... The pangolin uses its long claws to excavate a burrow"
-    },
-    "habitat": {
-     "url": "https://animalia.bio/chinese-pangolin",
-     "evidence": "They are found across a wide range of habitats including coniferous, tropical, evergreen and bamboo forests, agricultural fields and grasslands."
-    },
     "climate": {
      "url": "https://animaldiversity.org/accounts/Manis_pentadactyla/",
      "evidence": "Chinese pangolins inhabit subtropical and deciduous forests."
@@ -414,25 +594,9 @@
      "url": "https://animaldiversity.org/accounts/Manis_pentadactyla/",
      "evidence": "Not only are they nocturnal animals, but they are extremely shy and slow moving"
     },
-    "body_mass_kg": {
-     "url": "https://animalia.bio/chinese-pangolin",
-     "evidence": "A mature Chinese pangolin weighs from 2 to 7 kilograms (4.4 to 15.4 lb)."
-    },
-    "body_length_m": {
-     "url": "https://en.wikipedia.org/wiki/Chinese_pangolin",
-     "evidence": "Its head and body measure about 40–58 cm (16–23 in) and its tail measures about 25–38 cm (9.8–15.0 in)."
-    },
-    "visible_features": {
-     "url": "https://animalia.bio/chinese-pangolin",
-     "evidence": "It's scales are typically grayish blue. There are 18 rows of overlapping scales accompanied by hair... It has a small, narrow mouth and a little, pointed head. Its head and body measure about 40-58 cm and its tail measures about 25-38 cm."
-    },
     "mouthparts": {
      "url": "https://animaldiversity.org/accounts/Manidae/",
      "evidence": "Pangolins have no teeth. The tongue is connected to the lowest part of the sternum and measures between 37.8 and 40.8 cm in length"
-    },
-    "breathing": {
-     "url": "https://www.britannica.com/animal/mammal",
-     "evidence": "A muscular diaphragm separates the heart and the lungs from the abdominal cavity."
     }
    },
    "corrections": [
@@ -508,7 +672,223 @@
     "https://www.gbif.org/species/9632830",
     "https://www.nationalgeographic.com/animals/mammals/facts/chinese-pangolin",
     "https://www.oneearth.org/meet-the-chinese-pangolin-one-of-asias-most-threatened-mammals/"
-   ]
+   ],
+   "rejected_citations": {
+    "movement": {
+     "url": "https://animalia.bio/chinese-pangolin",
+     "evidence": "despite being highly terrestrial, it can climb trees and swim capably. Occasionally, when walking, it will rise onto its hind legs... The pangolin uses its long claws to excavate a burrow",
+     "status": "rejected_source",
+     "reason": "animalia.bio: a general wiki or wiki-style aggregator",
+     "at": "2026-11-01T03:52:55+00:00"
+    },
+    "habitat": {
+     "url": "https://animalia.bio/chinese-pangolin",
+     "evidence": "They are found across a wide range of habitats including coniferous, tropical, evergreen and bamboo forests, agricultural fields and grasslands.",
+     "status": "rejected_source",
+     "reason": "animalia.bio: a general wiki or wiki-style aggregator",
+     "at": "2026-11-01T03:52:55+00:00"
+    },
+    "body_mass_kg": {
+     "url": "https://animalia.bio/chinese-pangolin",
+     "evidence": "A mature Chinese pangolin weighs from 2 to 7 kilograms (4.4 to 15.4 lb).",
+     "status": "rejected_source",
+     "reason": "animalia.bio: a general wiki or wiki-style aggregator",
+     "at": "2026-11-01T03:52:55+00:00"
+    },
+    "body_length_m": {
+     "url": "https://en.wikipedia.org/wiki/Chinese_pangolin",
+     "evidence": "Its head and body measure about 40–58 cm (16–23 in) and its tail measures about 25–38 cm (9.8–15.0 in).",
+     "status": "rejected_source",
+     "reason": "en.wikipedia.org: a general wiki or wiki-style aggregator",
+     "at": "2026-11-01T03:52:55+00:00"
+    },
+    "visible_features": {
+     "url": "https://animalia.bio/chinese-pangolin",
+     "evidence": "It's scales are typically grayish blue. There are 18 rows of overlapping scales accompanied by hair... It has a small, narrow mouth and a little, pointed head. Its head and body measure about 40-58 cm and its tail measures about 25-38 cm.",
+     "status": "rejected_source",
+     "reason": "animalia.bio: a general wiki or wiki-style aggregator",
+     "at": "2026-11-01T03:52:55+00:00"
+    },
+    "breathing": {
+     "url": "https://www.britannica.com/animal/mammal",
+     "evidence": "A muscular diaphragm separates the heart and the lungs from the abdominal cavity.",
+     "status": "fetch_failed",
+     "reason": "page could not be fetched: HTTPStatusError: Client error '403 Forbidden' for url 'https://www.britannica.com/animal/mammal'\nFor more information",
+     "at": "2026-11-01T03:52:55+00:00"
+    }
+   },
+   "citation_checks": {
+    "body_plan": {
+     "field": "body_plan",
+     "url": "https://animaldiversity.org/accounts/Manis_pentadactyla/",
+     "host": "animaldiversity.org",
+     "tier": 1,
+     "source_status": "tier1",
+     "quote": "The forefeet and hind feet are equipped with sharp claws.",
+     "quote_status": "found",
+     "status": "supported",
+     "provenance": "web-cited",
+     "reason": "tier 1 source; quote found on the page",
+     "short_quote": false
+    },
+    "primary_locomotor_part": {
+     "field": "primary_locomotor_part",
+     "url": "https://animaldiversity.org/accounts/Manis_pentadactyla/",
+     "host": "animaldiversity.org",
+     "tier": 1,
+     "source_status": "tier1",
+     "quote": "The forefeet and hind feet are equipped with sharp claws.",
+     "quote_status": "found",
+     "status": "supported",
+     "provenance": "web-cited",
+     "reason": "tier 1 source; quote found on the page",
+     "short_quote": false
+    },
+    "covering": {
+     "field": "covering",
+     "url": "https://animaldiversity.org/accounts/Manidae/",
+     "host": "animaldiversity.org",
+     "tier": 1,
+     "source_status": "tier1",
+     "quote": "Pangolin bodies are covered in keratinous scales that act as body armor.",
+     "quote_status": "found",
+     "status": "supported",
+     "provenance": "web-cited",
+     "reason": "tier 1 source; quote found on the page",
+     "short_quote": false
+    },
+    "movement": {
+     "field": "movement",
+     "url": "https://animalia.bio/chinese-pangolin",
+     "host": "animalia.bio",
+     "tier": null,
+     "source_status": "rejected",
+     "quote": "despite being highly terrestrial, it can climb trees and swim capably. Occasionally, when walking, it will rise onto its hind legs... The pangolin uses its long claws to excavate a burrow",
+     "quote_status": "not_checked",
+     "status": "rejected_source",
+     "provenance": "model-estimated",
+     "reason": "animalia.bio: a general wiki or wiki-style aggregator",
+     "short_quote": false
+    },
+    "habitat": {
+     "field": "habitat",
+     "url": "https://animalia.bio/chinese-pangolin",
+     "host": "animalia.bio",
+     "tier": null,
+     "source_status": "rejected",
+     "quote": "They are found across a wide range of habitats including coniferous, tropical, evergreen and bamboo forests, agricultural fields and grasslands.",
+     "quote_status": "not_checked",
+     "status": "rejected_source",
+     "provenance": "model-estimated",
+     "reason": "animalia.bio: a general wiki or wiki-style aggregator",
+     "short_quote": false
+    },
+    "climate": {
+     "field": "climate",
+     "url": "https://animaldiversity.org/accounts/Manis_pentadactyla/",
+     "host": "animaldiversity.org",
+     "tier": 1,
+     "source_status": "tier1",
+     "quote": "Chinese pangolins inhabit subtropical and deciduous forests.",
+     "quote_status": "found",
+     "status": "supported",
+     "provenance": "web-cited",
+     "reason": "tier 1 source; quote found on the page",
+     "short_quote": false
+    },
+    "diet": {
+     "field": "diet",
+     "url": "https://www.nationalgeographic.com/animals/mammals/facts/chinese-pangolin",
+     "host": "nationalgeographic.com",
+     "tier": 2,
+     "source_status": "tier2",
+     "quote": "Termites and ants make up 100 percent of the pangolin’s diet.",
+     "quote_status": "found",
+     "status": "supported",
+     "provenance": "web-cited",
+     "reason": "tier 2 source; quote found on the page",
+     "short_quote": false
+    },
+    "active_time": {
+     "field": "active_time",
+     "url": "https://animaldiversity.org/accounts/Manis_pentadactyla/",
+     "host": "animaldiversity.org",
+     "tier": 1,
+     "source_status": "tier1",
+     "quote": "Not only are they nocturnal animals, but they are extremely shy and slow moving",
+     "quote_status": "found",
+     "status": "supported",
+     "provenance": "web-cited",
+     "reason": "tier 1 source; quote found on the page",
+     "short_quote": false
+    },
+    "body_mass_kg": {
+     "field": "body_mass_kg",
+     "url": "https://animalia.bio/chinese-pangolin",
+     "host": "animalia.bio",
+     "tier": null,
+     "source_status": "rejected",
+     "quote": "A mature Chinese pangolin weighs from 2 to 7 kilograms (4.4 to 15.4 lb).",
+     "quote_status": "not_checked",
+     "status": "rejected_source",
+     "provenance": "model-estimated",
+     "reason": "animalia.bio: a general wiki or wiki-style aggregator",
+     "short_quote": false
+    },
+    "body_length_m": {
+     "field": "body_length_m",
+     "url": "https://en.wikipedia.org/wiki/Chinese_pangolin",
+     "host": "en.wikipedia.org",
+     "tier": null,
+     "source_status": "rejected",
+     "quote": "Its head and body measure about 40–58 cm (16–23 in) and its tail measures about 25–38 cm (9.8–15.0 in).",
+     "quote_status": "not_checked",
+     "status": "rejected_source",
+     "provenance": "model-estimated",
+     "reason": "en.wikipedia.org: a general wiki or wiki-style aggregator",
+     "short_quote": false
+    },
+    "visible_features": {
+     "field": "visible_features",
+     "url": "https://animalia.bio/chinese-pangolin",
+     "host": "animalia.bio",
+     "tier": null,
+     "source_status": "rejected",
+     "quote": "It's scales are typically grayish blue. There are 18 rows of overlapping scales accompanied by hair... It has a small, narrow mouth and a little, pointed head. Its head and body measure about 40-58 cm and its tail measures about 25-38 cm.",
+     "quote_status": "not_checked",
+     "status": "rejected_source",
+     "provenance": "model-estimated",
+     "reason": "animalia.bio: a general wiki or wiki-style aggregator",
+     "short_quote": false
+    },
+    "mouthparts": {
+     "field": "mouthparts",
+     "url": "https://animaldiversity.org/accounts/Manidae/",
+     "host": "animaldiversity.org",
+     "tier": 1,
+     "source_status": "tier1",
+     "quote": "Pangolins have no teeth. The tongue is connected to the lowest part of the sternum and measures between 37.8 and 40.8 cm in length",
+     "quote_status": "found",
+     "status": "supported",
+     "provenance": "web-cited",
+     "reason": "tier 1 source; quote found on the page",
+     "short_quote": false
+    },
+    "breathing": {
+     "field": "breathing",
+     "url": "https://www.britannica.com/animal/mammal",
+     "host": "britannica.com",
+     "tier": 2,
+     "source_status": "tier2",
+     "quote": "A muscular diaphragm separates the heart and the lungs from the abdominal cavity.",
+     "quote_status": "fetch_failed",
+     "status": "fetch_failed",
+     "provenance": "model-estimated",
+     "reason": "page could not be fetched: HTTPStatusError: Client error '403 Forbidden' for url 'https://www.britannica.com/animal/mammal'\nFor more information",
+     "short_quote": false
+    }
+   },
+   "citations_verified_at": "2026-11-01T03:52:55+00:00"
   },
   "european_rhinoceros_beetle": {
    "id": "european_rhinoceros_beetle",
@@ -591,19 +971,19 @@
    },
    "claims": [],
    "provenance": {
-    "body_plan": "web-cited",
-    "primary_locomotor_part": "web-cited",
-    "covering": "web-cited",
-    "movement": "web-cited",
-    "habitat": "web-cited",
-    "climate": "web-cited",
-    "diet": "web-cited",
-    "active_time": "web-cited",
+    "body_plan": "model-estimated (citation not accepted: monaconatureencyclopedia.com: domain not in data/source_tiers.json)",
+    "primary_locomotor_part": "model-estimated (citation not accepted: monaconatureencyclopedia.com: domain not in data/source_tiers.json)",
+    "covering": "model-estimated (citation not accepted: monaconatureencyclopedia.com: domain not in data/source_tiers.json)",
+    "movement": "model-estimated (citation not accepted: monaconatureencyclopedia.com: domain not in data/source_tiers.json)",
+    "habitat": "model-estimated (citation not accepted: monaconatureencyclopedia.com: domain not in data/source_tiers.json)",
+    "climate": "model-estimated (citation not accepted: en.wikipedia.org: a general wiki or wiki-style aggregator)",
+    "diet": "model-estimated (citation not accepted: en.wikipedia.org: a general wiki or wiki-style aggregator)",
+    "active_time": "model-estimated (citation not accepted: en.wikipedia.org: a general wiki or wiki-style aggregator)",
     "body_mass_kg": "model-estimated",
-    "body_length_m": "web-cited",
-    "visible_features": "web-cited",
-    "mouthparts": "web-cited",
-    "breathing": "web-cited",
+    "body_length_m": "model-estimated (citation not accepted: en.wikipedia.org: a general wiki or wiki-style aggregator)",
+    "visible_features": "model-estimated (citation not accepted: en.wikipedia.org: a general wiki or wiki-style aggregator)",
+    "mouthparts": "model-estimated (citation not accepted: coleoptera.org.uk: domain not in data/source_tiers.json)",
+    "breathing": "model-estimated (citation not accepted: merriam-webster.com: a dictionary)",
     "class": "gbif",
     "order": "gbif",
     "family": "gbif",
@@ -675,56 +1055,7 @@
      "url": "https://en.wikipedia.org/wiki/European_rhinoceros_beetle"
     }
    ],
-   "citations": {
-    "body_plan": {
-     "url": "https://monaconatureencyclopedia.com/oryctes-nasicornis/",
-     "evidence": "è un coleottero appartenente alla famiglia Scarabaeidae ... con tre paia di zampe nella zona toracica"
-    },
-    "primary_locomotor_part": {
-     "url": "https://monaconatureencyclopedia.com/oryctes-nasicornis/",
-     "evidence": "con tre paia di zampe nella zona toracica"
-    },
-    "covering": {
-     "url": "https://monaconatureencyclopedia.com/oryctes-nasicornis/",
-     "evidence": "nei Dynastinae l’eso-scheletro è molto spesso"
-    },
-    "movement": {
-     "url": "https://monaconatureencyclopedia.com/oryctes-nasicornis/",
-     "evidence": "Gli adulti sono in grado di volare ... Il corno è usato dai maschi ... per scavare gallerie sotterranee"
-    },
-    "habitat": {
-     "url": "https://monaconatureencyclopedia.com/oryctes-nasicornis/",
-     "evidence": "Le larve si sviluppano nel legno in decomposizione di piante arboree, principalmente latifoglie."
-    },
-    "climate": {
-     "url": "https://en.wikipedia.org/wiki/European_rhinoceros_beetle",
-     "evidence": "It is the only representative of the Dynastinae family found in Northern Europe."
-    },
-    "diet": {
-     "url": "https://en.wikipedia.org/wiki/European_rhinoceros_beetle",
-     "evidence": "The larvae grow in decaying plants feeding on woody debris (xylophagy), generally non-resinous."
-    },
-    "active_time": {
-     "url": "https://en.wikipedia.org/wiki/European_rhinoceros_beetle",
-     "evidence": "very active, flying at dusk and by night, attracted by lights"
-    },
-    "body_length_m": {
-     "url": "https://en.wikipedia.org/wiki/European_rhinoceros_beetle",
-     "evidence": "Oryctes nasicornis reach a length of 20–42 millimetres, with a maximum of 47 mm"
-    },
-    "visible_features": {
-     "url": "https://en.wikipedia.org/wiki/European_rhinoceros_beetle",
-     "evidence": "The elytra are reddish brown with a glazed appearance, while the head and pronotum are slightly darker. The underside of the body and the legs are covered with long red hair. The male's head is topped by a long curved horn"
-    },
-    "mouthparts": {
-     "url": "https://www.coleoptera.org.uk/what-are-beetles",
-     "evidence": "Beetles almost invariably have biting mouthparts, with sharp mandibles."
-    },
-    "breathing": {
-     "url": "https://www.merriam-webster.com/dictionary/spiracle",
-     "evidence": "For insects, oxygen enters their bodies through tiny openings called spiracles, traveling through internal networks of tubes called tracheae."
-    }
-   },
+   "citations": {},
    "cited_at": "2026-11-01T02:43:54+00:00",
    "sources_opened": [
     "https://bio.utexas.edu/courses/bio303/Ch34_Invertebrates/Insects.html",
@@ -738,7 +1069,252 @@
     "https://www.coleoptera.org.uk/what-are-beetles",
     "https://www.merriam-webster.com/dictionary/spiracle",
     "https://www.si.edu/spotlight/breathe-insect-how-do-bugs-breathe"
-   ]
+   ],
+   "rejected_citations": {
+    "body_plan": {
+     "url": "https://monaconatureencyclopedia.com/oryctes-nasicornis/",
+     "evidence": "è un coleottero appartenente alla famiglia Scarabaeidae ... con tre paia di zampe nella zona toracica",
+     "status": "unlisted_source",
+     "reason": "monaconatureencyclopedia.com: domain not in data/source_tiers.json",
+     "at": "2026-11-01T03:52:55+00:00"
+    },
+    "primary_locomotor_part": {
+     "url": "https://monaconatureencyclopedia.com/oryctes-nasicornis/",
+     "evidence": "con tre paia di zampe nella zona toracica",
+     "status": "unlisted_source",
+     "reason": "monaconatureencyclopedia.com: domain not in data/source_tiers.json",
+     "at": "2026-11-01T03:52:55+00:00"
+    },
+    "covering": {
+     "url": "https://monaconatureencyclopedia.com/oryctes-nasicornis/",
+     "evidence": "nei Dynastinae l’eso-scheletro è molto spesso",
+     "status": "unlisted_source",
+     "reason": "monaconatureencyclopedia.com: domain not in data/source_tiers.json",
+     "at": "2026-11-01T03:52:55+00:00"
+    },
+    "movement": {
+     "url": "https://monaconatureencyclopedia.com/oryctes-nasicornis/",
+     "evidence": "Gli adulti sono in grado di volare ... Il corno è usato dai maschi ... per scavare gallerie sotterranee",
+     "status": "unlisted_source",
+     "reason": "monaconatureencyclopedia.com: domain not in data/source_tiers.json",
+     "at": "2026-11-01T03:52:55+00:00"
+    },
+    "habitat": {
+     "url": "https://monaconatureencyclopedia.com/oryctes-nasicornis/",
+     "evidence": "Le larve si sviluppano nel legno in decomposizione di piante arboree, principalmente latifoglie.",
+     "status": "unlisted_source",
+     "reason": "monaconatureencyclopedia.com: domain not in data/source_tiers.json",
+     "at": "2026-11-01T03:52:55+00:00"
+    },
+    "climate": {
+     "url": "https://en.wikipedia.org/wiki/European_rhinoceros_beetle",
+     "evidence": "It is the only representative of the Dynastinae family found in Northern Europe.",
+     "status": "rejected_source",
+     "reason": "en.wikipedia.org: a general wiki or wiki-style aggregator",
+     "at": "2026-11-01T03:52:55+00:00"
+    },
+    "diet": {
+     "url": "https://en.wikipedia.org/wiki/European_rhinoceros_beetle",
+     "evidence": "The larvae grow in decaying plants feeding on woody debris (xylophagy), generally non-resinous.",
+     "status": "rejected_source",
+     "reason": "en.wikipedia.org: a general wiki or wiki-style aggregator",
+     "at": "2026-11-01T03:52:55+00:00"
+    },
+    "active_time": {
+     "url": "https://en.wikipedia.org/wiki/European_rhinoceros_beetle",
+     "evidence": "very active, flying at dusk and by night, attracted by lights",
+     "status": "rejected_source",
+     "reason": "en.wikipedia.org: a general wiki or wiki-style aggregator",
+     "at": "2026-11-01T03:52:55+00:00"
+    },
+    "body_length_m": {
+     "url": "https://en.wikipedia.org/wiki/European_rhinoceros_beetle",
+     "evidence": "Oryctes nasicornis reach a length of 20–42 millimetres, with a maximum of 47 mm",
+     "status": "rejected_source",
+     "reason": "en.wikipedia.org: a general wiki or wiki-style aggregator",
+     "at": "2026-11-01T03:52:55+00:00"
+    },
+    "visible_features": {
+     "url": "https://en.wikipedia.org/wiki/European_rhinoceros_beetle",
+     "evidence": "The elytra are reddish brown with a glazed appearance, while the head and pronotum are slightly darker. The underside of the body and the legs are covered with long red hair. The male's head is topped by a long curved horn",
+     "status": "rejected_source",
+     "reason": "en.wikipedia.org: a general wiki or wiki-style aggregator",
+     "at": "2026-11-01T03:52:55+00:00"
+    },
+    "mouthparts": {
+     "url": "https://www.coleoptera.org.uk/what-are-beetles",
+     "evidence": "Beetles almost invariably have biting mouthparts, with sharp mandibles.",
+     "status": "unlisted_source",
+     "reason": "coleoptera.org.uk: domain not in data/source_tiers.json",
+     "at": "2026-11-01T03:52:55+00:00"
+    },
+    "breathing": {
+     "url": "https://www.merriam-webster.com/dictionary/spiracle",
+     "evidence": "For insects, oxygen enters their bodies through tiny openings called spiracles, traveling through internal networks of tubes called tracheae.",
+     "status": "rejected_source",
+     "reason": "merriam-webster.com: a dictionary",
+     "at": "2026-11-01T03:52:55+00:00"
+    }
+   },
+   "citation_checks": {
+    "body_plan": {
+     "field": "body_plan",
+     "url": "https://monaconatureencyclopedia.com/oryctes-nasicornis/",
+     "host": "monaconatureencyclopedia.com",
+     "tier": null,
+     "source_status": "unlisted",
+     "quote": "è un coleottero appartenente alla famiglia Scarabaeidae ... con tre paia di zampe nella zona toracica",
+     "quote_status": "not_checked",
+     "status": "unlisted_source",
+     "provenance": "model-estimated",
+     "reason": "monaconatureencyclopedia.com: domain not in data/source_tiers.json",
+     "short_quote": false
+    },
+    "primary_locomotor_part": {
+     "field": "primary_locomotor_part",
+     "url": "https://monaconatureencyclopedia.com/oryctes-nasicornis/",
+     "host": "monaconatureencyclopedia.com",
+     "tier": null,
+     "source_status": "unlisted",
+     "quote": "con tre paia di zampe nella zona toracica",
+     "quote_status": "not_checked",
+     "status": "unlisted_source",
+     "provenance": "model-estimated",
+     "reason": "monaconatureencyclopedia.com: domain not in data/source_tiers.json",
+     "short_quote": false
+    },
+    "covering": {
+     "field": "covering",
+     "url": "https://monaconatureencyclopedia.com/oryctes-nasicornis/",
+     "host": "monaconatureencyclopedia.com",
+     "tier": null,
+     "source_status": "unlisted",
+     "quote": "nei Dynastinae l’eso-scheletro è molto spesso",
+     "quote_status": "not_checked",
+     "status": "unlisted_source",
+     "provenance": "model-estimated",
+     "reason": "monaconatureencyclopedia.com: domain not in data/source_tiers.json",
+     "short_quote": false
+    },
+    "movement": {
+     "field": "movement",
+     "url": "https://monaconatureencyclopedia.com/oryctes-nasicornis/",
+     "host": "monaconatureencyclopedia.com",
+     "tier": null,
+     "source_status": "unlisted",
+     "quote": "Gli adulti sono in grado di volare ... Il corno è usato dai maschi ... per scavare gallerie sotterranee",
+     "quote_status": "not_checked",
+     "status": "unlisted_source",
+     "provenance": "model-estimated",
+     "reason": "monaconatureencyclopedia.com: domain not in data/source_tiers.json",
+     "short_quote": false
+    },
+    "habitat": {
+     "field": "habitat",
+     "url": "https://monaconatureencyclopedia.com/oryctes-nasicornis/",
+     "host": "monaconatureencyclopedia.com",
+     "tier": null,
+     "source_status": "unlisted",
+     "quote": "Le larve si sviluppano nel legno in decomposizione di piante arboree, principalmente latifoglie.",
+     "quote_status": "not_checked",
+     "status": "unlisted_source",
+     "provenance": "model-estimated",
+     "reason": "monaconatureencyclopedia.com: domain not in data/source_tiers.json",
+     "short_quote": false
+    },
+    "climate": {
+     "field": "climate",
+     "url": "https://en.wikipedia.org/wiki/European_rhinoceros_beetle",
+     "host": "en.wikipedia.org",
+     "tier": null,
+     "source_status": "rejected",
+     "quote": "It is the only representative of the Dynastinae family found in Northern Europe.",
+     "quote_status": "not_checked",
+     "status": "rejected_source",
+     "provenance": "model-estimated",
+     "reason": "en.wikipedia.org: a general wiki or wiki-style aggregator",
+     "short_quote": false
+    },
+    "diet": {
+     "field": "diet",
+     "url": "https://en.wikipedia.org/wiki/European_rhinoceros_beetle",
+     "host": "en.wikipedia.org",
+     "tier": null,
+     "source_status": "rejected",
+     "quote": "The larvae grow in decaying plants feeding on woody debris (xylophagy), generally non-resinous.",
+     "quote_status": "not_checked",
+     "status": "rejected_source",
+     "provenance": "model-estimated",
+     "reason": "en.wikipedia.org: a general wiki or wiki-style aggregator",
+     "short_quote": false
+    },
+    "active_time": {
+     "field": "active_time",
+     "url": "https://en.wikipedia.org/wiki/European_rhinoceros_beetle",
+     "host": "en.wikipedia.org",
+     "tier": null,
+     "source_status": "rejected",
+     "quote": "very active, flying at dusk and by night, attracted by lights",
+     "quote_status": "not_checked",
+     "status": "rejected_source",
+     "provenance": "model-estimated",
+     "reason": "en.wikipedia.org: a general wiki or wiki-style aggregator",
+     "short_quote": false
+    },
+    "body_length_m": {
+     "field": "body_length_m",
+     "url": "https://en.wikipedia.org/wiki/European_rhinoceros_beetle",
+     "host": "en.wikipedia.org",
+     "tier": null,
+     "source_status": "rejected",
+     "quote": "Oryctes nasicornis reach a length of 20–42 millimetres, with a maximum of 47 mm",
+     "quote_status": "not_checked",
+     "status": "rejected_source",
+     "provenance": "model-estimated",
+     "reason": "en.wikipedia.org: a general wiki or wiki-style aggregator",
+     "short_quote": false
+    },
+    "visible_features": {
+     "field": "visible_features",
+     "url": "https://en.wikipedia.org/wiki/European_rhinoceros_beetle",
+     "host": "en.wikipedia.org",
+     "tier": null,
+     "source_status": "rejected",
+     "quote": "The elytra are reddish brown with a glazed appearance, while the head and pronotum are slightly darker. The underside of the body and the legs are covered with long red hair. The male's head is topped by a long curved horn",
+     "quote_status": "not_checked",
+     "status": "rejected_source",
+     "provenance": "model-estimated",
+     "reason": "en.wikipedia.org: a general wiki or wiki-style aggregator",
+     "short_quote": false
+    },
+    "mouthparts": {
+     "field": "mouthparts",
+     "url": "https://www.coleoptera.org.uk/what-are-beetles",
+     "host": "coleoptera.org.uk",
+     "tier": null,
+     "source_status": "unlisted",
+     "quote": "Beetles almost invariably have biting mouthparts, with sharp mandibles.",
+     "quote_status": "not_checked",
+     "status": "unlisted_source",
+     "provenance": "model-estimated",
+     "reason": "coleoptera.org.uk: domain not in data/source_tiers.json",
+     "short_quote": false
+    },
+    "breathing": {
+     "field": "breathing",
+     "url": "https://www.merriam-webster.com/dictionary/spiracle",
+     "host": "merriam-webster.com",
+     "tier": null,
+     "source_status": "rejected",
+     "quote": "For insects, oxygen enters their bodies through tiny openings called spiracles, traveling through internal networks of tubes called tracheae.",
+     "quote_status": "not_checked",
+     "status": "rejected_source",
+     "provenance": "model-estimated",
+     "reason": "merriam-webster.com: a dictionary",
+     "short_quote": false
+    }
+   },
+   "citations_verified_at": "2026-11-01T03:52:55+00:00"
   }
  },
  "aliases": {

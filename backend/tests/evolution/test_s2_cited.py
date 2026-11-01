@@ -78,7 +78,7 @@ async def test_a_new_animal_stores_web_cited_fields_with_urls(engine):
     entry = engine.resolver.store.lookup("woolly mammoth")[0]
     assert entry["provenance"]["diet"] == "web-cited" and entry["citations"]["diet"]["url"].startswith("https://")
     assert entry["provenance"]["visible_features"] == "model-estimated" and "visible_features" not in entry["citations"]
-    assert entry["traits_note"] == "12 of 13 fields web-cited"
+    assert entry["traits_note"] == "12 of 13 fields web-cited (source tier and quote checked)"  # S3a
     assert res.animal.public()["citations"]["diet"] == entry["citations"]["diet"]["url"]
 
 

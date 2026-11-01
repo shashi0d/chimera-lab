@@ -1,0 +1,37 @@
+{
+  "about": "S3a part 4: source tiers for web-cited traits. A citation counts only when its page is tier 1 or tier 2 and the model's supporting quote is found on the page, fetched in code. Domains are matched on the host name or any parent domain. Rejected patterns win over tiers. A domain in no list is 'unlisted' and is not accepted (the trust layer is conservative); add it here, with a reason, to accept it.",
+  "tier1": {
+    "suffixes": [".edu", ".gov", ".ac.uk", ".ac.nz", ".ac.jp", ".edu.au", ".gov.uk", ".gov.au", ".gc.ca", ".europa.eu"],
+    "domains": [
+      "animaldiversity.org",
+      "ncbi.nlm.nih.gov", "pubmed.ncbi.nlm.nih.gov", "doi.org",
+      "si.edu", "amnh.org", "nhm.ac.uk", "fieldmuseum.org", "nhm.org", "nms.ac.uk", "naturalis.nl", "australian.museum", "museumsvictoria.com.au", "floridamuseum.ufl.edu",
+      "iucnredlist.org", "gbif.org", "biodiversitylibrary.org", "eol.org",
+      "nature.com", "science.org", "sciencedirect.com", "link.springer.com", "springer.com", "onlinelibrary.wiley.com", "journals.plos.org", "plos.org",
+      "academic.oup.com", "frontiersin.org", "mdpi.com", "royalsocietypublishing.org", "cambridge.org", "jstor.org", "biorxiv.org", "pnas.org", "cell.com", "tandfonline.com", "journals.uchicago.edu", "bioone.org", "zookeys.pensoft.net", "peerj.com", "elifesciences.org"
+    ]
+  },
+  "tier2": {
+    "domains": [
+      "sandiegozoo.org", "animals.sandiegozoo.org", "nationalzoo.si.edu", "zsl.org", "torontozoo.com", "bronxzoo.com", "wcs.org", "zoo.org", "philadelphiazoo.org", "lpzoo.org", "jacksonvillezoo.org", "houstonzoo.org", "denverzoo.org", "stlzoo.org", "oregonzoo.org", "zoosvictoria.com.au", "taronga.org.au",
+      "aquariumofpacific.org", "montereybayaquarium.org", "georgiaaquarium.org", "neaq.org", "sheddaquarium.org",
+      "nationalgeographic.com", "britannica.com", "bbc.co.uk", "bbc.com", "smithsonianmag.com", "scientificamerican.com", "newscientist.com", "sciencenews.org", "theconversation.com", "audubon.org", "worldwildlife.org", "wwf.org.uk", "nwf.org", "rspb.org.uk", "nhpbs.org"
+    ],
+    "patterns": ["zoo", "aquarium"]
+  },
+  "rejected": {
+    "reasons": {
+      "store": "a store or shop page",
+      "dictionary": "a dictionary",
+      "children": "a children's encyclopedia",
+      "wiki": "a general wiki or wiki-style aggregator"
+    },
+    "domains": {
+      "merriam-webster.com": "dictionary", "dictionary.com": "dictionary", "collinsdictionary.com": "dictionary", "wiktionary.org": "dictionary", "dictionary.cambridge.org": "dictionary", "vocabulary.com": "dictionary", "thefreedictionary.com": "dictionary",
+      "kids.britannica.com": "children", "kids.nationalgeographic.com": "children", "kiddle.co": "children", "dkfindout.com": "children", "ducksters.com": "children", "natgeokids.com": "children", "kids.kiddle.co": "children", "easyscienceforkids.com": "children", "coolkidfacts.com": "children",
+      "wikipedia.org": "wiki", "fandom.com": "wiki", "wikiwand.com": "wiki", "animalia.bio": "wiki", "a-z-animals.com": "wiki", "everything.explained.today": "wiki", "infogalactic.com": "wiki", "newworldencyclopedia.org": "wiki",
+      "amazon.com": "store", "ebay.com": "store", "etsy.com": "store"
+    },
+    "host_words": {"store": "store", "shop": "store", "kids": "children"}
+  }
+}

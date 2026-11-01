@@ -197,8 +197,9 @@ async def _direct(kind: str, purpose: str, aw: Awaitable[T]) -> T:
 
 class Resolver:
     def __init__(self, tax: Taxonomy, spark: Any, gbif: Gbif, store: LearnedStore,
-                 call: Callable[[str, str, Awaitable[Any]], Awaitable[Any]] = _direct) -> None:
+                 call: Callable[[str, str, Awaitable[Any]], Awaitable[Any]] = _direct, verifier: Any = None) -> None:
         self.tax, self.spark, self.gbif, self.store, self.call = tax, spark, gbif, store, call
+        self.verifier = verifier  # S3a: citecheck.CitationVerifier (source tier + quote found on the fetched page)
         for e in store.entries():  # learned animals are part of this engine's taxonomy from the start
             if fixes := check_traits((e.get("taxonomy") or {}).get("class", ""), e.get("traits") or {}):
                 e = store.correct(e["id"], fixes, CLASS_PARTS)  # S2: saved traits must fit the class, logged
@@ -334,6 +335,8 @@ class Resolver:
                 if c["verified"] and f in prov:
                     prov[f] = CITED
                     cites[f] = {"url": c["url"], "evidence": c["evidence"]}
+                elif c.get("check") and f in prov:  # S3a: cited by the model but not accepted
+                    prov[f] = f"{MODEL} (citation not accepted: {c['check']['reason']})"
         prov.update({f: tax_source for f in ("class", "order", "family", "genus", "gbif_key")})
         prov["scientific_name"] = tax_source if taxo else MODEL
         prov["common_name"] = MODEL
@@ -344,7 +347,7 @@ class Resolver:
             "taxonomy_source": tax_source, "traits": {k: traits[k] for k in TRAIT_FIELDS if k in traits},
             "details": {"mouthparts": traits.get("mouthparts_detail", ""), "breathing": traits.get("breathing_detail", "")},
             "claims": traits.get("claimed_crosses", []), "provenance": prov, "citations": cites,
-            "traits_note": cite_note,
+            "traits_note": cite_note, "citation_checks": (cited or {}).get("checks", {}),
             "learned_at": datetime.now(UTC).isoformat(timespec="seconds"),
         }
         if fixes := check_traits(entry["taxonomy"].get("class", ""), entry["traits"]):  # S2: fit the class
@@ -377,8 +380,16 @@ class Resolver:
             return None, f"cited traits failed ({e.code.value}: {e.message[:120]}); traits are model-estimated"
         except (ValueError, KeyError, TypeError) as e:
             return None, f"cited traits failed ({str(e)[:120]}); traits are model-estimated"
+        if self.verifier is not None:  # S3a: a citation counts only from a tier 1 or 2 page that contains the quote
+            checks = await self.verifier.verify({f: c for f, c in out["citations"].items() if c["verified"]},
+                                                subject_terms(ident))
+            for f, c in out["citations"].items():
+                c["check"] = checks.get(f)
+                c["verified"] = bool(c["verified"] and checks.get(f, {}).get("status") == "supported")
+            out["checks"] = checks
         n = sum(1 for c in out["citations"].values() if c["verified"])
-        return out, f"{n} of {len(out['citations'])} fields web-cited"
+        tail = " (source tier and quote checked)" if self.verifier is not None else ""
+        return out, f"{n} of {len(out['citations'])} fields web-cited{tail}"
 
     async def cite(self, name: str) -> dict[str, Any]:
         """S2: re-resolve a known animal with web-cited traits and report, per field, matched (the cited value agrees
@@ -407,7 +418,7 @@ class Resolver:
             else:
                 status = "matched" if _agrees(f, old, new) else "corrected"
             rows.append({"field": f, "status": status, "stored": old, "cited": new, "url": c.get("url", ""),
-                         "evidence": c.get("evidence", ""), "class_parts": rejected.get(f)})
+                         "evidence": c.get("evidence", ""), "class_parts": rejected.get(f), "check": c.get("check")})
         if a.source == "learned":
             self.store.enrich(a.id, out, rows)
             entry = self.store.data["animals"][a.id]
@@ -418,6 +429,38 @@ class Resolver:
         return {"query": name, "animal": a.id, "source": a.source, "status": "cited", "note": note,
                 "stored": stored_where, "fields": rows, "opened": out.get("opened", []),
                 "searches": out.get("searches", [])}
+
+    async def reverify(self, name: str, citations: dict[str, dict[str, Any]] | None = None) -> dict[str, Any]:
+        """S3a: re-check stored citations (no model call): source tier plus the quote on the fetched page. A learned
+        entry keeps only the citations that pass; a failing field falls back to model-estimated, with its old
+        citation and the reason kept in `rejected_citations`. A database animal (citations given by the caller, from
+        the S2 report) is compared only."""
+        if self.verifier is None:
+            raise RuntimeError("reverify needs a CitationVerifier")
+        res = await self.resolve(name)
+        if res.status != "resolved" or res.animal is None:
+            return {"query": name, "status": res.status, "note": res.note}
+        a = res.animal
+        entry = self.store.data["animals"].get(a.id) if a.source == "learned" else None
+        cites = citations if citations is not None else dict((entry or {}).get("citations") or {})
+        checks = await self.verifier.verify(cites, subject_terms({"common_name": a.common_name,
+                                                                  "scientific_name": a.scientific_name}))
+        if entry is not None:
+            stamp = datetime.now(UTC).isoformat(timespec="seconds")
+            for f, c in checks.items():
+                if c["status"] == "supported":
+                    continue
+                old = entry.get("citations", {}).pop(f, None)
+                entry.setdefault("rejected_citations", {})[f] = {**(old or {}), "status": c["status"],
+                                                                 "reason": c["reason"], "at": stamp}
+                entry.setdefault("provenance", {})[f] = f"{MODEL} (citation not accepted: {c['reason']})"
+            entry["citation_checks"] = checks
+            entry["citations_verified_at"] = stamp
+            self.store._save()
+            self.tax.add(animal_from_entry(entry), [])
+        return {"query": name, "animal": a.id, "source": a.source, "checks": checks,
+                "stored": "data/learned_animals.json (failing citations moved to rejected_citations)"
+                if entry is not None else "comparison only: chimera_data.json stays the source of truth"}
 
     def _stored_traits(self, a: Animal) -> dict[str, Any]:
         """The animal's current trait values in the trait schema's shape (learned entry, or the database row)."""
@@ -442,6 +485,15 @@ class Resolver:
                 "active_time": split(row.get("active_time")), "body_mass_kg": rng(row.get("body_mass_kg", "")),
                 "body_length_m": rng(row.get("body_length_m", "")), "visible_features": list(a.features),
                 "mouthparts": a.mouthparts, "breathing": a.breathing}
+
+
+def subject_terms(ident: dict[str, Any]) -> list[str]:
+    """Names a supporting page must use for the animal: common name, its last word ("pangolin"), the binomial and
+    the genus."""
+    common = str(ident.get("common_name") or "").strip()
+    sci = str(ident.get("scientific_name") or "").strip()
+    terms = [common, common.split()[-1] if common else "", sci, sci.split()[0] if sci else ""]
+    return list(dict.fromkeys(t for t in terms if t))
 
 
 def _agrees(field: str, old: Any, new: Any) -> bool:
