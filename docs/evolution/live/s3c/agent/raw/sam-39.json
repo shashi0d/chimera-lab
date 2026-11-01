@@ -1,0 +1,70 @@
+{
+ "purpose": "sam",
+ "request": {
+  "model": "sam-3.1",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "animal"
+     },
+     {
+      "type": "input_image",
+      "image_url": "<elided> (756967 chars)"
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "top_logprobs": 0,
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "service_tier": "auto",
+  "model": "sam-3.1",
+  "background": false,
+  "tools": [],
+  "tool_choice": "auto",
+  "truncation": "disabled",
+  "id": "resp_6ae786d095d92e65f8bc4710",
+  "object": "response",
+  "status": "completed",
+  "created_at": 1793558223.0,
+  "completed_at": 1793558224.0,
+  "error": null,
+  "incomplete_details": null,
+  "output": [
+   {
+    "type": "message",
+    "id": "msg_4d0a09db-4edb-4526-90c7-c716dd527dce",
+    "role": "assistant",
+    "content": [
+     {
+      "type": "output_text",
+      "text": "<elided> (257895 chars)",
+      "annotations": [],
+      "logprobs": []
+     }
+    ],
+    "status": "completed"
+   }
+  ],
+  "instructions": null,
+  "usage": {
+   "input_tokens": 0,
+   "input_tokens_details": {
+    "cached_tokens": 0
+   },
+   "output_tokens": 0,
+   "output_tokens_details": {
+    "reasoning_tokens": 0
+   },
+   "total_tokens": 0,
+   "images_processed": 1
+  },
+  "parallel_tool_calls": true,
+  "store": true
+ }
+}

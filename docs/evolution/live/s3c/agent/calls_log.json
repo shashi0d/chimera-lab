@@ -1,0 +1,215 @@
+[
+ {
+  "at": "2026-11-01T13:33:14",
+  "budget": {
+   "before": {
+    "image": 123,
+    "spark": 556,
+    "sam": 115,
+    "spark_baseten": 754
+   },
+   "after": {
+    "image": 126,
+    "spark": 562,
+    "sam": 116,
+    "spark_baseten": 780
+   }
+  },
+  "calls": {
+   "baseten:spark_baseten:evo_agent": {
+    "ok": 15,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_polish": {
+    "ok": 2,
+    "failed": 0
+   },
+   "meta:image:text_to_image": {
+    "ok": 3,
+    "failed": 0
+   },
+   "meta:spark:evo_describe": {
+    "ok": 3,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_describe": {
+    "ok": 3,
+    "failed": 0
+   },
+   "meta:spark:evo_ask": {
+    "ok": 3,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_ask": {
+    "ok": 3,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_checklist": {
+    "ok": 2,
+    "failed": 0
+   },
+   "meta:sam:sam": {
+    "ok": 1,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_critic": {
+    "ok": 1,
+    "failed": 0
+   }
+  },
+  "summary": [
+   {
+    "run": "tortoise_goat",
+    "repeat": 1,
+    "held_out": false,
+    "renders": 2,
+    "edits": 1,
+    "tool_calls": 16,
+    "stop": null,
+    "final_image": "img2",
+    "remaining": [
+     {
+      "key": "grows_out",
+      "kind": "covering",
+      "text": "Do the hard shell plates grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending into scales), rather than"
+     },
+     {
+      "key": "on_top",
+      "kind": "covering",
+      "text": "Do the hard shell plates look like separate pieces laid on top of the fur, with a raised rim or a gap at the edge?"
+     },
+     {
+      "key": "follows_body",
+      "kind": "covering",
+      "text": "Do the hard shell plates follow this body's own shape and contours, the way its own skin would?"
+     },
+     {
+      "key": "separate_outline",
+      "kind": "covering",
+      "text": "Do the hard shell plates keep the outline of a separate object, such as another animal's shell or back, instead of the body's own shape?"
+     },
+     {
+      "key": "extra_horn",
+      "kind": "structural",
+      "text": "described but not planned: horn"
+     }
+    ],
+    "host": "domestic_goat"
+   }
+  ]
+ },
+ {
+  "at": "2026-11-01T13:37:29",
+  "budget": {
+   "before": {
+    "image": 126,
+    "spark": 562,
+    "sam": 116,
+    "spark_baseten": 780
+   },
+   "after": {
+    "image": 129,
+    "spark": 568,
+    "sam": 117,
+    "spark_baseten": 808
+   }
+  },
+  "calls": {
+   "baseten:spark_baseten:evo_agent": {
+    "ok": 17,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_polish": {
+    "ok": 2,
+    "failed": 0
+   },
+   "meta:image:text_to_image": {
+    "ok": 3,
+    "failed": 0
+   },
+   "meta:spark:evo_describe": {
+    "ok": 3,
+    "failed": 0
+   },
+   "meta:spark:evo_ask": {
+    "ok": 3,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_describe": {
+    "ok": 3,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_ask": {
+    "ok": 3,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_checklist": {
+    "ok": 2,
+    "failed": 0
+   },
+   "meta:sam:sam": {
+    "ok": 1,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_critic": {
+    "ok": 1,
+    "failed": 0
+   }
+  },
+  "summary": [
+   {
+    "run": "tortoise_goat",
+    "repeat": 2,
+    "held_out": false,
+    "renders": 2,
+    "edits": 1,
+    "tool_calls": 17,
+    "stop": null,
+    "final_image": "img2",
+    "remaining": [
+     {
+      "key": "grows_out",
+      "kind": "covering",
+      "text": "Do the hard shell plates grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending into scales), rather than"
+     },
+     {
+      "key": "on_top",
+      "kind": "covering",
+      "text": "Do the hard shell plates look like separate pieces laid on top of the fur, with a raised rim or a gap at the edge?"
+     },
+     {
+      "key": "scattered",
+      "kind": "covering",
+      "text": "Are the hard shell plates scattered as separate pieces over different parts of the body?"
+     },
+     {
+      "key": "cover_on_legs",
+      "kind": "covering",
+      "text": "Are there hard shell plates on the legs?"
+     },
+     {
+      "key": "cover_on_shoulders",
+      "kind": "covering",
+      "text": "Are there hard shell plates on the shoulders?"
+     },
+     {
+      "key": "follows_body",
+      "kind": "covering",
+      "text": "Do the hard shell plates follow this body's own shape and contours, the way its own skin would?"
+     },
+     {
+      "key": "separate_outline",
+      "kind": "covering",
+      "text": "Do the hard shell plates keep the outline of a separate object, such as another animal's shell or back, instead of the body's own shape?"
+     },
+     {
+      "key": "extra_horn",
+      "kind": "structural",
+      "text": "described but not planned: horn"
+     }
+    ],
+    "host": "domestic_goat"
+   }
+  ]
+ }
+]

@@ -874,6 +874,9 @@ def _cards_in(obj: Any) -> list[str]:
 
 def _summary(name: str, out: dict[str, Any]) -> str:
     if not out.get("ok"):
+        if out.get("error") is None and out.get("errors"):  # a plan operation's own validation errors
+            e = out["errors"][0]
+            return f"refused: {e.get('code')}: {str(e.get('message', ''))[:160]}"
         return f"refused: {out.get('error')}: {out.get('message', '')[:160]}"
     if name == "resolve_animal":
         a = out.get("animal") or {}
