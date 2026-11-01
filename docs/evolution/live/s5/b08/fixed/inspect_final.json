@@ -1,0 +1,532 @@
+{
+ "protocol": "plan-blind (S3a)",
+ "critics": [
+  "spark_open",
+  "meta_spark"
+ ],
+ "items": [
+  {
+   "source": "checklist",
+   "key": "frame",
+   "text": "Is the overall body shape that of a red fox?",
+   "group": "structure",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "no"
+   },
+   "status": "fail",
+   "fix": "Show the planned red fox body shape and outline; keep everything else the same.",
+   "sam": null,
+   "pair_status": "uncertain",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "head",
+   "text": "Does it have a red fox head with visible eyes?",
+   "group": "structure",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "fix": "Show the planned red fox head, fully visible with clear eyes; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "wings_front",
+   "text": "Does it have barn owl wings in place of its front legs?",
+   "group": "structure",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "fix": "Show the planned barn owl wings in place of the front legs, standing on two hind legs; keep everything else the same.",
+   "sam": "wings",
+   "pair_status": "pass",
+   "sam_found": true,
+   "sam_fill": 0.0797
+  },
+  {
+   "source": "checklist",
+   "key": "legs_and_wings",
+   "text": "Does it stand on four walking legs and also have wings?",
+   "group": "structure",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "The plan has wings in place of the front legs: show two hind legs only; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "whole_animal",
+   "text": "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?",
+   "group": "structure",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "Show the planned barn owl contribution only as layered contour feathers on the red fox's own body over the shoulders and neck, not as separate animals; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "second_head",
+   "text": "Is there a second head anywhere?",
+   "group": "structure",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "Show one single head, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "extra_legs",
+   "text": "Does it have more than 2 walking legs?",
+   "group": "structure",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "Show exactly 2 walking legs, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "no_mane",
+   "text": "Does it have a full mane of long hair around the head and neck?",
+   "group": "structure",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "The plan has no mane: show the planned neck with no mane; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "plain_fur",
+   "text": "Does the fur show stripes or spots?",
+   "group": "pattern",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "Show a plain coat with no stripes or spots, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "cover_present",
+   "text": "Are there layered contour feathers on the shoulders and neck?",
+   "group": "surface",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "fix": "Show the planned layered contour feathers over the shoulders and neck; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "connects_feathered_wings",
+   "text": "Does the feathered wings grow out of the layered contour feathers at its base, so they look like one connected system?",
+   "group": "connection",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "fix": "Show the feathered wings growing out of the layered contour feathers at its base, as one system; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "separate_feathered_wings",
+   "text": "Does the feathered wings look stuck on separately, with no connection to the layered contour feathers?",
+   "group": "connection",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "Show the feathered wings growing out of the layered contour feathers at its base, as one system; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "separate_bodies",
+   "text": "separate bodies: 1",
+   "group": "structure",
+   "expect": 1,
+   "answers": {
+    "spark_open": 1,
+    "meta_spark": 1
+   },
+   "status": "pass",
+   "fix": "Show the planned barn owl contribution only as layered contour feathers on the red fox's own body over the shoulders and neck, not as separate animals; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "heads",
+   "text": "heads: 1",
+   "group": "structure",
+   "expect": 1,
+   "answers": {
+    "spark_open": 1,
+    "meta_spark": 1
+   },
+   "status": "pass",
+   "fix": "Show one single head, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "walking_legs",
+   "text": "walking legs: 2",
+   "group": "structure",
+   "expect": 2,
+   "answers": {
+    "spark_open": 2,
+    "meta_spark": 2
+   },
+   "status": "pass",
+   "fix": "Show exactly 2 walking legs, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "wings",
+   "text": "wings: 2",
+   "group": "structure",
+   "expect": 2,
+   "answers": {
+    "spark_open": 2,
+    "meta_spark": 2
+   },
+   "status": "pass",
+   "fix": "Show exactly one pair of wings, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "extra_limb_pieces",
+   "text": "extra limb pieces: 0",
+   "group": "structure",
+   "expect": 0,
+   "answers": {
+    "spark_open": 0,
+    "meta_spark": 0
+   },
+   "status": "pass",
+   "fix": "Show the red fox's own limbs only, with no extra limb-like pieces; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "description",
+   "key": "extra_spots",
+   "text": "described but not planned: spots",
+   "group": "structure",
+   "expect": "absent",
+   "answers": {
+    "spark_open": true,
+    "meta_spark": true
+   },
+   "status": "fail",
+   "fix": "The plan has no spots: show the red fox's own body there instead; keep everything else the same.",
+   "sam": null,
+   "pair_status": "fail",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "origin",
+   "key": "origin_feathered_wings",
+   "text": "which animal the feathered wings came from",
+   "group": "identity",
+   "expect": "barn owl",
+   "answers": {
+    "spark_open": "barn owl",
+    "meta_spark": "barn owl"
+   },
+   "status": "pass",
+   "sam": null,
+   "fix": "Show the feathered wings with its own form (broad wings of layered flight feathers with fingered tips), in its planned place; keep everything else the same.",
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  }
+ ],
+ "failures": [
+  {
+   "source": "checklist",
+   "key": "frame",
+   "text": "Is the overall body shape that of a red fox?",
+   "group": "structure",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "no"
+   },
+   "status": "fail",
+   "fix": "Show the planned red fox body shape and outline; keep everything else the same.",
+   "sam": null,
+   "pair_status": "uncertain",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "description",
+   "key": "extra_spots",
+   "text": "described but not planned: spots",
+   "group": "structure",
+   "expect": "absent",
+   "answers": {
+    "spark_open": true,
+    "meta_spark": true
+   },
+   "status": "fail",
+   "fix": "The plan has no spots: show the red fox's own body there instead; keep everything else the same.",
+   "sam": null,
+   "pair_status": "fail",
+   "sam_found": null,
+   "sam_fill": null
+  }
+ ],
+ "structural_failures": 2,
+ "uncertain": 0,
+ "sam_calls": 1,
+ "descriptions": {
+  "spark_open": {
+   "description": "The creature is shown in right-facing profile standing upright on two hind legs against a plain off-white background. The anterior head, neck, hind legs and long tail have the appearance of a reddish-brown fox with dense fur, while the torso, chest and paired folded wings have the appearance of an owl with layered brown, tan, grey and white feathers. The head is fox-like with a pointed muzzle, the body is stout and upright, the wings are folded close against the sides of the body, and the tail extends straight back behind the legs. The overall coloration is reddish-brown on the head, outer legs and tail, white on the muzzle, throat and chest, and mottled tan, grey and brown with dark speckling and barring on the back and wings.",
+   "parts": [
+    {
+     "part": "head",
+     "looks_like": "fox-like, narrow pointed muzzle with a black nose, white fur around the muzzle and lower cheek, reddish-brown fur on the top of the muzzle and forehead, a visible amber-brown eye with a dark pupil facing right, and fine whiskers on the muzzle",
+     "where": "at the top front of the body, in profile facing right"
+    },
+    {
+     "part": "ears",
+     "looks_like": "two upright, triangular pointed ears with reddish-brown outer fur, black on the back edges and pale buff inside, with dark inner fur",
+     "where": "on top of the head, one slightly in front of the other in profile view"
+    },
+    {
+     "part": "legs",
+     "looks_like": "two muscular hind legs covered in short reddish-brown fur that darkens to dark brown-black on the lower shins, with visible hock joints bent in a standing posture",
+     "where": "under the rear torso, extending down to the ground, left and right hind legs visible in profile with the nearer leg in front"
+    },
+    {
+     "part": "feet",
+     "looks_like": "dark brown to black paws with blunt claws and padded soles, the toes splayed slightly on the ground",
+     "where": "at the bottom ends of the two hind legs, in contact with the ground"
+    },
+    {
+     "part": "tail",
+     "looks_like": "long, thick and bushy, covered in long reddish-brown fur with darker underfur and a pale cream-white tip at the end",
+     "where": "extending from the rear of the body, angled slightly downward behind the hind legs"
+    },
+    {
+     "part": "wings",
+     "looks_like": "two folded bird wings with layered flight feathers, the nearer wing prominently visible with broad overlapping feathers showing tan, cream, grey and brown coloration, dark speckles and dark barring on the primaries, the farther wing partially visible under the chest",
+     "where": "folded against the sides of the torso, from the shoulder region above the mid-back down to the upper thigh, one on the near side and one on the far side"
+    },
+    {
+     "part": "feathers",
+     "looks_like": "dense, soft-looking owl-like plumage covering the neck, back, chest, belly and wings; white with small dark spots on the throat, chest and belly, and mottled tan, buff, grey and brown with scalloped feather edges on the back and wing coverts",
+     "where": "covering the entire torso from the back of the neck down the back and around the front chest and belly, and forming the wings"
+    },
+    {
+     "part": "markings",
+     "looks_like": "small black-brown spots scattered on the white chest and belly, darker brown barring and chevron marks on the wing and tail feathers, and grey scalloping on the back and shoulder feathers",
+     "where": "on the white chest/belly plumage, on the folded wing feathers along the side, and on the dorsal back feathers behind the neck"
+    }
+   ],
+   "attached_objects": [],
+   "animals": [
+    "fox",
+    "barn owl"
+   ],
+   "separate_bodies": 1,
+   "heads": 1,
+   "walking_legs": 2,
+   "wings": 2,
+   "extra_limb_pieces": 0,
+   "tails": 1
+  },
+  "meta_spark": {
+   "description": "A single standing chimera shown in right profile with the head, hindquarters, legs and long bushy tail of a red fox combined with the wings and plumage of a barn owl. The head is rusty-red above with white on the lower cheeks, chin and throat, a pointed muzzle with a black nose, and upright pointed ears. The chest and front of the neck are fluffy white to buff with fine dark speckles, while the back of the neck and shoulders are buff with gray mottling. Large folded feathered wings lie along both sides of the torso. The lower body and hind legs are covered in reddish-brown fox fur with darker brown-black on the lower legs and paws. A long thick fox tail, reddish-brown with a white tip, extends back and down behind the legs to the ground.",
+   "parts": [
+    {
+     "part": "head",
+     "looks_like": "red fox with rusty-red fur above, white on muzzle, cheeks and throat, pointed snout, black nose and amber-brown eye",
+     "where": "at the top front of the body, facing right in profile"
+    },
+    {
+     "part": "ears",
+     "looks_like": "pointed fox ears, reddish inside with black on the back edges",
+     "where": "on top of the head, upright"
+    },
+    {
+     "part": "legs",
+     "looks_like": "furry reddish-brown fox hind legs with bent hocks and darker lower segments",
+     "where": "under the lower rear body, supporting the body"
+    },
+    {
+     "part": "feet",
+     "looks_like": "dark brown-black fox paws with visible claws",
+     "where": "at the ends of the legs on the ground"
+    },
+    {
+     "part": "tail",
+     "looks_like": "long bushy fox tail, reddish-brown fur with a white tip",
+     "where": "extending back and down from the rear of the body to the ground"
+    },
+    {
+     "part": "wings",
+     "looks_like": "folded barn owl wings with layered flight and covert feathers",
+     "where": "folded along the sides of the torso from the shoulder area to mid-body, one prominent on the near side and one partially visible on the far side"
+    },
+    {
+     "part": "feathers",
+     "looks_like": "mottled barn owl plumage in tan, buff, gray and cream with dark barring and spots",
+     "where": "covering the wings and the upper back and back of the neck"
+    },
+    {
+     "part": "markings",
+     "looks_like": "small black speckles on white to buff background",
+     "where": "scattered over the neck, chest and belly"
+    }
+   ],
+   "attached_objects": [],
+   "animals": [
+    "fox",
+    "barn owl"
+   ],
+   "separate_bodies": 1,
+   "heads": 1,
+   "walking_legs": 2,
+   "wings": 2,
+   "extra_limb_pieces": 0,
+   "tails": 1
+  }
+ },
+ "matches": {
+  "spark_open": {
+   "seen": [
+    "feathers",
+    "spots",
+    "wings"
+   ],
+   "expected": [
+    "feathers",
+    "wings"
+   ],
+   "extras": [
+    "spots"
+   ],
+   "omissions": []
+  },
+  "meta_spark": {
+   "seen": [
+    "feathers",
+    "spots",
+    "wings"
+   ],
+   "expected": [
+    "feathers",
+    "wings"
+   ],
+   "extras": [
+    "spots"
+   ],
+   "omissions": []
+  }
+ },
+ "third_animals": {
+  "spark_open": [],
+  "meta_spark": []
+ },
+ "balance": {
+  "yes": 5,
+  "no": 7
+ },
+ "expected_counts": {
+  "separate_bodies": 1,
+  "heads": 1,
+  "walking_legs": 2,
+  "wings": 2,
+  "extra_limb_pieces": 0
+ }
+}

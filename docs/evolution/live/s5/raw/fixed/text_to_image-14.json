@@ -1,0 +1,110 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Show the planned red fox body shape and outline; keep everything else the same. The plan has no spots: show the red fox's own body there instead; keep everything else the same.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ],
+  "previous_response_id": "resp_6ae7ae3050aa0806cc1f46a8"
+ },
+ "response": {
+  "id": "resp_6ae7ae8b350f1ed7238d4a3b",
+  "access_programs": null,
+  "created_at": 1793568395.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae7ae8bbe332480dc5440de",
+    "summary": [
+     {
+      "text": "**Editing image spots**\nI'm preparing to generate the updated image with the spots removed while keeping the wings and everything else exactly the same.\n**Refining red fox portrait**\nI'm adjusting the portrait to replace the feathered neck, shoulder, and chest with plain red fox fur and remove the spots, while keeping the body shape, outline, and wings exactly the same.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae7ae8b57a6775f693d4840",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR08xT3VqUXpyQWlyWTBNRkFQdnRkemJ0OVhCOWJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczozODM3NDM0MS02MDRmLTRkODMtOWNlYy01YWQ4ZDNjMWY4MzI6R0JUTm1UU1dLMEZxcE5JT0FJc3dwdGFEOFN3MmJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM1NjgzOTV9.Q8WLFwGYW0Q4MI792juTQrEtovdf",
+    "result": "<elided> (619808 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": "resp_6ae7ae3050aa0806cc1f46a8",
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 20984,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 19712
+   },
+   "output_tokens": 728,
+   "output_tokens_details": {
+    "reasoning_tokens": 160
+   },
+   "total_tokens": 21712
+  },
+  "user": null
+ }
+}
