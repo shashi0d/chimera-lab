@@ -28,7 +28,7 @@ tuning.
 | both parents named by the deciding critic | 7 of 11 | 5 of 11 |
 
 - **The agent makes fewer structural failures (0.55 against 0.91) and more integration failures (1.27 against 1.0).**
-- **It wins where the pipeline has no rule.** On a structural host tie (6 of the 11 cases) the pipeline falls back to
+- **It wins where the pipeline has no rule.** On a structural host tie (7 of the 11 cases) the pipeline falls back to
   the first-named parent. The agent chose the horse for pangolin × horse, the goat for tortoise × goat and the
   cheetah for penguin × cheetah, each with a reason. Its images name both parents more often.
 - **It loses where it re-rolls on critic misreads:** octopus × horse spent 4 renders on a "toad" misread.
@@ -137,7 +137,7 @@ The shared counter (`docs/live/budget.json`) went from image 162, Meta Spark 637
 
 ## Where the agent's choices made the difference
 
-**The host on a structural tie** (6 of 11 cases tie; the pipeline falls back to the first-named parent).
+**The host on a structural tie** (7 of 11 cases tie: b01, b03, b04, b07, b08, b09 and b10; the pipeline falls back to the first-named parent).
 
 - **b09, Indian pangolin × horse: helped.**
   - The agent, step 4, `choose_candidate C2`: *"Chosen horse as host for realistic mode - horse body carries
