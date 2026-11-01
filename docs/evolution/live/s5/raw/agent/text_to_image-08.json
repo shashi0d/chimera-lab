@@ -1,0 +1,109 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Silhouette: Upright golden eagle frame on two legs. Host frame: the golden eagle sets the outline, body size and overall frame. It is a single creature combining a lion and a golden eagle. The head is that of the golden eagle, fully visible and uncluttered, with clear, discernible eyes. Details: golden eagle body and legs with its own layered contour feathers on the face, neck, shoulders, belly, hips, legs and tail; plain coat with no stripes or spots. From the lion, as parts and materials on the golden eagle's own body: wings sized for flight; dense fur in its own colors, grown from the skin as the golden eagle's own covering over the back and flanks, replacing the golden eagle's layered contour feathers there and conforming to the golden eagle's body, sized to the golden eagle's body and following its contours. Every covered part keeps the golden eagle's own length and shape; the layered contour feathers stop at the covering's edge, while the face, neck, shoulders, belly, hips, legs and tail retain the golden eagle's own layered contour feathers. Deep keel and heavy flight chest. The covering follows the body's own shape. Bilaterally symmetrical, with recognizable limbs and visible sense organs. Habitat cue (forest): dark back and light belly with mild countershading. Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "id": "resp_6ae7a50a2253d0bf0d114fa8",
+  "access_programs": null,
+  "created_at": 1793565962.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae7a50af2f7feea77a3439b",
+    "summary": [
+     {
+      "text": "**Designing hybrid eagle-lion silhouette**\nI'm shaping the upright golden eagle frame with lion elements, keeping the head fully visible with clear eyes and adding layered contour feathers, flight-sized wings, and dense fur in the eagle's own colors.\n**Composing natural-history griffin illustration**\nI'm drafting a full-body, side three-quarter natural history plate: golden eagle head, neck, shoulders, belly, hips, legs and tail in feathers, with dense lion fur covering the back and flanks, wings, deep keel, countershaded forest tones, plain light background, 1:1.\n**Regenerating griffin with lion fur**\nI'm regenerating the griffin so the body has lion fur instead of just eagle features, keeping the natural-history illustration style and composition.\n**Adjusting griffin leg count**\nI'm refining the griffin design to match the request for two legs instead of four, keeping the lion fur and overall look consistent.\n**Refining hybrid image details**\nI'm reviewing the two generated options, noting the leg count and fur differences, and deciding to generate one more version that combines two legs with lion fur.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae7a50ab80961b7582b4ebc",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0NUU3ZUUnBLVlB6Yi1FRUFORjF5emc1bUVnZWJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczozN2RlNGRiMS05OThjLTRiYWUtYWFlZC1mNjllY2MxOWI1Nzk6R0RUU3ZUUnVuQlBmVE9VREFON3lEanF2RXY5UWJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM1NjU5NjJ9.Q8WLFwFCreTFBp_iHS_yV291tyuf",
+    "result": "<elided> (684784 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 45413,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 32064
+   },
+   "output_tokens": 4900,
+   "output_tokens_details": {
+    "reasoning_tokens": 745
+   },
+   "total_tokens": 50313
+  },
+  "user": null
+ }
+}

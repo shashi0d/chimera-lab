@@ -1,0 +1,77 @@
+[
+ {
+  "id": "C1",
+  "ops": [
+   {
+    "op": "set_host",
+    "args": {
+     "animal": "lion"
+    }
+   }
+  ],
+  "score": 2.25,
+  "host": "lion",
+  "silhouette": "horizontal lion frame carried on two hind legs, golden eagle wings in place of the forelegs",
+  "parts": [
+   "wings (forelimbs)"
+  ],
+  "dropped": [],
+  "identity_parts": [],
+  "covering": {
+   "extent": [
+    "forequarters",
+    "neck"
+   ],
+   "plate_pattern": "",
+   "plate_source": ""
+  },
+  "licenses": [],
+  "labels": [
+   "speculative chimera, no real-world precedent",
+   "non-flying wings: display or gliding only"
+  ],
+  "notes": {
+   "niche": "habitat forest (native to lion, golden eagle)",
+   "autonomy": "functions not carried: movement: labeled",
+   "survival": "0 license(s) of 0: none",
+   "identity": "covering over forequarters, neck",
+   "host": "structural tie: lion is one of two equal options (RC-R10-01: never by size, mass or name order)"
+  }
+ },
+ {
+  "id": "C2",
+  "ops": [
+   {
+    "op": "set_host",
+    "args": {
+     "animal": "golden eagle"
+    }
+   }
+  ],
+  "score": 2.25,
+  "host": "golden eagle",
+  "silhouette": "upright golden eagle frame on two legs",
+  "parts": [],
+  "dropped": [],
+  "identity_parts": [],
+  "covering": {
+   "extent": [
+    "back",
+    "flanks"
+   ],
+   "plate_pattern": "",
+   "plate_source": ""
+  },
+  "licenses": [],
+  "labels": [
+   "speculative chimera, no real-world precedent"
+  ],
+  "notes": {
+   "niche": "habitat forest (native to lion, golden eagle)",
+   "autonomy": "functions not carried: movement: repaired",
+   "survival": "0 license(s) of 0: none",
+   "identity": "covering over back, flanks",
+   "host": "structural tie: golden eagle is one of two equal options (RC-R10-01: never by size, mass or name order)"
+  }
+ }
+]
