@@ -380,3 +380,5 @@ Read `docs/evolution/ROADMAP.md` (now committed) sections 4, 5 and 5b. Caps for 
 - **Fix:** labels are now checked on the finished plan only. A regression test was added; suite 834 passed, 6 skipped.
 - **Run 2** (`live/s2/beetlebear/`, fresh cache): again 1 Meta Spark, 4 Spark Open, 1 image and 2 SAM. The model plan and polish were accepted. Quality 0.967 (critic 1.0, silhouette 0.891, thumbnail 1.0). Inspect passed every structural item: four legs, bear head, horn found by SAM (fill 0.0064), compensation, no wings, no whole beetles. So no edit turn was needed. My judgment: correct, with plates slightly beyond the planned back and flanks (onto the shoulders and upper legs).
 - **Budget counter:** image 26→28, Spark 103→104 (102→103 in run 1), SAM 21→25, Spark Open 44→52 over both runs.
+
+**Part 9:** report `docs/evolution/S2_FIXPACK.md`: what changed (D-063 to D-071), the cited-trait table, the beetle-bear result (two live runs), calls by provider, budget, and notes for step 3. S2 adds 134 tests; suite 834 passed, 6 skipped.
