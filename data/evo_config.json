@@ -407,7 +407,11 @@
     "cite_traits": {"provider": "meta"},
     "judge_functions": {"provider": "meta"},
     "describe": {"provider": "baseten", "max_tokens": 8000},
-    "ask": {"provider": "baseten", "max_tokens": 8000}
+    "ask": {"provider": "baseten", "max_tokens": 8000},
+    "agent": {"provider": "baseten", "max_tokens": 8000}
   },
+  "agent_about": "S3c (ROADMAP step 3): the agent loop. Caps are runaway guards only (about 3x a creature's planned use: one render, one inspect, one repair). Every Spark Open agent call carries max_tokens (reasoning tokens count). Reference portraits stay off (ROADMAP 5b).",
+  "agent": {"max_renders": 4, "max_tool_calls": 30, "max_edits": 6, "max_tokens": 8000, "max_nudges": 3,
+            "reference_portraits": false},
   "prosaic_detail": "natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin"
 }

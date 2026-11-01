@@ -443,6 +443,36 @@ class EvoEngine:
         return {**doc, "cached": False, "cache_key": key, "model_plan": model_note,
                 "meta_calls": self.meter.since(before)}
 
+    async def agent_fuse(self, sire_name: str, dam_name: str, mode: str = "speculative", seed: int = 0,
+                         brain: Any = None, ask: Any = None, growth_default: bool = False) -> tuple[dict[str, Any], Any]:
+        """S3c: the agent builds the creature (agent.AgentRun). Live, the brain is Muse Spark Open on Baseten; mock
+        mode uses the policy brain. Returns (creature doc, the run with its trace)."""
+        from app.evolution.agent import AgentRun, SparkOpenBrain
+        from app.evolution.agent import settings as agent_settings
+
+        if mode not in DESIGN_MODES:
+            raise ChimeraError(ErrorCode.VALIDATION_FAILED, f"Unknown mode {mode!r}.",
+                               details={"modes": list(DESIGN_MODES)})
+        self._guard()
+        if brain is None and not self.mock:
+            baseten = getattr(self.spark, "baseten", None)
+            if baseten is None:
+                raise ChimeraError(ErrorCode.UPSTREAM_ERROR, "The agent brain is Muse Spark Open on Baseten; "
+                                   "BASETEN_API_KEY_MODEL_MUSE_SPARK_OPEN_26 is not set.", retryable=False)
+            brain = SparkOpenBrain(baseten, int(agent_settings()["max_tokens"]))
+        run = AgentRun(self, sire_name, dam_name, mode, seed, brain, ask, growth_default)
+        start = len(self._spark_log())
+        token = _LOG_MARK.set(start)
+        try:
+            doc = await run.run()
+        finally:
+            _LOG_MARK.reset(token)
+        if doc.get("genome"):
+            doc["providers"] = self.providers(start)
+            doc["card"]["providers"] = doc["providers"]
+            self.store.put("creatures", doc["genome"]["id"], doc)
+        return doc, run
+
     async def _compare(self, sire_name: str | None, dam_name: str | None, sire_image: bytes | None,
                        dam_image: bytes | None, host: str | None, habitat: str | None, seed: int,
                        other: str) -> dict[str, Any]:

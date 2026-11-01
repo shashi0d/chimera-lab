@@ -56,6 +56,13 @@ def needs_identity(donor: Animal, host: Animal) -> bool:
     return donor.group != "vertebrate" or host.group != "vertebrate"
 
 
+def _eligible(s: Any) -> bool:
+    """A covering, a back shape that folds into it, or a walking limb (the host keeps its own legs) is never an
+    identity part."""
+    walking = s.slot == "limbs" and any(w in s.part.split() for w in ("legs", "leg", "feet", "hooves", "flippers"))
+    return s.slot not in NOT_PARTS and s.slot not in SHAPE_SLOTS and not walking
+
+
 def candidates(donor: Animal) -> list[Candidate]:
     """The donor's possible identity parts, most diagnostic first: each of its own visible features that names a
     class part (not a covering, not a back shape that folds into the covering). With no recorded features, the
@@ -66,13 +73,13 @@ def candidates(donor: Animal) -> list[Candidate]:
     for feat in donor.features:
         feat = QUALIFIER.sub("", feat).strip()  # "long curved head horn in males": the form, not who carries it
         s = match(donor, feat)
-        if s is None or forbidden(donor, feat) or s.slot in NOT_PARTS or s.slot in SHAPE_SLOTS or s.part in seen:
+        if s is None or forbidden(donor, feat) or not _eligible(s) or s.part in seen:
             continue
         seen.add(s.part)
         out.append(Candidate(s.part, s.slot, s.job, feat, src))
     if not donor.features:
         for s in specs(donor):
-            if s.slot in NOT_PARTS or s.slot in SHAPE_SLOTS or s.part in seen:
+            if not _eligible(s) or s.part in seen:
                 continue
             seen.add(s.part)
             out.append(Candidate(s.part, s.slot, s.job, "", "model-estimated (class_parts.json class list; the "
