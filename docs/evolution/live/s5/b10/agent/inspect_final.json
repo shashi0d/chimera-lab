@@ -1,0 +1,569 @@
+{
+ "protocol": "plan-blind (S3a)",
+ "critics": [
+  "spark_open",
+  "meta_spark"
+ ],
+ "items": [
+  {
+   "source": "checklist",
+   "key": "frame",
+   "text": "Is the overall body shape that of a domestic goat?",
+   "group": "structure",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "fix": "Show the planned domestic goat body shape and outline; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "head",
+   "text": "Does it have a domestic goat head with visible eyes?",
+   "group": "structure",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "fix": "Show the planned domestic goat head, fully visible with clear eyes; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "no_wings",
+   "text": "Are there wings anywhere on the body?",
+   "group": "structure",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "The plan has no wings: show the domestic goat's own body there instead; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "whole_animal",
+   "text": "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?",
+   "group": "structure",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "Show the planned tortoise contribution only as hard shell plates on the domestic goat's own body over the back, not as separate animals; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "second_head",
+   "text": "Is there a second head anywhere?",
+   "group": "structure",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "Show one single head, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "extra_legs",
+   "text": "Does it have more than 4 walking legs?",
+   "group": "structure",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "Show exactly 4 walking legs, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "plain_fur",
+   "text": "Does the fur show stripes or spots?",
+   "group": "pattern",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "yes"
+   },
+   "status": "fail",
+   "fix": "Show a plain coat with no stripes or spots, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "uncertain",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "material_look",
+   "text": "Does the fur on the back have a tortoise's colors and sheen?",
+   "group": "integration",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "fail",
+   "fix": "Keep the domestic goat's own fur everywhere; over the back it takes only the tortoise's colors, gloss and texture; keep everything else the same.",
+   "sam": null,
+   "pair_status": "fail",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "host_cover_kept",
+   "text": "Is the back covered by fur?",
+   "group": "integration",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "fail",
+   "fix": "Keep the domestic goat's own fur everywhere; over the back it takes only the tortoise's colors, gloss and texture; keep everything else the same.",
+   "sam": null,
+   "pair_status": "fail",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "donor_pieces",
+   "text": "Are there hard shell plates on the body?",
+   "group": "integration",
+   "expect": "no",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "fail",
+   "fix": "Keep the domestic goat's own fur everywhere; over the back it takes only the tortoise's colors, gloss and texture; keep everything else the same.",
+   "sam": null,
+   "pair_status": "fail",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "separate_bodies",
+   "text": "separate bodies: 1",
+   "group": "structure",
+   "expect": 1,
+   "answers": {
+    "spark_open": 1,
+    "meta_spark": 1
+   },
+   "status": "pass",
+   "fix": "Show the planned tortoise contribution only as hard shell plates on the domestic goat's own body over the back, not as separate animals; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "heads",
+   "text": "heads: 1",
+   "group": "structure",
+   "expect": 1,
+   "answers": {
+    "spark_open": 1,
+    "meta_spark": 1
+   },
+   "status": "pass",
+   "fix": "Show one single head, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "walking_legs",
+   "text": "walking legs: 4",
+   "group": "structure",
+   "expect": 4,
+   "answers": {
+    "spark_open": 4,
+    "meta_spark": 4
+   },
+   "status": "pass",
+   "fix": "Show exactly 4 walking legs, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "wings",
+   "text": "wings: 0",
+   "group": "structure",
+   "expect": 0,
+   "answers": {
+    "spark_open": 0,
+    "meta_spark": 0
+   },
+   "status": "pass",
+   "fix": "The plan has no wings: show the domestic goat's own body there instead; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "extra_limb_pieces",
+   "text": "extra limb pieces: 0",
+   "group": "structure",
+   "expect": 0,
+   "answers": {
+    "spark_open": 0,
+    "meta_spark": 0
+   },
+   "status": "pass",
+   "fix": "Show the domestic goat's own limbs only, with no extra limb-like pieces; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "description",
+   "key": "extra_horn",
+   "text": "described but not planned: horn",
+   "group": "structure",
+   "expect": "absent",
+   "answers": {
+    "spark_open": true,
+    "meta_spark": true
+   },
+   "status": "fail",
+   "fix": "The plan has no horn: show the domestic goat's own body there instead; keep everything else the same.",
+   "sam": null,
+   "pair_status": "fail",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "description",
+   "key": "extra_mane",
+   "text": "described but not planned: mane",
+   "group": "structure",
+   "expect": "absent",
+   "answers": {
+    "spark_open": true,
+    "meta_spark": false
+   },
+   "status": "pass",
+   "fix": "The plan has no mane: show the domestic goat's own body there instead; keep everything else the same.",
+   "sam": null,
+   "pair_status": "uncertain",
+   "sam_found": null,
+   "sam_fill": null
+  }
+ ],
+ "failures": [
+  {
+   "source": "checklist",
+   "key": "plain_fur",
+   "text": "Does the fur show stripes or spots?",
+   "group": "pattern",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "yes"
+   },
+   "status": "fail",
+   "fix": "Show a plain coat with no stripes or spots, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "uncertain",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "material_look",
+   "text": "Does the fur on the back have a tortoise's colors and sheen?",
+   "group": "integration",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "fail",
+   "fix": "Keep the domestic goat's own fur everywhere; over the back it takes only the tortoise's colors, gloss and texture; keep everything else the same.",
+   "sam": null,
+   "pair_status": "fail",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "host_cover_kept",
+   "text": "Is the back covered by fur?",
+   "group": "integration",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "fail",
+   "fix": "Keep the domestic goat's own fur everywhere; over the back it takes only the tortoise's colors, gloss and texture; keep everything else the same.",
+   "sam": null,
+   "pair_status": "fail",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "donor_pieces",
+   "text": "Are there hard shell plates on the body?",
+   "group": "integration",
+   "expect": "no",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "fail",
+   "fix": "Keep the domestic goat's own fur everywhere; over the back it takes only the tortoise's colors, gloss and texture; keep everything else the same.",
+   "sam": null,
+   "pair_status": "fail",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "description",
+   "key": "extra_horn",
+   "text": "described but not planned: horn",
+   "group": "structure",
+   "expect": "absent",
+   "answers": {
+    "spark_open": true,
+    "meta_spark": true
+   },
+   "status": "fail",
+   "fix": "The plan has no horn: show the domestic goat's own body there instead; keep everything else the same.",
+   "sam": null,
+   "pair_status": "fail",
+   "sam_found": null,
+   "sam_fill": null
+  }
+ ],
+ "structural_failures": 5,
+ "uncertain": 0,
+ "sam_calls": 0,
+ "descriptions": {
+  "spark_open": {
+   "description": "The creature is shown in right-facing profile standing on sparse grass and bare earth against a plain off-white background. It has the overall body shape, fur, head, and limbs of a shaggy domestic goat, with long coarse fur that is dark brown on the neck, chest, back and upper legs and creamy off-white on the belly and lower legs. The head is goat-like with a blunt muzzle, dark nose, brown eye, closed mouth and a tufted beard under the chin, topped with two thick curved horns. Embedded in the fur along the dorsal midline from the shoulders to the rump is a large, glossy, domed patch of polygonal plates with a mottled amber, dark brown and black tortoiseshell pattern; smaller patches of the same patterned plates occur on the side of the shoulder, the side of the thigh, the lower legs and the tip of the short fluffy tail.",
+   "parts": [
+    {
+     "part": "head",
+     "looks_like": "goat-like head with short to medium brown fur, paler fur around the muzzle, a dark nostril, a visible brown eye with eyelid, a closed mouth, and a tuft of longer hair forming a beard under the chin",
+     "where": "at the anterior right end of the body, atop the neck, facing right in profile"
+    },
+    {
+     "part": "horns",
+     "looks_like": "two thick, ridged, keratinous horns, dark gray-brown to black, with transverse growth rings, tapering to pointed tips and curving backward and slightly outward",
+     "where": "arising from the top of the head just behind and above the ears, the nearer right horn partially overlapping the left horn"
+    },
+    {
+     "part": "ears",
+     "looks_like": "two triangular pointed ears with brown outer fur and lighter inner fur, upright",
+     "where": "on the sides of the head behind the horns, the right ear fully visible in profile and the left ear partially visible behind the horns"
+    },
+    {
+     "part": "mane",
+     "looks_like": "very long, shaggy, wavy dark brown fur forming a thick ruff, coarser and longer than the body fur",
+     "where": "along the dorsal and ventral neck extending from behind the ears down over the throat, chest and shoulders"
+    },
+    {
+     "part": "legs",
+     "looks_like": "four sturdy columnar legs covered in long shaggy fur, brown on the upper portions and creamy off-white on the lower portions",
+     "where": "beneath the torso, two forelegs under the chest and two hindlegs under the rump, standing on the ground, left legs partially obscured behind right legs"
+    },
+    {
+     "part": "feet",
+     "looks_like": "four cloven hooves, each with two toes capped in dark brown horn with a central cleft, with short light fur at the coronet above the hoof",
+     "where": "at the distal ends of the four legs in contact with the ground"
+    },
+    {
+     "part": "tail",
+     "looks_like": "short, fluffy tail covered in long shaggy fur, creamy at the base and brown toward the tip, with a small patch of tortoiseshell pattern at the very tip",
+     "where": "projecting from the posterior rump at the left end of the body, held slightly raised"
+    },
+    {
+     "part": "shell",
+     "looks_like": "a large elongated-oval, slightly domed, hard glossy covering made of many polygonal scutes with a mottled tortoiseshell pattern of amber-yellow, dark brown and black with dark borders",
+     "where": "embedded in the fur along the dorsal midline of the back, extending from behind the shoulders to above the rump"
+    },
+    {
+     "part": "plates",
+     "looks_like": "individual hard glossy polygonal plates with the same amber-brown-black tortoiseshell mottling, about 15-20 in the large dorsal patch and smaller clusters of 4-7 plates, plus small irregular dark mottled patches",
+     "where": "large contiguous patch on the mid-back, plus isolated clusters on the lateral side of the right foreleg shoulder and right hindleg thigh, and small patches near the lower forelegs, lower hindlegs and tail tip"
+    },
+    {
+     "part": "markings",
+     "looks_like": "mottled tortoiseshell pattern of amber, brown and black on the plates, contrasting with the solid brown and cream fur",
+     "where": "on all plate clusters on the back, shoulder, thigh, lower legs and tail tip"
+    }
+   ],
+   "attached_objects": [],
+   "animals": [
+    "goat",
+    "tortoise"
+   ],
+   "separate_bodies": 1,
+   "heads": 1,
+   "walking_legs": 4,
+   "wings": 0,
+   "extra_limb_pieces": 0,
+   "tails": 1
+  },
+  "meta_spark": {
+   "description": "A stocky four-legged animal with the body, head and coat of a shaggy brown and cream goat, standing in side view facing right. It has a bearded goat head with curved ridged horns, pointed ears, long shaggy neck and torso fur, four slender legs ending in dark cloven hooves, and a short fluffy tail. Across the middle of its back is a patch of glossy polygonal plates with black, brown and yellow tortoise-shell mottling, with smaller patches of the same mottled pattern showing through the fur on the shoulders, thighs, lower legs and tail tip.",
+   "parts": [
+    {
+     "part": "head",
+     "looks_like": "goat-like with brown fur, elongated muzzle, brown eye and slight smile",
+     "where": "at the front top of the body, facing right"
+    },
+    {
+     "part": "horns",
+     "looks_like": "dark gray-brown curved ridged goat horns",
+     "where": "on top of the head curving back and up"
+    },
+    {
+     "part": "ears",
+     "looks_like": "pointed furry goat ears",
+     "where": "on the sides of the head below the horns"
+    },
+    {
+     "part": "beard",
+     "looks_like": "long thin brown hair hanging from the chin",
+     "where": "under the muzzle on the chin and throat"
+    },
+    {
+     "part": "body fur",
+     "looks_like": "long shaggy brown to cream goat fur, darker on neck and back",
+     "where": "covering the neck, torso and upper legs"
+    },
+    {
+     "part": "legs",
+     "looks_like": "slender furry goat legs, cream below with brown patches",
+     "where": "four under the torso, two front and two rear"
+    },
+    {
+     "part": "feet",
+     "looks_like": "dark cloven goat hooves",
+     "where": "at the ends of the legs on the ground"
+    },
+    {
+     "part": "tail",
+     "looks_like": "short fluffy furry tail with mottled dark tip",
+     "where": "at the rear of the body"
+    },
+    {
+     "part": "shell plates",
+     "looks_like": "glossy polygonal tortoise carapace scutes with black, brown and yellow mottling",
+     "where": "in a row on the middle of the back over the fur from shoulder to rump"
+    },
+    {
+     "part": "markings",
+     "looks_like": "mottled black, brown and yellow tortoise-like patches",
+     "where": "on the front shoulder, rear thigh, lower legs and tail tip showing through the fur"
+    }
+   ],
+   "attached_objects": [],
+   "animals": [
+    "goat",
+    "tortoise"
+   ],
+   "separate_bodies": 1,
+   "heads": 1,
+   "walking_legs": 4,
+   "wings": 0,
+   "extra_limb_pieces": 0,
+   "tails": 1
+  }
+ },
+ "matches": {
+  "spark_open": {
+   "seen": [
+    "horn",
+    "mane",
+    "plates"
+   ],
+   "expected": [
+    "plates",
+    "scales"
+   ],
+   "extras": [
+    "horn",
+    "mane"
+   ],
+   "omissions": []
+  },
+  "meta_spark": {
+   "seen": [
+    "horn",
+    "plates"
+   ],
+   "expected": [
+    "plates",
+    "scales"
+   ],
+   "extras": [
+    "horn"
+   ],
+   "omissions": []
+  }
+ },
+ "third_animals": {
+  "spark_open": [],
+  "meta_spark": []
+ },
+ "balance": {
+  "yes": 4,
+  "no": 6
+ },
+ "expected_counts": {
+  "separate_bodies": 1,
+  "heads": 1,
+  "walking_legs": 4,
+  "wings": 0,
+  "extra_limb_pieces": 0
+ }
+}

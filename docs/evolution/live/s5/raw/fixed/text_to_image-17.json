@@ -1,0 +1,110 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "The plan has no mane: show the planned neck with no mane; keep everything else the same. The plan has no mane: show the tortoise's own body there instead; keep everything else the same. The plan has no stripes: show the tortoise's own body there instead; keep everything else the same.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ],
+  "previous_response_id": "resp_6ae7b2572d06680e44204d30"
+ },
+ "response": {
+  "id": "resp_6ae7b2b6b5bb01e9f26b495d",
+  "access_programs": null,
+  "created_at": 1793569462.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae7b2b6da059c18af3b4372",
+    "summary": [
+     {
+      "text": "**Editing image for tortoise look**\nI'm adjusting the image to remove the mane and stripes, replacing those areas with the tortoise's natural scaly skin while keeping everything else the same.\n**Refining tortoise image edits**\nI'm preparing an edit of the tortoise image using media_ulu284 as the base, removing fur from the neck and crown to show scaly skin, keeping fur on the legs and tail, and replacing the striped shell with a normal tortoise shell pattern while leaving everything else unchanged.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae7b2b629657cd0b2884c8a",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0hHTXBEUUdXblJQaENrSEFLYm43RTcyekFSX2JnMWlBUUJlIiwicmVzdW1lX2lkIjoiczpjYjJiMTZlMi03YTQ3LTRiMDUtOTM1OC1jNGVkM2UyZjhhZjQ6R0VVVHBEUl81QWZWU3o0RkFLZ25nb3ROQ0o0TmJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM1Njk0NjJ9.Q8WLFwHwxegirC1ACL_V30iNaDig",
+    "result": "<elided> (814100 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": "resp_6ae7b2572d06680e44204d30",
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 21756,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 20480
+   },
+   "output_tokens": 1001,
+   "output_tokens_details": {
+    "reasoning_tokens": 316
+   },
+   "total_tokens": 22757
+  },
+  "user": null
+ }
+}
