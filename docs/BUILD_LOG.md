@@ -299,3 +299,9 @@ Short entries per phase: what was built, what was tested, what was deferred. New
 - Resolver: 2 of 2 with the same kind and scientific name (woolly mammoth extinct; pangolin ambiguous, *Manis pentadactyla*), with 3 of 4 alternatives the same.
 - Checklist: 15 of 15 items agree. Forced choice, animals and creature count are identical, items were echoed in order, and the JSON is schema-valid.
 - A first parity attempt made 1 plan call (b) and then the script crashed on the unreadable answer (fixed); it is noted in `live/s1/parity_try1/NOTE.txt`. Baseten spark counter: 33 → 44.
+
+**Part 4 (Muse Image on Meta, live):** `scripts/s1_probe.py image`, outputs in `docs/evolution/live/s1/image/`. There were 4 image calls, not the 3 the task named, because the reference render needs the 2 portraits first.
+- Portraits (text only, 21 s and 24 s): both clean, 4 of 4 checklist items yes, one SAM component (the axolotl mask has 2).
+- Reference render (the E4 axolotl x pangolin compiled prompt plus both portraits, 25 s): quality 0.975, the same as the text-only re-render. The references carried the axolotl's speckled skin and the portraits' engraving style into the patches but changed no anatomy (no gills, still pangolin-shaped). The open critic still answered "pangolin" only.
+- Edit turn (`previous_response_id` of the E4 beetle x bear render, made a day earlier, 20 s): it edited the same creature. Only 3.7% of pixels changed by more than 32 levels, and the pose, wings, tail and breathing openings are identical. The beetle bodies are gone, but they were how the model drew the planned "exoskeleton patches on the forequarters", so that item now fails and quality dropped from 0.845 to 0.778. The "wings in place of the front legs" item still fails, as before.
+- Budget counter: image 22 → 26, spark 89 → 97, sam 12 → 16.
