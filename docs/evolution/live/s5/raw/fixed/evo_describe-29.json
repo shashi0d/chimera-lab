@@ -1,0 +1,154 @@
+{
+ "purpose": "evo_describe",
+ "request": {
+  "model": "muse-spark-1.3",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture with no other context and describe exactly what is drawn, like a careful field naturalist. Do not guess what was intended; describe only what is visible. description: a free paragraph describing the whole creature first. parts: every body part you see, one entry each (head, horns, ears, mane, legs, feet, tail, wings, gills, tentacles, shell, plates, scales, feathers, markings), with what it looks like and where it is. attached_objects: anything that looks attached to or sitting on the body rather than part of it, such as an object, an armor piece or a whole small animal; empty if none. animals: every real animal whose features you can see, as everyday English common names, at most four; include any animal that only one part resembles. Then count, looking carefully: separate_bodies: separate animal bodies or body-shaped objects in the picture, including any whole animal or animal-shaped object attached to or sitting on the main creature. heads: heads of any kind. walking_legs: legs the creature stands or walks on, including hidden ones you can infer. wings: wings of any kind. extra_limb_pieces: jointed leg-like, claw-like or tentacle-like pieces other than the walking legs and the tail. tails: tails of any kind (0 if none)."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "Describe this creature, then count."
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (878479 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "plan_blind_describe",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "description",
+      "parts",
+      "attached_objects",
+      "animals",
+      "separate_bodies",
+      "heads",
+      "walking_legs",
+      "wings",
+      "extra_limb_pieces",
+      "tails"
+     ],
+     "properties": {
+      "description": {
+       "type": "string"
+      },
+      "parts": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "part",
+         "looks_like",
+         "where"
+        ],
+        "properties": {
+         "part": {
+          "type": "string"
+         },
+         "looks_like": {
+          "type": "string"
+         },
+         "where": {
+          "type": "string"
+         }
+        }
+       }
+      },
+      "attached_objects": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "animals": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "separate_bodies": {
+       "type": "integer"
+      },
+      "heads": {
+       "type": "integer"
+      },
+      "walking_legs": {
+       "type": "integer"
+      },
+      "wings": {
+       "type": "integer"
+      },
+      "extra_limb_pieces": {
+       "type": "integer"
+      },
+      "tails": {
+       "type": "integer"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0
+ },
+ "response": {
+  "id": "chatcmpl-01a19909-01ed-76ae-9503-abd301318644",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\"animals\": [\"pangolin\"], \"attached_objects\": [], \"description\": \"A quadrupedal mammal shown in right-facing profile standing on four short sturdy legs with a long tapering tail extending behind. It has an elongated narrow head with a pointed snout and a large dark eye. The top of the head, sides of the neck and body, outer legs, and tail are covered in overlapping brown keratin scales, while the entire arched back and top of the neck are covered in dense long shaggy dark brown fur. The feet end in short dark blunt claws.\", \"extra_limb_pieces\": 0, \"heads\": 1, \"parts\": [{\"looks_like\": \"elongated narrow with tapered snout, small dark nostril at the tip, pebbly tan skin and thin pale whiskers around the muzzle\", \"part\": \"head\", \"where\": \"at the front right of the body, held forward and slightly up\"}, {\"looks_like\": \"large round glossy black eye with a pale textured ring around it\", \"part\": \"eye\", \"where\": \"on the side of the head behind the snout\"}, {\"looks_like\": \"small rounded mammalian ear with a visible inner fold\", \"part\": \"ears\", \"where\": \"on the side of the head behind and slightly above the eye, below the scaled cap\"}, {\"looks_like\": \"dense long shaggy dark brown hair forming a thick arched mass\", \"part\": \"fur\", \"where\": \"covering the entire top of the back and neck from behind the head to the rump\"}, {\"looks_like\": \"overlapping rounded brown keratin scales like shingles, larger on the flanks and smaller and denser on the head and legs\", \"part\": \"scales\", \"where\": \"covering the top of the head, sides of neck and body, outer surfaces of the legs, and the tail\"}, {\"looks_like\": \"short thick columnar legs, scaled on the outside with some pale short hair on the inner hind leg\", \"part\": \"legs\", \"where\": \"two under the front chest and two under the rear body supporting the animal\"}, {\"looks_like\": \"short blunt dark hoof-like claws, three to four per foot\", \"part\": \"feet\", \"where\": \"at the bottom ends of the four legs touching the ground\"}, {\"looks_like\": \"long thick-based tapering tail covered in overlapping pointed scales ending in a narrow tip\", \"part\": \"tail\", \"where\": \"extending from the rear of the body backward to the right along the ground\"}], \"separate_bodies\": 1, \"tails\": 1, \"walking_legs\": 4, \"wings\": 0}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null
+    }
+   }
+  ],
+  "created": 1793568866,
+  "model": "muse-spark-1.3",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 2437,
+   "prompt_tokens": 3852,
+   "total_tokens": 6289,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": null,
+    "audio_tokens": null,
+    "reasoning_tokens": 1858,
+    "rejected_prediction_tokens": null,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": null,
+    "cache_write_tokens": null,
+    "cached_tokens": 369,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

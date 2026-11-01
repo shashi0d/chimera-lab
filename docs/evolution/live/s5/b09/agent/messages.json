@@ -1,0 +1,194 @@
+[
+ {
+  "role": "system",
+  "content": "You are the design agent of Chimera Lab, a natural-history creature engine. You build one creature from two parent animals by calling tools; code tools do the work and check every step.\n\nRules:\n1. You never write a plan. Pick a candidate from propose_candidates with choose_candidate, and change it only with the typed plan-operation tools (set_host, set_region, set_extent, drop_part, set_covering_material_only and the others). Code fills every derived field. Their enums list the plan's own parts and features: use only those.\n2. Every call has a reason: what you decided and why, citing the rule cards the tools return when they apply.\n3. Order: resolve_animal for each parent, propose_candidates, choose_candidate, audit_plan, render, inspect.\n4. audit_plan: blocking items stop render until fixed; advice is yours to weigh.\n5. After inspect: if it passes, call finalize with that image. If it fails, choose and say why:\n   - covering or surface failures (kind \"covering\"): edit that image with those failure keys;\n   - structural failures (kind \"structural\": counts, extra or missing parts, the frame, part identity or connection, a third animal): change the plan with a plan operation or choose another candidate, audit, and render again. An unplanned feature the critics report (extra_*, third_animal) is not a plan part: render again or accept it;\n   - or accept the failures and finalize, saying why.\n   An edit or a new render can make things worse: compare with images_so_far from inspect, and finalize the best image. If you finalize an image other than best_so_far, give why_not_best.\n   Two-failure rule: after two inspects in a row with covering failures, stop editing the covering. Change the plan instead: reduce the covering's extent (set_extent with fewer zones and a plan_reason), or show the donor by material and color only (set_covering_material_only with a plan_reason; the host keeps its own covering, the donor's identity parts stay). Then audit_plan and render again. edit refuses covering fixes until the plan has changed.\n6. A host tie: choose the host yourself from the candidates' notes, with a reason (this run is not interactive: ask_user returns no answer).\n7. Limits: at most 4 renders and 30 tool calls. Near a limit, finalize your best inspected image; its remaining failures go on the card.\nKeep reasons short. Call one tool at a time."
+ },
+ {
+  "role": "user",
+  "content": "Build one creature from the parents 'Indian pangolin' (sire) and 'horse' (dam) in realistic mode. Start with resolve_animal for each parent."
+ },
+ {
+  "role": "assistant",
+  "content": null,
+  "tool_calls": [
+   {
+    "id": "chatcmpl-tool-56d4abcc5a1a4ef98141e1ec0ddb228b",
+    "type": "function",
+    "function": {
+     "name": "resolve_animal",
+     "arguments": "{\"name\": \"Indian pangolin\", \"reason\": \"First parent sire as requested; resolving traits for Indian pangolin\"}"
+    }
+   },
+   {
+    "id": "chatcmpl-tool-a05f8b1a09c04fe682c443d9e4bdbc7b",
+    "type": "function",
+    "function": {
+     "name": "resolve_animal",
+     "arguments": "{\"name\": \"horse\", \"reason\": \"Second parent dam as requested; resolving traits for horse\"}"
+    }
+   }
+  ]
+ },
+ {
+  "role": "tool",
+  "tool_call_id": "chatcmpl-tool-56d4abcc5a1a4ef98141e1ec0ddb228b",
+  "content": "{\"ok\": true, \"status\": \"resolved\", \"note\": \"\", \"slot\": \"sire\", \"animal\": {\"id\": \"indian_pangolin\", \"common_name\": \"indian pangolin\", \"scientific_name\": \"Manis crassicaudata\", \"class\": \"Mammalia\", \"body_plan\": \"quadruped\", \"covering\": \"scales\", \"mass_kg\": 12.5, \"habitats\": [\"grassland\", \"forest\", \"desert\"], \"breathing\": \"lungs\", \"features\": [\"overlapping keratin armour scales\", \"thick muscular tapering tail\", \"cone-shaped head with long snout\", \"powerful limbs with long curved foreclaws\", \"small dark eyes\"], \"features_source\": \"model-estimated\", \"source\": \"learned\"}}"
+ },
+ {
+  "role": "tool",
+  "tool_call_id": "chatcmpl-tool-a05f8b1a09c04fe682c443d9e4bdbc7b",
+  "content": "{\"ok\": true, \"status\": \"resolved\", \"note\": \"\", \"slot\": \"dam\", \"animal\": {\"id\": \"horse\", \"common_name\": \"horse\", \"scientific_name\": \"Equus caballus\", \"class\": \"Mammalia\", \"body_plan\": \"quadruped\", \"covering\": \"fur\", \"mass_kg\": 563.5, \"habitats\": [\"tundra\", \"grassland\", \"forest\", \"wetland\"], \"breathing\": \"lungs\", \"features\": [], \"features_source\": \"model-estimated (no source recorded)\", \"source\": \"database\"}}"
+ },
+ {
+  "role": "assistant",
+  "content": null,
+  "tool_calls": [
+   {
+    "id": "chatcmpl-tool-08c1bab148fb458aa0e0336c9b0c94b4",
+    "type": "function",
+    "function": {
+     "name": "propose_candidates",
+     "arguments": "{\"reason\": \"Both parents resolved; generating candidate plans blending pangolin and horse\"}"
+    }
+   }
+  ]
+ },
+ {
+  "role": "tool",
+  "tool_call_id": "chatcmpl-tool-08c1bab148fb458aa0e0336c9b0c94b4",
+  "content": "{\"ok\": true, \"host_tie\": [\"indian pangolin\", \"horse\"], \"candidates\": [{\"id\": \"C1\", \"ops\": [{\"op\": \"set_host\", \"args\": {\"animal\": \"indian pangolin\"}}], \"score\": 2.5, \"host\": \"indian pangolin\", \"silhouette\": \"four-legged indian pangolin frame\", \"parts\": [], \"dropped\": [], \"identity_parts\": [], \"covering\": {\"extent\": [\"back\", \"flanks\"], \"plate_pattern\": \"\", \"plate_source\": \"\"}, \"licenses\": [], \"labels\": [\"speculative chimera, no real-world precedent\"], \"notes\": {\"niche\": \"habitat grassland (native to indian pangolin, horse)\", \"autonomy\": \"the indian pangolin body carries every function\", \"survival\": \"0 license(s) of 0: none\", \"identity\": \"covering over back, flanks\", \"host\": \"structural tie: indian pangolin is one of two equal options (RC-R10-01: never by size, mass or name order)\"}}, {\"id\": \"C2\", \"ops\": [{\"op\": \"set_host\", \"args\": {\"animal\": \"horse\"}}], \"score\": 2.5, \"host\": \"horse\", \"silhouette\": \"four-legged horse frame\", \"parts\": [], \"dropped\": [], \"identity_parts\": [], \"covering\": {\"extent\": [\"head\", \"neck\", \"forequarters\", \"back\", \"flanks\", \"hindquarters\", \"legs\", \"tail\"], \"plate_pattern\": \"many overlapping scales in rows (from 'overlapping keratin armour scales')\", \"plate_source\": \"model-estimated\"}, \"licenses\": [], \"labels\": [\"speculative chimera, no real-world precedent\"], \"notes\": {\"niche\": \"habitat grassland (native to indian pangolin, horse)\", \"autonomy\": \"the horse body carries every function\", \"survival\": \"0 license(s) of 0: none\", \"identity\": \"covering over head, neck, forequarters, back, flanks, hindquarters, legs, tail, many overlapping scales in rows (from 'overlapping keratin armour scales')\", \"host\": \"structural tie: horse is one of two equal options (RC-R10-01: never by size, mass or name order)\"}}], \"note\": \"advice only: you choose; scores rank the R10 notes, nothing more\", \"cards\": [\"RC-R10-01\", \"RC-R6-08\", \"RC-R6-09\", \"RC-R10-15\"]}"
+ },
+ {
+  "role": "assistant",
+  "content": null,
+  "tool_calls": [
+   {
+    "id": "chatcmpl-tool-0464d99e9f8e4ac7ba6fd99c38de7c56",
+    "type": "function",
+    "function": {
+     "name": "choose_candidate",
+     "arguments": "{\"candidate_id\": \"C2\", \"reason\": \"Chosen horse as host for realistic mode - horse body carries autonomous function, grassland niche shared, and full scale covering provides clear pangolin identity per RC-R10\"}"
+    }
+   }
+  ]
+ },
+ {
+  "role": "tool",
+  "tool_call_id": "chatcmpl-tool-0464d99e9f8e4ac7ba6fd99c38de7c56",
+  "content": "{\"ok\": true, \"chosen\": \"C2\", \"plan\": {\"plan_id\": \"crt_b5948c4c441f\", \"host\": \"horse\", \"host_tie\": null, \"mode\": \"realistic\", \"habitat\": \"grassland\", \"silhouette\": \"four-legged horse frame\", \"parts\": [], \"identity_parts\": [], \"dropped\": [], \"licenses\": [], \"covering\": {\"extent\": [\"head\", \"neck\", \"forequarters\", \"back\", \"flanks\", \"hindquarters\", \"legs\", \"tail\"], \"plate_pattern\": \"many overlapping scales in rows (from 'overlapping keratin armour scales')\"}, \"transfers\": []}, \"next\": \"audit_plan\"}"
+ },
+ {
+  "role": "assistant",
+  "content": null,
+  "tool_calls": [
+   {
+    "id": "chatcmpl-tool-f4c193db8c5c4b68a73c7600c3eb5b32",
+    "type": "function",
+    "function": {
+     "name": "audit_plan",
+     "arguments": "{\"reason\": \"Need audit before render to check blocking issues and licenses\"}"
+    }
+   }
+  ]
+ },
+ {
+  "role": "tool",
+  "tool_call_id": "chatcmpl-tool-f4c193db8c5c4b68a73c7600c3eb5b32",
+  "content": "{\"ok\": true, \"blocking\": [], \"advice\": [], \"functions\": {\"breathing\": \"pass\", \"feeding\": \"pass\", \"support\": \"pass\", \"movement\": \"pass\", \"heat\": \"pass\", \"senses\": \"pass\"}, \"fiction_budget\": {\"budget\": 0, \"licenses\": [], \"identity_parts\": []}, \"labels\": [\"speculative chimera, no real-world precedent\"], \"renderable\": true, \"cards\": []}"
+ },
+ {
+  "role": "assistant",
+  "content": null,
+  "tool_calls": [
+   {
+    "id": "chatcmpl-tool-976f4ab2816b44aba3198229e04f9401",
+    "type": "function",
+    "function": {
+     "name": "render",
+     "arguments": "{\"method\": \"single_pass\", \"reason\": \"Plan passes audit; rendering horse host with pangolin scale covering\"}"
+    }
+   }
+  ]
+ },
+ {
+  "role": "tool",
+  "tool_call_id": "chatcmpl-tool-976f4ab2816b44aba3198229e04f9401",
+  "content": "{\"ok\": true, \"image_id\": \"img1\", \"method\": \"single_pass\", \"renders_used\": 1, \"renders_left\": 3, \"polish\": \"accepted\"}"
+ },
+ {
+  "role": "assistant",
+  "content": null,
+  "tool_calls": [
+   {
+    "id": "chatcmpl-tool-a55aa91aaf984e2dba04a9ff73ebd94f",
+    "type": "function",
+    "function": {
+     "name": "inspect",
+     "arguments": "{\"image_id\": \"img1\", \"reason\": \"Inspecting render for structural and covering accuracy\"}"
+    }
+   }
+  ]
+ },
+ {
+  "role": "tool",
+  "tool_call_id": "chatcmpl-tool-a55aa91aaf984e2dba04a9ff73ebd94f",
+  "content": "{\"ok\": true, \"image_id\": \"img1\", \"verdict\": \"fail\", \"failures\": [{\"key\": \"cover_present\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Are there large overlapping keratin scales on the head, neck, shoulders, back, flanks, hips, legs and tail?\", \"fix\": \"Show the planned large overlapping keratin scales over the head, neck, shoulders, back, flanks, hips, legs and tail; keep everything else the same.\"}, {\"key\": \"continuous\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the large overlapping keratin scales form one continuous structure over the head, neck, shoulders, back, flanks, hips, legs and tail, rather than scattered p\", \"fix\": \"Show the large overlapping keratin scales as one continuous covering over the head, neck, shoulders, back, flanks, hips, legs and tail, not scattered pieces; the horse's fur stays on the belly and leg\"}, {\"key\": \"sized_to_body\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Are the scales sized to this animal's body, about as large as its own muscles and body segments?\", \"fix\": \"Show each scale sized to the horse's own body segments and muscle masses; keep everything else the same.\"}, {\"key\": \"wrong_scale\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the scales look made for a much smaller or much larger animal?\", \"fix\": \"Show each scale sized to the horse's own body segments and muscle masses; keep everything else the same.\"}], \"counts\": {\"separate_bodies\": 1, \"heads\": 1, \"walking_legs\": 4, \"wings\": 0, \"extra_limb_pieces\": 0}, \"third_animals\": {\"spark_open\": [], \"meta_spark\": []}, \"drift\": null, \"decision\": \"Meta Spark decides; Spark Open answers kept as information (D-084)\", \"images_so_far\": {\"img1\": {\"structural\": 0, \"covering\": 4}}, \"best_so_far\": \"img1\", \"cards\": [\"RC-R10-12\", \"RC-R10-15\", \"RC-R10-16\"]}"
+ },
+ {
+  "role": "assistant",
+  "content": null,
+  "tool_calls": [
+   {
+    "id": "chatcmpl-tool-659aaa5a87a541ada5b1836f21462615",
+    "type": "function",
+    "function": {
+     "name": "edit",
+     "arguments": "{\"image_id\": \"img1\", \"failure_keys\": [\"cover_present\", \"continuous\", \"sized_to_body\", \"wrong_scale\"], \"reason\": \"Covering failures require edit to show continuous large overlapping keratin scales sized to horse body per RC-R10\"}"
+    }
+   }
+  ]
+ },
+ {
+  "role": "tool",
+  "tool_call_id": "chatcmpl-tool-659aaa5a87a541ada5b1836f21462615",
+  "content": "{\"ok\": true, \"image_id\": \"img2\", \"instruction\": \"Show the planned large overlapping keratin scales over the head, neck, shoulders, back, flanks, hips, legs and tail; keep everything else the same. Show the large overlapping keratin scales as one continuous covering over the head, neck, shoulders, back, flanks, hips, legs and tail, not scattered pieces; the horse's fur stays on the belly and legs; keep everything else the same. Show each scale sized to the horse's own body segments and muscle masses; keep everything else the same.\", \"edits_used\": 1, \"next\": \"inspect the new image (host drift is checked there)\"}"
+ },
+ {
+  "role": "assistant",
+  "content": null,
+  "tool_calls": [
+   {
+    "id": "chatcmpl-tool-9f6c8df5d3204e7192b9df585f44bc99",
+    "type": "function",
+    "function": {
+     "name": "inspect",
+     "arguments": "{\"image_id\": \"img2\", \"reason\": \"Re-inspecting edited image to verify covering fixes\"}"
+    }
+   }
+  ]
+ },
+ {
+  "role": "tool",
+  "tool_call_id": "chatcmpl-tool-9f6c8df5d3204e7192b9df585f44bc99",
+  "content": "{\"ok\": true, \"image_id\": \"img2\", \"verdict\": \"pass\", \"failures\": [], \"counts\": {\"separate_bodies\": 1, \"heads\": 1, \"walking_legs\": 4, \"wings\": 0, \"extra_limb_pieces\": 0}, \"third_animals\": {\"spark_open\": [], \"meta_spark\": []}, \"drift\": {\"drifted\": false, \"changed\": [], \"by_critic\": {\"spark_open\": [], \"meta_spark\": []}}, \"decision\": \"Meta Spark decides; Spark Open answers kept as information (D-084)\", \"images_so_far\": {\"img1\": {\"structural\": 0, \"covering\": 4}, \"img2\": {\"structural\": 0, \"covering\": 0}}, \"best_so_far\": \"img2\", \"cards\": []}"
+ },
+ {
+  "role": "assistant",
+  "content": null,
+  "tool_calls": [
+   {
+    "id": "chatcmpl-tool-1f9857c68c3a46f694847d651b473a4e",
+    "type": "function",
+    "function": {
+     "name": "finalize",
+     "arguments": "{\"image_id\": \"img2\", \"reason\": \"Image passes inspection with horse host and continuous pangolin scale covering correctly rendered\"}"
+    }
+   }
+  ]
+ },
+ {
+  "role": "tool",
+  "tool_call_id": "chatcmpl-tool-1f9857c68c3a46f694847d651b473a4e",
+  "content": "{\"ok\": true, \"creature_id\": \"crt_b5948c4c441f\", \"remaining_failures\": [], \"final_choice\": {\"agree\": true, \"shown_first\": \"agent\"}}"
+ }
+]

@@ -1,0 +1,526 @@
+{
+ "protocol": "plan-blind (S3a)",
+ "critics": [
+  "spark_open",
+  "meta_spark"
+ ],
+ "items": [
+  {
+   "source": "checklist",
+   "key": "frame",
+   "text": "Is the overall body shape that of a horse?",
+   "group": "structure",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "fix": "Show the planned horse body shape and outline; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "head",
+   "text": "Does it have a horse head with visible eyes?",
+   "group": "structure",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "fix": "Show the planned horse head, fully visible with clear eyes; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "no_wings",
+   "text": "Are there wings anywhere on the body?",
+   "group": "structure",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "The plan has no wings: show the horse's own body there instead; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "whole_animal",
+   "text": "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?",
+   "group": "structure",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "Show the planned indian pangolin contribution only as large overlapping keratin scales on the horse's own body over the head, neck, shoulders, back, flanks, hips, legs and tail, not as separate animals; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "second_head",
+   "text": "Is there a second head anywhere?",
+   "group": "structure",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "Show one single head, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "extra_legs",
+   "text": "Does it have more than 4 walking legs?",
+   "group": "structure",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "Show exactly 4 walking legs, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "plain_fur",
+   "text": "Does the fur show stripes or spots?",
+   "group": "pattern",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "Show a plain coat with no stripes or spots, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "cover_present",
+   "text": "Are there large overlapping keratin scales on the head, neck, shoulders, back, flanks, hips, legs and tail?",
+   "group": "integration",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "fix": "Show the planned large overlapping keratin scales over the head, neck, shoulders, back, flanks, hips, legs and tail; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "grows_out",
+   "text": "Do the large overlapping keratin scales grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending into scales), rather than looking attached on top?",
+   "group": "integration",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "fix": "Show the large overlapping keratin scales grown in the skin over the head, neck, shoulders, back, flanks, hips, legs and tail, as one covering that replaces the horse's fur there; the fur stops at its edge; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "on_top",
+   "text": "Do the large overlapping keratin scales look like separate pieces laid on top of the fur, with a raised rim or a gap at the edge?",
+   "group": "integration",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "Show the large overlapping keratin scales grown in the skin over the head, neck, shoulders, back, flanks, hips, legs and tail, as one covering that replaces the horse's fur there; the fur stops at its edge; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "continuous",
+   "text": "Do the large overlapping keratin scales form one continuous structure over the head, neck, shoulders, back, flanks, hips, legs and tail, rather than scattered pieces?",
+   "group": "integration",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "fix": "Show the large overlapping keratin scales as one continuous covering over the head, neck, shoulders, back, flanks, hips, legs and tail, not scattered pieces; the horse's fur stays on the belly and legs; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "scattered",
+   "text": "Are the large overlapping keratin scales scattered as separate pieces over different parts of the body?",
+   "group": "integration",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "Show the large overlapping keratin scales as one continuous covering over the head, neck, shoulders, back, flanks, hips, legs and tail, not scattered pieces; the horse's fur stays on the belly and legs; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "follows_body",
+   "text": "Do the large overlapping keratin scales follow this body's own shape and contours, the way its own skin would?",
+   "group": "integration",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "fix": "Show the large overlapping keratin scales conforming to the horse's own body shape, grown from its skin over the head, neck, shoulders, back, flanks, hips, legs and tail; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "separate_outline",
+   "text": "Do the large overlapping keratin scales keep the outline of a separate object, such as another animal's shell or back, instead of the body's own shape?",
+   "group": "integration",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "Show the large overlapping keratin scales conforming to the horse's own body shape, grown from its skin over the head, neck, shoulders, back, flanks, hips, legs and tail; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "sized_to_body",
+   "text": "Are the scales sized to this animal's body, about as large as its own muscles and body segments?",
+   "group": "integration",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "fix": "Show each scale sized to the horse's own body segments and muscle masses; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "wrong_scale",
+   "text": "Do the scales look made for a much smaller or much larger animal?",
+   "group": "integration",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "Show each scale sized to the horse's own body segments and muscle masses; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "separate_bodies",
+   "text": "separate bodies: 1",
+   "group": "structure",
+   "expect": 1,
+   "answers": {
+    "spark_open": 1,
+    "meta_spark": 1
+   },
+   "status": "pass",
+   "fix": "Show the planned indian pangolin contribution only as large overlapping keratin scales on the horse's own body over the head, neck, shoulders, back, flanks, hips, legs and tail, not as separate animals; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "heads",
+   "text": "heads: 1",
+   "group": "structure",
+   "expect": 1,
+   "answers": {
+    "spark_open": 1,
+    "meta_spark": 1
+   },
+   "status": "pass",
+   "fix": "Show one single head, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "walking_legs",
+   "text": "walking legs: 4",
+   "group": "structure",
+   "expect": 4,
+   "answers": {
+    "spark_open": 4,
+    "meta_spark": 4
+   },
+   "status": "pass",
+   "fix": "Show exactly 4 walking legs, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "wings",
+   "text": "wings: 0",
+   "group": "structure",
+   "expect": 0,
+   "answers": {
+    "spark_open": 0,
+    "meta_spark": 0
+   },
+   "status": "pass",
+   "fix": "The plan has no wings: show the horse's own body there instead; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "extra_limb_pieces",
+   "text": "extra limb pieces: 0",
+   "group": "structure",
+   "expect": 0,
+   "answers": {
+    "spark_open": 0,
+    "meta_spark": 0
+   },
+   "status": "pass",
+   "fix": "Show the horse's own limbs only, with no extra limb-like pieces; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  }
+ ],
+ "failures": [],
+ "structural_failures": 0,
+ "uncertain": 0,
+ "sam_calls": 0,
+ "descriptions": {
+  "spark_open": {
+   "description": "The creature is a quadrupedal, horse-proportioned animal shown in right-facing profile standing on a small patch of sparse grass and dirt. Its overall body shape, head, legs and hooves are those of a horse, but almost the entire dorsal and lateral surface is covered in dense, overlapping, rounded scales in mottled brown and tan resembling pangolin armor. The scales cover the neck, back, sides, rump, outer surfaces of all four legs, the long tapering tail, and the forehead and crown between the ears. The face, muzzle, ears, and the ventral belly and inner upper legs retain short hair; the facial hair is brown with a dark muzzle and nostril, the belly and inner leg fur is pale cream to light tan, and the lower legs have a fringe of brown hair just above the hooves. The head is held at shoulder height with ears erect, and all four hooved feet are on the ground. The tail hangs vertically behind the hind legs.",
+   "parts": [
+    {
+     "part": "head",
+     "looks_like": "horse-like head with brown short hair, dark brown muzzle, large black nostril, dark eye with eyelid, lower lip and chin with short whiskers, forehead and crown covered with overlapping rounded brown scales",
+     "where": "at the anterior end of the neck, facing right"
+    },
+    {
+     "part": "ears",
+     "looks_like": "two upright, pointed, brown horse ears with darker inner fur and pointed tips",
+     "where": "on top of the head, emerging from the scaly covering on the crown"
+    },
+    {
+     "part": "mane",
+     "looks_like": "no hair mane; dorsal ridge of neck covered with overlapping brown scales forming a scaly crest where a mane would be",
+     "where": "along the dorsal midline of the neck from behind the ears to the shoulders"
+    },
+    {
+     "part": "legs",
+     "looks_like": "four long, slender horse-like legs, anterior and lateral surfaces densely covered with overlapping brown rounded scales, posterior and ventral upper portions with pale cream shaggy fur",
+     "where": "beneath the trunk, two forelegs under the chest and two hind legs under the rump"
+    },
+    {
+     "part": "feet",
+     "looks_like": "four rounded, dark brown keratinous hooves, each with a short fringe of brown hair just above the hoof wall",
+     "where": "at the distal ends of all four legs, in contact with the ground"
+    },
+    {
+     "part": "tail",
+     "looks_like": "single long, narrow, tapering tail fully covered on all sides with overlapping brown rounded scales, pointed at the tip",
+     "where": "extending from the posterior rump, hanging vertically down behind the hind legs"
+    },
+    {
+     "part": "scales",
+     "looks_like": "dense, overlapping, rounded keratinous scales in shades of brown and tan with darker brown margins, arranged in diagonal rows like armor",
+     "where": "covering the neck, trunk, sides, rump, outer legs, tail, and forehead between the ears"
+    },
+    {
+     "part": "plates",
+     "looks_like": "the overlapping scales form continuous armor plates over the body",
+     "where": "over the dorsal and lateral trunk, neck, legs and tail"
+    },
+    {
+     "part": "markings",
+     "looks_like": "pale cream to off-white shaggy fur on the ventral belly, chest, and inner upper legs contrasting with the brown scaly dorsum; brown hair on face and lower legs",
+     "where": "on the underside of the body and inner legs, and on the face"
+    }
+   ],
+   "attached_objects": [],
+   "animals": [
+    "horse",
+    "pangolin"
+   ],
+   "separate_bodies": 1,
+   "heads": 1,
+   "walking_legs": 4,
+   "wings": 0,
+   "extra_limb_pieces": 0,
+   "tails": 1
+  },
+  "meta_spark": {
+   "description": "A four-legged animal with the overall body shape, head, and stance of a horse standing in three-quarter profile facing right. Its head, ears, muzzle, and hooved lower legs are brown and horse-like, while the top of its head, neck, back, sides, outer surfaces of all four legs, and long tapering tail are densely covered in overlapping brown scales. The underside of the torso, chest, and inner upper legs show pale tan shaggy fur. It stands on a small patch of dirt with sparse grass.",
+   "parts": [
+    {
+     "part": "head",
+     "looks_like": "brown horse head with long muzzle, dark eye, large nostril and mouth",
+     "where": "at the front end of the neck, facing to the right"
+    },
+    {
+     "part": "ears",
+     "looks_like": "two upright pointed brown horse ears",
+     "where": "on top of the head"
+    },
+    {
+     "part": "legs",
+     "looks_like": "four long slender horse-like legs with pale fur on the inner upper portions",
+     "where": "under the body, two in front and two in rear"
+    },
+    {
+     "part": "feet",
+     "looks_like": "dark brown rounded horse hooves with a fringe of brown hair above",
+     "where": "at the bottom ends of the four legs on the ground"
+    },
+    {
+     "part": "tail",
+     "looks_like": "long narrow tapering tail fully covered in small overlapping scales",
+     "where": "hanging down from the rear of the body on the left side"
+    },
+    {
+     "part": "scales",
+     "looks_like": "overlapping rounded brown pangolin-like scales in rows, smaller on the head and lower legs and larger on the neck, body and upper legs",
+     "where": "covering the top of the head, the entire neck, back, sides, outer legs, and tail"
+    },
+    {
+     "part": "underbelly fur",
+     "looks_like": "pale cream to light tan shaggy fur",
+     "where": "on the underside of the torso, lower chest, and inner upper legs"
+    }
+   ],
+   "attached_objects": [],
+   "animals": [
+    "horse",
+    "pangolin"
+   ],
+   "separate_bodies": 1,
+   "heads": 1,
+   "walking_legs": 4,
+   "wings": 0,
+   "extra_limb_pieces": 0,
+   "tails": 1
+  }
+ },
+ "matches": {
+  "spark_open": {
+   "seen": [
+    "plates",
+    "scales"
+   ],
+   "expected": [
+    "mane",
+    "plates",
+    "scales"
+   ],
+   "extras": [],
+   "omissions": []
+  },
+  "meta_spark": {
+   "seen": [
+    "scales"
+   ],
+   "expected": [
+    "mane",
+    "plates",
+    "scales"
+   ],
+   "extras": [],
+   "omissions": []
+  }
+ },
+ "third_animals": {
+  "spark_open": [],
+  "meta_spark": []
+ },
+ "balance": {
+  "yes": 7,
+  "no": 9
+ },
+ "expected_counts": {
+  "separate_bodies": 1,
+  "heads": 1,
+  "walking_legs": 4,
+  "wings": 0,
+  "extra_limb_pieces": 0
+ }
+}
