@@ -1,15 +1,19 @@
 import { ReactFlowProvider } from "@xyflow/react";
 import { useEffect, useState } from "react";
-import { Canvas } from "../canvas/Canvas";
 import { startConnectivity } from "../connectivity/store";
-import { startUploadQueue } from "../nodes/image-input/uploads";
+import { copy } from "../copy";
+import { useLimits } from "../evo/data";
+import { stopAllStreams, useEvoRuns } from "../evo/runs";
+import { useGraph } from "../graph/store";
 import { registerRunHandlers } from "../nodes/registry";
+import type { FusionData } from "../nodes/fusion/types";
 import { restoreGraph, startAutosave } from "../persistence/autosave";
-import { resumeAllRuns, stopAllRuns } from "../runs/store";
-import { useUi } from "../ui/uiStore";
+import { CreaturePage } from "../screens/CreaturePage";
+import { GalleryPage } from "../screens/GalleryPage";
+import { LabView } from "../screens/LabView";
 import { Banners } from "./Banners";
+import { useRoute } from "./route";
 import { ShortcutsDialog } from "./ShortcutsDialog";
-import { SidePanel } from "./SidePanel";
 import { Toasts } from "./Toasts";
 import { TopBar } from "./TopBar";
 
@@ -18,26 +22,34 @@ function AppCrash(): never {
   throw new Error("Forced app crash (test hook)");
 }
 
+/** After a reload: follow every Fusion node's latest run again (from the cached trace, then ?after=). */
+function resumeRuns(): void {
+  for (const n of useGraph.getState().nodes) {
+    const runId = (n.data as FusionData).activeRunId;
+    if (n.type === "fusion" && runId) useEvoRuns.getState().attach(runId);
+  }
+}
+
 export function App({ crash = false }: { crash?: boolean }) {
   const [ready, setReady] = useState(false);
-  const panelOpen = useUi((s) => Boolean(s.panel));
+  const route = useRoute();
 
   useEffect(() => {
     const stops: Array<() => void> = [];
     let alive = true;
     stops.push(registerRunHandlers());
     stops.push(startConnectivity());
+    void useLimits.getState().refresh();
     void restoreGraph().then(() => {
       if (!alive) return;
       stops.push(startAutosave());
-      stops.push(startUploadQueue());
-      resumeAllRuns();
+      resumeRuns();
       setReady(true);
     });
     return () => {
       alive = false;
       stops.forEach((s) => s());
-      stopAllRuns();
+      stopAllStreams();
     };
   }, []);
 
@@ -45,15 +57,20 @@ export function App({ crash = false }: { crash?: boolean }) {
 
   return (
     <ReactFlowProvider>
-      <div className={`app${panelOpen ? " has-panel" : ""}`}>
-        <a className="skip-link" href="#canvas-region">
-          Skip to canvas
+      <div className={`app app--${route.view}`}>
+        <a className="skip-link" href="#main">
+          {copy.app.skip}
         </a>
         <TopBar />
         <Banners />
-        <main id="canvas-region" className="workspace" aria-busy={!ready}>
-          {ready ? <Canvas /> : <div className="workspace__loading" aria-label="Loading canvas"><span className="spinner" /></div>}
-          <SidePanel />
+        <main id="main" className="main" tabIndex={-1}>
+          {route.view === "gallery" ? (
+            <GalleryPage />
+          ) : route.view === "creature" ? (
+            <CreaturePage key={route.creatureId} creatureId={route.creatureId} />
+          ) : (
+            <LabView ready={ready} runId={route.runId} />
+          )}
         </main>
         <Toasts />
         <ShortcutsDialog />

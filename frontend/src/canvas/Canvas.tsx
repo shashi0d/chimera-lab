@@ -21,8 +21,8 @@ import type { GraphNode } from "../graph/types";
 import { getDefinition, nodeRegistry, portsOf } from "../nodes/registry";
 import type { AnyNodeDefinition, ValidationIssue } from "../nodes/types";
 import { UnsupportedNodeView } from "../nodes/unsupported/NodeView";
-import { useRuns } from "../runs/store";
-import { TERMINAL } from "../runs/transport";
+import { derived, isTerminal, useEvoRuns } from "../evo/runs";
+import { createNode } from "../nodes/registry";
 import { toast } from "../ui/toastStore";
 import { useUi } from "../ui/uiStore";
 import { addImageFiles, FOOTPRINT } from "./addImages";
@@ -83,7 +83,7 @@ export function Canvas() {
   const selection = useGraph((s) => s.selection);
   const readOnly = useGraph((s) => s.readOnly);
   const connectivity = useConnectivity((s) => s.status);
-  const runs = useRuns((s) => s.runs);
+  const runs = useEvoRuns((s) => s.runs);
   const minimap = useUi((s) => s.minimap);
   const theme = useUi((s) => s.theme);
   const flow = useReactFlow();
@@ -120,8 +120,8 @@ export function Canvas() {
       nodes
         .filter((n) => {
           const runId = n.data.activeRunId as string | undefined;
-          const run = runId ? runs[runId] : undefined;
-          return run && !TERMINAL.has(run.status);
+          const run = runId ? derived(runs[runId]) : null;
+          return run && !isTerminal(run.status);
         })
         .map((n) => n.id),
     );
@@ -267,6 +267,17 @@ export function Canvas() {
     return () => document.removeEventListener("paste", onPaste);
   }, [addFiles]);
 
+  /** No photos: a Fusion node on its own takes two typed names (the contract's name fallback). */
+  const addNamesOnly = useCallback(() => {
+    const at = viewportCenter();
+    const node = createNode("fusion", { x: at.x + 100, y: at.y });
+    useGraph.getState().addNode(node, { select: true });
+    requestAnimationFrame(() => {
+      void flow.fitView({ padding: 0.3, duration: 300, maxZoom: 1 });
+      document.querySelector<HTMLInputElement>(`[data-node-id="${CSS.escape(node.id)}"] input`)?.focus();
+    });
+  }, [flow, viewportCenter]);
+
   // ---------------------------------------------------------------- keep new nodes in view
 
   const knownIds = useRef<Set<string> | null>(null);
@@ -279,12 +290,11 @@ export function Canvas() {
     if (!added.length) return;
     const rect = wrapper.current?.getBoundingClientRect();
     if (!rect) return;
-    const panelW = document.querySelector(".side-panel")?.getBoundingClientRect().width ?? 0;
     const offscreen = added.some((n) => {
       const p = flow.flowToScreenPosition(n.position);
       const size = measured[n.id] ?? { width: FOOTPRINT[n.type]?.w ?? 300, height: FOOTPRINT[n.type]?.h ?? 300 };
       const z = flow.getZoom();
-      return p.x < rect.left || p.y < rect.top || p.x + size.width * z > rect.right - panelW || p.y + size.height * z > rect.bottom;
+      return p.x < rect.left || p.y < rect.top || p.x + size.width * z > rect.right || p.y + size.height * z > rect.bottom;
     });
     // Zoom out only as far as needed; never zoom in on the user.
     // Wait a beat so React Flow has measured the new nodes before fitting.
@@ -345,14 +355,14 @@ export function Canvas() {
         nodesConnectable={!readOnly}
         elementsSelectable
         selectNodesOnDrag={false}
-        aria-label="Fusion canvas"
+        aria-label={copy.lab.canvasLabel}
       >
         <Background variant={BackgroundVariant.Dots} gap={28} size={1.6} className="canvas__grid" />
         {minimap ? <MiniMap pannable zoomable className="canvas__minimap" ariaLabel="Minimap" /> : null}
       </ReactFlow>
       <ToolRail onAddFiles={(files) => void addFiles(files)} />
       <ZoomControls />
-      {nodes.length === 0 && !dragging ? <EmptyState onAddFiles={(files) => void addFiles(files)} /> : null}
+      {nodes.length === 0 && !dragging ? <EmptyState onAddFiles={(files) => void addFiles(files)} onTypeNames={addNamesOnly} /> : null}
       {dragging ? (
         <div className="drop-overlay" aria-hidden="true">
           <p className="drop-overlay__label">{copy.empty.dropHere}</p>

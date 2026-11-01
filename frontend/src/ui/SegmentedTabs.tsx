@@ -13,10 +13,11 @@ interface Props {
   onChange(value: string): void;
   label: string;
   className?: string;
+  disabled?: boolean;
 }
 
 /** ZD SegmentedTabs as a radiogroup: arrow keys move, the active chip is raised. */
-export function SegmentedTabs({ items, value, onChange, label, className }: Props) {
+export function SegmentedTabs({ items, value, onChange, label, className, disabled }: Props) {
   const refs = useRef<Array<HTMLButtonElement | null>>([]);
   const idx = Math.max(
     0,
@@ -24,7 +25,7 @@ export function SegmentedTabs({ items, value, onChange, label, className }: Prop
   );
   const onKey = (e: KeyboardEvent) => {
     const step = e.key === "ArrowRight" || e.key === "ArrowDown" ? 1 : e.key === "ArrowLeft" || e.key === "ArrowUp" ? -1 : 0;
-    if (!step) return;
+    if (!step || disabled) return;
     e.preventDefault();
     const next = (idx + step + items.length) % items.length;
     const item = items[next];
@@ -47,6 +48,7 @@ export function SegmentedTabs({ items, value, onChange, label, className }: Prop
             aria-checked={on}
             aria-label={it.ariaLabel}
             tabIndex={on ? 0 : -1}
+            disabled={disabled}
             className={`segmented__item${on ? " is-active" : ""}`}
             onClick={() => onChange(it.value)}
           >

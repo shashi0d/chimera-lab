@@ -1,7 +1,5 @@
 import { createStore, del, get, set } from "idb-keyval";
 import { create } from "zustand";
-import { api } from "../api/client";
-import { useConnectivity } from "../connectivity/store";
 import { copy } from "../copy";
 import { GraphLoadError, loadGraph } from "../graph/migrate";
 import { useGraph } from "../graph/store";
@@ -10,7 +8,6 @@ import { toast } from "../ui/toastStore";
 
 const KEY = "graph:current";
 const LOCAL_DEBOUNCE_MS = 500;
-const SERVER_DEBOUNCE_MS = 2000;
 
 let store: ReturnType<typeof createStore> | null = null;
 function db() {
@@ -52,12 +49,11 @@ const LOCAL_MAX_WAIT_MS = 2000;
 
 /**
  * Debounced autosave to IndexedDB (500ms, but never more than 2s behind during a
- * burst such as upload progress) and, when online, to the backend (2s). Pending
- * work is flushed on teardown (e.g. the app error boundary) and on page hide.
+ * burst of edits). R1: the canvas is kept on this device only; the agent API has no
+ * graph endpoint. Pending work is flushed on teardown and on page hide.
  */
 export function startAutosave(): () => void {
   let localTimer: ReturnType<typeof setTimeout> | null = null;
-  let serverTimer: ReturnType<typeof setTimeout> | null = null;
   let firstPendingAt: number | null = null;
   // Only say "Saving…" when a save is actually slow to land (PV1-07).
   let savingLabelTimer: ReturnType<typeof setTimeout> | null = null;
@@ -79,16 +75,6 @@ export function startAutosave(): () => void {
     firstPendingAt ??= now;
     if (localTimer) clearTimeout(localTimer);
     localTimer = setTimeout(saveLocal, Math.max(0, Math.min(LOCAL_DEBOUNCE_MS, firstPendingAt + LOCAL_MAX_WAIT_MS - now)));
-    if (serverTimer) clearTimeout(serverTimer);
-    serverTimer = setTimeout(async () => {
-      if (useConnectivity.getState().status !== "online") return;
-      try {
-        await api.saveGraph(useGraph.getState().toDoc());
-        useSaveState.getState().set("saved");
-      } catch {
-        /* stays saved locally; connectivity handles the banner */
-      }
-    }, SERVER_DEBOUNCE_MS);
   });
 
   const flush = () => {
@@ -102,7 +88,6 @@ export function startAutosave(): () => void {
     unsub();
     window.removeEventListener("pagehide", flush);
     flush();
-    if (serverTimer) clearTimeout(serverTimer);
   };
 }
 

@@ -1,5 +1,5 @@
 import type { AppError } from "../../api/errors";
-import { fileError, MIN_SHORT_SIDE, precheck, targetSize } from "./validate";
+import { fileError, MAX_UPLOAD_BYTES, MIN_SHORT_SIDE, precheck, targetSize } from "./validate";
 
 export interface PreparedImage {
   blob: Blob;
@@ -41,17 +41,18 @@ export function setImageCodec(c: ImageCodec): void {
 /**
  * Client-side pipeline (TASKSHEET 7.1): size, real type, decode, min size,
  * EXIF orientation, downscale to 2048px, metadata stripped by re-encoding.
- * HEIC can't be decoded in most browsers, so it goes up as-is and the server converts it.
+ * R1: the agent API takes JPEG, PNG or WebP only, so HEIC is converted here when the browser can
+ * decode it (Safari) and refused as UNSUPPORTED_FILE when it can't. A PNG that would exceed the
+ * API's 8 MB limit is re-encoded as JPEG.
  */
 export async function prepareImage(file: Blob): Promise<PrepareResult> {
   const pre = await precheck(file);
   if ("error" in pre) return { ok: false, error: pre.error };
-  if (pre.kind === "heif") return { ok: true, image: { blob: file, width: null, height: null } };
   let decoded: Awaited<ReturnType<ImageCodec["decode"]>>;
   try {
     decoded = await codec.decode(file);
   } catch {
-    return { ok: false, error: fileError("IMAGE_CORRUPT") };
+    return { ok: false, error: fileError(pre.kind === "heif" ? "UNSUPPORTED_FILE" : "IMAGE_CORRUPT") };
   }
   try {
     if (Math.min(decoded.width, decoded.height) < MIN_SHORT_SIDE) {
@@ -59,7 +60,8 @@ export async function prepareImage(file: Blob): Promise<PrepareResult> {
     }
     const size = targetSize(decoded.width, decoded.height);
     const type = pre.kind === "png" ? "image/png" : "image/jpeg";
-    const blob = await codec.encode(decoded.source, size.width, size.height, type);
+    let blob = await codec.encode(decoded.source, size.width, size.height, type);
+    if (type === "image/png" && blob.size > MAX_UPLOAD_BYTES) blob = await codec.encode(decoded.source, size.width, size.height, "image/jpeg");
     return { ok: true, image: { blob, width: size.width, height: size.height } };
   } catch {
     return { ok: false, error: fileError("IMAGE_CORRUPT") };

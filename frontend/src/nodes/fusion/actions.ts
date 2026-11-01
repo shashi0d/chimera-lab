@@ -1,12 +1,10 @@
-import { copy } from "../../copy";
+import { findFreeSpot, FOOTPRINT, LAYOUT } from "../../canvas/addImages";
+import type { DerivedRun } from "../../evo/runs";
 import { useGraph } from "../../graph/store";
 import type { GraphNode } from "../../graph/types";
-import { upstreamNode } from "../../graph/queries";
-import type { Run } from "../../types/api";
-import type { ImageInputData } from "../image-input/types";
 import { createNode } from "../registry";
 import type { ResultData, ResultVersion } from "../result/types";
-import { findFreeSpot, FOOTPRINT, LAYOUT } from "../../canvas/addImages";
+import type { FusionData } from "./types";
 
 function resultNodeFor(fusionId: string): GraphNode | undefined {
   const g = useGraph.getState();
@@ -28,52 +26,23 @@ export function ensureResultNode(fusionId: string): string {
   return result.id;
 }
 
-function flagInput(fusionId: string, slot: "A" | "B" | null, message: string | null): void {
-  const g = useGraph.getState();
-  for (const port of ["a", "b"] as const) {
-    const up = upstreamNode(g, fusionId, port);
-    if (!up) continue;
-    const flagged = slot && port === slot.toLowerCase() ? message : null;
-    if ((up.data as ImageInputData).flagged !== flagged) {
-      g.updateNodeData<ImageInputData>(up.id, (d) => ({ ...d, flagged }));
-    }
-  }
+export function creatureTitle(run: Pick<DerivedRun, "sire" | "dam">): string {
+  return run.sire && run.dam ? `${run.sire.commonName} × ${run.dam.commonName}` : "";
 }
 
-function addVersion(fusionId: string, run: Run): void {
-  if (!run.result) return;
-  const resultId = ensureResultNode(fusionId);
+/** Fusion reacts to its runs: the finished creature becomes a new version on its Result node. */
+export function handleFusionRun(nodeId: string, run: DerivedRun): void {
+  const fin = run.finalize;
+  if (!fin) return;
+  const fusion = useGraph.getState().nodes.find((n) => n.id === nodeId);
+  if (!fusion || !((fusion.data as FusionData).runIds ?? []).includes(run.runId)) return;
+  const resultId = ensureResultNode(nodeId);
   const g = useGraph.getState();
-  const node = g.nodes.find((n) => n.id === resultId);
-  const data = node?.data as ResultData | undefined;
-  if (data?.versions.some((v) => v.runId === run.id)) return; // already applied (e.g. after reload)
-  const version: ResultVersion = {
-    runId: run.id,
-    assetId: run.result.assetId,
-    creatureId: run.result.creatureId,
-    imageUrl: run.result.imageUrl,
-    spec: run.result.spec,
-    createdAt: run.updatedAt,
-    metaResponseId: run.result.metaResponseId,
-  };
+  const data = g.nodes.find((n) => n.id === resultId)?.data as ResultData | undefined;
+  if (data?.versions.some((v) => v.runId === run.runId)) return; // already applied (e.g. after reload)
+  const version: ResultVersion = { runId: run.runId, creatureId: fin.creatureId, imageUrl: fin.imageUrl, title: creatureTitle(run), createdAt: fin.at };
   g.updateNodeData<ResultData>(resultId, (d) => {
     const versions = [...(d.versions ?? []), version];
     return { ...d, versions, selected: versions.length - 1, stale: false };
   });
-  g.updateNodeData<ResultData>(fusionId, (d) => ({ ...d, stale: false }));
-}
-
-/** Fusion reacts to its runs: Result node + versions on success, input highlighting on failure. */
-export function handleFusionRun(nodeId: string, run: Run): void {
-  {
-    if (run.status === "queued" || run.status === "running") {
-      flagInput(nodeId, null, null);
-      ensureResultNode(nodeId);
-    } else if (run.status === "succeeded") {
-      addVersion(nodeId, run);
-    } else if (run.status === "failed" && run.failedInput) {
-      const msg = run.error?.code === "HUMAN_DETECTED" ? copy.nodes.imageInput.highlightHuman : copy.nodes.imageInput.highlight;
-      flagInput(nodeId, run.failedInput, msg);
-    }
-  }
 }
