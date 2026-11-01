@@ -1,0 +1,105 @@
+{
+ "purpose": "evo_critic",
+ "request": {
+  "model": "meta-models/muse-spark-open-1026",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture with no other context. animals: the real animal species whose features you can clearly see in it, as everyday English common names, most prominent first, at most three. If it looks like one ordinary animal, list only that animal. creatures: how many separate creatures are in the picture. notes: one short sentence on what you see."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "What animals do you see, and how many creatures?"
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (778867 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "readability_critic",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "animals",
+      "creatures",
+      "notes"
+     ],
+     "properties": {
+      "animals": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "creatures": {
+       "type": "integer"
+      },
+      "notes": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0,
+  "max_tokens": 4000
+ },
+ "response": {
+  "id": "chatcmpl-cbfe07f4efef4de0a9f92cb5d0fbf29f",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\"animals\": [\"wolf\", \"crab\"], \"creatures\": 1, \"notes\": \"A single fantastical hybrid creature with a wolf's head and fur and a crab-like armored shell and claws.\"}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null,
+     "reasoning_content": "We need to answer: What animals do you see, and how many creatures?\n\nWe look at one picture with no other context. animals: the real animal species whose features you can clearly see in it, as everyday English common names, most prominent first, at most three. If it looks like one ordinary animal, list only that animal. creatures: how many separate creatures are in the picture. notes: one short sentence on what you see.\n\nWe have a hybrid creature: wolf head, crab/lobster body armor, claws. So animals: wolf, crab (or lobster). Could be wolf and crab. Or wolf and lobster. The body is crustacean. Could say crab. Or horseshoe crab? The shell looks like horseshoe crab? But front claws like crab/lobster. So list wolf, crab.\n\nMost prominent first: wolf head is prominent, then crab.\n\nAt most three. So animals: [\"wolf\", \"crab\"] or [\"wolf\", \"lobster\"].\n\nWe need to decide. The front limbs are crab claws. The carapace is like a crab. So crab is good.\n\nCreatures: how many separate creatures are in the picture. There's one hybrid creature. So 1.\n\nNotes: one short sentence on what you see.\n\nWe must output JSON? The prompt says: animals: ... creatures: ... notes: ... Probably need to output JSON with those fields.\n\nWe should follow format: likely JSON object with keys animals, creatures, notes.\n\nWe need to ensure we comply with instruction: \"You look at one picture with no other context. animals: the real animal species whose features you can clearly see in it, as everyday English common names, most prominent first, at most three. If it looks like one ordinary animal, list only that animal. creatures: how many separate creatures are in the picture. notes: one short sentence on what you see.\"\n\nSo output should be something like:\n{\n  \"animals\": [\"wolf\", \"crab\"],\n  \"creatures\": 1,\n  \"notes\": \"A single fantastical hybrid with a wolf's head and fur and a crab-like armored body and claws.\"\n}\n\nWe need to be careful: The animal species whose features you can clearly see. Wolf is clear. Crab/lobster is clear. Could also be horseshoe crab? But everyday common name crab is fine.\n\nShould we include lobster? The claws look like lobster/crab. Could list both? At most three, so we could list wolf, crab, lobster but crab and lobster are similar. Better to pick one.\n\nMaybe also include armadillo? No.\n\nThe body armor could be interpreted as crab.\n\nSo answer: animals: [\"wolf\", \"crab\"]\n\nCreatures: 1\n\nNotes: A chimeric creature combining a wolf's head and legs with a crustacean's armored shell and pincers.\n\nWe must ensure we answer correctly.\n\nPotential nuance: The instruction says \"If it looks like one ordinary animal, list only that animal.\" This does NOT look like one ordinary animal, it's a hybrid, so list multiple.\n\nWe should provide JSON.\n\nWe should not add extra fields.\n\nMake sure to use everyday English common names.\n\nWe should ensure creatures count is integer.\n\nWe should provide notes as one short sentence.\n\nWe should not hallucinate.\n\nWe should output valid JSON.\n\nProbably the expected answer: animals: [\"wolf\", \"crab\"] creatures: 1 notes: \"A fantasy hybrid creature with a wolf's head and a crab-like armored body standing on sandy ground.\"\n\nWe should ensure we follow the exact keys: animals, creatures, notes.\n\nWe should output JSON only.\n\nWe should not include markdown.\n\nWe should ensure we answer in correct format.\n\nWe might want to add reasoning strength 512 but not needed.\n\nWe should output final answer.\n\nWe should consider if the animal could be dog vs wolf. It looks like wolf. Could be wolf or dog. Wolf is more accurate. Could say wolf.\n\nAlternatively, some might say dog. But wolf is better.\n\nWe should answer with wolf.\n\nWe should ensure we list most prominent first: wolf is most prominent (head). So wolf first.\n\nWe should answer.\n\nWe should not mention AI.\n\nWe should provide final JSON.\n\nWe should ensure we comply with policy: No disallowed content. It's fine.\n\nWe should output."
+    }
+   }
+  ],
+  "created": 1793561316,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 947,
+   "prompt_tokens": 3595,
+   "total_tokens": 4542,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 682,
+    "audio_tokens": 0,
+    "reasoning_tokens": 891,
+    "rejected_prediction_tokens": 1173,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 128,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

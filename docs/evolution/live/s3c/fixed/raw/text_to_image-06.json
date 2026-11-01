@@ -1,0 +1,110 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Show the gray wolf's own legs with its own fur, with no insect leg pieces; keep everything else the same. The plan has no segmented tail: show the gray wolf's own body there instead; keep everything else the same. Show the hard, glossy chitin plates with fine seams grown in the skin over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, as one covering that replaces the gray wolf's fur there; the fur stops at its edge; keep everything else the same.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ],
+  "previous_response_id": "resp_6ae792c245173b42ff684cac"
+ },
+ "response": {
+  "id": "resp_6ae7932ab23fe9fb2ebd4059",
+  "access_programs": null,
+  "created_at": 1793561386.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae7932a2729fc7ce6484bed",
+    "summary": [
+     {
+      "text": "**Editing wolf hybrid image**\nI'm updating the hybrid image to replace the insect legs with the wolf's own furred legs and swap the segmented tail for a normal furred tail, while keeping the glossy chitin plates over the rest of the body.\n**Refining wolf hybrid design**\nI'm adjusting the hybrid so the legs and tail show normal gray wolf fur with no insect pieces, while keeping the glossy chitin plates over the head, neck, torso, and hips, plus the front claws.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae7932a33031b8a2d974bee",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0VZYXVqVHpTbVlDUjRjRkFQWFVxTDJESmExcGJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczozNDEzOWI4Yi01NjRiLTRlN2EtOWMzYi1jYWE4YzhkYTMwNDE6R05GT3VqUk1TMzlpTzlZRkFEUDdDR2VUclBBNGJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM1NjEzODZ9.Q8WLFwH_gSS6deGf0NexNyPzAM79",
+    "result": "<elided> (812120 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": "resp_6ae792c245173b42ff684cac",
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 23082,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 15488
+   },
+   "output_tokens": 1354,
+   "output_tokens_details": {
+    "reasoning_tokens": 506
+   },
+   "total_tokens": 24436
+  },
+  "user": null
+ }
+}

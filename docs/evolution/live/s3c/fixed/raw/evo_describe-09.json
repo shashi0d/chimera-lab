@@ -1,0 +1,154 @@
+{
+ "purpose": "evo_describe",
+ "request": {
+  "model": "muse-spark-1.3",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture with no other context and describe exactly what is drawn, like a careful field naturalist. Do not guess what was intended; describe only what is visible. description: a free paragraph describing the whole creature first. parts: every body part you see, one entry each (head, horns, ears, mane, legs, feet, tail, wings, gills, tentacles, shell, plates, scales, feathers, markings), with what it looks like and where it is. attached_objects: anything that looks attached to or sitting on the body rather than part of it, such as an object, an armor piece or a whole small animal; empty if none. animals: every real animal whose features you can see, as everyday English common names, at most four; include any animal that only one part resembles. Then count, looking carefully: separate_bodies: separate animal bodies or body-shaped objects in the picture, including any whole animal or animal-shaped object attached to or sitting on the main creature. heads: heads of any kind. walking_legs: legs the creature stands or walks on, including hidden ones you can infer. wings: wings of any kind. extra_limb_pieces: jointed leg-like, claw-like or tentacle-like pieces other than the walking legs and the tail. tails: tails of any kind (0 if none)."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "Describe this creature, then count."
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (778867 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "plan_blind_describe",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "description",
+      "parts",
+      "attached_objects",
+      "animals",
+      "separate_bodies",
+      "heads",
+      "walking_legs",
+      "wings",
+      "extra_limb_pieces",
+      "tails"
+     ],
+     "properties": {
+      "description": {
+       "type": "string"
+      },
+      "parts": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "part",
+         "looks_like",
+         "where"
+        ],
+        "properties": {
+         "part": {
+          "type": "string"
+         },
+         "looks_like": {
+          "type": "string"
+         },
+         "where": {
+          "type": "string"
+         }
+        }
+       }
+      },
+      "attached_objects": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "animals": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "separate_bodies": {
+       "type": "integer"
+      },
+      "heads": {
+       "type": "integer"
+      },
+      "walking_legs": {
+       "type": "integer"
+      },
+      "wings": {
+       "type": "integer"
+      },
+      "extra_limb_pieces": {
+       "type": "integer"
+      },
+      "tails": {
+       "type": "integer"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0
+ },
+ "response": {
+  "id": "chatcmpl-01a19896-13ec-7442-befe-0504481a27af",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\"animals\": [\"wolf\", \"crab\", \"lobster\"], \"attached_objects\": [], \"description\": \"A large quadrupedal creature standing in profile facing right, combining a furry gray wolf forequarters with a heavily armored crustacean-like body. The head, ears, muzzle, eyes, and thick neck ruff are wolf-like with gray and white fur, yellow eyes, and a black nose. From the forehead backward the entire trunk, legs, and long tapering tail are covered in dark gray segmented shell plates with scratches and pits, including a large scalloped carapace over the mid-back and overlapping plates along the neck, sides, and limbs. The two front limbs are thick jointed armor ending in large crab-like pincers that touch the ground, while the two hind limbs end in clawed paw-like feet. A long segmented armored tail hangs down behind the hind legs.\", \"extra_limb_pieces\": 0, \"heads\": 1, \"parts\": [{\"looks_like\": \"gray furry wolf head with pointed snout, yellow eyes and black nose\", \"part\": \"head\", \"where\": \"at the front of the body facing right\"}, {\"looks_like\": \"upright pointed furry wolf ears with dark interiors\", \"part\": \"ears\", \"where\": \"on top of the head\"}, {\"looks_like\": \"thick shaggy gray and white wolf fur\", \"part\": \"mane\", \"where\": \"around the neck, throat and cheeks under the head\"}, {\"looks_like\": \"small segmented dark shell plate\", \"part\": \"head plate\", \"where\": \"on top of the forehead between the ears\"}, {\"looks_like\": \"overlapping dark gray segmented armor plates with small dorsal spikes\", \"part\": \"neck and back plates\", \"where\": \"along the top of the neck and back from behind the head to the mid-back\"}, {\"looks_like\": \"large dark gray crab-like carapace with scalloped rim, scratches and pits\", \"part\": \"shell\", \"where\": \"covering the middle of the back over the torso\"}, {\"looks_like\": \"pale segmented soft-looking underside\", \"part\": \"underbelly\", \"where\": \"under the torso between the front and hind legs\"}, {\"looks_like\": \"thick jointed armored limbs covered in dark overlapping segments\", \"part\": \"front legs\", \"where\": \"at the front of the torso, left and right, reaching to the ground\"}, {\"looks_like\": \"large dark crab-like pincers with black tips and bumpy texture\", \"part\": \"claws\", \"where\": \"at the ends of the front legs touching the ground\"}, {\"looks_like\": \"jointed armored limbs with segmented plating and paler joints\", \"part\": \"hind legs\", \"where\": \"at the rear of the torso, left and right\"}, {\"looks_like\": \"clawed paw-like feet with dark claws\", \"part\": \"feet\", \"where\": \"at the ends of the hind legs on the ground\"}, {\"looks_like\": \"long tapered segmented armored tail\", \"part\": \"tail\", \"where\": \"extending down and behind the rear of the body\"}], \"separate_bodies\": 1, \"tails\": 1, \"walking_legs\": 4, \"wings\": 0}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null
+    }
+   }
+  ],
+  "created": 1793561334,
+  "model": "muse-spark-1.3",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 2335,
+   "prompt_tokens": 3852,
+   "total_tokens": 6187,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": null,
+    "audio_tokens": null,
+    "reasoning_tokens": 1626,
+    "rejected_prediction_tokens": null,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": null,
+    "cache_write_tokens": null,
+    "cached_tokens": 369,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

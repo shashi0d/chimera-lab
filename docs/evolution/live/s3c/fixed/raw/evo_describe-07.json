@@ -1,0 +1,154 @@
+{
+ "purpose": "evo_describe",
+ "request": {
+  "model": "muse-spark-1.3",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture with no other context and describe exactly what is drawn, like a careful field naturalist. Do not guess what was intended; describe only what is visible. description: a free paragraph describing the whole creature first. parts: every body part you see, one entry each (head, horns, ears, mane, legs, feet, tail, wings, gills, tentacles, shell, plates, scales, feathers, markings), with what it looks like and where it is. attached_objects: anything that looks attached to or sitting on the body rather than part of it, such as an object, an armor piece or a whole small animal; empty if none. animals: every real animal whose features you can see, as everyday English common names, at most four; include any animal that only one part resembles. Then count, looking carefully: separate_bodies: separate animal bodies or body-shaped objects in the picture, including any whole animal or animal-shaped object attached to or sitting on the main creature. heads: heads of any kind. walking_legs: legs the creature stands or walks on, including hidden ones you can infer. wings: wings of any kind. extra_limb_pieces: jointed leg-like, claw-like or tentacle-like pieces other than the walking legs and the tail. tails: tails of any kind (0 if none)."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "Describe this creature, then count."
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (690003 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "plan_blind_describe",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "description",
+      "parts",
+      "attached_objects",
+      "animals",
+      "separate_bodies",
+      "heads",
+      "walking_legs",
+      "wings",
+      "extra_limb_pieces",
+      "tails"
+     ],
+     "properties": {
+      "description": {
+       "type": "string"
+      },
+      "parts": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "part",
+         "looks_like",
+         "where"
+        ],
+        "properties": {
+         "part": {
+          "type": "string"
+         },
+         "looks_like": {
+          "type": "string"
+         },
+         "where": {
+          "type": "string"
+         }
+        }
+       }
+      },
+      "attached_objects": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "animals": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "separate_bodies": {
+       "type": "integer"
+      },
+      "heads": {
+       "type": "integer"
+      },
+      "walking_legs": {
+       "type": "integer"
+      },
+      "wings": {
+       "type": "integer"
+      },
+      "extra_limb_pieces": {
+       "type": "integer"
+      },
+      "tails": {
+       "type": "integer"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0
+ },
+ "response": {
+  "id": "chatcmpl-01a19893-e81b-7635-ba41-9146915c9f39",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\"animals\": [\"fox\", \"owl\"], \"attached_objects\": [], \"description\": \"The illustration shows a single upright creature combining fox and owl features. It has the head, pointed upright ears, furry hindquarters, two slender hind legs with pawed feet, and a long bushy tail of a reddish fox, while its neck, chest and front are covered in white speckled owl-like plumage and it carries a pair of large folded owl-like wings on its sides and back. It stands on its hind legs in three-quarter view facing to the right, with its tail extending behind it to the right along the ground.\", \"extra_limb_pieces\": 0, \"heads\": 1, \"parts\": [{\"looks_like\": \"reddish-brown fox head with pointed snout, black nose, amber eyes and white fur on muzzle and cheeks\", \"part\": \"head\", \"where\": \"at the top of the creature, facing to the right\"}, {\"looks_like\": \"large triangular pointed fox ears with dark backs and pale inner fur\", \"part\": \"ears\", \"where\": \"on top of the head\"}, {\"looks_like\": \"stout body with reddish fox fur on the neck and lower body and white feathering on the chest\", \"part\": \"torso\", \"where\": \"in the middle of the creature between the head and legs\"}, {\"looks_like\": \"large folded barn-owl wings with buff, grey and white feathers spotted and barred with black\", \"part\": \"wings\", \"where\": \"on the left and right sides of the upper body\"}, {\"looks_like\": \"soft white to cream owl breast feathers with small dark speckles\", \"part\": \"feathers\", \"where\": \"covering the front of the neck and chest\"}, {\"looks_like\": \"slender furry fox hind legs bent at the hock\", \"part\": \"legs\", \"where\": \"under the lower body supporting the creature\"}, {\"looks_like\": \"dark fox paws with short claws\", \"part\": \"feet\", \"where\": \"at the bottom of the legs on the ground\"}, {\"looks_like\": \"long thick bushy fox tail with reddish fur and a pale tip\", \"part\": \"tail\", \"where\": \"extending behind the lower body to the right and resting near the ground\"}, {\"looks_like\": \"dense reddish-brown fox fur with white on the muzzle and underside\", \"part\": \"fur\", \"where\": \"on the head, neck, lower body, legs and tail\"}], \"separate_bodies\": 1, \"tails\": 1, \"walking_legs\": 2, \"wings\": 2}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null
+    }
+   }
+  ],
+  "created": 1793561192,
+  "model": "muse-spark-1.3",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 2895,
+   "prompt_tokens": 3852,
+   "total_tokens": 6747,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": null,
+    "audio_tokens": null,
+    "reasoning_tokens": 2324,
+    "rejected_prediction_tokens": null,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": null,
+    "cache_write_tokens": null,
+    "cached_tokens": 369,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}
