@@ -1,0 +1,154 @@
+{
+ "purpose": "evo_describe",
+ "request": {
+  "model": "muse-spark-1.3",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture with no other context and describe exactly what is drawn, like a careful field naturalist. Do not guess what was intended; describe only what is visible. description: a free paragraph describing the whole creature first. parts: every body part you see, one entry each (head, horns, ears, mane, legs, feet, tail, wings, gills, tentacles, shell, plates, scales, feathers, markings), with what it looks like and where it is. attached_objects: anything that looks attached to or sitting on the body rather than part of it, such as an object, an armor piece or a whole small animal; empty if none. animals: every real animal whose features you can see, as everyday English common names, at most four; include any animal that only one part resembles. Then count, looking carefully: separate_bodies: separate animal bodies or body-shaped objects in the picture, including any whole animal or animal-shaped object attached to or sitting on the main creature. heads: heads of any kind. walking_legs: legs the creature stands or walks on, including hidden ones you can infer. wings: wings of any kind. extra_limb_pieces: jointed leg-like, claw-like or tentacle-like pieces other than the walking legs and the tail. tails: tails of any kind (0 if none)."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "Describe this creature, then count."
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (812983 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "plan_blind_describe",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "description",
+      "parts",
+      "attached_objects",
+      "animals",
+      "separate_bodies",
+      "heads",
+      "walking_legs",
+      "wings",
+      "extra_limb_pieces",
+      "tails"
+     ],
+     "properties": {
+      "description": {
+       "type": "string"
+      },
+      "parts": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "part",
+         "looks_like",
+         "where"
+        ],
+        "properties": {
+         "part": {
+          "type": "string"
+         },
+         "looks_like": {
+          "type": "string"
+         },
+         "where": {
+          "type": "string"
+         }
+        }
+       }
+      },
+      "attached_objects": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "animals": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "separate_bodies": {
+       "type": "integer"
+      },
+      "heads": {
+       "type": "integer"
+      },
+      "walking_legs": {
+       "type": "integer"
+      },
+      "wings": {
+       "type": "integer"
+      },
+      "extra_limb_pieces": {
+       "type": "integer"
+      },
+      "tails": {
+       "type": "integer"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0
+ },
+ "response": {
+  "id": "chatcmpl-01a198c7-6367-708d-b0dc-34f9db0ff792",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\"animals\": [\"pangolin\", \"axolotl\"], \"attached_objects\": [], \"description\": \"A stout four-legged creature shown in right-facing three-quarter view with an arched body. The back, top of the head, upper legs and top of the tail are covered in overlapping large rounded dark brown scales like armor, while the face, sides of the neck, belly, lower legs, feet and underside of the tail are pale pinkish-white wrinkled skin. The head is broad, flat and rounded with a slight smile, small nostrils, and large round eyes, with six pink feathery external gill stalks protruding from the sides of the head. It stands on four short thick clawed feet and has a long tapering tail extending to the left.\", \"extra_limb_pieces\": 0, \"heads\": 1, \"parts\": [{\"looks_like\": \"broad, flat, rounded and pale pink with smooth moist skin, a slight smiling mouth, tiny nostril dots on the snout\", \"part\": \"head\", \"where\": \"at the front right of the body, facing right\"}, {\"looks_like\": \"large round protruding eyes with black pupils and pale blue-grey irises, with fine dark speckling on the surrounding skin\", \"part\": \"eyes\", \"where\": \"on the sides of the head\"}, {\"looks_like\": \"pale pink stalks with bright pink feathery fringe, three branched stalks on each side\", \"part\": \"gills\", \"where\": \"protruding outward and upward from both sides of the head just behind the eyes\"}, {\"looks_like\": \"short thick pale pinkish-white wrinkled legs, partially covered on the upper front and rear surfaces with small dark overlapping scales\", \"part\": \"legs\", \"where\": \"under the body, two in front under the chest and two behind under the belly\"}, {\"looks_like\": \"broad pale pink feet with short toes tipped with short blunt tan claws\", \"part\": \"feet\", \"where\": \"at the ends of the four legs resting on the ground\"}, {\"looks_like\": \"long tapering tail, pale pink underneath with overlapping brown scales on top, cut off at the left edge\", \"part\": \"tail\", \"where\": \"extending left and slightly down from the rear of the body\"}, {\"looks_like\": \"large overlapping rounded brown scales with dark centers and lighter tan edges forming continuous armor\", \"part\": \"scales\", \"where\": \"covering the entire arched back from the top of the head to the tail and down over the upper legs\"}, {\"looks_like\": \"pale pinkish-white soft skin with wrinkles and folds\", \"part\": \"skin\", \"where\": \"on the face, sides of neck, belly, lower legs and underside of tail\"}], \"separate_bodies\": 1, \"tails\": 1, \"walking_legs\": 4, \"wings\": 0}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null
+    }
+   }
+  ],
+  "created": 1793564566,
+  "model": "muse-spark-1.3",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 3433,
+   "prompt_tokens": 3852,
+   "total_tokens": 7285,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": null,
+    "audio_tokens": null,
+    "reasoning_tokens": 2802,
+    "rejected_prediction_tokens": null,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": null,
+    "cache_write_tokens": null,
+    "cached_tokens": 0,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}
