@@ -146,6 +146,7 @@ class Animal:
     source: str = "database"  # database | learned
     provenance: tuple[tuple[str, str], ...] = ()  # (field, source) pairs; a tuple keeps the dataclass hashable
     claims: tuple[str, ...] = ()  # model claims (e.g. documented crosses): stored, never used as precedent
+    citations: tuple[tuple[str, str], ...] = ()  # S2: (field, source URL) for web-cited facts
 
     @property
     def genus(self) -> str:
@@ -194,7 +195,7 @@ class Animal:
                 "body_plan": self.body_plan, "group": self.group, "mass_kg": self.mass_kg, "kind": self.kind,
                 "source": self.source, "features": list(self.features), "mouthparts": self.mouthparts,
                 "breathing": self.breathing, "diet": self.diet, "provenance": dict(self.provenance),
-                "claims": list(self.claims)}
+                "claims": list(self.claims), "citations": dict(self.citations)}
 
 
 @dataclass

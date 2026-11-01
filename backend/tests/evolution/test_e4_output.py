@@ -89,7 +89,8 @@ async def test_card_provenance_marks_gbif_and_model_estimated_facts(engine):
     doc = await engine.fuse(sire_name="woolly mammoth", dam_name="lion")
     facts = doc["card"]["provenance"]["sire"]
     assert facts["kind"] == "extinct" and facts["source"] == "learned"
-    assert facts["facts"]["family"] == "gbif" and facts["facts"]["diet"] == "model-estimated"
+    assert facts["facts"]["family"] == "gbif" and facts["facts"]["diet"] == "web-cited"  # S2
+    assert facts["facts"]["visible_features"] == "model-estimated"
 
 
 @pytest.mark.parametrize("sire,dam,kind", [("donkey", "horse", "hybrid"), ("guanaco", "llama", "hybrid"),

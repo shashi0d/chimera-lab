@@ -1,0 +1,202 @@
+{
+ "query": "woolly mammoth",
+ "animal": "woolly_mammoth",
+ "source": "learned",
+ "status": "cited",
+ "note": "12 of 13 fields web-cited",
+ "stored": "data/learned_animals.json (cited values stored, old values kept in corrections)",
+ "fields": [
+  {
+   "field": "body_plan",
+   "status": "matched",
+   "stored": [
+    "quadruped"
+   ],
+   "cited": [
+    "quadruped"
+   ],
+   "url": "https://museumstore.hmns.org/products/woolly-mammoth",
+   "evidence": "It walked on four legs and was about the same size as a modern African elephant.",
+   "class_parts": null
+  },
+  {
+   "field": "primary_locomotor_part",
+   "status": "matched",
+   "stored": "four legs",
+   "cited": "four legs",
+   "url": "https://museumstore.hmns.org/products/woolly-mammoth",
+   "evidence": "It walked on four legs and was about the same size as a modern African elephant.",
+   "class_parts": null
+  },
+  {
+   "field": "covering",
+   "status": "matched",
+   "stored": "fur",
+   "cited": "fur",
+   "url": "https://kids.britannica.com/kids/article/mammoth-and-mastodon/275651",
+   "evidence": "and a coat of dense, furry, short hair overlain by longer, bristly hair.",
+   "class_parts": null
+  },
+  {
+   "field": "movement",
+   "status": "matched",
+   "stored": [
+    "walk"
+   ],
+   "cited": [
+    "walk"
+   ],
+   "url": "https://museumstore.hmns.org/products/woolly-mammoth",
+   "evidence": "It walked on four legs and was about the same size as a modern African elephant.",
+   "class_parts": null
+  },
+  {
+   "field": "habitat",
+   "status": "matched",
+   "stored": [
+    "grassland",
+    "tundra"
+   ],
+   "cited": [
+    "grassland",
+    "tundra"
+   ],
+   "url": "https://www.si.edu/newsdesk/snapshot/berezovka-woolly-mammoth-flesh-jar",
+   "evidence": "roamed the tundra and steppe grasslands of Europe, Africa, Asia and North America.",
+   "class_parts": null
+  },
+  {
+   "field": "climate",
+   "status": "corrected",
+   "stored": [
+    "polar",
+    "temperate"
+   ],
+   "cited": [
+    "polar"
+   ],
+   "url": "https://www.jacksonvillezoo.org/woolly-mammoth",
+   "evidence": "The haemoglobin of the Woolly Mammoth was adapted to the cold, with three mutations to improve oxygen delivery around the body and prevent freezing.",
+   "class_parts": null
+  },
+  {
+   "field": "diet",
+   "status": "matched",
+   "stored": "herbivore",
+   "cited": "herbivore",
+   "url": "https://www.amnh.org/explore/news-blogs/mammoth-mastodon-differences",
+   "evidence": "So, how can we tell these extinct behemoth herbivores apart? It’s all in the head!",
+   "class_parts": null
+  },
+  {
+   "field": "active_time",
+   "status": "matched",
+   "stored": [
+    "diurnal"
+   ],
+   "cited": [
+    "diurnal"
+   ],
+   "url": "https://ucmp.berkeley.edu/mammal/mesaxonia/elephantidae.php",
+   "evidence": "Spend 16 to 18 hours a day either feeding or moving toward a source of food or water.",
+   "class_parts": null
+  },
+  {
+   "field": "body_mass_kg",
+   "status": "matched",
+   "stored": {
+    "min": 2000.0,
+    "max": 6000.0
+   },
+   "cited": {
+    "min": 4000.0,
+    "max": 6000.0
+   },
+   "url": "https://ucmp.berkeley.edu/mammal/mesaxonia/elephantidae.php",
+   "evidence": "Woolly mammoths were 9-11 feet tall when fully grown and weighed 4-6 tons.",
+   "class_parts": null
+  },
+  {
+   "field": "body_length_m",
+   "status": "uncited",
+   "stored": {
+    "min": 4.0,
+    "max": 5.5
+   },
+   "cited": {
+    "min": 3.0,
+    "max": 4.0
+   },
+   "url": "",
+   "evidence": "",
+   "class_parts": null
+  },
+  {
+   "field": "visible_features",
+   "status": "corrected",
+   "stored": [
+    "long shaggy brown coat",
+    "high shoulder hump",
+    "long curved tusks",
+    "trunk",
+    "small ears"
+   ],
+   "cited": [
+    "long curved tusks",
+    "shaggy fur coat",
+    "small ears",
+    "long trunk",
+    "shoulder hump"
+   ],
+   "url": "https://kids.britannica.com/kids/article/mammoth-and-mastodon/275651",
+   "evidence": "Perfectly adapted to its cold environment, the woolly mammoth had small ears, a short, goatlike tail, and a coat of dense, furry, short hair overlain by longer, bristly hair. It had a humplike reserve of fat on its back. Its long, dexterous trunk was used to gather grass and leaves. Its tusks were a",
+   "class_parts": null
+  },
+  {
+   "field": "mouthparts",
+   "status": "matched",
+   "stored": "grinding teeth",
+   "cited": "grinding teeth",
+   "url": "https://www.amnh.org/explore/news-blogs/mammoth-mastodon-differences",
+   "evidence": "Mammoths, on the other hand, had ridged teeth—ideal for grazing and grinding tough grasses into small bits, like modern elephants.",
+   "class_parts": null
+  },
+  {
+   "field": "breathing",
+   "status": "matched",
+   "stored": "lungs",
+   "cited": "lungs",
+   "url": "https://naturalhistory.si.edu/sites/default/files/media/file/whale-evolution-activity-facilitation-guide-v2.pdf",
+   "evidence": "whales are mammals like us. They produce milk, give birth to live young, use their lungs to breathe air, and are warm-blooded",
+   "class_parts": null
+  }
+ ],
+ "opened": [
+  "https://www.si.edu/spotlight/berezovka-woolly-mammoth",
+  "https://www.si.edu/newsdesk/snapshot/berezovka-woolly-mammoth-flesh-jar",
+  "https://nature.ca/en/mammoth-mammoth-tusked-and-hairy-how-does-your-garden-grow/",
+  "https://kids.britannica.com/kids/article/mammoth-and-mastodon/275651",
+  "https://www.jacksonvillezoo.org/woolly-mammoth",
+  "https://www.amnh.org/explore/news-blogs/mammoth-mastodon-differences",
+  "https://museumstore.hmns.org/products/woolly-mammoth",
+  "https://ucmp.berkeley.edu/mammal/mesaxonia/elephantidae.php",
+  "https://naturalhistory.si.edu/sites/default/files/media/file/whale-evolution-activity-facilitation-guide-v2.pdf",
+  "https://naturalhistory.si.edu/sites/default/files/media/file/whale-evolution-activity-facilitation-guide-v2.pdf"
+ ],
+ "searches": [
+  "woolly mammoth Mammuthus primigenius size weight length",
+  "woolly mammoth habitat diet mammoth steppe museum",
+  "woolly mammoth physical description fur tusks trunk Smithsonian",
+  "American Museum Natural History woolly mammoth teeth molars grinding",
+  "woolly mammoth diurnal nocturnal activity breathing lungs mammals",
+  "woolly mammoth cold arctic climate habitat museum",
+  "Natural History Museum London woolly mammoth facts size",
+  "site:amnh.org woolly mammoth molars grazing grasses",
+  "San Diego Zoo elephant lungs breathing mammals",
+  "Smithsonian elephant diurnal active day night",
+  "woolly mammoth quadruped four legs walk museum",
+  "University Michigan Animal Diversity Web Mammuthus primigenius",
+  "Berkeley mammals breathe lungs air",
+  "site:si.edu mammals breathe lungs"
+ ]
+}

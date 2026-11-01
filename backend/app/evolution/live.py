@@ -17,6 +17,7 @@ Request builders and parsers are pure functions so recordings replay in mock mod
 from __future__ import annotations
 
 import io
+import json
 from collections.abc import Awaitable, Callable
 from typing import Any, TypeVar
 
@@ -223,8 +224,12 @@ def parse_identify_response(payload: dict[str, Any]) -> dict[str, Any]:
 
 
 def parse_traits_response(payload: dict[str, Any]) -> dict[str, Any]:
-    d = _message_json(payload)
-    keep = lambda v, allowed: [x for x in (v or []) if x in allowed]  # noqa: E731
+    return clean_traits(_message_json(payload))
+
+
+def clean_traits(d: dict[str, Any]) -> dict[str, Any]:
+    """Trait values cleaned to the engine's vocabularies (shared by the plain and the web-cited trait calls)."""
+    keep = lambda v, allowed: list(dict.fromkeys(x for x in (v or []) if x in allowed))  # noqa: E731
     one = lambda v, allowed, default: v if v in allowed else default  # noqa: E731
     rng = lambda v: {"min": float((v or {}).get("min") or 0), "max": float((v or {}).get("max") or 0)}  # noqa: E731
     return {"body_plan": keep(d.get("body_plan"), BODY_PLANS) or ["quadruped"],
@@ -252,6 +257,95 @@ def parse_audit_response(payload: dict[str, Any], functions: list[str]) -> list[
         detail = str(f.get("detail") or ("no model judgment returned" if not f else ""))
         out.append({"function": fn, "result": result, "detail": detail, "repair": str(f.get("repair") or "")})
     return out
+
+
+# ------------------------------------------------------------------ S2: web-cited traits (Meta Responses + web_search)
+
+CITE_FIELDS = ("body_plan", "primary_locomotor_part", "covering", "movement", "habitat", "climate", "diet",
+               "active_time", "body_mass_kg", "body_length_m", "visible_features", "mouthparts", "breathing")
+
+
+def _cited(value: dict[str, Any]) -> dict[str, Any]:
+    return _obj({"value": value, "source_url": _STR, "evidence": _STR})
+
+
+CITED_SCHEMA = _obj({
+    "body_plan": _cited(_enums(BODY_PLANS)), "primary_locomotor_part": _cited(_enum(LOCOMOTOR)),
+    "covering": _cited(_enum(COVERINGS)), "movement": _cited(_enums(MOVEMENTS)), "habitat": _cited(_enums(HABITATS)),
+    "climate": _cited(_enums(CLIMATES)), "diet": _cited(_enum(DIETS)), "active_time": _cited(_enums(ACTIVE)),
+    "body_mass_kg": _cited(_RANGE), "body_length_m": _cited(_RANGE), "visible_features": _cited(_STRS),
+    "mouthparts": _cited(_enum(MOUTHPARTS)), "breathing": _cited(_enum(BREATHING)),
+    "mouthparts_detail": _STR, "breathing_detail": _STR, "claimed_crosses": _STRS,
+})
+CITE_INSTRUCTIONS = (
+    "You describe a real animal for a natural-history engine, from sources. Use web search and open the pages you "
+    "rely on: encyclopedias, museums, universities, zoos, government agencies or peer-reviewed papers. For each "
+    "field give the value, source_url (the exact URL of a page you opened that supports the value) and evidence "
+    "(a short quote from that page). If no source you opened supports a field, give your best estimate and leave "
+    "source_url and evidence empty; never invent a URL. Use typical adult values. body_plan: the overall layout "
+    "(winged means wings are the main limbs; insects are multi_legged). visible_features: three to six short "
+    "visible features someone would draw. mouthparts: what the head eats with. breathing: the main breathing "
+    "organ. claimed_crosses: scientific names of species it is documented to hybridize with, or an empty list."
+)
+
+
+def build_cite_request(model: str, ident: dict[str, Any]) -> dict[str, Any]:
+    who = f"{ident.get('common_name')} ({ident.get('scientific_name')})"
+    if ident.get("breed"):
+        who += f", breed: {ident['breed']}"
+    return {"model": model, "instructions": CITE_INSTRUCTIONS, "tools": [{"type": "web_search"}],
+            "input": [{"role": "user", "content": [{"type": "input_text", "text": f"Describe, with sources: {who}"}]}],
+            "text": {"format": {"type": "json_schema", "name": "cited_traits", "strict": True, "schema": CITED_SCHEMA}}}
+
+
+def norm_url(url: str) -> str:
+    u = (url or "").strip().lower().rstrip("/")
+    for prefix in ("https://", "http://"):
+        u = u.removeprefix(prefix)
+    return u.removeprefix("www.")
+
+
+def parse_cite_response(payload: dict[str, Any]) -> dict[str, Any]:
+    """{traits, citations, opened, searches}. A field's citation is `verified` only when its URL is a page the
+    model opened, or a url_citation annotation, in this same response; anything else is not a citation."""
+    if payload.get("status") not in (None, "completed"):
+        raise ChimeraError(ErrorCode.UPSTREAM_ERROR, f"cited traits: response status {payload.get('status')!r}")
+    opened, searches, annotated, final = [], [], [], ""
+    for item in payload.get("output") or []:
+        if not isinstance(item, dict):
+            continue
+        if item.get("type") == "web_search_call":
+            act = item.get("action") or {}
+            if act.get("url"):
+                opened.append(act["url"])
+            if act.get("query"):
+                searches.append(act["query"])
+            for src in act.get("sources") or []:
+                if isinstance(src, dict) and src.get("url"):
+                    annotated.append(src["url"])
+        if item.get("type") == "message":
+            for c in item.get("content") or []:
+                if isinstance(c, dict) and c.get("type") == "output_text":
+                    annotated += [a.get("url", "") for a in c.get("annotations") or [] if isinstance(a, dict)]
+                    if item.get("phase") != "commentary":
+                        final += c.get("text", "")
+    try:
+        data = json.loads(final)
+    except json.JSONDecodeError as exc:
+        raise ChimeraError(ErrorCode.UPSTREAM_ERROR, "cited traits: the model returned an unreadable answer.") from exc
+    seen = {norm_url(u) for u in opened + annotated if u}
+    values: dict[str, Any] = {}
+    citations: dict[str, dict[str, Any]] = {}
+    for f in CITE_FIELDS:
+        cell = data.get(f) if isinstance(data.get(f), dict) else {}
+        values[f] = cell.get("value") if "value" in cell else (  # a range may come flat: {min, max, source_url}
+            {"min": cell.get("min"), "max": cell.get("max")} if "min" in cell else None)
+        url = str(cell.get("source_url") or "").strip()
+        citations[f] = {"url": url, "evidence": str(cell.get("evidence") or "").strip()[:300],
+                        "verified": bool(url) and norm_url(url) in seen}
+    for f in ("mouthparts_detail", "breathing_detail", "claimed_crosses"):
+        values[f] = data.get(f)
+    return {"traits": clean_traits(values), "citations": citations, "opened": opened, "searches": searches}
 
 
 # ------------------------------------------------------------------ request builders (pure)
@@ -415,6 +509,17 @@ class LiveEvoSpark(_Retrying):
     async def judge_functions(self, plan_text: str, functions: list[str]) -> list[dict[str, str]]:
         body = build_audit_request(self.model_id, plan_text, functions)
         return parse_audit_response(await self._chat("evo_audit", body), functions)
+
+    async def cite_traits(self, ident: dict[str, Any]) -> dict[str, Any]:
+        """S2: traits with web search and a citation per field (Meta Responses API; raw body, since the SDK has no
+        type for every web_search_call action). Its own, longer timeout: the model searches and opens pages."""
+        body = build_cite_request(self.model_id, ident)
+        timeout = self.settings.cite_timeout_seconds
+        http = _MetaClient(self.settings.meta_api_base_url, self.settings.meta_api_key or "", timeout)
+        payload = await call_with_retry(
+            lambda: http.call(self.kind, "evo_cite_traits", self.model_id, body, responses=True, raw=True),
+            timeout=timeout, base_delay=self.settings.retry_base_seconds, max_attempts=self.settings.retry_max_attempts)
+        return parse_cite_response(payload)
 
     async def vary(self, prompt: str, elites: list[dict[str, Any]], n: int, seed: int) -> list[dict[str, Any]]:
         raise ChimeraError(ErrorCode.UPSTREAM_ERROR, "Evolve rounds are not enabled live (E2 runs fuse only).",

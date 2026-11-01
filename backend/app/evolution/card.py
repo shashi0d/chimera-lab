@@ -41,7 +41,8 @@ def provenance(g: Genome, tax: Taxonomy) -> dict[str, Any]:
     for slot, pid in (("sire", g.parents.sire), ("dam", g.parents.dam)):
         a = tax.animals[pid]
         out[slot] = {"animal": a.common_name, "scientific_name": a.scientific_name, "kind": a.kind,
-                     "source": a.source, "facts": dict(a.provenance), "unverified_claims": list(a.claims)}
+                     "source": a.source, "facts": dict(a.provenance), "citations": dict(a.citations),
+                     "unverified_claims": list(a.claims)}
     return out
 
 

@@ -28,12 +28,15 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, TypeVar
 
-from app.evolution.data import Animal, Taxonomy, config, norm
+from app.errors import ChimeraError
+from app.evolution.data import TAXONOMY_PATH, Animal, Taxonomy, config, norm
 from app.evolution.gbif import Gbif, GbifUnavailable, accepted, taxonomy_from
 from app.evolution.parts import apply_corrections, check_traits
+from app.models.schemas import ErrorCode
 
 T = TypeVar("T")
 MODEL = "model-estimated"
+CITED = "web-cited"
 GBIF = "gbif"
 TIER2 = "chimera_data.json tier2 (gbif)"
 UNKNOWN = "unknown (GBIF unreachable)"
@@ -101,6 +104,7 @@ def animal_from_entry(e: dict[str, Any]) -> Animal:
         breathing=tr.get("breathing", ""), kind=e.get("kind", "species"), source="learned",
         provenance=tuple(sorted(prov.items())),
         claims=tuple(f"documented cross with {c} (unverified claim)" for c in e.get("claims") or []),
+        citations=tuple(sorted((f, c["url"]) for f, c in (e.get("citations") or {}).items())),
     )
 
 
@@ -155,6 +159,28 @@ class LearnedStore:
         e.setdefault("corrections", []).extend({**f, "by": by, "at": stamp} for f in fixes)
         for f in fixes:
             e.setdefault("provenance", {})[f["field"]] = f"{MODEL}, corrected by {by}"
+        self._save()
+        return e
+
+    def enrich(self, animal_id: str, cited: dict[str, Any], report: list[dict[str, Any]]) -> dict[str, Any]:
+        """S2: store web-cited values for an existing learned animal. A cited field replaces the stored value; the
+        old value is kept in `corrections` when it differed. Uncited fields stay as they were (model-estimated)."""
+        e = self.data["animals"][animal_id]
+        stamp = datetime.now(UTC).isoformat(timespec="seconds")
+        for row in report:
+            f = row["field"]
+            if row["status"] not in ("matched", "corrected"):
+                continue
+            if row["status"] == "corrected":
+                e.setdefault("corrections", []).append({"field": f, "was": row["stored"], "now": row["cited"],
+                                                        "reason": "web-cited value", "by": CITED, "at": stamp,
+                                                        "url": row["url"]})
+            e.setdefault("traits", {})[f] = row["cited"]
+            e.setdefault("provenance", {})[f] = CITED
+            e.setdefault("citations", {})[f] = {"url": row["url"], "evidence": row["evidence"]}
+        e["cited_at"] = stamp
+        e.setdefault("sources_opened", [])
+        e["sources_opened"] = sorted(set(e["sources_opened"]) | set(cited.get("opened") or []))
         self._save()
         return e
 
@@ -286,8 +312,12 @@ class Resolver:
                 taxo, tax_source = taxonomy_from(match), GBIF
         canonical = (taxo or {}).get("canonical_name") or sci
 
-        # d) traits from Muse Spark, model-estimated.
-        traits = await self.call("spark", "learn_traits", self.spark.learn_traits({**ident, "scientific_name": canonical}))
+        # d) traits: web-cited first (S2: Meta Spark with web search, a citation per field), else model-estimated.
+        cited, cite_note = await self._cite({**ident, "scientific_name": canonical})
+        if cited is not None:
+            traits = {**cited["traits"]}
+        else:
+            traits = await self.call("spark", "learn_traits", self.spark.learn_traits({**ident, "scientific_name": canonical}))
         common = breed or ident.get("common_name") or canonical
         aid = slug(common)
         if aid in self.tax.animals and self.tax.animals[aid].scientific_name.lower() != canonical.lower():
@@ -298,6 +328,12 @@ class Resolver:
         elif kind == "extinct":
             note = f"extinct species ({canonical}); traits are model-estimated from the record."
         prov = {f: MODEL for f in TRAIT_FIELDS}
+        cites: dict[str, dict[str, str]] = {}
+        if cited is not None:
+            for f, c in cited["citations"].items():
+                if c["verified"] and f in prov:
+                    prov[f] = CITED
+                    cites[f] = {"url": c["url"], "evidence": c["evidence"]}
         prov.update({f: tax_source for f in ("class", "order", "family", "genus", "gbif_key")})
         prov["scientific_name"] = tax_source if taxo else MODEL
         prov["common_name"] = MODEL
@@ -307,7 +343,8 @@ class Resolver:
             "taxonomy": {k: v for k, v in (taxo or {}).items() if k in ("class", "order", "family", "genus", "gbif_key")},
             "taxonomy_source": tax_source, "traits": {k: traits[k] for k in TRAIT_FIELDS if k in traits},
             "details": {"mouthparts": traits.get("mouthparts_detail", ""), "breathing": traits.get("breathing_detail", "")},
-            "claims": traits.get("claimed_crosses", []), "provenance": prov,
+            "claims": traits.get("claimed_crosses", []), "provenance": prov, "citations": cites,
+            "traits_note": cite_note,
             "learned_at": datetime.now(UTC).isoformat(timespec="seconds"),
         }
         if fixes := check_traits(entry["taxonomy"].get("class", ""), entry["traits"]):  # S2: fit the class
@@ -324,3 +361,100 @@ class Resolver:
         self.tax.add(a, [common, query] if name else [common])
         return Resolution(query, "resolved", a, "open_world", kind, entry.get("note", note), alts, tax_source, MODEL,
                           gbif=match)
+
+    # ------------------------------------------------------------------ S2: web-cited traits
+
+    async def _cite(self, ident: dict[str, Any]) -> tuple[dict[str, Any] | None, str]:
+        """(cited result, note). A failure falls back to model-estimated traits and says why (logged)."""
+        cite = getattr(self.spark, "cite_traits", None)
+        if cite is None:
+            return None, "cited traits unavailable: this Spark adapter has no web search"
+        try:
+            out = await self.call("spark", "cite_traits", cite(ident))
+        except ChimeraError as e:
+            if e.code == ErrorCode.BUDGET_EXCEEDED:
+                raise
+            return None, f"cited traits failed ({e.code.value}: {e.message[:120]}); traits are model-estimated"
+        except (ValueError, KeyError, TypeError) as e:
+            return None, f"cited traits failed ({str(e)[:120]}); traits are model-estimated"
+        n = sum(1 for c in out["citations"].values() if c["verified"])
+        return out, f"{n} of {len(out['citations'])} fields web-cited"
+
+    async def cite(self, name: str) -> dict[str, Any]:
+        """S2: re-resolve a known animal with web-cited traits and report, per field, matched (the cited value agrees
+        with the stored one), corrected (it differs; a learned entry takes the cited value and logs the old one) or
+        uncited (no verified citation; the stored value stays model-estimated). Database animals are compared
+        only: chimera_data.json stays the source of truth."""
+        res = await self.resolve(name)
+        if res.status != "resolved" or res.animal is None:
+            return {"query": name, "status": res.status, "note": res.note}
+        a = res.animal
+        stored = self._stored_traits(a)
+        ident = {"scientific_name": a.scientific_name, "common_name": a.common_name,
+                 "breed": stored.get("_breed", "")}
+        out, note = await self._cite(ident)
+        if out is None:
+            return {"query": name, "animal": a.id, "source": a.source, "status": "uncited", "note": note, "fields": []}
+        fixes = check_traits(a.tax_class, out["traits"])
+        cited_traits = apply_corrections(out["traits"], fixes)
+        rejected = {f["field"]: f["reason"] for f in fixes}
+        rows = []
+        for f in TRAIT_FIELDS:
+            c = out["citations"].get(f, {})
+            old, new = stored.get(f), cited_traits.get(f)
+            if not c.get("verified"):
+                status = "uncited"
+            else:
+                status = "matched" if _agrees(f, old, new) else "corrected"
+            rows.append({"field": f, "status": status, "stored": old, "cited": new, "url": c.get("url", ""),
+                         "evidence": c.get("evidence", ""), "class_parts": rejected.get(f)})
+        if a.source == "learned":
+            self.store.enrich(a.id, out, rows)
+            entry = self.store.data["animals"][a.id]
+            self.tax.add(animal_from_entry(entry), [])
+            stored_where = "data/learned_animals.json (cited values stored, old values kept in corrections)"
+        else:
+            stored_where = "comparison only: chimera_data.json stays the source of truth"
+        return {"query": name, "animal": a.id, "source": a.source, "status": "cited", "note": note,
+                "stored": stored_where, "fields": rows, "opened": out.get("opened", []),
+                "searches": out.get("searches", [])}
+
+    def _stored_traits(self, a: Animal) -> dict[str, Any]:
+        """The animal's current trait values in the trait schema's shape (learned entry, or the database row)."""
+        if a.source == "learned":
+            e, _ = self.store.lookup(a.id)
+            if e is None:
+                e = self.store.data["animals"].get(a.id)
+            out = dict((e or {}).get("traits") or {})
+            out["_breed"] = (e or {}).get("breed", "")
+            return out
+        row = next((r for r in json.loads(TAXONOMY_PATH.read_text(encoding="utf-8"))["animals"]
+                    if r["animal_id"] == a.id), {})
+        split = lambda v: [x for x in (v or "").split("|") if x]  # noqa: E731
+
+        def rng(v: str) -> dict[str, float] | None:
+            parts = [float(x) for x in (v or "").split("-") if x.strip()] if v else []
+            return {"min": parts[0], "max": parts[-1]} if parts else None
+
+        return {"body_plan": split(row.get("body_plan")), "primary_locomotor_part": row.get("primary_locomotor_part"),
+                "covering": row.get("covering"), "movement": split(row.get("movement")),
+                "habitat": split(row.get("habitat")), "climate": split(row.get("climate")), "diet": row.get("diet"),
+                "active_time": split(row.get("active_time")), "body_mass_kg": rng(row.get("body_mass_kg", "")),
+                "body_length_m": rng(row.get("body_length_m", "")), "visible_features": list(a.features),
+                "mouthparts": a.mouthparts, "breathing": a.breathing}
+
+
+def _agrees(field: str, old: Any, new: Any) -> bool:
+    """matched: same enum value, same set, overlapping ranges, or features naming the same class parts."""
+    if old in (None, "", [], {}):
+        return False
+    if field in ("body_mass_kg", "body_length_m"):
+        try:
+            return float(old["min"]) <= float(new["max"]) and float(new["min"]) <= float(old["max"])
+        except (KeyError, TypeError, ValueError):
+            return False
+    if field == "visible_features":
+        return {x.lower() for x in old} == {x.lower() for x in new or []}
+    if isinstance(old, list):
+        return set(old) == set(new or [])
+    return old == new

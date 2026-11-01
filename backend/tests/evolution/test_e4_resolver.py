@@ -51,7 +51,8 @@ async def test_exact_match_learns_and_the_cache_is_reused(tmp_path):
         "Mammuthus primigenius", "Mammalia", "Proboscidea", "Elephantidae", "Mammuthus")
     assert a.gbif_key == "4825833" and a.mouthparts == "grinding teeth" and a.breathing == "lungs"
     prov = a.public()["provenance"]
-    assert prov["family"] == "gbif" and prov["diet"] == MODEL and prov["breathing"] == MODEL
+    assert prov["family"] == "gbif" and prov["diet"] == "web-cited" and prov["breathing"] == "web-cited"
+    assert prov["visible_features"] == MODEL  # S2: the mock leaves this one uncited
     assert eng.meter.counts["spark"] == 2 and eng.gbif.calls == ["Mammuthus primigenius"]
     entry = _learned(eng)["animals"]["woolly_mammoth"]
     assert entry["learned_at"] and entry["provenance"]["class"] == "gbif"

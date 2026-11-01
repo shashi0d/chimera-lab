@@ -50,6 +50,8 @@ class EvoSpark(Protocol):
 
     async def judge_functions(self, plan_text: str, functions: list[str]) -> list[dict[str, str]]: ...
 
+    async def cite_traits(self, ident: dict[str, Any]) -> dict[str, Any]: ...
+
 
 class Segmenter(Protocol):
     model_id: str
@@ -205,6 +207,18 @@ class MockEvoSpark:
         if hit is None:
             raise ValueError(f"mock: no traits for {key!r}")
         return self._wire("describe", copy.deepcopy(hit))
+
+    async def cite_traits(self, ident: dict[str, Any]) -> dict[str, Any]:
+        """Mock web-cited traits (S2): the mock knowledge table with fixture citations. visible_features stays
+        uncited, so the uncited path is exercised too. URLs are example.org fixtures, never real sources."""
+        from app.evolution.live import CITE_FIELDS, clean_traits
+
+        traits = clean_traits(await self.learn_traits(ident))
+        sci = ident.get("scientific_name", "").replace(" ", "_")
+        url = f"https://example.org/mock-source/{sci}"
+        cites = {f: {"url": "" if f == "visible_features" else url, "evidence": "" if f == "visible_features"
+                     else f"mock evidence for {f}", "verified": f != "visible_features"} for f in CITE_FIELDS}
+        return {"traits": traits, "citations": cites, "opened": [url], "searches": [f"{sci} traits"]}
 
     async def judge_functions(self, plan_text: str, functions: list[str]) -> list[dict[str, str]]:
         return self._wire("describe", [{"function": f, "result": "pass", "repair": "",

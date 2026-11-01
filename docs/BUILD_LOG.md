@@ -336,3 +336,17 @@ Read `docs/evolution/ROADMAP.md` (now committed) sections 4, 5 and 5b. Caps for 
 - **Derived fields:** code rebuilds every derived field on each call.
 - **Legacy schema:** `labels`, `processes` and `card_trace` left the model's plan schema and became code-owned.
 - **Tests:** 27 new (`test_s2_ops.py`); full suite 779 passed, 6 skipped.
+
+**Part 4 (web-cited traits, D-068):**
+- **Probe:** 1 Meta call confirmed that the Responses API returns strict JSON together with `web_search_call` items (search queries and opened pages) and `url_citation` annotations.
+- **Code:** `live.build_cite_request`, `parse_cite_response`, `LiveEvoSpark.cite_traits`, a mock version, `Resolver._cite` (the new-animal trait step, with a logged fallback) and `Resolver.cite` (re-resolve with a per-field report).
+- **Live:** re-resolved 4 animals with 4 Meta Spark calls (budget spark 98 → 102); outputs in `docs/evolution/live/s2/cited/`.
+
+| Animal | Web-cited | Matched | Corrected | Uncited | Stored |
+|---|---|---|---|---|---|
+| axolotl | 13/13 | 8 | 5 | 0 | comparison only (database) |
+| Chinese pangolin | 13/13 | 10 | 3 | 0 | learned entry updated |
+| rhinoceros beetle | 12/13 | 9 | 3 | 1 (body mass) | learned entry updated |
+| woolly mammoth | 12/13 | 10 | 2 | 1 (body length) | learned entry updated |
+
+- **Tests:** 12 new (`test_s2_cited.py`, including a replay of the live probe response); suite 791 passed, 6 skipped.

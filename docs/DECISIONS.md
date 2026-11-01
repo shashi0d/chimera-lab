@@ -251,3 +251,11 @@ How a call works:
 - **Rebuild:** the session keeps the accepted operations as intents and rebuilds from `seed_plan` plus the intents plus `finish` on every call, so code always fills `card_trace`, labels, checks, audit, licenses, `render_details` and the silhouette.
 - **Errors:** an operation with bad arguments, or one whose result breaks a hard card, is not applied. It returns `OpError`s (code, message, field, hint, valid values) and leaves the session unchanged. Every call is logged.
 - **Legacy path:** for the step-5 comparison it keeps working, but `labels`, `processes` and `card_trace` are now code-owned (`CODE_FIELDS`) and are no longer in the model's plan schema.
+
+**D-068 Web-cited traits: Meta Spark 1.3 with web search, a citation per field, verified against the pages it opened (S2, ROADMAP Q5).**
+- **New resolver step:** for any animal not in `chimera_data.json`, the resolver's trait step is now `cite_traits`, a Meta Responses API call with `tools: [{"type": "web_search"}]` and a strict schema in which every trait field is `{value, source_url, evidence}`. It gets its own 240 s timeout.
+- **Verification:** a field counts as web-cited only when its `source_url` is a page the model opened (a `web_search_call` `open_page` action) or a `url_citation` annotation in the same response. A URL the model merely wrote down is not a citation, and that field stays "model-estimated".
+- **Storage:** verified fields are stored with provenance "web-cited" and their URL and quote in `citations`. The cited values are cleaned to the engine's vocabularies (duplicates removed) and checked against `class_parts.json` like any saved trait.
+- **Fallback:** if the cited call fails, the old model-estimated trait call runs and `traits_note` says why. A budget stop is never swallowed.
+- **Re-resolving a known animal (`Resolver.cite`):** each field is reported as matched (same value, same set, or overlapping range), corrected (it differs) or uncited. A learned entry takes the cited value and keeps the old one in `corrections` (by "web-cited", with the URL). A database animal is compared only: `chimera_data.json` stays the source of truth.
+- **Known limit:** a verified URL proves the page was opened, not that the quoted evidence supports the value. The live run has a few weak sources and quotes, listed in `S2_FIXPACK.md`.

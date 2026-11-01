@@ -189,3 +189,8 @@ Every real Meta API call made by L1 (appended automatically by `backend/app/adap
 | 2026-11-01T01:52:24+00:00 | s1:sam:c_lion_x_eagle:lion legs | sam | sam-3.1 | 1462 | 0 | 0 | 0 | ok | resp_6ae69b579b584aa8f37c4519 |
 | 2026-11-01T01:52:31+00:00 | s1:sam:b_axolotl_x_pangolin_rerender:external gills | sam | sam-3.1 | 1171 | 0 | 0 | 0 | ok | resp_6ae69b5d4f905501534b4a4f |
 | 2026-11-01T01:52:34+00:00 | s1:sam:d_rhinoceros_beetle_x_brown_bear:beetle | sam | sam-3.1 | 3105 | 0 | 0 | 0 | ok | resp_6ae69b5fc9d4129d8616478b |
+| 2026-11-01T02:34:50+00:00 | s2:websearch_probe | s2_websearch_probe | muse-spark-1.3 | 12768 | 13413 | 2570 | 15983 | ok | resp_6ae6a53d77c8d263aa5c4aa6 |
+| 2026-11-01T02:41:57+00:00 | s2:cite:axolotl | evo_cite_traits | muse-spark-1.3 | 40420 | 321627 | 8608 | 330235 | ok | resp_6ae6a6cc4e97b82cdb984a5c |
+| 2026-11-01T02:42:55+00:00 | s2:cite:chinese pangolin | evo_cite_traits | muse-spark-1.3 | 57433 | 568443 | 9384 | 577827 | ok | resp_6ae6a6f41a2a98abc6414ecf |
+| 2026-11-01T02:43:54+00:00 | s2:cite:rhinoceros beetle | evo_cite_traits | muse-spark-1.3 | 59343 | 321183 | 6835 | 328018 | ok | resp_6ae6a72e457124c0c57f4787 |
+| 2026-11-01T02:45:06+00:00 | s2:cite:woolly mammoth | evo_cite_traits | muse-spark-1.3 | 72356 | 531783 | 10563 | 542346 | ok | resp_6ae6a76983b00a67ebe74e01 |
