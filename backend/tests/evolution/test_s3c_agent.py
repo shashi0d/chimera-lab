@@ -476,3 +476,39 @@ async def test_the_agent_history_never_holds_image_data(eng, tmp_path):
         assert not any(isinstance(v, (bytes, bytearray)) for v in vars(im).values())
     assert not any(_has_image_data(m) for m in seen) and not _has_image_data(run.messages)
     assert not _has_image_data(run.trace) and not _has_image_data(doc)
+
+
+async def test_two_covering_failures_in_a_row_stop_edits_until_the_plan_changes(eng, monkeypatch):
+    monkeypatch.setattr(eng, "_inspect", fake_inspect([{"key": "on_top", "group": "integration"}]))
+    run = A.AgentRun(eng, "rhinoceros beetle", "brown bear", brain=scripted([]))
+    assert "Two-failure rule" in run.system_prompt() and "set_extent" in run.system_prompt()
+    for name in ("rhinoceros beetle", "brown bear"):
+        await run.call("resolve_animal", {"name": name, "reason": "parent"})
+    await run.call("propose_candidates", {"reason": "options"})
+    await run.call("choose_candidate", {"candidate_id": "C1", "reason": "top"})
+    await run.call("audit_plan", {"reason": "check"})
+    img = (await run.call("render", {"method": "single_pass", "reason": "go"}))["image_id"]
+    first = await run.call("inspect", {"image_id": img, "reason": "check"})
+    assert "rule" not in first
+    e1 = (await run.call("edit", {"image_id": img, "failure_keys": ["on_top"], "reason": "grow it in"}))["image_id"]
+    second = await run.call("inspect", {"image_id": e1, "reason": "check the edit"})
+    assert "two-failure rule" in second["rule"] and "[two-failure rule" in run.trace[-1]["summary"]
+    refused = await run.call("edit", {"image_id": e1, "failure_keys": ["on_top"], "reason": "once more"})
+    assert refused["error"] == "two_failure_rule" and "set_extent" in refused["hint"]
+    # an operation that changes nothing keeps the lock
+    zones = run.session.plan.transfers[[t.kind for t in run.session.plan.transfers].index("covering")].extent
+    same = await run.call("plan_op", {"op": "connect_features", "args": {"a": "head horn", "b": "covering"},
+                                      "reason": "no change"})
+    assert same["ok"] and same["changed"] is False
+    assert (await run.call("edit", {"image_id": e1, "failure_keys": ["on_top"], "reason": "x"}))["error"] == \
+        "two_failure_rule"
+    smaller = [z for z in zones if z in ("back", "flanks", "neck", "shoulders", "hips")] or zones[:2]
+    out = await run.call("plan_op", {"op": "set_extent", "args": {"feature": "covering", "extent": smaller,
+                                                                   "reason": "plates on the back only, where they "
+                                                                             "protect the spine; legs stay fur"},
+                                     "reason": "two-failure rule: reduce the covering"})
+    assert out["ok"] and out["changed"], out
+    assert (await run.call("audit_plan", {"reason": "re-audit"}))["renderable"]
+    img2 = (await run.call("render", {"method": "single_pass", "reason": "render the smaller covering"}))["image_id"]
+    assert "rule" not in await run.call("inspect", {"image_id": img2, "reason": "check"})
+    assert (await run.call("edit", {"image_id": img2, "failure_keys": ["on_top"], "reason": "one edit"}))["ok"]

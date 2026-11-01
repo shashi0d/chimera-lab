@@ -125,6 +125,11 @@ plan_op (typed operations). Code fills every derived field.
 connection, a third animal): change the plan with plan_op or choose another candidate, audit, and render again;
    - or accept the failures and finalize, saying why.
    An edit or a new render can make things worse: compare with images_so_far from inspect, and finalize the best image, not just the latest.
+   Two-failure rule: after two inspects in a row with covering failures, stop editing the covering. Change the \
+plan with typed operations instead: reduce the covering's extent (plan_op set_extent with feature "covering", fewer \
+zones and a stated reason), or move the donor's identity to material and color only (plan_op set_transfer_class \
+with cls non_homologous, or drop_part, for the donor part that fails). Then audit_plan and render again. edit \
+refuses covering fixes until the plan has changed.
 6. A host tie: choose the host yourself from the candidates' notes, with a reason{ask}.
 7. Limits: at most {renders} renders and {calls} tool calls. Near a limit, finalize your best inspected image; \
 its remaining failures go on the card.
@@ -506,6 +511,8 @@ class AgentRun:
         s = self._replay(c["ops"])
         if s is None:
             raise AgentError("replay_failed", "the candidate's operations no longer apply")
+        if self.session is None or _content_key(s.plan) != _content_key(self.session.plan):
+            self._plan_changed()
         self.session, self.state.chosen, self.state.audited = s, candidate_id, None
         return {"chosen": candidate_id, "plan": self._plan_brief(), "next": "audit_plan"}
 
@@ -525,6 +532,7 @@ class AgentRun:
         changed = res.ok and _content_key(s.plan) != before
         if changed:
             self.state.audited = None
+            self._plan_changed()
         out = res.public()
         out.pop("summary", None)
         note = {"next": "audit_plan"} if changed else (
@@ -653,13 +661,31 @@ class AgentRun:
                              "text": f"the edit changed the host: {', '.join(drift['changed'])}",
                              "fix": "render the plan again (single pass) instead of keeping this edit"})
         verdict = "pass" if not rows else "fail"
-        out = {"image_id": image_id, "verdict": verdict, "failures": rows,
+        rule = self._covering_rule(rows)
+        out = {"image_id": image_id, "verdict": verdict, "failures": rows, **({"rule": rule} if rule else {}),
                "counts": {k: v for k, v in insp.get("expected_counts", {}).items()},
                "third_animals": insp.get("third_animals"), "drift": drift,
                "decision": "Meta Spark decides; Spark Open answers kept as information (D-084)"}
         im.inspect, im.raw_inspect = out, insp
         return {**out, "images_so_far": self._scoreboard(), "best_so_far": self.best_image_id(),
                 "cards": ["RC-R10-12", "RC-R10-15", "RC-R10-16"] if rows else []}
+
+    def _covering_rule(self, rows: list[dict[str, Any]]) -> str | None:
+        """The two-failure rule: two inspects in a row with covering failures lock covering edits on this plan."""
+        if any(r["kind"] == "covering" for r in rows):
+            self.state.covering_streak += 1
+        else:
+            self.state.covering_streak = 0
+        if self.state.covering_streak < 2:
+            return None
+        self.state.edit_lock = _content_key(self._need_session().plan)
+        return (f"two-failure rule: {self.state.covering_streak} inspects in a row with covering failures. Stop "
+                "editing the covering; change the plan (set_extent with fewer zones and a reason, or "
+                "set_transfer_class non_homologous / drop_part so the donor shows by material and color only), "
+                "audit and render again")
+
+    def _plan_changed(self) -> None:
+        self.state.covering_streak, self.state.edit_lock = 0, None
 
     def _scoreboard(self) -> dict[str, dict[str, int]]:
         """Every inspected image's failure counts, so the agent can compare an edit with what it started from."""
@@ -703,6 +729,12 @@ class AgentRun:
             raise AgentError("not_inspected", "inspect the image first, then edit named failures")
         if self.state.edits >= self.cfg["max_edits"]:
             raise AgentError("edit_cap", f"the edit cap ({self.cfg['max_edits']}) is reached")
+        if self.state.edit_lock is not None and self.state.edit_lock == _content_key(self._need_session().plan):
+            raise AgentError("two_failure_rule", "two inspects in a row failed on covering items: covering edits "
+                             "stop until the plan changes",
+                             hint="plan_op set_extent (feature covering, fewer zones, a reason) or set_transfer_class "
+                             "non_homologous / drop_part (the donor by material and color only), then audit_plan "
+                             "and render", valid=["plan_op", "choose_candidate", "finalize"])
         fails = {f["key"]: f for f in (im.raw_inspect or {}).get("failures", [])}
         keys = [k for k in failure_keys if k in fails]
         if not keys:
@@ -865,7 +897,8 @@ def _summary(name: str, out: dict[str, Any]) -> str:
     if name == "inspect":
         f = out.get("failures") or []
         return f"{out.get('image_id')}: {out.get('verdict')}" + (
-            " - " + "; ".join(f"{x['key']} ({x['kind']}, {x['status']})" for x in f) if f else "")
+            " - " + "; ".join(f"{x['key']} ({x['kind']}, {x['status']})" for x in f) if f else "") + (
+            " [two-failure rule: covering edits stop]" if out.get("rule") else "")
     if name == "edit":
         return f"{out.get('image_id')} from an edit: {out.get('instruction', '')[:160]}"
     if name == "finalize":
