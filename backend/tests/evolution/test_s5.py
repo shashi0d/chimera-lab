@@ -174,3 +174,57 @@ async def test_d3_each_refused_call_is_stopped_by_the_new_schema_or_guided_by_it
         assert "name the legs in plan_reason" in schema["description"]
         fixed = {**args, "plan_reason": args["plan_reason"] + "; the legs stay furred for climbing grip"}
         assert (await run.call(name, fixed))["ok"]
+
+
+# ------------------------------------------------------------------ part 2: the anatomy map
+
+
+async def test_anatomy_map_colors_parts_by_parent_and_never_guesses(eng, monkeypatch):
+    import io
+
+    from PIL import Image
+
+    from app.errors import ChimeraError
+    from app.evolution.anatomy import COLORS
+    from app.models.schemas import ErrorCode
+
+    real = eng.segmenter.segment
+
+    async def segment(image: bytes, label: str) -> bytes:
+        if label == "head horn":  # SAM finds nothing
+            out = io.BytesIO()
+            Image.new("L", (64, 64), 0).save(out, "PNG")
+            return out.getvalue()
+        if label == "tail":
+            raise ChimeraError(ErrorCode.UPSTREAM_ERROR, "sam down")
+        return await real(image, label)
+
+    monkeypatch.setattr(eng.segmenter, "segment", segment)
+    doc, run = await eng.agent_fuse("rhinoceros beetle", "brown bear")
+    amap = doc["card"]["anatomy_map"]
+    by = {p["part"]: p for p in amap["parts"]}
+    horn = by["european rhinoceros beetle head horn"]
+    assert (horn["found"], horn["status"], horn["color"], horn["parent_role"]) == (False, "not located", None, "donor")
+    assert horn["mask_area"] == 0.0
+    assert by["tail"]["status"] == "not located" and "sam down" in by["tail"]["error"]
+    assert by["head"]["parent_role"] == "host" and by["head"]["color"] == "#{:02x}{:02x}{:02x}".format(*COLORS["host"])
+    cov = next(p for p in amap["parts"] if p["part"].endswith("covering"))
+    assert cov["parent_name"].lower().endswith("rhinoceros beetle") and cov["found"]
+    assert cov["color"] == "#{:02x}{:02x}{:02x}".format(*COLORS["donor"])
+    assert amap["not_located"] == 2 and amap["found"] == len(amap["parts"]) - 2
+    files = eng.services.settings.resolved_local_dir() / "files"
+    png = (files / amap["overlay_key"]).read_bytes()
+    with Image.open(io.BytesIO(png)) as im:
+        assert im.width == amap["image_size"][0] and im.height > amap["image_size"][1]  # the image plus a legend
+    assert (run.image_dir / "anatomy_map.png").exists()
+
+
+async def test_anatomy_map_parts_follow_the_plan(eng):
+    from app.evolution.anatomy import planned_parts
+
+    s = await eng.plan_session("red fox", "barn owl", "speculative")
+    parts = {p["part"]: p["parent"] for p in planned_parts(s.plan, eng.tax)}
+    assert parts["wings (in place of the forelegs)"] == "barn_owl" and parts["hind legs"] == "red_fox"
+    h = await eng.plan_session("donkey", "horse", "realistic")
+    hp = {p["part"]: p["parent"] for p in planned_parts(h.plan, eng.tax)}
+    assert hp["head"] == "donkey" and hp["body"] == "horse" and hp["tail"] == "blend"

@@ -943,6 +943,19 @@ class AgentRun:
                          "edits": self.state.edits, "tool_calls": self.state.calls, "stop": how,
                          "candidate": self.state.chosen}
         card["final_choice"] = await self._final_choice(im, key, agent_reason, g.id)
+        # S5 part 2: the anatomy map of the finalized image (SAM per planned part, colored by source parent)
+        from app.evolution.anatomy import anatomy_map
+
+        data = im.load()
+        try:
+            overlay, amap = await anatomy_map(data, g, eng.tax, eng.segmenter, eng.meter)
+        finally:
+            del data
+        map_key = f"evo/{g.id}.agent.{im.id}.anatomy.png"
+        await eng.services.storage.put(map_key, overlay, "image/png")
+        (self.image_dir / "anatomy_map.png").write_bytes(overlay)
+        card["anatomy_map"] = {**amap, "overlay_key": map_key}
+        del overlay
         doc = {"genome": g.model_dump(), "prompt": im.prompt,
                "prompt_compiled": im.extra.get("prompt_compiled") or compile_prompt(g, eng.tax),
                "image_key": key, "image_id": im.id, "image_kind": im.kind, "judge": verdict, "card": card,
