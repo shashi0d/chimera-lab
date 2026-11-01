@@ -422,3 +422,30 @@ The gold-set label for `e4/b_axolotl_x_pangolin` changes from fail ("external gi
 - **Smoke-run fixes:** the live smoke run on beetle x bear (kept as `live/s3c/agent/beetle_bear/smoke_r1`) found two gaps, both fixed before the validation runs:
   - the agent repeated an operation that changed nothing and re-rendered the same plan, so `plan_op` now says `changed: false`;
   - it finalized its sixth image although its first was better, so inspect now returns every image's failure counts and the best so far, and the system prompt says to finalize the best image, not the latest.
+
+**D-090 Agent runs keep images on disk and resume from disk (S3c finish).**
+- **Images:** the agent keeps only an image's path and size. Inspect, the drift check and finalize load the bytes
+  for one call and release them. Its history holds JSON summaries only, and a test checks this.
+- **Live runs:**
+  - `s3c_live.py` saves the trace, plans, prompts, images and critic answers after every tool step.
+  - doc.json is written last and is the only "finalized" marker.
+  - A rerun skips finalized runs and redoes a partial one, keeping the partial folder for the record.
+  - One creature runs per foreground invocation (`--max 1`), never in a background shell.
+- **Why:** the first full run was stopped by the host reclaiming memory from background shells. The measured
+  in-process saving is small (about 0.5 MB per image). The protection comes from the foreground runs and the
+  resume.
+
+**D-091 The two-failure rule (S3c finish).**
+- **The rule:** after two inspects in a row with covering failures, the agent stops editing the covering. It
+  changes the plan with typed operations instead, then audits and renders again:
+  - `set_extent` on the covering, with fewer zones and a reason; or
+  - `set_transfer_class non_homologous` or `drop_part`, so the donor shows by material and color only.
+- **In the prompt and in code:**
+  - the second such inspect locks covering edits on that plan's content;
+  - `edit` refuses with `two_failure_rule` until the plan changes;
+  - an operation that changes nothing keeps the lock;
+  - a clean inspect or a plan change resets the streak.
+- **Live result:** the rule fired in 4 of 8 runs. It changed what the agent did next, but it did not reduce the
+  remaining failures on tortoise × goat or beetle × bear.
+- **Open, for the owner:** a covering has no "material and color only" operation (`covering_is_material`).
+  `S3c_AGENT.md` proposes one.

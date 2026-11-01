@@ -419,3 +419,33 @@ Read `docs/evolution/ROADMAP.md` (now committed) sections 4, 5 and 5b. Caps for 
 - **Part 1:** plan fixes (D-084 to D-088). `identity.py` (one identity part per donor from its own traits), `set_identity_part`, the trait-based license compensation, plate patterns and the turtle-shell rule in `transfer.py`, the host tie as `needs_choice`, RC-R10-17 (126 cards), and the D3 gold-set relabel. `scripts/s3c_preview.py` prints a pair's plan and prompt with no calls. Suite 900 passed, 6 skipped (19 tie tests now name the host).
 - **Part 2:** `agent.py`: `AgentRun` (ten tools: the eight from the brief plus `choose_candidate` and `plan_op`), `SparkOpenBrain` (Baseten tool calling, `max_tokens` 8000 on every call) and `PolicyBrain` (mock), with trace.json and trace.md. Added `EvoEngine.agent_fuse`, `evo_config agent` caps (4 renders, 30 tool calls, 6 edits) and `scripts/s3c_live.py`. Suite 900 passed, 6 skipped.
 - **Part 4:** `test_s3c_agent.py`, 32 mock tests. Part 1: breathing clause from the donor, identity parts and their validation, realistic mode, plate patterns (bands only when present, class default marked), RC-R10-17 and the GBIF reptile classes, D1 to D3. Part 2: the loop with a reason on every step; the tie listing both hosts and blocking render; audit before render; edits refused for structural failures; drift; the render and tool-call caps with code finalize; growth by edit; ask_user; the Spark Open brain's output cap and parsing; an unchanged plan op. Suite 932 passed, 6 skipped.
+- **Part 3 (first full run, kept as `live/s3c/agent_v1/`):** 8 agent creatures on the code before the memory fix
+  and the two-failure rule. The host stopped the session for low memory before the fixed-pipeline part ran.
+- **Finish, step 1:** parts 1, 2 and 4 pushed to evo.
+- **Finish, step 2 (memory):**
+  - What held memory: the agent kept every image's bytes in memory for the whole creature. Its history and the
+    critic payloads held none.
+  - The fix: images live on disk (`Image.path`) and are loaded for one call at a time.
+  - Measured with `scripts/s3c_memory.py`, before → after: tracemalloc peak 16.26 → 13.63 MB, retained after the
+    run 6.34 → 3.12 MB, image bytes held 3.22 → 0 MB, peak working set 137.5 → 135.5 MB.
+  - New test: the agent's history never holds image data.
+- **Finish, step 3 (resume):** `s3c_live.py` saves after every tool step and writes doc.json last as the
+  "finalized" marker. A rerun skips finished runs and keeps partial ones as `rN_partialK`. It runs one creature per
+  foreground invocation (`--max 1`), and the step labels include the repeat folder.
+- **Finish, step 4 (two-failure rule):** in the system prompt and enforced in code (D-091). New test.
+- **Finish, step 5 (usage):** 540 was the project-wide Spark Open counter, not one creature's. No creature went over
+  30 tool calls (the most was 22 in v1 and 26 in this validation), so there was no cap fix. See
+  `live/s3c/usage_check.md`.
+- **Finish, step 6 (live validation):**
+  - Agent: 2 repeats each of tortoise × goat, fox × owl (held out), crab × wolf and beetle × bear.
+  - Fixed pipeline: once per pair.
+  - 473 calls, none failed: Spark Open 307, Muse Image 39, Meta Spark 81, SAM 46.
+  - Each creature ran as its own foreground invocation, and every pair was committed and pushed.
+  - Also fixed: a refused plan operation's trace summary now shows its error code.
+- **Finish, step 7:** `docs/evolution/S3c_AGENT.md`.
+  - The agent beat the fixed pipeline on tortoise × goat (the host on a tie), was slightly better on fox × owl, and
+    was mixed on crab × wolf and beetle × bear.
+  - The two-failure rule changed the agent's path but not any outcome.
+  - The held-out fox × owl did best.
+- **Budget counter over S3c:** image 84→162, Meta Spark 483→637, SAM 80→161, Spark Open 507→1061.
+- **Tests:** 934 passed, 6 skipped.
