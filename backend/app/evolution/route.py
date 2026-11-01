@@ -132,13 +132,13 @@ def choose_host(r: Route, user_host: str | None = None) -> tuple[str | None, lis
         pick = r.sire if user_host == "sire" else r.dam
         return pick.id, ["RC-R6-01", "RC-R5-02"], f"user picked the {user_host}"
     s, d = r.sire, r.dam
-    ranked = sorted([s, d], key=lambda a: (a.structure_rank, a.mass_kg or 0.0, a is s), reverse=True)
-    host = ranked[0]
     if s.structure_rank != d.structure_rank:
-        why = f"{host.common_name} has the more structured body schema"
-    else:
-        why = f"equal schema structure; {host.common_name} is the larger animal"
-    return host.id, ["RC-R6-08", "RC-R6-09", "RC-R5-02"], why
+        host = s if s.structure_rank > d.structure_rank else d
+        return host.id, ["RC-R6-08", "RC-R6-09", "RC-R5-02"], f"{host.common_name} has the more structured body schema"
+    # S3b (RC-R10-01, hard): size and mass never decide which parent wins. On equal structure the first-named parent
+    # hosts by default; the user or the agent switches it (set_host) when the other body serves the pair better.
+    return s.id, ["RC-R6-08", "RC-R6-09", "RC-R5-02", "RC-R10-01"], (
+        f"equal schema structure; {s.common_name} (the first-named parent) hosts by default, never by size (RC-R10-01)")
 
 
 FRAME_WORDS = {

@@ -51,8 +51,8 @@ def test_breathing_gills_in_water_pass(engine):
 
 async def test_donor_gills_dropped_in_realistic_kept_as_frills_otherwise(engine):
     await engine.resolve("pangolin")
-    real, _ = _plan(engine, "axolotl", "pangolin", "realistic")
-    spec, _ = _plan(engine, "axolotl", "pangolin", "speculative")
+    real, _ = _plan(engine, "axolotl", "pangolin", "realistic", host_pick="dam")  # S3b: host named; RC-R10-01 ended the by-mass default
+    spec, _ = _plan(engine, "axolotl", "pangolin", "speculative", host_pick="dam")
     rb, sb = _audit(real)["breathing"], _audit(spec)["breathing"]
     assert rb.result == "repaired" and {"RC-R9-03", "RC-R9-12"} <= set(rb.cards) and "collapse in air" in rb.detail
     assert not any("gills" in a for a in real.limb_plan.appendages)
@@ -89,7 +89,7 @@ def test_feeding_behavior_follows_the_head_donor(engine):
 
 async def test_feeding_uncovered_mouthparts_are_model_judged(engine):
     await engine.resolve("pangolin")
-    g, _ = _plan(engine, "axolotl", "pangolin")
+    g, _ = _plan(engine, "axolotl", "pangolin", host_pick="dam")  # S3b: host named; RC-R10-01 ended the by-mass default
     f = _audit(g)["feeding"]
     assert f.result == "pending" and f.source == "model-judged" and "toothless tongue" in f.detail
 
@@ -254,7 +254,7 @@ async def test_live_regression_dropped_gills_never_return_through_model_notes(en
 
     await engine.resolve("pangolin")
     a, b = engine.tax.resolve("axolotl"), engine.tax.resolve("pangolin")
-    g, r = engine.seed_plan(a, b, design_mode="realistic")
+    g, r = engine.seed_plan(a, b, design_mode="realistic", host_pick="dam")  # S3b: host named; RC-R10-01 ended the by-mass default
     g.traits["body"].note = ("pangolin torso and scaled frame sets shape as structured host; retains pangolin lungs "
                              "for air breathing with axolotl gills supplemental")
     g.traits["head"].note = "pangolin head shape; axolotl gills attached externally, not blended into skull"

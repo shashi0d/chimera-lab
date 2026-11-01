@@ -1313,6 +1313,135 @@
     "source": "https://www.sf-encyclopedia.com/entry/wellss_law"
   },
   {
+    "id": "RC-R10-01",
+    "doc": "R10_chimera_science_landscape.md",
+    "rule": "Never rank a whole parent as dominant or stronger, and never treat dominance as fitness or frequency; neither size nor mass decides which parent wins",
+    "applies_to": [
+      "pipeline"
+    ],
+    "strength": "hard",
+    "status": "VERIFIED",
+    "source": "https://www.jstage.jst.go.jp/article/jssej/44/3/44_188/_article"
+  },
+  {
+    "id": "RC-R10-02",
+    "doc": "R10_chimera_science_landscape.md",
+    "rule": "On the chimera path, each body region is contested between the parents and goes to the version with higher fitness in that body and habitat; the winner is decided per pair, with no fixed ranking of species",
+    "applies_to": [
+      "all_traits",
+      "pipeline"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://www.nature.com/articles/s41586-021-03273-0"
+  },
+  {
+    "id": "RC-R10-03",
+    "doc": "R10_chimera_science_landscape.md",
+    "rule": "Donor parts fill the host's empty niches first (structures the host lacks); replacing a working host part requires a clear fitness gain",
+    "applies_to": [
+      "all_traits",
+      "pipeline"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://journals.biologists.com/dev/article/148/12/dev195792/269139/The-road-to-generating-transplantable-organs-from"
+  },
+  {
+    "id": "RC-R10-04",
+    "doc": "R10_chimera_science_landscape.md",
+    "rule": "A donor face, jaw or beak skeleton is autonomous: it keeps the donor's own shape and proportions, and the host tissue at the seam bends toward it",
+    "applies_to": [
+      "head",
+      "face",
+      "skull"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6108449"
+  },
+  {
+    "id": "RC-R10-05",
+    "doc": "R10_chimera_science_landscape.md",
+    "rule": "Internal organs and overall body size follow the host, even when built from donor cells",
+    "applies_to": [
+      "size",
+      "body"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://www.ims.u-tokyo.ac.jp/imsut/content/900004612.pdf"
+  },
+  {
+    "id": "RC-R10-06",
+    "doc": "R10_chimera_science_landscape.md",
+    "rule": "A layer architecture is allowed: the donor supplies the surface layer (skin, scales or feathers) over the host body or a whole body zone; in animals it is labeled speculative, because layer chimeras are documented in plants",
+    "applies_to": [
+      "coat_texture",
+      "coat_color",
+      "body"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4223383/"
+  },
+  {
+    "id": "RC-R10-07",
+    "doc": "R10_chimera_science_landscape.md",
+    "rule": "A borrowed donor part counts as working only if the host body supports it; otherwise it is shown but labeled non-working",
+    "applies_to": [
+      "all_traits",
+      "pipeline"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://ria.ua.pt/bitstream/10773/40784/1/2023%20Morelli%20et%20al_ORE.pdf"
+  },
+  {
+    "id": "RC-R10-08",
+    "doc": "R10_chimera_science_landscape.md",
+    "rule": "Creatures with three or more parents are built as a family tree of pairwise steps, and the result is a mosaic in which each parent shows in different features",
+    "applies_to": [
+      "pipeline"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://pure.psu.edu/en/publications/a-wood-warbler-produced-through-both-interspecific-and-intergener/"
+  },
+  {
+    "id": "RC-R10-09",
+    "doc": "R10_chimera_science_landscape.md",
+    "rule": "Choose the fusion operator by the kind of pair; no single blending method suits all pairs",
+    "applies_to": [
+      "pipeline"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://arxiv.org/pdf/2506.23630"
+  },
+  {
+    "id": "RC-R10-10",
+    "doc": "R10_chimera_science_landscape.md",
+    "rule": "Cap parents at three in realistic and speculative modes, and at four in mythic mode with a warning, because image models degrade with more concepts",
+    "applies_to": [
+      "pipeline"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://openaccess.thecvf.com/content/CVPR2024/papers/Kwon_Concept_Weaver_Enabling_Multi-Concept_Fusion_in_Text-to-Image_Models_CVPR_2024_paper.pdf"
+  },
+  {
+    "id": "RC-R10-11",
+    "doc": "R10_chimera_science_landscape.md",
+    "rule": "The genome carries both parents' versions for each region (one expressed, one carried); in evolve, an offspring may express a carried version, the way a hidden recessive can reappear in a later generation",
+    "applies_to": [
+      "pipeline"
+    ],
+    "strength": "soft",
+    "status": "UNVERIFIED",
+    "source": "https://shipseducation.net/updates/mendel2.htm"
+  },
+  {
     "id": "RC-R10-12",
     "doc": "R10_chimera_science_landscape.md",
     "rule": "A donor's protective covering (shell, carapace, scales, exoskeleton) is applied as a covering that replaces the host's covering in its zone and grows in the skin, not as pieces added on top; the host's covering stops at its edge, and the belly and legs keep the host's covering unless planned otherwise",
@@ -1334,7 +1463,8 @@
     ],
     "strength": "soft",
     "status": "VERIFIED",
-    "source": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9975656/"
+    "source": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9975656/",
+    "superseded_by": "RC-R10-15"
   },
   {
     "id": "RC-R10-14",
@@ -1346,5 +1476,31 @@
     "strength": "soft",
     "status": "UNVERIFIED",
     "source": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9975656/"
+  },
+  {
+    "id": "RC-R10-15",
+    "doc": "R10_chimera_science_landscape.md",
+    "rule": "Transfer traits, not shapes. Classify each donor feature as (a) material or covering, which grows on the host and conforms to the host's body shape; (b) homologous structure, placed where the host has the matching structure, keeping its form but fitted to host scale; (c) non-homologous structure, never transferred as a shape, only its material or function",
+    "applies_to": [
+      "all_traits",
+      "coat_texture",
+      "body"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://evolution.berkeley.edu/evolution-101/the-history-of-life-looking-at-the-patterns/homologies-and-analogies/"
+  },
+  {
+    "id": "RC-R10-16",
+    "doc": "R10_chimera_science_landscape.md",
+    "rule": "An exoskeleton covering is a whole-body system: hardened plates on each segment and limb section, joined by flexible cuticle at the joints; on a vertebrate host it covers body and limbs with flexible bands at joints, unless a stated functional reason limits it",
+    "applies_to": [
+      "coat_texture",
+      "body",
+      "limbs"
+    ],
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://genent.cals.ncsu.edu/bug-bytes/arthropods/"
   }
 ]

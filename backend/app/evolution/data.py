@@ -34,6 +34,7 @@ class Card:
     strength: str
     status: str
     source: str
+    superseded_by: str | None = None  # S3b: kept for the record, never quoted or applied
 
     @property
     def weight(self) -> float:
@@ -67,7 +68,7 @@ class CardBook:
 
     def for_tags(self, tags: list[str]) -> list[str]:
         want = set(tags) | {"all_traits", "pipeline"}
-        return [c.id for c in self._cards.values() if want & set(c.applies_to)]
+        return [c.id for c in self._cards.values() if want & set(c.applies_to) and not c.superseded_by]
 
 
 @lru_cache

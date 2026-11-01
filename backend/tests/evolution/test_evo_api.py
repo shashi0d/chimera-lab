@@ -28,9 +28,10 @@ def test_loader_matches_committed_cards(tmp_path):
     assert res.returncode == 0, res.stdout + res.stderr
     built = json.loads(out.read_text(encoding="utf-8"))
     assert built == json.loads((REPO_ROOT / "data/rule_cards.json").read_text(encoding="utf-8"))
-    assert len(built) == 112  # E4: R9 adds 15 cards; S3a: R10 adds 3
+    assert len(built) == 125  # E4: R9 adds 15 cards; S3a: R10 adds 3; S3b: R10 01-11 and 15-16
     assert {c["doc"].split("_")[0] for c in built} == {f"R{i}" for i in range(1, 11)}  # RESEARCH_SUMMARY skipped
-    assert all(set(c) == {"id", "doc", "rule", "applies_to", "strength", "status", "source"} for c in built)
+    assert all({"id", "doc", "rule", "applies_to", "strength", "status", "source"} <= set(c) <= {
+        "id", "doc", "rule", "applies_to", "strength", "status", "source", "superseded_by"} for c in built)  # S3b
 
 
 def test_prompts_quote_cards_verbatim(engine):
@@ -63,7 +64,7 @@ async def test_real_mode_refuses_before_any_call(tmp_path):
 
 async def test_evo_endpoints(client):
     r = await client.get("/evo/cards")
-    assert r.status_code == 200 and r.json()["count"] == 112 and len(r.json()["hard"]) == 17
+    assert r.status_code == 200 and r.json()["count"] == 125 and len(r.json()["hard"]) == 18
 
     r = await client.post("/evo/fuse", json={"sire": {"name": "lion"}, "dam": {"name": "eagle"}})
     assert r.status_code == 200, r.text

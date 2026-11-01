@@ -41,8 +41,10 @@ Command and gate rules unchanged. Result: **exit 0. Gate PASSED: 10 files, 109 c
 - https://www.ucl.ac.uk/taxome/jim/pap/mallet07_hybspn_Nature.pdf  (R1_inheritance.md:117, R1_inheritance.md:217, R2_real_hybrids.md:130, R2_real_hybrids.md:244)
 
 ## Resolved links
-The verifier reads this section as its history. Each URL below returned a status under 400 in at least one recorded run: run 1 (reconstructed from commit 98d4d8c as every link minus that run's FAIL and 403 lines) or run 4. S3a (Nov 1, 2026) added the two R10 sources (both resolved; run result: 112 cards, 0 failures, 16 bot-blocked, 1 timeout warning, 77 resolved).
+The verifier reads this section as its history. Each URL below returned a status under 400 in at least one recorded run: run 1 (reconstructed from commit 98d4d8c as every link minus that run's FAIL and 403 lines) or run 4. S3b (Nov 1, 2026) added the owner's R10 cards 01 to 11 and the sources of RC-R10-15 and 16 (run: 125 cards, 2 failures, both https://ria.ua.pt (RC-R10-07): every request to that host, including its home page, is reset from this network and from a second fetch path, so the source is unreachable, not shown dead; 19 bot-blocked, 1 timeout warning, 92 resolved). S3a (Nov 1, 2026) added the two R10 sources (both resolved; run result: 112 cards, 0 failures, 16 bot-blocked, 1 timeout warning, 77 resolved).
 - https://www.nationalgeographic.com/animals/article/animals-armor-bioinspiration
+- https://evolution.berkeley.edu/evolution-101/the-history-of-life-looking-at-the-patterns/homologies-and-analogies/
+- https://genent.cals.ncsu.edu/bug-bytes/arthropods/
 - https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9975656/
 - https://agris.fao.org/search/en/records/65dfe6754c5aef494fe67490
 - https://arxiv.org/abs/1504.04909

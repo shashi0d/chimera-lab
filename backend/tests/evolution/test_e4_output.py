@@ -49,7 +49,7 @@ def test_checklist_puts_license_compensations_first(engine):
 
 async def test_checklist_shows_kept_gills_and_size_compensation(engine):
     await engine.resolve("pangolin")
-    g, _ = _plan(engine, "axolotl", "pangolin")
+    g, _ = _plan(engine, "axolotl", "pangolin", host_pick="dam")  # S3b: host named; RC-R10-01 ended the by-mass default
     assert "three pairs of feathery gill stalks on the sides of the head" in generated_checklist(g, engine.tax)
     await engine.resolve("rhinoceros beetle")
     b, _ = _plan(engine, "rhinoceros beetle", "brown bear")

@@ -16,7 +16,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
 CARD_RE = re.compile(r"^### (RC-R\d+-\d+)\s*$")  # S3a: R10 and later have two-digit doc numbers
-FIELD_RE = re.compile(r"^(rule|applies_to|strength|status|source):\s*(.*)$")
+FIELD_RE = re.compile(r"^(rule|applies_to|strength|status|source|superseded_by):\s*(.*)$")  # S3b: optional
 FIELDS = ("rule", "applies_to", "strength", "status", "source")
 
 
@@ -51,7 +51,9 @@ def parse_file(path: Path) -> list[dict]:
         c["applies_to"] = _list(c["applies_to"])
         if c["strength"] not in ("hard", "soft") or c["status"] not in ("VERIFIED", "UNVERIFIED"):
             raise ValueError(f"{path.name} {c['id']}: bad strength/status")
-    return [{k: c[k] for k in ("id", "doc", *FIELDS)} for c in cards]
+    # superseded_by (S3b, optional): the card id only; any reason after it stays in the research doc
+    return [{**{k: c[k] for k in ("id", "doc", *FIELDS)}, **({"superseded_by": c["superseded_by"].split()[0]}
+            if c.get("superseded_by") else {})} for c in cards]
 
 
 def build(research_dir: Path) -> list[dict]:

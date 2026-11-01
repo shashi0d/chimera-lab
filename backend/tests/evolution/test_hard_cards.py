@@ -16,7 +16,7 @@ from app.evolution.route import LABEL_CHIMERA, LABEL_SPECULATIVE, find_known_pai
 from tests.evolution.conftest import plan_for
 
 HARD = {"RC-R1-01", "RC-R1-14", "RC-R2-01", "RC-R2-03", "RC-R2-11", "RC-R2-16", "RC-R3-01", "RC-R3-02", "RC-R3-09",
-        "RC-R5-01", "RC-R5-10", "RC-R9-01", "RC-R9-02", "RC-R9-03", "RC-R9-06", "RC-R9-09", "RC-R9-10"}
+        "RC-R5-01", "RC-R5-10", "RC-R10-01", "RC-R9-01", "RC-R9-02", "RC-R9-03", "RC-R9-06", "RC-R9-09", "RC-R9-10"}
 WORKED = [("donkey", "horse"), ("lion", "tiger"), ("lion", "eagle"), ("eagle", "octopus")]
 
 
@@ -26,6 +26,29 @@ def ids(violations):
 
 def test_every_hard_card_has_a_test_here():
     assert set(cards().hard_ids()) == HARD
+
+
+# ---------------------------------------------------------------- RC-R10-01 (S3b)
+
+
+def test_rc_r10_01_mass_never_decides_the_host(tax):
+    """Equal body-schema structure: swapping the parents' masses never changes the host; the first-named parent
+    hosts by default and the reason says so."""
+    import dataclasses
+
+    from app.evolution.route import choose_host
+
+    lion, tiger = tax.animals["lion"], tax.animals["tiger"]
+    assert lion.structure_rank == tiger.structure_rank
+    for a, b in ((lion, tiger), (tiger, lion)):
+        hosts = set()
+        for ma, mb in ((10.0, 500.0), (500.0, 10.0)):
+            r = route(dataclasses.replace(a, mass_kg=ma), dataclasses.replace(b, mass_kg=mb), tax)
+            r = dataclasses.replace(r, mode="chimera") if r.mode == "hybrid" else r
+            host, cards_, why = choose_host(r)
+            hosts.add(host)
+            assert "RC-R10-01" in cards_ and "larger" not in why and "never by size" in why
+        assert hosts == {a.id}
 
 
 # ---------------------------------------------------------------- RC-R1-01

@@ -1,7 +1,7 @@
 # R10. Chimera science landscape: how real chimeras decide which species wins each part
 
 Doc: docs/evolution/research/R10_chimera_science_landscape.md
-Status: research, first pass (Oct 31, 2026); cards 12 to 14 added in S3a (Nov 1, 2026)
+Status: research, first pass (Oct 31, 2026); cards 12 to 14 added in S3a, 15 and 16 in S3b (Nov 1, 2026); RC-R10-13 superseded by RC-R10-15
 Feeds: ALGORITHM.md (host and region selection, plan-level evolution, new LAYER operator, multi-parent trees, evolve carry-over)
 Related: R1 (dominance per gene), R5 (real chimeras), R8 (generative evolution), R9 (function audit)
 
@@ -115,6 +115,9 @@ Labels: PR = peer-reviewed, UNI = university-hosted, NEWS = science news, EDU = 
 - [S18] Yamanoi T, Izawa Y, Kanai T (2020). A large-scale survey of junior high school students' comprehension of dominance and recessiveness. Journal of Science Education in Japan 44(3). PR. https://www.jstage.jst.go.jp/article/jssej/44/3/44_188/_article
 - [S19] Toews D P L and colleagues (2018). A wood-warbler produced through both interspecific and intergeneric hybridization. Biology Letters 14: 20180557. Penn State research portal. PR, UNI. https://pure.psu.edu/en/publications/a-wood-warbler-produced-through-both-interspecific-and-intergener/
 
+- [S20] Understanding Evolution, University of California Museum of Paleontology. Homologies and analogies: homologous characters are inherited from a common ancestor; analogous ones have separate origins (bird and bat wings are analogous as wings, homologous as forelimbs). UNI. https://evolution.berkeley.edu/evolution-101/the-history-of-life-looking-at-the-patterns/homologies-and-analogies/
+- [S21] NC State University General Entomology, Arthropods: the exoskeleton and its jointed appendages are the hallmark of arthropods; the rigid exoskeleton "necessitated membranous joints to provide the flexibility needed for movement". UNI. https://genent.cals.ncsu.edu/bug-bytes/arthropods/
+
 ## Rule cards
 
 ### RC-R10-01
@@ -207,6 +210,7 @@ applies_to: [body, coat_texture]
 strength: soft
 status: VERIFIED
 source: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9975656/
+superseded_by: RC-R10-15 (S3b: elytra are wing-derived, so on a host without forewings only the cuticle material transfers, never the elytra shape)
 
 ### RC-R10-14
 rule: Every donor part has an anatomical anchor on the host chosen by function (a horn anchors on the nasal or frontal bone as in a rhinoceros; a dorsal shield anchors along the spine); the plan records the anchor and the prompt states it
@@ -214,3 +218,17 @@ applies_to: [all_traits]
 strength: soft
 status: UNVERIFIED
 source: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9975656/
+
+### RC-R10-15
+rule: Transfer traits, not shapes. Classify each donor feature as (a) material or covering, which grows on the host and conforms to the host's body shape; (b) homologous structure, placed where the host has the matching structure, keeping its form but fitted to host scale; (c) non-homologous structure, never transferred as a shape, only its material or function
+applies_to: [all_traits, coat_texture, body]
+strength: soft
+status: VERIFIED
+source: https://evolution.berkeley.edu/evolution-101/the-history-of-life-looking-at-the-patterns/homologies-and-analogies/
+
+### RC-R10-16
+rule: An exoskeleton covering is a whole-body system: hardened plates on each segment and limb section, joined by flexible cuticle at the joints; on a vertebrate host it covers body and limbs with flexible bands at joints, unless a stated functional reason limits it
+applies_to: [coat_texture, body, limbs]
+strength: soft
+status: VERIFIED
+source: https://genent.cals.ncsu.edu/bug-bytes/arthropods/

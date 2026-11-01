@@ -37,7 +37,7 @@ from pathlib import Path
 FIELDS = ("rule", "applies_to", "strength", "status", "source")
 CARD_RE = re.compile(r"^### (RC-R\d+-\d+)\s*$")  # S3a: R10 and later have two-digit doc numbers
 HEADING_RE = re.compile(r"^#{1,6} ")
-FIELD_RE = re.compile(r"^(rule|applies_to|strength|status|source):\s*(.*)$")
+FIELD_RE = re.compile(r"^(rule|applies_to|strength|status|source|superseded_by):\s*(.*)$")  # S3b: optional
 URL_RE = re.compile(r"https?://[^\s<>\"'`]+")
 TRAILING = ".,;:!?)]}>*_"
 EM_DASH = "—"
