@@ -193,7 +193,7 @@ class MockEvoSpark:
         if prompt is None:
             return self._wire("describe", {"description": "unrecognized image", "parts": [], "attached_objects": [],
                                            "animals": [], "separate_bodies": 0, "heads": 0, "walking_legs": 0,
-                                           "wings": 0, "extra_limb_pieces": 0})
+                                           "wings": 0, "extra_limb_pieces": 0, "tails": 0})
         low = prompt.lower()
         pair = PAIR_RE.search(prompt)
         two_legs = bool(re.search(r"wings in place of the front legs|upright [a-z' -]+ frame|two-legged|two hind legs"
@@ -207,7 +207,8 @@ class MockEvoSpark:
         return self._wire("describe", {"description": seen, "parts": parts, "attached_objects": [],
                                        "animals": [pair.group(1), pair.group(2)] if pair else [],
                                        "separate_bodies": 1, "heads": 1, "walking_legs": legs, "wings": wings,
-                                       "extra_limb_pieces": 1 if "tentacle" in low else 0})
+                                       "extra_limb_pieces": 1 if "tentacle" in low else 0,
+                                       "tails": 0 if "no tail" in low else 1})
 
     async def ask(self, image: bytes, questions: list[str]) -> dict[str, Any]:
         """Mock balanced checklist (S3a): a recognized render answers every question as the plan expects; an

@@ -132,6 +132,7 @@ DESCRIBE_SCHEMA = _obj({
     "walking_legs": {"type": "integer"},
     "wings": {"type": "integer"},
     "extra_limb_pieces": {"type": "integer"},
+    "tails": {"type": "integer"},
 })
 DESCRIBE_INSTRUCTIONS = (
     "You look at one picture with no other context and describe exactly what is drawn, like a careful field "
@@ -145,7 +146,7 @@ DESCRIBE_INSTRUCTIONS = (
     "picture, including any whole animal or animal-shaped object attached to or sitting on the main creature. heads: "
     "heads of any kind. walking_legs: legs the creature stands or walks on, including hidden ones you can infer. "
     "wings: wings of any kind. extra_limb_pieces: jointed leg-like, claw-like or tentacle-like pieces other than the "
-    "walking legs and the tail."
+    "walking legs and the tail. tails: tails of any kind (0 if none)."
 )
 # S3a iteration 2: a bare list of answers in question order. Copying each question's text into the answer (iteration
 # 1) made Spark Open run away to its 8000-token cap on 4 of 11 images.
@@ -190,7 +191,7 @@ def parse_describe_response(payload: dict[str, Any]) -> dict[str, Any]:
     out: dict[str, Any] = {"description": str(data.get("description") or ""), "parts": parts,
                            "attached_objects": [str(x) for x in data.get("attached_objects") or []],
                            "animals": [str(x) for x in data.get("animals") or []]}
-    for k in ("separate_bodies", "heads", "walking_legs", "wings", "extra_limb_pieces"):
+    for k in ("separate_bodies", "heads", "walking_legs", "wings", "extra_limb_pieces", "tails"):
         out[k] = _int(data.get(k))
     return out
 

@@ -28,6 +28,9 @@ from app.evolution.data import DATA, Animal, Taxonomy, cards, taxonomy
 from app.evolution.fiction import settle
 from app.evolution.gbif import FixtureGbif, GbifClient
 from app.evolution.genome import DESIGN_MODES, TRAIT_TAGS, Genome, Trait, validate_plan
+from app.evolution.growth import drift as growth_drift
+from app.evolution.growth import has_covering, host_first
+from app.evolution.growth import instruction as growth_instruction
 from app.evolution.habitat import apply_habitat, choose_habitat, clear_habitat
 from app.evolution.inspect import Item, edit_instruction, inspect, inspect_checklist, plan_items
 from app.evolution.judge import judge
@@ -257,9 +260,11 @@ class EvoEngine:
             spark = summarize(self._spark_log()[start:])
         return {**spark, "render": f"meta:{self.renderer.model_id}", "segment": f"meta:{self.segmenter.model_id}"}
 
-    async def realize(self, g: Genome, r: Route, refs: list[bytes]) -> dict[str, Any]:
+    async def realize(self, g: Genome, r: Route, refs: list[bytes], growth: str | None = None) -> dict[str, Any]:
         mark = _LOG_MARK.get()
         start = mark if mark is not None else len(self._spark_log())
+        if growth == "edit" and has_covering(g):  # S3b: coverings only; a plan without one renders normally
+            return await self._realize_growth(g, r, refs, start)
         await self._judge_functions(g)
         prompt = compile_prompt(g, self.tax)
         polished = await self.meter.call("spark", "polish", self.spark.polish(prompt))
@@ -312,12 +317,66 @@ class EvoEngine:
         self.store.put("creatures", g.id, doc)
         return doc
 
+    async def _realize_growth(self, g: Genome, r: Route, refs: list[bytes], start: int) -> dict[str, Any]:
+        """S3b growth by edit: host with its discrete parts first, one edit growing the covering, a drift check;
+        on drift, the first-pass render of the full plan (the default compile). No repair edit follows: a second
+        edit on a grown creature is one more chance to drift."""
+        await self._judge_functions(g)
+        if not refs and self.mock:
+            refs = [swatch(g.parents.sire), swatch(g.parents.dam)]
+        first_prompt = compile_prompt(host_first(g), self.tax)
+        img1 = await self.meter.call("image", "render", self.renderer.generate(first_prompt, refs, "1:1"))
+        if self.mock:
+            self.registry.note(img1.data, first_prompt)
+        first_key = f"evo/{g.id}.host.webp"
+        await self.services.storage.put(first_key, img1.data, img1.content_type)
+        instr = growth_instruction(g, self.tax)
+        full = compile_prompt(g, self.tax)
+        warnings: list[str] = []
+        img2 = await self.meter.call("image", "edit", self.renderer.generate(instr, [], "1:1", img1.response_id))
+        if self.mock:
+            self.registry.note(img2.data, full)
+        d = await growth_drift(img1.data, img2.data, critics_for(self.spark), self.meter)
+        growth = {"first_prompt": first_prompt, "instruction": instr, "first_image_key": first_key,
+                  "previous_response_id": img1.response_id, "drift": d, "used": not d["drifted"]}
+        prompt_used = f"{first_prompt}\n\n[edit turn]\n{instr}"
+        if d["drifted"]:
+            growth["edit_image_key"] = f"evo/{g.id}.grown.webp"
+            await self.services.storage.put(growth["edit_image_key"], img2.data, img2.content_type)
+            warnings.append(f"growth edit drifted the host ({', '.join(d['changed'])}): first-pass render of the "
+                            "full plan used instead")
+            img = await self.meter.call("image", "render", self.renderer.generate(full, refs, "1:1"))
+            if self.mock:
+                self.registry.note(img.data, full)
+            prompt_used = full
+        else:
+            img = img2
+        verdict = await judge(img.data, g, r, self.tax, self.spark, self.segmenter, self.meter)
+        insp = await self._inspect(img.data, g, r, verdict)
+        if insp["failures"]:
+            warnings.append(f"structural miss (growth mode makes no repair edit): {_texts(insp)}")
+        g = g.model_copy(update={"scores": verdict["scores"]})
+        key = f"evo/{g.id}.webp"
+        await self.services.storage.put(key, img.data, img.content_type)
+        doc = {"genome": g.model_dump(), "prompt": prompt_used, "prompt_compiled": full, "image_key": key,
+               "judge": verdict, "card": output_card(g, r, self.tax), "route": r.public(), "polish": "not used (growth)",
+               "render_attempts": [{"prompt": "growth" if growth["used"] else "first-pass fallback",
+                                    "critic": verdict["critic"], "third_animal": verdict["third_animal"],
+                                    "scores": verdict["scores"]}],
+               "first_image_key": first_key, "warnings": warnings, "ref_keys": [],
+               "inspect": {"before": insp, "edit": None, "after": None, "kept": "growth" if growth["used"] else
+                           "first-pass"}, "response_id": img.response_id, "growth": growth}
+        doc["providers"] = self.providers(start)
+        doc["card"]["providers"] = doc["providers"]
+        self.store.put("creatures", g.id, doc)
+        return doc
+
     # ------------------------------------------------------------------ endpoints
 
     async def fuse(self, sire_name: str | None = None, dam_name: str | None = None, sire_image: bytes | None = None,
                    dam_image: bytes | None = None, myth: bool = False, host: str | None = None,
                    habitat: str | None = None, seed: int = 0, mode: str | None = None,
-                   compare_with: str = "speculative") -> dict[str, Any]:
+                   compare_with: str = "speculative", growth: str | None = None) -> dict[str, Any]:
         """mode: realistic, speculative (default), mythic, or compare (realistic plus `compare_with`, as a pair).
         The old `myth` flag still means mythic."""
         if mode == "compare":
@@ -332,18 +391,18 @@ class EvoEngine:
         token = _LOG_MARK.set(len(self._spark_log()))  # S2: this fuse's calls start here (identify and plan too)
         try:
             return await self._fuse(sire_name, dam_name, sire_image, dam_image, myth, host, habitat, seed, design,
-                                    before)
+                                    before, growth)
         finally:
             _LOG_MARK.reset(token)
 
     async def _fuse(self, sire_name: str | None, dam_name: str | None, sire_image: bytes | None,
                     dam_image: bytes | None, myth: bool, host: str | None, habitat: str | None, seed: int,
-                    design: str, before: dict[str, int]) -> dict[str, Any]:
+                    design: str, before: dict[str, int], growth: str | None = None) -> dict[str, Any]:
         sire = await self.resolve_parent(sire_name, sire_image, "sire")
         dam = await self.resolve_parent(dam_name, dam_image, "dam")
         if sire.id == dam.id:
             raise ChimeraError(ErrorCode.DUPLICATE_INPUTS, "Sire and dam are the same animal.")
-        key = cache_key(sire.id, dam.id, myth, host, habitat, seed, design)
+        key = cache_key(sire.id, dam.id, myth, host, habitat, seed, design) + ("-growth" if growth == "edit" else "")
         hit = self.store.get("cache", key)
         if hit and (doc := self.store.get("creatures", hit["creature_id"])):
             return {**doc, "cached": True, "cache_key": key, "meta_calls": self.meter.since(before)}
@@ -367,7 +426,7 @@ class EvoEngine:
             raise ChimeraError(ErrorCode.VALIDATION_FAILED, "Plan breaks a hard rule card.",
                                details={"violations": [x.public() for x in v]})
         refs = [i for i in (sire_image, dam_image) if i]
-        doc = await self.realize(g, r, refs)
+        doc = await (self.realize(g, r, refs, growth) if growth else self.realize(g, r, refs))
         self.store.put("cache", key, {"creature_id": g.id})
         return {**doc, "cached": False, "cache_key": key, "model_plan": model_note,
                 "meta_calls": self.meter.since(before)}
