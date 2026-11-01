@@ -161,27 +161,32 @@ def _scripted_critic(engine, answers: list[list[str]]):
     engine.spark.checklist = checklist  # type: ignore[method-assign]
 
 
-async def test_third_animal_rerenders_once_with_the_compiled_prompt(engine):
+async def test_third_animal_gets_one_plan_worded_edit_turn(engine):
+    # S2: the E2b re-render became the inspect step's single edit turn (previous_response_id), worded from the plan.
     _scripted_critic(engine, [["lion", "leopard", "golden eagle"], ["lion", "golden eagle"]])
     doc = await engine.fuse(sire_name="lion", dam_name="eagle")
     assert [a["third_animal"] for a in doc["render_attempts"]] == [["leopard"], []]
-    assert doc["render_attempts"][1]["prompt"] == "compiled" and doc["prompt"] == doc["prompt_compiled"]
-    assert doc["warnings"] == [] and doc["first_image_key"]
-    assert doc["meta_calls"] == {"spark": 8, "image": 2, "sam": 2}  # E4: 3 critic calls per render
+    edit = doc["render_attempts"][1]
+    assert edit["prompt"] == "edit" and "leopard" not in edit["instruction"].lower()
+    assert edit["instruction"].startswith("Show the creature exactly as planned")
+    assert doc["warnings"] == [] and doc["first_image_key"] and doc["inspect"]["kept"] == "edited"
+    assert doc["inspect"]["edit"]["previous_response_id"]
+    # 2 renders x (2 checklist calls + open critic) + plan + polish; SAM: silhouette + the wings presence check each
+    assert doc["meta_calls"] == {"spark": 8, "image": 2, "sam": 4}
 
 
 async def test_third_animal_twice_is_kept_with_a_warning(engine):
     # E2d: the mule now gets the checklist critic, so the open critic is scripted on a chimera.
     _scripted_critic(engine, [["lion", "golden eagle", "zebra"]])
     doc = await engine.fuse(sire_name="lion", dam_name="eagle")
-    assert len(doc["render_attempts"]) == 2  # exactly one re-render, no loop
-    assert doc["warnings"] == ["third animal after one re-render: zebra"]
+    assert len(doc["render_attempts"]) == 2  # exactly one edit turn, no loop
+    assert doc["warnings"] == ["structural miss after one edit turn: only the two parents' features"]
     assert doc["meta_calls"]["image"] == 2
 
 
 async def test_no_third_animal_no_rerender(engine):
     doc = await engine.fuse(sire_name="lion", dam_name="tiger")
-    assert len(doc["render_attempts"]) == 1 and doc["meta_calls"] == {"spark": 5, "image": 1, "sam": 1}
+    assert len(doc["render_attempts"]) == 1 and doc["meta_calls"] == {"spark": 5, "image": 1, "sam": 1}  # no part
 
 
 # ------------------------------------------------------------------ 6. SAM scorer
@@ -197,7 +202,8 @@ async def test_sam_is_prompted_with_animal(engine):
 
     engine.segmenter.segment = spy  # type: ignore[method-assign]
     doc = await engine.fuse(sire_name="eagle", dam_name="octopus")
-    assert seen == ["animal"] == [SAM_PROMPT] and doc["judge"]["sam_prompt"] == "animal"
+    assert seen[0] == "animal" == SAM_PROMPT and doc["judge"]["sam_prompt"] == "animal"  # the silhouette mask
+    assert seen[1:] == [it["sam"] for it in doc["inspect"]["before"]["items"] if it["sam"]]  # S2: part presence
 
 
 def test_pieces_count_as_one_creature_when_the_critic_says_one():

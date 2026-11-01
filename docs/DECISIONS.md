@@ -266,3 +266,21 @@ How a call works:
 - **Router:** `routing.RoutedSpark` wraps the two adapters (built in `live.build_live`). A Baseten failure, including an unreadable answer from one cut off at its cap, falls back to Meta once, and the router logs both entries. A budget stop is never turned into a fallback. Without a Baseten key everything goes to Meta, with a note.
 - **Provider on records:** every usage record carries `provider` (from the endpoint). `LIVE_LOG.md` writes the model as `provider/model`.
 - **Provider on the card:** each creature's document and card carry `providers`: the provider and model per call type, any fallbacks, plus `meta:` Muse Image and SAM 3.1. Mock mode reports the mock adapter.
+
+**D-070 Inspect and one plan-worded edit turn replace the E2b third-animal re-render (S2, ROADMAP Q2, Q3, 5b).**
+`inspect.plan_items` turns the plan into checklist items with a kind, whether it is structural, an optional SAM prompt and a fix sentence written from the plan. The structural items are the frame, the head, each license compensation, each dropped part ("no wings"), each donor part (wings, dorsal insect wings, a tail part, appendages such as a horn or gills) and "only parts and materials of the donor, no whole donor animals on the body". Surface and pattern items are informational. The generated checklist is these items, structural first, and its cap rose from 6 to 8 (D-061) so they fit in the one critic call that inspect reuses.
+
+How each item is judged:
+- **Planned parts:** a part passes when the critic says yes or SAM 3.1 finds it (fill ≥ 0.2 percent), and fails only on a critic "no" with no SAM mask.
+- **Everything else:** absences, frame, compensations and "no whole animals" are decided by the critic. An empty SAM mask never fails an item on its own (S1: SAM missed five beetle bodies), and absences are never SAM-tested.
+- **Count and third animals:** two or more creatures, or a third animal, are structural failures.
+- **Real hybrids:** a hand-written checklist is descriptive, so only the count and third animals apply.
+
+What happens on a failure:
+- **One edit turn:** `realize()` makes a single Muse Image edit turn (`previous_response_id`). Its instruction joins the fix sentences of up to 3 failed items, each worded from the plan ("Show the planned … as …; keep everything else the same"), never from the symptom. S1's "remove the beetle bodies" also removed the planned chitin plates.
+- **Re-inspect:** the edited image is judged and inspected again.
+- **Which image is kept:** the edited image, unless it has more structural failures than the first render, in which case the first is kept, with a warning. A miss that survives the edit is kept with the warning "structural miss after one edit turn: …".
+- **No loop:** there is only ever one edit.
+- **Errors:** an edit-call error keeps the first render, with a warning; a budget stop is raised.
+- **Records:** the document carries `inspect` (before, edit, after, kept) and `response_id`.
+- **Mock:** the mock image generator supports `previous_response_id` edits.

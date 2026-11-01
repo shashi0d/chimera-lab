@@ -37,7 +37,7 @@ def test_checklist_from_the_plan_names_frame_head_and_parts(engine):
     items = generated_checklist(g, engine.tax)
     assert items[0] == "a lion body shape" and items[1] == "a lion head with visible eyes"
     assert "golden eagle wings in place of the front legs" in items
-    assert any("golden eagle feathers patches" in x for x in items)
+    assert any("layered contour feathers patches" in x for x in items)  # S2: materials, not "<donor> feathers"
 
 
 def test_checklist_puts_license_compensations_first(engine):
@@ -50,7 +50,7 @@ def test_checklist_puts_license_compensations_first(engine):
 async def test_checklist_shows_kept_gills_and_size_compensation(engine):
     await engine.resolve("pangolin")
     g, _ = _plan(engine, "axolotl", "pangolin")
-    assert "axolotl external gills on the sides of the head" in generated_checklist(g, engine.tax)
+    assert "three pairs of feathery gill stalks on the sides of the head" in generated_checklist(g, engine.tax)
     await engine.resolve("rhinoceros beetle")
     b, _ = _plan(engine, "rhinoceros beetle", "brown bear")
     assert b.licenses[0].compensation in generated_checklist(b, engine.tax)

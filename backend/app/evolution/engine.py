@@ -28,6 +28,7 @@ from app.evolution.fiction import settle
 from app.evolution.gbif import FixtureGbif, GbifClient
 from app.evolution.genome import DESIGN_MODES, TRAIT_TAGS, Genome, Trait, validate_plan
 from app.evolution.habitat import apply_habitat, choose_habitat, clear_habitat
+from app.evolution.inspect import Item, edit_instruction, inspect, plan_items
 from app.evolution.judge import judge
 from app.evolution.parts import fix_parts
 from app.evolution.physics import run_checks
@@ -206,6 +207,16 @@ class EvoEngine:
             self.registry.note(img.data, prompt)
         return img, await judge(img.data, g, r, self.tax, self.spark, self.segmenter, self.meter)
 
+    async def _inspect(self, image: bytes, g: Genome, r: Route, verdict: dict[str, Any]) -> dict[str, Any]:
+        """S2: SAM presence for planned structural parts plus the judge's own checklist answers (no extra critic
+        call). A hand-written real-hybrid checklist is descriptive: only count and third animals are structural."""
+        if verdict.get("checklist_source", "").startswith("known pair"):
+            items = [Item(t, "pad", False) for t in verdict["checklist"]]
+        else:
+            items = [i for i in plan_items(g, self.tax) if i.text in verdict["checklist"]]
+        return await inspect(image, g, self.tax, items, verdict["critic"], verdict["third_animal"], self.segmenter,
+                             self.meter)
+
     async def _judge_functions(self, g: Genome) -> None:
         """4.5b: one Muse Spark call for every audit function no card covers, before the render."""
         fns = uncovered(g)
@@ -245,28 +256,42 @@ class EvoEngine:
                      "third_animal": verdict["third_animal"], "scores": verdict["scores"]}]
         warnings: list[str] = []
         first_key: str | None = None
-        if verdict["third_animal"]:  # E2b: one re-render with the code-compiled prompt, then keep it
+        insp = await self._inspect(img.data, g, r, verdict)
+        inspection: dict[str, Any] = {"before": insp, "edit": None, "after": None, "kept": "first"}
+        if insp["failures"]:  # S2: one Muse Image edit turn, worded from the failed plan items, then inspect again
+            instruction = edit_instruction(insp["failures"])
             first_key = f"evo/{g.id}.try1.webp"
             await self.services.storage.put(first_key, img.data, img.content_type)
             try:
-                img2, v2 = await self._render_and_judge(prompt, g, r, refs)
+                img2 = await self.meter.call("image", "edit", self.renderer.generate(instruction, [], "1:1",
+                                                                                     img.response_id))
             except ChimeraError as e:
-                if e.code != ErrorCode.BUDGET_EXCEEDED:
+                if e.code == ErrorCode.BUDGET_EXCEEDED:
                     raise
-                warnings.append(f"third animal ({', '.join(verdict['third_animal'])}); re-render skipped: {e.message}")
+                warnings.append(f"structural miss ({_texts(insp)}); edit turn failed: {e.code.value}: {e.message[:120]}")
             else:
-                img, verdict, final = img2, v2, prompt
-                attempts.append({"prompt": "compiled", "critic": v2["critic"], "third_animal": v2["third_animal"],
-                                 "scores": v2["scores"]})
-                if v2["third_animal"]:
-                    warnings.append(f"third animal after one re-render: {', '.join(v2['third_animal'])}")
+                if self.mock:
+                    self.registry.note(img2.data, f"{final} {instruction}")
+                v2 = await judge(img2.data, g, r, self.tax, self.spark, self.segmenter, self.meter)
+                insp2 = await self._inspect(img2.data, g, r, v2)
+                inspection.update(edit={"instruction": instruction, "previous_response_id": img.response_id,
+                                        "response_id": img2.response_id}, after=insp2)
+                attempts.append({"prompt": "edit", "instruction": instruction, "critic": v2["critic"],
+                                 "third_animal": v2["third_animal"], "scores": v2["scores"]})
+                if insp2["structural_failures"] <= insp["structural_failures"]:
+                    img, verdict, inspection["kept"] = img2, v2, "edited"
+                else:
+                    warnings.append("the edit left more structural misses than the first render: first render kept")
+                if insp2["failures"]:
+                    warnings.append(f"structural miss after one edit turn: {_texts(insp2)}")
         g = g.model_copy(update={"scores": verdict["scores"]})
         key = f"evo/{g.id}.webp"
         await self.services.storage.put(key, img.data, img.content_type)
         doc = {"genome": g.model_dump(), "prompt": final, "prompt_compiled": prompt, "image_key": key,
                "judge": verdict, "card": output_card(g, r, self.tax), "route": r.public(),
                "polish": f"rejected: {polish_reason}" if polish_reason else "accepted",
-               "render_attempts": attempts, "first_image_key": first_key, "warnings": warnings, "ref_keys": []}
+               "render_attempts": attempts, "first_image_key": first_key, "warnings": warnings, "ref_keys": [],
+               "inspect": inspection, "response_id": img.response_id}
         doc["providers"] = self.providers(start)
         doc["card"]["providers"] = doc["providers"]  # S2: the provider of every call type is on the card
         self.store.put("creatures", g.id, doc)
@@ -426,6 +451,10 @@ class EvoEngine:
                                details={"violations": why})
         out = await self.realize(g, r, [])
         return {**out, "meta_calls": self.meter.since(before)}
+
+
+def _texts(insp: dict[str, Any]) -> str:
+    return "; ".join(f["text"] for f in insp["failures"])
 
 
 def decode_image(b64: str | None) -> bytes | None:

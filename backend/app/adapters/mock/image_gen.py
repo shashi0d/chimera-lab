@@ -74,8 +74,20 @@ class MockImageGen:
 
     def __init__(self, delay_scale: float = 1.0) -> None:
         self.delay_scale = delay_scale
+        self.turns: dict[str, tuple[str, list[bytes]]] = {}  # response id -> (prompt, refs), for edit turns
 
-    async def generate(self, prompt: str, reference_images: list[bytes], aspect: str | None) -> GeneratedImage:
+    async def generate(self, prompt: str, reference_images: list[bytes], aspect: str | None,
+                       previous_response_id: str | None = None) -> GeneratedImage:
+        """S2: with previous_response_id, an edit turn on that render (the instruction is added to its prompt)."""
+        if previous_response_id and previous_response_id in self.turns:
+            base, refs = self.turns[previous_response_id]
+            prompt, reference_images = f"{base} {prompt}", refs
+        out = await self._generate(prompt, reference_images, aspect)
+        if out.response_id:
+            self.turns[out.response_id] = (prompt, list(reference_images))
+        return out
+
+    async def _generate(self, prompt: str, reference_images: list[bytes], aspect: str | None) -> GeneratedImage:
         fault = current_fault.get()
         seed = int(hashlib.sha256(b"".join(reference_images) + prompt.encode()).hexdigest()[:4], 16)
         if self.delay_scale > 0:

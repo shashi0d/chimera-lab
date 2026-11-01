@@ -357,3 +357,10 @@ Read `docs/evolution/ROADMAP.md` (now committed) sections 4, 5 and 5b. Caps for 
 - **Meta:** plans, traits, cited traits, the audit and vary.
 - **Fallback and provenance:** a logged fallback to Meta; the provider is on every call record and on the card.
 - **Tests:** 18 new (`test_s2_routing.py`); 2 S1 tests updated. Suite 809 passed, 6 skipped.
+
+**Part 6 (inspect and edit, D-070):** `app/evolution/inspect.py`:
+- **Items:** the plan as structured checklist items.
+- **Judging:** SAM presence for planned parts (never proof of absence); the critic for absences, the frame, compensations, count, third animals and separate bodies.
+- **Edit loop:** `realize()` makes one plan-worded edit turn on a structural miss, inspects again, keeps the image with fewer misses, and warns if a miss remains. It replaces the E2b re-render. The checklist cap is now 8.
+- **Mock:** the image generator chains edits by `previous_response_id`.
+- **Tests:** 22 new (`test_s2_inspect.py`, with the S1 edit recording and the E4 beetle plan as regressions); E2b, E4 and worked-example tests updated for the extra SAM presence calls and the edit turn. Suite 831 passed, 6 skipped.

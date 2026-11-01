@@ -76,7 +76,7 @@ async def test_evo_endpoints(client):
 
     r = await client.post("/evo/evolve", json={"creature_id": cid, "rounds": 1, "batch": 2})
     assert r.status_code == 200, r.text
-    assert r.json()["cells"] and r.json()["meta_calls"] == {"spark": 1 + 2 * 4, "image": 2, "sam": 2}
+    assert r.json()["cells"] and r.json()["meta_calls"] == {"spark": 1 + 2 * 4, "image": 2, "sam": 4}  # S2: + wings presence
 
     r = await client.post(f"/evo/creature/{cid}/edit", json={"gene": "habitat", "value": "desert"})
     assert r.status_code == 200, r.text

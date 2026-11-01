@@ -22,7 +22,6 @@ from PIL import Image
 
 from app.errors import ChimeraError
 from app.evolution.adapters import EvoSpark, Meter, Segmenter
-from app.evolution.audit import dropped_parts
 from app.evolution.checks import soft_penalties
 from app.evolution.data import Animal, Taxonomy
 from app.evolution.genome import Genome
@@ -128,7 +127,7 @@ def thumbnail(image: bytes) -> bytes:
 
 
 CHECKLIST_VALUE = {"yes": 1.0, "unclear": 0.5, "no": 0.0}
-CHECKLIST_MIN, CHECKLIST_MAX = 4, 6
+CHECKLIST_MIN, CHECKLIST_MAX = 4, 8  # S2: 8 so structural items fit
 CHECKLIST_PAD = ("feet resting on the ground", "the whole body visible, one creature")
 
 
@@ -143,36 +142,12 @@ def _regions(regs: list[str] | None) -> str:
 
 
 def generated_checklist(g: Genome, tax: Taxonomy) -> list[str]:
-    """E4: 4 to 6 visible yes/no items from the plan: frame, head, license compensations, donor parts and
-    surface. Licenses come before parts, so a declared bend is always checked."""
-    name = lambda i: tax.animals[i].common_name.lower()  # noqa: E731
-    a, b = name(g.parents.sire), name(g.parents.dam)
-    lp, t = g.limb_plan, g.traits
-    items: list[str] = []
-    items.append(f"a {name(g.host)} body shape" if g.host else f"an in-between body of a {a} and a {b}")
-    head = t["head"].donor if isinstance(t["head"].donor, str) else None
-    items.append(f"a {name(head)} head with visible eyes" if head else "one clear head with visible eyes")
-    items += [lic.compensation for lic in g.licenses]
-    items += [f"no {key}" for key in dropped_parts(g)]  # E4: a dropped part must not be in the image
-    parts: list[str] = []
-    if lp.extra_wings and lp.extra_wings.donor:
-        parts.append(f"four legs plus a separate pair of {name(lp.extra_wings.donor)} wings")
-    elif lp.forelimbs.kind == "wings" and lp.forelimbs.donor and lp.forelimbs.donor != g.host:
-        parts.append(f"{name(lp.forelimbs.donor)} wings in place of the front legs")
-    for tag, tr in t.items():
-        if tr.part and tr.donor and tr.donor != g.host:
-            parts.append(f"{name(tr.donor)} {tr.part} in place of the {tag}")
-    parts += [x for x in lp.appendages if not x.endswith("(tail)")]
-    tex = t["coat_texture"]
-    if tex.op == "PATCH" and isinstance(tex.donor, str):
-        parts.append(f"{name(tex.donor)} {tax.animals[tex.donor].covering or 'surface'} patches on the "
-                     f"{_regions(tex.region)}")
-    pat = t["coat_pattern"]
-    if pat.op == "OVERLAY" and isinstance(pat.donor, str):
-        parts.append(f"faint {name(pat.donor)}-type markings on the {_regions(pat.region)}")
-    elif "plain" in pat.flags:
-        parts.append("plain coat with no stripes or spots")
-    items += parts
+    """S2: the checklist is the plan's own items (inspect.plan_items), structural ones first: frame, head, license
+    compensations, absences, donor parts, "no whole donor animals", then surface and pattern; padded to 4 and capped
+    at 8 so every structural item fits in the one critic call that inspect reuses."""
+    from app.evolution.inspect import plan_items
+
+    items = [i.text for i in plan_items(g, tax)]
     for pad in CHECKLIST_PAD:
         if len(items) >= CHECKLIST_MIN:
             break
