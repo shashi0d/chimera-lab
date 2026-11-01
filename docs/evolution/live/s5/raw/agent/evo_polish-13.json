@@ -1,0 +1,83 @@
+{
+ "purpose": "evo_polish",
+ "request": {
+  "model": "meta-models/muse-spark-open-1026",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You lightly edit a text-to-image prompt for readability. Keep the first sentence word for word. Do not add, remove or change any animal, body part, color, count, strength, habitat or view. Do not add brand or franchise names. Stay within 20 percent of the original length. Return the edited prompt only."
+   },
+   {
+    "role": "user",
+    "content": "Silhouette: Four-legged cheetah frame. Host frame: the cheetah sets the outline, body size and overall frame. A single creature that combines a emperor penguin and a cheetah. Head of the cheetah, fully visible and uncluttered, with clear, discernible eyes. Details: cheetah body and legs, with its own dense fur with cheetah-type spots on the face, neck, shoulders, belly, hips, legs and tail; from the emperor penguin, as parts and materials on the cheetah's own body: layered contour feathers in its own colors, grown from the skin as the cheetah's own covering over the back and flanks: it replaces the cheetah's dense fur there and conforms to the cheetah's body, sized to the cheetah's body and following its contours; every covered part keeps the cheetah's own length and shape; the dense fur stops at the covering's edge, and the face, neck, shoulders, belly, hips, legs and tail keep the cheetah's own dense fur. The covering follows the body's own shape. Bilaterally symmetrical, recognizable limbs, visible sense organs. Habitat cue (alpine meadow): shorter ears and tail, dense coat for the cold. Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration."
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "polished_prompt",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "prompt"
+     ],
+     "properties": {
+      "prompt": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0.2,
+  "max_tokens": 15000
+ },
+ "response": {
+  "id": "chatcmpl-6e62f0a7a6584913813f9472ff94f7cd",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{ \"prompt\": \"Silhouette: Four-legged cheetah frame. Host frame: the cheetah sets the outline, body size and overall frame. A single creature combining an emperor penguin and a cheetah. The head is that of the cheetah, fully visible and uncluttered, with clear, discernible eyes. Details: cheetah body and legs with dense fur and cheetah-type spots on the face, neck, shoulders, belly, hips, legs and tail; from the emperor penguin, as parts and materials on the cheetah's own body, layered contour feathers in its own colors grown from the skin as the cheetah's own covering over the back and flanks, replacing the cheetah's dense fur there and conforming to the cheetah's body, sized to the cheetah's body and following its contours; every covered part keeps the cheetah's own length and shape; the dense fur stops at the covering's edge, and the face, neck, shoulders, belly, hips, legs and tail keep the cheetah's own dense fur. The covering follows the body's own shape. Bilaterally symmetrical, with recognizable limbs and visible sense organs. Habitat cue (alpine meadow): shorter ears and tail, dense coat for the cold. Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration.\" }",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null,
+     "reasoning_content": "<elided> (12858 chars)"
+    }
+   }
+  ],
+  "created": 1793567289,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 4073,
+   "prompt_tokens": 530,
+   "total_tokens": 4603,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 3383,
+    "audio_tokens": 0,
+    "reasoning_tokens": 3740,
+    "rejected_prediction_tokens": 1447,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 128,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

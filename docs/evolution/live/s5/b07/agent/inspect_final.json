@@ -1,0 +1,502 @@
+{
+ "protocol": "plan-blind (S3a)",
+ "critics": [
+  "spark_open",
+  "meta_spark"
+ ],
+ "items": [
+  {
+   "source": "checklist",
+   "key": "frame",
+   "text": "Is the overall body shape that of a cheetah?",
+   "group": "structure",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "fix": "Show the planned cheetah body shape and outline; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "head",
+   "text": "Does it have a cheetah head with visible eyes?",
+   "group": "structure",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "fix": "Show the planned cheetah head, fully visible with clear eyes; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "no_wings",
+   "text": "Are there wings anywhere on the body?",
+   "group": "structure",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "The plan has no wings: show the cheetah's own body there instead; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "whole_animal",
+   "text": "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?",
+   "group": "structure",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "Show the planned emperor penguin contribution only as layered contour feathers on the cheetah's own body over the back and flanks, not as separate animals; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "second_head",
+   "text": "Is there a second head anywhere?",
+   "group": "structure",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "Show one single head, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "extra_legs",
+   "text": "Does it have more than 4 walking legs?",
+   "group": "structure",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "Show exactly 4 walking legs, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "plain_fur",
+   "text": "Does the fur show stripes or spots?",
+   "group": "pattern",
+   "expect": "no",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "fail",
+   "fix": "Show a plain coat with no stripes or spots, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "fail",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "cover_present",
+   "text": "Are there layered contour feathers on the back and flanks?",
+   "group": "surface",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "fix": "Show the planned layered contour feathers over the back and flanks; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "separate_bodies",
+   "text": "separate bodies: 1",
+   "group": "structure",
+   "expect": 1,
+   "answers": {
+    "spark_open": 1,
+    "meta_spark": 1
+   },
+   "status": "pass",
+   "fix": "Show the planned emperor penguin contribution only as layered contour feathers on the cheetah's own body over the back and flanks, not as separate animals; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "heads",
+   "text": "heads: 1",
+   "group": "structure",
+   "expect": 1,
+   "answers": {
+    "spark_open": 1,
+    "meta_spark": 1
+   },
+   "status": "pass",
+   "fix": "Show one single head, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "walking_legs",
+   "text": "walking legs: 4",
+   "group": "structure",
+   "expect": 4,
+   "answers": {
+    "spark_open": 4,
+    "meta_spark": 4
+   },
+   "status": "pass",
+   "fix": "Show exactly 4 walking legs, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "wings",
+   "text": "wings: 0",
+   "group": "structure",
+   "expect": 0,
+   "answers": {
+    "spark_open": 0,
+    "meta_spark": 0
+   },
+   "status": "pass",
+   "fix": "The plan has no wings: show the cheetah's own body there instead; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "extra_limb_pieces",
+   "text": "extra limb pieces: 0",
+   "group": "structure",
+   "expect": 0,
+   "answers": {
+    "spark_open": 0,
+    "meta_spark": 0
+   },
+   "status": "pass",
+   "fix": "Show the cheetah's own limbs only, with no extra limb-like pieces; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "description",
+   "key": "extra_spots",
+   "text": "described but not planned: spots",
+   "group": "structure",
+   "expect": "absent",
+   "answers": {
+    "spark_open": true,
+    "meta_spark": true
+   },
+   "status": "fail",
+   "fix": "The plan has no spots: show the cheetah's own body there instead; keep everything else the same.",
+   "sam": null,
+   "pair_status": "fail",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "description",
+   "key": "extra_stripes",
+   "text": "described but not planned: stripes",
+   "group": "structure",
+   "expect": "absent",
+   "answers": {
+    "spark_open": true,
+    "meta_spark": true
+   },
+   "status": "fail",
+   "fix": "The plan has no stripes: show the cheetah's own body there instead; keep everything else the same.",
+   "sam": null,
+   "pair_status": "fail",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "description",
+   "key": "third_animal",
+   "text": "an animal other than the two parents",
+   "group": "structure",
+   "expect": "none",
+   "answers": {
+    "spark_open": [
+     "jackal"
+    ],
+    "meta_spark": []
+   },
+   "status": "pass",
+   "fix": "Show the planned emperor penguin contribution only as layered contour feathers on the cheetah's own body over the back and flanks, not as separate animals; keep everything else the same.",
+   "sam": null,
+   "pair_status": "uncertain",
+   "sam_found": null,
+   "sam_fill": null
+  }
+ ],
+ "failures": [
+  {
+   "source": "checklist",
+   "key": "plain_fur",
+   "text": "Does the fur show stripes or spots?",
+   "group": "pattern",
+   "expect": "no",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "fail",
+   "fix": "Show a plain coat with no stripes or spots, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "fail",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "description",
+   "key": "extra_spots",
+   "text": "described but not planned: spots",
+   "group": "structure",
+   "expect": "absent",
+   "answers": {
+    "spark_open": true,
+    "meta_spark": true
+   },
+   "status": "fail",
+   "fix": "The plan has no spots: show the cheetah's own body there instead; keep everything else the same.",
+   "sam": null,
+   "pair_status": "fail",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "description",
+   "key": "extra_stripes",
+   "text": "described but not planned: stripes",
+   "group": "structure",
+   "expect": "absent",
+   "answers": {
+    "spark_open": true,
+    "meta_spark": true
+   },
+   "status": "fail",
+   "fix": "The plan has no stripes: show the cheetah's own body there instead; keep everything else the same.",
+   "sam": null,
+   "pair_status": "fail",
+   "sam_found": null,
+   "sam_fill": null
+  }
+ ],
+ "structural_failures": 3,
+ "uncertain": 0,
+ "sam_calls": 0,
+ "descriptions": {
+  "spark_open": {
+   "description": "A single quadrupedal creature is shown in right-facing profile standing on a small patch of sandy ground with sparse grass and tiny white flowers. The animal has a tan, short-furred mammalian body with four sturdy legs and a short, thick, bushy tail. Its head is feline in shape with a spotted tan face, amber eyes, and black tear-stripes. The entire dorsal region from the back of the neck to the rump and down the upper flanks is covered by a dense mantle of overlapping black feathers that contrasts sharply with the tan fur of the underside, chest, legs and tail. A narrow white stripe runs along the lower edge of the black mantle and a small yellow patch is visible at the front edge of the mantle near the shoulder.",
+   "parts": [
+    {
+     "part": "head",
+     "looks_like": "feline-shaped head at the front of the body, covered in short tan fur with small black spots on the forehead, crown and cheeks, a black nose, white fur on the muzzle, chin and throat, long white whiskers, amber eyes with black pupils, and a distinct black tear-line running from the inner corner of each eye down the side of the muzzle",
+     "where": "anterior end of the body, held slightly above shoulder level and facing to the right"
+    },
+    {
+     "part": "ears",
+     "looks_like": "two small, rounded, upright ears with tan outer fur and darker gray-black fur on the back and inside, with slightly rounded tips",
+     "where": "on top of the head, one more forward and one slightly behind, both visible in profile"
+    },
+    {
+     "part": "mane",
+     "looks_like": "a short ruff of slightly longer fur around the back and sides of the neck, tan at the base with black tips, giving a bristly appearance",
+     "where": "encircling the neck just behind the ears and in front of the black feathered mantle"
+    },
+    {
+     "part": "legs",
+     "looks_like": "four thick, muscular legs covered in short dense tan fur, with visible joints and slightly darker shading on the lower portions, standing in a natural quadrupedal stance",
+     "where": "two forelegs beneath the chest and two hindlegs beneath the rump, all extending to the ground"
+    },
+    {
+     "part": "feet",
+     "looks_like": "four large rounded paws with tan fur, blunt toes and visible toe pads, each with short dark claws",
+     "where": "at the distal ends of all four legs, in contact with the ground"
+    },
+    {
+     "part": "tail",
+     "looks_like": "a single short, thick, blunt-tipped tail covered in dense fluffy tan fur, hanging almost vertically with a slight outward curve",
+     "where": "at the posterior end of the body, projecting from the rump above the hindlegs"
+    },
+    {
+     "part": "feathers",
+     "looks_like": "a dense covering of overlapping pointed black feathers with a slight sheen, layered like roof tiles, with a more scaly-textured appearance on the lower side area",
+     "where": "covering the entire back and upper sides from just behind the neck and shoulders to the top of the rump, forming a saddle-like mantle"
+    },
+    {
+     "part": "markings",
+     "looks_like": "small black spots on the head and neck, solid black tear-stripes on the face, a solid black dorsal mantle, a narrow horizontal white stripe along the lower border of the mantle, and a small patch of yellow-orange fur at the anterior edge of the mantle on the shoulder",
+     "where": "spots and tear-stripes on the face and neck, black mantle on the back and sides, white stripe along the ventral edge of the mantle, yellow patch at the shoulder junction between tan neck fur and black feathers"
+    }
+   ],
+   "attached_objects": [],
+   "animals": [
+    "cheetah",
+    "jackal",
+    "bird"
+   ],
+   "separate_bodies": 1,
+   "heads": 1,
+   "walking_legs": 4,
+   "wings": 0,
+   "extra_limb_pieces": 0,
+   "tails": 1
+  },
+  "meta_spark": {
+   "description": "A large four-legged mammal-like creature standing in side view facing right with its head turned toward the viewer. It has a tan short-furred body, chest, and long muscular legs ending in broad paws, a cheetah-like head with black spots and black tear lines, small rounded ears, and a short bushy tan tail hanging at the rear. The back from behind the neck to the rump is covered by a thick mantle of overlapping black feathers, bordered below by a white stripe along the flank and a small yellow patch at the shoulder.",
+   "parts": [
+    {
+     "part": "head",
+     "looks_like": "a cheetah with tan fur, black spots, black tear lines from the eyes, amber eyes and a black nose",
+     "where": "at the front of the body, turned three-quarters toward the viewer"
+    },
+    {
+     "part": "ears",
+     "looks_like": "small rounded furry ears",
+     "where": "on top of the head"
+    },
+    {
+     "part": "legs",
+     "looks_like": "long muscular tan furry legs",
+     "where": "underneath the body, two in front and two in back"
+    },
+    {
+     "part": "feet",
+     "looks_like": "broad rounded paws with toe divisions",
+     "where": "at the ends of the four legs on the ground"
+    },
+    {
+     "part": "tail",
+     "looks_like": "short bushy tan fur",
+     "where": "at the rear of the body hanging down"
+    },
+    {
+     "part": "feathers",
+     "looks_like": "dense overlapping black feathers forming a saddle-like mantle",
+     "where": "covering the back from behind the neck to the rump"
+    },
+    {
+     "part": "markings",
+     "looks_like": "black spots and tear lines on the face, a yellow patch at the shoulder, and a white stripe along the side separating black from tan",
+     "where": "on the face, shoulder, and along the flank"
+    }
+   ],
+   "attached_objects": [],
+   "animals": [
+    "cheetah",
+    "bird"
+   ],
+   "separate_bodies": 1,
+   "heads": 1,
+   "walking_legs": 4,
+   "wings": 0,
+   "extra_limb_pieces": 0,
+   "tails": 1
+  }
+ },
+ "matches": {
+  "spark_open": {
+   "seen": [
+    "feathers",
+    "mane",
+    "scales",
+    "spots",
+    "stripes"
+   ],
+   "expected": [
+    "feathers",
+    "mane"
+   ],
+   "extras": [
+    "spots",
+    "stripes"
+   ],
+   "omissions": []
+  },
+  "meta_spark": {
+   "seen": [
+    "feathers",
+    "spots",
+    "stripes"
+   ],
+   "expected": [
+    "feathers",
+    "mane"
+   ],
+   "extras": [
+    "spots",
+    "stripes"
+   ],
+   "omissions": []
+  }
+ },
+ "third_animals": {
+  "spark_open": [
+   "jackal"
+  ],
+  "meta_spark": []
+ },
+ "balance": {
+  "yes": 3,
+  "no": 5
+ },
+ "expected_counts": {
+  "separate_bodies": 1,
+  "heads": 1,
+  "walking_legs": 4,
+  "wings": 0,
+  "extra_limb_pieces": 0
+ }
+}

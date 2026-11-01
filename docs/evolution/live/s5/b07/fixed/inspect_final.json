@@ -1,0 +1,483 @@
+{
+ "protocol": "plan-blind (S3a)",
+ "critics": [
+  "spark_open",
+  "meta_spark"
+ ],
+ "items": [
+  {
+   "source": "checklist",
+   "key": "frame",
+   "text": "Is the overall body shape that of a emperor penguin?",
+   "group": "structure",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "fix": "Show the planned emperor penguin body shape and outline; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "head",
+   "text": "Does it have a emperor penguin head with visible eyes?",
+   "group": "structure",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "fix": "Show the planned emperor penguin head, fully visible with clear eyes; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "no_wings",
+   "text": "Are there wings anywhere on the body?",
+   "group": "structure",
+   "expect": "no",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "fail",
+   "fix": "The plan has no wings: show the emperor penguin's own body there instead; keep everything else the same.",
+   "sam": null,
+   "pair_status": "fail",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "whole_animal",
+   "text": "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?",
+   "group": "structure",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "Show the planned cheetah contribution only as dense fur on the emperor penguin's own body over the back and flanks, not as separate animals; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "second_head",
+   "text": "Is there a second head anywhere?",
+   "group": "structure",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "Show one single head, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "extra_legs",
+   "text": "Does it have more than 2 walking legs?",
+   "group": "structure",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "Show exactly 2 walking legs, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "no_mane",
+   "text": "Does it have a full mane of long hair around the head and neck?",
+   "group": "structure",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "The plan has no mane: show the planned neck with no mane; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "cover_present",
+   "text": "Is there dense fur on the back and flanks?",
+   "group": "surface",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "no"
+   },
+   "status": "fail",
+   "fix": "Show the planned dense fur over the back and flanks; keep everything else the same.",
+   "sam": null,
+   "pair_status": "uncertain",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "separate_bodies",
+   "text": "separate bodies: 1",
+   "group": "structure",
+   "expect": 1,
+   "answers": {
+    "spark_open": 1,
+    "meta_spark": 1
+   },
+   "status": "pass",
+   "fix": "Show the planned cheetah contribution only as dense fur on the emperor penguin's own body over the back and flanks, not as separate animals; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "heads",
+   "text": "heads: 1",
+   "group": "structure",
+   "expect": 1,
+   "answers": {
+    "spark_open": 1,
+    "meta_spark": 1
+   },
+   "status": "pass",
+   "fix": "Show one single head, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "walking_legs",
+   "text": "walking legs: 2",
+   "group": "structure",
+   "expect": 2,
+   "answers": {
+    "spark_open": 2,
+    "meta_spark": 2
+   },
+   "status": "pass",
+   "fix": "Show exactly 2 walking legs, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "wings",
+   "text": "wings: 0",
+   "group": "structure",
+   "expect": 0,
+   "answers": {
+    "spark_open": 1,
+    "meta_spark": 1
+   },
+   "status": "fail",
+   "fix": "The plan has no wings: show the emperor penguin's own body there instead; keep everything else the same.",
+   "sam": null,
+   "pair_status": "fail",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "extra_limb_pieces",
+   "text": "extra limb pieces: 0",
+   "group": "structure",
+   "expect": 0,
+   "answers": {
+    "spark_open": 0,
+    "meta_spark": 0
+   },
+   "status": "pass",
+   "fix": "Show the emperor penguin's own limbs only, with no extra limb-like pieces; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "description",
+   "key": "extra_stripes",
+   "text": "described but not planned: stripes",
+   "group": "structure",
+   "expect": "absent",
+   "answers": {
+    "spark_open": true,
+    "meta_spark": false
+   },
+   "status": "pass",
+   "fix": "The plan has no stripes: show the emperor penguin's own body there instead; keep everything else the same.",
+   "sam": null,
+   "pair_status": "uncertain",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "description",
+   "key": "extra_wings",
+   "text": "described but not planned: wings",
+   "group": "structure",
+   "expect": "absent",
+   "answers": {
+    "spark_open": true,
+    "meta_spark": true
+   },
+   "status": "fail",
+   "fix": "The plan has no wings: show the emperor penguin's own body there instead; keep everything else the same.",
+   "sam": null,
+   "pair_status": "fail",
+   "sam_found": null,
+   "sam_fill": null
+  }
+ ],
+ "failures": [
+  {
+   "source": "checklist",
+   "key": "no_wings",
+   "text": "Are there wings anywhere on the body?",
+   "group": "structure",
+   "expect": "no",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "fail",
+   "fix": "The plan has no wings: show the emperor penguin's own body there instead; keep everything else the same.",
+   "sam": null,
+   "pair_status": "fail",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "wings",
+   "text": "wings: 0",
+   "group": "structure",
+   "expect": 0,
+   "answers": {
+    "spark_open": 1,
+    "meta_spark": 1
+   },
+   "status": "fail",
+   "fix": "The plan has no wings: show the emperor penguin's own body there instead; keep everything else the same.",
+   "sam": null,
+   "pair_status": "fail",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "description",
+   "key": "extra_wings",
+   "text": "described but not planned: wings",
+   "group": "structure",
+   "expect": "absent",
+   "answers": {
+    "spark_open": true,
+    "meta_spark": true
+   },
+   "status": "fail",
+   "fix": "The plan has no wings: show the emperor penguin's own body there instead; keep everything else the same.",
+   "sam": null,
+   "pair_status": "fail",
+   "sam_found": null,
+   "sam_fill": null
+  }
+ ],
+ "structural_failures": 3,
+ "uncertain": 0,
+ "sam_calls": 0,
+ "descriptions": {
+  "spark_open": {
+   "description": "A large upright bird-like creature is shown in right-facing profile standing on a small patch of ground with sparse grass and tiny purple and yellow flowers. It has a stout, ovoid body held vertically, with a rounded black head bearing a long slender dark beak and a small dark eye, a bright yellow to orange patch on the side of the neck behind the head, a white and pale yellow chest and belly with dense short shaggy plumage, and a thick covering of brown velvety-fuzzy plumage over the back, sides and the single visible flipper-like wing held against its side. The lower rear bears a short stiff black tail of pointed feathers, and the body is supported by two short thick scaly legs ending in large clawed feet resting on the ground.",
+   "parts": [
+    {
+     "part": "head",
+     "looks_like": "rounded and glossy black on the crown, face and throat with a small dark eye on the side and a long slender dark gray-black beak tapering to a slightly down-hooked tip pointing to the right; a bright yellow-orange patch covers the side of the neck immediately behind the black face",
+     "where": "at the top right of the body, atop the neck"
+    },
+    {
+     "part": "legs",
+     "looks_like": "short, thick and columnar, covered in wrinkled scaly gray-brown skin",
+     "where": "extending down from the lower belly to the ground, under the center of the body"
+    },
+    {
+     "part": "feet",
+     "looks_like": "large flat scaly gray-brown feet with three forward-pointing toes each tipped with a dark curved claw, the skin wrinkled and textured",
+     "where": "at the bottom of each leg, resting on the ground patch"
+    },
+    {
+     "part": "wings",
+     "looks_like": "one flipper-like wing visible, long and narrow with dense brown fuzzy plumage and a thin pale cream edge along the trailing margin, the tip rounded",
+     "where": "on the side of the body, attached at the shoulder and lying close against the torso from upper back to mid-body"
+    },
+    {
+     "part": "tail",
+     "looks_like": "short, stiff and pointed, composed of narrow black feathers with a slightly ragged, layered tip",
+     "where": "projecting from the lower rear of the body to the left, just above the ground"
+    },
+    {
+     "part": "feathers",
+     "looks_like": "dense short plumage: white and shaggy on the chest and belly with a yellow wash on the upper chest, brown and velvety-fuzzy on the back and outer wing, glossy black on the head and tail",
+     "where": "covering the entire body except the beak, legs and feet"
+    },
+    {
+     "part": "markings",
+     "looks_like": "a distinct bright yellow-orange auricular patch behind the eye and black face, a thin black stripe separating the brown dorsum from the white chest, and a sharp contrast between the white ventral plumage and brown dorsal plumage",
+     "where": "on the side of the neck and along the side of the torso"
+    }
+   ],
+   "attached_objects": [],
+   "animals": [
+    "penguin"
+   ],
+   "separate_bodies": 1,
+   "heads": 1,
+   "walking_legs": 2,
+   "wings": 1,
+   "extra_limb_pieces": 0,
+   "tails": 1
+  },
+  "meta_spark": {
+   "description": "A large upright flightless bird shown in side profile standing on a small patch of grass and flowers. It has a bulky teardrop-shaped body with dense white plumage on the front and chest fading to pale yellow-orange on the upper chest, and dense brown plumage on the back and sides. The head is rounded and black with a small dark eye and a long slender black pointed beak, with a bright yellow patch on the side of the neck. A long narrow brown flipper lies along the visible side of the body, and a short tuft of stiff black tail feathers projects from the rear. It stands on two short thick scaly legs ending in large three-toed clawed feet.",
+   "parts": [
+    {
+     "part": "head",
+     "looks_like": "rounded black feathered head with smooth plumage",
+     "where": "at the top of the body"
+    },
+    {
+     "part": "beak",
+     "looks_like": "long slender black pointed beak with slightly downcurved tip",
+     "where": "on the front of the head"
+    },
+    {
+     "part": "eye",
+     "looks_like": "small dark round eye",
+     "where": "on the side of the head"
+    },
+    {
+     "part": "body",
+     "looks_like": "large upright teardrop-shaped body with dense white front plumage and brown back plumage",
+     "where": "in the center from neck to legs"
+    },
+    {
+     "part": "neck marking",
+     "looks_like": "bright yellow to pale orange patch fading to white on the chest",
+     "where": "on the sides of the neck and upper chest"
+    },
+    {
+     "part": "wings",
+     "looks_like": "long narrow brown flipper-like wing with pale edging",
+     "where": "along the side of the body"
+    },
+    {
+     "part": "legs",
+     "looks_like": "short thick scaly pinkish-grey legs",
+     "where": "under the lower belly"
+    },
+    {
+     "part": "feet",
+     "looks_like": "large three-toed scaly feet with thick black claws",
+     "where": "at the bottom of the legs on the ground"
+    },
+    {
+     "part": "tail",
+     "looks_like": "short stiff black pointed tail feathers",
+     "where": "at the rear bottom of the body"
+    }
+   ],
+   "attached_objects": [],
+   "animals": [
+    "penguin"
+   ],
+   "separate_bodies": 1,
+   "heads": 1,
+   "walking_legs": 2,
+   "wings": 1,
+   "extra_limb_pieces": 0,
+   "tails": 1
+  }
+ },
+ "matches": {
+  "spark_open": {
+   "seen": [
+    "beak",
+    "feathers",
+    "scales",
+    "stripes",
+    "wings"
+   ],
+   "expected": [
+    "beak",
+    "feathers"
+   ],
+   "extras": [
+    "stripes",
+    "wings"
+   ],
+   "omissions": []
+  },
+  "meta_spark": {
+   "seen": [
+    "beak",
+    "feathers",
+    "scales",
+    "wings"
+   ],
+   "expected": [
+    "beak",
+    "feathers"
+   ],
+   "extras": [
+    "wings"
+   ],
+   "omissions": []
+  }
+ },
+ "third_animals": {
+  "spark_open": [],
+  "meta_spark": []
+ },
+ "balance": {
+  "yes": 3,
+  "no": 5
+ },
+ "expected_counts": {
+  "separate_bodies": 1,
+  "heads": 1,
+  "walking_legs": 2,
+  "wings": 0,
+  "extra_limb_pieces": 0
+ }
+}

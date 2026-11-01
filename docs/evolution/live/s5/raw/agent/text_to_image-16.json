@@ -1,0 +1,109 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Silhouette: Four-legged cheetah frame. Host frame: the cheetah sets the outline, body size and overall frame. A single creature combining an emperor penguin and a cheetah. The head is that of the cheetah, fully visible and uncluttered, with clear, discernible eyes. Details: cheetah body and legs with dense fur and cheetah-type spots on the face, neck, shoulders, belly, hips, legs and tail; from the emperor penguin, as parts and materials on the cheetah's own body, layered contour feathers in its own colors grown from the skin as the cheetah's own covering over the back and flanks. This covering replaces the cheetah's dense fur there and conforms to the cheetah's body, sized to the cheetah's body and following its contours; every covered part keeps the cheetah's own length and shape; the dense fur stops at the covering's edge, and the face, neck, shoulders, belly, hips, legs and tail keep the cheetah's own dense fur. The covering follows the body's own shape. Bilaterally symmetrical, with recognizable limbs and visible sense organs. Habitat cue (alpine meadow): shorter ears and tail, dense coat for the cold. Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "id": "resp_6ae7ab094e95ed5140df4b96",
+  "access_programs": null,
+  "created_at": 1793567497.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae7ab0951793163dba548ae",
+    "summary": [
+     {
+      "text": "**Composing hybrid creature image**\nI'm planning a composite creature with a cheetah's four-legged silhouette and head, adding emperor penguin contour feathers layered over the back while keeping dense fur and spots on the face, neck, shoulders, belly, hips, legs, and tail.\n**Composing hybrid creature image**\nI'm assembling a natural-history illustration of a cheetah with emperor penguin contour feathers over the back and flanks, keeping the cheetah head, spotted fur elsewhere, shorter ears and tail, and a plain light alpine meadow setting in a 1:1 side three-quarter view.\n**Refining hybrid creature design**\nI'm adjusting the image so the penguin's feathers blend into the hybrid instead of appearing separate, creating a more integrated look.\n**Refining hybrid creature design**\nI'm adjusting the prompt to better separate the two animals and clarify the hybrid details, aiming for a clearer final image.\n**Regenerating hybrid creature image**\nI'm preparing a final generation using media_dbqxgu as input to remove the flipper and refine the hybrid creature design.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae7ab0964a0c54d39344ebf",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0U4SWVUU3FNRWFJZU13SEFKWUg3REhKVWRnS2JnMWlBUUJlIiwicmVzdW1lX2lkIjoiczozMzE4YTY4Yi01ZGRkLTRjMDktODI3OC0zMWY4ZDYwNzY0YzM6R0ZuUmN6UmVFdFgwc1lVREFOX0d6VXBOVHBOSGJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM1Njc0OTd9.Q8WLFwECviOheiVu8D4dvxTKYIcC",
+    "result": "<elided> (880872 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 45016,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 31872
+   },
+   "output_tokens": 4679,
+   "output_tokens_details": {
+    "reasoning_tokens": 674
+   },
+   "total_tokens": 49695
+  },
+  "user": null
+ }
+}

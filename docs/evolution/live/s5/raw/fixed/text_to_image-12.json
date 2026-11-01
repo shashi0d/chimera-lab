@@ -1,0 +1,110 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "The plan has no wings: show the emperor penguin's own body there instead; keep everything else the same. The plan has no spots: show the emperor penguin's own body there instead; keep everything else the same. Show the planned cheetah contribution only as dense fur on the emperor penguin's own body over the back and flanks, not as separate animals; keep everything else the same.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ],
+  "previous_response_id": "resp_6ae7ac3d8dfdd534e45044ae"
+ },
+ "response": {
+  "id": "resp_6ae7ac97111660817a9844c4",
+  "access_programs": null,
+  "created_at": 1793567895.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae7ac974e266cac46d54f0c",
+    "summary": [
+     {
+      "text": "**Refining penguin fur edit**\nI'm removing the wings and spots, then applying dense, spot-free fur to the emperor penguin's back and flanks while keeping the rest of the image unchanged.\n**Retouching pet portrait**\nI'm working with the provided photo to remove the spots and keep the solid brown fur, while preserving the rest of the details for the final image.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae7ac979b06f0c1eb75439f",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0NnN0J6VC1lQjhUcFlzR0FCVFhEaVR2RFVOMmJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczo5NmQ5NDFiNC0yNTJiLTQwYjQtYTVmZi04YjY1YWVlMGY0ODE6R0VROUJ6U0lKblNBU1NNREFDUkY0QzI3YlFCMWJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM1Njc4OTV9.Q8WLFwHeJjNPmdbEluNQTvxkybtR",
+    "result": "<elided> (723748 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": "resp_6ae7ac3d8dfdd534e45044ae",
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 21253,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 19840
+   },
+   "output_tokens": 645,
+   "output_tokens_details": {
+    "reasoning_tokens": 176
+   },
+   "total_tokens": 21898
+  },
+  "user": null
+ }
+}
