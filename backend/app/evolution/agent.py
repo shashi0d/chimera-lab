@@ -122,6 +122,7 @@ plan_op (typed operations). Code fills every derived field.
    - structural failures (kind "structural": counts, extra or missing parts, the frame, part identity or \
 connection, a third animal): change the plan with plan_op or choose another candidate, audit, and render again;
    - or accept the failures and finalize, saying why.
+   An edit or a new render can make things worse: compare with images_so_far from inspect, and finalize the best image, not just the latest.
 6. A host tie: choose the host yourself from the candidates' notes, with a reason{ask}.
 7. Limits: at most {renders} renders and {calls} tool calls. Near a limit, finalize your best inspected image; \
 its remaining failures go on the card.
@@ -198,7 +199,7 @@ def default_policy(run: AgentRun) -> tuple[str, dict[str, Any]] | None:
         return "propose_candidates", {"reason": "see the arrangements"}
     if s.chosen is None:
         return "choose_candidate", {"candidate_id": s.candidates[0]["id"], "reason": "top ranked"}
-    if s.audited != run.session.plan.id:
+    if not run.audit_current():
         return "audit_plan", {"reason": "audit before render"}
     if not s.images:
         method = "growth_edit" if run.growth_default and has_covering(run.session.plan) else "single_pass"
@@ -492,6 +493,10 @@ class AgentRun:
         self.session, self.state.chosen, self.state.audited = s, candidate_id, None
         return {"chosen": candidate_id, "plan": self._plan_brief(), "next": "audit_plan"}
 
+    def audit_current(self) -> bool:
+        """The current plan passed audit_plan (by content: who last set a field does not matter)."""
+        return self.session is not None and self.state.audited == _content_key(self.session.plan)
+
     def _need_session(self) -> PlanSession:
         if self.session is None:
             raise AgentError("no_plan", "choose a candidate first", hint="propose_candidates, then choose_candidate")
@@ -499,12 +504,17 @@ class AgentRun:
 
     async def t_plan_op(self, op: str, args: dict[str, Any]) -> dict[str, Any]:
         s = self._need_session()
+        before = _content_key(s.plan)
         res = s.apply(op, dict(args or {}))
-        if res.ok:
+        changed = res.ok and _content_key(s.plan) != before
+        if changed:
             self.state.audited = None
         out = res.public()
         out.pop("summary", None)
-        return {**out, "plan": self._plan_brief(), **({"next": "audit_plan"} if res.ok else {})}
+        note = {"next": "audit_plan"} if changed else (
+            {"note": "the plan is unchanged (this was already so): rendering it again gives the same plan"}
+            if res.ok else {})
+        return {**out, "changed": changed, "plan": self._plan_brief(), **note}
 
     async def t_audit_plan(self) -> dict[str, Any]:
         s = self._need_session()
@@ -526,13 +536,13 @@ class AgentRun:
                                     "identity_parts": s.summary()["identity_parts"]},
                  "labels": g.labels}
         self.state.audit = audit
-        self.state.audited = g.id if not blocking else None
+        self.state.audited = _content_key(g) if not blocking else None
         cards = sorted({b["card"] for b in blocking} | {a["card"] for a in advice if a.get("card")})
         return {**audit, "renderable": not blocking, "cards": cards}
 
     def _ready(self) -> PlanSession:
         s = self._need_session()
-        if self.state.audited != s.plan.id:
+        if not self.audit_current():
             raise AgentError("not_audited", "the current plan has not passed audit_plan since its last change",
                              hint="call audit_plan; fix any blocking item first")
         if self.state.renders >= self.cfg["max_renders"]:
@@ -620,7 +630,14 @@ class AgentRun:
                "third_animals": insp.get("third_animals"), "drift": drift,
                "decision": "Meta Spark decides; Spark Open answers kept as information (D-084)"}
         im.inspect, im.raw_inspect = out, insp
-        return {**out, "cards": ["RC-R10-12", "RC-R10-15", "RC-R10-16"] if rows else []}
+        return {**out, "images_so_far": self._scoreboard(), "best_so_far": self.best_image_id(),
+                "cards": ["RC-R10-12", "RC-R10-15", "RC-R10-16"] if rows else []}
+
+    def _scoreboard(self) -> dict[str, dict[str, int]]:
+        """Every inspected image's failure counts, so the agent can compare an edit with what it started from."""
+        return {i: {"structural": sum(f["kind"] == "structural" for f in im.inspect["failures"]),
+                    "covering": sum(f["kind"] == "covering" for f in im.inspect["failures"])}
+                for i, im in self.state.images.items() if im.inspect is not None}
 
     async def _drift(self, before: Image, after: Image, g: Any) -> dict[str, Any]:
         """Host drift across an edit, from the critics' plan-blind counts. The before image is inspected (or
@@ -687,7 +704,10 @@ class AgentRun:
         im = self._image(image_id)
         if im.inspect is None:
             raise AgentError("not_inspected", "inspect the image before finalizing it")
+        best = self.best_image_id()
         doc = await self._finish(im, "finalized by the agent")
+        if best and best != im.id:
+            doc["card"]["agent"]["note"] = f"the agent finalized {im.id}; by failure counts {best} was better"
         return {"creature_id": doc["genome"]["id"], "remaining_failures": doc["card"]["remaining_failures"]}
 
     # ------------------------------------------------------------------ finish
@@ -768,6 +788,16 @@ def _animal_brief(a: Animal) -> dict[str, Any]:
             "body_plan": a.body_plan, "covering": a.covering, "mass_kg": a.mass_kg, "habitats": list(a.habitats),
             "breathing": a.breathing, "features": list(a.features)[:5],
             "features_source": a.source_of("visible_features", "features"), "source": a.source}
+
+
+def _content_key(g: Any) -> str:
+    """The plan's content, ignoring who last set a field (a repeated operation marks set_by "agent" only)."""
+    d = g.model_dump(exclude={"id", "scores", "checks"})
+    for t in d.get("transfers", []):
+        t["set_by"] = ""
+    for p in d.get("identity_parts", []):
+        p["set_by"], p["reason"] = "", ""
+    return json.dumps(d, sort_keys=True)
 
 
 def _cards_in(obj: Any) -> list[str]:
