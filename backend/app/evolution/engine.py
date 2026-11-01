@@ -157,6 +157,7 @@ class EvoEngine:
     def finish(self, g: Genome, r: Route) -> Genome:
         """4.4 habitat and 4.5 physical checks, then derived fields. Idempotent."""
         g = g.model_copy(deep=True)
+        g.render_details = []  # S2: rebuilt by the code steps below; model text never enters it
         locked = bool(r.pair and r.pair.get("locked"))
         g.checks += fix_parts(g, self.tax)  # S2 (E4c): a model plan's parts are checked against the class too
         gate_cards = gate(g.traits, r, g.host, self.tax)  # E2b: a model plan cannot undo GATE (e.g. a mane on feathers)

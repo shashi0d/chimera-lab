@@ -42,7 +42,7 @@ class EvoSpark(Protocol):
 
     async def critic(self, image: bytes) -> dict[str, Any]: ...
 
-    async def checklist(self, image: bytes, items: list[str], choices: list[str]) -> dict[str, Any]: ...
+    async def checklist(self, image: bytes, items: list[str]) -> dict[str, Any]: ...
 
     async def identify(self, name: str | None = None, image: bytes | None = None) -> dict[str, Any]: ...
 
@@ -168,22 +168,19 @@ class MockEvoSpark:
             animals = [host.group(1)] if host else animals[:1]  # faint donor traits vanish at thumbnail size
         return self._wire("describe", {"animals": animals, "creatures": 1, "notes": "mock critic"})
 
-    async def checklist(self, image: bytes, items: list[str], choices: list[str]) -> dict[str, Any]:
+    async def checklist(self, image: bytes, items: list[str]) -> dict[str, Any]:
         """Mock: a real-hybrid render shows every item; at thumbnail size, fine detail (stripes, mane, tail
         hair) reads as unclear. An unrecognized image is unclear throughout."""
         prompt = self.registry.lookup(image)
-        m = HYBRID_RE.search(prompt or "")
         with Image.open(io.BytesIO(image)) as im:
             small = max(im.size) < 400
         fine = ("stripe", "mane", "tail")
         known = prompt is not None
         answers = [{"item": it, "answer": "unclear" if not known or (small and any(f in it for f in fine)) else "yes"}
                    for it in items]
-        choice = m.group(1) if m and m.group(1) in choices else ("a mix of both" if "a mix of both" in choices
-                                                                  and known else "other")
         pair = PAIR_RE.search(prompt or "")
         animals = [pair.group(1), pair.group(2)] if pair else []
-        return self._wire("describe", {"answers": answers, "choice": choice, "creatures": 1 if known else 0,
+        return self._wire("describe", {"answers": answers, "creatures": 1 if known else 0,
                                        "animals": animals, "notes": "mock checklist"})
 
     # E4 open world (mock knowledge: tests/fixtures/recorded/open_world.json)

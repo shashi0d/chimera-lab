@@ -67,7 +67,7 @@ async def test_judge_keeps_count_third_animal_and_logs_the_open_critic(engine):
     j = doc["judge"]
     assert j["critic"]["creatures"] == 1 and "animals" in j["critic"] and j["third_animal"] == []
     assert j["checklist"] == generated_checklist(validate_plan(doc["genome"]), engine.tax)
-    assert "animals" in j["open_critic"] and j["forced_choice"]["full"] in ("lion", "golden eagle", "a mix of both", "other")
+    assert "animals" in j["open_critic"] and "forced_choice" not in j
 
 
 # ------------------------------------------------------------------ output card

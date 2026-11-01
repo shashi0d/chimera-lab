@@ -152,7 +152,7 @@ def _scripted_critic(engine, answers: list[list[str]]):
     """E4: the animals seen come from the checklist call (full image and thumbnail per render)."""
     calls: list[int] = []
 
-    async def checklist(image: bytes, items: list[str], choices: list[str]) -> dict[str, Any]:
+    async def checklist(image: bytes, items: list[str]) -> dict[str, Any]:
         calls.append(1)
         n = (len(calls) - 1) // 2
         return {"answers": [{"item": i, "answer": "yes"} for i in items], "choice": "other", "creatures": 1,

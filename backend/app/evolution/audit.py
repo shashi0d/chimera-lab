@@ -48,7 +48,9 @@ class Need:
     detail: str
 
 
-def _note(g: Genome, tag: str, text: str, locked: frozenset[str]) -> bool:
+def _note(g: Genome, tag: str, text: str, locked: frozenset[str], visual: bool = True) -> bool:
+    """Write a code repair into the trait note (card and log). `visual` code repairs also go to
+    `render_details` for the prompt (S2); model-written repairs and license compensations do not."""
     if tag in locked:
         return False
     tr = g.traits[tag]
@@ -56,6 +58,8 @@ def _note(g: Genome, tag: str, text: str, locked: frozenset[str]) -> bool:
         tr.note = text
     elif text not in tr.note:
         tr.note = f"{tr.note}; {text}"
+    if visual and text not in g.render_details:
+        g.render_details.append(text)
     return True
 
 
@@ -363,8 +367,8 @@ def apply_judgment(g: Genome, judged: list[dict[str, str]] | None, error: str | 
         detail = j["detail"]
         if "oxygen" in detail.lower() and "debated" not in detail.lower():
             detail = f"{detail} ({OXYGEN_NOTE})"
-        if j["result"] == "repaired" and j.get("repair"):
-            _note(g, FUNCTION_TRAIT[item.function], j["repair"], locked)
+        if j["result"] == "repaired" and j.get("repair"):  # model-written: on the card, never in the prompt (S2)
+            _note(g, FUNCTION_TRAIT[item.function], j["repair"], locked, visual=False)
             detail = f"{detail}; repair: {j['repair']}"
         if j["result"] == "labeled":
             _label(g, f"speculative: {item.function} may not work as planned")

@@ -7,7 +7,7 @@
 3. Thumbnail check: the critic again on a small copy (RC-R6-06).
 E2d/E4: both critics are a feature checklist (yes 1, unclear 0.5, no 0; score = mean): the pair's
 hand-written R2 checklist on the real-hybrid route, otherwise generated from the plan. The same call gives
-the creature count and the animals seen; a forced choice and the open critic are logged, not scored.
+the creature count and the animals seen; the open critic is logged, not scored (S2: no forced choice).
 quality = 0.4 critic + 0.3 silhouette + 0.1 thumbnail + 0.2 (1 - normalized soft penalty)
 """
 
@@ -180,14 +180,8 @@ def generated_checklist(g: Genome, tax: Taxonomy) -> list[str]:
     return list(dict.fromkeys(items))[:CHECKLIST_MAX]
 
 
-def checklist_choices(sire: Animal, dam: Animal, r: Route) -> list[str]:
-    """Forced-choice options: the two parents, the hybrid's name (or "a mix of both"), or "other". Logged only."""
-    middle = str(r.pair["name"]) if r.pair and is_real_hybrid(r) else "a mix of both"
-    return [sire.common_name.lower(), dam.common_name.lower(), middle, "other"]
-
-
 def checklist_score(result: dict[str, Any]) -> float:
-    """Fraction of items answered yes; unclear counts 0.5. The forced choice is logged, never scored."""
+    """Fraction of items answered yes; unclear counts 0.5."""
     answers = result.get("answers") or []
     if not answers:
         return 0.0
@@ -203,11 +197,10 @@ async def judge(image: bytes, g: Genome, r: Route, tax: Taxonomy, spark: EvoSpar
     frame_animal = tax.animals[g.host] if g.host else sire
     hand = checklist_for(r)
     checklist = hand or generated_checklist(g, tax)
-    choices = checklist_choices(sire, dam, r)
-    critic = await meter.call("spark", "critic", spark.checklist(image, checklist, choices))
+    critic = await meter.call("spark", "critic", spark.checklist(image, checklist))
     mask = await meter.call("sam", "segment", seg.segment(image, SAM_PROMPT))  # E2b: never the host's name
     stats = mask_stats(mask)
-    thumb = await meter.call("spark", "critic_thumbnail", spark.checklist(thumbnail(image), checklist, choices))
+    thumb = await meter.call("spark", "critic_thumbnail", spark.checklist(thumbnail(image), checklist))
     try:
         open_critic: dict[str, Any] = await meter.call("spark", "critic_open", spark.critic(image))
     except ChimeraError as e:  # a second opinion only: its failure never fails the judge
@@ -225,5 +218,4 @@ async def judge(image: bytes, g: Genome, r: Route, tax: Taxonomy, spark: EvoSpar
             "third_animal": third_animals(critic, sire, dam, tax, r), "sam_prompt": SAM_PROMPT,
             "critic_mode": "checklist", "checklist": checklist,
             "checklist_source": "known pair (hand-written)" if hand else "generated from the plan",
-            "forced_choice": {"full": critic.get("choice"), "thumbnail": thumb.get("choice")},  # logged, not scored
             "open_critic": open_critic}  # logged second opinion, not scored

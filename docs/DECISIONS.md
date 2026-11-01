@@ -228,3 +228,12 @@ Chimera and mythic prompts (`prompt.compile_hosted`) now give:
 - **Donor clause:** one grouped clause, "from the <donor>, as parts and materials on the <host>'s own body: …". The donor is named once there. Its head (mythic swap), wings, dorsal insect wings, tail part, appendages, surface patches and patch pattern are each described with the class list's shape and surface wording ("hard, glossy chitin plates with fine seams", "a single curved horn of hard, glossy chitin rising from the brow"), not as "<donor> exoskeleton".
 - **Pattern exception:** E2b's rule that a pattern is always "<animal>-type <type>" is kept, so a patterned donor's type designator may appear a second time.
 - **Silhouette:** recomputed last in `finish()`, and `route.silhouette_issues` must find no disagreement with the final limb plan (forelimb wings, six limbs, dorsal mount, tail part, two hind legs only with wing forelimbs).
+
+**D-066 The render prompt reads only structured fields; the forced choice is removed (S2, ROADMAP Q4 and Q6).**
+`compile_prompt` (hosted, hybrid and real-hybrid) builds the prompt only from the plan's structured fields (silhouette, host, limb plan, traits' donors, operators, regions, strengths, parts and flags, licenses, habitat cue), the data tables (`class_parts.json` shapes, coat patterns, known-pair prompt blocks) and a new code-owned plan field, `render_details`.
+- **`render_details`:** holds the visual details code adds while checking and repairing: a deep keel, posture, thicker limb bones, jointless soft parts, a deep chest at size, digging forelimbs, vestigial gill slits.
+- **Rebuilt each pass:** `finish()` clears and rebuilds it on every pass.
+- **Not in it:** model-judged audit repairs, which stay on the card, and license compensations, which reach the prompt once through the license clause.
+- **Notes:** trait notes, which a model plan can write, are kept for the card and logs but are never read by the compiler.
+- **Hybrid extremes:** the beyond-both-parents note on hybrids is now phrased from the BLEND value and flag.
+- **Forced choice:** removed from the checklist schema, instructions, request, parser (an old recording's `choice` is ignored), the EvoSpark protocol (`checklist(image, items)`), the mock and the judge verdict. It answered "a mix of both" on every image and was never scored.

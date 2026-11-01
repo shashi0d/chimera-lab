@@ -503,15 +503,14 @@ async def part_parity() -> None:
         req["messages"][1]["content"][1]["image_url"]["url"] = _data_url(img)
         text = req["messages"][1]["content"][0]["text"]
         items = [ln.split(". ", 1)[1] for ln in text.split("\n") if re.match(r"^\d+\. ", ln)]
-        choices = req["response_format"]["json_schema"]["schema"]["properties"]["choice"]["enum"]
-        meta = live.parse_checklist_response(rec["response"], items, choices)
+        meta = live.parse_checklist_response(rec["response"], items)  # S2: forced choice removed
         payload, err, att = await bt_call(run, spark, "parity_checklist", req)
         row = {"case": label, "items": items, "error": err, "attempts": att,
-               "meta": {"answers": [a["answer"] for a in meta["answers"]], "choice": meta["choice"],
+               "meta": {"answers": [a["answer"] for a in meta["answers"]],
                         "creatures": meta["creatures"], "animals": meta["animals"]}}
         if payload:
-            bt = live.parse_checklist_response(payload, items, choices)
-            row["baseten"] = {"answers": [a["answer"] for a in bt["answers"]], "choice": bt["choice"],
+            bt = live.parse_checklist_response(payload, items)
+            row["baseten"] = {"answers": [a["answer"] for a in bt["answers"]],
                               "creatures": bt["creatures"], "animals": bt["animals"], "notes": bt["notes"],
                               "json": json_report(payload, req["response_format"]["json_schema"]["schema"])}
             row["agree"] = [m == b for m, b in zip(row["meta"]["answers"], row["baseten"]["answers"], strict=True)]
@@ -534,7 +533,7 @@ async def judge_image(eng: EvoEngine, img: bytes, plan_dir: Path) -> dict[str, A
     g = validate_plan(json.loads((plan_dir / "plan.json").read_text(encoding="utf-8")))
     r = route(eng.tax.animals[g.parents.sire], eng.tax.animals[g.parents.dam], eng.tax, g.design_mode == "mythic")
     v = await judge(img, g, r, eng.tax, eng.spark, eng.segmenter, eng.meter)
-    return {k: v.get(k) for k in ("scores", "checklist", "critic", "critic_thumbnail", "forced_choice",
+    return {k: v.get(k) for k in ("scores", "checklist", "critic", "critic_thumbnail",
                                   "open_critic", "third_animal", "mask")}
 
 
@@ -580,7 +579,7 @@ async def part_image() -> None:
             items = [f"a {name}", "one animal only", "plain light background"]
             items.insert(1, "external gills on the sides of the head" if key == "axolotl" else "overlapping scales")
             start = run.mark()
-            check = await eng.spark.checklist(img.data, items, [name.lower(), "other"])
+            check = await eng.spark.checklist(img.data, items)
             mask = await seg.segment(img.data, "animal")
             w(run.dir / f"portrait_{key}_mask.png", mask)
             res["renders"][-1]["judge"] = {"checklist": check, "mask": mask_stats(mask), "attempts": run.since(start)}

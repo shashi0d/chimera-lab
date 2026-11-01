@@ -48,9 +48,9 @@ def check_licensable(card: str) -> bool:
 
 def _compensate(g: Genome, lic: License, locked: frozenset[str]) -> None:
     """Write the compensation into the plan (the prompt reads g.licenses too)."""
-    _note(g, "body", lic.compensation, locked)
+    _note(g, "body", lic.compensation, locked, visual=False)  # the prompt shows it via license_clause
     if "leg" in lic.compensation or "tentacle" in lic.compensation:
-        _note(g, "limbs", lic.compensation, locked)
+        _note(g, "limbs", lic.compensation, locked, visual=False)
 
 
 def _repair(g: Genome, need: Need, locked: frozenset[str]) -> str | None:

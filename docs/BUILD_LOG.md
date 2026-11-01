@@ -325,3 +325,8 @@ Read `docs/evolution/ROADMAP.md` (now committed) sections 4, 5 and 5b. Caps for 
 - **(d) Silhouette:** recomputed last and checked against the limb plan.
 - **Regression:** the E4 live beetle plan, replayed with the beetle as E4 saved it, now gives four bear legs, no wings ("dropped part: wings"), a chitin horn on the brow, chitin plates, and one license (arthropod size).
 - **Tests:** 39 new (`test_s2_e4c.py`); one E2b test reworded ("lion body" instead of "lion coat"). Full suite 740 passed, 6 skipped.
+
+**Part 2 (prompt hygiene, D-066):**
+- **Prompt sources:** the prompt is compiled only from structured fields plus the code-owned `render_details`; trait notes never reach it on any route.
+- **Forced choice:** removed from the schema, instructions, request, parser, protocol, mock and verdict. The `e2d_rescore`, `e4_live` and `s1_probe` scripts were updated to match.
+- **Tests:** 13 new (`test_s2_prompt_hygiene.py`: poisoned notes on 6 routes, a model plan full of notes, code repairs present, compensation shown once, model-judged repair kept off the prompt, `render_details` code-owned and rebuilt). E2d tests rewritten for no choice. Full suite 752 passed, 6 skipped.

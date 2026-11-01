@@ -167,6 +167,9 @@ class Genome(_Strict):
     design_mode: DesignMode = "speculative"
     audit: list[AuditItem] = Field(default_factory=list)
     licenses: list[License] = Field(default_factory=list)
+    # S2: visual details code adds while checking and repairing the plan (a deep keel, thicker limb bones). With
+    # the structured fields and data tables, this is all the prompt compiler reads: notes never reach the prompt.
+    render_details: list[str] = Field(default_factory=list)
 
     @model_validator(mode="after")
     def _consistent(self) -> Genome:

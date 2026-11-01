@@ -22,7 +22,7 @@ import re
 
 from app.evolution.audit import dropped_parts
 from app.evolution.data import PLAIN_COAT, Taxonomy, config, pattern_phrase
-from app.evolution.genome import Genome
+from app.evolution.genome import BEYOND, Genome
 from app.evolution.parts import dorsal_wings, match, part_owner, surface, wing_spec
 from app.evolution.route import find_known_pair, is_real_hybrid
 
@@ -271,14 +271,9 @@ def compile_prompt(g: Genome, tax: Taxonomy) -> str:
                            f"on the {_regions(tr.region)}")
         elif tr.part:
             contrib.append(f"{_name(tax, tr.donor)} {tr.part} in place of the {tag}")
-        if tr.donor is None and "gated" in tr.flags:
-            continue  # an absent, gated feature is left out rather than named (naming it could invite it)
-        note = tr.note or ""
-        if PATTERN_WORDS.search(note) or plan_conflicts(note, g):
-            continue  # patterns are named only by pattern_clause; a note never contradicts the plan
-        if note and tr.op != "PATCH" and tag not in ("size",) and "host value" not in note:
-            contrib.append(f"{tag.replace('_', ' ')}: {note}")
+    contrib += beyond_details(g, tax)  # S2: structured fields only; trait notes never reach the prompt
     contrib.append(pattern_clause(g, tax))
+    contrib += code_details(g)
     for app_ in lp.appendages:
         if not app_.endswith("(tail)"):  # E4: e.g. donor external gills, kept as display frills outside realistic mode
             contrib.append(f"{app_}, small display frills" if "gills" in app_ else app_)
@@ -355,16 +350,19 @@ def accept_polish(original: str, polished: str | None, g: Genome, tax: Taxonomy)
     return (original, reason) if reason else (polished or original, None)
 
 
-def _detail_notes(g: Genome) -> list[str]:
-    """Trait notes that may still reach the prompt (replaced by structured render details in S2 part 2)."""
+def code_details(g: Genome) -> list[str]:
+    """S2: the code-made visual details (render_details), minus anything that would contradict the plan.
+    Trait notes, which a model plan may have written, are never read."""
+    return [d for d in g.render_details if not PATTERN_WORDS.search(d) and not plan_conflicts(d, g)]
+
+
+def beyond_details(g: Genome, tax: Taxonomy) -> list[str]:
+    """Hybrid extremes from the structured BLEND value (RC-R1-13), not from a note."""
     out = []
     for tag, tr in g.traits.items():
-        note = tr.note or ""
-        if tag == "coat_pattern" or not note or tr.op == "PATCH" or tag == "size" or "host value" in note:
-            continue
-        if PATTERN_WORDS.search(note) or plan_conflicts(note, g) or (tr.donor is None and "gated" in tr.flags):
-            continue
-        out.append(f"{tag.replace('_', ' ')}: {note}")
+        if tr.op == "BLEND" and BEYOND in tr.flags and isinstance(tr.donor, list) and tr.value is not None:
+            past = tr.donor[0] if tr.value < 0 else tr.donor[1]
+            out.append(f"{tag.replace('_', ' ')} slightly past the {_name(tax, past)}'s proportions, beyond both parents")
     return out
 
 
@@ -382,7 +380,7 @@ def compile_hosted(g: Genome, tax: Taxonomy) -> str:
     details = [host_clause(g, tax)]
     if group := donor_clause(g, tax):
         details.append(group)
-    details += _detail_notes(g)
+    details += code_details(g)
     lines.append("Details: " + "; ".join(details) + ".")
     lines.append("Coat texture and patches follow the body outline.")
     if g.licenses:

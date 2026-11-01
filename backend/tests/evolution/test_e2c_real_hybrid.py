@@ -174,7 +174,7 @@ async def test_fuse_mule_uses_the_real_hybrid_prompt(engine):
 
 async def test_fuse_chimera_does_not_accept_a_hybrid_name(engine):
     # E4: the animals seen come from the checklist call; "liger" on a chimera is a third animal.
-    async def checklist(image, items, choices):
+    async def checklist(image, items):
         return {"answers": [{"item": i, "answer": "yes"} for i in items], "choice": "other", "creatures": 1,
                 "animals": ["liger"], "notes": "s"}
 

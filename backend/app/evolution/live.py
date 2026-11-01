@@ -2,7 +2,7 @@
 
 * Muse Spark (chat completions, strict JSON schema): first plan, prompt polish,
   readability critic and thumbnail critic (on the real-hybrid route, a feature
-  checklist with a forced choice, E2d). Crossover/mutation (`vary`) is not
+  checklist, E2d; the forced choice was removed in S2). Crossover/mutation (`vary`) is not
   enabled live: E2 runs no evolve rounds.
 * Muse Image: the existing `MetaImageGen`, wrapped in the shared retry policy.
 * SAM 3.1: the Responses API at the same Meta base URL, model ``sam-3.1``, one
@@ -80,19 +80,20 @@ PLAN_SCHEMA: dict[str, Any] = _obj({
     "processes": _STRS,
     "card_trace": _STRS,
 })
-CODE_FIELDS = ("id", "seed", "lineage", "checks", "scores", "design_mode", "audit", "licenses")  # E4: code-owned
+CODE_FIELDS = ("id", "seed", "lineage", "checks", "scores", "design_mode", "audit", "licenses",  # E4: code-owned
+               "render_details")  # S2
 
 POLISH_SCHEMA = _obj({"prompt": _STR})
 CRITIC_SCHEMA = _obj({"animals": _STRS, "creatures": {"type": "integer"}, "notes": _STR})
 ANSWERS = ("yes", "no", "unclear")
 
 
-def checklist_schema(choices: list[str]) -> dict[str, Any]:
-    """E2d: one yes/no/unclear answer per checklist item, plus a forced choice among `choices`."""
+def checklist_schema() -> dict[str, Any]:
+    """E2d: one yes/no/unclear answer per checklist item. S2: the forced choice is gone (ROADMAP Q6: it said
+    "a mix of both" every time and was never scored)."""
     answer = _obj({"item": _STR, "answer": {"type": "string", "enum": list(ANSWERS)}})
     # No minItems/maxItems: strict schemas may reject them. The parser pads a short list with "unclear".
-    return _obj({"answers": {"type": "array", "items": answer},
-                 "choice": {"type": "string", "enum": list(choices)}, "creatures": {"type": "integer"},
+    return _obj({"answers": {"type": "array", "items": answer}, "creatures": {"type": "integer"},
                  "animals": _STRS, "notes": _STR})
 
 PLAN_INSTRUCTIONS = (
@@ -115,8 +116,7 @@ CRITIC_INSTRUCTIONS = (
 CHECKLIST_INSTRUCTIONS = (
     "You look at one picture of an animal and check it against a list of visible features. For each item, answer "
     "yes if the feature is clearly visible, no if the picture clearly shows otherwise, or unclear if you cannot "
-    "tell. Copy each item's text exactly, in the given order. Judge only what is visible. choice: which one of the "
-    "listed options the animal in the picture looks most like; pick exactly one. creatures: how many separate "
+    "tell. Copy each item's text exactly, in the given order. Judge only what is visible. creatures: how many separate "
     "creatures are in the picture. animals: the real animal species whose features you can clearly see, as "
     "everyday English common names, at most three. notes: one short sentence."
 )
@@ -280,15 +280,14 @@ def build_critic_request(model: str, image: bytes) -> dict[str, Any]:
     ], "response_format": _json_schema("readability_critic", CRITIC_SCHEMA), "temperature": 0}
 
 
-def build_checklist_request(model: str, image: bytes, items: list[str], choices: list[str]) -> dict[str, Any]:
+def build_checklist_request(model: str, image: bytes, items: list[str]) -> dict[str, Any]:
     listing = "\n".join(f"{i}. {item}" for i, item in enumerate(items, 1))
-    text = (f"Features to check:\n{listing}\n\nForced choice, the animal looks most like: "
-            f"{', '.join(choices)}.")
+    text = f"Features to check:\n{listing}"
     return {"model": model, "messages": [
         {"role": "system", "content": CHECKLIST_INSTRUCTIONS},
         {"role": "user", "content": [{"type": "text", "text": text},
                                      {"type": "image_url", "image_url": {"url": _data_url(image)}}]},
-    ], "response_format": _json_schema("feature_checklist", checklist_schema(choices)), "temperature": 0}
+    ], "response_format": _json_schema("feature_checklist", checklist_schema()), "temperature": 0}
 
 
 def build_sam_request(image: bytes, prompt: str, model: str = SAM_MODEL) -> dict[str, Any]:
@@ -316,18 +315,16 @@ def parse_critic_response(payload: dict[str, Any]) -> dict[str, Any]:
             "notes": str(data.get("notes") or "")}
 
 
-def parse_checklist_response(payload: dict[str, Any], items: list[str], choices: list[str]) -> dict[str, Any]:
+def parse_checklist_response(payload: dict[str, Any], items: list[str]) -> dict[str, Any]:
     """Answers are matched to items by order (the model is told to keep it); anything missing or
-    not one of yes/no/unclear becomes "unclear". A choice outside `choices` becomes "other"."""
+    not one of yes/no/unclear becomes "unclear". A "choice" in an old recording is ignored (S2)."""
     data = _message_json(payload)
     got = [a for a in data.get("answers") or [] if isinstance(a, dict)]
     answers = []
     for i, item in enumerate(items):
         a = str(got[i].get("answer", "")).lower() if i < len(got) else ""
         answers.append({"item": item, "answer": a if a in ANSWERS else "unclear"})
-    choice = str(data.get("choice") or "")
-    return {"answers": answers, "choice": choice if choice in choices else "other",
-            "creatures": int(data.get("creatures") or 0), "animals": [str(a) for a in data.get("animals") or []],
+    return {"answers": answers, "creatures": int(data.get("creatures") or 0), "animals": [str(a) for a in data.get("animals") or []],
             "notes": str(data.get("notes") or "")}
 
 
@@ -408,9 +405,9 @@ class LiveEvoSpark(_Retrying):
     async def critic(self, image: bytes) -> dict[str, Any]:
         return parse_critic_response(await self._chat("evo_critic", build_critic_request(self.model_id, image)))
 
-    async def checklist(self, image: bytes, items: list[str], choices: list[str]) -> dict[str, Any]:
-        body = build_checklist_request(self.model_id, image, items, choices)
-        return parse_checklist_response(await self._chat("evo_checklist", body), items, choices)
+    async def checklist(self, image: bytes, items: list[str]) -> dict[str, Any]:
+        body = build_checklist_request(self.model_id, image, items)
+        return parse_checklist_response(await self._chat("evo_checklist", body), items)
 
     async def identify(self, name: str | None = None, image: bytes | None = None) -> dict[str, Any]:
         return parse_identify_response(await self._chat("evo_identify", build_identify_request(self.model_id, name, image)))

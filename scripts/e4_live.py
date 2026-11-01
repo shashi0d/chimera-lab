@@ -100,7 +100,7 @@ async def render(eng: EvoEngine, tap: MaskTap, slug: str, sire: str, dam: str, m
     _w(out / "prompt_compiled.txt", doc["prompt_compiled"])
     _w(out / "prompt_final.txt", doc["prompt"])
     _w(out / "judge.json", {k: j.get(k) for k in ("scores", "checklist", "checklist_source", "critic",
-                                                    "critic_thumbnail", "forced_choice", "open_critic", "mask",
+                                                    "critic_thumbnail", "open_critic", "mask",
                                                     "third_animal", "soft_cards", "sam_prompt")}
        | {"render_attempts": doc.get("render_attempts"), "warnings": doc.get("warnings"), "polish": doc.get("polish"),
           "model_plan": doc.get("model_plan", "not kept in the cached document")})
@@ -109,7 +109,7 @@ async def render(eng: EvoEngine, tap: MaskTap, slug: str, sire: str, dam: str, m
     return {"slug": slug, "sire": sire, "dam": dam, "mode": mode, "try": attempt, "creature_id": g["id"],
             "route": doc["route"], "labels": g["labels"], "licenses": g["licenses"], "audit": g["audit"],
             "scores": g["scores"], "checklist": j["checklist"], "answers": j["critic"].get("answers"),
-            "thumb_answers": j["critic_thumbnail"].get("answers"), "forced_choice": j["forced_choice"],
+            "thumb_answers": j["critic_thumbnail"].get("answers"),
             "open_critic": j["open_critic"], "third_animal": j["third_animal"], "model_plan": doc.get("model_plan", "not kept in the cached document"),
             "meta_calls": doc["meta_calls"], "attempts_by_kind": _count(calls, start),
             "warnings": doc.get("warnings")}

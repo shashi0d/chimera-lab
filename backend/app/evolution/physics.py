@@ -29,6 +29,8 @@ def _note(g: Genome, tag: str, text: str, locked: frozenset[str] = frozenset()) 
         tr.note = text
     elif text not in tr.note:
         tr.note = f"{tr.note}; {text}"
+    if text not in g.render_details:  # S2: code repairs reach the prompt through render_details, never notes
+        g.render_details.append(text)
     return True
 
 

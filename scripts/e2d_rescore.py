@@ -3,7 +3,7 @@
 Usage (from the repo root, META_API_KEY in .env or the environment):
     .venv/Scripts/python.exe scripts/e2d_rescore.py
 
-Two Spark calls per image (full image and the 192 px thumbnail, same checklist and forced choice):
+Two Spark calls per image (full image and the 192 px thumbnail, same checklist; S2 removed the forced choice):
 the E2c mule and, as a check, the E2 liger. Caps: images 20, Spark 70, SAM 15 on the shared
 counter docs/live/budget.json. Silhouette and soft-penalty scores are reused from the image's
 original run; only the critic and thumbnail parts are new. Outputs: docs/evolution/live/e2d/.
@@ -35,7 +35,6 @@ from app.config import Settings
 from app.evolution.data import taxonomy
 from app.evolution.judge import (
     WEIGHTS,
-    checklist_choices,
     checklist_for,
     checklist_score,
     thumbnail,
@@ -54,21 +53,20 @@ async def rescore(spark: LiveEvoSpark, slug: str, run: str, sire: str, dam: str)
     tax = taxonomy()
     s, d = tax.resolve(sire), tax.resolve(dam)
     r = route(s, d, tax)
-    items, choices = checklist_for(r), checklist_choices(s, d, r)
+    items = checklist_for(r)  # S2: the forced choice was removed
     src = ROOT / "docs" / "evolution" / "live" / run / slug
     image = (src / "image.webp").read_bytes()
     old = json.loads((src / "critic.json").read_text(encoding="utf-8"))
     current_step.set(f"e2d:{slug}")
-    full = await spark.checklist(image, items, choices)
-    thumb = await spark.checklist(thumbnail(image), items, choices)
+    full = await spark.checklist(image, items)
+    thumb = await spark.checklist(thumbnail(image), items)
     s_old = old["scores"]
     new = {"critic": checklist_score(full), "silhouette": s_old["silhouette"], "thumbnail": checklist_score(thumb),
            "soft_penalty": s_old["soft_penalty"]}
     new["quality"] = round(WEIGHTS["critic"] * new["critic"] + WEIGHTS["silhouette"] * new["silhouette"]
                            + WEIGHTS["thumbnail"] * new["thumbnail"] + WEIGHTS["rules"] * (1 - new["soft_penalty"]), 3)
     result = {"slug": slug, "image": f"docs/evolution/live/{run}/{slug}/image.webp", "known_pair": r.pair["id"],
-              "checklist": items, "choices": choices, "full": full, "thumbnail": thumb,
-              "forced_choice": {"full": full["choice"], "thumbnail": thumb["choice"]},
+              "checklist": items, "full": full, "thumbnail": thumb,
               "scores_before": s_old, "open_critic_before": {"full": old["critic"], "thumbnail": old["critic_thumbnail"]},
               "scores_after": new}
     out = OUT / slug
@@ -99,7 +97,7 @@ async def main() -> int:
                 continue
             results.append(res)
             print(f"{slug}: critic={res['scores_after']['critic']} thumb={res['scores_after']['thumbnail']} "
-                  f"choice={res['forced_choice']} quality {res['scores_before']['quality']} -> "
+                  f"quality {res['scores_before']['quality']} -> "
                   f"{res['scores_after']['quality']}")
             break
     after = budget_used()
