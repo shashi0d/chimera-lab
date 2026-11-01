@@ -72,6 +72,29 @@ class Settings(BaseSettings):
     run_lease_seconds: float = 180.0
     mock_delay_scale: float = Field(default=1.0, ge=0)
 
+    # R1: the public agent API (docs/api_contract.md "Caps"). Env names are the upper-case field names.
+    evo_daily_runs: int = 50  # agent runs per day, all visitors
+    evo_visitor_daily_runs: int = 3  # agent runs per visitor (session id + client IP) per day
+    evo_max_concurrent_runs: int = Field(default=3, ge=1)  # more are queued
+    evo_runs_per_minute_per_ip: int = 5  # POST /evo/agent/runs
+    evo_run_soft_seconds: float = 840.0  # the agent finalizes its best image here (cap_reached scope time)
+    evo_run_hard_seconds: float = 900.0  # the runner stops the run here
+    evo_choice_seconds: float = 120.0  # host-tie choice wait
+    evo_keepalive_seconds: float = 15.0  # SSE ": ping"
+    evo_poll_seconds: float = 1.0  # SSE re-read of a run that lives in another process
+    evo_heartbeat_seconds: float = 10.0  # live runs refresh updatedAt (the lease, D-016)
+    evo_showcase: str = "b09,b01,b03,b08,b11,b05"  # S5 case ids (or crt_ creature ids), in gallery order
+    evo_showcase_dir: str = "docs/evolution/live/s5"  # S5 outputs: <case>/agent/
+    evo_fixtures_dir: str = "docs/api_fixtures"  # mock mode replays these
+    evo_mock_replay_scale: float = Field(default=0.02, ge=0)  # mock replay: fixture time gaps x this
+    evo_mock_max_event_delay: float = Field(default=1.5, ge=0)  # ... capped at this many seconds per event
+    evo_identify_min_confidence: float = 0.6  # below this the POST returns needs_choice
+    evo_max_upload_bytes: int = 8 * 1024 * 1024
+    evo_identify_max_side: int = 1024  # uploads are resized to this before any model call
+    evo_public_bucket: str = "chimera-public"  # Supabase: generated images, public read
+    evo_proxy_hops: int = Field(default=1, ge=0)  # trusted proxies in front of the app (X-Forwarded-For)
+    frontend_dist: str = "frontend/dist"  # served at / when it exists
+
     @property
     def cors_origin_list(self) -> list[str]:
         return [o.strip() for o in self.cors_origins.split(",") if o.strip()]
@@ -83,6 +106,15 @@ class Settings(BaseSettings):
     def resolved_local_dir(self) -> Path:
         p = Path(self.local_data_dir)
         return p if p.is_absolute() else REPO_ROOT / p
+
+    @staticmethod
+    def repo_path(value: str) -> Path:
+        p = Path(value)
+        return p if p.is_absolute() else REPO_ROOT / p
+
+    @property
+    def showcase_list(self) -> list[str]:
+        return [s.strip() for s in self.evo_showcase.split(",") if s.strip()]
 
 
 @lru_cache

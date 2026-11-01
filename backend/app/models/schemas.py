@@ -44,6 +44,7 @@ class ErrorCode(str, Enum):
     RUN_INTERRUPTED = "RUN_INTERRUPTED"
     NOT_FOUND = "NOT_FOUND"
     INTERNAL = "INTERNAL"
+    CAP_REACHED = "CAP_REACHED"  # R1: daily and visitor caps on agent runs
 
 
 class ApiError(ApiModel):

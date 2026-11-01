@@ -9,7 +9,7 @@ import threading
 from pathlib import Path
 from typing import Any
 
-COLLECTIONS = ("assets", "runs", "graphs", "creatures", "idempotency", "counters")
+COLLECTIONS = ("assets", "runs", "graphs", "creatures", "idempotency", "counters", "agent_runs")
 
 
 class SqliteDb:
