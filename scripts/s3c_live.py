@@ -91,7 +91,7 @@ async def part_agent(only: list[str]) -> None:
     for key, sire, dam, mode, held in RUNS:
         if only and key not in only:
             continue
-        for n in range(1, REPEATS + 1):
+        for n in range(1, int(os.environ.get("S3C_REPEATS", REPEATS)) + 1):
             vdir = OUT / "agent" / key / f"r{n}{os.environ.get('S3C_TAG', '')}"
             if (vdir / "doc.json").exists():
                 print("cached", key, n)

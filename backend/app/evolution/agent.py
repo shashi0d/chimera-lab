@@ -607,6 +607,7 @@ class AgentRun:
                          "fix": (f.get("fix") or "")[:200]})
         drift = None
         parent = self.state.images.get(im.parent) if im.parent else None
+        im.raw_inspect = insp  # the drift check reads this image's own descriptions
         if parent is not None:
             drift = await self._drift(parent, im, g)
             if drift["drifted"]:
