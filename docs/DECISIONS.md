@@ -507,3 +507,22 @@ The gold-set label for `e4/b_axolotl_x_pangolin` changes from fail ("external gi
 12 of the 15 are now stopped by the schema before anything runs. The 3 `unexplained_gap` refusals depend on the
 donor (an exoskeleton), so they stay a code check, and the description now says what that check requires. The test
 also confirms that each one passes once its plan_reason names the legs.
+
+**D-095 S5: the fixed benchmark, and the engine is frozen for the demo.**
+- **Benchmark:** `data/evo_benchmark.json` holds 11 cases and never changes; a test checks its canonical hash.
+  Scores are computed only in code (`app/evolution/benchmark.py`) from the saved results:
+  - full match: no failing or uncertain critic row;
+  - failures split into structure, identity and integration (integration includes the coverage, placement,
+    pattern and connection groups);
+  - per-parent identity: whether the deciding critic's (Meta Spark) "which animals" answer names the parent, as a
+    whole word, by full name or last word;
+  - renders, edits, tool calls, calls per provider and wall time.
+- **Result:**
+  - Agent: 5/11 full matches, 1.82 average failures, both parents named in 7 cases.
+  - Fixed pipeline: 6/11, 1.91, and 5.
+  - Per creature, the agent costs about 1.6 times the calls and 1.27 times the wall time.
+- **Frozen:** after S5 the engine gets no further quality tuning; only the demo work remains.
+- **Proposed, pending the owner's ratings in `benchmark/s5_review.html`:**
+  - the agent is the demo path, because it chooses the host on a tie and shows its trace;
+  - showcase: b09, b01, b03, b08, b11 and b05;
+  - the material-only critic items get gold labels before their failures are trusted.

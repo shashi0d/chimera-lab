@@ -449,3 +449,33 @@ Read `docs/evolution/ROADMAP.md` (now committed) sections 4, 5 and 5b. Caps for 
   - The held-out fox × owl did best.
 - **Budget counter over S3c:** image 84→162, Meta Spark 483→637, SAM 80→161, Spark Open 507→1061.
 - **Tests:** 934 passed, 6 skipped.
+
+## S5: fixed benchmark, agent against the fixed pipeline, and the anatomy map (evo)
+
+- **Part 1 (D-092 to D-094):**
+  - D1: `set_covering_material_only`, a typed operation with its own compiler wording and critic items; it is the
+    two-failure rule's second route.
+  - D2: `finalize` against the code's ranking needs `why_not_best`, and the card's `final_choice` keeps both picks.
+  - D3: one tool per plan operation, with schemas checked in code and per-turn enums. The 15 refused S3c calls are
+    replayed from `tests/fixtures/s3c_refused_calls.json` (12 caught by the schema, 3 explained in the
+    description).
+- **Part 2:** `anatomy.py`. Each planned part is segmented with SAM and colored by its source parent; a part SAM
+  cannot find is "not located". The map goes on the card at finalize.
+- **Part 3:** `data/evo_benchmark.json` (11 cases, frozen; its hash is tested) and `benchmark.py` (scores computed
+  from saved results).
+- **Part 4:** `scripts/s5_live.py`. 22 live creatures, one per foreground invocation, committed and pushed after
+  each case.
+  - 700 calls, 0 failed. No rerun and no code fix during the run.
+  - From b02's fixed run on, the 590 s `timeout` wrapper was dropped. Killing a long agent run and redoing it would
+    have biased the benchmark toward short runs. No run went past 10 minutes (the longest was 474 s).
+- **Part 5:** `docs/evolution/benchmark/s5_review.html` (blind, randomized, with anatomy maps and works / partly /
+  fails ratings) and the key file.
+- **Part 6:** `docs/evolution/S5_BENCHMARK.md`.
+  - Full matches: agent 5/11, pipeline 6/11. Average failures 1.82 and 1.91.
+  - Both parents named: 7 and 5.
+  - Calls per creature: 39 and 24.
+  - A proposed showcase of 6, pending the owner's ratings.
+- **ROADMAP 5b:** rows for S3c and S5.
+- **Budget counter over S5:** image 162→211, Meta Spark 637→747, SAM 161→340, Spark Open 1061→1423.
+- **Tests:** 956 passed, 6 skipped (25 tests in `test_s5.py`); ruff clean.
+- **The engine is frozen for the demo.**
