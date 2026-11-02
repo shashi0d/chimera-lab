@@ -110,9 +110,9 @@ Modes: realistic, speculative, mythic, compare; plus goal mode (the user states 
 | 3 | Agent core | Spark Open tool loop over the tools above, trace log, guardrails | One live creature built end to end by the agent, with a readable trace |
 | 4 | Verification upgrade | SAM part checks, a plan-blind critic, the anatomy map, a human review sheet | Part checks agree with human review on the existing images |
 | 5 | Benchmark and A/B | Fixed eval set; A/Bs: references vs none, edit vs re-render, agent vs pipeline, Spark Open vs Wonder as brain | Defaults chosen by measured results |
-| 6 | Goal mode and multi-parent | Goal to proposed parent pairs; voice input; 3-parent family trees | A goal request produces 3 sensible pairs and one finished creature |
-| 7 | API, streaming, deploy | Modal asgi app with SSE trace, background runs, Volume caches, Supabase persistence | Deployed endpoint streams a live run |
-| 8 | Frontend integration | The redesigned graph UI runs the agent: trace panel, card, Can-it-live panel, anatomy map, variants | A full run from the UI, recorded |
+| 6 | Goal mode and multi-parent | **Cut for the submission (D-096).** Goal to proposed parent pairs; voice input; 3-parent family trees | A goal request produces 3 sensible pairs and one finished creature |
+| 7 | API, streaming, deploy | **R1 built the API host-neutral (one FastAPI app, SSE, background runs, Supabase persistence; D-096, D-099); deploy is R2.** | Deployed endpoint streams a live run |
+| 8 | Frontend integration | **R1 built it against the contract and tested it end to end in mock mode (D-099).** The redesigned graph UI runs the agent: trace panel, card, Can-it-live panel, anatomy map, variants | A full run from the UI, recorded |
 | 9 | Hardening and merge | End-to-end live runs, failure handling, owner review, evo merged to main, README, a log of what was built during the hackathon | Owner approves the merge |
 | 10 | Demo and launch | Showcase creatures, a 3-minute video, X post, gallery submission with prize flags | Submitted before Nov 4, 9 PM Eastern |
 

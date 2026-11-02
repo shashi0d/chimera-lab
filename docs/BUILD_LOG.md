@@ -479,3 +479,30 @@ Read `docs/evolution/ROADMAP.md` (now committed) sections 4, 5 and 5b. Caps for 
 - **Budget counter over S5:** image 162→211, Meta Spark 637→747, SAM 161→340, Spark Open 1061→1423.
 - **Tests:** 956 passed, 6 skipped (25 tests in `test_s5.py`); ruff clean.
 - **The engine is frozen for the demo.**
+
+## 2026-11-01 to 11-02: R1 Parallel build toward submission (evo)
+
+**Plan:** step 0 (contract and fixtures, `990703e`), then three parallel streams on git worktrees, then a lead merge.
+The three streams launched from the owner's laptop never reached GitHub, so they were rerun in this session as
+three parallel subagents (r1-api, r1-ui, r1-docs), each confined to its folder, in mock mode with API keys stripped
+from every command.
+
+**Built:**
+- **Stream A (backend):** the agent run API (8 endpoints), SSE event store with resume, job runner, caps, queue,
+  rate limit, uploads and identify, creature store, showcase gallery, one-origin serving, Supabase migration,
+  deploy checklist with a host comparison. 38 new tests.
+- **Stream B (frontend):** gallery first screen, agent Fusion node, live trace panel, creature card with anatomy
+  overlay and both picks, every needs_choice, refusal, cap and error state, mock transport per fixture; v1 fusion
+  path removed from the UI. 40 Playwright tests; 60 reviewed screenshots (12 defects found and fixed).
+- **Stream C (docs):** README rewrite (now the root README), built-during-the-hackathon log, two Mermaid diagrams,
+  3-minute video script (pending the owner's ratings), form text, X post.
+- **Lead:** contract 1.1; S5 limit-4 correction; merged the owner's own S5 host-tie fix (7 of 11, not 6) and carried
+  it into the submission docs; a 15-test end-to-end suite from the built UI through the real backend in mock mode;
+  the Chimera palette (D-098); D-097 to D-099.
+
+**Problems:** the container restarted mid-run and stopped Stream B; its committed work survived and it resumed from
+its transcript. One axe test failed once on a cold start and passed on two reruns (flaky, noted).
+
+**Tests:** backend 997 passed, 6 skipped; frontend 189 passed; Playwright 40 passed; end-to-end 15 passed;
+check-css and check-bundle pass. Report: `docs/R1_REPORT.md`.
+

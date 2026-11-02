@@ -60,7 +60,7 @@ function Hero({ c }: { c: Creature }) {
           <img className="creature__img" src={evo().imageUrl(src)} alt={overlay ? t.overlayAlt(c.title) : copy.labels.alt(c.title)} />
         </div>
         <figcaption className="creature__cap">
-          <Pill tone="indigo">
+          <Pill tone="brand">
             <Icon name="leaf" size={12} /> {c.generatedLabel || copy.labels.generated}
           </Pill>
           <span className="creature__cap-text">{overlay ? t.overlayCaption : t.notReal}</span>

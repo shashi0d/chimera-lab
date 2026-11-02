@@ -1,5 +1,9 @@
 # Chimera Lab U1 design: ZD
 
+> **R1 update (D-098):** the ZD backbone (token names, type, spacing, radius, shadows, motion, components) stays, but
+> every colour is now the Chimera palette: teal brand, warm graphite ink, amber donor B. Colour values quoted below
+> are the original ZD ones and are historical.
+
 U1 replaces the "Field paper" identity (docs/DESIGN.md, kept for history) with the ZD design system (`docs/design-system/ZD.md`, `zd-tokens.css`). The visual language changes, the behaviour doesn't:
 - **Unchanged:** backend, API contracts, node registry, test hooks and the state matrix.
 - **Changed:** what a node is, where controls live, and how a result explains itself.

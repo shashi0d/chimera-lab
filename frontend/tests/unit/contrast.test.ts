@@ -105,7 +105,7 @@ const PAIRS: Array<[string, string, number]> = [
   ["text-strong", "ground", 4.5],
   ["text-body", "ground", 4.5], // anything read on the ground (save state, zoom value)
   ["accent-text", "surface-card", 4.5],
-  ["accent-text", "tint-indigo/surface-card", 4.5], // "Generated fusion", running status
+  ["accent-text", "tint-brand/surface-card", 4.5], // "Generated fusion", running status
   ["info-text", "tint-info/surface-card", 4.5], // real-hybrid pill
   ["warning-text", "surface-card", 4.5],
   ["warning-text", "tint-warning/surface-card", 4.5], // warnings, "Unverified"
@@ -115,7 +115,7 @@ const PAIRS: Array<[string, string, number]> = [
   ["danger-text-aa", "tint-danger/surface-card", 4.5], // error status
   ["text-strong", "tint-warning/surface-card", 4.5],
   ["text-strong", "tint-danger/surface-card", 4.5],
-  ["white", "indigo-600", 4.5], // Fuse and every primary button
+  ["white", "brand-600", 4.5], // Fuse and every primary button
   ["toast-text-aa", "toast-bg-aa", 4.5], // toasts, tooltips, offline banner
   ["text-strong", "donor-a-fill", 4.5], // pinned body regions
   ["text-strong", "donor-b-fill", 4.5],
@@ -133,26 +133,33 @@ const UI_PAIRS: Array<[string, string, number]> = [
 describe.each([
   ["light", light],
   ["dark", dark],
-])("WCAG AA contrast, %s theme (ZD.md §3)", (_name, v) => {
+])("WCAG AA contrast, %s theme (Chimera palette, D-098)", (_name, v) => {
   it.each([...PAIRS, ...UI_PAIRS])("%s on %s ≥ %s", (fg, bg, min) => {
     expect(ratio(surface(v, fg), surface(v, bg))).toBeGreaterThanOrEqual(min);
   });
 });
 
-describe("ZD tokens are used as shipped", () => {
-  it("theme.css contains zd-tokens.css verbatim", () => {
-    expect(css.includes(zd)).toBe(true);
+describe("ZD backbone with the Chimera palette (D-098)", () => {
+  // Non-colour ZD tokens (type, spacing, layout, radius, blur, motion) are kept exactly; colours are Chimera's own.
+  const zdRoot: Vars = {};
+  for (const m of zd.split('[data-theme="dark"]')[0]!.matchAll(/--([\w-]+):\s*([^;]+);/g)) zdRoot[m[1] as string] = (m[2] as string).trim();
+  const backbone = Object.keys(zdRoot).filter((k) => /^(font-|type-|tracking-|space-|page-|sidebar-|header-|drawer-|radius-|blur-|ease-|dur-)/.test(k));
+
+  it("keeps every ZD type, spacing, layout, radius, blur and motion token unchanged", () => {
+    expect(backbone.length).toBeGreaterThan(40);
+    for (const k of backbone) expect(light[k], k).toBe(zdRoot[k]);
   });
 
-  it("the -aa deviations are needed: ZD's own values miss 4.5:1 in light", () => {
-    expect(ratio(surface(light, "success-text"), surface(light, "surface-card"))).toBeLessThan(4.5);
-    expect(ratio(surface(light, "danger-text"), surface(light, "tint-danger/surface-card"))).toBeLessThan(4.5);
-    expect(ratio(surface(dark, "white"), surface(dark, "ink-900"))).toBeLessThan(4.5);
+  it("keeps every ZD token name (the palette changes values, not the vocabulary), apart from indigo renamed to brand", () => {
+    const renamed = (k: string) => k.replace(/^indigo-/, "brand-").replace(/^tint-indigo$/, "tint-brand").replace(/^cat-indigo$/, "cat-brand");
+    for (const k of Object.keys(zdRoot)) expect(light[renamed(k)], k).toBeDefined();
   });
 
-  it("dark keeps ZD's text values", () => {
-    expect(resolveVar(dark, "var(--success-text-aa)")).toBe(resolveVar(dark, "var(--success-text)"));
-    expect(resolveVar(dark, "var(--danger-text-aa)")).toBe(resolveVar(dark, "var(--danger-text)"));
+  it("uses none of ZD's colour values", () => {
+    const tokenBlock = css.slice(css.indexOf("/* >>> ZD backbone"), css.indexOf("/* <<< ZD backbone end */"));
+    for (const hex of ["#6a63f5", "#5a53e6", "#4b45c9", "#1b1d29", "#4a4d62", "#6b6e82", "#3f7fe6", "#1f9d6b", "#df5a63", "#2a9bb0", "#1b1d2e"]) {
+      expect(tokenBlock.toLowerCase(), hex).not.toContain(hex);
+    }
   });
 
   it("every -aa token is defined in both themes", () => {

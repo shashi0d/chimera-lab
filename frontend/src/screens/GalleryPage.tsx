@@ -27,7 +27,7 @@ function Card({ item }: { item: GalleryItem }) {
             <img className="gcard__img" src={evo().imageUrl(item.imageUrl)} alt={copy.labels.alt(item.title)} loading="lazy" onError={() => setBroken(true)} />
           )}
           <span className="gcard__label">
-            <Pill tone="indigo">
+            <Pill tone="brand">
               <Icon name="leaf" size={12} /> {copy.labels.generated}
             </Pill>
           </span>

@@ -34,8 +34,8 @@ in `docs/evolution/`. Times below are US Eastern (the deadline's time zone), con
 - `data/chimera_data.json` carries `"built": "2026-10-28"` and `"from": "Muse final.json (Tier 2 script data + Tier
   11 research), cleaned by Claude"` in its `meta` block, with four cleaning passes dated 2026-10-28. It entered git
   on Oct 30 in `d60ca90` (D1).
-- When "Muse final.json" itself was gathered is not recorded in the repo: **unknown**. The file it refers to
-  (`chimera_info.md`) is not in the repo.
+- "Muse final.json" and the dataset were produced during the event (owner, D-097); the building period started
+  Oct 27. The file it refers to (`chimera_info.md`) is not in the repo.
 
 ### Oct 29, 10:19 PM to Oct 30, 12:03 AM: v1 app (branch `main`)
 
@@ -87,11 +87,14 @@ Clocks changed from EDT to EST at 2 AM on Nov 1, so the commit offsets change fr
 | `ed64cd9` to `9ec64e1` | S5 | Material-only operation, finalize reason, one schema per plan operation; the anatomy map; the frozen 11-case benchmark; 22 live creatures (`d6b5d8f` to `3d0b519`); blind owner review sheet | `docs/evolution/S5_BENCHMARK.md` |
 | `990703e` | R1 step 0 | API contract and fixtures for the submission build; owner decisions D-096 | `docs/api_contract.md` |
 
-### Nov 1 onward: R1, the submission build (in progress)
+### Nov 1 to Nov 2: R1, the submission build (branch `evo`)
 
-Three parallel streams on branches `r1-api` (backend), `r1-ui` (frontend) and `r1-docs` (these documents), each
-based on `evo` at `990703e`. Their commits will be listed here by the lead at merge. Nothing from R1 was merged at
-the time of writing.
+- Step 0, contract and fixtures: `990703e` (Nov 1, 5:24 PM).
+- Stream A, backend agent API: `57d212a` to `ffc1b02`, merged in `1ca1c01`.
+- Stream C, these submission documents: `f350c02`, merged in `a4b208f`.
+- Stream B, the gallery-first UI and live trace: `6eea3d4` to `26ad328`, merged in `1e9118c`.
+- Lead: contract 1.1 and the S5 correction (`ac9184d`); the end-to-end suite (`7631f1f`); the Chimera palette, the
+  README move and the R1 report (the R1 lead commit after `7631f1f`). Details: `docs/R1_REPORT.md`.
 
 ## What the demo may show
 
@@ -104,10 +107,10 @@ repo (U1, `71a091b`). The owner should confirm the ZD question below before the 
 
 | Item | Where in the repo | Origin | When | Licence |
 |---|---|---|---|---|
-| Animal dataset: 200 animals, 1,778 tier-2 animals, 5,827 measurements, 31 hybrids, 254 mythology rows, 130 rules | `data/chimera_data.json` | Owner's research data; its `meta` says built from "Muse final.json", cleaned by Claude. Per-row source URLs point to animaldiversity.org (638 URLs), api.gbif.org (1,978), zenodo.org record 6468938 (5,540) and en.wikipedia.org (381) | Built Oct 28 (its metadata); committed Oct 30 (`d60ca90`) | **Unknown.** The file states no licence. The licences of Animal Diversity Web, GBIF records, the Zenodo record and Wikipedia text as used here have not been checked. Which dataset Zenodo record 6468938 is has not been confirmed in the repo. |
-| Research docs R1 to R10, RESEARCH_SUMMARY, ALGORITHM v1 | `docs/evolution/research/`, `docs/evolution/ALGORITHM.md` | Supplied by the owner ("The docs were already in docs/evolution/", BUILD_LOG E1). They cite third-party papers and pages by URL; `scripts/verify_research.py` checks the links | Headers say "first pass (Oct 31, 2026)"; committed Oct 31 (`98d4d8c`); R10 placed Nov 1 (`6e47b91`) | The docs: the owner's own (to confirm). How they were written is not recorded in the repo: **unknown**. The cited works keep their own copyrights. |
+| Animal dataset: 200 animals, 1,778 tier-2 animals, 5,827 measurements, 31 hybrids, 254 mythology rows, 130 rules | `data/chimera_data.json` | Owner's research data; its `meta` says built from "Muse final.json", cleaned by Claude. Per-row source URLs point to animaldiversity.org (638 URLs), api.gbif.org (1,978), zenodo.org record 6468938 (5,540) and en.wikipedia.org (381) | Built Oct 28 (its metadata); committed Oct 30 (`d60ca90`) | The owner confirms the derived file may be public (D-097). The file states no licence of its own; the licences of the cited sources (Animal Diversity Web, GBIF, Zenodo record 6468938, Wikipedia) apply to their own content. |
+| Research docs R1 to R10, RESEARCH_SUMMARY, ALGORITHM v1 | `docs/evolution/research/`, `docs/evolution/ALGORITHM.md` | Supplied by the owner ("The docs were already in docs/evolution/", BUILD_LOG E1). They cite third-party papers and pages by URL; `scripts/verify_research.py` checks the links | Headers say "first pass (Oct 31, 2026)"; committed Oct 31 (`98d4d8c`); R10 placed Nov 1 (`6e47b91`) | The owner's own, produced during the event (D-097). The cited works keep their own copyrights. |
 | Owner's planning script and review notes | `scripts/plan_evolution_sim.py`, `docs/evolution/benchmark/s3a_owner_review.md` | The owner | Placed Nov 1 (`6e47b91`) | The owner's own |
-| ZD design system tokens (183 tokens) and usage notes | `docs/design-system/zd-tokens.css`, `docs/design-system/ZD.md`; pasted verbatim into `frontend/src/styles/theme.css` (D-045) | `ZD.md`: exported from the Claude Design project `ZeroDistanceCMSDesignSystem_3e5a47` (`ZeroDistance_Dashboard.html`). Tokens only; the component code was written here | The export date is **unknown**. Committed Oct 30, 8:14 PM (`71a091b`) | **Unknown.** Whether it may be public is an open question for the owner. |
+| ZD design system tokens (183 tokens) and usage notes | `docs/design-system/zd-tokens.css`, `docs/design-system/ZD.md`; its backbone used in `frontend/src/styles/theme.css` (D-045; colours replaced in R1, D-098) | `ZD.md`: exported from the Claude Design project `ZeroDistanceCMSDesignSystem_3e5a47` (`ZeroDistance_Dashboard.html`). Tokens only; the component code was written here | Committed Oct 30, 8:14 PM (`71a091b`) | The owner's own work (D-097). Since R1 the app keeps only its backbone (names, type, spacing, radius, motion); every colour is the Chimera palette (D-098). |
 | Fonts: Space Grotesk, Hanken Grotesk, JetBrains Mono (woff2) | `frontend/public/fonts/` | `@fontsource/*` npm packages | Third party | OFL-1.1 (from the packages' `package.json`) |
 | React Flow structural CSS | vendored into `theme.css` (D-010) | `@xyflow/react` | Third party | MIT (package metadata) |
 | SAM mask parser `meta-sam-parser==0.1.0` | `backend/requirements.txt` | Meta; decodes SAM 3.1 masks (E2). Installed with the owner's approval (BUILD_LOG E2) | Third party | "SAM License" (package metadata). `backend/app/evolution/live.py` notes it forbids reverse engineering the mask format, which is why the package is used |

@@ -543,3 +543,52 @@ also confirms that each one passes once its plan_reason names the legs.
 - **Process:** `docs/api_contract.md` and `docs/api_fixtures/` are the lead's (changes go through the lead). Three
   streams work in parallel on git worktrees (r1-api: backend/, r1-ui: frontend/, r1-docs: docs/submission/). Each
   writes its notes to `docs/r1/`.
+
+**D-097 Owner answers during R1 (Nov 1).**
+- **Dataset:** may be public (`data/chimera_data.json` and its derived files).
+- **ZD design system:** the owner's own work. Keep its backbone (token names, type scale, spacing, radius, shadow
+  shapes, motion, components); replace every colour with a new palette (D-098).
+- **Timing:** the dataset source and the research docs were produced during the event only, so nothing needs
+  declaring as pre-existing.
+- **Pitch:** the impact framing stays as Stream C wrote it.
+- Problem-statement wording, which prizes to flag and whether to mention the Claude Code-assisted build stay with
+  the owner (not lead decisions).
+
+**D-098 The Chimera palette replaces the ZD colours.**
+- **What changed:** every colour value in the token block (light and dark): the ink ramp is a warm graphite
+  (`#1a201d` to `#e6eae3`), the brand ramp is teal (`--brand-500 #0f8478`, Fuse on `--brand-600 #0b6e64`, 6.1:1
+  under white), and status, category, tint, ground, gradient, scrim, focus and shadow-tint colours are retuned to
+  match. `--indigo-*`, `--tint-indigo` and `--cat-indigo` are renamed `--brand-*`, `--tint-brand` and `--cat-brand`
+  so names match colours; the `indigo` pill tone is now `brand`.
+- **Donor B is amber** (`--cat-amber`, light `#b8621a`, dark `#d9822f`) instead of teal, so it no longer reads as the
+  brand; donor A stays blue. This matches the engine's anatomy map (host blue, donor orange).
+- **What stayed:** every ZD type, spacing, layout, radius, blur and motion token, every token name apart from the
+  rename above, the components and their structure. `contrast.test.ts` now checks that backbone is unchanged
+  and that no ZD colour value remains, instead of checking ZD verbatim.
+- **AA tokens:** the palette passes 4.5:1 natively in both themes, so `--success-text-aa` and `--danger-text-aa`
+  alias the status text colours; the toast pair still flips in dark. All 27 contrast pairs pass in both themes;
+  axe stays at 0 serious or critical.
+- Supersedes the "ZD values never edited" rule in D-045 and D-046.
+
+**D-099 R1 build (merged from the stream notes, `docs/r1/`).**
+- **API (Stream A, `docs/r1/api_notes.md`):** a new package `backend/app/agentapi/` around the frozen engine (no
+  file in `backend/app/evolution/` changed). In-process job runner with a heartbeat lease (D-016), a concurrent
+  limit with a queue, choices with a 120 s expiry, a 14-minute soft and 15-minute hard stop; fixtures replay
+  through the real runner, event store and SSE path (`X-Mock-Scenario`). Uploads are sniffed by content, resized to
+  1024 px and never stored. One process and one worker per deploy, because choices and live wake-ups are in
+  process. Supabase migration `001_agent_api.sql` adds `agent_runs` and a public `chimera-public` bucket (writes
+  only with the service key); not yet run against a live project.
+- **Contract 1.1:** Stream A's six clarifications (queue `ahead`, three extra mock scenarios, one `needs_choice`
+  kind, one live identify option, 413 before parsing, envelope nulls).
+- **UI (Stream B, `docs/r1/ui_notes.md`):** query-string routes on `/` (`?view=lab`, `?run=`, `?creature=`) so no
+  client route collides with the API; the event stream is read with `fetch` (EventSource cannot send
+  `X-Session-Id`) and resumes with `Last-Event-ID` and `?after=`; a fixture-backed mock transport for dev and
+  tests, kept out of the production bundle; photos stay on the device until a run starts; the mock adds one
+  constructed both-picks creature (`crt_mock_b10_split`), labelled as constructed, because no fixture has
+  `agree: false`.
+- **Docs (Stream C, `docs/r1/docs_notes.md`):** submission documents in `docs/submission/`; the README moved to the
+  root. Stream C found that S5 known limit 4 was wrong for b03 (the plan picks the eagle's head); corrected in
+  `S5_BENCHMARK.md`.
+- **Visual baselines:** the v1 pixel baselines were removed with the v1 UI; the 60 reviewed screenshots in
+  `docs/r1/ui_shots/` stand in until the UI settles.
+

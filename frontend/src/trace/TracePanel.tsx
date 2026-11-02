@@ -94,7 +94,7 @@ function ResultSummary({ run }: { run: DerivedRun }) {
       <figure className="result-sum__figure">
         <img className="result-sum__img" src={evo().imageUrl(fin.imageUrl)} alt={copy.labels.alt(creature?.title ?? title(run))} />
         <figcaption className="result-sum__cap">
-          <Pill tone="indigo">
+          <Pill tone="brand">
             <Icon name="leaf" size={12} /> {creature?.generatedLabel ?? copy.labels.generated}
           </Pill>
           {creature?.realHybrid ? (

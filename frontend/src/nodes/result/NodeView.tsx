@@ -138,7 +138,7 @@ export function ResultView({ node, selected }: NodeViewProps<ResultConfig, Resul
       {version && cardRoute ? (
         <>
           <div className="result-node__pills">
-            <Pill tone="indigo">
+            <Pill tone="brand">
               <Icon name="leaf" size={12} /> {t.generated}
             </Pill>
             {creature.data?.realHybrid ? (
