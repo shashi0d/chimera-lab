@@ -3,6 +3,7 @@ import { absoluteUrl, baseHeaders, request } from "../api/client";
 import { Button } from "../ui/Button";
 import { StudioCanvas, type StudioVersion as Version } from "./StudioCanvas";
 import { RegionEditor } from "./RegionEditor";
+import { StudioCollaborator } from "./StudioCollaborator";
 
 type Review = { observation: string; suggestions: string };
 type Job = { id: string; operation: string; status: string; stage: string; result: Version | null; error: string | null };
@@ -78,12 +79,12 @@ export function Studio() {
     } catch (e) { setError(e instanceof Error ? e.message : "Could not create the concept."); }
     finally { setBusy(false); }
   }
-  async function revise() {
+  async function revise(instruction: string = edit) {
     if (!current) return;
     setBusy(true); setError("");
     try {
       const { data } = await request<Job>(`/evo/studio/versions/${encodeURIComponent(current.id)}/revise?background=1`, {
-        method: "POST", headers: baseHeaders({ "Content-Type": "application/json" }), body: JSON.stringify({ instruction: edit }),
+        method: "POST", headers: baseHeaders({ "Content-Type": "application/json" }), body: JSON.stringify({ instruction }),
       });
       setJobs((old) => [data, ...old.filter((job) => job.id !== data.id)]); setEdit("");
     } catch (e) { setError(e instanceof Error ? e.message : "Could not revise the draft."); }
@@ -147,6 +148,7 @@ export function Studio() {
         {current && <>
           <p className="studio__instruction"><strong>{current.parentId ? "Revision" : "Your brief"}:</strong> {current.instruction}</p>
           {current.direction && <details><summary>See the collaborator’s direction</summary><p>{current.direction}</p></details>}
+          <StudioCollaborator key={current.id} versionId={current.id} disabled={working} onReview={() => void askForReview()} onRevise={(instruction) => void revise(instruction)} />
           <div className="studio__review">
             <h3>Creative review</h3>
             <p>Ask the collaborator to look at this version and suggest possible next steps. You decide what to change.</p>

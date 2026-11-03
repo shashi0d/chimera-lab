@@ -146,3 +146,29 @@ async def test_painted_edit_preserves_unpainted_pixels_and_next_edit_uses_compos
     revised = await client.post(f"/evo/studio/versions/{child['id']}/revise", json={"instruction": "More texture"})
     assert revised.status_code == 201
     assert calls[2] == ([merged], None)
+
+
+async def test_collaborator_proposes_action_without_running_it(client, monkeypatch):
+    from app.agentapi import studio
+    calls = []
+
+    class Renderer:
+        async def generate(self, prompt, refs, aspect, previous_response_id=None):
+            calls.append(prompt)
+            return GeneratedImage(image_bytes("red"), "image/png", "test", "response")
+
+    async def fake_plan(settings, brief, selected_instruction, conversation):
+        assert brief == "Eight spider legs"
+        assert conversation[-1]["content"] == "Make the legs longer"
+        return {"message": "Let's try this.", "action": {"type": "revise", "reason": "Your request", "instruction": "Longer legs"}}
+
+    client.app.state.services.image_gen = Renderer()
+    monkeypatch.setattr(studio, "plan_collaboration", fake_plan)
+    concept = await client.post("/evo/studio/concept", data={"animal1": "monkey", "animal2": "spider", "brief": "Eight spider legs"})
+    version = concept.json()
+    answer = await client.post(f"/evo/studio/versions/{version['id']}/collaborate", json={"messages": [{"role": "user", "content": "Make the legs longer"}]})
+    assert answer.status_code == 200
+    assert answer.json()["action"]["instruction"] == "Longer legs"
+    assert len(calls) == 1
+    denied = await client.post(f"/evo/studio/versions/{version['id']}/collaborate", json={"messages": [{"role": "user", "content": "Change it"}]}, headers={"X-Session-Id": "other-session-1"})
+    assert denied.status_code == 404

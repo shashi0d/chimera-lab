@@ -139,6 +139,98 @@ async def version_image(a: Any, doc: dict[str, Any]) -> bytes:
     return await a.files.get(key)
 
 
+async def root_version(a: Any, selected: dict[str, Any], visitor: str) -> dict[str, Any]:
+    root = selected
+    seen: set[str] = set()
+    while root.get("parentId"):
+        parent_id = str(root["parentId"])
+        if parent_id in seen or len(seen) >= 100:
+            raise _err(ErrorCode.VALIDATION_FAILED, "This draft's history is invalid.", 422)
+        seen.add(parent_id)
+        root = await get_version(a, parent_id, visitor)
+    return root
+
+
+async def plan_collaboration(settings: Any, brief: str, selected_instruction: str,
+                             conversation: list[dict[str, str]]) -> dict[str, Any]:
+    """Choose an available workspace action; proposing it does not execute it."""
+    if settings.chimera_mode == "mock":
+        last = conversation[-1]["content"]
+        return {"message": "I can turn that into a revision of the selected draft.",
+                "action": {"type": "revise", "instruction": last, "reason": "Follow your direction."}}
+    from app.adapters.baseten.client import BasetenEvoSpark
+    brain = BasetenEvoSpark(settings)
+    tools = [
+        {"type": "function", "function": {"name": "propose_revision", "description": "Propose one editable image revision for the selected draft; never run it yourself.",
+         "parameters": {"type": "object", "properties": {"instruction": {"type": "string"}, "reason": {"type": "string"}}, "required": ["instruction", "reason"], "additionalProperties": False}}},
+        {"type": "function", "function": {"name": "propose_review", "description": "Suggest visually reviewing the selected draft when observation would help.",
+         "parameters": {"type": "object", "properties": {"reason": {"type": "string"}}, "required": ["reason"], "additionalProperties": False}}},
+    ]
+    prompt = ("You are a creative collaborator in Chimera Lab. The user directs an imaginary creature. "
+              "The selected image is not visible to you; do not claim you saw it. You may propose one available action "
+              "using the tools, or respond conversationally or ask a clarifying question. Never change the user's explicit "
+              "anatomy or assert biological rules. A proposed action will be shown for the user to edit and run. "
+              "For a request to visually inspect the image, propose_review. For a concrete visual change, propose_revision. "
+              "If the user mentions painting an area, explain they should use the paint tool; you cannot paint a mask.\n"
+              + json.dumps({"original_brief": brief, "selected_draft_instruction": selected_instruction}, ensure_ascii=False))
+    response = await brain.chat("studio_collaborate", {"messages": [{"role": "system", "content": prompt}, *conversation],
+                                                       "tools": tools, "tool_choice": "auto", "max_tokens": 4096})
+    choice = (response.get("choices") or [{}])[0]
+    message = choice.get("message") or {}
+    calls = message.get("tool_calls") or []
+    if len(calls) > 1 or (calls and choice.get("finish_reason") not in (None, "tool_calls")):
+        raise _err(ErrorCode.UPSTREAM_ERROR, "The collaborator returned too many actions. Please try again.", 502)
+    text = str(message.get("content") or "").strip()[:3000]
+    if not calls:
+        if not text or choice.get("finish_reason") not in (None, "stop"):
+            raise _err(ErrorCode.UPSTREAM_ERROR, "The collaborator did not finish its response. Please try again.", 502)
+        return {"message": text, "action": None}
+    fn = calls[0].get("function") or {}
+    try:
+        args = json.loads(fn.get("arguments") or "{}")
+    except (ValueError, TypeError) as exc:
+        raise _err(ErrorCode.UPSTREAM_ERROR, "The collaborator returned an invalid action. Please try again.", 502) from exc
+    if not isinstance(args, dict) or not isinstance(args.get("reason"), str) or not args["reason"].strip():
+        raise _err(ErrorCode.UPSTREAM_ERROR, "The collaborator returned an invalid action. Please try again.", 502)
+    reason = args["reason"].strip()[:500]
+    if fn.get("name") == "propose_revision" and isinstance(args.get("instruction"), str) and args["instruction"].strip():
+        action = {"type": "revise", "instruction": args["instruction"].strip()[:2000], "reason": reason}
+    elif fn.get("name") == "propose_review":
+        action = {"type": "review", "reason": reason}
+    else:
+        raise _err(ErrorCode.UPSTREAM_ERROR, "The collaborator returned an unsupported action. Please try again.", 502)
+    return {"message": text or "Here's a possible next step for this draft.", "action": action}
+
+
+@router.post("/versions/{version_id}/collaborate")
+async def collaborate(version_id: str, request: Request) -> JSONResponse:
+    a = api(request)
+    visitor, ip = _visitor(request, a)
+    a.caps.rate_limit(ip)
+    await a.caps.check(visitor)
+    selected = await get_version(a, version_id, visitor)
+    try:
+        body = await request.json()
+    except ValueError as exc:
+        raise _err(ErrorCode.VALIDATION_FAILED, "Send a message to the collaborator.", 422) from exc
+    messages = body.get("messages") if isinstance(body, dict) else None
+    if not isinstance(messages, list) or not 1 <= len(messages) <= 12:
+        raise _err(ErrorCode.VALIDATION_FAILED, "Send between one and twelve conversation messages.", 422)
+    conversation = []
+    for item in messages:
+        if not isinstance(item, dict) or item.get("role") not in ("user", "assistant") or not isinstance(item.get("content"), str) or not 1 <= len(item["content"].strip()) <= 2000:
+            raise _err(ErrorCode.VALIDATION_FAILED, "Each message must contain up to 2,000 characters.", 422)
+        conversation.append({"role": item["role"], "content": item["content"].strip()})
+    if conversation[-1]["role"] != "user":
+        raise _err(ErrorCode.VALIDATION_FAILED, "The last message must be yours.", 422)
+    root = await root_version(a, selected, visitor)
+    await a.caps.take(visitor)
+    async with request.app.state.studio_slots:
+        result = await plan_collaboration(a.settings, str(root.get("instruction") or ""),
+                                          str(selected.get("instruction") or ""), conversation)
+    return JSONResponse(result, headers={"Cache-Control": "no-store"})
+
+
 def composite_region(original: bytes, candidate: bytes, mask: bytes) -> bytes:
     """Blend inside the painted alpha only. All pixels outside that alpha remain unchanged."""
     try:
@@ -205,14 +297,7 @@ async def review(version_id: str, request: Request) -> JSONResponse:
     a.caps.rate_limit(ip)
     await a.caps.check(visitor)
     selected = await get_version(a, version_id, visitor)
-    root = selected
-    seen: set[str] = set()
-    while root.get("parentId"):
-        parent_id = str(root["parentId"])
-        if parent_id in seen or len(seen) >= 100:
-            raise _err(ErrorCode.VALIDATION_FAILED, "This draft's history is invalid.", 422)
-        seen.add(parent_id)
-        root = await get_version(a, parent_id, visitor)
+    root = await root_version(a, selected, visitor)
     image = await version_image(a, selected)
     await a.caps.take(visitor)
     async with request.app.state.studio_slots:

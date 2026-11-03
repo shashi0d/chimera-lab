@@ -1,0 +1,8 @@
+{
+  "message": "Here's a possible next step for this draft.",
+  "action": {
+    "type": "revise",
+    "instruction": "Remove any extra spider face/chelicerae at the transition and make the junction between the monkey upper body and spider abdomen organic and seamless, keeping all eight spider legs clearly attached to the spider hips/abdomen",
+    "reason": "To clean up the unwanted spider facial features and create a more natural, seamless transition as requested while retaining the core hybrid anatomy of monkey upper body with eight spider legs."
+  }
+}
