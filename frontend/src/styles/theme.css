@@ -1962,4 +1962,5 @@ p.image-node__banner { display: flex; align-items: flex-start; gap: var(--space-
 .studio__version img { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 5px; }
 .studio__version span { display: block; padding: 5px 2px; font-size: 11px; }
 .studio__error { padding: 12px; border: 1px solid #b84343; border-radius: 8px; color: #a52828 !important; }
+.studio__job { padding: 12px; border: 1px solid var(--indigo-500); border-radius: 8px; font-size: 13px; }
 @media (max-width: 800px) { .studio { padding: 28px 16px 60px; } .studio__layout { grid-template-columns: 1fr; } .studio__canvas { min-height: 260px; } }

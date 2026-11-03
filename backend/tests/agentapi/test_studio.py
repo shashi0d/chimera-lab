@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import io
+import asyncio
 
 from PIL import Image
 
@@ -78,3 +79,41 @@ async def test_saved_history_and_review_use_the_selected_image_and_original_brie
     assert all("responseId" not in v for v in history.json()["versions"])
     other = await client.get("/evo/studio/versions", headers={"X-Session-Id": "other-session-1"})
     assert other.json()["versions"] == []
+
+
+async def test_background_generation_survives_request_and_can_be_recovered(client):
+    started, release = asyncio.Event(), asyncio.Event()
+
+    class SlowRenderer:
+        async def generate(self, prompt, refs, aspect, previous_response_id=None):
+            started.set()
+            await release.wait()
+            return GeneratedImage(image_bytes("blue"), "image/png", "test", "response-background")
+
+    client.app.state.services.image_gen = SlowRenderer()
+    response = await client.post("/evo/studio/concept?background=1", data={"animal1": "monkey", "animal2": "spider", "brief": "Eight legs"})
+    assert response.status_code == 202
+    await asyncio.wait_for(started.wait(), 2)
+    running = (await client.get("/evo/studio/jobs")).json()["jobs"]
+    assert running[0]["id"] == response.json()["id"]
+    assert running[0]["status"] == "running"
+    assert running[0]["stage"] == "Generating your concept"
+    other = await client.get("/evo/studio/jobs", headers={"X-Session-Id": "other-session-1"})
+    assert other.json()["jobs"] == []
+    release.set()
+    await asyncio.wait_for(client.app.state.studio_tasks[response.json()["id"]], 2)
+    done = (await client.get("/evo/studio/jobs")).json()["jobs"][0]
+    assert done["status"] == "succeeded"
+    assert done["result"]["instruction"] == "Eight legs"
+    assert (await client.get(done["result"]["imageUrl"])).status_code == 200
+
+
+async def test_orphaned_local_job_reports_interruption(client):
+    # Persist a job that no longer has a running task, as after a server restart.
+    request = client.build_request("GET", "/evo/studio/jobs")
+    from app.agentapi.caps import visitor_key
+    visitor = visitor_key(request.headers["x-session-id"], "127.0.0.1")
+    await client.app.state.services.db.put("assets", "studiojob_orphan", {
+        "id": "studiojob_orphan", "kind": "studio_job", "visitor": visitor, "status": "running", "createdAt": "2026-01-01"})
+    result = (await client.get("/evo/studio/jobs")).json()["jobs"]
+    assert result[0]["status"] == "interrupted"

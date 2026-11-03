@@ -3,6 +3,8 @@ from __future__ import annotations
 
 import asyncio
 import json
+import logging
+from collections.abc import Awaitable, Callable
 from typing import Any
 
 from fastapi import APIRouter, Request
@@ -13,9 +15,70 @@ from app.agentapi import uploads as U
 from app.agentapi.files import EXT
 from app.agentapi.routes import _clean_name, _err, _visitor, api
 from app.models.schemas import ErrorCode
+from app.errors import ChimeraError
 from app.util import new_id, now_iso
 
 router = APIRouter(prefix="/evo/studio", tags=["studio"])
+log = logging.getLogger(__name__)
+
+
+def public_job(doc: dict[str, Any]) -> dict[str, Any]:
+    return {k: doc.get(k) for k in ("id", "operation", "status", "stage", "createdAt", "updatedAt", "result", "error")}
+
+
+async def start_background(request: Request, visitor: str, operation: str,
+                           work: Callable[[Callable[[str], Awaitable[None]]], Awaitable[dict[str, Any]]]) -> JSONResponse:
+    """Keep a paid operation alive independently of its initiating HTTP connection."""
+    a = api(request)
+    job_id = new_id("studiojob")
+    doc: dict[str, Any] = {"id": job_id, "kind": "studio_job", "visitor": visitor, "operation": operation,
+                           "status": "queued", "stage": "Waiting for a workspace slot", "createdAt": now_iso(),
+                           "updatedAt": now_iso(), "result": None, "error": None}
+
+    async def save(**fields: Any) -> None:
+        doc.update(fields, updatedAt=now_iso())
+        await a.services.db.put("assets", job_id, doc)
+
+    async def stage(message: str) -> None:
+        await save(status="running", stage=message)
+
+    async def run() -> None:
+        try:
+            async with request.app.state.studio_slots:
+                await stage("Starting")
+                result = await work(stage)
+                await save(status="succeeded", stage="Ready", result=result)
+        except asyncio.CancelledError:
+            await save(status="interrupted", stage="Interrupted", error="The server stopped while this was running. Please try again.")
+            raise
+        except ChimeraError as exc:
+            await save(status="failed", stage="Failed", error=exc.message)
+        except Exception:
+            log.exception("Studio job %s failed", job_id)
+            await save(status="failed", stage="Failed", error="The operation failed. Please try again.")
+        finally:
+            request.app.state.studio_tasks.pop(job_id, None)
+
+    await save()
+    task = asyncio.create_task(run(), name=job_id)
+    request.app.state.studio_tasks[job_id] = task
+    return JSONResponse(public_job(doc), status_code=202)
+
+
+@router.get("/jobs")
+async def jobs(request: Request) -> JSONResponse:
+    a = api(request)
+    visitor, _ = _visitor(request, a)
+    docs = [d for d in await a.services.db.list("assets", "visitor", visitor) if d.get("kind") == "studio_job"]
+    # Local storage is single-process. A nonterminal job missing from this process was interrupted by a restart.
+    if a.services.local_backend:
+        for doc in docs:
+            if doc.get("status") in ("queued", "running") and doc["id"] not in request.app.state.studio_tasks:
+                doc.update(status="interrupted", stage="Interrupted", updatedAt=now_iso(),
+                           error="The server stopped while this was running. Please try again.")
+                await a.services.db.put("assets", doc["id"], doc)
+    docs.sort(key=lambda d: (d.get("createdAt") or "", d.get("id") or ""), reverse=True)
+    return JSONResponse({"jobs": [public_job(d) for d in docs[:20]]}, headers={"Cache-Control": "no-store"})
 
 
 async def creative_direction(settings: Any, names: list[str], brief: str) -> str:
@@ -161,19 +224,29 @@ async def concept(request: Request) -> JSONResponse:
             refs.append(await U.prepare(data, f"animal{index}", a.services))
             labels.append(f"Reference image {len(refs)} depicts animal {index}: {names[-1]}.")
     await a.caps.take(visitor)
-    async with request.app.state.studio_slots:
+    async def render(stage: Callable[[str], Awaitable[None]]) -> dict[str, Any]:
+        await stage("Developing your creative direction")
         direction = await creative_direction(a.settings, names, brief)
         prompt = ("Create one original chimera concept image, a single creature combining the following animals: "
                   + ", ".join(names) + ". " + " ".join(labels)
                   + "\nThe creator's exact brief is the highest authority for the creature's anatomy and appearance: "
                   + json.dumps(brief, ensure_ascii=False)
                   + "\nCreative collaborator's suggestions (ignore any that conflict with the creator's brief): " + direction)
-        if a.mock and not refs:
+        render_refs = refs
+        if a.mock and not render_refs:
             # The mock renderer is an image compositor and needs input pixels even for named animals.
             from app.evolution.adapters import swatch
-            refs = [swatch(name) for name in names]
-        image = await a.services.image_gen.generate(prompt, refs, "1:1")
-        version = await save_image(a, image, visitor, brief, direction, None)
+            render_refs = [swatch(name) for name in names]
+        await stage("Generating your concept")
+        image = await a.services.image_gen.generate(prompt, render_refs, "1:1")
+        await stage("Saving your concept")
+        return await save_image(a, image, visitor, brief, direction, None)
+    if request.query_params.get("background") == "1":
+        return await start_background(request, visitor, "concept", render)
+    async with request.app.state.studio_slots:
+        async def no_stage(_message: str) -> None:
+            pass
+        version = await render(no_stage)
     return JSONResponse(version, status_code=201)
 
 
@@ -193,9 +266,17 @@ async def revise(version_id: str, request: Request) -> JSONResponse:
         raise _err(ErrorCode.VALIDATION_FAILED, "Describe the revision in up to 2,000 characters.", 422)
     instruction = instruction.strip()
     await a.caps.take(visitor)
-    async with request.app.state.studio_slots:
+    async def render(stage: Callable[[str], Awaitable[None]]) -> dict[str, Any]:
+        await stage("Revising the selected draft")
         image = await a.services.image_gen.generate(
             "Revise the selected image according to the creator's instruction. Preserve other details where possible. " + instruction,
             [], "1:1", doc["responseId"])
-        version = await save_image(a, image, visitor, instruction, "", version_id)
+        await stage("Saving your revision")
+        return await save_image(a, image, visitor, instruction, "", version_id)
+    if request.query_params.get("background") == "1":
+        return await start_background(request, visitor, "revision", render)
+    async with request.app.state.studio_slots:
+        async def no_stage(_message: str) -> None:
+            pass
+        version = await render(no_stage)
     return JSONResponse(version, status_code=201)

@@ -45,3 +45,7 @@ FLORA's documentation describes an open canvas of connected blocks, direct manip
 - Useful next controls: a selected-image visual review tied to the original brief; selectable suggestions; a connected, branchable version canvas; side-by-side comparison; local area editing once a compatible provider is validated; clear preservation intent and optional anatomy checks. Selection and human judgment remain authoritative.
 
 The current review tool makes a plan-blind visual description with Meta and asks Baseten for optional suggestions using that observation and the original brief. It is advisory and can be wrong. The user can copy the suggestions into an editable instruction; no automatic change occurs.
+
+## Background work
+
+Studio concept and revision requests can run as background jobs. The studio polls for their stage and reloads the result after a page refresh. Work continues while the server process stays alive; a local server restart marks unfinished work interrupted instead of claiming it finished. This is an in-process demo queue, not durable job execution across server restarts or multiple workers. Visual review still uses an open request. Each submitted operation consumes the configured daily allowance even if the provider later fails.

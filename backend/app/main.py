@@ -66,6 +66,11 @@ def create_app(settings: Settings | None = None, services: Services | None = Non
         yield
         if seed is not None:
             seed.cancel()
+        studio_tasks = list(app.state.studio_tasks.values())
+        for task in studio_tasks:
+            task.cancel()
+        if studio_tasks:
+            await asyncio.gather(*studio_tasks, return_exceptions=True)
         await app.state.agent.runner.shutdown()
 
     app = FastAPI(title="Chimera Lab API", version=APP_VERSION, lifespan=lifespan)
@@ -73,6 +78,7 @@ def create_app(settings: Settings | None = None, services: Services | None = Non
     app.state.runs = RunManager(svc)
     app.state.agent = AgentApi(svc, build_public_files(settings))  # R1: the agent API under /evo
     app.state.studio_slots = asyncio.Semaphore(settings.evo_max_concurrent_runs)
+    app.state.studio_tasks = {}
 
     app.add_middleware(
         CORSMiddleware,
