@@ -31,3 +31,17 @@ This demo is an experiment in the collaboration loop. Selection masks, compositi
 Build the frontend with `cd frontend; npm run build`. From the repository root, run the backend in real mode with `CHIMERA_MODE=real`, `PYTHONPATH=backend`, and the Meta and Baseten keys configured, then open `/?view=studio` on its local URL. On Windows, `scripts/dev.ps1` starts both development servers in real mode. Each concept and revision counts against the existing daily run limits. The demo retains the version list in browser local storage; its editable provider response IDs remain server-side.
 
 The paid live example is recorded in `docs/evolution/live/studio_demo/concept.webp` and `revision.webp`. The revision asked for longer, more delicate legs. It retained the main composition, but both images show an unwanted spider face at the join; they do not prove reliable anatomy or pixel-perfect edits. `scripts/studio_live_demo.py` repeats this paid test.
+
+## FLORA workflow and chimera translation (Nov 2026)
+
+FLORA's documentation describes an open canvas of connected blocks, direct manipulation and a history, with each inpaint producing a new block rather than replacing its source: https://docs.flora.ai/editor/canvas and https://docs.flora.ai/editor/image-editing. Its FAUNA agent can read the canvas, add and connect nodes, and execute a workflow through conversation: https://docs.flora.ai/editor/fauna. These are vendor descriptions, not a hands-on evaluation. For Chimera Lab, the equivalent should begin with two references and a brief on a canvas; every concept or revision should become a selectable, connected image node. The creator needs to compare branches, select what the collaborator is acting on, retain originals, and explicitly run paid actions. A conversational collaborator should eventually create and connect those actions, not just rewrite a prompt.
+
+### Audit of the live monkey/spider example
+
+- The first concept has a recognisable monkey head, torso and arms above a spider-like lower body with radiating legs. The general upper/lower arrangement follows the brief.
+- A second spider face and mouthparts appear at the join. The result reads like a monkey placed on a whole spider, rather than a single invented creature with a coherent transition. This is a visible issue, although the creator may choose to keep it.
+- Some limbs overlap or leave the frame, making the requested count difficult to verify confidently. The revision makes limbs thinner and longer but preserves the extra spider face; it does not address that defect.
+- Whole-image text edits can drift in pose, features or composition. A real mask-based local edit would let a creator mark the seam or face; the current Meta adapter's chained edit accepts text and previous response ID, not a verified mask parameter. Do not label a painted selection as inpainting without a model that actually accepts a mask.
+- Useful next controls: a selected-image visual review tied to the original brief; selectable suggestions; a connected, branchable version canvas; side-by-side comparison; local area editing once a compatible provider is validated; clear preservation intent and optional anatomy checks. Selection and human judgment remain authoritative.
+
+The current review tool makes a plan-blind visual description with Meta and asks Baseten for optional suggestions using that observation and the original brief. It is advisory and can be wrong. The user can copy the suggestions into an editable instruction; no automatic change occurs.

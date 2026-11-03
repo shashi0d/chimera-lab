@@ -51,12 +51,82 @@ async def save_image(a: Any, image: Any, visitor: str, instruction: str, directi
     ext = EXT.get(image.content_type)
     if not ext:
         raise _err(ErrorCode.UPSTREAM_ERROR, "The image provider returned an unsupported image format.", 502)
-    url = await a.files.put(f"studio/{version_id}.{ext}", image.data, image.content_type)
+    image_key = f"studio/{version_id}.{ext}"
+    url = await a.files.put(image_key, image.data, image.content_type)
     doc = {"id": version_id, "parentId": parent_id, "imageUrl": url, "instruction": instruction,
            "direction": direction, "createdAt": now_iso(), "mode": a.settings.chimera_mode,
-           "responseId": image.response_id, "visitor": visitor}
+           "responseId": image.response_id, "imageKey": image_key, "visitor": visitor, "kind": "studio_version"}
     await a.services.db.put("assets", version_id, doc)
     return public_version(doc)
+
+
+async def get_version(a: Any, version_id: str, visitor: str) -> dict[str, Any]:
+    doc = await a.services.db.get("assets", version_id)
+    if not doc or doc.get("visitor") != visitor or not doc.get("responseId") or not str(doc.get("id", "")).startswith("studio_"):
+        raise _err(ErrorCode.NOT_FOUND, "This draft is unavailable in this session.", 404)
+    return doc
+
+
+@router.get("/versions")
+async def versions(request: Request) -> JSONResponse:
+    a = api(request)
+    visitor, _ = _visitor(request, a)
+    docs = await a.services.db.list("assets", "visitor", visitor)
+    rows = [public_version(d) for d in docs if str(d.get("id", "")).startswith("studio_") and d.get("responseId")]
+    rows.sort(key=lambda d: (d.get("createdAt") or "", d.get("id") or ""))
+    return JSONResponse({"versions": rows}, headers={"Cache-Control": "no-store"})
+
+
+async def review_image(settings: Any, image: bytes, brief: str, change: str) -> dict[str, str]:
+    """Observe without the brief first, then suggest options with the creator's intent in view."""
+    if settings.chimera_mode == "mock":
+        return {"observation": "Mock preview: visual inspection is not available in mock mode.",
+                "suggestions": "Describe what you want to change in the revision field."}
+    from app.evolution.live import LiveEvoSpark
+    from app.adapters.baseten.client import BasetenEvoSpark
+
+    observation = await LiveEvoSpark(settings).describe(image)
+    description = str(observation.get("description") or "").strip()
+    if not description:
+        raise _err(ErrorCode.UPSTREAM_ERROR, "The visual reviewer could not describe this image.", 502)
+    brain = BasetenEvoSpark(settings)
+    result = await brain.chat("studio_review", {"messages": [
+        {"role": "system", "content": "You are a collaborative creature concept artist. Compare an independent visual description to the creator's intent. Give up to three concise, concrete, optional revision ideas. Mention apparent mismatches cautiously because the visual description can be wrong. Do not claim to see details not in the description, impose biological rules, or decide what the creator should choose."},
+        {"role": "user", "content": json.dumps({"creator_brief": brief, "latest_revision": change,
+                                                  "visual_observation": observation}, ensure_ascii=False)},
+    ], "max_tokens": 4096})
+    choice = (result.get("choices") or [{}])[0]
+    text = (choice.get("message") or {}).get("content")
+    if choice.get("finish_reason") not in (None, "stop") or not isinstance(text, str) or not text.strip():
+        raise _err(ErrorCode.UPSTREAM_ERROR, "The creative collaborator did not return a complete review.", 502)
+    return {"observation": description[:3000], "suggestions": text.strip()[:4000]}
+
+
+@router.post("/versions/{version_id}/review")
+async def review(version_id: str, request: Request) -> JSONResponse:
+    a = api(request)
+    visitor, ip = _visitor(request, a)
+    a.caps.rate_limit(ip)
+    await a.caps.check(visitor)
+    selected = await get_version(a, version_id, visitor)
+    root = selected
+    seen: set[str] = set()
+    while root.get("parentId"):
+        parent_id = str(root["parentId"])
+        if parent_id in seen or len(seen) >= 100:
+            raise _err(ErrorCode.VALIDATION_FAILED, "This draft's history is invalid.", 422)
+        seen.add(parent_id)
+        root = await get_version(a, parent_id, visitor)
+    image_key = selected.get("imageKey")
+    if not image_key:
+        # Versions created by the original demo stored the URL but not the key.
+        image_key = "studio/" + str(selected["imageUrl"]).rsplit("/", 1)[-1]
+    image = await a.files.get(image_key)
+    await a.caps.take(visitor)
+    async with request.app.state.studio_slots:
+        result = await review_image(a.settings, image, str(root.get("instruction") or ""),
+                                    str(selected.get("instruction") or "") if selected.get("parentId") else "")
+    return JSONResponse(result, headers={"Cache-Control": "no-store"})
 
 
 @router.post("/concept")
@@ -113,9 +183,7 @@ async def revise(version_id: str, request: Request) -> JSONResponse:
     visitor, ip = _visitor(request, a)
     a.caps.rate_limit(ip)
     await a.caps.check(visitor)
-    doc = await a.services.db.get("assets", version_id)
-    if not doc or doc.get("visitor") != visitor or not doc.get("responseId"):
-        raise _err(ErrorCode.NOT_FOUND, "This draft is unavailable in this session.", 404)
+    doc = await get_version(a, version_id, visitor)
     try:
         body = await request.json()
     except ValueError as exc:

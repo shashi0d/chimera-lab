@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { absoluteUrl, baseHeaders, request } from "../api/client";
 import { Button } from "../ui/Button";
+import { StudioCanvas, type StudioVersion as Version } from "./StudioCanvas";
 
-type Version = { id: string; parentId: string | null; imageUrl: string; instruction: string; direction: string; createdAt: string; mode: string };
+type Review = { observation: string; suggestions: string };
 const STORAGE = "chimera.studio.versions.v1";
 
 function restore(): Version[] {
@@ -20,10 +21,21 @@ export function Studio() {
   const [versions, setVersions] = useState<Version[]>(restore);
   const [selected, setSelected] = useState<string | null>(() => restore().at(-1)?.id ?? null);
   const [busy, setBusy] = useState(false);
+  const [review, setReview] = useState<Review | null>(null);
   const [error, setError] = useState("");
   const current = versions.find((v) => v.id === selected);
 
   useEffect(() => { try { localStorage.setItem(STORAGE, JSON.stringify(versions)); } catch { /* storage may be unavailable */ } }, [versions]);
+  useEffect(() => {
+    let cancelled = false;
+    void request<{ versions: Version[] }>("/evo/studio/versions", { headers: baseHeaders() }).then(({ data }) => {
+      if (cancelled) return;
+      setVersions(data.versions);
+      setSelected((old) => data.versions.some((v) => v.id === old) ? old : data.versions.at(-1)?.id ?? null);
+    }).catch(() => { /* Keep the local copy available when offline. */ });
+    return () => { cancelled = true; };
+  }, []);
+  useEffect(() => { setReview(null); }, [selected]);
 
   const add = (v: Version) => { setVersions((old) => [...old, v]); setSelected(v.id); };
   async function create() {
@@ -47,6 +59,17 @@ export function Studio() {
       });
       add(data); setEdit("");
     } catch (e) { setError(e instanceof Error ? e.message : "Could not revise the draft."); }
+    finally { setBusy(false); }
+  }
+  async function askForReview() {
+    if (!current) return;
+    setBusy(true); setError(""); setReview(null);
+    try {
+      const { data } = await request<Review>(`/evo/studio/versions/${encodeURIComponent(current.id)}/review`, {
+        method: "POST", headers: baseHeaders(),
+      });
+      setReview(data);
+    } catch (e) { setError(e instanceof Error ? e.message : "Could not review this draft."); }
     finally { setBusy(false); }
   }
 
@@ -84,6 +107,15 @@ export function Studio() {
         {current && <>
           <p className="studio__instruction"><strong>{current.parentId ? "Revision" : "Your brief"}:</strong> {current.instruction}</p>
           {current.direction && <details><summary>See the collaborator’s direction</summary><p>{current.direction}</p></details>}
+          <div className="studio__review">
+            <h3>Creative review</h3>
+            <p>Ask the collaborator to look at this version and suggest possible next steps. You decide what to change.</p>
+            <Button size="sm" disabled={busy} onClick={() => void askForReview()}>Review selected draft</Button>
+            <p className="studio__note">A review uses one daily run. Visual observations can be mistaken.</p>
+            {review && <div aria-live="polite"><p><strong>What the reviewer observed:</strong> {review.observation}</p>
+              <p className="studio__suggestions"><strong>Ideas to consider:</strong>{"\n"}{review.suggestions}</p>
+              <p className="studio__note">Choose the ideas you like and write or paste them into the revision field below.</p></div>}
+          </div>
           <label htmlFor="studio-edit">What would you like to change?</label>
           <textarea id="studio-edit" className="text-input studio__textarea" rows={3} maxLength={2000} value={edit} disabled={busy}
             placeholder="Make the spider legs longer, keeping the monkey's expression..." onChange={(e) => setEdit(e.target.value)} />
@@ -91,11 +123,14 @@ export function Studio() {
             <a className="btn btn--secondary" href={absoluteUrl(current.imageUrl)} download target="_blank" rel="noreferrer">Open image</a></div>
           <p className="studio__note">Revisions use the selected image as their starting point. The model may change other details too.</p>
         </>}
-        {versions.length > 0 && <div className="studio__history"><h3>Versions</h3><p>Choose any version to branch from it.</p><div className="studio__versions">
-          {versions.map((v, i) => <button type="button" key={v.id} className={`studio__version${v.id === selected ? " is-selected" : ""}`} aria-pressed={v.id === selected} disabled={busy} onClick={() => setSelected(v.id)}>
-            <img src={absoluteUrl(v.imageUrl)} alt="" /><span>Version {i + 1}{v.parentId ? ` · from ${versions.findIndex((p) => p.id === v.parentId) + 1}` : " · concept"}</span>
-          </button>)}
-        </div></div>}
+        {versions.length > 0 && <div className="studio__history"><h3>Creative canvas</h3><p>Drag to arrange, zoom to explore, and select a version to review or branch from it.</p>
+          <StudioCanvas versions={versions} selected={selected} onSelect={(id) => { if (!busy) setSelected(id); }} />
+          <div className="studio__versions" aria-label="Choose a version">
+            {versions.map((v, i) => <button type="button" key={v.id} className={`studio__version${v.id === selected ? " is-selected" : ""}`} aria-pressed={v.id === selected} disabled={busy} onClick={() => setSelected(v.id)}>
+              <span>Version {i + 1}{v.parentId ? ` · from ${versions.findIndex((p) => p.id === v.parentId) + 1}` : " · concept"}</span>
+            </button>)}
+          </div>
+        </div>}
       </section>
     </div>
   </div>;

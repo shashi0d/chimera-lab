@@ -50,3 +50,31 @@ async def test_rejects_missing_animal_and_invalid_reference(client):
     invalid = await client.post("/evo/studio/concept", data={"animal1": "monkey", "animal2": "spider", "brief": "legs"},
                                 files={"image1": ("bad.png", b"not an image", "image/png")})
     assert invalid.status_code == 422
+
+
+async def test_saved_history_and_review_use_the_selected_image_and_original_brief(client, monkeypatch):
+    from app.agentapi import studio
+
+    class Renderer:
+        async def generate(self, prompt, refs, aspect, previous_response_id=None):
+            return GeneratedImage(image_bytes("blue"), "image/png", "test", "response")
+
+    captured = {}
+
+    async def fake_review(settings, image, brief, change):
+        captured.update(image=image, brief=brief, change=change)
+        return {"observation": "A creature", "suggestions": "Try longer legs."}
+
+    monkeypatch.setattr(studio, "review_image", fake_review)
+    client.app.state.services.image_gen = Renderer()
+    first = (await client.post("/evo/studio/concept", data={"animal1": "monkey", "animal2": "spider", "brief": "Eight legs"})).json()
+    child = (await client.post(f"/evo/studio/versions/{first['id']}/revise", json={"instruction": "Blue fur"})).json()
+    review = await client.post(f"/evo/studio/versions/{child['id']}/review")
+    assert review.status_code == 200
+    assert captured == {"image": image_bytes("blue"), "brief": "Eight legs", "change": "Blue fur"}
+    assert review.json()["suggestions"] == "Try longer legs."
+    history = await client.get("/evo/studio/versions")
+    assert {v["id"] for v in history.json()["versions"]} == {first["id"], child["id"]}
+    assert all("responseId" not in v for v in history.json()["versions"])
+    other = await client.get("/evo/studio/versions", headers={"X-Session-Id": "other-session-1"})
+    assert other.json()["versions"] == []
