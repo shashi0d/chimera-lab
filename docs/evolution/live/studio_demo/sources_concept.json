@@ -1,0 +1,19 @@
+{
+  "id": "studio_3ea96057480a4732",
+  "parentId": null,
+  "imageUrl": "/evo/files/studio/studio_3ea96057480a4732.webp",
+  "instruction": "A single creature with a lion head and a tiger body.",
+  "direction": "Image generation direction: a single hybrid creature with one lion head on one tiger body, full-body view.",
+  "createdAt": "2026-11-03T04:18:32.299Z",
+  "mode": "real",
+  "sources": [
+    {
+      "name": "lion",
+      "hasImage": true
+    },
+    {
+      "name": "tiger",
+      "hasImage": true
+    }
+  ]
+}

@@ -31,15 +31,25 @@ async def test_concept_and_branching_revisions_keep_creator_intent_and_reference
     first = response.json()
     assert brief in calls[0][0]
     assert len(calls[0][1]) == 2
+    assert first["sources"] == [{"name": "monkey", "hasImage": True}, {"name": "spider", "hasImage": True}]
+    reference = await client.get(f"/evo/studio/versions/{first['id']}/sources/1")
+    assert reference.status_code == 200 and reference.headers["content-type"] == "image/jpeg"
+    assert (await client.get(f"/evo/studio/versions/{first['id']}/sources/1", headers={"X-Session-Id": "other-session-1"})).status_code == 404
     assert "responseId" not in first
     assert (await client.get(first["imageUrl"])).status_code == 200
     edit = await client.post(f"/evo/studio/versions/{first['id']}/revise", json={"instruction": "Longer legs"})
     assert edit.status_code == 201, edit.text
     assert edit.json()["parentId"] == first["id"]
+    assert (await client.get(f"/evo/studio/versions/{edit.json()['id']}/sources/1")).content == reference.content
     assert calls[1][2] == "response-1"
     branch = await client.post(f"/evo/studio/versions/{first['id']}/revise", json={"instruction": "Blue fur"})
     assert branch.status_code == 201
     assert calls[2][2] == "response-1"
+    with_sources = await client.post(f"/evo/studio/versions/{edit.json()['id']}/revise", json={"instruction": "Match the reference", "useSources": True})
+    assert with_sources.status_code == 201
+    assert calls[3][2] is None and len(calls[3][1]) == 3
+    assert calls[3][1][0] == image_bytes("blue") and calls[3][1][1] == reference.content
+    assert "Reference image 1 is the selected draft" in calls[3][0]
     denied = await client.post(f"/evo/studio/versions/{first['id']}/revise", json={"instruction": "change"},
                                headers={"X-Session-Id": "other-session-1"})
     assert denied.status_code == 404

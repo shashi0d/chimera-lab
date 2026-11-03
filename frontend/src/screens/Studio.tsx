@@ -31,9 +31,19 @@ export function Studio() {
   const [review, setReview] = useState<Review | null>(null);
   const [regionOpen, setRegionOpen] = useState(false);
   const [compareId, setCompareId] = useState("");
+  const [useSources, setUseSources] = useState(false);
   const [error, setError] = useState("");
   const current = versions.find((v) => v.id === selected);
   const compared = versions.find((v) => v.id === compareId && v.id !== selected);
+  const rootOf = (version: Version): Version => {
+    let root = version; const seen = new Set<string>();
+    while (root.parentId && !seen.has(root.parentId)) {
+      seen.add(root.parentId); const parent = versions.find((v) => v.id === root.parentId);
+      if (!parent) break; root = parent;
+    }
+    return root;
+  };
+  const hasSources = current ? Boolean(rootOf(current).sources?.some((source) => source.hasImage)) : false;
   const activeJob = jobs.find((job) => job.status === "queued" || job.status === "running");
   const working = busy || Boolean(activeJob);
 
@@ -58,6 +68,7 @@ export function Studio() {
   useEffect(() => {
     let cancelled = false;
     setReview(null);
+    setUseSources(false);
     if (selected) void request<{ review: Review | null }>(`/evo/studio/versions/${encodeURIComponent(selected)}/review`, { headers: baseHeaders() })
       .then(({ data }) => { if (!cancelled) setReview(data.review); }).catch(() => { /* review is optional */ });
     return () => { cancelled = true; };
@@ -102,7 +113,7 @@ export function Studio() {
     setBusy(true); setError("");
     try {
       const { data } = await request<Job>(`/evo/studio/versions/${encodeURIComponent(current.id)}/revise?background=1`, {
-        method: "POST", headers: baseHeaders({ "Content-Type": "application/json" }), body: JSON.stringify({ instruction }),
+        method: "POST", headers: baseHeaders({ "Content-Type": "application/json" }), body: JSON.stringify({ instruction, useSources }),
       });
       setJobs((old) => [data, ...old.filter((job) => job.id !== data.id)]); setEdit("");
     } catch (e) { setError(e instanceof Error ? e.message : "Could not revise the draft."); }
@@ -161,7 +172,7 @@ export function Studio() {
     <div className="studio__layout">
       <section className="studio__panel" aria-labelledby="studio-brief">
         <p className="studio__eyebrow">01 / YOUR IDEA</p><h2 id="studio-brief">Create a concept</h2>
-        <p>Give each animal a name, an image, or both. Images are sent as visual references.</p>
+        <p>Give each animal a name, an image, or both. Reference images are sent to the model and saved privately with the concept.</p>
         {[0, 1].map((i) => <div className="studio__animal" key={i}>
           <label htmlFor={`animal-${i}`}>Animal {i + 1}</label>
           <input id={`animal-${i}`} className="text-input" value={names[i]} maxLength={80} placeholder={i === 0 ? "e.g. monkey" : "e.g. spider"} disabled={working}
@@ -226,6 +237,8 @@ export function Studio() {
               <p className="studio__note">Choose the ideas you like and write or paste them into the revision field below.</p></div>}
           </div>
           <label htmlFor="studio-edit">What would you like to change?</label>
+          {hasSources && <label className="studio__source-toggle"><input type="checkbox" checked={useSources} disabled={working} onChange={(event) => setUseSources(event.target.checked)} /> Include original animal images in the next revision</label>}
+          {hasSources && useSources && <p className="studio__note">The selected draft and source images will be sent as references. This can change the composition more than a chained edit.</p>}
           <textarea id="studio-edit" className="text-input studio__textarea" rows={3} maxLength={2000} value={edit} disabled={working}
             placeholder="Make the spider legs longer, keeping the monkey's expression..." onChange={(e) => setEdit(e.target.value)} />
           <div className="studio__actions"><Button variant="primary" busy={working} disabled={working || !edit.trim()} onClick={() => void revise()}>Revise selected draft</Button>

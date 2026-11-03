@@ -147,11 +147,14 @@ async def creative_direction(settings: Any, names: list[str], brief: str) -> str
 
 
 def public_version(doc: dict[str, Any]) -> dict[str, Any]:
-    return {key: doc.get(key) for key in ("id", "parentId", "imageUrl", "instruction", "direction", "createdAt", "mode")}
+    result = {key: doc.get(key) for key in ("id", "parentId", "imageUrl", "instruction", "direction", "createdAt", "mode")}
+    if doc.get("sources"):
+        result["sources"] = [{"name": s["name"], "hasImage": bool(s.get("imageKey"))} for s in doc["sources"]]
+    return result
 
 
 async def save_image(a: Any, image: Any, visitor: str, instruction: str, direction: str, parent_id: str | None,
-                     reference_only: bool = False) -> dict[str, Any]:
+                     reference_only: bool = False, source_inputs: list[tuple[str, bytes | None]] | None = None) -> dict[str, Any]:
     if not image.response_id:
         raise _err(ErrorCode.UPSTREAM_ERROR, "The image provider did not return an editable response. Please try again.", 502)
     version_id = new_id("studio")
@@ -164,6 +167,13 @@ async def save_image(a: Any, image: Any, visitor: str, instruction: str, directi
            "direction": direction, "createdAt": now_iso(), "mode": a.settings.chimera_mode,
            "responseId": image.response_id, "imageKey": image_key, "visitor": visitor, "kind": "studio_version",
            "referenceOnly": reference_only}
+    if source_inputs is not None:
+        doc["sources"] = []
+        for index, (name, data) in enumerate(source_inputs, 1):
+            key = f"studio-sources/{version_id}/{index}.jpg" if data else None
+            if key and data:
+                await a.services.storage.put(key, data, "image/jpeg")
+            doc["sources"].append({"name": name, "imageKey": key})
     await a.services.db.put("assets", version_id, doc)
     return public_version(doc)
 
@@ -190,6 +200,19 @@ async def root_version(a: Any, selected: dict[str, Any], visitor: str) -> dict[s
         seen.add(parent_id)
         root = await get_version(a, parent_id, visitor)
     return root
+
+
+@router.get("/versions/{version_id}/sources/{index}")
+async def source_image(version_id: str, index: int, request: Request) -> Response:
+    a = api(request)
+    visitor, _ = _visitor(request, a)
+    selected = await get_version(a, version_id, visitor)
+    root = await root_version(a, selected, visitor)
+    sources = root.get("sources") or []
+    if index not in (1, 2) or index > len(sources) or not sources[index - 1].get("imageKey"):
+        raise _err(ErrorCode.NOT_FOUND, "This reference image is unavailable.", 404)
+    data = await a.services.storage.get(sources[index - 1]["imageKey"])
+    return Response(data, media_type="image/jpeg", headers={"Cache-Control": "private, no-store"})
 
 
 async def plan_collaboration(settings: Any, brief: str, selected_instruction: str,
@@ -410,6 +433,7 @@ async def concept(request: Request) -> JSONResponse:
         raise _err(ErrorCode.VALIDATION_FAILED, "Describe your creature in up to 2,000 characters.", 422)
     names: list[str] = []
     refs: list[bytes] = []
+    slot_refs: list[bytes | None] = []
     labels: list[str] = []
     for index in (1, 2):
         name = _clean_name(form.get(f"animal{index}"), f"animal{index}")
@@ -418,11 +442,14 @@ async def concept(request: Request) -> JSONResponse:
         if not name and not has_image:
             raise _err(ErrorCode.VALIDATION_FAILED, f"Add a name or image for animal {index}.", 422)
         names.append(name or f"animal {index} in its reference image")
+        prepared: bytes | None = None
         if has_image:
             data = await upload.read(a.settings.evo_max_upload_bytes + 1)
             await upload.close()
-            refs.append(await U.prepare(data, f"animal{index}", a.services))
+            prepared = await U.prepare(data, f"animal{index}", a.services)
+            refs.append(prepared)
             labels.append(f"Reference image {len(refs)} depicts animal {index}: {names[-1]}.")
+        slot_refs.append(prepared)
     await request.app.state.studio_caps.take(visitor)
     async def render(stage: Callable[[str], Awaitable[None]]) -> dict[str, Any]:
         await stage("Developing your creative direction")
@@ -440,7 +467,7 @@ async def concept(request: Request) -> JSONResponse:
         await stage("Generating your concept")
         image = await a.services.image_gen.generate(prompt, render_refs, "1:1")
         await stage("Saving your concept")
-        return await save_image(a, image, visitor, brief, direction, None)
+        return await save_image(a, image, visitor, brief, direction, None, source_inputs=list(zip(names, slot_refs)))
     if request.query_params.get("background") == "1":
         return await start_background(request, visitor, "concept", render)
     async with request.app.state.studio_slots:
@@ -464,13 +491,30 @@ async def revise(version_id: str, request: Request) -> JSONResponse:
     instruction = body.get("instruction") if isinstance(body, dict) else None
     if not isinstance(instruction, str) or not instruction.strip() or len(instruction) > 2000:
         raise _err(ErrorCode.VALIDATION_FAILED, "Describe the revision in up to 2,000 characters.", 422)
+    use_sources = body.get("useSources", False) if isinstance(body, dict) else False
+    if not isinstance(use_sources, bool):
+        raise _err(ErrorCode.VALIDATION_FAILED, "Choose whether to include the source images.", 422)
+    source_refs: list[tuple[str, bytes]] = []
+    if use_sources:
+        root = await root_version(a, doc, visitor)
+        for source in root.get("sources") or []:
+            if source.get("imageKey"):
+                source_refs.append((str(source.get("name") or "animal"), await a.services.storage.get(source["imageKey"])))
+        if not source_refs:
+            raise _err(ErrorCode.VALIDATION_FAILED, "This concept has no saved source images to include.", 422)
     instruction = instruction.strip()
     await request.app.state.studio_caps.take(visitor)
     async def render(stage: Callable[[str], Awaitable[None]]) -> dict[str, Any]:
         await stage("Revising the selected draft")
-        refs = [await version_image(a, doc)] if doc.get("referenceOnly") else []
+        refs = [await version_image(a, doc)] if doc.get("referenceOnly") or source_refs else []
+        source_note = ""
+        if source_refs:
+            refs.extend(data for _, data in source_refs)
+            source_note = " Reference image 1 is the selected draft. " + " ".join(
+                f"Reference image {i + 2} shows {name} and is only a source for its features."
+                for i, (name, _) in enumerate(source_refs))
         image = await a.services.image_gen.generate(
-            "Revise the selected image according to the creator's instruction. Preserve other details where possible. " + instruction,
+            "Revise the selected image according to the creator's instruction. Preserve other details where possible. " + instruction + source_note,
             refs, "1:1", None if refs else doc["responseId"])
         await stage("Saving your revision")
         return await save_image(a, image, visitor, instruction, "", version_id)
