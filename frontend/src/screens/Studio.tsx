@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { absoluteUrl, baseHeaders, request } from "../api/client";
 import { Button } from "../ui/Button";
 import { StudioCanvas, type StudioVersion as Version } from "./StudioCanvas";
+import { RegionEditor } from "./RegionEditor";
 
 type Review = { observation: string; suggestions: string };
 type Job = { id: string; operation: string; status: string; stage: string; result: Version | null; error: string | null };
@@ -25,6 +26,7 @@ export function Studio() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const known = useRef(new Set(restore().map((v) => v.id)));
   const [review, setReview] = useState<Review | null>(null);
+  const [regionOpen, setRegionOpen] = useState(false);
   const [error, setError] = useState("");
   const current = versions.find((v) => v.id === selected);
   const activeJob = jobs.find((job) => job.status === "queued" || job.status === "running");
@@ -98,6 +100,16 @@ export function Studio() {
     } catch (e) { setError(e instanceof Error ? e.message : "Could not review this draft."); }
     finally { setBusy(false); }
   }
+  async function editRegion(mask: Blob, instruction: string) {
+    if (!current) return;
+    setBusy(true); setError("");
+    try {
+      const form = new FormData(); form.append("mask", mask, "mask.png"); form.append("instruction", instruction);
+      const { data } = await request<Job>(`/evo/studio/versions/${encodeURIComponent(current.id)}/region?background=1`, { method: "POST", headers: baseHeaders(), body: form });
+      setJobs((old) => [data, ...old.filter((job) => job.id !== data.id)]); setRegionOpen(false);
+    } catch (e) { setError(e instanceof Error ? e.message : "Could not start the painted edit."); }
+    finally { setBusy(false); }
+  }
 
   return <div className="studio page">
     <header className="studio__heading"><p className="hero__kicker">CREATIVE STUDIO · EARLY DEMO</p>
@@ -148,8 +160,10 @@ export function Studio() {
           <textarea id="studio-edit" className="text-input studio__textarea" rows={3} maxLength={2000} value={edit} disabled={working}
             placeholder="Make the spider legs longer, keeping the monkey's expression..." onChange={(e) => setEdit(e.target.value)} />
           <div className="studio__actions"><Button variant="primary" busy={working} disabled={working || !edit.trim()} onClick={() => void revise()}>Revise selected draft</Button>
+            <Button disabled={working} onClick={() => setRegionOpen((open) => !open)}>{regionOpen ? "Close painted edit" : "Paint an area to edit"}</Button>
             <a className="btn btn--secondary" href={absoluteUrl(current.imageUrl)} download target="_blank" rel="noreferrer">Open image</a></div>
           <p className="studio__note">Revisions use the selected image as their starting point. The model may change other details too.</p>
+          {regionOpen && <RegionEditor key={current.id} imageUrl={current.imageUrl} disabled={working} onSubmit={(mask, instruction) => void editRegion(mask, instruction)} />}
         </>}
         {versions.length > 0 && <div className="studio__history"><h3>Creative canvas</h3><p>Drag to arrange, zoom to explore, and select a version to review or branch from it.</p>
           <StudioCanvas versions={versions} selected={selected} onSelect={(id) => { if (!working) setSelected(id); }} />

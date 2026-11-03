@@ -117,3 +117,32 @@ async def test_orphaned_local_job_reports_interruption(client):
         "id": "studiojob_orphan", "kind": "studio_job", "visitor": visitor, "status": "running", "createdAt": "2026-01-01"})
     result = (await client.get("/evo/studio/jobs")).json()["jobs"]
     assert result[0]["status"] == "interrupted"
+
+
+async def test_painted_edit_preserves_unpainted_pixels_and_next_edit_uses_composite(client):
+    calls = []
+
+    class Renderer:
+        async def generate(self, prompt, refs, aspect, previous_response_id=None):
+            calls.append((refs, previous_response_id))
+            return GeneratedImage(image_bytes("red" if len(calls) == 1 else "blue"), "image/png", "test", f"response-{len(calls)}")
+
+    client.app.state.services.image_gen = Renderer()
+    first = (await client.post("/evo/studio/concept", data={"animal1": "monkey", "animal2": "spider", "brief": "Eight legs"})).json()
+    mask = Image.new("RGBA", (32, 32), (0, 0, 0, 0))
+    for x in range(16):
+        for y in range(32):
+            mask.putpixel((x, y), (255, 0, 0, 255))
+    buf = io.BytesIO(); mask.save(buf, "PNG")
+    response = await client.post(f"/evo/studio/versions/{first['id']}/region", data={"instruction": "Change this area"},
+                                 files={"mask": ("mask.png", buf.getvalue(), "image/png")})
+    assert response.status_code == 201, response.text
+    child = response.json()
+    merged = (await client.get(child["imageUrl"])).content
+    with Image.open(io.BytesIO(merged)) as img:
+        assert img.getpixel((30, 16)) == (255, 0, 0)
+        assert img.getpixel((3, 16)) == (0, 0, 255)
+    assert calls[1][1] == "response-1"
+    revised = await client.post(f"/evo/studio/versions/{child['id']}/revise", json={"instruction": "More texture"})
+    assert revised.status_code == 201
+    assert calls[2] == ([merged], None)

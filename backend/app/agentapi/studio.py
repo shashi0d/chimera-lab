@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import asyncio
+import io
 import json
 import logging
 from collections.abc import Awaitable, Callable
@@ -9,6 +10,7 @@ from typing import Any
 
 from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse
+from PIL import Image, ImageChops, ImageFilter, UnidentifiedImageError
 from starlette.datastructures import UploadFile
 
 from app.agentapi import uploads as U
@@ -107,7 +109,8 @@ def public_version(doc: dict[str, Any]) -> dict[str, Any]:
     return {key: doc.get(key) for key in ("id", "parentId", "imageUrl", "instruction", "direction", "createdAt", "mode")}
 
 
-async def save_image(a: Any, image: Any, visitor: str, instruction: str, direction: str, parent_id: str | None) -> dict[str, Any]:
+async def save_image(a: Any, image: Any, visitor: str, instruction: str, direction: str, parent_id: str | None,
+                     reference_only: bool = False) -> dict[str, Any]:
     if not image.response_id:
         raise _err(ErrorCode.UPSTREAM_ERROR, "The image provider did not return an editable response. Please try again.", 502)
     version_id = new_id("studio")
@@ -118,7 +121,8 @@ async def save_image(a: Any, image: Any, visitor: str, instruction: str, directi
     url = await a.files.put(image_key, image.data, image.content_type)
     doc = {"id": version_id, "parentId": parent_id, "imageUrl": url, "instruction": instruction,
            "direction": direction, "createdAt": now_iso(), "mode": a.settings.chimera_mode,
-           "responseId": image.response_id, "imageKey": image_key, "visitor": visitor, "kind": "studio_version"}
+           "responseId": image.response_id, "imageKey": image_key, "visitor": visitor, "kind": "studio_version",
+           "referenceOnly": reference_only}
     await a.services.db.put("assets", version_id, doc)
     return public_version(doc)
 
@@ -128,6 +132,35 @@ async def get_version(a: Any, version_id: str, visitor: str) -> dict[str, Any]:
     if not doc or doc.get("visitor") != visitor or not doc.get("responseId") or not str(doc.get("id", "")).startswith("studio_"):
         raise _err(ErrorCode.NOT_FOUND, "This draft is unavailable in this session.", 404)
     return doc
+
+
+async def version_image(a: Any, doc: dict[str, Any]) -> bytes:
+    key = doc.get("imageKey") or ("studio/" + str(doc["imageUrl"]).rsplit("/", 1)[-1])
+    return await a.files.get(key)
+
+
+def composite_region(original: bytes, candidate: bytes, mask: bytes) -> bytes:
+    """Blend inside the painted alpha only. All pixels outside that alpha remain unchanged."""
+    try:
+        with Image.open(io.BytesIO(original)) as src, Image.open(io.BytesIO(candidate)) as edited, Image.open(io.BytesIO(mask)) as painted:
+            src.load(); edited.load(); painted.load()
+            if painted.format != "PNG" or painted.mode not in ("RGBA", "LA") or painted.size != src.size:
+                raise ValueError("mask dimensions or format")
+            alpha = painted.getchannel("A")
+            if not alpha.getbbox():
+                raise ValueError("empty mask")
+            if abs((edited.width / edited.height) - (src.width / src.height)) > 0.01:
+                raise ValueError("image aspect ratio changed")
+            base = src.convert("RGB")
+            overlay = edited.convert("RGB").resize(src.size, Image.Resampling.LANCZOS)
+            # Soften only *within* the painted area; never modify pixels outside it.
+            feather = ImageChops.darker(alpha, alpha.filter(ImageFilter.GaussianBlur(max(1, min(src.size) / 200))))
+            result = Image.composite(overlay, base, feather)
+            out = io.BytesIO()
+            result.save(out, format="PNG")
+            return out.getvalue()
+    except (UnidentifiedImageError, OSError, ValueError, Image.DecompressionBombError) as exc:
+        raise _err(ErrorCode.VALIDATION_FAILED, "Paint a nonempty region on the selected image and try again.", 422) from exc
 
 
 @router.get("/versions")
@@ -180,11 +213,7 @@ async def review(version_id: str, request: Request) -> JSONResponse:
             raise _err(ErrorCode.VALIDATION_FAILED, "This draft's history is invalid.", 422)
         seen.add(parent_id)
         root = await get_version(a, parent_id, visitor)
-    image_key = selected.get("imageKey")
-    if not image_key:
-        # Versions created by the original demo stored the URL but not the key.
-        image_key = "studio/" + str(selected["imageUrl"]).rsplit("/", 1)[-1]
-    image = await a.files.get(image_key)
+    image = await version_image(a, selected)
     await a.caps.take(visitor)
     async with request.app.state.studio_slots:
         result = await review_image(a.settings, image, str(root.get("instruction") or ""),
@@ -268,13 +297,63 @@ async def revise(version_id: str, request: Request) -> JSONResponse:
     await a.caps.take(visitor)
     async def render(stage: Callable[[str], Awaitable[None]]) -> dict[str, Any]:
         await stage("Revising the selected draft")
+        refs = [await version_image(a, doc)] if doc.get("referenceOnly") else []
         image = await a.services.image_gen.generate(
             "Revise the selected image according to the creator's instruction. Preserve other details where possible. " + instruction,
-            [], "1:1", doc["responseId"])
+            refs, "1:1", None if refs else doc["responseId"])
         await stage("Saving your revision")
         return await save_image(a, image, visitor, instruction, "", version_id)
     if request.query_params.get("background") == "1":
         return await start_background(request, visitor, "revision", render)
+    async with request.app.state.studio_slots:
+        async def no_stage(_message: str) -> None:
+            pass
+        version = await render(no_stage)
+    return JSONResponse(version, status_code=201)
+
+
+@router.post("/versions/{version_id}/region")
+async def region(version_id: str, request: Request) -> JSONResponse:
+    from app.adapters.base import GeneratedImage
+
+    a = api(request)
+    visitor, ip = _visitor(request, a)
+    a.caps.rate_limit(ip)
+    await a.caps.check(visitor)
+    doc = await get_version(a, version_id, visitor)
+    length = request.headers.get("content-length")
+    if length and length.isdigit() and int(length) > a.settings.evo_max_upload_bytes + 1024 * 1024:
+        raise _err(ErrorCode.FILE_TOO_LARGE, "The painted mask is too large.", 413)
+    try:
+        form = await request.form(max_files=1, max_fields=2)
+    except Exception as exc:
+        raise _err(ErrorCode.VALIDATION_FAILED, "Send a painted mask and an edit instruction.", 422) from exc
+    instruction = str(form.get("instruction") or "").strip()
+    upload = form.get("mask")
+    if not instruction or len(instruction) > 2000 or not isinstance(upload, UploadFile):
+        raise _err(ErrorCode.VALIDATION_FAILED, "Paint a region and describe the change in up to 2,000 characters.", 422)
+    mask = await upload.read(a.settings.evo_max_upload_bytes + 1)
+    await upload.close()
+    if len(mask) > a.settings.evo_max_upload_bytes:
+        raise _err(ErrorCode.FILE_TOO_LARGE, "The painted mask is too large.", 413)
+    original = await version_image(a, doc)
+    await asyncio.to_thread(composite_region, original, original, mask)  # validate before spending a call
+    await a.caps.take(visitor)
+
+    async def render(stage: Callable[[str], Awaitable[None]]) -> dict[str, Any]:
+        await stage("Generating an edit for your painted region")
+        refs = [original] if doc.get("referenceOnly") else []
+        candidate = await a.services.image_gen.generate(
+            "Edit the selected image as follows, keeping its framing and everything else as similar as possible: " + instruction,
+            refs, "1:1", None if refs else doc["responseId"])
+        await stage("Blending the painted region")
+        merged = await asyncio.to_thread(composite_region, original, candidate.data, mask)
+        image = GeneratedImage(merged, "image/png", candidate.model, candidate.response_id)
+        # The saved composite is not identical to the provider's response; future edits must use it as a reference.
+        return await save_image(a, image, visitor, instruction, "", version_id, reference_only=True)
+
+    if request.query_params.get("background") == "1":
+        return await start_background(request, visitor, "region", render)
     async with request.app.state.studio_slots:
         async def no_stage(_message: str) -> None:
             pass
