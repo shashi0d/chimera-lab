@@ -152,7 +152,7 @@ async def root_version(a: Any, selected: dict[str, Any], visitor: str) -> dict[s
 
 
 async def plan_collaboration(settings: Any, brief: str, selected_instruction: str,
-                             conversation: list[dict[str, str]]) -> dict[str, Any]:
+                             conversation: list[dict[str, str]], observation: str = "") -> dict[str, Any]:
     """Choose an available workspace action; proposing it does not execute it."""
     if settings.chimera_mode == "mock":
         last = conversation[-1]["content"]
@@ -167,12 +167,14 @@ async def plan_collaboration(settings: Any, brief: str, selected_instruction: st
          "parameters": {"type": "object", "properties": {"reason": {"type": "string"}}, "required": ["reason"], "additionalProperties": False}}},
     ]
     prompt = ("You are a creative collaborator in Chimera Lab. The user directs an imaginary creature. "
-              "The selected image is not visible to you; do not claim you saw it. You may propose one available action "
+              "You cannot see the selected image directly. A separate visual review may be provided; its observations "
+              "are uncertain and can be wrong. Do not imply that you personally saw the image. You may propose one available action "
               "using the tools, or respond conversationally or ask a clarifying question. Never change the user's explicit "
               "anatomy or assert biological rules. A proposed action will be shown for the user to edit and run. "
               "For a request to visually inspect the image, propose_review. For a concrete visual change, propose_revision. "
               "If the user mentions painting an area, explain they should use the paint tool; you cannot paint a mask.\n"
-              + json.dumps({"original_brief": brief, "selected_draft_instruction": selected_instruction}, ensure_ascii=False))
+              + json.dumps({"original_brief": brief, "selected_draft_instruction": selected_instruction,
+                            "independent_visual_observation": observation or None}, ensure_ascii=False))
     response = await brain.chat("studio_collaborate", {"messages": [{"role": "system", "content": prompt}, *conversation],
                                                        "tools": tools, "tool_choice": "auto", "max_tokens": 4096})
     choice = (response.get("choices") or [{}])[0]
@@ -227,7 +229,8 @@ async def collaborate(version_id: str, request: Request) -> JSONResponse:
     await a.caps.take(visitor)
     async with request.app.state.studio_slots:
         result = await plan_collaboration(a.settings, str(root.get("instruction") or ""),
-                                          str(selected.get("instruction") or ""), conversation)
+                                          str(selected.get("instruction") or ""), conversation,
+                                          str((selected.get("review") or {}).get("observation") or ""))
     return JSONResponse(result, headers={"Cache-Control": "no-store"})
 
 
@@ -303,7 +306,17 @@ async def review(version_id: str, request: Request) -> JSONResponse:
     async with request.app.state.studio_slots:
         result = await review_image(a.settings, image, str(root.get("instruction") or ""),
                                     str(selected.get("instruction") or "") if selected.get("parentId") else "")
+    selected["review"] = result
+    await a.services.db.put("assets", version_id, selected)
     return JSONResponse(result, headers={"Cache-Control": "no-store"})
+
+
+@router.get("/versions/{version_id}/review")
+async def saved_review(version_id: str, request: Request) -> JSONResponse:
+    a = api(request)
+    visitor, _ = _visitor(request, a)
+    doc = await get_version(a, version_id, visitor)
+    return JSONResponse({"review": doc.get("review")}, headers={"Cache-Control": "no-store"})
 
 
 @router.post("/concept")

@@ -157,7 +157,7 @@ async def test_collaborator_proposes_action_without_running_it(client, monkeypat
             calls.append(prompt)
             return GeneratedImage(image_bytes("red"), "image/png", "test", "response")
 
-    async def fake_plan(settings, brief, selected_instruction, conversation):
+    async def fake_plan(settings, brief, selected_instruction, conversation, observation):
         assert brief == "Eight spider legs"
         assert conversation[-1]["content"] == "Make the legs longer"
         return {"message": "Let's try this.", "action": {"type": "revise", "reason": "Your request", "instruction": "Longer legs"}}
@@ -171,4 +171,34 @@ async def test_collaborator_proposes_action_without_running_it(client, monkeypat
     assert answer.json()["action"]["instruction"] == "Longer legs"
     assert len(calls) == 1
     denied = await client.post(f"/evo/studio/versions/{version['id']}/collaborate", json={"messages": [{"role": "user", "content": "Change it"}]}, headers={"X-Session-Id": "other-session-1"})
+    assert denied.status_code == 404
+
+
+async def test_review_is_saved_and_given_to_collaborator_for_that_version(client, monkeypatch):
+    from app.agentapi import studio
+    captured = []
+
+    class Renderer:
+        async def generate(self, prompt, refs, aspect, previous_response_id=None):
+            return GeneratedImage(image_bytes("red"), "image/png", "test", "response")
+
+    async def fake_review(settings, image, brief, change):
+        return {"observation": "A second spider face is visible", "suggestions": "Consider removing it"}
+
+    async def fake_plan(settings, brief, selected_instruction, conversation, observation):
+        captured.append(observation)
+        return {"message": "Consider removing it.", "action": None}
+
+    client.app.state.services.image_gen = Renderer()
+    monkeypatch.setattr(studio, "review_image", fake_review)
+    monkeypatch.setattr(studio, "plan_collaboration", fake_plan)
+    version = (await client.post("/evo/studio/concept", data={"animal1": "monkey", "animal2": "spider", "brief": "Eight legs"})).json()
+    before = await client.get(f"/evo/studio/versions/{version['id']}/review")
+    assert before.json()["review"] is None
+    assert (await client.post(f"/evo/studio/versions/{version['id']}/review")).status_code == 200
+    assert (await client.get(f"/evo/studio/versions/{version['id']}/review")).json()["review"]["observation"] == "A second spider face is visible"
+    result = await client.post(f"/evo/studio/versions/{version['id']}/collaborate", json={"messages": [{"role": "user", "content": "What next?"}]})
+    assert result.status_code == 200
+    assert captured == ["A second spider face is visible"]
+    denied = await client.get(f"/evo/studio/versions/{version['id']}/review", headers={"X-Session-Id": "other-session-1"})
     assert denied.status_code == 404

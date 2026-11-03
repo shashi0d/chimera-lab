@@ -43,7 +43,13 @@ export function Studio() {
     }).catch(() => { /* Keep the local copy available when offline. */ });
     return () => { cancelled = true; };
   }, []);
-  useEffect(() => { setReview(null); }, [selected]);
+  useEffect(() => {
+    let cancelled = false;
+    setReview(null);
+    if (selected) void request<{ review: Review | null }>(`/evo/studio/versions/${encodeURIComponent(selected)}/review`, { headers: baseHeaders() })
+      .then(({ data }) => { if (!cancelled) setReview(data.review); }).catch(() => { /* review is optional */ });
+    return () => { cancelled = true; };
+  }, [selected]);
 
   useEffect(() => {
     let cancelled = false;
@@ -148,7 +154,7 @@ export function Studio() {
         {current && <>
           <p className="studio__instruction"><strong>{current.parentId ? "Revision" : "Your brief"}:</strong> {current.instruction}</p>
           {current.direction && <details><summary>See the collaborator’s direction</summary><p>{current.direction}</p></details>}
-          <StudioCollaborator key={current.id} versionId={current.id} disabled={working} onReview={() => void askForReview()} onRevise={(instruction) => void revise(instruction)} />
+          <StudioCollaborator key={current.id} versionId={current.id} hasReview={Boolean(review)} disabled={working} onReview={() => void askForReview()} onRevise={(instruction) => void revise(instruction)} />
           <div className="studio__review">
             <h3>Creative review</h3>
             <p>Ask the collaborator to look at this version and suggest possible next steps. You decide what to change.</p>
