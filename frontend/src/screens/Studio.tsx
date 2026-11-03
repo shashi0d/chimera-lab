@@ -7,6 +7,7 @@ import { StudioCollaborator } from "./StudioCollaborator";
 
 type Review = { observation: string; suggestions: string };
 type Job = { id: string; operation: string; status: string; stage: string; result: Version | null; error: string | null };
+type StudioLimits = { used: number; limit: number; totalUsed: number; totalLimit: number };
 const STORAGE = "chimera.studio.versions.v1";
 
 function restore(): Version[] {
@@ -25,6 +26,7 @@ export function Studio() {
   const [selected, setSelected] = useState<string | null>(() => restore().at(-1)?.id ?? null);
   const [busy, setBusy] = useState(false);
   const [jobs, setJobs] = useState<Job[]>([]);
+  const [limits, setLimits] = useState<StudioLimits | null>(null);
   const known = useRef(new Set(restore().map((v) => v.id)));
   const [review, setReview] = useState<Review | null>(null);
   const [regionOpen, setRegionOpen] = useState(false);
@@ -34,6 +36,14 @@ export function Studio() {
   const working = busy || Boolean(activeJob);
 
   useEffect(() => { try { localStorage.setItem(STORAGE, JSON.stringify(versions)); } catch { /* storage may be unavailable */ } }, [versions]);
+  useEffect(() => {
+    let cancelled = false;
+    const refresh = () => void request<StudioLimits>("/evo/studio/limits", { headers: baseHeaders() })
+      .then(({ data }) => { if (!cancelled) setLimits(data); }).catch(() => { /* quota is displayed when available */ });
+    refresh();
+    const timer = setInterval(refresh, 10000);
+    return () => { cancelled = true; clearInterval(timer); };
+  }, [busy, activeJob?.status]);
   useEffect(() => {
     let cancelled = false;
     void request<{ versions: Version[] }>("/evo/studio/versions", { headers: baseHeaders() }).then(({ data }) => {
@@ -141,10 +151,24 @@ export function Studio() {
         <Button variant="primary" busy={working} disabled={working || !brief.trim() || names.some((n, i) => !n.trim() && !files[i])} onClick={() => void create()}>
           {working ? "Working on your idea…" : "Generate concept"}
         </Button>
-        <p className="studio__note">Each generation or revision uses one daily run. Images can take a few minutes.</p>
+        <p className="studio__note">Each generation, revision, review or collaborator message uses one studio action. Images can take a few minutes.
+          {limits ? ` ${Math.max(0, limits.limit - limits.used)} of ${limits.limit} personal actions remain today; ${Math.max(0, limits.totalLimit - limits.totalUsed)} remain for the workspace. Resets at 00:00 UTC.` : ""}</p>
+      </section>
+      <section className="studio__board" aria-labelledby="studio-board-title">
+        <div className="studio__board-head"><div><p className="studio__eyebrow">02 / YOUR CREATIVE CANVAS</p><h2 id="studio-board-title">Explore your ideas</h2></div>
+          <span className="studio__badge">{versions.length} {versions.length === 1 ? "version" : "versions"}</span></div>
+        <p className="studio__board-help">Select a version to work on it. Drag cards to arrange your ideas and zoom to explore branches.</p>
+        {versions.length > 0 ? <>
+          <StudioCanvas versions={versions} selected={selected} onSelect={(id) => { if (!working) setSelected(id); }} />
+          <div className="studio__versions" aria-label="Choose a version">
+            {versions.map((v, i) => <button type="button" key={v.id} className={`studio__version${v.id === selected ? " is-selected" : ""}`} aria-pressed={v.id === selected} disabled={working} onClick={() => setSelected(v.id)}>
+              <span>Version {i + 1}{v.parentId ? ` · from ${versions.findIndex((p) => p.id === v.parentId) + 1}` : " · concept"}</span>
+            </button>)}
+          </div>
+        </> : <div className="studio__board-empty"><span aria-hidden="true">✳</span><h3>Your canvas starts with an idea</h3><p>Describe your creature and generate a concept. Each new version will grow from the one you choose.</p></div>}
       </section>
       <section className="studio__workspace" aria-labelledby="studio-draft">
-        <div className="studio__workspace-head"><div><p className="studio__eyebrow">02 / EXPLORE & REFINE</p><h2 id="studio-draft">Your concept</h2></div>
+        <div className="studio__workspace-head"><div><p className="studio__eyebrow">03 / CREATE & REFINE</p><h2 id="studio-draft">Selected draft</h2></div>
           {current && <span className="studio__badge">{current.mode === "mock" ? "Mock preview" : "Generated image"}</span>}</div>
         {activeJob && <p className="studio__job" role="status">{activeJob.stage} · You can refresh or return while this runs.</p>}
         {!activeJob && jobs[0] && (jobs[0].status === "failed" || jobs[0].status === "interrupted") && <p className="studio__error" role="alert">{jobs[0].error}</p>}
@@ -159,7 +183,7 @@ export function Studio() {
             <h3>Creative review</h3>
             <p>Ask the collaborator to look at this version and suggest possible next steps. You decide what to change.</p>
             <Button size="sm" disabled={working} onClick={() => void askForReview()}>Review selected draft</Button>
-            <p className="studio__note">A review uses one daily run. Visual observations can be mistaken.</p>
+            <p className="studio__note">A review uses one studio action. Visual observations can be mistaken.</p>
             {review && <div aria-live="polite"><p><strong>What the reviewer observed:</strong> {review.observation}</p>
               <p className="studio__suggestions"><strong>Ideas to consider:</strong>{"\n"}{review.suggestions}</p>
               <p className="studio__note">Choose the ideas you like and write or paste them into the revision field below.</p></div>}
@@ -173,14 +197,6 @@ export function Studio() {
           <p className="studio__note">Revisions use the selected image as their starting point. The model may change other details too.</p>
           {regionOpen && <RegionEditor key={current.id} imageUrl={current.imageUrl} disabled={working} onSubmit={(mask, instruction) => void editRegion(mask, instruction)} />}
         </>}
-        {versions.length > 0 && <div className="studio__history"><h3>Creative canvas</h3><p>Drag to arrange, zoom to explore, and select a version to review or branch from it.</p>
-          <StudioCanvas versions={versions} selected={selected} onSelect={(id) => { if (!working) setSelected(id); }} />
-          <div className="studio__versions" aria-label="Choose a version">
-            {versions.map((v, i) => <button type="button" key={v.id} className={`studio__version${v.id === selected ? " is-selected" : ""}`} aria-pressed={v.id === selected} disabled={working} onClick={() => setSelected(v.id)}>
-              <span>Version {i + 1}{v.parentId ? ` · from ${versions.findIndex((p) => p.id === v.parentId) + 1}` : " · concept"}</span>
-            </button>)}
-          </div>
-        </div>}
       </section>
     </div>
   </div>;

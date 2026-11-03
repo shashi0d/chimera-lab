@@ -79,6 +79,8 @@ def create_app(settings: Settings | None = None, services: Services | None = Non
     app.state.agent = AgentApi(svc, build_public_files(settings))  # R1: the agent API under /evo
     app.state.studio_slots = asyncio.Semaphore(settings.evo_max_concurrent_runs)
     app.state.studio_tasks = {}
+    from app.agentapi.studio import StudioCaps
+    app.state.studio_caps = StudioCaps(svc.db, settings)
 
     app.add_middleware(
         CORSMiddleware,

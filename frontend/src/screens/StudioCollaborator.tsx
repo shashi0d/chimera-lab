@@ -41,7 +41,7 @@ export function StudioCollaborator({ versionId, hasReview, disabled, onReview, o
   return <section className="studio-collaborator" aria-label="Creative collaborator">
     <h3>Creative collaborator</h3>
     <p>Talk through this draft. The collaborator can propose a review or an editable revision; you choose whether to run it.</p>
-    <p className="studio__note">Each message uses one daily run. {hasReview ? "The collaborator can use this draft’s saved visual review, which may be mistaken." : "The collaborator has not seen this image; run visual review to add observations."} Conversation is saved in this browser.</p>
+    <p className="studio__note">Each message uses one studio action. {hasReview ? "The collaborator can use this draft’s saved visual review, which may be mistaken." : "The collaborator has not seen this image; run visual review to add observations."} Conversation is saved in this browser.</p>
     {messages.length > 0 && <div className="studio-collaborator__messages" aria-live="polite">{messages.map((m, i) => <p key={i}><strong>{m.role === "user" ? "You" : "Collaborator"}:</strong> {m.content}</p>)}</div>}
     {error && <p className="studio__error" role="alert">{error}</p>}
     {action && <div className="studio-collaborator__action"><p><strong>Suggested {action.type}:</strong> {action.reason}</p>

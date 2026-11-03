@@ -15,6 +15,7 @@ from starlette.datastructures import UploadFile
 
 from app.agentapi import uploads as U
 from app.agentapi.files import EXT
+from app.agentapi.caps import Caps, day_key, resets_at
 from app.agentapi.routes import _clean_name, _err, _visitor, api
 from app.models.schemas import ErrorCode
 from app.errors import ChimeraError
@@ -22,6 +23,46 @@ from app.util import new_id, now_iso
 
 router = APIRouter(prefix="/evo/studio", tags=["studio"])
 log = logging.getLogger(__name__)
+
+
+class StudioCaps(Caps):
+    """A separate, configurable action budget for the iterative studio."""
+    def __init__(self, db: Any, settings: Any) -> None:
+        super().__init__(db, settings.model_copy(update={
+            "evo_daily_runs": settings.studio_daily_actions,
+            "evo_visitor_daily_runs": settings.studio_visitor_daily_actions,
+            "evo_runs_per_minute_per_ip": settings.studio_actions_per_minute_per_ip,
+        }))
+
+    def _keys(self, visitor: str) -> tuple[str, str]:
+        day = day_key()
+        return f"studio_actions:{day}", f"studio_actions:{day}:v:{visitor}"
+
+    async def check(self, visitor: str) -> None:
+        try:
+            await super().check(visitor)
+        except ChimeraError as exc:
+            if exc.code == ErrorCode.CAP_REACHED:
+                exc.message = "Today's studio action limit is reached. More actions are available at 00:00 UTC."
+            raise
+
+    async def take(self, visitor: str) -> None:
+        try:
+            await super().take(visitor)
+        except ChimeraError as exc:
+            if exc.code == ErrorCode.CAP_REACHED:
+                exc.message = "Today's studio action limit is reached. More actions are available at 00:00 UTC."
+            raise
+
+
+@router.get("/limits")
+async def studio_limits(request: Request) -> JSONResponse:
+    visitor, _ = _visitor(request, api(request))
+    caps = request.app.state.studio_caps
+    total, mine = await caps.used(visitor)
+    return JSONResponse({"used": mine, "limit": caps.settings.evo_visitor_daily_runs,
+                         "totalUsed": total, "totalLimit": caps.settings.evo_daily_runs,
+                         "resetsAt": resets_at()}, headers={"Cache-Control": "no-store"})
 
 
 def public_job(doc: dict[str, Any]) -> dict[str, Any]:
@@ -208,8 +249,8 @@ async def plan_collaboration(settings: Any, brief: str, selected_instruction: st
 async def collaborate(version_id: str, request: Request) -> JSONResponse:
     a = api(request)
     visitor, ip = _visitor(request, a)
-    a.caps.rate_limit(ip)
-    await a.caps.check(visitor)
+    request.app.state.studio_caps.rate_limit(ip)
+    await request.app.state.studio_caps.check(visitor)
     selected = await get_version(a, version_id, visitor)
     try:
         body = await request.json()
@@ -226,7 +267,7 @@ async def collaborate(version_id: str, request: Request) -> JSONResponse:
     if conversation[-1]["role"] != "user":
         raise _err(ErrorCode.VALIDATION_FAILED, "The last message must be yours.", 422)
     root = await root_version(a, selected, visitor)
-    await a.caps.take(visitor)
+    await request.app.state.studio_caps.take(visitor)
     async with request.app.state.studio_slots:
         result = await plan_collaboration(a.settings, str(root.get("instruction") or ""),
                                           str(selected.get("instruction") or ""), conversation,
@@ -297,12 +338,12 @@ async def review_image(settings: Any, image: bytes, brief: str, change: str) -> 
 async def review(version_id: str, request: Request) -> JSONResponse:
     a = api(request)
     visitor, ip = _visitor(request, a)
-    a.caps.rate_limit(ip)
-    await a.caps.check(visitor)
+    request.app.state.studio_caps.rate_limit(ip)
+    await request.app.state.studio_caps.check(visitor)
     selected = await get_version(a, version_id, visitor)
     root = await root_version(a, selected, visitor)
     image = await version_image(a, selected)
-    await a.caps.take(visitor)
+    await request.app.state.studio_caps.take(visitor)
     async with request.app.state.studio_slots:
         result = await review_image(a.settings, image, str(root.get("instruction") or ""),
                                     str(selected.get("instruction") or "") if selected.get("parentId") else "")
@@ -323,8 +364,8 @@ async def saved_review(version_id: str, request: Request) -> JSONResponse:
 async def concept(request: Request) -> JSONResponse:
     a = api(request)
     visitor, ip = _visitor(request, a)
-    a.caps.rate_limit(ip)
-    await a.caps.check(visitor)
+    request.app.state.studio_caps.rate_limit(ip)
+    await request.app.state.studio_caps.check(visitor)
     length = request.headers.get("content-length")
     if length and length.isdigit() and int(length) > 2 * a.settings.evo_max_upload_bytes + 2 * 1024 * 1024:
         raise _err(ErrorCode.FILE_TOO_LARGE, U.MSG_SIZE, 413)
@@ -350,7 +391,7 @@ async def concept(request: Request) -> JSONResponse:
             await upload.close()
             refs.append(await U.prepare(data, f"animal{index}", a.services))
             labels.append(f"Reference image {len(refs)} depicts animal {index}: {names[-1]}.")
-    await a.caps.take(visitor)
+    await request.app.state.studio_caps.take(visitor)
     async def render(stage: Callable[[str], Awaitable[None]]) -> dict[str, Any]:
         await stage("Developing your creative direction")
         direction = await creative_direction(a.settings, names, brief)
@@ -381,8 +422,8 @@ async def concept(request: Request) -> JSONResponse:
 async def revise(version_id: str, request: Request) -> JSONResponse:
     a = api(request)
     visitor, ip = _visitor(request, a)
-    a.caps.rate_limit(ip)
-    await a.caps.check(visitor)
+    request.app.state.studio_caps.rate_limit(ip)
+    await request.app.state.studio_caps.check(visitor)
     doc = await get_version(a, version_id, visitor)
     try:
         body = await request.json()
@@ -392,7 +433,7 @@ async def revise(version_id: str, request: Request) -> JSONResponse:
     if not isinstance(instruction, str) or not instruction.strip() or len(instruction) > 2000:
         raise _err(ErrorCode.VALIDATION_FAILED, "Describe the revision in up to 2,000 characters.", 422)
     instruction = instruction.strip()
-    await a.caps.take(visitor)
+    await request.app.state.studio_caps.take(visitor)
     async def render(stage: Callable[[str], Awaitable[None]]) -> dict[str, Any]:
         await stage("Revising the selected draft")
         refs = [await version_image(a, doc)] if doc.get("referenceOnly") else []
@@ -416,8 +457,8 @@ async def region(version_id: str, request: Request) -> JSONResponse:
 
     a = api(request)
     visitor, ip = _visitor(request, a)
-    a.caps.rate_limit(ip)
-    await a.caps.check(visitor)
+    request.app.state.studio_caps.rate_limit(ip)
+    await request.app.state.studio_caps.check(visitor)
     doc = await get_version(a, version_id, visitor)
     length = request.headers.get("content-length")
     if length and length.isdigit() and int(length) > a.settings.evo_max_upload_bytes + 1024 * 1024:
@@ -436,7 +477,7 @@ async def region(version_id: str, request: Request) -> JSONResponse:
         raise _err(ErrorCode.FILE_TOO_LARGE, "The painted mask is too large.", 413)
     original = await version_image(a, doc)
     await asyncio.to_thread(composite_region, original, original, mask)  # validate before spending a call
-    await a.caps.take(visitor)
+    await request.app.state.studio_caps.take(visitor)
 
     async def render(stage: Callable[[str], Awaitable[None]]) -> dict[str, Any]:
         await stage("Generating an edit for your painted region")

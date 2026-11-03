@@ -202,3 +202,19 @@ async def test_review_is_saved_and_given_to_collaborator_for_that_version(client
     assert captured == ["A second spider face is visible"]
     denied = await client.get(f"/evo/studio/versions/{version['id']}/review", headers={"X-Session-Id": "other-session-1"})
     assert denied.status_code == 404
+
+
+async def test_studio_has_separate_visible_action_limit(client):
+    client.app.state.studio_caps.settings.evo_visitor_daily_runs = 1
+    initial = (await client.get("/evo/studio/limits")).json()
+    assert initial["used"] == 0 and initial["limit"] == 1
+    first = await client.post("/evo/studio/concept", data={"animal1": "monkey", "animal2": "spider", "brief": "Eight legs"})
+    assert first.status_code == 201
+    limits = (await client.get("/evo/studio/limits")).json()
+    assert limits["used"] == 1
+    blocked = await client.post(f"/evo/studio/versions/{first.json()['id']}/review")
+    assert blocked.status_code == 429
+    assert "studio action limit" in blocked.json()["error"]["message"]
+    from app.agentapi.caps import visitor_key
+    visitor = visitor_key("test-session-1", "127.0.0.1")
+    assert await client.app.state.agent.caps.used(visitor) == (0, 0)

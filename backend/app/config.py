@@ -77,6 +77,10 @@ class Settings(BaseSettings):
     evo_visitor_daily_runs: int = 3  # agent runs per visitor (session id + client IP) per day
     evo_max_concurrent_runs: int = Field(default=3, ge=1)  # more are queued
     evo_runs_per_minute_per_ip: int = 5  # POST /evo/agent/runs
+    # Studio actions include conversational turns and visual reviews as well as image calls.
+    studio_daily_actions: int = Field(default=100, ge=1)
+    studio_visitor_daily_actions: int = Field(default=20, ge=1)
+    studio_actions_per_minute_per_ip: int = Field(default=10, ge=1)
     evo_run_soft_seconds: float = 840.0  # the agent finalizes its best image here (cap_reached scope time)
     evo_run_hard_seconds: float = 900.0  # the runner stops the run here
     evo_choice_seconds: float = 120.0  # host-tie choice wait
