@@ -6,10 +6,11 @@ import { useSyncExternalStore } from "react";
 //   /?run=<runId>         the canvas with the live trace of that run (reload resumes it)
 //   /?creature=<id>       one creature's card
 
-export type Route = { view: "gallery" } | { view: "lab"; runId: string | null } | { view: "creature"; creatureId: string };
+export type Route = { view: "gallery" } | { view: "studio" } | { view: "lab"; runId: string | null } | { view: "creature"; creatureId: string };
 
 export function parseRoute(search: string): Route {
   const q = new URLSearchParams(search);
+  if (q.get("view") === "studio") return { view: "studio" };
   const creature = q.get("creature");
   if (creature) return { view: "creature", creatureId: creature };
   const run = q.get("run");
@@ -22,6 +23,8 @@ export function hrefFor(r: Route): string {
   switch (r.view) {
     case "gallery":
       return "/";
+    case "studio":
+      return "/?view=studio";
     case "lab":
       return r.runId ? `/?run=${encodeURIComponent(r.runId)}` : "/?view=lab";
     case "creature":

@@ -11,6 +11,7 @@ import { restoreGraph, startAutosave } from "../persistence/autosave";
 import { CreaturePage } from "../screens/CreaturePage";
 import { GalleryPage } from "../screens/GalleryPage";
 import { LabView } from "../screens/LabView";
+import { Studio } from "../screens/Studio";
 import { Banners } from "./Banners";
 import { useRoute } from "./route";
 import { ShortcutsDialog } from "./ShortcutsDialog";
@@ -66,6 +67,8 @@ export function App({ crash = false }: { crash?: boolean }) {
         <main id="main" className="main" tabIndex={-1}>
           {route.view === "gallery" ? (
             <GalleryPage />
+          ) : route.view === "studio" ? (
+            <Studio />
           ) : route.view === "creature" ? (
             <CreaturePage key={route.creatureId} creatureId={route.creatureId} />
           ) : (

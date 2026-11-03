@@ -72,6 +72,7 @@ def create_app(settings: Settings | None = None, services: Services | None = Non
     app.state.services = svc
     app.state.runs = RunManager(svc)
     app.state.agent = AgentApi(svc, build_public_files(settings))  # R1: the agent API under /evo
+    app.state.studio_slots = asyncio.Semaphore(settings.evo_max_concurrent_runs)
 
     app.add_middleware(
         CORSMiddleware,
@@ -110,6 +111,8 @@ def create_app(settings: Settings | None = None, services: Services | None = Non
 
     app.include_router(evo_router)
     app.include_router(agent_router)
+    from app.agentapi.studio import router as studio_router
+    app.include_router(studio_router)
     mount_frontend(app, settings.repo_path(settings.frontend_dist))  # last: the SPA fallback
     return app
 

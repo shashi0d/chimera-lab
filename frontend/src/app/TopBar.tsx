@@ -34,6 +34,7 @@ export function TopBar() {
       </a>
       <nav className="topnav" aria-label={copy.nav.label}>
         <NavLink to={{ view: "gallery" }} label={copy.nav.gallery} current={route.view === "gallery" || route.view === "creature"} />
+        <NavLink to={{ view: "studio" }} label="Creative studio" current={route.view === "studio"} />
         <NavLink to={{ view: "lab", runId: null }} label={copy.nav.lab} current={inLab} />
       </nav>
       <p className="topbar__doc">

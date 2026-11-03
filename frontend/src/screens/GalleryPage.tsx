@@ -87,6 +87,9 @@ export function GalleryPage() {
           <p className="hero__lead">{t.lead}</p>
         </div>
         <div className="hero__action">
+          <Button variant="primary" className="btn--lg hero__make" onClick={() => navigate({ view: "studio" })}>
+            Open creative studio
+          </Button>
           <Button variant="primary" icon="fusion" className="btn--lg hero__make" disabled={capped} aria-describedby="limits-line" onClick={() => navigate({ view: "lab", runId: null })}>
             {t.make}
           </Button>
