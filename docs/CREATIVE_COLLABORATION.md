@@ -62,6 +62,8 @@ A selected draft has a conversational collaborator backed by Baseten tool callin
 
 Any two versions can be compared side by side. A creator can mark or unmark versions as final choices and download the original saved image bytes. Final is a reversible personal label, not a claim that the design is correct or that other versions are discarded. Multiple versions may be marked final. Comparison and final marking do not use model calls.
 
+Each independent concept and its descendants are grouped as an idea. The canvas shows one idea at a time, and the selector returns to the last selected version of each idea in the same browser. Earlier ideas stay available; comparison can still cross idea boundaries. The grouping is derived from saved parent links rather than a separate project record.
+
 ## Reference cards
 
 New concepts retain the original brief and two named source cards on the canvas. Uploaded source images are resized and stored in the configured private asset storage, served only to the originating session, and sent to the model for the initial concept. A creator can optionally include them with a selected draft in a subsequent revision. That option starts a new reference-based image request, so pose and composition may drift more than with a chained edit. Older concepts created before this feature cannot recover discarded source images. A live test using the repository's synthetic lion and tiger fixtures produced `sources_concept.webp` and `sources_revision.webp`; the requested stronger stripes changed little, so this verifies the data path rather than reliable reference adherence.

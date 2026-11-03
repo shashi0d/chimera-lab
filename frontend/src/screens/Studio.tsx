@@ -4,11 +4,14 @@ import { Button } from "../ui/Button";
 import { StudioCanvas, type StudioVersion as Version } from "./StudioCanvas";
 import { RegionEditor } from "./RegionEditor";
 import { StudioCollaborator } from "./StudioCollaborator";
+import { groupProjects, projectId } from "./studioProjects";
 
 type Review = { observation: string; suggestions: string };
 type Job = { id: string; operation: string; status: string; stage: string; result: Version | null; error: string | null };
 type StudioLimits = { used: number; limit: number; totalUsed: number; totalLimit: number };
 const STORAGE = "chimera.studio.versions.v1";
+const SELECTED = "chimera.studio.selected.v1";
+const PROJECT_SELECTIONS = "chimera.studio.project-selections.v1";
 
 function restore(): Version[] {
   try {
@@ -17,13 +20,20 @@ function restore(): Version[] {
   } catch { return []; }
 }
 
+function remembered(): Record<string, string> {
+  try { return JSON.parse(localStorage.getItem(PROJECT_SELECTIONS) || "{}"); } catch { return {}; }
+}
+
 export function Studio() {
   const [names, setNames] = useState(["", ""]);
   const [files, setFiles] = useState<Array<File | null>>([null, null]);
   const [brief, setBrief] = useState("");
   const [edit, setEdit] = useState("");
   const [versions, setVersions] = useState<Version[]>(restore);
-  const [selected, setSelected] = useState<string | null>(() => restore().at(-1)?.id ?? null);
+  const [selected, setSelected] = useState<string | null>(() => {
+    try { return localStorage.getItem(SELECTED) || restore().at(-1)?.id || null; } catch { return restore().at(-1)?.id ?? null; }
+  });
+  const [hydrated, setHydrated] = useState(false);
   const [busy, setBusy] = useState(false);
   const [jobs, setJobs] = useState<Job[]>([]);
   const [limits, setLimits] = useState<StudioLimits | null>(null);
@@ -34,20 +44,20 @@ export function Studio() {
   const [useSources, setUseSources] = useState(false);
   const [error, setError] = useState("");
   const current = versions.find((v) => v.id === selected);
+  const projects = groupProjects(versions);
+  const currentProject = current ? projectId(current, versions) : null;
+  const projectVersions = projects.find((project) => project.id === currentProject)?.versions ?? [];
   const compared = versions.find((v) => v.id === compareId && v.id !== selected);
-  const rootOf = (version: Version): Version => {
-    let root = version; const seen = new Set<string>();
-    while (root.parentId && !seen.has(root.parentId)) {
-      seen.add(root.parentId); const parent = versions.find((v) => v.id === root.parentId);
-      if (!parent) break; root = parent;
-    }
-    return root;
-  };
-  const hasSources = current ? Boolean(rootOf(current).sources?.some((source) => source.hasImage)) : false;
+  const root = currentProject ? versions.find((v) => v.id === currentProject) : undefined;
+  const hasSources = Boolean(root?.sources?.some((source) => source.hasImage));
   const activeJob = jobs.find((job) => job.status === "queued" || job.status === "running");
-  const working = busy || Boolean(activeJob);
+  const working = busy || Boolean(activeJob) || !hydrated;
 
   useEffect(() => { try { localStorage.setItem(STORAGE, JSON.stringify(versions)); } catch { /* storage may be unavailable */ } }, [versions]);
+  useEffect(() => {
+    if (!current || !currentProject) return;
+    try { const selections = remembered(); selections[currentProject] = current.id; localStorage.setItem(PROJECT_SELECTIONS, JSON.stringify(selections)); localStorage.setItem(SELECTED, current.id); } catch { /* storage is optional */ }
+  }, [current?.id, currentProject]);
   useEffect(() => {
     let cancelled = false;
     const refresh = () => void request<StudioLimits>("/evo/studio/limits", { headers: baseHeaders() })
@@ -60,21 +70,24 @@ export function Studio() {
     let cancelled = false;
     void request<{ versions: Version[] }>("/evo/studio/versions", { headers: baseHeaders() }).then(({ data }) => {
       if (cancelled) return;
+      known.current = new Set(data.versions.map((v) => v.id));
       setVersions(data.versions);
       setSelected((old) => data.versions.some((v) => v.id === old) ? old : data.versions.at(-1)?.id ?? null);
-    }).catch(() => { /* Keep the local copy available when offline. */ });
+    }).catch(() => { /* Keep the local copy available when offline. */ }).finally(() => { if (!cancelled) setHydrated(true); });
     return () => { cancelled = true; };
   }, []);
   useEffect(() => {
+    if (!hydrated) return;
     let cancelled = false;
     setReview(null);
     setUseSources(false);
     if (selected) void request<{ review: Review | null }>(`/evo/studio/versions/${encodeURIComponent(selected)}/review`, { headers: baseHeaders() })
       .then(({ data }) => { if (!cancelled) setReview(data.review); }).catch(() => { /* review is optional */ });
     return () => { cancelled = true; };
-  }, [selected]);
+  }, [selected, hydrated]);
 
   useEffect(() => {
+    if (!hydrated) return;
     let cancelled = false;
     let timer: ReturnType<typeof setTimeout>;
     async function poll() {
@@ -94,7 +107,22 @@ export function Studio() {
     }
     void poll();
     return () => { cancelled = true; clearTimeout(timer); };
-  }, []);
+  }, [hydrated]);
+
+  function selectProject(id: string) {
+    const group = projects.find((project) => project.id === id);
+    if (!group) return;
+    const last = remembered()[id];
+    setSelected(group.versions.find((version) => version.id === last)?.id ?? group.versions.at(-1)?.id ?? null);
+    setCompareId(""); setRegionOpen(false);
+  }
+
+  function versionLabel(version: Version): string {
+    const id = projectId(version, versions);
+    const group = projects.find((project) => project.id === id);
+    const n = (group?.versions.findIndex((item) => item.id === version.id) ?? -1) + 1;
+    return `${id === currentProject ? "" : "Other idea · "}Version ${n}${version.isFinal ? " · final" : ""}`;
+  }
 
   async function create() {
     setBusy(true); setError("");
@@ -192,23 +220,31 @@ export function Studio() {
       </section>
       <section className="studio__board" aria-labelledby="studio-board-title">
         <div className="studio__board-head"><div><p className="studio__eyebrow">02 / YOUR CREATIVE CANVAS</p><h2 id="studio-board-title">Explore your ideas</h2></div>
-          <span className="studio__badge">{versions.length} {versions.length === 1 ? "version" : "versions"}</span></div>
+          <span className="studio__badge">{projectVersions.length} {projectVersions.length === 1 ? "version" : "versions"}</span></div>
+        {projects.length > 1 && <><label htmlFor="studio-project">Creature idea</label>
+          <select id="studio-project" className="text-input studio__project-select" value={currentProject ?? ""} disabled={working} onChange={(event) => selectProject(event.target.value)}>
+            {projects.map((project, index) => {
+              const concept = project.versions.find((v) => v.id === project.id) ?? project.versions[0]!;
+              const title = concept.sources?.map((source) => source.name).join(" × ") || concept.instruction;
+              return <option key={project.id} value={project.id}>{`Idea ${index + 1} · ${title.slice(0, 65)}`}</option>;
+            })}
+          </select></>}
         <p className="studio__board-help">Select a version to work on it. Drag cards to arrange your ideas and zoom to explore branches.</p>
-        {versions.length > 0 ? <>
-          <StudioCanvas versions={versions} selected={selected} onSelect={(id) => { if (!working) setSelected(id); }} />
+        {projectVersions.length > 0 ? <>
+          <StudioCanvas key={currentProject} versions={projectVersions} selected={selected} onSelect={(id) => { if (!working) setSelected(id); }} />
           <div className="studio__versions" aria-label="Choose a version">
-            {versions.map((v, i) => <button type="button" key={v.id} className={`studio__version${v.id === selected ? " is-selected" : ""}`} aria-pressed={v.id === selected} disabled={working} onClick={() => setSelected(v.id)}>
-              <span>Version {i + 1}{v.parentId ? ` · from ${versions.findIndex((p) => p.id === v.parentId) + 1}` : " · concept"}{v.isFinal ? " · final" : ""}</span>
+            {projectVersions.map((v, i) => <button type="button" key={v.id} className={`studio__version${v.id === selected ? " is-selected" : ""}`} aria-pressed={v.id === selected} disabled={working} onClick={() => setSelected(v.id)}>
+              <span>Version {i + 1}{v.parentId ? ` · from ${projectVersions.findIndex((p) => p.id === v.parentId) + 1}` : " · concept"}{v.isFinal ? " · final" : ""}</span>
             </button>)}
           </div>
           {current && versions.length > 1 && <div className="studio__compare">
             <label htmlFor="compare-version">Compare selected draft with</label>
             <select id="compare-version" className="text-input" value={compared?.id ?? ""} onChange={(event) => setCompareId(event.target.value)}>
               <option value="">Choose another version</option>
-              {versions.map((v, i) => v.id !== current.id && <option key={v.id} value={v.id}>Version {i + 1}{v.isFinal ? " · final" : ""}</option>)}
+              {versions.map((v) => v.id !== current.id && <option key={v.id} value={v.id}>{versionLabel(v)}</option>)}
             </select>
-            {compared && <div className="studio__compare-images"><figure><img src={absoluteUrl(current.imageUrl)} alt="Selected draft for comparison" /><figcaption>Selected · Version {versions.findIndex((v) => v.id === current.id) + 1}</figcaption></figure>
-              <figure><img src={absoluteUrl(compared.imageUrl)} alt="Comparison draft" /><figcaption>Version {versions.findIndex((v) => v.id === compared.id) + 1}</figcaption></figure></div>}
+            {compared && <div className="studio__compare-images"><figure><img src={absoluteUrl(current.imageUrl)} alt="Selected draft for comparison" /><figcaption>Selected · {versionLabel(current)}</figcaption></figure>
+              <figure><img src={absoluteUrl(compared.imageUrl)} alt="Comparison draft" /><figcaption>{versionLabel(compared)}</figcaption></figure></div>}
           </div>}
         </> : <div className="studio__board-empty"><span aria-hidden="true">✳</span><h3>Your canvas starts with an idea</h3><p>Describe your creature and generate a concept. Each new version will grow from the one you choose.</p></div>}
       </section>
