@@ -44,6 +44,8 @@ export function Studio() {
   const [useSources, setUseSources] = useState(false);
   const [error, setError] = useState("");
   const current = versions.find((v) => v.id === selected);
+  const selectedRef = useRef(selected);
+  selectedRef.current = selected;
   const projects = groupProjects(versions);
   const currentProject = current ? projectId(current, versions) : null;
   const projectVersions = projects.find((project) => project.id === currentProject)?.versions ?? [];
@@ -262,7 +264,8 @@ export function Studio() {
             <Button size="sm" disabled={working} onClick={() => void download()}>Download image</Button></div>
           {current.isFinal && <p className="studio__note">You marked this version as a final choice. You can continue editing or change your mind.</p>}
           {current.direction && <details><summary>See the collaborator’s direction</summary><p>{current.direction}</p></details>}
-          <StudioCollaborator key={current.id} versionId={current.id} hasReview={Boolean(review)} disabled={working} onReview={() => void askForReview()} onInspected={setReview} onRevise={(instruction) => void revise(instruction)} />
+          <StudioCollaborator key={current.id} versionId={current.id} hasReview={Boolean(review)} disabled={working} onReview={() => void askForReview()} onBusyChange={setBusy}
+            onInspected={(result) => { if (selectedRef.current === current.id) setReview(result); }} onRevise={(instruction) => void revise(instruction)} />
           <div className="studio__review">
             <h3>Creative review</h3>
             <p>Ask the collaborator to look at this version and suggest possible next steps. You decide what to change.</p>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { baseHeaders, request } from "../api/client";
 import { Button } from "../ui/Button";
 
@@ -15,31 +15,35 @@ function restore(versionId: string): { messages: Message[]; action: Action | nul
   } catch { return { messages: [], action: null }; }
 }
 
-export function StudioCollaborator({ versionId, hasReview, disabled, onReview, onRevise, onInspected }: {
-  versionId: string; hasReview: boolean; disabled: boolean; onReview: () => void; onRevise: (instruction: string) => void; onInspected: (review: VisualReview) => void;
+export function StudioCollaborator({ versionId, hasReview, disabled, onReview, onRevise, onInspected, onBusyChange }: {
+  versionId: string; hasReview: boolean; disabled: boolean; onReview: () => void; onRevise: (instruction: string) => void; onInspected: (review: VisualReview) => void; onBusyChange: (busy: boolean) => void;
 }) {
   const [messages, setMessages] = useState<Message[]>(() => restore(versionId).messages);
   const [input, setInput] = useState("");
   const [action, setAction] = useState<Action | null>(() => restore(versionId).action);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const mounted = useRef(false);
+  useEffect(() => { mounted.current = true; return () => { mounted.current = false; onBusyChange(false); }; }, [onBusyChange]);
   useEffect(() => { try { localStorage.setItem(`chimera.studio.chat.${versionId}`, JSON.stringify({ messages, action })); } catch { /* local storage is optional */ } }, [versionId, messages, action]);
 
   async function send() {
     const content = input.trim();
     if (!content) return;
     const next: Message[] = [...messages, { role: "user" as const, content }].slice(-11);
-    setMessages(next); setInput(""); setAction(null); setError(""); setLoading(true);
+    setMessages(next); setInput(""); setAction(null); setError(""); setLoading(true); onBusyChange(true);
     try {
       const { data } = await request<Answer>(`/evo/studio/versions/${encodeURIComponent(versionId)}/collaborate`, {
         method: "POST", headers: baseHeaders({ "Content-Type": "application/json" }), body: JSON.stringify({ messages: next }),
       });
       const description = data.action?.type === "revise" ? ` Suggested revision: ${data.action.instruction}` : data.action?.type === "review" ? " Suggested a visual review." : "";
       const steps = data.steps?.map((step) => `Inspected the selected draft: ${step.reason}`).join("\n") ?? "";
-      setMessages((old) => [...old, { role: "assistant", content: `${steps}${steps ? "\n" : ""}${data.message}${description}`.slice(0, 2000) }]); setAction(data.action);
-      if (data.review) onInspected(data.review);
-    } catch (e) { setError(e instanceof Error ? e.message : "The collaborator could not respond."); }
-    finally { setLoading(false); }
+      const completed: Message[] = [...next, { role: "assistant", content: `${steps}${steps ? "\n" : ""}${data.message}${description}`.slice(0, 2000) }];
+      // The request may finish after the creator leaves this draft. Keep its reply with the originating version.
+      try { localStorage.setItem(`chimera.studio.chat.${versionId}`, JSON.stringify({ messages: completed, action: data.action })); } catch { /* storage is optional */ }
+      if (mounted.current) { setMessages(completed); setAction(data.action); if (data.review) onInspected(data.review); }
+    } catch (e) { if (mounted.current) setError(e instanceof Error ? e.message : "The collaborator could not respond."); }
+    finally { if (mounted.current) { setLoading(false); onBusyChange(false); } }
   }
   return <section className="studio-collaborator" aria-label="Creative collaborator">
     <h3>Creative collaborator</h3>
