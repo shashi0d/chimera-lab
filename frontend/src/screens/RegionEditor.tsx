@@ -2,10 +2,17 @@ import { useRef, useState, type PointerEvent } from "react";
 import { absoluteUrl } from "../api/client";
 import { Button } from "../ui/Button";
 
+type Point = { x: number; y: number };
+type Stroke = { points: Point[]; width: number; erase: boolean };
+
 export function RegionEditor({ imageUrl, disabled, onSubmit }: { imageUrl: string; disabled: boolean; onSubmit: (mask: Blob, instruction: string) => void }) {
   const canvas = useRef<HTMLCanvasElement>(null);
-  const drawing = useRef(false);
+  const active = useRef<Stroke | null>(null);
+  const strokes = useRef<Stroke[]>([]);
+  const undone = useRef<Stroke[]>([]);
   const [painted, setPainted] = useState(false);
+  const [history, setHistory] = useState({ undo: 0, redo: 0 });
+  const [erase, setErase] = useState(false);
   const [size, setSize] = useState(60);
   const [instruction, setInstruction] = useState("");
 
@@ -13,33 +20,76 @@ export function RegionEditor({ imageUrl, disabled, onSubmit }: { imageUrl: strin
     const el = event.currentTarget, bounds = el.getBoundingClientRect();
     return { x: (event.clientX - bounds.left) * el.width / bounds.width, y: (event.clientY - bounds.top) * el.height / bounds.height };
   }
+  function configure(ctx: CanvasRenderingContext2D, stroke: Stroke) {
+    ctx.globalCompositeOperation = stroke.erase ? "destination-out" : "source-over";
+    ctx.strokeStyle = "#ff3f6d"; ctx.fillStyle = "#ff3f6d"; ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.lineWidth = stroke.width;
+  }
+  function draw(ctx: CanvasRenderingContext2D, stroke: Stroke) {
+    const first = stroke.points[0];
+    if (!first) return;
+    configure(ctx, stroke);
+    ctx.beginPath(); ctx.arc(first.x, first.y, stroke.width / 2, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(first.x, first.y);
+    for (const p of stroke.points.slice(1)) ctx.lineTo(p.x, p.y);
+    ctx.stroke(); ctx.globalCompositeOperation = "source-over";
+  }
+  function updateState() {
+    const el = canvas.current, ctx = el?.getContext("2d");
+    if (!el || !ctx) return;
+    const pixels = ctx.getImageData(0, 0, el.width, el.height).data;
+    let hasPaint = false;
+    for (let i = 3; i < pixels.length; i += 4) if (pixels[i]) { hasPaint = true; break; }
+    setPainted(hasPaint); setHistory({ undo: strokes.current.length, redo: undone.current.length });
+  }
+  function redraw() {
+    const el = canvas.current, ctx = el?.getContext("2d");
+    if (!el || !ctx) return;
+    ctx.clearRect(0, 0, el.width, el.height);
+    for (const stroke of strokes.current) draw(ctx, stroke);
+    updateState();
+  }
   function down(event: PointerEvent<HTMLCanvasElement>) {
     if (disabled) return;
     const el = event.currentTarget, ctx = el.getContext("2d");
     if (!ctx) return;
-    event.preventDefault(); el.setPointerCapture(event.pointerId); drawing.current = true;
+    event.preventDefault(); el.setPointerCapture(event.pointerId);
     const p = point(event);
-    ctx.strokeStyle = "#ff3f6d"; ctx.fillStyle = "#ff3f6d"; ctx.lineCap = "round"; ctx.lineJoin = "round";
-    ctx.lineWidth = size * el.width / el.getBoundingClientRect().width;
-    ctx.beginPath(); ctx.arc(p.x, p.y, ctx.lineWidth / 2, 0, Math.PI * 2); ctx.fill();
-    ctx.beginPath(); ctx.moveTo(p.x, p.y); setPainted(true);
+    const stroke: Stroke = { points: [p], width: size * el.width / el.getBoundingClientRect().width, erase };
+    active.current = stroke; configure(ctx, stroke);
+    ctx.beginPath(); ctx.arc(p.x, p.y, stroke.width / 2, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(p.x, p.y);
   }
   function move(event: PointerEvent<HTMLCanvasElement>) {
-    if (!drawing.current) return;
+    if (!active.current) return;
     const ctx = event.currentTarget.getContext("2d");
     if (!ctx) return;
-    const p = point(event); ctx.lineTo(p.x, p.y); ctx.stroke();
+    const p = point(event); active.current.points.push(p); ctx.lineTo(p.x, p.y); ctx.stroke();
   }
-  function clear() { const el = canvas.current; if (el) el.getContext("2d")?.clearRect(0, 0, el.width, el.height); setPainted(false); }
+  function finish() {
+    if (!active.current) return;
+    strokes.current.push(active.current); active.current = null; undone.current = [];
+    const ctx = canvas.current?.getContext("2d"); if (ctx) ctx.globalCompositeOperation = "source-over";
+    updateState();
+  }
+  function undo() { const stroke = strokes.current.pop(); if (stroke) { undone.current.push(stroke); redraw(); } }
+  function redo() { const stroke = undone.current.pop(); if (stroke) { strokes.current.push(stroke); redraw(); } }
+  function clear() { active.current = null; strokes.current = []; undone.current = []; redraw(); }
   return <div className="region-editor">
     <p>Paint the area to change. A full-image edit is blended into your selection; everything outside the paint stays unchanged. Edges may be visible.</p>
     <div className="region-editor__image"><img src={absoluteUrl(imageUrl)} alt="Image to paint a region on" onLoad={(event) => {
-      const el = canvas.current; if (el) { el.width = event.currentTarget.naturalWidth; el.height = event.currentTarget.naturalHeight; setPainted(false); }
+      const el = canvas.current; if (el) { el.width = event.currentTarget.naturalWidth; el.height = event.currentTarget.naturalHeight; clear(); }
     }} />
-      <canvas ref={canvas} aria-label="Paint the area to change" onPointerDown={down} onPointerMove={move} onPointerUp={() => { drawing.current = false; }} onPointerCancel={() => { drawing.current = false; }} />
+      <canvas ref={canvas} tabIndex={0} aria-label="Paint the area to change" onPointerDown={down} onPointerMove={move} onPointerUp={finish} onPointerCancel={finish} onLostPointerCapture={finish}
+        onKeyDown={(event) => { if (!disabled && (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "z") { event.preventDefault(); if (event.shiftKey) redo(); else undo(); } }} />
     </div>
     <label htmlFor="region-size">Brush size: {size}px</label><input id="region-size" type="range" min="10" max="140" value={size} disabled={disabled} onChange={(event) => setSize(Number(event.target.value))} />
-    <Button size="sm" disabled={disabled || !painted} onClick={clear}>Clear paint</Button>
+    <div className="region-editor__tools" aria-label="Paint tools">
+      <Button size="sm" disabled={disabled} aria-pressed={!erase} onClick={() => setErase(false)}>Brush</Button>
+      <Button size="sm" disabled={disabled} aria-pressed={erase} onClick={() => setErase(true)}>Eraser</Button>
+      <Button size="sm" disabled={disabled || !history.undo} onClick={undo}>Undo stroke</Button>
+      <Button size="sm" disabled={disabled || !history.redo} onClick={redo}>Redo stroke</Button>
+      <Button size="sm" disabled={disabled || !history.undo} onClick={clear}>Clear paint</Button>
+    </div>
     <label htmlFor="region-instruction">Change in painted area</label>
     <textarea id="region-instruction" className="text-input studio__textarea" rows={3} value={instruction} maxLength={2000} disabled={disabled}
       placeholder="Remove the spider face and blend the waist into the abdomen" onChange={(event) => setInstruction(event.target.value)} />
