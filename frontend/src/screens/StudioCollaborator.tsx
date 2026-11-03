@@ -4,7 +4,8 @@ import { Button } from "../ui/Button";
 
 type Message = { role: "user" | "assistant"; content: string };
 type Action = { type: "review" | "revise"; reason: string; instruction?: string };
-type Answer = { message: string; action: Action | null };
+type VisualReview = { observation: string; suggestions: string };
+type Answer = { message: string; action: Action | null; review?: VisualReview | null; steps?: { tool: string; reason: string }[] };
 
 function restore(versionId: string): { messages: Message[]; action: Action | null } {
   try {
@@ -14,8 +15,8 @@ function restore(versionId: string): { messages: Message[]; action: Action | nul
   } catch { return { messages: [], action: null }; }
 }
 
-export function StudioCollaborator({ versionId, hasReview, disabled, onReview, onRevise }: {
-  versionId: string; hasReview: boolean; disabled: boolean; onReview: () => void; onRevise: (instruction: string) => void;
+export function StudioCollaborator({ versionId, hasReview, disabled, onReview, onRevise, onInspected }: {
+  versionId: string; hasReview: boolean; disabled: boolean; onReview: () => void; onRevise: (instruction: string) => void; onInspected: (review: VisualReview) => void;
 }) {
   const [messages, setMessages] = useState<Message[]>(() => restore(versionId).messages);
   const [input, setInput] = useState("");
@@ -34,14 +35,16 @@ export function StudioCollaborator({ versionId, hasReview, disabled, onReview, o
         method: "POST", headers: baseHeaders({ "Content-Type": "application/json" }), body: JSON.stringify({ messages: next }),
       });
       const description = data.action?.type === "revise" ? ` Suggested revision: ${data.action.instruction}` : data.action?.type === "review" ? " Suggested a visual review." : "";
-      setMessages((old) => [...old, { role: "assistant", content: `${data.message}${description}`.slice(0, 2000) }]); setAction(data.action);
+      const steps = data.steps?.map((step) => `Inspected the selected draft: ${step.reason}`).join("\n") ?? "";
+      setMessages((old) => [...old, { role: "assistant", content: `${steps}${steps ? "\n" : ""}${data.message}${description}`.slice(0, 2000) }]); setAction(data.action);
+      if (data.review) onInspected(data.review);
     } catch (e) { setError(e instanceof Error ? e.message : "The collaborator could not respond."); }
     finally { setLoading(false); }
   }
   return <section className="studio-collaborator" aria-label="Creative collaborator">
     <h3>Creative collaborator</h3>
-    <p>Talk through this draft. The collaborator can propose a review or an editable revision; you choose whether to run it.</p>
-    <p className="studio__note">Each message uses one studio action. {hasReview ? "The collaborator can use this draft’s saved visual review, which may be mistaken." : "The collaborator has not seen this image; run visual review to add observations."} Conversation is saved in this browser.</p>
+    <p>Talk through this draft. The collaborator can inspect it and propose an editable revision; you choose whether to generate it.</p>
+    <p className="studio__note">Each message uses one studio action and may make several model calls. {hasReview ? "The collaborator can use this draft’s saved visual review, which may be mistaken." : "Ask the collaborator to inspect the image, or run visual review below."} Conversation is saved in this browser.</p>
     {messages.length > 0 && <div className="studio-collaborator__messages" aria-live="polite">{messages.map((m, i) => <p key={i}><strong>{m.role === "user" ? "You" : "Collaborator"}:</strong> {m.content}</p>)}</div>}
     {error && <p className="studio__error" role="alert">{error}</p>}
     {action && <div className="studio-collaborator__action"><p><strong>Suggested {action.type}:</strong> {action.reason}</p>

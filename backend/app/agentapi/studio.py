@@ -216,18 +216,23 @@ async def source_image(version_id: str, index: int, request: Request) -> Respons
 
 
 async def plan_collaboration(settings: Any, brief: str, selected_instruction: str,
-                             conversation: list[dict[str, str]], observation: str = "") -> dict[str, Any]:
-    """Choose an available workspace action; proposing it does not execute it."""
+                             conversation: list[dict[str, str]], observation: str = "",
+                             inspect: Callable[[], Awaitable[dict[str, str]]] | None = None) -> dict[str, Any]:
+    """Use at most one visual inspection, then answer or propose an editable revision."""
     if settings.chimera_mode == "mock":
         last = conversation[-1]["content"]
+        if inspect and any(word in last.lower() for word in ("inspect", "review", "look at")):
+            review = await inspect()
+            return {"message": "I inspected the selected draft. " + review["observation"], "action": None,
+                    "review": review, "steps": [{"tool": "inspect_draft", "reason": "You asked me to inspect it."}]}
         return {"message": "I can turn that into a revision of the selected draft.",
-                "action": {"type": "revise", "instruction": last, "reason": "Follow your direction."}}
+                "action": {"type": "revise", "instruction": last, "reason": "Follow your direction."}, "steps": []}
     from app.adapters.baseten.client import BasetenEvoSpark
     brain = BasetenEvoSpark(settings)
     tools = [
         {"type": "function", "function": {"name": "propose_revision", "description": "Propose one editable image revision for the selected draft; never run it yourself.",
          "parameters": {"type": "object", "properties": {"instruction": {"type": "string"}, "reason": {"type": "string"}}, "required": ["instruction", "reason"], "additionalProperties": False}}},
-        {"type": "function", "function": {"name": "propose_review", "description": "Suggest visually reviewing the selected draft when observation would help.",
+        {"type": "function", "function": {"name": "inspect_draft", "description": "Inspect the selected image with a visual model when the user asks you to look or an observation is needed. This performs a model call.",
          "parameters": {"type": "object", "properties": {"reason": {"type": "string"}}, "required": ["reason"], "additionalProperties": False}}},
     ]
     prompt = ("You are a creative collaborator in Chimera Lab. The user directs an imaginary creature. "
@@ -235,22 +240,46 @@ async def plan_collaboration(settings: Any, brief: str, selected_instruction: st
               "are uncertain and can be wrong. Do not imply that you personally saw the image. You may propose one available action "
               "using the tools, or respond conversationally or ask a clarifying question. Never change the user's explicit "
               "anatomy or assert biological rules. A proposed action will be shown for the user to edit and run. "
-              "For a request to visually inspect the image, propose_review. For a concrete visual change, propose_revision. "
+              "For a request to visually inspect the image, call inspect_draft. You can inspect at most once per message. "
+              "For a concrete visual change, propose_revision. Do not create or modify an image yourself. "
               "If the user mentions painting an area, explain they should use the paint tool; you cannot paint a mask.\n"
               + json.dumps({"original_brief": brief, "selected_draft_instruction": selected_instruction,
                             "independent_visual_observation": observation or None}, ensure_ascii=False))
-    response = await brain.chat("studio_collaborate", {"messages": [{"role": "system", "content": prompt}, *conversation],
-                                                       "tools": tools, "tool_choice": "auto", "max_tokens": 4096})
+    messages: list[dict[str, Any]] = [{"role": "system", "content": prompt}, *conversation]
+    response = await brain.chat("studio_collaborate", {"messages": messages, "tools": tools, "tool_choice": "auto", "max_tokens": 4096})
     choice = (response.get("choices") or [{}])[0]
     message = choice.get("message") or {}
     calls = message.get("tool_calls") or []
     if len(calls) > 1 or (calls and choice.get("finish_reason") not in (None, "tool_calls")):
         raise _err(ErrorCode.UPSTREAM_ERROR, "The collaborator returned too many actions. Please try again.", 502)
+    review: dict[str, str] | None = None
+    steps: list[dict[str, str]] = []
+    if calls and (calls[0].get("function") or {}).get("name") == "inspect_draft":
+        if inspect is None or not calls[0].get("id"):
+            raise _err(ErrorCode.UPSTREAM_ERROR, "The collaborator could not inspect this draft.", 502)
+        try:
+            inspect_args = json.loads((calls[0].get("function") or {}).get("arguments") or "{}")
+        except (ValueError, TypeError) as exc:
+            raise _err(ErrorCode.UPSTREAM_ERROR, "The collaborator returned an invalid inspection.", 502) from exc
+        if not isinstance(inspect_args, dict) or not isinstance(inspect_args.get("reason"), str) or not inspect_args["reason"].strip():
+            raise _err(ErrorCode.UPSTREAM_ERROR, "The collaborator returned an invalid inspection.", 502)
+        review = await inspect()
+        steps.append({"tool": "inspect_draft", "reason": inspect_args["reason"].strip()[:500]})
+        messages.extend([{ "role": "assistant", "content": message.get("content") or None, "tool_calls": calls },
+                         {"role": "tool", "tool_call_id": calls[0]["id"], "content": json.dumps(review, ensure_ascii=False)}])
+        # A second inspection is intentionally unavailable in this turn.
+        response = await brain.chat("studio_collaborate_after_inspection", {"messages": messages, "tools": tools[:1],
+                                    "tool_choice": "auto", "max_tokens": 4096})
+        choice = (response.get("choices") or [{}])[0]
+        message = choice.get("message") or {}
+        calls = message.get("tool_calls") or []
+        if len(calls) > 1 or (calls and choice.get("finish_reason") not in (None, "tool_calls")):
+            raise _err(ErrorCode.UPSTREAM_ERROR, "The collaborator returned too many actions after inspection.", 502)
     text = str(message.get("content") or "").strip()[:3000]
     if not calls:
         if not text or choice.get("finish_reason") not in (None, "stop"):
             raise _err(ErrorCode.UPSTREAM_ERROR, "The collaborator did not finish its response. Please try again.", 502)
-        return {"message": text, "action": None}
+        return {"message": text, "action": None, "review": review, "steps": steps}
     fn = calls[0].get("function") or {}
     try:
         args = json.loads(fn.get("arguments") or "{}")
@@ -261,11 +290,9 @@ async def plan_collaboration(settings: Any, brief: str, selected_instruction: st
     reason = args["reason"].strip()[:500]
     if fn.get("name") == "propose_revision" and isinstance(args.get("instruction"), str) and args["instruction"].strip():
         action = {"type": "revise", "instruction": args["instruction"].strip()[:2000], "reason": reason}
-    elif fn.get("name") == "propose_review":
-        action = {"type": "review", "reason": reason}
     else:
         raise _err(ErrorCode.UPSTREAM_ERROR, "The collaborator returned an unsupported action. Please try again.", 502)
-    return {"message": text or "Here's a possible next step for this draft.", "action": action}
+    return {"message": text or "Here's a possible next step for this draft.", "action": action, "review": review, "steps": steps}
 
 
 @router.post("/versions/{version_id}/collaborate")
@@ -290,11 +317,18 @@ async def collaborate(version_id: str, request: Request) -> JSONResponse:
     if conversation[-1]["role"] != "user":
         raise _err(ErrorCode.VALIDATION_FAILED, "The last message must be yours.", 422)
     root = await root_version(a, selected, visitor)
+    async def inspect_selected() -> dict[str, str]:
+        image = await version_image(a, selected)
+        result = await review_image(a.settings, image, str(root.get("instruction") or ""),
+                                    str(selected.get("instruction") or "") if selected.get("parentId") else "")
+        selected["review"] = result
+        await a.services.db.put("assets", version_id, selected)
+        return result
     await request.app.state.studio_caps.take(visitor)
     async with request.app.state.studio_slots:
         result = await plan_collaboration(a.settings, str(root.get("instruction") or ""),
                                           str(selected.get("instruction") or ""), conversation,
-                                          str((selected.get("review") or {}).get("observation") or ""))
+                                          str((selected.get("review") or {}).get("observation") or ""), inspect_selected)
     return JSONResponse(result, headers={"Cache-Control": "no-store"})
 
 

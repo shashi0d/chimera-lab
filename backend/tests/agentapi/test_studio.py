@@ -167,7 +167,7 @@ async def test_collaborator_proposes_action_without_running_it(client, monkeypat
             calls.append(prompt)
             return GeneratedImage(image_bytes("red"), "image/png", "test", "response")
 
-    async def fake_plan(settings, brief, selected_instruction, conversation, observation):
+    async def fake_plan(settings, brief, selected_instruction, conversation, observation, inspect):
         assert brief == "Eight spider legs"
         assert conversation[-1]["content"] == "Make the legs longer"
         return {"message": "Let's try this.", "action": {"type": "revise", "reason": "Your request", "instruction": "Longer legs"}}
@@ -195,7 +195,7 @@ async def test_review_is_saved_and_given_to_collaborator_for_that_version(client
     async def fake_review(settings, image, brief, change):
         return {"observation": "A second spider face is visible", "suggestions": "Consider removing it"}
 
-    async def fake_plan(settings, brief, selected_instruction, conversation, observation):
+    async def fake_plan(settings, brief, selected_instruction, conversation, observation, inspect):
         captured.append(observation)
         return {"message": "Consider removing it.", "action": None}
 
@@ -212,6 +212,44 @@ async def test_review_is_saved_and_given_to_collaborator_for_that_version(client
     assert captured == ["A second spider face is visible"]
     denied = await client.get(f"/evo/studio/versions/{version['id']}/review", headers={"X-Session-Id": "other-session-1"})
     assert denied.status_code == 404
+
+
+async def test_collaborator_inspects_then_proposes_without_rendering(client, monkeypatch):
+    from app.agentapi import studio
+    from app.adapters.baseten import client as baseten
+    generated, chats = [], []
+
+    class Renderer:
+        async def generate(self, prompt, refs, aspect, previous_response_id=None):
+            generated.append(prompt)
+            return GeneratedImage(image_bytes("blue"), "image/png", "test", "response")
+
+    class Brain:
+        def __init__(self, settings): pass
+        async def chat(self, purpose, body):
+            chats.append(body)
+            if len(chats) == 1:
+                return {"choices": [{"finish_reason": "tool_calls", "message": {"tool_calls": [{"id": "call-1", "type": "function", "function": {"name": "inspect_draft", "arguments": '{"reason":"Check the image"}'}}]}}]}
+            assert body["messages"][-1]["role"] == "tool"
+            assert "extra face" in body["messages"][-1]["content"]
+            assert len(body["tools"]) == 1
+            return {"choices": [{"finish_reason": "tool_calls", "message": {"tool_calls": [{"id": "call-2", "type": "function", "function": {"name": "propose_revision", "arguments": '{"reason":"Remove mismatch","instruction":"Remove the extra face"}'}}]}}]}
+
+    async def fake_review(settings, image, brief, change):
+        assert image == image_bytes("blue")
+        return {"observation": "An extra face appears", "suggestions": "Remove it"}
+
+    client.app.state.services.image_gen = Renderer()
+    version = (await client.post("/evo/studio/concept", data={"animal1": "monkey", "animal2": "spider", "brief": "Eight legs"})).json()
+    monkeypatch.setattr(baseten, "BasetenEvoSpark", Brain)
+    monkeypatch.setattr(studio, "review_image", fake_review)
+    client.app.state.services.settings.chimera_mode = "real"
+    result = await client.post(f"/evo/studio/versions/{version['id']}/collaborate", json={"messages": [{"role": "user", "content": "Inspect it and suggest a fix"}]})
+    assert result.status_code == 200, result.text
+    assert result.json()["steps"][0]["tool"] == "inspect_draft"
+    assert result.json()["action"]["instruction"] == "Remove the extra face"
+    assert (await client.get(f"/evo/studio/versions/{version['id']}/review")).json()["review"]["observation"] == "An extra face appears"
+    assert len(generated) == 1
 
 
 async def test_studio_has_separate_visible_action_limit(client):
