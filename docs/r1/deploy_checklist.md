@@ -51,16 +51,19 @@ Spend guards also apply: `DAILY_GENERATION_CAP`, `DAILY_TOKEN_CAP`, `MAX_TOKENS_
 
 ## 3. Supabase setup
 
-1. Create the project; copy the URL and the **service_role** key into the host secrets.
+1. Create the project; copy the URL and the **secret** key (`sb_secret_...`, legacy name service_role) into the
+   host secrets as `SUPABASE_URL` and `SUPABASE_SECRET_KEY` (`SUPABASE_SERVICE_KEY` is also accepted).
 2. SQL editor: run `backend/app/adapters/supabase/schema.sql` (existing tables, `incr_counter`, private
    `chimera-assets` bucket), then `backend/app/adapters/supabase/001_agent_api.sql` (adds `agent_runs`, a
    `creatures.kind` index, and the **public** `chimera-public` bucket; no write policies, so only the service key
-   writes).
+   writes), then `002_lockdown_and_indexes.sql` (only the service role may call `incr_counter`; `assets` indexes),
+   then `003_table_grants.sql` (newer projects give the API roles no data privileges on new tables: this grants
+   them to service_role only; without it every write fails with `permission denied for table assets`).
 3. Check: `select id, public from storage.buckets;` shows `chimera-public | true`.
 4. Image URLs then look like `$SUPABASE_URL/storage/v1/object/public/chimera-public/runs/<runId>/img1.webp`;
    `/evo/files/...` redirects there.
-5. Note: the Supabase adapters were never run against a live project (P7-03 UNVERIFIED). Do one mock-mode smoke
-   (below) against the real project before the live demo.
+5. Verified 2026-11-03 against a live project (Postgres 17): document put/get/list, upsert, `incr_counter`, both
+   buckets, and that the publishable key can neither read, write nor call `incr_counter`.
 
 ## 4. Build, start and smoke-test
 

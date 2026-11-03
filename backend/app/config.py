@@ -6,7 +6,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Literal
 
-from pydantic import Field
+from pydantic import AliasChoices, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -32,7 +32,9 @@ class Settings(BaseSettings):
     baseten_timeout_seconds: float = 300.0
 
     supabase_url: str | None = None
-    supabase_service_key: str | None = None
+    # Server-side key (bypasses RLS). Supabase now calls it the secret key (sb_secret_...); the legacy name still works.
+    supabase_service_key: str | None = Field(
+        default=None, validation_alias=AliasChoices("SUPABASE_SECRET_KEY", "SUPABASE_SERVICE_KEY", "supabase_service_key"))
     storage_bucket: str = "chimera-assets"
 
     data_path: str = "data/chimera_data.json"
