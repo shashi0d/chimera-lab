@@ -17,10 +17,10 @@ from typing import Any
 import pytest
 from PIL import Image
 
-from app.adapters.mock.recorded import chat_payload
 from app.evolution import live
 from app.evolution.data import known_pairs
 from app.evolution.judge import THUMB_PX, checklist_for, checklist_score
+from app.evolution.recorded import chat_payload
 from app.evolution.route import route
 from tests.conftest import make_settings
 

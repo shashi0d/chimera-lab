@@ -22,8 +22,7 @@ from app.evolution.engine import EvoEngine
 from app.evolution.genome import validate_plan
 from app.evolution.inspect import Item, edit_instruction, inspect_checklist, plan_items
 from app.models.schemas import ErrorCode
-from app.services import build_services
-from tests.conftest import make_settings
+from tests.conftest import make_settings, offline_services
 from tests.evolution.conftest import plan_for
 
 FIX = Path(__file__).resolve().parents[1] / "fixtures" / "recorded" / "s2"
@@ -61,7 +60,7 @@ def _critic(items: list[Item], answers: dict[str, str], creatures: int = 1) -> d
 def e4_engine(tmp_path: Path) -> EvoEngine:
     store = tmp_path / "learned.json"
     shutil.copy(FIX / "learned_beetle_e4.json", store)
-    return EvoEngine(build_services(make_settings(tmp_path, evo_learned_path=str(store))))
+    return EvoEngine(offline_services(make_settings(tmp_path, evo_learned_path=str(store))), offline=True)
 
 
 def _e4_plan(e4_engine):

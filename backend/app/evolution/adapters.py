@@ -26,7 +26,7 @@ from typing import Any, Protocol, TypeVar
 
 from PIL import Image, ImageDraw
 
-from app.adapters.mock.recorded import RECORDED, chat_payload
+from app.evolution.recorded import RECORDED, chat_payload
 
 T = TypeVar("T")
 

@@ -136,9 +136,3 @@ async def test_unknown_mode_is_refused(engine):
 
     with pytest.raises(ChimeraError):
         await engine.fuse(sire_name="lion", dam_name="eagle", host="sire", mode="fantasy")
-
-
-async def test_fuse_endpoint_compare(client):
-    r = await client.post("/evo/fuse", json={"sire": {"name": "lion"}, "dam": {"name": "eagle"}, "host": "sire", "mode": "compare"})
-    assert r.status_code == 200, r.text
-    assert [d["genome"]["design_mode"] for d in r.json()["pair"]] == ["realistic", "speculative"]

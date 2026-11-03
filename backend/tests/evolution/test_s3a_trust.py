@@ -55,12 +55,11 @@ class NoSeg:
 @pytest.fixture
 def e4_engine(tmp_path: Path):
     from app.evolution.engine import EvoEngine
-    from app.services import build_services
-    from tests.conftest import make_settings
+    from tests.conftest import make_settings, offline_services
 
     store = tmp_path / "learned.json"
     shutil.copy(FIX / "learned_beetle_e4.json", store)
-    return EvoEngine(build_services(make_settings(tmp_path, evo_learned_path=str(store))))
+    return EvoEngine(offline_services(make_settings(tmp_path, evo_learned_path=str(store))), offline=True)
 
 
 async def _beetle_bear(e4_engine):

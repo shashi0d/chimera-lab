@@ -28,7 +28,7 @@ import httpx
 from app.adapters.base import GeneratedImage
 from app.adapters.usage import CallKind, CallRecord, Timer, current_step, guard, record, tokens_of
 from app.errors import ChimeraError
-from app.models.schemas import AnimalReading, ErrorCode, FieldCard, FusionPlan
+from app.models.schemas import AnimalReading, ErrorCode
 
 # ------------------------------------------------------------- formats
 
@@ -70,53 +70,11 @@ READING_SCHEMA: dict[str, Any] = {
     },
 }
 
-PARTS = ["head", "body", "limbs", "covering", "tail"]
-
-PLAN_SCHEMA: dict[str, Any] = {
-    "type": "object",
-    "additionalProperties": False,
-    "required": ["creature_name", "body_plan", "part_donors", "rationale"],
-    "properties": {
-        "creature_name": {"type": "string"},
-        "body_plan": {"type": "string"},
-        "part_donors": {
-            "type": "object",
-            "additionalProperties": False,
-            "required": PARTS,
-            "properties": {k: {"type": "string", "enum": ["A", "B"]} for k in PARTS},
-        },
-        "rationale": {"type": "string"},
-    },
-}
-
-CARD_SCHEMA: dict[str, Any] = {
-    "type": "object",
-    "additionalProperties": False,
-    "required": ["common_name", "binomial", "habitat", "diet", "size", "behaviour"],
-    "properties": {k: {"type": "string"} for k in ["common_name", "binomial", "habitat", "diet", "size", "behaviour"]},
-}
-
 DESCRIBE_INSTRUCTIONS = (
     "You are a field biologist. Identify the single main animal in the photo: its everyday English common name "
     "and its Latin binomial (genus species, the standard accepted name). If there is no animal, set is_animal=false. "
     "If any human or human body part is visible, set contains_human=true and do not describe the person. "
     "List only anatomy that is actually visible. body_plan is one of: " + ", ".join(BODY_PLANS) + "."
-)
-
-PLAN_INSTRUCTIONS = (
-    "You design anatomically plausible creature fusions from two real animals, A and B. Choose which parent donates "
-    "each part (head, body, limbs, covering, tail) so the result can plausibly stand, move and feed. Any part in "
-    "donor_pins is fixed by the user: keep it exactly. body_plan must be exactly one value from allowed_body_plans. "
-    "Respect the rule warnings and real-hybrid facts provided. Keep the rationale to two sentences. "
-    "creature_name: an evocative common name of two or three words, as a field guide would print it. "
-    "Do not glue the parents' names together (no portmanteaus like 'Liger' or 'Lioiger')."
-)
-
-CARD_INSTRUCTIONS = (
-    "Write a natural-history field-guide entry for an INVENTED creature fused from two real animals. "
-    "Invent a Latinate binomial. Base habitat and diet only on the parents' data provided. For size, quote "
-    "the parents' recorded ranges exactly as given and do not compute averages or midpoints. Two sentences "
-    "of behaviour at most. Never claim the creature exists."
 )
 
 # ------------------------------------------------------------- request builders (pure)
@@ -138,30 +96,6 @@ def build_describe_request(model: str, image: bytes) -> dict[str, Any]:
         ],
         "response_format": _json_schema("animal_reading", READING_SCHEMA),
         "temperature": 0,
-    }
-
-
-def build_plan_request(model: str, context: dict[str, Any]) -> dict[str, Any]:
-    return {
-        "model": model,
-        "messages": [
-            {"role": "system", "content": PLAN_INSTRUCTIONS},
-            {"role": "user", "content": json.dumps(context, ensure_ascii=False)},
-        ],
-        "response_format": _json_schema("fusion_plan", PLAN_SCHEMA),
-        "temperature": 0.4,
-    }
-
-
-def build_card_request(model: str, context: dict[str, Any]) -> dict[str, Any]:
-    return {
-        "model": model,
-        "messages": [
-            {"role": "system", "content": CARD_INSTRUCTIONS},
-            {"role": "user", "content": json.dumps(context, ensure_ascii=False)},
-        ],
-        "response_format": _json_schema("field_card", CARD_SCHEMA),
-        "temperature": 0.6,
     }
 
 
@@ -203,17 +137,6 @@ def _message_json(payload: dict[str, Any]) -> dict[str, Any]:
 
 def parse_describe_response(payload: dict[str, Any]) -> AnimalReading:
     return AnimalReading.model_validate(_message_json(payload))
-
-
-def parse_plan_response(payload: dict[str, Any]) -> FusionPlan:
-    data = _message_json(payload)
-    if "creature_name" in data:  # L1-10: the plan names the creature
-        data["name_suggestion"] = data.pop("creature_name")
-    return FusionPlan.model_validate(data)
-
-
-def parse_card_response(payload: dict[str, Any]) -> FieldCard:
-    return FieldCard.model_validate(_message_json(payload))
 
 
 def parse_generate_response(payload: dict[str, Any], model: str) -> GeneratedImage:
@@ -387,14 +310,6 @@ class MetaVision:
     async def describe_animal(self, image: bytes, slot: str) -> AnimalReading:
         payload = await self.http.call("spark", "describe", self.model_id, build_describe_request(self.model_id, image))
         return parse_describe_response(payload)
-
-    async def plan_fusion(self, context: dict[str, Any]) -> FusionPlan:
-        payload = await self.http.call("spark", "plan", self.model_id, build_plan_request(self.model_id, context))
-        return parse_plan_response(payload)
-
-    async def write_field_card(self, context: dict[str, Any]) -> FieldCard:
-        payload = await self.http.call("spark", "card", self.model_id, build_card_request(self.model_id, context))
-        return parse_card_response(payload)
 
 
 class MetaImageGen:

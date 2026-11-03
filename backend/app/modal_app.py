@@ -2,8 +2,8 @@
 itself is plain FastAPI + uvicorn and uses no Modal-only feature (docs/r1/deploy_checklist.md).
 
 Secrets are attached as a Modal secret named `chimera-lab` holding the env vars from docs/r1/deploy_checklist.md
-(META_API_KEY, BASETEN_API_KEY_MODEL_MUSE_SPARK_OPEN_26, SUPABASE_URL, SUPABASE_SERVICE_KEY, the caps, ...).
-The built frontend (frontend/dist), the S5 showcase outputs and the mock fixtures are added when they exist.
+(META_API_KEY, BASETEN_API_KEY_MODEL_MUSE_SPARK_OPEN_26, SUPABASE_URL, SUPABASE_SECRET_KEY, SUPABASE_PUBLISHABLE_KEY, the caps, ...).
+The built frontend (frontend/dist) and the S5 showcase outputs are added when they exist.
 """
 
 from __future__ import annotations
@@ -15,8 +15,7 @@ import modal
 BACKEND_DIR = Path(__file__).resolve().parents[1]
 REPO = BACKEND_DIR.parent
 OPTIONAL = {"frontend_dist": (REPO / "frontend" / "dist", "/root/frontend/dist"),
-            "evo_showcase_dir": (REPO / "docs" / "evolution" / "live" / "s5", "/root/s5"),
-            "evo_fixtures_dir": (REPO / "docs" / "api_fixtures", "/root/api_fixtures")}
+            "evo_showcase_dir": (REPO / "docs" / "evolution" / "live" / "s5", "/root/s5")}
 
 image = (
     modal.Image.debian_slim(python_version="3.11")
@@ -47,4 +46,4 @@ def fastapi_app():  # type: ignore[no-untyped-def]
     from app.main import create_app
 
     paths = {k: dst for k, (_src, dst) in OPTIONAL.items() if Path(dst).exists()}
-    return create_app(Settings(data_path="/root/data/chimera_data.json", **paths))
+    return create_app(Settings(**paths))

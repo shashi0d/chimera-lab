@@ -89,9 +89,11 @@ class EvoStore:
 
 class EvoEngine:
     def __init__(self, services: Services, spark: EvoSpark | None = None, segmenter: Segmenter | None = None,
-                 registry: MockRegistry | None = None, store_root: Path | None = None) -> None:
+                 registry: MockRegistry | None = None, store_root: Path | None = None, offline: bool = False) -> None:
+        """`offline` runs the engine on its deterministic offline adapters (the test harness: no model is called).
+        The app never sets it: Chimera Lab is live-only."""
         self.services = services
-        self.mock = services.settings.chimera_mode == "mock"
+        self.mock = offline
         self.registry = registry or MockRegistry()
         self.renderer: ImageGenAdapter = services.image_gen
         self.live_error: str | None = None

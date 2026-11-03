@@ -18,12 +18,11 @@ from app.evolution.engine import EvoEngine
 from app.evolution.gbif import FixtureGbif, GbifClient, GbifUnavailable, accepted
 from app.evolution.resolve import MODEL, LearnedStore
 from app.evolution.route import LABEL_CHIMERA, route
-from app.services import build_services
-from tests.conftest import IMAGES, make_settings
+from tests.conftest import IMAGES, make_settings, offline_services
 
 
 def _engine(tmp_path, **kw) -> EvoEngine:
-    return EvoEngine(build_services(make_settings(tmp_path, **kw)))
+    return EvoEngine(offline_services(make_settings(tmp_path, **kw)), offline=True)
 
 
 def _learned(eng: EvoEngine) -> dict[str, Any]:
@@ -192,16 +191,6 @@ async def test_fuse_refuses_with_the_resolution_in_details(engine):
     with pytest.raises(ChimeraError) as e:
         await engine.fuse(sire_name="griffin", dam_name="lion")
     assert e.value.details["resolution"]["status"] == "refused"
-
-
-async def test_resolve_endpoint(client):
-    r = await client.post("/evo/resolve", json={"name": "pangolin"})
-    assert r.status_code == 200 and r.json()["status"] == "resolved" and r.json()["alternatives"]
-    r = await client.post("/evo/resolve", json={"name": "notarealus"})
-    assert r.status_code == 200 and r.json()["status"] == "needs_choice"
-
-
-# ------------------------------------------------------------------ GBIF client
 
 
 async def test_gbif_client_exact_and_retry_then_unavailable():

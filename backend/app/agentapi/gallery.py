@@ -1,8 +1,12 @@
 """Creatures saved by agent runs, the gallery, and the S5 showcase seed.
 
-Creatures live in the existing `creatures` table as {"kind": "evo_agent", "creatureId", "createdAt", "source",
-"view": Creature, "trace": [...], ...}. The `showcase` flag is not stored: it is read from EVO_SHOWCASE at request
-time, so the list can change after the owner's ratings without re-seeding.
+Creatures live in the `creatures` table as {"kind": "evo_agent", "creatureId", "createdAt", "source", "owner",
+"view": Creature, "trace": [...], "publications": [...]}. The `showcase` flag is not stored: it is read from
+EVO_SHOWCASE at request time, so the list can change without re-seeding.
+
+The gallery is the showcase plus what users chose to publish from the Lab (kind "lab_publication": a final version
+with its whole path, app/agentapi/lab.py). A user's run creature stays private to them unless a version of it is
+published.
 
 The showcase creatures are seeded on first use from the S5 benchmark outputs (EVO_SHOWCASE_DIR/<case>/agent/): the
 agent's doc, plan, trace, critic answers and images, converted to gallery JPEGs in public storage. A case whose folder
@@ -22,10 +26,12 @@ from typing import Any
 from app.adapters.base import DbAdapter
 from app.agentapi.creature import build_creature, gallery_item, parent_view
 from app.agentapi.files import PublicFiles
+from app.auth import User
 from app.config import Settings
 
 log = logging.getLogger(__name__)
 KIND = "evo_agent"
+PUBLICATION = "lab_publication"
 SEED_VERSION = 1
 SHOWCASE_EPOCH = datetime(2026, 11, 1, 20, 0, 0, tzinfo=UTC)
 
@@ -70,22 +76,36 @@ class Creatures:
         show = {showcase_id(c) for c in self.settings.showcase_list}
         return {**view, "showcase": view["creatureId"] in show}
 
-    async def get(self, creature_id: str) -> dict[str, Any] | None:
+    def _is_showcase(self, creature_id: str) -> bool:
+        return creature_id in {showcase_id(c) for c in self.settings.showcase_list}
+
+    async def get(self, creature_id: str, user: User | None = None) -> dict[str, Any] | None:
+        """A creature card: public when it is in the showcase or published, else only for its owner."""
         await self.ensure_showcase()
         doc = await self.db.get("creatures", creature_id)
         if not doc or doc.get("kind") != KIND:
             return None
+        public = self._is_showcase(creature_id) or bool(doc.get("publications"))
+        if not public and (user is None or doc.get("owner") != user.id):
+            return None
         return self._present(doc["view"])
 
+    async def publication(self, publication_id: str) -> dict[str, Any] | None:
+        doc = await self.db.get("creatures", publication_id)
+        if not doc or doc.get("kind") != PUBLICATION or doc.get("unpublished"):
+            return None
+        return publication_view(doc)
+
     async def gallery(self, limit: int, cursor: str | None) -> dict[str, Any]:
+        """The showcase first (in EVO_SHOWCASE order), then published creations, newest first."""
         await self.ensure_showcase()
         docs = await self.db.list("creatures", "kind", KIND)
         order = [showcase_id(c) for c in self.settings.showcase_list]
         by_id = {d["creatureId"]: d for d in docs}
-        first = [by_id[i] for i in order if i in by_id]
-        rest = sorted((d for d in docs if d["creatureId"] not in set(order)), key=lambda d: d["createdAt"],
-                      reverse=True)
-        items = [gallery_item(self._present(d["view"])) for d in first + rest]
+        first = [gallery_item(self._present(by_id[i]["view"])) | {"kind": "showcase"} for i in order if i in by_id]
+        pubs = [d for d in await self.db.list("creatures", "kind", PUBLICATION) if not d.get("unpublished")]
+        pubs.sort(key=lambda d: d["createdAt"], reverse=True)
+        items = first + [publication_item(d) for d in pubs]
         start = _decode_cursor(cursor)
         page = items[start:start + limit]
         nxt = start + limit
@@ -154,6 +174,19 @@ class Creatures:
             stats={"renders": meta.get("renders"), "edits": meta.get("edits"), "toolCalls": meta.get("tool_calls"),
                    "seconds": meta.get("wall_seconds")})
         return view, trace
+
+
+def publication_item(doc: dict[str, Any]) -> dict[str, Any]:
+    return {"kind": "creation", "creatureId": doc["creatureId"], "title": doc.get("title"), "sire": doc.get("sire"),
+            "dam": doc.get("dam"), "mode": doc.get("mode"), "imageUrl": doc.get("imageUrl"), "showcase": False,
+            "createdAt": doc.get("createdAt"), "steps": len(doc.get("steps") or [])}
+
+
+def publication_view(doc: dict[str, Any]) -> dict[str, Any]:
+    """A published creation with its path: the parents, the Fusion run's creature, then every edit to the final."""
+    return {"publicationId": doc["creatureId"], "title": doc.get("title"), "createdAt": doc.get("createdAt"),
+            "sire": doc.get("sire"), "dam": doc.get("dam"), "mode": doc.get("mode"), "imageUrl": doc.get("imageUrl"),
+            "sourceCreatureId": doc.get("sourceCreatureId"), "steps": doc.get("steps") or []}
 
 
 def _encode_cursor(offset: int) -> str:

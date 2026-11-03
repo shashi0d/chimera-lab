@@ -6,13 +6,12 @@ import pytest
 
 from app.evolution.data import taxonomy
 from app.evolution.engine import EvoEngine
-from app.services import build_services
-from tests.conftest import make_settings
+from tests.conftest import make_settings, offline_services
 
 
 @pytest.fixture
 def engine(tmp_path: Path) -> EvoEngine:
-    return EvoEngine(build_services(make_settings(tmp_path)))
+    return EvoEngine(offline_services(make_settings(tmp_path)), offline=True)
 
 
 @pytest.fixture

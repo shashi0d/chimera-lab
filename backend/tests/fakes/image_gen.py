@@ -15,11 +15,12 @@ import re
 
 from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageOps
 
-from app.adapters.base import GeneratedImage, current_fault
+from app.adapters.base import GeneratedImage
 from app.adapters.meta.client import parse_generate_response
-from app.adapters.mock.recorded import responses_payload
 from app.errors import ChimeraError
+from app.evolution.recorded import responses_payload
 from app.models.schemas import ErrorCode
+from tests.fakes.faults import current_fault
 
 SIZE = 1024
 PAPER = (241, 235, 222)

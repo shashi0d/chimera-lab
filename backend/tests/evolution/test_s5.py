@@ -14,8 +14,7 @@ from app.evolution import agent as A
 from app.evolution.critic import questions
 from app.evolution.engine import EvoEngine
 from app.evolution.prompt import compile_prompt
-from app.services import build_services
-from tests.conftest import make_settings
+from tests.conftest import make_settings, offline_services
 
 REPO = Path(__file__).resolve().parents[3]
 FIX = Path(__file__).resolve().parents[1] / "fixtures"
@@ -25,7 +24,7 @@ FIX = Path(__file__).resolve().parents[1] / "fixtures"
 def eng(tmp_path: Path) -> EvoEngine:
     store = tmp_path / "learned.json"
     shutil.copy(REPO / "data" / "learned_animals.json", store)
-    return EvoEngine(build_services(make_settings(tmp_path, evo_learned_path=str(store))))
+    return EvoEngine(offline_services(make_settings(tmp_path, evo_learned_path=str(store))), offline=True)
 
 
 async def _run_to_plan(eng: EvoEngine, a: str, b: str, mode: str = "speculative", cand: str = "C1",

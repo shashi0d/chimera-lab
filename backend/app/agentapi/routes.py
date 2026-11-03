@@ -1,4 +1,7 @@
-"""The agent API under /evo (docs/api_contract.md): runs, events (SSE), choices, limits, creatures, gallery, files."""
+"""The agent API under /evo (docs/api_contract.md): runs, events (SSE), choices, limits, creatures, gallery, files.
+
+Starting and following a run needs a signed-in user (app/auth.py); a run belongs to the user who started it. The
+gallery, showcase and published creatures are public."""
 
 from __future__ import annotations
 
@@ -13,18 +16,17 @@ from fastapi.responses import JSONResponse, RedirectResponse, Response, Streamin
 from starlette.datastructures import UploadFile
 
 from app.agentapi import uploads as U
-from app.agentapi.caps import Caps, client_ip, visitor_key
+from app.agentapi.caps import Caps, client_ip
 from app.agentapi.creature import parent_view
 from app.agentapi.files import PublicFiles, content_type_for
-from app.agentapi.fixtures import REFUSED, RUN_SCENARIOS, SCENARIOS, load
 from app.agentapi.gallery import Creatures
-from app.agentapi.jobs import AgentDriver, ChoiceRefused, Job, JobRunner, ReplayDriver
+from app.agentapi.jobs import AgentDriver, ChoiceRefused, Job, JobRunner
 from app.agentapi.store import TERMINAL, RunStore, snapshot
-from app.api.deps import SESSION_RE, mock_fault
+from app.auth import User, current_user, require_user
 from app.errors import ChimeraError
 from app.models.schemas import ErrorCode
 from app.services import Services
-from app.util import new_id, now_iso, parse_iso
+from app.util import new_id, now_iso
 
 log = logging.getLogger(__name__)
 router = APIRouter(prefix="/evo", tags=["agent"])
@@ -40,14 +42,8 @@ class AgentApi:
         self.creatures = Creatures(services.db, files, services.settings)
         self.runner = JobRunner(services, self.store, files, self.creatures)
         self.caps = Caps(services.db, services.settings)
-
-    @property
-    def mock(self) -> bool:
-        return self.settings.chimera_mode == "mock"
-
-    @property
-    def fixtures_dir(self) -> Any:
-        return self.settings.repo_path(self.settings.evo_fixtures_dir)
+        # Builds the driver for one run. Tests replace it; the app always drives the live agent.
+        self.driver_factory: Any = lambda: AgentDriver(services)
 
 
 def api(request: Request) -> AgentApi:
@@ -58,27 +54,10 @@ def _err(code: ErrorCode, message: str, status: int, **details: Any) -> ChimeraE
     return ChimeraError(code, message, retryable=False, details=details).with_status(status)
 
 
-def _scenario(request: Request, a: AgentApi) -> str | None:
-    """X-Mock-Scenario, honoured only in mock mode (default success)."""
-    if not a.mock:
-        return None
-    s = (request.headers.get("x-mock-scenario") or "success").strip().lower()
-    if s not in SCENARIOS:
-        raise _err(ErrorCode.VALIDATION_FAILED, f"Unknown X-Mock-Scenario {s!r}.", 422, scenarios=list(SCENARIOS))
-    return s
-
-
-def _visitor(request: Request, a: AgentApi) -> tuple[str, str]:
-    sid = request.headers.get("x-session-id", "")
-    sid = sid if SESSION_RE.match(sid) else "anonymous"
-    ip = client_ip(request, a.settings.evo_proxy_hops)
-    return visitor_key(sid, ip), ip
-
-
-def _fixture_error(case: dict[str, Any]) -> ChimeraError:
-    body, status = case["response"]["body"]["error"], case["response"]["status"]
-    return ChimeraError(ErrorCode(body["code"]), body["message"], retryable=bool(body.get("retryable")),
-                        details=dict(body.get("details") or {})).with_status(status)
+async def _owner(request: Request, a: AgentApi) -> tuple[User, str]:
+    """The signed-in user (401 without one) and the client IP (per-IP rate limits)."""
+    user = await require_user(request)
+    return user, client_ip(request, a.settings.evo_proxy_hops)
 
 
 def _clean_name(raw: Any, slot: str) -> str | None:
@@ -99,12 +78,9 @@ def _clean_name(raw: Any, slot: str) -> str | None:
 async def start_run(request: Request) -> Response:
     a = api(request)
     svc, st = a.services, a.settings
-    scenario = _scenario(request, a)
-    visitor, ip = _visitor(request, a)
+    user, ip = await _owner(request, a)
     a.caps.rate_limit(ip)
-    if scenario == "cap_daily":
-        raise _fixture_error({"response": load(a.fixtures_dir, "cap_daily.json")["response"]})
-    await a.caps.check(visitor)
+    await a.caps.check(user.id)
 
     length = request.headers.get("content-length")
     if length and length.isdigit() and int(length) > 2 * st.evo_max_upload_bytes + 2 * 1024 * 1024:
@@ -113,8 +89,6 @@ async def start_run(request: Request) -> Response:
         form = await request.form(max_files=4, max_fields=16)
     except Exception as exc:  # malformed multipart
         raise _err(ErrorCode.VALIDATION_FAILED, "Send the parents as multipart/form-data.", 422) from exc
-    if scenario in REFUSED:
-        raise _fixture_error(load(a.fixtures_dir, "upload_refused.json")["cases"][REFUSED[scenario]])
 
     mode = str(form.get("mode") or "").strip().lower()
     if mode not in U.MODES:
@@ -133,74 +107,29 @@ async def start_run(request: Request) -> Response:
         if not photos.get(s) and not names[s]:
             raise _err(ErrorCode.VALIDATION_FAILED, f"Add a photo or a name for the {s}.", 422, slot=s)
 
-    if scenario is not None and scenario != "agent":
-        parents = _mock_parents(a, scenario, names, photos)
-        if isinstance(parents, dict) and parents.get("status") == "needs_choice":
-            return JSONResponse(parents, status_code=200)
-        fixture_name, sire, dam = parents  # type: ignore[misc]
-        driver: Any = ReplayDriver(load(a.fixtures_dir, fixture_name), a.fixtures_dir)
-    else:
-        sire, dam, choice = await _identify(a, photos, names, mock_fault(request))
-        del photos
-        if choice is not None:
-            return JSONResponse(choice, status_code=200)
-        driver = AgentDriver(svc)
+    sire, dam, choice = await _identify(a, photos, names)
+    del photos
+    if choice is not None:
+        return JSONResponse(choice, status_code=200)
+    driver = a.driver_factory()
 
-    await a.caps.take(visitor)
+    await a.caps.take(user.id)
     run_id = new_id("run")
     ts = now_iso()
     doc = {"runId": run_id, "status": "queued", "position": None, "sire": sire, "dam": dam, "mode": mode,
            "createdAt": ts, "updatedAt": ts, "lastEventId": 0, "creatureId": None, "error": None,
-           "pendingChoice": None, "events": [], "visitor": visitor, "scenario": scenario}
+           "pendingChoice": None, "events": [], "owner": user.id}
     job = Job(doc=doc, driver=driver, runner=a.runner)
-    holds = None
-    if scenario == "queued":
-        holds, gate = _queue_script(a)
-        job.not_before = time.monotonic() + gate
-    await a.runner.submit(job, holds)
+    await a.runner.submit(job)
     body = {"runId": run_id, "status": doc["status"], "position": doc["position"],
             "eventsUrl": f"/evo/agent/runs/{run_id}/events", "runUrl": f"/evo/agent/runs/{run_id}",
             "sire": sire, "dam": dam, "mode": mode}
     return JSONResponse(body, status_code=202)
 
 
-def _mock_parents(a: AgentApi, scenario: str, names: dict[str, str | None],
-                  photos: dict[str, bytes]) -> Any:
-    """Mock mode: the fixture's parents for photo slots; a named slot keeps its name (source 'name')."""
-    if scenario == "identify_choice":
-        fx = load(a.fixtures_dir, "identify_choice.json")
-        if "sire" in photos:
-            return fx["response"]["body"]
-        scenario = "host_tie"  # the follow-up post (names): the host-tie run, as in the fixture's followUp
-    fixture_name = RUN_SCENARIOS[scenario]
-    body = load(a.fixtures_dir, fixture_name)["response"]["body"]
-    out = []
-    for s in U.SLOTS:
-        fx_parent = body[s]
-        if names[s]:
-            same = names[s].lower() == (fx_parent["commonName"] or "").lower()
-            out.append(parent_view(names[s], fx_parent["scientificName"] if same else None, "name", None))
-        else:
-            out.append(fx_parent)
-    return fixture_name, out[0], out[1]
-
-
-def _queue_script(a: AgentApi) -> tuple[list[float], float]:
-    """Mock 'queued': the fixture's waits (position 2, then 1, then start), scaled like every replayed gap."""
-    ev = load(a.fixtures_dir, "run_queued.json")["events"]
-    st = a.settings
-
-    def gap(i: int, j: int) -> float:
-        secs = (parse_iso(ev[j]["at"]) - parse_iso(ev[i]["at"])).total_seconds()
-        return min(secs * st.evo_mock_replay_scale, st.evo_mock_max_event_delay)
-
-    first = gap(0, 1)
-    return [first], first + gap(1, 2) + 0.001
-
-
 async def _identify(a: AgentApi, photos: dict[str, bytes], names: dict[str, str | None],
-                    fault: str | None) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any] | None]:
-    readings = await U.identify(a.services, photos, fault) if photos else {}
+                    ) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any] | None]:
+    readings = await U.identify(a.services, photos) if photos else {}
     parents: dict[str, dict[str, Any] | None] = {}
     for s in U.SLOTS:
         if names[s]:
@@ -224,16 +153,17 @@ async def _identify(a: AgentApi, photos: dict[str, bytes], names: dict[str, str 
 # ====================================================================== runs
 
 
-async def _doc(a: AgentApi, run_id: str) -> dict[str, Any]:
+async def _doc(a: AgentApi, run_id: str, user: User) -> dict[str, Any]:
+    """The user's own run. Another user's run reads as missing (no existence leak)."""
     doc = await a.store.get(run_id)
-    if doc is None:
+    if doc is None or doc.get("owner") != user.id:
         raise ChimeraError(ErrorCode.RUN_NOT_FOUND, "This run doesn't exist.")
     return doc
 
 
 @router.get("/agent/runs/{run_id}", response_model=None)
 async def get_run(run_id: str, request: Request) -> Response:
-    doc = await _doc(api(request), run_id)
+    doc = await _doc(api(request), run_id, await require_user(request))
     return JSONResponse(snapshot(doc), headers={"Cache-Control": "no-cache"})
 
 
@@ -252,7 +182,7 @@ def _after(request: Request) -> int:
 @router.get("/agent/runs/{run_id}/events", response_model=None)
 async def run_events(run_id: str, request: Request) -> Response:
     a = api(request)
-    await _doc(a, run_id)
+    await _doc(a, run_id, await require_user(request))
     after = _after(request)
     st = a.settings
 
@@ -287,7 +217,7 @@ async def run_events(run_id: str, request: Request) -> Response:
 @router.post("/agent/runs/{run_id}/choice", response_model=None)
 async def answer_choice(run_id: str, request: Request) -> Response:
     a = api(request)
-    await _doc(a, run_id)
+    await _doc(a, run_id, await require_user(request))
     try:
         body = await request.json()
     except ValueError as exc:
@@ -304,11 +234,17 @@ async def answer_choice(run_id: str, request: Request) -> Response:
 @router.get("/agent/limits", response_model=None)
 async def limits(request: Request) -> Response:
     a = api(request)
-    visitor, _ = _visitor(request, a)
-    body = await a.caps.limits(visitor, len(a.runner.running), len(a.runner.queued_jobs))
-    if a.mock and request.headers.get("x-mock-scenario", "").lower() == "cap_daily":
-        body = {**body, "liveRuns": "capped", "dailyTotal": {**body["dailyTotal"], "used": body["dailyTotal"]["limit"]}}
+    user = await current_user(request)
+    body = await a.caps.limits(user.id if user else None, len(a.runner.running), len(a.runner.queued_jobs))
     return JSONResponse(body, headers={"Cache-Control": "no-cache"})
+
+
+@router.get("/config", response_model=None)
+async def public_config(request: Request) -> Response:
+    """What the browser needs to sign in: the project URL and its publishable key (both public by design)."""
+    st = api(request).settings
+    return JSONResponse({"supabaseUrl": st.supabase_url, "supabasePublishableKey": st.supabase_publishable_key,
+                         "authConfigured": request.app.state.auth.configured}, headers={"Cache-Control": "no-cache"})
 
 
 # ====================================================================== creatures, gallery, files
@@ -316,9 +252,17 @@ async def limits(request: Request) -> Response:
 
 @router.get("/creatures/{creature_id}", response_model=None)
 async def get_creature(creature_id: str, request: Request) -> Response:
-    view = await api(request).creatures.get(creature_id)
+    view = await api(request).creatures.get(creature_id, await current_user(request))
     if view is None:
         raise ChimeraError(ErrorCode.NOT_FOUND, "This creature doesn't exist.")
+    return JSONResponse(view)
+
+
+@router.get("/publications/{publication_id}", response_model=None)
+async def get_publication(publication_id: str, request: Request) -> Response:
+    view = await api(request).creatures.publication(publication_id)
+    if view is None:
+        raise ChimeraError(ErrorCode.NOT_FOUND, "This creation isn't in the gallery.")
     return JSONResponse(view)
 
 

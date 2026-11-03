@@ -1,18 +1,16 @@
 """Public-safety caps for agent runs (docs/api_contract.md "Caps"; per-run caps are the engine's own, S3c).
 
-- daily total and per-visitor daily runs: counters in the document store, keyed by the UTC day (they reset at 00:00
+- daily total and per-user daily runs: counters in the document store, keyed by the UTC day (they reset at 00:00
   UTC); refused at POST with 429 CAP_REACHED, never as an event
 - the per-IP rate limit on POST /evo/agent/runs: a sliding minute, in memory (429 RATE_LIMITED, Retry-After)
 - the concurrent-run limit lives in the job runner (extra runs are queued)
 
-The visitor is the X-Session-Id plus the client IP (hashed; the raw values are not stored). The client IP is the
-X-Forwarded-For entry written by the trusted proxy in front of the app (EVO_PROXY_HOPS from the right), else the
-socket peer.
+The per-user counter is keyed by the signed-in user's id. The client IP (rate limit only) is the X-Forwarded-For
+entry written by the trusted proxy in front of the app (EVO_PROXY_HOPS from the right), else the socket peer.
 """
 
 from __future__ import annotations
 
-import hashlib
 import time
 from collections import defaultdict, deque
 from datetime import UTC, datetime, timedelta
@@ -31,10 +29,6 @@ def client_ip(request: Request, hops: int) -> str:
     if hops > 0 and fwd:
         return fwd[-hops] if len(fwd) >= hops else fwd[0]
     return request.client.host if request.client else "unknown"
-
-
-def visitor_key(session_id: str, ip: str) -> str:
-    return hashlib.sha256(f"{session_id}|{ip}".encode()).hexdigest()[:24]
 
 
 def day_key(now: datetime | None = None) -> str:
@@ -101,8 +95,9 @@ class Caps:
             await self.db.incr(total_key, -1)
             raise cap_error("visitor_daily", self.settings.evo_visitor_daily_runs)
 
-    async def limits(self, visitor: str, running: int, queued: int) -> dict[str, Any]:
-        total, mine = await self.used(visitor)
+    async def limits(self, visitor: str | None, running: int, queued: int) -> dict[str, Any]:
+        """`visitor` is the signed-in user's id; signed out, only the shared numbers are known."""
+        total, mine = await self.used(visitor) if visitor else (await self.db.incr(self._keys("-")[0], 0), 0)
         s = self.settings
         capped = total >= s.evo_daily_runs or mine >= s.evo_visitor_daily_runs
         return {"liveRuns": "capped" if capped else "open",

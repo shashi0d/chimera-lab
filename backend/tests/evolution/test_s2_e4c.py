@@ -26,8 +26,7 @@ from app.evolution.parts import (
 )
 from app.evolution.prompt import compile_prompt, donor_clause
 from app.evolution.route import silhouette_issues
-from app.services import build_services
-from tests.conftest import make_settings
+from tests.conftest import make_settings, offline_services
 from tests.evolution.conftest import plan_for
 
 FIX = Path(__file__).resolve().parents[1] / "fixtures" / "recorded" / "s2"
@@ -46,7 +45,7 @@ def e4_engine(tmp_path: Path) -> EvoEngine:
     """An engine whose learned store holds the beetle exactly as E4 saved it (body plan multi_legged + winged)."""
     store = tmp_path / "learned.json"
     shutil.copy(FIX / "learned_beetle_e4.json", store)
-    return EvoEngine(build_services(make_settings(tmp_path, evo_learned_path=str(store))))
+    return EvoEngine(offline_services(make_settings(tmp_path, evo_learned_path=str(store))), offline=True)
 
 
 # ------------------------------------------------------------------ a) wing rules

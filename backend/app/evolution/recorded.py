@@ -18,7 +18,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
-RECORDED = Path(__file__).resolve().parents[3] / "tests" / "fixtures" / "recorded"
+RECORDED = Path(__file__).resolve().parents[2] / "tests" / "fixtures" / "recorded"
 
 # Minimal shapes used only if the recordings are missing (e.g. a trimmed deploy image).
 _FALLBACK_CHAT = {"id": "chatcmpl-mock", "object": "chat.completion", "model": "muse-spark-1.3",

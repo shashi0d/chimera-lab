@@ -22,8 +22,7 @@ from app.evolution.parts import class_entry
 from app.evolution.prompt import compile_prompt
 from app.evolution.route import host_tie, route
 from app.evolution.transfer import plate_pattern
-from app.services import build_services
-from tests.conftest import make_settings
+from tests.conftest import make_settings, offline_services
 
 REPO = Path(__file__).resolve().parents[3]
 
@@ -32,7 +31,7 @@ REPO = Path(__file__).resolve().parents[3]
 def eng(tmp_path: Path) -> EvoEngine:
     store = tmp_path / "learned.json"
     shutil.copy(REPO / "data" / "learned_animals.json", store)
-    return EvoEngine(build_services(make_settings(tmp_path, evo_learned_path=str(store))))
+    return EvoEngine(offline_services(make_settings(tmp_path, evo_learned_path=str(store))), offline=True)
 
 
 async def _session(eng: EvoEngine, a: str, b: str, mode: str = "speculative", host: str | None = None):

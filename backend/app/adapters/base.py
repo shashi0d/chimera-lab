@@ -2,28 +2,10 @@
 
 from __future__ import annotations
 
-import contextvars
 from dataclasses import dataclass, field
 from typing import Any, Protocol
 
-from app.models.schemas import AnimalReading, FieldCard, FusionPlan
-
-MOCK_FAULTS = {
-    "timeout",
-    "rate_limit",
-    "server_error",
-    "refusal",
-    "not_animal",
-    "human",
-    "corrupt_output",
-    "slow",
-    "crash_mid_run",
-    "budget",
-}
-
-# Set per request / per run task. Only mock adapters and the runner read it,
-# and only when CHIMERA_MODE=mock (enforced where the header is parsed).
-current_fault: contextvars.ContextVar[str | None] = contextvars.ContextVar("current_fault", default=None)
+from app.models.schemas import AnimalReading
 
 
 @dataclass
@@ -41,17 +23,12 @@ class VisionAdapter(Protocol):
 
     async def describe_animal(self, image: bytes, slot: str) -> AnimalReading: ...
 
-    async def plan_fusion(self, context: dict[str, Any]) -> FusionPlan: ...
-
-    async def write_field_card(self, context: dict[str, Any]) -> FieldCard: ...
-
 
 class ImageGenAdapter(Protocol):
     model_id: str
 
-    async def generate(
-        self, prompt: str, reference_images: list[bytes], aspect: str | None
-    ) -> GeneratedImage: ...
+    async def generate(self, prompt: str, reference_images: list[bytes], aspect: str | None,
+                       previous_response_id: str | None = None) -> GeneratedImage: ...
 
 
 class StorageAdapter(Protocol):
@@ -63,7 +40,7 @@ class StorageAdapter(Protocol):
 
 
 class DbAdapter(Protocol):
-    """Document-style CRUD. Collections: assets, runs, graphs, creatures, idempotency, counters."""
+    """Document-style CRUD. Collections: assets, graphs, creatures, agent_runs, counters."""
 
     async def put(self, collection: str, key: str, doc: dict[str, Any]) -> None: ...
 

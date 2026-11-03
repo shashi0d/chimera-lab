@@ -1,7 +1,7 @@
-"""R1 Stream A: the agent API in mock mode against every contract fixture (docs/api_fixtures/).
+"""The agent API (docs/api_contract.md) with sign-in: runs, SSE events, choices, caps, queue, leases, the gallery.
 
-The fixtures' event sequences are replayed through the real job runner, event store and SSE path (X-Mock-Scenario);
-the `agent` scenario runs the engine's real agent loop over the mock adapters. No paid calls.
+Runs go through the real job runner, event store and SSE path. The work itself is a scripted driver (fast and
+precise about events), or the engine's real agent loop over its offline adapters. No paid call is made.
 """
 
 from __future__ import annotations
@@ -17,24 +17,57 @@ import httpx
 import pytest
 from PIL import Image
 
-from app.agentapi.creature import HIDDEN_CHECKS, short_args, visible
+from app.agentapi.creature import short_args, visible
+from app.agentapi.jobs import AgentDriver, Job
 from app.main import create_app
-from app.util import now_iso
-from tests.conftest import IMAGES, make_settings
-
-REPO = Path(__file__).resolve().parents[3]
-FX = REPO / "docs" / "api_fixtures"
-SID = "test-visitor-0001"
+from app.util import new_id, now_iso
+from tests.conftest import IMAGES, FakeAuth, auth, make_settings, offline_services
+from tests.fakes.faults import current_fault
 
 
-def fx(name: str) -> dict[str, Any]:
-    return json.loads((FX / name).read_text(encoding="utf-8"))
+def png(color: str = "blue") -> bytes:
+    out = io.BytesIO()
+    Image.new("RGB", (64, 64), color).save(out, "PNG")
+    return out.getvalue()
+
+
+class ScriptedDriver:
+    """A run that emits a few steps, optionally asks the host-tie question, renders one image and saves a creature."""
+
+    def __init__(self, ask: bool = False, fail: str | None = None, hold: asyncio.Event | None = None) -> None:
+        self.ask, self.fail, self.hold = ask, fail, hold
+
+    async def run(self, job: Job) -> dict[str, Any]:
+        from app.agentapi.jobs import RunFailed
+
+        await job.emit("step", n=1, tool="plan", args={}, summary="planned the body", reason="", cards=[], ok=True,
+                       error=None)
+        if self.hold is not None:
+            await self.hold.wait()
+        if self.fail:
+            raise RunFailed(self.fail, "The model service returned an error.", True)
+        n = 2
+        if self.ask:
+            answer = await job.ask("host_tie", "Which animal is the host?", ["tortoise", "domestic goat"], n)
+            await job.emit("step", n=n, tool="ask_user", args={}, summary=f"answer: {answer}" if answer else
+                           "no answer: the agent decides", reason="", cards=[], ok=True, error=None)
+            n += 1
+        url = await job.runner.files.put(f"runs/{job.run_id}/img1.png", png(), "image/png")
+        await job.emit("render", n=n, imageId="img1", url=url, kind="render", parent=None, method="generate",
+                       rendersUsed=1, rendersLeft=3)
+        cid = new_id("crt")
+        doc = job.doc
+        view = {"creatureId": cid, "createdAt": now_iso(), "title": f"{doc['sire']['commonName']} × "
+                f"{doc['dam']['commonName']}", "sire": doc["sire"], "dam": doc["dam"], "mode": doc["mode"],
+                "imageUrl": url, "showcase": False, "runId": job.run_id}
+        await job.runner.creatures.save(view, "run", trace=[], owner=doc.get("owner"))
+        return {"creatureId": cid, "imageId": "img1", "imageUrl": url, "remainingFailures": [], "hiddenChecks": 0,
+                "agree": True, "stop": "finalized"}
 
 
 def api_settings(tmp_path: Path, **over: Any):  # type: ignore[no-untyped-def]
-    base = dict(evo_mock_replay_scale=0.0, evo_runs_per_minute_per_ip=1000, evo_visitor_daily_runs=1000,
-                evo_daily_runs=1000, evo_keepalive_seconds=15.0, evo_heartbeat_seconds=0.05,
-                evo_seed_on_start=False)
+    base = dict(evo_runs_per_minute_per_ip=1000, evo_visitor_daily_runs=1000, evo_daily_runs=1000,
+                evo_keepalive_seconds=15.0, evo_heartbeat_seconds=0.05)
     base.update(over)
     return make_settings(tmp_path, **base)
 
@@ -43,12 +76,16 @@ def api_settings(tmp_path: Path, **over: Any):  # type: ignore[no-untyped-def]
 async def make_client(tmp_path: Path) -> AsyncIterator[Any]:
     stack: list[Any] = []
 
-    async def make(**over: Any) -> httpx.AsyncClient:
-        app = create_app(api_settings(tmp_path / f"app{len(stack)}", **over))
+    async def make(driver: Any = None, user: str = "user-1", **over: Any) -> httpx.AsyncClient:
+        settings = api_settings(tmp_path / f"app{len(stack)}", **over)
+        svc = offline_services(settings)
+        app = create_app(settings, services=svc)
+        app.state.auth = FakeAuth()
+        app.state.agent.driver_factory = driver or (lambda: ScriptedDriver())
         ctx = app.router.lifespan_context(app)
         await ctx.__aenter__()
-        c = httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://test",
-                              headers={"X-Session-Id": SID}, timeout=30)
+        c = httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://test", headers=auth(user),
+                              timeout=30)
         c.app = app  # type: ignore[attr-defined]
         stack.append((c, ctx))
         return c
@@ -69,14 +106,14 @@ def photos(sire: str = "lion.jpg", dam: str = "red_fox.jpg") -> dict[str, Any]:
             "damImage": (dam, (IMAGES / dam).read_bytes(), "image/jpeg")}
 
 
-async def post_run(c: httpx.AsyncClient, scenario: str | None = None, mode: str = "realistic",
-                   files: dict[str, Any] | None = None, data: dict[str, Any] | None = None,
-                   headers: dict[str, str] | None = None) -> httpx.Response:
-    h = dict(headers or {})
-    if scenario:
-        h["X-Mock-Scenario"] = scenario
+async def post_run(c: httpx.AsyncClient, mode: str = "realistic", files: dict[str, Any] | None = None,
+                   data: dict[str, Any] | None = None, headers: dict[str, str] | None = None) -> httpx.Response:
     return await c.post("/evo/agent/runs", data={"mode": mode, **(data or {})},
-                        files=photos() if files is None else files, headers=h)
+                        files=photos() if files is None else files, headers=headers)
+
+
+async def named_run(c: httpx.AsyncClient, **kw: Any) -> httpx.Response:
+    return await post_run(c, files={}, data={"sireName": "lion", "damName": "red fox"}, **kw)
 
 
 def parse_sse(text: str) -> tuple[list[dict[str, Any]], int]:
@@ -104,30 +141,6 @@ async def events_of(c: httpx.AsyncClient, run_id: str, **kw: Any) -> list[dict[s
     return parse_sse(r.text)[0]
 
 
-def norm(e: dict[str, Any]) -> dict[str, Any]:
-    """Drop what differs per run: the run id, times, image URLs, the creature id and the choice id."""
-    out = {k: v for k, v in e.items() if k not in ("runId", "at")}
-    for k in ("url", "imageUrl"):
-        if k in out:
-            out[k] = Path(str(out[k])).name
-    for k in ("creatureId", "choiceId", "expiresAt"):
-        if k in out:
-            out[k] = "*"
-    return out
-
-
-async def assert_served(c: httpx.AsyncClient, url: str) -> None:
-    r = await c.get(url)
-    assert r.status_code == 200, url
-    assert r.headers["cache-control"] == "public, max-age=31536000, immutable"
-    Image.open(io.BytesIO(r.content)).verify()
-
-
-def fixture_post(name: str) -> tuple[str, dict[str, Any]]:
-    f = fx(name)
-    return f["request"]["fields"]["mode"], f
-
-
 async def wait_status(c: httpx.AsyncClient, run_id: str, status: str, timeout: float = 10) -> dict[str, Any]:
     loop = asyncio.get_running_loop()
     end = loop.time() + timeout
@@ -139,152 +152,83 @@ async def wait_status(c: httpx.AsyncClient, run_id: str, status: str, timeout: f
         await asyncio.sleep(0.01)
 
 
-# ====================================================================== fixture replays
+async def assert_served(c: httpx.AsyncClient, url: str) -> None:
+    r = await c.get(url)
+    assert r.status_code == 200, url
+    assert r.headers["cache-control"] == "public, max-age=31536000, immutable"
+    Image.open(io.BytesIO(r.content)).verify()
 
 
-@pytest.mark.parametrize("scenario,name", [("success", "run_success.json"), ("cap", "run_cap.json"),
-                                           ("error", "run_error.json"), ("queued", "run_queued.json")])
-async def test_run_replays_the_fixture_event_sequence(client, scenario, name):
-    mode, f = fixture_post(name)
-    r = await post_run(client, scenario, mode)
-    assert r.status_code == f["response"]["status"] == 202
-    body, want = r.json(), f["response"]["body"]
-    rid = body["runId"]
-    assert body["eventsUrl"] == f"/evo/agent/runs/{rid}/events" and body["runUrl"] == f"/evo/agent/runs/{rid}"
-    drop = ("runId", "eventsUrl", "runUrl")
-    assert {k: v for k, v in body.items() if k not in drop} == {k: v for k, v in want.items() if k not in drop}
+# ====================================================================== sign-in and ownership
 
+
+async def test_starting_and_reading_a_run_needs_sign_in(client):
+    signed_out = {"Authorization": ""}
+    r = await post_run(client, headers=signed_out)
+    assert r.status_code == 401 and r.json()["error"]["code"] == "UNAUTHORIZED"
+    bad = await post_run(client, headers={"Authorization": "Bearer forged"})
+    assert bad.status_code == 401
+    rid = (await named_run(client)).json()["runId"]
+    for path in (f"/evo/agent/runs/{rid}", f"/evo/agent/runs/{rid}/events"):
+        assert (await client.get(path, headers=signed_out)).status_code == 401
+
+
+async def test_a_run_is_visible_only_to_its_owner(client):
+    rid = (await named_run(client)).json()["runId"]
     events = await events_of(client, rid)
-    assert [e["id"] for e in events] == list(range(1, len(f["events"]) + 1))  # from 1, no gaps
-    assert [norm(e) for e in events] == [norm(e) for e in f["events"]]
-    assert all(e["runId"] == rid and e["at"].endswith("Z") for e in events)
-    for e in events:
-        if e["type"] == "render":
-            assert e["url"].startswith(f"/evo/files/runs/{rid}/")
-            await assert_served(client, e["url"])
-
-    snap = (await client.get(f"/evo/agent/runs/{rid}")).json()
-    assert set(snap) == set(fx("run_success.json")["snapshot"])
-    assert snap["lastEventId"] == len(f["events"]) and snap["pendingChoice"] is None and snap["position"] is None
-    if scenario == "error":
-        assert snap["status"] == "failed" and snap["creatureId"] is None
-        assert snap["error"] == {k: f["events"][-1][k] for k in ("code", "message", "retryable")}
-    else:
-        assert snap["status"] == "succeeded" and snap["creatureId"] == events[-1]["creatureId"]
-
-
-async def test_success_snapshot_and_creature_match_the_fixtures(client):
-    mode, f = fixture_post("run_success.json")
-    rid = (await post_run(client, "success", mode)).json()["runId"]
-    events = await events_of(client, rid)
-    snap = (await client.get(f"/evo/agent/runs/{rid}")).json()
-    want = f["snapshot"]
-    for k in ("status", "position", "mode", "lastEventId", "error", "pendingChoice"):
-        assert snap[k] == want[k], k
+    other = auth("user-2")
+    for path in (f"/evo/agent/runs/{rid}", f"/evo/agent/runs/{rid}/events"):
+        r = await client.get(path, headers=other)
+        assert r.status_code == 404 and r.json()["error"]["code"] == "RUN_NOT_FOUND"
+    r = await client.post(f"/evo/agent/runs/{rid}/choice", json={"choiceId": "x", "answer": "y"}, headers=other)
+    assert r.status_code == 404
     cid = events[-1]["creatureId"]
-    r = await client.get(f"/evo/creatures/{cid}")
-    assert r.status_code == 200
-    got, exp = r.json(), fx("creature_b09.json")["response"]["body"]
-    assert set(got) == set(exp)
-    assert got["creatureId"] == cid and got["runId"] == rid and got["showcase"] is False
-    for k in ("title", "mode", "generatedLabel", "realHybrid", "host", "canItLive", "remainingFailures",
-              "hiddenChecks", "stats", "card", "plan"):
-        assert got[k] == exp[k], k
-    assert [Path(i["url"]).name for i in got["images"]] == [Path(i["url"]).name for i in exp["images"]]
-    for i in got["images"]:
-        await assert_served(client, i["url"])
-    await assert_served(client, got["anatomyMap"]["overlayUrl"])
-    await assert_served(client, got["finalChoice"]["agentPick"]["imageUrl"])
-    assert got["imageUrl"] == events[-1]["imageUrl"]
+    assert (await client.get(f"/evo/creatures/{cid}")).status_code == 200
+    assert (await client.get(f"/evo/creatures/{cid}", headers=other)).status_code == 404
+    assert (await client.get(f"/evo/creatures/{cid}", headers={"Authorization": ""})).status_code == 404
 
 
-async def test_host_tie_waits_for_the_users_choice(client):
-    mode, f = fixture_post("run_host_tie.json")
-    rid = (await post_run(client, "host_tie", mode)).json()["runId"]
-    snap = await wait_status(client, rid, "needs_choice")
-    pc = snap["pendingChoice"]
-    want = next(e for e in f["events"] if e["type"] == "needs_choice")
-    assert pc["kind"] == "host_tie" and pc["options"] == want["options"] and pc["question"] == want["question"]
-    reader = asyncio.create_task(events_of(client, rid))
-    await asyncio.sleep(0.05)
-    r = await client.post(f"/evo/agent/runs/{rid}/choice", json={"choiceId": pc["choiceId"],
-                                                                 "answer": "domestic goat"})
-    assert r.status_code == 200 and r.json() == f["choiceRequest"]["response"]["body"]
-    events = await reader
-    assert [norm(e) for e in events] == [norm(e) for e in f["events"]]
-    nc = next(e for e in events if e["type"] == "needs_choice")
-    assert nc["choiceId"] == pc["choiceId"] and nc["expiresAt"] == pc["expiresAt"]
-    again = await client.post(f"/evo/agent/runs/{rid}/choice", json={"choiceId": pc["choiceId"],
-                                                                     "answer": "domestic goat"})
-    assert again.status_code == 409 and again.json()["error"]["code"] == "VALIDATION_FAILED"
-    cr = (await client.get(f"/evo/creatures/{events[-1]['creatureId']}")).json()
-    assert cr["host"]["chosenBy"] == "user" and cr["hiddenChecks"] == 3
-    assert not {f["key"] for f in cr["remainingFailures"]} & set(HIDDEN_CHECKS)
-    assert not {f["key"] for f in cr["card"]["remaining_failures"]} & set(HIDDEN_CHECKS)
+async def test_config_exposes_only_public_sign_in_settings(make_client):
+    c = await make_client(supabase_url="https://example.supabase.co", supabase_publishable_key="sb_publishable_x",
+                          supabase_service_key="sb_secret_never_sent")
+    body = (await c.get("/evo/config", headers={"Authorization": ""})).json()
+    assert body == {"supabaseUrl": "https://example.supabase.co", "supabasePublishableKey": "sb_publishable_x",
+                    "authConfigured": True}
+    assert "sb_secret" not in json.dumps(body)
 
 
-async def test_choice_errors(client):
-    rid = (await post_run(client, "host_tie")).json()["runId"]
-    pc = (await wait_status(client, rid, "needs_choice"))["pendingChoice"]
-    url = f"/evo/agent/runs/{rid}/choice"
-    bad = await client.post(url, json={"choiceId": pc["choiceId"], "answer": "giraffe"})
-    assert bad.status_code == 422 and bad.json()["error"]["code"] == "VALIDATION_FAILED"
-    wrong = await client.post(url, json={"choiceId": "choice_nope", "answer": "tortoise"})
-    assert wrong.status_code == 409
-    missing = await client.post("/evo/agent/runs/run_nope/choice", json={"choiceId": "x", "answer": "y"})
-    assert missing.status_code == 404 and missing.json()["error"]["code"] == "RUN_NOT_FOUND"
-    assert (await client.post(url, json={"choiceId": pc["choiceId"], "answer": "tortoise"})).status_code == 200
-    events = await events_of(client, rid)
-    res = next(e for e in events if e["type"] == "choice_resolved")
-    assert res["answer"] == "tortoise" and res["by"] == "user"
-    ask = next(e for e in events if e["type"] == "step" and e["tool"] == "ask_user")
-    assert ask["summary"] == "answer: tortoise" and ask["id"] == res["id"] + 1
+# ====================================================================== events
 
 
-async def test_choice_expires_and_the_agent_decides(make_client):
-    c = await make_client(evo_choice_seconds=0.05)
-    rid = (await post_run(c, "host_tie")).json()["runId"]
-    events = await events_of(c, rid)
-    res = next(e for e in events if e["type"] == "choice_resolved")
-    assert res["answer"] is None and res["by"] == "timeout"
-    ask = next(e for e in events if e["type"] == "step" and e["tool"] == "ask_user")
-    assert ask["summary"].startswith("no answer")
-    assert events[-1]["type"] == "finalize"
-    late = await c.post(f"/evo/agent/runs/{rid}/choice", json={"choiceId": res["choiceId"], "answer": "tortoise"})
-    assert late.status_code == 409
-
-
-async def test_keep_alive_pings_while_waiting(make_client):
-    c = await make_client(evo_choice_seconds=0.4, evo_keepalive_seconds=0.05)
-    rid = (await post_run(c, "host_tie")).json()["runId"]
-    r = await c.get(f"/evo/agent/runs/{rid}/events")
-    events, pings = parse_sse(r.text)
-    assert pings >= 2 and events[-1]["type"] == "finalize"
-
-
-# ====================================================================== resume
+async def test_a_run_streams_its_events_in_order(client):
+    r = await named_run(client)
+    assert r.status_code == 202
+    body = r.json()
+    assert body["sire"]["source"] == "name" and body["dam"]["commonName"] == "red fox"
+    events = await events_of(client, body["runId"])
+    assert [e["type"] for e in events] == ["started", "step", "render", "finalize"]
+    assert [e["id"] for e in events] == [1, 2, 3, 4]
+    await assert_served(client, events[2]["url"])
+    snap = (await client.get(f"/evo/agent/runs/{body['runId']}")).json()
+    assert snap["status"] == "succeeded" and snap["creatureId"] == events[-1]["creatureId"]
 
 
 async def test_resume_from_last_event_id_and_after(client):
-    rid = (await post_run(client, "success")).json()["runId"]
+    rid = (await named_run(client)).json()["runId"]
     full = await events_of(client, rid)
-    tail = await events_of(client, rid, headers={"Last-Event-ID": "10"})
-    assert tail == full[10:]
-    assert await events_of(client, rid, params={"after": 5}) == full[5:]
-    assert await events_of(client, rid, params={"after": 2}, headers={"Last-Event-ID": "12"}) == full[12:]  # header wins
-    assert await events_of(client, rid, headers={"Last-Event-ID": "16"}) == []  # ended: immediate close
+    assert await events_of(client, rid, headers={"Last-Event-ID": "2"}) == full[2:]
+    assert await events_of(client, rid, params={"after": 1}) == full[1:]
+    assert await events_of(client, rid, params={"after": 1}, headers={"Last-Event-ID": "3"}) == full[3:]
+    assert await events_of(client, rid, headers={"Last-Event-ID": "4"}) == []
     assert await events_of(client, rid, params={"after": "junk"}) == full
 
 
-async def test_resume_mid_run_gets_the_replay_then_live_events(client):
-    rid = (await post_run(client, "host_tie")).json()["runId"]
-    pc = (await wait_status(client, rid, "needs_choice"))["pendingChoice"]
-    snap = (await client.get(f"/evo/agent/runs/{rid}")).json()
-    reader = asyncio.create_task(events_of(client, rid, headers={"Last-Event-ID": "3"}))
-    await asyncio.sleep(0.05)
-    await client.post(f"/evo/agent/runs/{rid}/choice", json={"choiceId": pc["choiceId"], "answer": "domestic goat"})
-    events = await reader
-    assert [e["id"] for e in events] == list(range(4, 30)) and snap["lastEventId"] == 5
+async def test_a_failed_run_ends_with_an_error_event(make_client):
+    c = await make_client(driver=lambda: ScriptedDriver(fail="UPSTREAM_ERROR"))
+    rid = (await named_run(c)).json()["runId"]
+    events = await events_of(c, rid)
+    assert events[-1]["type"] == "error" and events[-1]["code"] == "UPSTREAM_ERROR"
+    assert (await c.get(f"/evo/agent/runs/{rid}")).json()["status"] == "failed"
 
 
 async def test_unknown_run_is_404(client):
@@ -293,20 +237,49 @@ async def test_unknown_run_is_404(client):
         assert r.status_code == 404 and r.json()["error"]["code"] == "RUN_NOT_FOUND"
 
 
-# ====================================================================== identify and refusals
+# ====================================================================== choices
 
 
-@pytest.mark.parametrize("scenario,index", [("refused_human", 0), ("refused_type", 1), ("refused_size", 2)])
-async def test_mock_refusals_match_the_fixture(client, scenario, index):
-    case = fx("upload_refused.json")["cases"][index]
-    r = await post_run(client, scenario)
-    assert r.status_code == case["response"]["status"]
-    err = r.json()["error"]
-    want = case["response"]["body"]["error"]
-    assert {k: err[k] for k in ("code", "message", "retryable", "details")} == want
+async def test_host_tie_waits_for_the_users_choice(make_client):
+    c = await make_client(driver=lambda: ScriptedDriver(ask=True))
+    rid = (await named_run(c)).json()["runId"]
+    pc = (await wait_status(c, rid, "needs_choice"))["pendingChoice"]
+    assert pc["kind"] == "host_tie" and pc["options"] == ["tortoise", "domestic goat"]
+    reader = asyncio.create_task(events_of(c, rid))
+    await asyncio.sleep(0.05)
+    bad = await c.post(f"/evo/agent/runs/{rid}/choice", json={"choiceId": pc["choiceId"], "answer": "giraffe"})
+    assert bad.status_code == 422
+    wrong = await c.post(f"/evo/agent/runs/{rid}/choice", json={"choiceId": "choice_nope", "answer": "tortoise"})
+    assert wrong.status_code == 409
+    r = await c.post(f"/evo/agent/runs/{rid}/choice", json={"choiceId": pc["choiceId"], "answer": "domestic goat"})
+    assert r.status_code == 200 and r.json() == {"accepted": True}
+    events = await reader
+    res = next(e for e in events if e["type"] == "choice_resolved")
+    assert res["answer"] == "domestic goat" and res["by"] == "user"
+    assert events[-1]["type"] == "finalize"
+    again = await c.post(f"/evo/agent/runs/{rid}/choice", json={"choiceId": pc["choiceId"], "answer": "tortoise"})
+    assert again.status_code == 409
 
 
-async def test_real_upload_checks(client):
+async def test_choice_expires_and_the_run_continues(make_client):
+    c = await make_client(driver=lambda: ScriptedDriver(ask=True), evo_choice_seconds=0.05)
+    events = await events_of(c, (await named_run(c)).json()["runId"])
+    res = next(e for e in events if e["type"] == "choice_resolved")
+    assert res["answer"] is None and res["by"] == "timeout" and events[-1]["type"] == "finalize"
+
+
+async def test_keep_alive_pings_while_waiting(make_client):
+    c = await make_client(driver=lambda: ScriptedDriver(ask=True), evo_choice_seconds=0.4,
+                          evo_keepalive_seconds=0.05)
+    r = await c.get(f"/evo/agent/runs/{(await named_run(c)).json()['runId']}/events")
+    events, pings = parse_sse(r.text)
+    assert pings >= 2 and events[-1]["type"] == "finalize"
+
+
+# ====================================================================== uploads and identify
+
+
+async def test_upload_checks(client):
     big = b"\xff\xd8\xff" + b"0" * (8 * 1024 * 1024)
     gif = b"GIF89a" + b"\x00" * 100
     corrupt = b"\xff\xd8\xff\xe0" + b"garbage" * 50
@@ -315,108 +288,87 @@ async def test_real_upload_checks(client):
              ({"damImage": ("big.jpg", big, "image/jpeg")}, 413, "FILE_TOO_LARGE", "dam"),
              ({"sireImage": ("bad.jpg", corrupt, "image/jpeg")}, 422, "IMAGE_CORRUPT", "sire")]
     for files, status, code, slot in cases:
-        both = {**photos(), **files}
-        r = await post_run(client, "agent", files=both)
+        r = await post_run(client, files={**photos(), **files})
         assert r.status_code == status, (code, r.text)
-        err = r.json()["error"]
-        assert err["code"] == code and err["details"]["slot"] == slot
-    r = await post_run(client, "agent", files={**photos(), "damImage": ("big.jpg", big, "image/jpeg")})
-    assert r.json()["error"]["message"] == "Images must be 8 MB or smaller."
-    assert r.json()["error"]["details"]["maxBytes"] == 8 * 1024 * 1024
+        assert r.json()["error"]["code"] == code and r.json()["error"]["details"]["slot"] == slot
 
 
-async def test_real_identify_refuses_people_and_non_animals(client):
-    r = await post_run(client, "agent", headers={"X-Mock-Fault": "human"})
-    assert r.status_code == 422
-    assert r.json()["error"] == {**r.json()["error"], "code": "HUMAN_DETECTED", "details": {"slot": "sire"},
-                                 "message": "This looks like a photo of a person. Chimera Lab only uses animal photos."}
-    r = await post_run(client, "agent", headers={"X-Mock-Fault": "not_animal"})
+async def test_identify_refuses_people_and_non_animals(client):
+    token = current_fault.set("human")
+    try:
+        r = await post_run(client)
+    finally:
+        current_fault.reset(token)
+    assert r.status_code == 422 and r.json()["error"]["code"] == "HUMAN_DETECTED"
+    assert r.json()["error"]["details"] == {"slot": "sire"}
+    token = current_fault.set("not_animal")
+    try:
+        r = await post_run(client)
+    finally:
+        current_fault.reset(token)
     assert r.status_code == 422 and r.json()["error"]["code"] == "NOT_AN_ANIMAL"
-    assert r.json()["error"]["details"] == {"slot": "dam"}
-    assert r.json()["error"]["message"] == "We couldn't find an animal in this image."
-    limits = (await client.get("/evo/agent/limits")).json()
-    assert limits["dailyTotal"]["used"] == 0  # a refused upload uses no run
+    assert (await client.get("/evo/agent/limits")).json()["dailyTotal"]["used"] == 0  # a refused upload is free
 
 
-async def test_identify_choice_fixture_and_follow_up(client):
-    f = fx("identify_choice.json")
-    r = await post_run(client, "identify_choice")
-    assert r.status_code == 200 and r.json() == f["response"]["body"]
-    fields = f["followUp"]["request"]["fields"]
-    r = await client.post("/evo/agent/runs", data=fields, headers={"X-Mock-Scenario": "identify_choice"})
+async def test_photos_are_identified(client):
+    r = await post_run(client)
     assert r.status_code == 202
-    want = f["followUp"]["response"]["body"]
-    assert r.json()["sire"] == want["sire"] and r.json()["dam"] == want["dam"] and r.json()["status"] == "running"
+    assert r.json()["sire"]["commonName"] == "Lion" and r.json()["sire"]["source"] == "image"
 
 
 async def test_low_confidence_returns_needs_choice_and_no_run(make_client):
     c = await make_client(evo_identify_min_confidence=0.99)
-    r = await post_run(c, "agent")
-    assert r.status_code == 200
-    body = r.json()
+    body = (await post_run(c)).json()
     assert body["status"] == "needs_choice" and body["choice"]["kind"] == "identify"
-    assert body["choice"]["slot"] == "sire" and body["choice"]["allowOther"] is True
-    assert body["choice"]["options"][0]["commonName"] == "Lion"
-    assert body["identified"] == {"sire": None, "dam": None}
+    assert body["choice"]["slot"] == "sire" and body["choice"]["options"][0]["commonName"] == "Lion"
     assert (await c.get("/evo/agent/limits")).json()["dailyTotal"]["used"] == 0
-    named = await post_run(c, "agent", files={}, data={"sireName": "lion", "damName": "red fox"})
-    assert named.status_code == 202 and named.json()["sire"]["source"] == "name"
+    assert (await named_run(c)).status_code == 202
 
 
 async def test_validation_errors(client):
-    r = await post_run(client, "agent", files={"sireImage": photos()["sireImage"]})
+    r = await post_run(client, files={"sireImage": photos()["sireImage"]})
     assert r.status_code == 422 and r.json()["error"]["details"]["slot"] == "dam"
-    r = await post_run(client, "agent", mode="goal")
+    r = await post_run(client, mode="goal")
     assert r.status_code == 422 and r.json()["error"]["code"] == "VALIDATION_FAILED"
-    r = await post_run(client, "agent", files={}, data={"sireName": "lion", "damName": "<script>"})
+    r = await post_run(client, files={}, data={"sireName": "lion", "damName": "<script>"})
     assert r.status_code == 422 and r.json()["error"]["details"]["slot"] == "dam"
-    r = await post_run(client, "nonsense")
-    assert r.status_code == 422
 
 
-# ====================================================================== the real agent path
+# ====================================================================== the engine's agent (offline)
 
 
-async def test_agent_scenario_runs_the_engine_agent(client):
-    r = await post_run(client, "agent")
-    assert r.status_code == 202
-    body = r.json()
-    assert body["sire"] == {"commonName": "Lion", "scientificName": "Panthera leo", "source": "image",
-                            "confidence": body["sire"]["confidence"]}
-    events = await events_of(client, body["runId"])
+async def test_the_engine_agent_runs_end_to_end_offline(make_client):
+    holder: dict[str, Any] = {}
+
+    def factory() -> AgentDriver:
+        return AgentDriver(holder["svc"], offline=True)
+
+    c = await make_client(driver=factory)
+    holder["svc"] = c.app.state.services
+    rid = (await post_run(c)).json()["runId"]
+    events = await events_of(c, rid)
     types = [e["type"] for e in events]
     assert types[0] == "started" and types[-1] == "finalize"
     assert events[0]["caps"] == {"renders": 4, "toolCalls": 30, "seconds": 900}
-    assert [e["id"] for e in events] == list(range(1, len(events) + 1))
     steps = [e for e in events if e["type"] == "step"]
     assert [s["n"] for s in steps] == list(range(1, len(steps) + 1))
-    for s in steps:
-        assert set(s) >= {"n", "tool", "args", "summary", "reason", "cards", "ok", "error"}
     for e in events:
-        if e["type"] in ("render", "inspect"):  # pairing: the step with the same n comes first
-            i = events.index(e)
-            assert any(p["type"] == "step" and p["n"] == e["n"] for p in events[:i])
         if e["type"] == "render":
-            await assert_served(client, e["url"])
-            assert e["rendersUsed"] == 1 and e["rendersLeft"] == 3
-    fin = events[-1]
-    cr = (await client.get(f"/evo/creatures/{fin['creatureId']}")).json()
-    assert set(cr) == set(fx("creature_b09.json")["response"]["body"])
-    assert cr["imageUrl"] == fin["imageUrl"] and cr["runId"] == body["runId"]
-    assert cr["anatomyMap"]["parts"] and cr["anatomyMap"]["overlayUrl"]
-    await assert_served(client, cr["anatomyMap"]["overlayUrl"])
-    assert cr["stats"]["renders"] == 1 and cr["plan"]["id"].startswith("crt_")
-    doc = await client.app.state.services.db.get("creatures", fin["creatureId"])
-    assert doc["trace"] and doc["kind"] == "evo_agent"
+            await assert_served(c, e["url"])
+    cr = (await c.get(f"/evo/creatures/{events[-1]['creatureId']}")).json()
+    assert cr["runId"] == rid and cr["imageUrl"] == events[-1]["imageUrl"]
 
 
 async def test_soft_time_cap_fires_and_hard_cap_stops(make_client):
-    c = await make_client(evo_run_soft_seconds=0.0)
-    events = await events_of(c, (await post_run(c, "agent")).json()["runId"])
+    holder: dict[str, Any] = {}
+    c = await make_client(driver=lambda: AgentDriver(holder["svc"], offline=True), evo_run_soft_seconds=0.0)
+    holder["svc"] = c.app.state.services
+    events = await events_of(c, (await post_run(c)).json()["runId"])
     caps = [e for e in events if e["type"] == "cap_reached"]
-    assert caps and caps[0]["scope"] == "time" and events[-1]["type"] == "error"
-    c2 = await make_client(evo_run_hard_seconds=0.0, evo_mock_replay_scale=1.0)
-    events = await events_of(c2, (await post_run(c2, "success")).json()["runId"])
+    assert caps and caps[0]["scope"] == "time"
+    hold = asyncio.Event()
+    c2 = await make_client(driver=lambda: ScriptedDriver(hold=hold), evo_run_hard_seconds=0.05)
+    events = await events_of(c2, (await named_run(c2)).json()["runId"])
     assert events[-1]["type"] == "error" and events[-1]["code"] == "RUN_INTERRUPTED"
 
 
@@ -459,77 +411,56 @@ async def test_deadline_brain_finalizes_the_best_image():
 # ====================================================================== caps, queue, rate limit
 
 
-async def test_daily_and_visitor_caps(make_client):
+async def test_daily_and_per_user_caps(make_client):
     c = await make_client(evo_daily_runs=2, evo_visitor_daily_runs=1)
-    assert (await post_run(c, "success")).status_code == 202
-    r = await post_run(c, "success")
+    assert (await named_run(c)).status_code == 202
+    r = await named_run(c)
     assert r.status_code == 429
     err = r.json()["error"]
     assert err["code"] == "CAP_REACHED" and err["details"]["scope"] == "visitor_daily" and err["details"]["limit"] == 1
-    other = {"X-Session-Id": "another-visitor-02"}
-    assert (await post_run(c, "success", headers=other)).status_code == 202
-    r = await post_run(c, "success", headers={"X-Session-Id": "third-visitor-003"})
-    want = fx("cap_daily.json")["response"]
-    assert r.status_code == want["status"]
+    assert (await named_run(c, headers=auth("user-2"))).status_code == 202
+    r = await named_run(c, headers=auth("user-3"))
     err = r.json()["error"]
-    assert err["code"] == "CAP_REACHED" and err["message"] == want["body"]["error"]["message"]
-    assert err["details"]["scope"] == "daily_total" and err["details"]["limit"] == 2
+    assert r.status_code == 429 and err["details"]["scope"] == "daily_total" and err["details"]["limit"] == 2
     assert err["details"]["resetsAt"].endswith("T00:00:00Z") and err["retryable"] is False
     limits = (await c.get("/evo/agent/limits")).json()
-    assert set(limits) == set(fx("limits.json")["cases"][1]["response"]["body"])
     assert limits["liveRuns"] == "capped" and limits["dailyTotal"]["used"] == 2
-    g = await c.get("/evo/gallery")  # the gallery works when live runs are capped
-    assert g.status_code == 200 and len(g.json()["items"]) >= 6
 
 
-async def test_mock_cap_daily_scenario(client):
-    r = await post_run(client, "cap_daily")
-    want = fx("cap_daily.json")["response"]
-    assert r.status_code == 429 and r.json()["error"] == {**want["body"]["error"], **{
-        k: v for k, v in r.json()["error"].items() if k not in want["body"]["error"]}}
-    lim = (await client.get("/evo/agent/limits", headers={"X-Mock-Scenario": "cap_daily"})).json()
-    assert lim["liveRuns"] == "capped"
-
-
-async def test_limits_shape(client):
+async def test_limits_signed_in_and_out(client):
     body = (await client.get("/evo/agent/limits")).json()
-    want = fx("limits.json")["cases"][0]["response"]["body"]
-    assert body["liveRuns"] == "open" and set(body) == set(want)
-    for k in want:
-        if isinstance(want[k], dict):
-            assert set(body[k]) == set(want[k]), k
+    assert body["liveRuns"] == "open" and set(body) == {"liveRuns", "dailyTotal", "visitor", "concurrent"}
     assert body["concurrent"] == {"running": 0, "limit": 3, "queued": 0}
     assert body["visitor"] == {"used": 0, "limit": 1000}
+    out = await client.get("/evo/agent/limits", headers={"Authorization": ""})
+    assert out.status_code == 200 and out.json()["dailyTotal"]["used"] == 0
 
 
 async def test_rate_limit_per_ip(make_client):
     c = await make_client(evo_runs_per_minute_per_ip=2)
     for _ in range(2):
-        assert (await post_run(c, "identify_choice")).status_code == 200
-    r = await post_run(c, "identify_choice", headers={"X-Session-Id": "other-session-9"})
+        assert (await named_run(c)).status_code == 202
+    r = await named_run(c, headers=auth("user-9"))
     assert r.status_code == 429 and r.json()["error"]["code"] == "RATE_LIMITED"
     assert int(r.headers["retry-after"]) >= 1 and r.json()["error"]["retryAfterMs"] > 0
-    r = await post_run(c, "identify_choice", headers={"X-Forwarded-For": "203.0.113.9"})
-    assert r.status_code == 200  # another client IP (as the proxy reports it)
+    assert (await named_run(c, headers={**auth("user-9"), "X-Forwarded-For": "203.0.113.9"})).status_code == 202
 
 
 async def test_concurrent_limit_queues_and_gives_positions(make_client):
-    c = await make_client(evo_max_concurrent_runs=1)
-    first = (await post_run(c, "host_tie")).json()
+    hold = asyncio.Event()
+    drivers = iter([ScriptedDriver(hold=hold), ScriptedDriver(), ScriptedDriver()])
+    c = await make_client(driver=lambda: next(drivers), evo_max_concurrent_runs=1)
+    first = (await named_run(c)).json()
     assert first["status"] == "running"
-    pc = (await wait_status(c, first["runId"], "needs_choice"))["pendingChoice"]
-    second = (await post_run(c, "success")).json()
-    third = (await post_run(c, "success")).json()
+    second = (await named_run(c)).json()
+    third = (await named_run(c)).json()
     assert (second["status"], second["position"]) == ("queued", 1)
     assert (third["status"], third["position"]) == ("queued", 2)
-    lim = (await c.get("/evo/agent/limits")).json()
-    assert lim["concurrent"] == {"running": 1, "limit": 1, "queued": 2}
-    await c.post(f"/evo/agent/runs/{first['runId']}/choice", json={"choiceId": pc["choiceId"], "answer": "tortoise"})
+    assert (await c.get("/evo/agent/limits")).json()["concurrent"] == {"running": 1, "limit": 1, "queued": 2}
+    hold.set()
     ev3 = await events_of(c, third["runId"])
     assert [(e["type"], e.get("position")) for e in ev3[:3]] == [("queued", 2), ("queued", 1), ("started", None)]
-    assert all(e["ahead"] == e["position"] for e in ev3 if e["type"] == "queued")
-    ev2 = await events_of(c, second["runId"])
-    assert [e["type"] for e in ev2[:2]] == ["queued", "started"] and ev2[-1]["type"] == "finalize"
+    assert ev3[-1]["type"] == "finalize"
 
 
 # ====================================================================== lease and orphans
@@ -541,7 +472,7 @@ async def test_a_stale_run_is_interrupted_when_read(client):
     await db.put("agent_runs", "run_stale", {"runId": "run_stale", "status": "running", "position": None,
                                              "sire": None, "dam": None, "mode": "realistic", "createdAt": old,
                                              "updatedAt": old, "lastEventId": 1, "creatureId": None,
-                                             "error": None, "pendingChoice": None,
+                                             "error": None, "pendingChoice": None, "owner": "user-1",
                                              "events": [{"id": 1, "type": "started", "runId": "run_stale",
                                                          "at": old}]})
     snap = (await client.get("/evo/agent/runs/run_stale")).json()
@@ -552,7 +483,7 @@ async def test_a_stale_run_is_interrupted_when_read(client):
 
 async def test_orphans_are_interrupted_at_startup(tmp_path):
     s = api_settings(tmp_path)
-    app = create_app(s)
+    app = create_app(s, services=offline_services(s))
     await app.state.services.db.put("agent_runs", "run_orphan", {
         "runId": "run_orphan", "status": "queued", "position": 1, "lastEventId": 0, "events": [],
         "updatedAt": now_iso()})
@@ -562,8 +493,8 @@ async def test_orphans_are_interrupted_at_startup(tmp_path):
 
 
 async def test_a_live_run_heartbeat_keeps_its_lease(make_client):
-    c = await make_client(evo_choice_seconds=0.5, run_lease_seconds=0.2)
-    rid = (await post_run(c, "host_tie")).json()["runId"]
+    c = await make_client(driver=lambda: ScriptedDriver(ask=True), evo_choice_seconds=0.5, run_lease_seconds=0.2)
+    rid = (await named_run(c)).json()["runId"]
     await wait_status(c, rid, "needs_choice")
     await asyncio.sleep(0.3)
     doc = await c.app.state.services.db.get("agent_runs", rid)
@@ -574,43 +505,29 @@ async def test_a_live_run_heartbeat_keeps_its_lease(make_client):
     store.live[rid] = doc
 
 
-# ====================================================================== gallery and creatures
+# ====================================================================== gallery, showcase, files
 
 
-async def test_gallery_showcase_first_then_newest(client):
-    want = fx("gallery.json")["response"]["body"]["items"]
-    g = (await client.get("/evo/gallery")).json()
-    items = g["items"]
-    assert [i["title"] for i in items[:6]] == [w["title"] for w in want]
-    assert [i["creatureId"] for i in items[:6]] == [f"crt_s5_{c}" for c in ("b09", "b01", "b03", "b08", "b11", "b05")]
-    for got, exp in zip(items, want):
-        assert set(got) == set(exp) and got["showcase"] is True
-        assert (got["sire"], got["dam"], got["mode"]) == (exp["sire"], exp["dam"], exp["mode"])
-        assert Path(got["imageUrl"]).name == Path(exp["imageUrl"]).name.split("_", 1)[1]
-        await assert_served(client, got["imageUrl"])
-    assert g["nextCursor"] is None
-    a = (await post_run(client, "success")).json()["runId"]
-    await events_of(client, a)
-    b = (await post_run(client, "queued", mode="mythic")).json()["runId"]
-    await events_of(client, b)
+SHOWCASE = [f"crt_s5_{c}" for c in ("b09", "b01", "b03", "b08", "b11", "b05")]
+
+
+async def test_gallery_is_the_showcase_and_runs_stay_private(client):
+    g = (await client.get("/evo/gallery", headers={"Authorization": ""})).json()
+    assert [i["creatureId"] for i in g["items"]] == SHOWCASE and g["nextCursor"] is None
+    for item in g["items"]:
+        assert item["kind"] == "showcase" and item["showcase"] is True
+        await assert_served(client, item["imageUrl"])
+    await events_of(client, (await named_run(client)).json()["runId"])
     items = (await client.get("/evo/gallery")).json()["items"]
-    assert len(items) == 8 and [i["showcase"] for i in items] == [True] * 6 + [False, False]
-    assert items[6]["title"] == "lion × golden eagle"  # newest first after the showcase
-    page1 = (await client.get("/evo/gallery", params={"limit": 5})).json()
-    page2 = (await client.get("/evo/gallery", params={"limit": 5, "cursor": page1["nextCursor"]})).json()
-    assert [i["creatureId"] for i in page1["items"] + page2["items"]] == [i["creatureId"] for i in items]
-    assert page2["nextCursor"] is None
+    assert [i["creatureId"] for i in items] == SHOWCASE  # a finished run is not published automatically
+    page1 = (await client.get("/evo/gallery", params={"limit": 4})).json()
+    page2 = (await client.get("/evo/gallery", params={"limit": 4, "cursor": page1["nextCursor"]})).json()
+    assert [i["creatureId"] for i in page1["items"] + page2["items"]] == SHOWCASE and page2["nextCursor"] is None
 
 
-async def test_showcase_creature_view(client):
-    cr = (await client.get("/evo/creatures/crt_s5_b09")).json()
-    exp = fx("creature_b09.json")["response"]["body"]
-    assert set(cr) == set(exp) and cr["showcase"] is True and cr["runId"] is None
-    for k in ("title", "sire", "dam", "mode", "realHybrid", "host", "canItLive", "remainingFailures", "hiddenChecks",
-              "stats", "plan", "card"):
-        assert cr[k] == exp[k], k
-    assert cr["anatomyMap"]["parts"] == exp["anatomyMap"]["parts"]
-    assert cr["finalChoice"]["agree"] is True and cr["finalChoice"]["agentPick"]["imageId"] == "img2"
+async def test_showcase_creature_is_public(client):
+    cr = (await client.get("/evo/creatures/crt_s5_b09", headers={"Authorization": ""})).json()
+    assert cr["showcase"] is True and cr["runId"] is None and cr["title"]
     assert [i["imageId"] for i in cr["images"]] == ["img1", "img2"]
     r = await client.get("/evo/creatures/crt_nope")
     assert r.status_code == 404 and r.json()["error"]["code"] == "NOT_FOUND"
@@ -618,8 +535,7 @@ async def test_showcase_creature_view(client):
 
 async def test_showcase_list_is_configurable(make_client):
     c = await make_client(evo_showcase="b05,b02")
-    items = (await c.get("/evo/gallery")).json()["items"]
-    assert [i["creatureId"] for i in items] == ["crt_s5_b05", "crt_s5_b02"]
+    assert [i["creatureId"] for i in (await c.get("/evo/gallery")).json()["items"]] == ["crt_s5_b05", "crt_s5_b02"]
     c2 = await make_client(evo_showcase="")
     assert (await c2.get("/evo/gallery")).json() == {"items": [], "nextCursor": None}
 
@@ -655,15 +571,13 @@ async def test_single_origin_serves_the_frontend(tmp_path, make_client):
     for path in ("/", "/gallery", "/creature/crt_s5_b09", "/run/run_x"):
         r = await c.get(path)
         assert r.status_code == 200 and "Chimera Lab" in r.text and r.headers["cache-control"] == "no-cache", path
-    r = await c.get("/assets/index-abc123.js")  # Vite's bundle, not the v1 /assets/{asset_id} route
+    r = await c.get("/assets/index-abc123.js")
     assert r.status_code == 200 and "console.log" in r.text and "immutable" in r.headers["cache-control"]
     assert (await c.get("/favicon.svg")).status_code == 200
     r = await c.get("/evo/nope")
     assert r.status_code == 404 and r.json()["error"]["code"] == "NOT_FOUND"
-    assert (await c.get("/health")).json()["status"] in ("ok", "degraded")
-    assert (await c.get("/assets/ast_missing")).json()["error"]["code"] == "NOT_FOUND"
+    assert (await c.get("/health")).json()["status"] == "ok"
     assert (await c.get("/evo/gallery")).status_code == 200
-    assert (await c.get("/../../etc/passwd")).status_code in (200, 404)  # never a file outside dist
     assert "root:" not in (await c.get("/..%2F..%2Fetc%2Fpasswd")).text
 
 

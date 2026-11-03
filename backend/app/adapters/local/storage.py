@@ -33,5 +33,5 @@ class LocalStorage:
         return await asyncio.to_thread(path.read_bytes)
 
     async def get_url(self, key: str) -> str:
-        # Asset keys are "assets/<id>"; the API serves them at /assets/<id>/content.
+        # Local development only (the engine's own saved images); public images go through PublicFiles.
         return f"/{key}/content"

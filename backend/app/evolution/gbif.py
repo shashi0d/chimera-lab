@@ -17,10 +17,10 @@ from typing import Any, Protocol
 
 import httpx
 
-from app.adapters.mock.recorded import RECORDED
 from app.errors import ChimeraError
+from app.evolution.recorded import RECORDED
 from app.models.schemas import ErrorCode
-from app.pipeline.retry import call_with_retry
+from app.retry import call_with_retry
 
 GBIF_MATCH = "https://api.gbif.org/v1/species/match"
 SPECIES_RANKS = ("SPECIES", "SUBSPECIES", "VARIETY", "FORM", "INFRASPECIFIC_NAME")

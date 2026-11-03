@@ -14,21 +14,19 @@ HTTP_STATUS: dict[ErrorCode, int] = {
     ErrorCode.UNSUPPORTED_FILE: 415,
     ErrorCode.FILE_TOO_LARGE: 413,
     ErrorCode.IMAGE_CORRUPT: 422,
-    ErrorCode.IMAGE_TOO_SMALL: 422,
     ErrorCode.NOT_AN_ANIMAL: 422,
     ErrorCode.HUMAN_DETECTED: 422,
-    ErrorCode.DUPLICATE_INPUTS: 422,
-    ErrorCode.GRAPH_INVALID: 422,
     ErrorCode.RATE_LIMITED: 429,
     ErrorCode.UPSTREAM_TIMEOUT: 504,
     ErrorCode.UPSTREAM_ERROR: 502,
     ErrorCode.MODEL_REFUSED: 422,
     ErrorCode.BUDGET_EXCEEDED: 402,
     ErrorCode.RUN_NOT_FOUND: 404,
-    ErrorCode.RUN_INTERRUPTED: 409,
     ErrorCode.NOT_FOUND: 404,
     ErrorCode.INTERNAL: 500,
     ErrorCode.CAP_REACHED: 429,
+    ErrorCode.UNAUTHORIZED: 401,
+    ErrorCode.FORBIDDEN: 403,
 }
 
 DEFAULT_MESSAGES: dict[ErrorCode, str] = {

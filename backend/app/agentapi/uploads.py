@@ -1,4 +1,4 @@
-"""Uploads for POST /evo/agent/runs: checked, resized, identified with the v1 identify step, then discarded.
+"""Uploads for POST /evo/agent/runs: checked, resized, identified by the vision model, then discarded.
 
 Images are never stored: the bytes live in this request only. Only the identified names go to the job.
 """
@@ -11,15 +11,13 @@ from typing import Any
 
 from PIL import Image, ImageOps, UnidentifiedImageError
 
-from app.adapters.base import current_fault
 from app.errors import ChimeraError
 from app.models.schemas import AnimalReading, ErrorCode
-from app.pipeline.context import InputImage, RunContext
-from app.pipeline.steps import identify as identify_step
+from app.retry import call_with_retry
 from app.services import Services
 
 SLOTS = ("sire", "dam")
-V1_SLOT = {"sire": "A", "dam": "B"}
+VISION_SLOT = {"sire": "A", "dam": "B"}  # the vision adapter's slot labels
 MODES = ("realistic", "speculative", "mythic")
 
 MSG_HUMAN = "This looks like a photo of a person. Chimera Lab only uses animal photos."
@@ -71,26 +69,24 @@ async def prepare(data: bytes, slot: str, svc: Services) -> bytes:
     return await asyncio.to_thread(resize, data, slot, s.evo_identify_max_side)
 
 
-async def identify(svc: Services, images: dict[str, bytes], fault: str | None = None) -> dict[str, AnimalReading]:
-    """The v1 identify step (app/pipeline/steps/identify.py) over the resized photos, with its spend guard. Its
-    refusals are re-worded for the agent API and name the slot as sire or dam."""
+async def identify(svc: Services, images: dict[str, bytes]) -> dict[str, AnimalReading]:
+    """Read each resized photo with the vision model (in parallel, with the shared retry policy). A person or a
+    non-animal is refused, naming the slot as sire or dam."""
+    st = svc.settings
     slots = [s for s in SLOTS if s in images]
-    ctx = RunContext(run=None, graph=None, services=svc, fault=fault)  # type: ignore[arg-type]
-    ctx.inputs = [InputImage(slot=V1_SLOT[s], node_id=s, asset_id="", data=images[s]) for s in slots]
-    token = current_fault.set(fault)
-    try:
-        await identify_step.run(ctx)
-    except ChimeraError as exc:
-        slot = next((s for s in slots if V1_SLOT[s] == exc.details.get("slot")), None)
-        if exc.code == ErrorCode.HUMAN_DETECTED:
-            raise refuse(ErrorCode.HUMAN_DETECTED, MSG_HUMAN, slot=slot) from exc
-        if exc.code == ErrorCode.NOT_AN_ANIMAL:
-            raise refuse(ErrorCode.NOT_AN_ANIMAL, MSG_NOT_ANIMAL, slot=slot) from exc
-        raise
-    finally:
-        current_fault.reset(token)
-    readings = ctx.state["readings"]
-    return {s: readings[V1_SLOT[s]] for s in slots}
+
+    async def read(slot: str) -> AnimalReading:
+        return await call_with_retry(lambda: svc.vision.describe_animal(images[slot], VISION_SLOT[slot]),
+                                     timeout=st.identify_timeout_seconds, base_delay=st.retry_base_seconds,
+                                     max_attempts=st.retry_max_attempts)
+
+    readings = dict(zip(slots, await asyncio.gather(*(read(s) for s in slots))))
+    for slot, reading in readings.items():
+        if reading.contains_human:
+            raise refuse(ErrorCode.HUMAN_DETECTED, MSG_HUMAN, slot=slot)
+        if not reading.is_animal:
+            raise refuse(ErrorCode.NOT_AN_ANIMAL, MSG_NOT_ANIMAL, slot=slot)
+    return readings
 
 
 def needs_choice(slot: str, reading: AnimalReading, identified: dict[str, Any]) -> dict[str, Any]:

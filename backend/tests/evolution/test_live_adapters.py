@@ -16,13 +16,13 @@ from PIL import Image
 
 from app.adapters import usage
 from app.adapters.base import GeneratedImage
-from app.adapters.mock.recorded import chat_payload
 from app.errors import ChimeraError
 from app.evolution import live
 from app.evolution.adapters import swatch
 from app.evolution.engine import EvoEngine
 from app.evolution.genome import Genome, validate_plan
 from app.evolution.judge import mask_stats, silhouette_score
+from app.evolution.recorded import chat_payload
 from app.models.schemas import ErrorCode
 from app.services import build_services
 from tests.conftest import make_settings
@@ -77,7 +77,7 @@ def test_sam_budget_kind(tmp_path, monkeypatch):
 
 
 def test_real_mode_builds_live_adapters(tmp_path):
-    eng = EvoEngine(build_services(make_settings(tmp_path, chimera_mode="real", meta_api_key="k-test")))
+    eng = EvoEngine(build_services(make_settings(tmp_path, meta_api_key="k-test")))
     from app.evolution.routing import RoutedSpark
 
     assert isinstance(eng.spark, RoutedSpark) and isinstance(eng.spark.meta, live.LiveEvoSpark)  # S2: routed

@@ -2,10 +2,8 @@
 interactive choices, and the per-run time caps. Works on any host that keeps one Python process alive for a run.
 
 A job's driver does the work and reports through the job (`emit`, `ask`):
-- AgentDriver runs the engine's agent (EvoEngine.agent_fuse) and turns its trace steps into events; live it is Muse
-  Spark Open, in mock mode the policy brain over the mock adapters.
-- ReplayDriver (mock mode, X-Mock-Scenario) replays a contract fixture's events, copying its images into storage as
-  the renders arrive, answering its needs_choice through the real choice path, and saving its creature.
+- AgentDriver runs the engine's agent (EvoEngine.agent_fuse) on Muse Spark Open and turns its trace steps into events.
+  Tests build it offline (the scripted policy brain over the engine's offline adapters); the app never does.
 
 Time caps: at EVO_RUN_SOFT_SECONDS (14 min) a cap_reached(time) event fires and the agent's next turn finalizes its
 best inspected image (DeadlineBrain); at EVO_RUN_HARD_SECONDS (15 min) the runner stops the run with an error event.
@@ -14,7 +12,6 @@ best inspected image (DeadlineBrain); at EVO_RUN_HARD_SECONDS (15 min) the runne
 from __future__ import annotations
 
 import asyncio
-import copy
 import json
 import logging
 import shutil
@@ -30,7 +27,7 @@ from app.agentapi.gallery import Creatures
 from app.agentapi.store import RunStore
 from app.errors import ChimeraError
 from app.services import Services
-from app.util import new_id, now_iso, parse_iso
+from app.util import new_id, now_iso
 
 log = logging.getLogger(__name__)
 
@@ -306,83 +303,6 @@ class JobRunner:
 # ====================================================================== drivers
 
 
-def _iso_seconds(a: str, b: str) -> float:
-    return max(0.0, (parse_iso(b) - parse_iso(a)).total_seconds())
-
-
-class ReplayDriver:
-    """Mock mode: replay a fixture run (docs/api_fixtures/run_*.json) through the job."""
-
-    def __init__(self, fixture: dict[str, Any], fixtures_dir: Path) -> None:
-        self.fx, self.root = fixture, fixtures_dir
-
-    def _delay(self, job: Job, seconds: float) -> float:
-        st = job.runner.settings
-        return min(seconds * st.evo_mock_replay_scale, st.evo_mock_max_event_delay)
-
-    async def _copy(self, job: Job, rel: str, cache: dict[str, str]) -> str:
-        if rel in cache:
-            return cache[rel]
-        src = self.root / rel
-        url = await job.runner.files.put(f"runs/{job.run_id}/{Path(rel).name}", src.read_bytes())
-        cache[rel] = url
-        return url
-
-    async def run(self, job: Job) -> dict[str, Any]:
-        events = self.fx["events"]
-        start = next((i for i, e in enumerate(events) if e["type"] == "started"), -1)
-        prev = events[start]["at"] if start >= 0 else events[0]["at"]
-        copied: dict[str, str] = {}
-        answer: str | None = None
-        asked = False
-        for e in events[start + 1:]:
-            t = e["type"]
-            payload = {k: v for k, v in e.items() if k not in ("id", "type", "runId", "at")}
-            if t == "choice_resolved":  # emitted by job.ask with the real answer
-                prev = e["at"]
-                continue
-            await asyncio.sleep(self._delay(job, _iso_seconds(prev, e["at"])))
-            prev = e["at"]
-            if t == "needs_choice":
-                answer = await job.ask(payload["kind"], payload["question"], payload["options"], payload.get("n"))
-                asked = True
-                continue
-            if t == "step" and asked and payload.get("tool") == "ask_user":
-                payload["summary"] = (f"answer: {answer}" if answer else
-                                      "no answer: the choice expired, so the agent decides itself")
-            if t == "render":
-                payload["url"] = await self._copy(job, payload["url"], copied)
-            if t == "error":
-                raise RunFailed(payload["code"], payload["message"], bool(payload.get("retryable")))
-            if t == "finalize":
-                cid = await self._save_creature(job, copied)
-                payload["creatureId"] = cid
-                payload["imageUrl"] = await self._copy(job, payload["imageUrl"], copied)
-                return payload
-            await job.emit(t, **payload)
-        raise RunFailed("INTERNAL", "The mock run ended without a result.")
-
-    async def _save_creature(self, job: Job, copied: dict[str, str]) -> str:
-        view = copy.deepcopy(self.fx["creature"])
-        cid = new_id("crt")
-
-        async def walk(x: Any) -> Any:
-            if isinstance(x, dict):
-                return {k: await walk(v) for k, v in x.items()}
-            if isinstance(x, list):
-                return [await walk(v) for v in x]
-            if isinstance(x, str) and x.startswith("images/") and (self.root / x).is_file():
-                return await self._copy(job, x, copied)
-            return x
-
-        view = await walk(view)
-        view.update(creatureId=cid, runId=job.run_id, createdAt=now_iso(), showcase=False,
-                    sire=job.doc["sire"], dam=job.doc["dam"],
-                    title=f"{job.doc['sire']['commonName']} × {job.doc['dam']['commonName']}")
-        await job.runner.creatures.save(view, "mock_replay", scenario=self.fx.get("name"))
-        return cid
-
-
 class DeadlineBrain:
     """Wraps the agent's brain for the 14-minute time cap: past the soft deadline the next turn finalizes the best
     inspected image (inspecting the last render first if none is inspected). Before it, the inner brain decides."""
@@ -424,15 +344,15 @@ class DeadlineBrain:
 class AgentDriver:
     """The engine's agent (S3c/S5) as a job: every trace step becomes events as it happens."""
 
-    def __init__(self, services: Services) -> None:
-        self.svc = services
+    def __init__(self, services: Services, offline: bool = False) -> None:
+        self.svc, self.offline = services, offline
 
     async def run(self, job: Job) -> dict[str, Any]:
         from app.evolution import agent as A
         from app.evolution.engine import EvoEngine
 
         svc, doc = self.svc, job.doc
-        eng = EvoEngine(svc)
+        eng = EvoEngine(svc, offline=self.offline)
         cfg = A.settings()
         if eng.mock:
             inner: Any = A.PolicyBrain(A.default_policy)
@@ -552,7 +472,8 @@ class AgentDriver:
             trace=trace, images=images, overlay_url=overlay, run_id=job.run_id, host_by="user" if asked else None,
             stats={"renders": run.state.renders, "edits": run.state.edits, "toolCalls": run.state.calls,
                    "seconds": round(time.monotonic() - job.t0, 1)})
-        await job.runner.creatures.save(view, "run", trace=trace, engineCreatureId=plan.get("id"))
+        await job.runner.creatures.save(view, "run", trace=trace, engineCreatureId=plan.get("id"),
+                                        owner=job.doc.get("owner"))
         fails, hidden = visible(card.get("remaining_failures"))
         stop = (card.get("agent") or {}).get("stop") or "finalized"
         if timed_out:

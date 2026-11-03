@@ -11,15 +11,14 @@ from __future__ import annotations
 import asyncio
 import colorsys
 import io
-from typing import Any
 
 from PIL import Image
 
-from app.adapters.base import current_fault
-from app.adapters.meta.client import parse_card_response, parse_describe_response, parse_plan_response
-from app.adapters.mock.recorded import chat_payload
+from app.adapters.meta.client import parse_describe_response
 from app.errors import ChimeraError
-from app.models.schemas import AnimalReading, ErrorCode, FieldCard, FusionPlan, PartDonors
+from app.evolution.recorded import chat_payload
+from app.models.schemas import AnimalReading, ErrorCode
+from tests.fakes.faults import current_fault
 
 # (hue degrees, common name, scientific name, body plan, visible parts)
 MOCK_SPECIES: list[tuple[int, str, str, str, list[str]]] = [
@@ -107,68 +106,4 @@ class MockVision:
             visible_parts=parts,
             body_plan=plan,
             notes=f"Mock reading from dominant hue {hue:.0f} degrees.",
-        )
-
-    async def plan_fusion(self, context: dict[str, Any]) -> FusionPlan:
-        plan = await self._plan(context)
-        wire = {"creature_name": plan.name_suggestion, "body_plan": plan.body_plan,
-                "part_donors": plan.part_donors.model_dump(), "rationale": plan.rationale}
-        return parse_plan_response(chat_payload("plan", wire))
-
-    async def _plan(self, context: dict[str, Any]) -> FusionPlan:
-        await self._delay(0.6)
-        readings = context["readings"]
-        pins = context.get("donor_pins") or {}
-        donors = PartDonors(**{"head": "A", "body": "B", "limbs": "B", "covering": "A", "tail": "A", **pins})
-        body_reading = readings[donors.body]
-        other = readings["A" if donors.body == "B" else "B"]
-        match = (context.get("matches") or {}).get(donors.body) or {}
-        allowed = context.get("allowed_body_plans") or []
-        body_plan = (match.get("facts") or {}).get("body_plan") or body_reading.get("bodyPlan") or other.get("bodyPlan") or "quadruped"
-        if allowed and body_plan not in allowed:  # mock readings use loose words ("avian"); stay inside the data's set
-            body_plan = {"avian": "winged", "aquatic": "finned", "cephalopod": "multi_legged"}.get(body_plan, allowed[0])
-        head_name = (readings[donors.head].get("commonName") or "animal").split()[-1].lower()
-        body_name = (body_reading.get("commonName") or "animal").split()[-1].lower()
-        a_name, b_name = head_name, body_name
-        return FusionPlan(
-            body_plan=body_plan,
-            part_donors=donors,
-            rationale=(
-                f"Keep the {b_name}'s {body_plan} frame so the creature can stand and move, "
-                f"and give it the {a_name}'s head and covering as the recognisable signature."
-            ),
-            # L1-10: a descriptive field-guide style name, never a portmanteau of the parents.
-            name_suggestion=f"{head_name.capitalize()}-headed {body_name}" if head_name != body_name else f"Variant {body_name}",
-        )
-
-    async def write_field_card(self, context: dict[str, Any]) -> FieldCard:
-        card = await self._card(context)
-        return parse_card_response(chat_payload("card", card.model_dump(exclude={"provenance"})))
-
-    async def _card(self, context: dict[str, Any]) -> FieldCard:
-        await self._delay(0.7)
-        fault = current_fault.get()
-        if fault == "timeout":
-            raise ChimeraError(ErrorCode.UPSTREAM_TIMEOUT)
-        if fault == "rate_limit":
-            raise ChimeraError(ErrorCode.RATE_LIMITED, retry_after_ms=4000)
-        if fault == "server_error":
-            raise ChimeraError(ErrorCode.UPSTREAM_ERROR)
-        parents = context["parents"]
-        donors = context["part_donors"]
-        head = parents[donors["head"]]
-        body = parents[donors["body"]]
-        genus = (head.get("scientific_name") or "Chimaera x").split()[0]
-        epithet = ((body.get("scientific_name") or "x ignota").split() + ["ignota"])[1]
-        habitats = sorted({h for p in parents.values() for h in p.get("habitat", [])})
-        return FieldCard(
-            common_name=context.get("name") or f"{head['common_name']} × {body['common_name']}",
-            binomial=f"{genus} {epithet[:4].lower()}oides",
-            habitat=(", ".join(habitats[:3]) + " (inherited from both parents)") if habitats else "Unknown: neither parent has habitat data.",
-            diet=body.get("diet") or head.get("diet") or "Unknown",
-            size="Unknown for the fusion itself; the parents' recorded ranges bound it.",
-            behaviour=(
-                f"Moves like a {body['common_name'].lower()} and hunts or forages with the senses of a "
-                f"{head['common_name'].lower()}. Mock card: written without a model."
-            ),
         )

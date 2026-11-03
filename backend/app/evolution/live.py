@@ -30,7 +30,7 @@ from app.config import Settings
 from app.errors import ChimeraError
 from app.evolution.genome import REGIONS, TRAIT_TAGS
 from app.models.schemas import ErrorCode
-from app.pipeline.retry import call_with_retry
+from app.retry import call_with_retry
 
 T = TypeVar("T")
 
@@ -662,8 +662,8 @@ class RetryingImageGen(_Retrying):
         return await self.retry(lambda: self.inner.generate(prompt, reference_images, aspect, previous_response_id))
 
 
-def build_studio_chat(settings: Settings) -> Any:
-    """The creative studio's raw chat calls (direction, collaboration, review) on Spark Open."""
+def build_collaborator_chat(settings: Settings) -> Any:
+    """The lab collaborator's raw chat calls (visual review, collaborator messages) on Spark Open."""
     if not settings.baseten_api_key:
         raise ChimeraError(ErrorCode.UPSTREAM_ERROR, "The creative collaborator is not configured on this server.",
                            retryable=False)
