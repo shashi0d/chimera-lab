@@ -1,13 +1,12 @@
-// Fixture-backed mock of the agent API (docs/api_contract.md, docs/api_fixtures/). Dev and test builds only:
-// evo/index.ts imports this module behind `!import.meta.env.PROD`, so neither it nor the fixtures reach the
-// production bundle. Fixture images are served by the Vite dev server at /__fixtures/ (vite.config.ts).
+// Test-only, fixture-backed fake of the agent API (docs/api_contract.md, docs/api_fixtures/). The app is live-only
+// and never imports this; component and unit tests install it with setTransport().
 //
 // Runs replay the fixture's events on a compressed clock that survives reloads (localStorage), so
 // resume-after-reload, Last-Event-ID replay, the host-tie ask, the queue and the error path all work
 // without a backend. The scenario is picked with ?mock=<scenario> or window.__chimera.mock (test mode).
-import { ApiRequestError } from "../api/errors";
-import type { EventStream, EvoTransport, StreamHandlers } from "./transport";
-import type { AgentEvent, Creature, GalleryPage, Limits, RunAccepted, RunSnapshot, RunStatus, StartInput, StartResult } from "./types";
+import { ApiRequestError } from "../../src/api/errors";
+import type { EventStream, EvoTransport, StreamHandlers } from "../../src/evo/transport";
+import type { AgentEvent, Creature, GalleryPage, Limits, RunAccepted, RunSnapshot, RunStatus, StartInput, StartResult } from "../../src/evo/types";
 
 type Json = Record<string, unknown>;
 interface Fixture {
@@ -277,11 +276,11 @@ function startFixtureRun(name: string, body?: Json): RunAccepted {
 // ------------------------------------------------------------------ the transport
 
 export const mockTransport: EvoTransport = {
-  kind: "mock",
+  kind: "fake",
 
   async health() {
     await wait(mockConfig.latencyMs / 2);
-    return { mode: "mock" };
+    return { status: "ok" };
   },
 
   async startRun(input: StartInput): Promise<StartResult> {
@@ -405,6 +404,10 @@ export const mockTransport: EvoTransport = {
     const c = creatures()[id];
     if (!c) fail({ error: { code: "NOT_FOUND", message: "No creature with this id.", retryable: false, details: {} } }, 404);
     return withImages(c);
+  },
+
+  async getPublication(): Promise<never> {
+    throw new ApiRequestError({ code: "NOT_FOUND", message: "Not in the fixtures.", retryable: false }, 404);
   },
 
   async getGallery(): Promise<GalleryPage> {

@@ -1,60 +1,81 @@
 import { ReactFlowProvider } from "@xyflow/react";
 import { useEffect, useState } from "react";
+import { initAuth, useAuth } from "../auth/auth";
 import { startConnectivity } from "../connectivity/store";
 import { copy } from "../copy";
 import { useLimits } from "../evo/data";
 import { stopAllStreams, useEvoRuns } from "../evo/runs";
 import { useGraph } from "../graph/store";
+import { followJobs, stopFollowingJobs } from "../lab/store";
 import { registerRunHandlers } from "../nodes/registry";
 import type { FusionData } from "../nodes/fusion/types";
-import { restoreGraph, startAutosave } from "../persistence/autosave";
+import type { VersionData } from "../nodes/version/types";
+import { restoreWorkspace, startAutosave } from "../persistence/autosave";
+import { CreationPage } from "../screens/CreationPage";
 import { CreaturePage } from "../screens/CreaturePage";
 import { GalleryPage } from "../screens/GalleryPage";
 import { LabView } from "../screens/LabView";
-import { Studio } from "../screens/Studio";
 import { Banners } from "./Banners";
 import { useRoute } from "./route";
 import { ShortcutsDialog } from "./ShortcutsDialog";
 import { Toasts } from "./Toasts";
 import { TopBar } from "./TopBar";
 
-/** Test hook: render-time crash of the whole app shell. */
-function AppCrash(): never {
-  throw new Error("Forced app crash (test hook)");
-}
-
-/** After a reload: follow every Fusion node's latest run again (from the cached trace, then ?after=). */
-function resumeRuns(): void {
+/** After a reload: follow every Fusion run again (from the cached trace, then ?after=), and every edit job. */
+function resume(): void {
   for (const n of useGraph.getState().nodes) {
-    const runId = (n.data as FusionData).activeRunId;
-    if (n.type === "fusion" && runId) useEvoRuns.getState().attach(runId);
+    const runId = n.type === "fusion" ? (n.data as FusionData).activeRunId : n.type === "version" && !(n.data as VersionData).version ? (n.data as VersionData).runId : null;
+    if (runId) useEvoRuns.getState().attach(runId);
   }
+  followJobs();
 }
 
-export function App({ crash = false }: { crash?: boolean }) {
-  const [ready, setReady] = useState(false);
-  const route = useRoute();
+/** Load the signed-in user's Lab (once per user); signing out clears it. */
+function useWorkspace(): boolean {
+  const status = useAuth((s) => s.status);
+  const userId = useAuth((s) => s.userId);
+  const [readyFor, setReadyFor] = useState<string | null>(null);
 
   useEffect(() => {
-    const stops: Array<() => void> = [];
+    if (status !== "signed-in" || !userId) {
+      useGraph.getState().reset();
+      stopFollowingJobs();
+      stopAllStreams();
+      setReadyFor(null);
+      return;
+    }
     let alive = true;
-    stops.push(registerRunHandlers());
-    stops.push(startConnectivity());
-    void useLimits.getState().refresh();
-    void restoreGraph().then(() => {
+    let stop: (() => void) | null = null;
+    void restoreWorkspace(userId).then(() => {
       if (!alive) return;
-      stops.push(startAutosave());
-      resumeRuns();
-      setReady(true);
+      stop = startAutosave(userId);
+      resume();
+      setReadyFor(userId);
     });
     return () => {
       alive = false;
+      stop?.();
+    };
+  }, [status, userId]);
+
+  return status === "signed-in" ? readyFor === userId : status !== "loading";
+}
+
+export function App() {
+  const route = useRoute();
+  const ready = useWorkspace();
+
+  useEffect(() => {
+    const stops: Array<() => void> = [];
+    stops.push(registerRunHandlers());
+    stops.push(startConnectivity());
+    void initAuth();
+    void useLimits.getState().refresh();
+    return () => {
       stops.forEach((s) => s());
       stopAllStreams();
     };
   }, []);
-
-  if (crash) return <AppCrash />;
 
   return (
     <ReactFlowProvider>
@@ -67,10 +88,10 @@ export function App({ crash = false }: { crash?: boolean }) {
         <main id="main" className="main" tabIndex={-1}>
           {route.view === "gallery" ? (
             <GalleryPage />
-          ) : route.view === "studio" ? (
-            <Studio />
           ) : route.view === "creature" ? (
             <CreaturePage key={route.creatureId} creatureId={route.creatureId} />
+          ) : route.view === "creation" ? (
+            <CreationPage key={route.publicationId} publicationId={route.publicationId} />
           ) : (
             <LabView ready={ready} runId={route.runId} />
           )}

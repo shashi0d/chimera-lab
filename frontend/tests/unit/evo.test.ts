@@ -1,7 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { setTestSession } from "../../src/auth/auth";
 import { hrefFor, parseRoute } from "../../src/app/route";
 import { STREAM, streamRunEvents, toEvent } from "../../src/evo/http";
-import { mockConfig, mockTransport, releasedEvents, resetMock, SPLIT_CREATURE_ID } from "../../src/evo/mock";
+import { mockConfig, mockTransport, releasedEvents, resetMock, SPLIT_CREATURE_ID } from "../fakes/evoTransport";
 import { deriveRun, readCache, type RunRecord } from "../../src/evo/runs";
 import { SseParser } from "../../src/evo/sse";
 import type { AgentEvent, RunSnapshot } from "../../src/evo/types";
@@ -55,7 +56,8 @@ describe("http event stream (resume, reconnect, terminal)", () => {
   beforeEach(() => vi.useFakeTimers());
   afterEach(() => vi.useRealTimers());
 
-  it("sends Last-Event-ID and ?after=, delivers in order, stops at the terminal event", async () => {
+  it("sends the access token, Last-Event-ID and ?after=, delivers in order, stops at the terminal event", async () => {
+    setTestSession({ id: "user-1", email: "a@example.test" });
     const all = ev(success);
     const fetch = vi.fn(async () => new Response(sseBody(all.slice(5)), { status: 200 }));
     const got: number[] = [];
@@ -65,7 +67,7 @@ describe("http event stream (resume, reconnect, terminal)", () => {
     const [url, init] = fetch.mock.calls[0] as unknown as [string, RequestInit];
     expect(url).toContain("/evo/agent/runs/run_x/events?after=5");
     expect((init.headers as Record<string, string>)["Last-Event-ID"]).toBe("5");
-    expect((init.headers as Record<string, string>)["X-Session-Id"]).toBeTruthy();
+    expect((init.headers as Record<string, string>).Authorization).toBe("Bearer test-token");
     expect(got).toEqual(all.slice(5).map((e) => e.id));
     expect(states.at(-1)).toBe("closed");
     expect(fetch).toHaveBeenCalledTimes(1);

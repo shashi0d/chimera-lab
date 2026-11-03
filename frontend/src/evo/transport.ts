@@ -1,5 +1,5 @@
 import type { AppError } from "../api/errors";
-import type { AgentEvent, Creature, GalleryPage, Health, Limits, RunSnapshot, StartInput, StartResult } from "./types";
+import type { AgentEvent, Creature, GalleryPage, Health, Limits, Publication, RunSnapshot, StartInput, StartResult } from "./types";
 
 export type StreamState = "connecting" | "open" | "reconnecting" | "closed";
 
@@ -15,9 +15,9 @@ export interface EventStream {
   stop(): void;
 }
 
-/** Everything the UI needs from the agent API (docs/api_contract.md). Real: http.ts. Dev/test: mock.ts. */
+/** Everything the UI needs from the agent API (docs/api_contract.md). The app uses http.ts; tests pass a fake. */
 export interface EvoTransport {
-  readonly kind: "http" | "mock";
+  readonly kind: "http" | "fake";
   health(): Promise<Health>;
   startRun(input: StartInput): Promise<StartResult>;
   getRun(runId: string): Promise<RunSnapshot>;
@@ -27,6 +27,7 @@ export interface EvoTransport {
   getLimits(): Promise<Limits>;
   getCreature(creatureId: string): Promise<Creature>;
   getGallery(cursor?: string | null, limit?: number): Promise<GalleryPage>;
+  getPublication(publicationId: string): Promise<Publication>;
   /** An image URL from the API, as the browser should load it. */
   imageUrl(url: string): string;
 }

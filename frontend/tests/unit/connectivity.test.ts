@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { httpTransport } from "../../src/evo/http";
 import { useConnectivity } from "../../src/connectivity/store";
 
-beforeEach(() => useConnectivity.setState({ browserOnline: true, serverReachable: true, forced: null, status: "online", mode: null }));
+beforeEach(() => useConnectivity.setState({ browserOnline: true, serverReachable: true, forced: null, status: "online" }));
 
 describe("connectivity (TASKSHEET 7.7)", () => {
   it("offline when the browser says so", () => {
@@ -13,11 +13,10 @@ describe("connectivity (TASKSHEET 7.7)", () => {
     vi.spyOn(httpTransport, "health").mockRejectedValue(new Error("down"));
     expect(await useConnectivity.getState().check()).toBe("unreachable");
   });
-  it("health check restores online and records the mode", async () => {
+  it("a health check restores online", async () => {
     useConnectivity.getState().setServerReachable(false);
-    vi.spyOn(httpTransport, "health").mockResolvedValue({ mode: "mock" });
+    vi.spyOn(httpTransport, "health").mockResolvedValue({ status: "ok" });
     expect(await useConnectivity.getState().check()).toBe("online");
-    expect(useConnectivity.getState().mode).toBe("mock");
   });
   it("forced status wins (test hook)", () => {
     useConnectivity.getState().force("offline");

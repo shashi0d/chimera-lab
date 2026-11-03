@@ -7,9 +7,11 @@ for creature designers in games, film and tabletop, and for people learning biol
 Every creature is generated. The app labels each one "Generated fusion" and never presents it as a real animal.
 Documented real hybrids (a mule, a liger) are labelled separately.
 
-**Status (Nov 2, build round R1 merged on `evo`):** the engine and the agent are built and benchmarked live (S5).
-The gallery-first UI, the run API with its resumable live trace, caps and the creature gallery are built and tested
-end to end in mock mode (`docs/R1_REPORT.md`). Hosting is chosen in R2; live mode on a host is not verified yet.
+**Status (Nov 3, on `evo`):** the app is live-only. The engine and the agent are built and benchmarked live (S5).
+After the agent's image, creators shape the creature in the **Lab**: a FLORA-style canvas where every edit is a
+card between two images, so the path from the two animals to the final creature stays visible
+(`docs/LAB.md`). Accounts are Supabase Auth (email magic link); runs, edits and the canvas are saved to Supabase.
+Hosting comes later.
 
 - What was built during the hackathon, and what came from outside: `docs/submission/BUILT_DURING_HACKATHON.md`
 - Architecture diagrams: `docs/submission/ARCHITECTURE.md`
@@ -17,6 +19,9 @@ end to end in mock mode (`docs/R1_REPORT.md`). Hosting is chosen in R2; live mod
 
 ## What you get
 
+- **The Lab: one flow.** Animals → Fusion agent → image V1 → edit cards (Revise, or Paint an area) → V2, V3 … Each
+  image card has tools: its path, compare, a visual review, a collaborator that proposes revisions, mark final,
+  download, and publish to the gallery with the whole path (`docs/LAB.md`).
 - **A gallery first.** Finished creatures, with six showcase creatures from the benchmark run first (D-096). The six
   are proposed and wait for the owner's ratings (D-095).
 - **A live trace.** Every agent step appears as it happens: the tool, its arguments, the agent's reason and the
@@ -137,7 +142,7 @@ once with the fixed pipeline, live, 22 creatures, no reruns. Scores are computed
 
 ## Run it
 
-### Mock mode (no keys, no paid calls)
+The app is live-only: every run, edit and review calls the real models.
 
 ```bash
 python3 -m venv .venv && .venv/bin/pip install -r backend/requirements-dev.txt
@@ -145,26 +150,21 @@ cd frontend && npm install && cd ..
 scripts/dev.sh
 ```
 
-`scripts/dev.sh` starts the backend on <http://localhost:8000> in mock mode and the frontend dev server on
-<http://localhost:5173>. In mock mode no model is called: the agent is driven by a scripted policy brain
-(`PolicyBrain` in `agent.py`) and the models are deterministic mocks.
+Open <http://localhost:5173>. The Vite dev server proxies `/evo` and `/health` to the backend on port 8000, so the
+browser sees one origin, as in production (the built frontend is served by the backend at `/`).
 
-R1 (in progress at the time of writing) adds the agent endpoints under `/evo/agent/...` and serves the built
-frontend from the same app at `/` (`docs/api_contract.md`). In mock mode the header `X-Mock-Scenario` picks a
-scenario (success, host tie, cap, error, queued, refused upload).
-
-### Live mode
-
-Set these in `.env` (see `.env.example`); keys stay on the backend:
+Set these in the repo-root `.env` (see `.env.example`); keys stay on the backend:
 
 | Variable | What |
 |---|---|
-| `CHIMERA_MODE=real` | use the live adapters |
 | `META_API_KEY` | Meta Model API: Muse Spark 1.3, Muse Image 1.0, SAM 3.1 |
-| `BASETEN_API_KEY_MODEL_MUSE_SPARK_OPEN_26` | Baseten: Muse Spark Open, the agent |
-| `SUPABASE_URL`, `SUPABASE_SERVICE_KEY` | optional: Postgres and Storage instead of local files and SQLite |
-| `EVO_DAILY_RUNS`, `EVO_VISITOR_DAILY_RUNS` | public caps, defaults 50 and 3 (R1, `docs/api_contract.md`) |
+| `BASETEN_API_KEY_MODEL_MUSE_SPARK_OPEN_26` | Baseten: Muse Spark Open, the agent and the Lab collaborator |
+| `SUPABASE_URL`, `SUPABASE_SECRET_KEY`, `SUPABASE_PUBLISHABLE_KEY` | Postgres, Storage and Auth (without them: local SQLite and files, and no sign-in) |
+| `EVO_DAILY_RUNS`, `EVO_VISITOR_DAILY_RUNS` | Fusion runs per day, total and per user (defaults 50 and 3) |
+| `LAB_DAILY_ACTIONS`, `LAB_USER_DAILY_ACTIONS` | Lab edits, reviews and messages per day (defaults 100 and 20) |
 | `CHIMERA_LIVE_BUDGET_FILE` and `CHIMERA_LIVE_MAX_*` | optional hard cap on live calls across processes |
+
+Supabase setup (SQL migrations, sign-in redirect URLs, email): `docs/LAB.md` → Setup.
 
 The benchmark runner spends real calls, one creature per invocation, and resumes from disk:
 
@@ -177,15 +177,16 @@ The benchmark runner spends real calls, one creature per invocation, and resumes
 
 | Command | What |
 |---|---|
-| `.venv/bin/python -m pytest backend` | backend, all in mock mode (956 passed, 6 live tests skipped, at S5) |
-| `cd frontend && npm test` | frontend unit and component tests |
-| `cd frontend && npm run e2e` | Playwright end-to-end tests |
+| `.venv/bin/python -m pytest backend` | backend with offline fakes: no paid call, never reads `.env` (892 passed, 6 live tests skipped) |
+| `cd frontend && npm test` | frontend unit and component tests (201) |
 
 ## Repository map
 
 ```
 backend/app/evolution/   the engine and the agent (agent.py, inspect.py, critic.py, anatomy.py, benchmark.py)
-backend/app/adapters/    Meta, Baseten, Supabase and mock adapters
+backend/app/adapters/    Meta, Baseten and Supabase adapters (and local SQLite/files for development)
+backend/app/agentapi/    the API: agent runs, the Lab (lab.py), gallery; backend/app/auth.py verifies sign-in
+frontend/src/lab/        the Lab: edit jobs, tools panel, paint editor; nodes/version and nodes/edit are its cards
 data/                    dataset, rule cards, engine config, the frozen benchmark
 docs/evolution/          research, algorithm, step reports, live outputs (live/s5/ is the benchmark run)
 docs/submission/         submission documents

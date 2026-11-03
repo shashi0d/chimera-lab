@@ -22,6 +22,7 @@ import { getDefinition, nodeRegistry, portsOf } from "../nodes/registry";
 import type { AnyNodeDefinition, ValidationIssue } from "../nodes/types";
 import { UnsupportedNodeView } from "../nodes/unsupported/NodeView";
 import { derived, isTerminal, useEvoRuns } from "../evo/runs";
+import { addEditNode } from "../lab/graph";
 import { createNode } from "../nodes/registry";
 import { toast } from "../ui/toastStore";
 import { useUi } from "../ui/uiStore";
@@ -38,21 +39,13 @@ interface FlowData extends Record<string, unknown> {
 }
 type FlowNode = Node<FlowData>;
 
-/** Test hook target: throws inside the node's error boundary. */
-function Crash(): never {
-  throw new Error("Forced node crash (test hook)");
-}
-
 function makeNodeComponent(def: AnyNodeDefinition): ComponentType<NodeProps<FlowNode>> {
   const View = def.View;
-  const Component = ({ id, data, selected }: NodeProps<FlowNode>) => {
-    const crash = useUi((s) => s.crashNodes.includes(id));
-    return (
-      <NodeErrorBoundary nodeId={id}>
-        {crash ? <Crash /> : <View node={data.node} selected={Boolean(selected)} issues={data.issues} catalog={data.catalog} />}
-      </NodeErrorBoundary>
-    );
-  };
+  const Component = ({ id, data, selected }: NodeProps<FlowNode>) => (
+    <NodeErrorBoundary nodeId={id}>
+      <View node={data.node} selected={Boolean(selected)} issues={data.issues} catalog={data.catalog} />
+    </NodeErrorBoundary>
+  );
   Component.displayName = `Node(${def.type})`;
   return memo(Component);
 }
@@ -211,7 +204,14 @@ export function Canvas() {
   }, []);
 
   const onConnectEnd = useCallback(
-    (_e: MouseEvent | TouchEvent, state: FinalConnectionState) => {
+    (e: MouseEvent | TouchEvent, state: FinalConnectionState) => {
+      // FLORA-style: drag from an image's output onto empty canvas to start an edit of that image there.
+      if (!state.toNode && state.fromNode?.type === "version" && state.fromHandle?.type === "source" && !useGraph.getState().readOnly) {
+        const point = "changedTouches" in e ? e.changedTouches[0]! : e;
+        const p = flow.screenToFlowPosition({ x: point.clientX, y: point.clientY });
+        addEditNode(state.fromNode.id, "revise", "", { x: p.x, y: p.y - 60 });
+        return;
+      }
       if (state.isValid || !state.toHandle || !state.fromHandle || !state.toNode || !state.fromNode) return;
       const fromIsSource = state.fromHandle.type === "source";
       const c: ConnectionAttempt = fromIsSource
@@ -220,7 +220,7 @@ export function Canvas() {
       const res = checkConnection(useGraph.getState(), c, portsOf);
       if (!res.ok) refuse(state.toNode.id, res.reason);
     },
-    [refuse],
+    [refuse, flow],
   );
 
   // ---------------------------------------------------------------- files: drop + paste

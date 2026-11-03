@@ -3,7 +3,7 @@ import { addImageFiles, replaceImage } from "../../src/canvas/addImages";
 import { useConnectivity } from "../../src/connectivity/store";
 import { useLimits, useCapped } from "../../src/evo/data";
 import { setTransport } from "../../src/evo/index";
-import { mockConfig, mockTransport, resetMock } from "../../src/evo/mock";
+import { mockConfig, mockTransport, resetMock } from "../fakes/evoTransport";
 import { stopAllStreams, useEvoRuns } from "../../src/evo/runs";
 import { useGraph } from "../../src/graph/store";
 import { browserCodec, setImageCodec } from "../../src/nodes/image-input/codec";
@@ -11,8 +11,9 @@ import type { ImageInputData } from "../../src/nodes/image-input/types";
 import { confirmIdentify, startFusion, useFusionStart } from "../../src/nodes/fusion/start";
 import type { FusionData } from "../../src/nodes/fusion/types";
 import { registerRunHandlers } from "../../src/nodes/registry";
-import type { ResultData } from "../../src/nodes/result/types";
-import { restoreGraph, writeRawAutosave } from "../../src/persistence/autosave";
+import { labApi, type LabVersion } from "../../src/lab/api";
+import type { VersionData } from "../../src/nodes/version/types";
+import { restoreWorkspace } from "../../src/persistence/autosave";
 import { useToasts } from "../../src/ui/toastStore";
 import { renderHook } from "@testing-library/react";
 
@@ -87,25 +88,30 @@ describe("adding images (TASKSHEET 7.1, R1: kept on this device until a run star
   });
 });
 
-describe("autosave restore (TASKSHEET 7.6)", () => {
-  it("corrupt autosave is discarded with a toast", async () => {
-    await writeRawAutosave("{{{ not a graph");
-    await restoreGraph();
+/** The server's saved workspace, as GET /evo/lab/workspace returns it. */
+function serverHas(graph: unknown) {
+  vi.spyOn(labApi, "getWorkspace").mockResolvedValue({ graph: graph as never, revision: 1, updatedAt: "2026-11-03T00:00:00Z" });
+}
+
+describe("workspace restore (the signed-in user's canvas)", () => {
+  it("corrupt saved workspace is discarded with a toast", async () => {
+    serverHas("{{{ not a graph");
+    await restoreWorkspace("user-1");
     expect(useGraph.getState().nodes).toHaveLength(0);
     expect(useToasts.getState().toasts[0]?.message).toMatch(/couldn't be read/);
   });
 
   it("orphan edges are removed on load with a note", async () => {
     vi.spyOn(console, "info").mockImplementation(() => undefined);
-    await writeRawAutosave({ schemaVersion: 1, graphId: "g1", nodes: [{ id: "a", type: "image-input", position: { x: 0, y: 0 } }], edges: [{ id: "e", source: "a", sourcePort: "out", target: "zz", targetPort: "a" }] });
-    await restoreGraph();
+    serverHas({ schemaVersion: 1, graphId: "g1", nodes: [{ id: "a", type: "image-input", position: { x: 0, y: 0 } }], edges: [{ id: "e", source: "a", sourcePort: "out", target: "zz", targetPort: "a" }] });
+    await restoreWorkspace("user-1");
     expect(useGraph.getState().graphId).toBe("g1");
     expect(useGraph.getState().edges).toHaveLength(0);
     expect(useToasts.getState().toasts[0]?.message).toMatch(/Removed 1 broken connection/);
   });
 
-  it("v1 canvases migrate: images keep their local copy, old pipeline runs and versions are dropped", async () => {
-    await writeRawAutosave({
+  it("old canvases migrate: images keep their local copy, old runs are dropped, retired node types stay as placeholders", async () => {
+    serverHas({
       schemaVersion: 1,
       graphId: "old",
       nodes: [
@@ -116,20 +122,22 @@ describe("autosave restore (TASKSHEET 7.6)", () => {
       ],
       edges: [],
     });
-    await restoreGraph();
+    await restoreWorkspace("user-1");
     const byId = Object.fromEntries(useGraph.getState().nodes.map((x) => [x.id, x]));
     expect(byId.a?.data).toMatchObject({ status: "ready", blobKey: "k" });
     expect(byId.f?.config).toEqual({ mode: "realistic" });
     expect(byId.f?.data).toMatchObject({ activeRunId: null, runIds: [] });
-    expect((byId.r?.data as ResultData).versions).toEqual([]);
+    expect(byId.r?.type).toBe("result"); // the retired Result node: shown as "unsupported", not lost
     expect(byId.c?.type).toBe("field-card"); // kept for the "unsupported" placeholder
   });
 });
 
 describe("making a creature through the agent API (contract POST /evo/agent/runs)", () => {
-  it("typed names only: posts the names, attaches the run, puts its id in the URL, and the finished creature becomes a Result version", async () => {
+  it("typed names only: posts the names, attaches the run, puts its id in the URL, and the finished creature becomes image V1", async () => {
     const stop = registerRunHandlers();
     const spy = vi.spyOn(mockTransport, "startRun");
+    const v1 = (runId: string): LabVersion => ({ id: `labv_run_${runId}`, parentId: null, runId, creatureId: "crt_fx_b09", operation: "fusion", instruction: "Indian pangolin × horse (mythic)", imageUrl: "/evo/files/runs/x/img2.webp", createdAt: "2026-11-03T00:00:00Z", isFinal: false, publicationId: null, title: "Indian pangolin × horse" });
+    const fromRun = vi.spyOn(labApi, "versionFromRun").mockImplementation(async (runId) => v1(runId));
     await addImageFiles([], { x: 0, y: 0 });
     useGraph.getState().addNode({ id: "f", type: "fusion", version: 3, position: { x: 0, y: 0 }, config: { mode: "mythic" }, data: { activeRunId: null, runIds: [], names: { a: " Indian  pangolin ", b: "horse" } } });
     await startFusion("f");
@@ -137,10 +145,13 @@ describe("making a creature through the agent API (contract POST /evo/agent/runs
     const runId = fusionData().activeRunId as string;
     expect(runId).toMatch(/^run_fx_success-/);
     expect(window.location.search).toBe(`?run=${encodeURIComponent(runId)}`);
-    expect(useGraph.getState().nodes.filter((x) => x.type === "result")).toHaveLength(1);
+    const card = () => useGraph.getState().nodes.find((x) => x.type === "version");
+    expect((card()?.data as VersionData).runId).toBe(runId); // a waiting image card hangs off the Fusion node
+    expect(useGraph.getState().edges.some((e) => e.source === "f" && e.target === card()?.id)).toBe(true);
     await vi.waitFor(() => expect(useEvoRuns.getState().runs[runId]?.stream).toBe("closed"), { timeout: 3000 });
-    const res = useGraph.getState().nodes.find((x) => x.type === "result")?.data as ResultData;
-    expect(res.versions).toEqual([expect.objectContaining({ runId, creatureId: "crt_fx_b09", title: "Indian pangolin × horse" })]);
+    await vi.waitFor(() => expect((card()?.data as VersionData).version?.id).toBe(`labv_run_${runId}`));
+    expect(fromRun).toHaveBeenCalledWith(runId);
+    expect(useGraph.getState().nodes.filter((x) => x.type === "version")).toHaveLength(1);
     stop();
   });
 

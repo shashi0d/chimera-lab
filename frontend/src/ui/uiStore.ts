@@ -6,8 +6,6 @@ interface UiState {
   theme: Theme;
   minimap: boolean;
   shortcutsOpen: boolean;
-  /** Test hook: node ids forced to throw on render. */
-  crashNodes: string[];
   setTheme(t: Theme): void;
   toggleMinimap(): void;
   setShortcutsOpen(v: boolean): void;
@@ -27,7 +25,6 @@ export const useUi = create<UiState>()((set) => ({
   theme: initialTheme(),
   minimap: false,
   shortcutsOpen: false,
-  crashNodes: [],
   setTheme(theme) {
     try {
       localStorage.setItem("chimera.theme", theme);

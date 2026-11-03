@@ -2,18 +2,13 @@ import { absoluteUrl, baseHeaders, parseError, reportNetwork, request } from "..
 import { ApiRequestError, toAppError } from "../api/errors";
 import { SseParser } from "./sse";
 import type { EventStream, EvoTransport, StreamHandlers } from "./transport";
-import { EVENT_TYPES, isTerminalEvent, type AgentEvent, type Creature, type GalleryPage, type Health, type Limits, type RunSnapshot, type StartInput, type StartResult } from "./types";
+import { EVENT_TYPES, isTerminalEvent, type AgentEvent, type Creature, type GalleryPage, type Health, type Limits, type Publication, type RunSnapshot, type StartInput, type StartResult } from "./types";
 
 const TERMINAL_STATUS = new Set(["succeeded", "failed", "interrupted"]);
 export const STREAM = { backoffMs: [1000, 2000, 4000, 8000, 15000], idleMs: 45_000 };
 
-/** Dev only: forwarded as X-Mock-Scenario to a backend running in mock mode. Never set in production builds. */
-export const httpDevConfig = { mockScenario: null as string | null };
-
 function headers(extra: Record<string, string> = {}): Record<string, string> {
-  const h = baseHeaders(extra);
-  if (!import.meta.env.PROD && httpDevConfig.mockScenario) h["X-Mock-Scenario"] = httpDevConfig.mockScenario;
-  return h;
+  return baseHeaders(extra);
 }
 
 const enc = encodeURIComponent;
@@ -29,7 +24,7 @@ export function toEvent(data: string): AgentEvent | null {
 }
 
 /**
- * Reads GET /evo/agent/runs/{id}/events with fetch (EventSource can't send X-Session-Id).
+ * Reads GET /evo/agent/runs/{id}/events with fetch (EventSource can't send the Authorization header).
  * Resumes with Last-Event-ID and ?after=, reconnects with backoff, and treats 45 s without a byte
  * (the server pings every 15 s) as a dead connection.
  */
@@ -164,7 +159,7 @@ export const httpTransport: EvoTransport = {
 
   async health() {
     const { data } = await request<Health>("/health", { headers: headers(), timeoutMs: 5000 });
-    return { mode: data?.mode ?? null };
+    return { status: data?.status ?? "ok" };
   },
 
   async startRun(input: StartInput): Promise<StartResult> {
@@ -210,6 +205,11 @@ export const httpTransport: EvoTransport = {
 
   async getCreature(id) {
     const { data } = await request<Creature>(`/evo/creatures/${enc(id)}`, { headers: headers(), timeoutMs: 15000 });
+    return data;
+  },
+
+  async getPublication(id) {
+    const { data } = await request<Publication>(`/evo/publications/${enc(id)}`, { headers: headers(), timeoutMs: 15000 });
     return data;
   },
 

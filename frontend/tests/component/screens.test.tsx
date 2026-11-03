@@ -5,7 +5,7 @@ import { ApiRequestError } from "../../src/api/errors";
 import { useConnectivity } from "../../src/connectivity/store";
 import { useCreatures, useGallery, useLimits } from "../../src/evo/data";
 import { setTransport } from "../../src/evo/index";
-import { mockConfig, mockTransport, resetMock, SPLIT_CREATURE_ID } from "../../src/evo/mock";
+import { mockConfig, mockTransport, resetMock, SPLIT_CREATURE_ID } from "../fakes/evoTransport";
 import { stopAllStreams, useEvoRuns, type RunRecord } from "../../src/evo/runs";
 import type { AgentEvent } from "../../src/evo/types";
 import { useGraph } from "../../src/graph/store";

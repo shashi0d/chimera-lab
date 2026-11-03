@@ -1,5 +1,9 @@
 # R1 deploy checklist (Stream A)
 
+> **Updated Nov 3:** the app is live-only (no `CHIMERA_MODE`, no mock fixtures) and has accounts (Supabase Auth).
+> Runs, the Lab and caps belong to the signed-in user; requests carry `Authorization: Bearer <token>`, not
+> `X-Session-Id`. The Lab and its setup: `docs/LAB.md`. The host comparison below is unchanged.
+
 Status: **not deployed** (R1 rule). This page lists what any host must provide, how to configure it, and compares four
 hosts. The app is one FastAPI process (uvicorn) serving the built frontend at `/` and the API under `/evo`
 (D-096). Nothing in it depends on Modal.
@@ -14,7 +18,7 @@ hosts. The app is one FastAPI process (uvicorn) serving the built frontend at `/
 | **Secrets as env vars** | below | never in the frontend bundle (`scripts/check-bundle.sh`) |
 | ~1 GB RAM | engine + PIL on 1600 px images; images live on disk, not in memory (D-090) | measured limits: UNVERIFIED for live runs on a 512 MB box |
 | Writable local disk (ephemeral is fine with Supabase) | per-run image folder `LOCAL_DATA_DIR/agent_runs/<runId>` (deleted after finalize); without Supabase, also the SQLite store and `/evo/files` | without Supabase an ephemeral disk loses the gallery on restart |
-| The repo's `data/`, `docs/evolution/live/s5/` (showcase source) and, for mock mode, `docs/api_fixtures/` | the showcase is seeded from the S5 outputs at startup | a missing case folder is skipped with a log warning |
+| The repo's `data/` and `docs/evolution/live/s5/` (showcase source) | the showcase is seeded from the S5 outputs at startup | a missing case folder is skipped with a log warning |
 
 ## 2. Environment variables and secrets
 
@@ -31,9 +35,9 @@ Configuration (defaults in `backend/app/config.py`):
 
 | name | default | meaning |
 |---|---|---|
-| `CHIMERA_MODE` | `mock` | `real` for the live demo; `mock` replays fixtures and makes no paid calls |
 | `EVO_DAILY_RUNS` | 50 | agent runs per UTC day, all visitors |
-| `EVO_VISITOR_DAILY_RUNS` | 3 | per visitor (X-Session-Id + client IP) per day |
+| `EVO_VISITOR_DAILY_RUNS` | 3 | per signed-in user per day |
+| `LAB_DAILY_ACTIONS` / `LAB_USER_DAILY_ACTIONS` | 100 / 20 | Lab edits, reviews and collaborator messages per day |
 | `EVO_MAX_CONCURRENT_RUNS` | 3 | more are queued with a position |
 | `EVO_RUNS_PER_MINUTE_PER_IP` | 5 | POST rate limit |
 | `EVO_RUN_SOFT_SECONDS` / `EVO_RUN_HARD_SECONDS` | 840 / 900 | finalize-best at 14 min, stop at 15 |
@@ -59,6 +63,8 @@ Spend guards also apply: `DAILY_GENERATION_CAP`, `DAILY_TOKEN_CAP`, `MAX_TOKENS_
    writes), then `002_lockdown_and_indexes.sql` (only the service role may call `incr_counter`; `assets` indexes),
    then `003_table_grants.sql` (newer projects give the API roles no data privileges on new tables: this grants
    them to service_role only; without it every write fails with `permission denied for table assets`).
+   Then `004_lab_owner_index.sql`. Also set `SUPABASE_PUBLISHABLE_KEY` (sign-in) and, under Authentication →
+   URL Configuration, the Site URL and Redirect URLs for the host (docs/LAB.md → Setup).
 3. Check: `select id, public from storage.buckets;` shows `chimera-public | true`.
 4. Image URLs then look like `$SUPABASE_URL/storage/v1/object/public/chimera-public/runs/<runId>/img1.webp`;
    `/evo/files/...` redirects there.
@@ -78,24 +84,18 @@ cd backend && ../.venv/bin/python -m uvicorn app.main:app --host 0.0.0.0 --port 
     --workers 1 --proxy-headers --timeout-keep-alive 75
 ```
 
-Smoke (mock mode first: `CHIMERA_MODE=mock`, no paid calls; `B=https://<host>` or `http://127.0.0.1:8300`):
+Smoke (no paid calls; `B=https://<host>` or `http://127.0.0.1:8300`):
 
 ```bash
-curl -s $B/health                                   # {"status":"ok","mode":"mock",...}
+curl -s $B/health                                   # {"status":"ok","version":...}
 curl -s -o /dev/null -w "%{http_code}\n" $B/        # 200 (index.html)
-curl -s $B/evo/agent/limits                         # liveRuns "open"
+curl -s $B/evo/config                               # supabaseUrl, publishable key, authConfigured true
 curl -s "$B/evo/gallery?limit=6" | head -c 300      # six showcase creatures
-R=$(curl -s -X POST $B/evo/agent/runs -H "X-Session-Id: smoke-session-01" -F mode=realistic \
-    -F sireImage=@backend/tests/fixtures/images/lion.jpg -F damImage=@backend/tests/fixtures/images/red_fox.jpg)
-RID=$(echo "$R" | python3 -c "import sys,json;print(json.load(sys.stdin)['runId'])")
-curl -sN $B/evo/agent/runs/$RID/events | grep '^event:'   # started ... finalize (16 events, success fixture)
-curl -s -H "Last-Event-ID: 14" $B/evo/agent/runs/$RID/events | grep '^event:'   # step, finalize
-curl -s $B/evo/agent/runs/$RID                      # status succeeded, creatureId
+curl -s -o /dev/null -w "%{http_code}\n" $B/evo/lab/workspace   # 401 without a sign-in
 ```
 
-Real mode: set `CHIMERA_MODE=real` and the secrets, then run **one** run by names
-(`-F sireName=lion -F damName="golden eagle" -F mode=mythic`) and watch its stream to `finalize`. This costs
-model calls; only the owner starts it.
+Then sign in through the app (magic link) and run **one** Fusion run by names. This costs model calls; only the
+owner starts it.
 
 ## 5. Host comparison
 

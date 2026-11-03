@@ -250,6 +250,8 @@ export interface Creature {
 }
 
 export interface GalleryItem {
+  /** "showcase": a featured agent run (opens its creature card); "creation": published from someone's Lab. */
+  kind: "showcase" | "creation";
   creatureId: string;
   title: string;
   sire: Parent;
@@ -258,6 +260,29 @@ export interface GalleryItem {
   imageUrl: string;
   showcase: boolean;
   createdAt: string;
+  /** Creations: images on the path (the Fusion image plus each edit). */
+  steps?: number;
+}
+
+/** One image on a published creation's path. */
+export interface PublicationStep {
+  versionId: string;
+  operation: "fusion" | "revise" | "paint";
+  instruction: string;
+  imageUrl: string;
+  createdAt: string;
+}
+
+export interface Publication {
+  publicationId: string;
+  title: string;
+  createdAt: string;
+  sire: Parent | null;
+  dam: Parent | null;
+  mode: Mode | null;
+  imageUrl: string;
+  sourceCreatureId: string | null;
+  steps: PublicationStep[];
 }
 
 export interface GalleryPage {
@@ -266,5 +291,5 @@ export interface GalleryPage {
 }
 
 export interface Health {
-  mode: "mock" | "real" | null;
+  status: string;
 }

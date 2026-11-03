@@ -6,7 +6,8 @@ type Point = { x: number; y: number };
 type Stroke = { points: Point[]; width: number; erase: boolean };
 const CHECK_SIZE = 256;
 
-export function RegionEditor({ imageUrl, disabled, onSubmit }: { imageUrl: string; disabled: boolean; onSubmit: (mask: Blob, instruction: string) => void }) {
+/** Paint the area an edit may change. Pixels outside the paint stay exactly as they are. */
+export function PaintEditor({ imageUrl, disabled, onSave }: { imageUrl: string; disabled: boolean; onSave: (mask: Blob) => void }) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const active = useRef<Stroke | null>(null);
   const strokes = useRef<Stroke[]>([]);
@@ -15,7 +16,6 @@ export function RegionEditor({ imageUrl, disabled, onSubmit }: { imageUrl: strin
   const [history, setHistory] = useState({ undo: 0, redo: 0 });
   const [erase, setErase] = useState(false);
   const [size, setSize] = useState(60);
-  const [instruction, setInstruction] = useState("");
 
   function point(event: PointerEvent<HTMLCanvasElement>) {
     const el = event.currentTarget, bounds = el.getBoundingClientRect();
@@ -85,7 +85,7 @@ export function RegionEditor({ imageUrl, disabled, onSubmit }: { imageUrl: strin
   function redo() { const stroke = undone.current.pop(); if (stroke) { strokes.current.push(stroke); redraw(); } }
   function clear() { active.current = null; strokes.current = []; undone.current = []; redraw(); }
   return <div className="region-editor">
-    <p>Paint the area to change. A full-image edit is blended into your selection; everything outside the paint stays unchanged. Edges may be visible.</p>
+    <p>Paint the area to change. The edit is blended into your paint; everything outside it stays exactly as it is. Edges may be visible.</p>
     <div className="region-editor__image"><img src={absoluteUrl(imageUrl)} alt="Image to paint a region on" onLoad={(event) => {
       const el = canvas.current; if (el) { el.width = event.currentTarget.naturalWidth; el.height = event.currentTarget.naturalHeight; clear(); }
     }} />
@@ -100,11 +100,8 @@ export function RegionEditor({ imageUrl, disabled, onSubmit }: { imageUrl: strin
       <Button size="sm" disabled={disabled || !history.redo} onClick={redo}>Redo stroke</Button>
       <Button size="sm" disabled={disabled || !history.undo} onClick={clear}>Clear paint</Button>
     </div>
-    <label htmlFor="region-instruction">Change in painted area</label>
-    <textarea id="region-instruction" className="text-input studio__textarea" rows={3} value={instruction} maxLength={2000} disabled={disabled}
-      placeholder="Remove the spider face and blend the waist into the abdomen" onChange={(event) => setInstruction(event.target.value)} />
-    <Button variant="primary" disabled={disabled || !painted || !instruction.trim()} onClick={() => canvas.current?.toBlob((blob) => { if (blob) onSubmit(blob, instruction.trim()); }, "image/png")}>
-      Generate painted edit
+    <Button variant="primary" icon="check" disabled={disabled || !painted} onClick={() => canvas.current?.toBlob((blob) => { if (blob) onSave(blob); }, "image/png")}>
+      Use this area
     </Button>
   </div>;
 }

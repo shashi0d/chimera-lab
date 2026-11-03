@@ -28,8 +28,6 @@ export const copy = {
     saved: "Saved",
     saving: "Saving…",
     savedLocally: "Saved on this device",
-    modeMock: "Mock mode",
-    modeMockHint: "No models are called. Runs replay recorded agent runs from the test fixtures.",
     modeReal: "Live models",
     themeToDark: "Switch to dark theme",
     themeToLight: "Switch to light theme",
@@ -261,10 +259,10 @@ export const copy = {
   },
   gallery: {
     kicker: "Chimera Lab",
-    title: "Creatures made by an agent",
-    lead: "Two real animals in, one generated creature out. The agent chooses which animal carries the body, checks whether the creature could live, and shows every step it took.",
+    title: "Creatures, and how they were made",
+    lead: "Two real animals in, one generated creature out. An agent designs the first image; creators then shape it in the Lab, one edit at a time. Open any creation to see its whole path.",
     make: "Make a new creature",
-    showcase: "Showcase",
+    showcase: "Gallery",
     note: "Every image here is generated. None of these animals exist.",
     limits: (left: number, total: number, mine: number) =>
       `A creature takes about 5 minutes. ${left} of ${total} live runs left today; you can start ${mine} more.`,
@@ -273,7 +271,7 @@ export const copy = {
     retry: "Try again",
     loading: "Loading the gallery",
     more: "Show more",
-    empty: "No creatures yet. Make the first one.",
+    empty: "No creatures yet. Make the first one in the Lab.",
   },
   creature: {
     crumbs: "Breadcrumb",

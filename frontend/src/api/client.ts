@@ -1,6 +1,5 @@
 import type { ErrorEnvelope } from "../types/api";
 import { ApiRequestError, fromBody } from "./errors";
-import { sessionId } from "./session";
 
 type Listener = (ok: boolean) => void;
 
@@ -23,9 +22,17 @@ export function absoluteUrl(url: string): string {
   return /^(https?:|blob:|data:)/.test(url) ? url : `${apiConfig.baseUrl}${url}`;
 }
 
-/** Every request carries the anonymous session id (D-017); it is not authentication. */
+let tokenProvider: () => string | null = () => null;
+
+/** The auth module installs this: the signed-in user's current access token (refreshed by Supabase). */
+export function setAccessTokenProvider(fn: () => string | null): void {
+  tokenProvider = fn;
+}
+
+/** Every request carries the signed-in user's access token, when there is one. */
 export function baseHeaders(extra: Record<string, string> = {}): Record<string, string> {
-  return { "X-Session-Id": sessionId(), ...extra };
+  const token = tokenProvider();
+  return token ? { Authorization: `Bearer ${token}`, ...extra } : { ...extra };
 }
 
 export async function parseError(res: Response): Promise<ApiRequestError> {

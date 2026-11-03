@@ -14,7 +14,8 @@ const t = copy.gallery;
 
 function Card({ item }: { item: GalleryItem }) {
   const [broken, setBroken] = useState(false);
-  const route = { view: "creature", creatureId: item.creatureId } as const;
+  const creation = item.kind === "creation";
+  const route = creation ? ({ view: "creation", publicationId: item.creatureId } as const) : ({ view: "creature", creatureId: item.creatureId } as const);
   return (
     <li className="gcard">
       <a className="gcard__link" href={hrefFor(route)} onClick={linkHandler(route)}>
@@ -30,10 +31,19 @@ function Card({ item }: { item: GalleryItem }) {
             <Pill tone="brand">
               <Icon name="leaf" size={12} /> {copy.labels.generated}
             </Pill>
+            {creation ? (
+              <Pill tone="info">
+                <Icon name="fusion" size={12} /> {item.steps && item.steps > 1 ? `${item.steps} steps` : "Lab creation"}
+              </Pill>
+            ) : (
+              <Pill tone="neutral">
+                <Icon name="star" size={12} /> Featured
+              </Pill>
+            )}
           </span>
         </span>
         <span className="gcard__body">
-          <span className="gcard__kicker">{copy.modes[item.mode]?.label ?? item.mode}</span>
+          <span className="gcard__kicker">{creation ? "Lab creation" : "Agent run"} · {copy.modes[item.mode]?.label ?? item.mode}</span>
           <span className="gcard__title">{item.title}</span>
           <span className="gcard__parents">
             {item.sire.scientificName ? <span className="binomial">{item.sire.scientificName}</span> : item.sire.commonName}
@@ -87,9 +97,6 @@ export function GalleryPage() {
           <p className="hero__lead">{t.lead}</p>
         </div>
         <div className="hero__action">
-          <Button variant="primary" className="btn--lg hero__make" onClick={() => navigate({ view: "studio" })}>
-            Open creative studio
-          </Button>
           <Button variant="primary" icon="fusion" className="btn--lg hero__make" disabled={capped} aria-describedby="limits-line" onClick={() => navigate({ view: "lab", runId: null })}>
             {t.make}
           </Button>

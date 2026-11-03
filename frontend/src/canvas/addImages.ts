@@ -16,7 +16,8 @@ export const LAYOUT = { imageGapY: 330, fusionDx: 320, resultDx: 380 };
 export const FOOTPRINT: Record<string, { w: number; h: number }> = {
   "image-input": { w: 240, h: 300 },
   fusion: { w: 320, h: 460 },
-  result: { w: 500, h: 660 },
+  version: { w: 340, h: 470 },
+  edit: { w: 320, h: 380 },
 };
 const DEFAULT_FOOTPRINT = { w: 280, h: 300 };
 

@@ -12,7 +12,7 @@ import { upstreamNode } from "../../graph/queries";
 import { useGraph } from "../../graph/store";
 import { getBlob } from "../../persistence/blobStore";
 import type { ImageInputData } from "../image-input/types";
-import { ensureResultNode } from "./actions";
+import { ensureRunVersion } from "../../lab/store";
 import { cleanName, readMode, type FusionData } from "./types";
 
 /** An identify question from the POST response, waiting for the user (no run exists yet). */
@@ -85,7 +85,7 @@ function accepted(nodeId: string, res: RunAccepted): void {
   }));
   recordIdentified(nodeId, res);
   flagSlot(nodeId, null, null);
-  ensureResultNode(nodeId);
+  ensureRunVersion(nodeId, res.runId, false);
   useEvoRuns.getState().attach(res.runId, res);
   void useLimits.getState().refresh();
   navigate({ view: "lab", runId: res.runId });

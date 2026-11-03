@@ -19,7 +19,7 @@ export function fusion(id = "f", data: Record<string, unknown> = {}): GraphNode 
 }
 
 export function result(id = "r", data: Record<string, unknown> = {}): GraphNode {
-  return { id, type: "result", version: 2, position: { x: 600, y: 0 }, config: {}, data: { versions: [], selected: 0, ...data } };
+  return { id, type: "version", version: 1, position: { x: 600, y: 0 }, config: {}, data: { version: null, runId: null, error: null, ...data } };
 }
 
 export function edge(source: string, target: string, targetPort: string, sourcePort = "out"): GraphEdge {

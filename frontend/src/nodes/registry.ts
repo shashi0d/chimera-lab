@@ -3,12 +3,13 @@ import { uuid } from "../api/session";
 import type { GraphNode, NodeData, Position } from "../graph/types";
 import { fusionNode } from "./fusion/definition";
 import { imageInputNode } from "./image-input/definition";
-import { resultNode } from "./result/definition";
+import { editNode } from "./edit/definition";
+import { versionNode } from "./version/definition";
 import { onRunChange } from "../evo/runs";
 import { useGraph } from "../graph/store";
 import type { AnyNodeDefinition } from "./types";
 
-const definitions: AnyNodeDefinition[] = [imageInputNode, fusionNode, resultNode];
+const definitions: AnyNodeDefinition[] = [imageInputNode, fusionNode, versionNode, editNode];
 
 export const nodeRegistry: Readonly<Record<string, AnyNodeDefinition>> = Object.freeze(
   Object.fromEntries(definitions.map((d) => [d.type, d])),

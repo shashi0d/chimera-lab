@@ -1,4 +1,4 @@
-import { useConnectivity } from "../connectivity/store";
+import { signOut, useAuth } from "../auth/auth";
 import { copy } from "../copy";
 import { derived, isTerminal, useEvoRuns } from "../evo/runs";
 import { useSaveState } from "../persistence/autosave";
@@ -17,14 +17,15 @@ function NavLink({ to, label, current }: { to: Route; label: string; current: bo
 }
 
 export function TopBar() {
-  const mode = useConnectivity((s) => s.mode);
+  const auth = useAuth((s) => s.status);
+  const email = useAuth((s) => s.email);
   const theme = useUi((s) => s.theme);
   const setTheme = useUi((s) => s.setTheme);
   const setShortcutsOpen = useUi((s) => s.setShortcutsOpen);
   const save = useSaveState((s) => s.state);
   const route = useRoute();
   const liveRunId = useEvoRuns((s) => Object.values(s.runs).find((r) => !isTerminal(derived(r)!.status) && derived(r)!.status !== "loading")?.runId ?? null);
-  const saveLabel = save === "saving" ? copy.app.saving : save === "saved" || save === "saved-local" ? copy.app.savedLocally : "";
+  const saveLabel = save === "saving" ? copy.app.saving : save === "saved" ? "Saved" : save === "saved-local" ? copy.app.savedLocally : "";
   const inLab = route.view === "lab";
 
   return (
@@ -33,8 +34,7 @@ export function TopBar() {
         <BrandMark />
       </a>
       <nav className="topnav" aria-label={copy.nav.label}>
-        <NavLink to={{ view: "gallery" }} label={copy.nav.gallery} current={route.view === "gallery" || route.view === "creature"} />
-        <NavLink to={{ view: "studio" }} label="Creative studio" current={route.view === "studio"} />
+        <NavLink to={{ view: "gallery" }} label={copy.nav.gallery} current={route.view === "gallery" || route.view === "creature" || route.view === "creation"} />
         <NavLink to={{ view: "lab", runId: null }} label={copy.nav.lab} current={inLab} />
       </nav>
       <p className="topbar__doc">
@@ -55,10 +55,19 @@ export function TopBar() {
             <LiveIndicator tone="running" label={copy.status.running} />
           </a>
         ) : null}
-        {mode === "mock" ? (
-          <span className="mode-badge" data-tooltip={copy.app.modeMockHint} tabIndex={0} aria-label={`${copy.app.modeMock}. ${copy.app.modeMockHint}`}>
-            {copy.app.modeMock}
+        {auth === "signed-in" ? (
+          <span className="topbar__account">
+            <span className="topbar__email" title={email ?? undefined}>
+              {email}
+            </span>
+            <button type="button" className="btn btn--ghost btn--sm" onClick={() => void signOut()}>
+              Sign out
+            </button>
           </span>
+        ) : auth === "signed-out" && !inLab ? (
+          <a className="btn btn--secondary btn--sm" href={hrefFor({ view: "lab", runId: null })} onClick={linkHandler({ view: "lab", runId: null })}>
+            Sign in
+          </a>
         ) : null}
         <IconButton
           icon={theme === "dark" ? "sun" : "moon"}
