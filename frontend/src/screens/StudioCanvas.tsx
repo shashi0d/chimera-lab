@@ -2,7 +2,7 @@ import { Background, Controls, Position as FlowPosition, ReactFlow, useNodesInit
 import { useEffect, useMemo } from "react";
 import { absoluteUrl } from "../api/client";
 
-export type StudioVersion = { id: string; parentId: string | null; imageUrl: string; instruction: string; direction: string; createdAt: string; mode: string };
+export type StudioVersion = { id: string; parentId: string | null; imageUrl: string; instruction: string; direction: string; createdAt: string; mode: string; isFinal?: boolean };
 type Position = { x: number; y: number };
 const POSITIONS = "chimera.studio.positions.v1";
 
@@ -36,7 +36,7 @@ export function StudioCanvas({ versions, selected, onSelect }: { versions: Studi
       return { id: v.id, position: saved[v.id] ?? { x: column * 270, y: row * 280 }, sourcePosition: FlowPosition.Right, targetPosition: FlowPosition.Left,
         selected: v.id === selected,
         data: { label: <div className="studio-canvas__card"><img src={absoluteUrl(v.imageUrl)} alt="" />
-          <strong>Version {i + 1}</strong><span>{v.parentId ? "Revision" : "Concept"}</span></div> } };
+          <strong>Version {i + 1}{v.isFinal ? " · Final choice" : ""}</strong><span>{v.parentId ? "Revision" : "Concept"}</span></div> } };
     }));
   }, [versions, selected, setNodes]);
   useEffect(() => {

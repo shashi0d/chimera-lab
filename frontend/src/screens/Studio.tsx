@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { absoluteUrl, baseHeaders, request } from "../api/client";
+import { absoluteUrl, baseHeaders, parseError, request } from "../api/client";
 import { Button } from "../ui/Button";
 import { StudioCanvas, type StudioVersion as Version } from "./StudioCanvas";
 import { RegionEditor } from "./RegionEditor";
@@ -30,8 +30,10 @@ export function Studio() {
   const known = useRef(new Set(restore().map((v) => v.id)));
   const [review, setReview] = useState<Review | null>(null);
   const [regionOpen, setRegionOpen] = useState(false);
+  const [compareId, setCompareId] = useState("");
   const [error, setError] = useState("");
   const current = versions.find((v) => v.id === selected);
+  const compared = versions.find((v) => v.id === compareId && v.id !== selected);
   const activeJob = jobs.find((job) => job.status === "queued" || job.status === "running");
   const working = busy || Boolean(activeJob);
 
@@ -127,6 +129,29 @@ export function Studio() {
     } catch (e) { setError(e instanceof Error ? e.message : "Could not start the painted edit."); }
     finally { setBusy(false); }
   }
+  async function setFinal(isFinal: boolean) {
+    if (!current) return;
+    setBusy(true); setError("");
+    try {
+      await request(`/evo/studio/versions/${encodeURIComponent(current.id)}/final`, { method: "PUT",
+        headers: baseHeaders({ "Content-Type": "application/json" }), body: JSON.stringify({ isFinal }) });
+      setVersions((old) => old.map((v) => v.id === current.id ? { ...v, isFinal } : v));
+    } catch (e) { setError(e instanceof Error ? e.message : "Could not update the final choice."); }
+    finally { setBusy(false); }
+  }
+  async function download() {
+    if (!current) return;
+    setBusy(true); setError("");
+    try {
+      const response = await fetch(absoluteUrl(`/evo/studio/versions/${encodeURIComponent(current.id)}/download`), { headers: baseHeaders() });
+      if (!response.ok) throw await parseError(response);
+      const blob = await response.blob(), url = URL.createObjectURL(blob);
+      const ext = blob.type === "image/png" ? "png" : blob.type === "image/jpeg" ? "jpg" : "webp";
+      const anchor = document.createElement("a"); anchor.href = url; anchor.download = `chimera-${current.id}.${ext}`;
+      document.body.appendChild(anchor); anchor.click(); anchor.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+    } catch (e) { setError(e instanceof Error ? e.message : "Could not download this image."); }
+    finally { setBusy(false); }
+  }
 
   return <div className="studio page">
     <header className="studio__heading"><p className="hero__kicker">CREATIVE STUDIO · EARLY DEMO</p>
@@ -162,9 +187,18 @@ export function Studio() {
           <StudioCanvas versions={versions} selected={selected} onSelect={(id) => { if (!working) setSelected(id); }} />
           <div className="studio__versions" aria-label="Choose a version">
             {versions.map((v, i) => <button type="button" key={v.id} className={`studio__version${v.id === selected ? " is-selected" : ""}`} aria-pressed={v.id === selected} disabled={working} onClick={() => setSelected(v.id)}>
-              <span>Version {i + 1}{v.parentId ? ` · from ${versions.findIndex((p) => p.id === v.parentId) + 1}` : " · concept"}</span>
+              <span>Version {i + 1}{v.parentId ? ` · from ${versions.findIndex((p) => p.id === v.parentId) + 1}` : " · concept"}{v.isFinal ? " · final" : ""}</span>
             </button>)}
           </div>
+          {current && versions.length > 1 && <div className="studio__compare">
+            <label htmlFor="compare-version">Compare selected draft with</label>
+            <select id="compare-version" className="text-input" value={compared?.id ?? ""} onChange={(event) => setCompareId(event.target.value)}>
+              <option value="">Choose another version</option>
+              {versions.map((v, i) => v.id !== current.id && <option key={v.id} value={v.id}>Version {i + 1}{v.isFinal ? " · final" : ""}</option>)}
+            </select>
+            {compared && <div className="studio__compare-images"><figure><img src={absoluteUrl(current.imageUrl)} alt="Selected draft for comparison" /><figcaption>Selected · Version {versions.findIndex((v) => v.id === current.id) + 1}</figcaption></figure>
+              <figure><img src={absoluteUrl(compared.imageUrl)} alt="Comparison draft" /><figcaption>Version {versions.findIndex((v) => v.id === compared.id) + 1}</figcaption></figure></div>}
+          </div>}
         </> : <div className="studio__board-empty"><span aria-hidden="true">✳</span><h3>Your canvas starts with an idea</h3><p>Describe your creature and generate a concept. Each new version will grow from the one you choose.</p></div>}
       </section>
       <section className="studio__workspace" aria-labelledby="studio-draft">
@@ -177,6 +211,9 @@ export function Studio() {
           <div><span aria-hidden="true">✳</span><p>Your first concept will appear here.</p><small>Describe your creature to begin.</small></div>}</div>
         {current && <>
           <p className="studio__instruction"><strong>{current.parentId ? "Revision" : "Your brief"}:</strong> {current.instruction}</p>
+          <div className="studio__actions"><Button size="sm" disabled={working} onClick={() => void setFinal(!current.isFinal)}>{current.isFinal ? "Remove final mark" : "Mark as final"}</Button>
+            <Button size="sm" disabled={working} onClick={() => void download()}>Download image</Button></div>
+          {current.isFinal && <p className="studio__note">You marked this version as a final choice. You can continue editing or change your mind.</p>}
           {current.direction && <details><summary>See the collaborator’s direction</summary><p>{current.direction}</p></details>}
           <StudioCollaborator key={current.id} versionId={current.id} hasReview={Boolean(review)} disabled={working} onReview={() => void askForReview()} onRevise={(instruction) => void revise(instruction)} />
           <div className="studio__review">
@@ -192,8 +229,7 @@ export function Studio() {
           <textarea id="studio-edit" className="text-input studio__textarea" rows={3} maxLength={2000} value={edit} disabled={working}
             placeholder="Make the spider legs longer, keeping the monkey's expression..." onChange={(e) => setEdit(e.target.value)} />
           <div className="studio__actions"><Button variant="primary" busy={working} disabled={working || !edit.trim()} onClick={() => void revise()}>Revise selected draft</Button>
-            <Button disabled={working} onClick={() => setRegionOpen((open) => !open)}>{regionOpen ? "Close painted edit" : "Paint an area to edit"}</Button>
-            <a className="btn btn--secondary" href={absoluteUrl(current.imageUrl)} download target="_blank" rel="noreferrer">Open image</a></div>
+            <Button disabled={working} onClick={() => setRegionOpen((open) => !open)}>{regionOpen ? "Close painted edit" : "Paint an area to edit"}</Button></div>
           <p className="studio__note">Revisions use the selected image as their starting point. The model may change other details too.</p>
           {regionOpen && <RegionEditor key={current.id} imageUrl={current.imageUrl} disabled={working} onSubmit={(mask, instruction) => void editRegion(mask, instruction)} />}
         </>}

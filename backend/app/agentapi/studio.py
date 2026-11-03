@@ -9,7 +9,7 @@ from collections.abc import Awaitable, Callable
 from typing import Any
 
 from fastapi import APIRouter, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 from PIL import Image, ImageChops, ImageFilter, UnidentifiedImageError
 from starlette.datastructures import UploadFile
 
@@ -304,9 +304,41 @@ async def versions(request: Request) -> JSONResponse:
     a = api(request)
     visitor, _ = _visitor(request, a)
     docs = await a.services.db.list("assets", "visitor", visitor)
+    finals = {d.get("versionId") for d in docs if d.get("kind") == "studio_final" and d.get("isFinal") is True}
     rows = [public_version(d) for d in docs if str(d.get("id", "")).startswith("studio_") and d.get("responseId")]
+    for row in rows:
+        row["isFinal"] = row["id"] in finals
     rows.sort(key=lambda d: (d.get("createdAt") or "", d.get("id") or ""))
     return JSONResponse({"versions": rows}, headers={"Cache-Control": "no-store"})
+
+
+@router.put("/versions/{version_id}/final")
+async def mark_final(version_id: str, request: Request) -> JSONResponse:
+    a = api(request)
+    visitor, _ = _visitor(request, a)
+    await get_version(a, version_id, visitor)
+    try:
+        body = await request.json()
+    except ValueError as exc:
+        raise _err(ErrorCode.VALIDATION_FAILED, "Choose whether this version is final.", 422) from exc
+    if not isinstance(body, dict) or not isinstance(body.get("isFinal"), bool):
+        raise _err(ErrorCode.VALIDATION_FAILED, "Choose whether this version is final.", 422)
+    value = body["isFinal"]
+    await a.services.db.put("assets", f"studiofinal_{version_id}", {"kind": "studio_final", "visitor": visitor,
+                                                                    "versionId": version_id, "isFinal": value})
+    return JSONResponse({"versionId": version_id, "isFinal": value}, headers={"Cache-Control": "no-store"})
+
+
+@router.get("/versions/{version_id}/download")
+async def download_version(version_id: str, request: Request) -> Response:
+    a = api(request)
+    visitor, _ = _visitor(request, a)
+    doc = await get_version(a, version_id, visitor)
+    data = await version_image(a, doc)
+    key = doc.get("imageKey") or str(doc.get("imageUrl") or "")
+    from app.agentapi.files import content_type_for
+    return Response(data, media_type=content_type_for(key), headers={"Cache-Control": "no-store",
+                    "Content-Disposition": f'attachment; filename="chimera-{version_id}.{key.rsplit(".", 1)[-1]}"'})
 
 
 async def review_image(settings: Any, image: bytes, brief: str, change: str) -> dict[str, str]:

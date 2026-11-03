@@ -57,3 +57,7 @@ The painted edit generates a whole-image candidate through the existing Meta edi
 ## Conversational collaborator
 
 A selected draft has a conversational collaborator backed by Baseten tool calling. It receives the original brief, the selected draft's instruction, up to twelve recent text messages, and that draft's saved independent visual observation if reviewed. It cannot see the image directly; the observation may be wrong. It can respond with advice or propose a review or an editable revision, but cannot paint a mask. Proposals do not spend an image call until the creator runs one. Live tool-call and review-context examples are saved in `collaboration.json` and `collaboration_with_review.json`. Reviews are stored with their image version; conversations and unrun proposals are stored per version in the browser. Each message uses one studio action allowance.
+
+## Choosing an output
+
+Any two versions can be compared side by side. A creator can mark or unmark versions as final choices and download the original saved image bytes. Final is a reversible personal label, not a claim that the design is correct or that other versions are discarded. Multiple versions may be marked final. Comparison and final marking do not use model calls.

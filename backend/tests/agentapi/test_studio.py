@@ -218,3 +218,22 @@ async def test_studio_has_separate_visible_action_limit(client):
     from app.agentapi.caps import visitor_key
     visitor = visitor_key("test-session-1", "127.0.0.1")
     assert await client.app.state.agent.caps.used(visitor) == (0, 0)
+
+
+async def test_final_mark_and_original_image_download_are_reversible_and_session_scoped(client):
+    class Renderer:
+        async def generate(self, prompt, refs, aspect, previous_response_id=None):
+            return GeneratedImage(image_bytes("blue"), "image/png", "test", "response")
+
+    client.app.state.services.image_gen = Renderer()
+    version = (await client.post("/evo/studio/concept", data={"animal1": "monkey", "animal2": "spider", "brief": "Eight legs"})).json()
+    url = f"/evo/studio/versions/{version['id']}"
+    assert (await client.put(url + "/final", json={"isFinal": True})).status_code == 200
+    assert (await client.get("/evo/studio/versions")).json()["versions"][0]["isFinal"] is True
+    download = await client.get(url + "/download")
+    assert download.status_code == 200 and download.content == image_bytes("blue")
+    assert download.headers["content-type"] == "image/png"
+    assert "attachment;" in download.headers["content-disposition"]
+    assert (await client.get(url + "/download", headers={"X-Session-Id": "other-session-1"})).status_code == 404
+    assert (await client.put(url + "/final", json={"isFinal": False})).status_code == 200
+    assert (await client.get("/evo/studio/versions")).json()["versions"][0]["isFinal"] is False

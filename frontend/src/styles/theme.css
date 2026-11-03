@@ -1956,6 +1956,12 @@ p.image-node__banner { display: flex; align-items: flex-start; gap: var(--space-
 .studio__history { margin-top: 28px; border-top: 1px solid var(--ink-100); padding-top: 20px; }
 .studio__history p { font-size: 13px; margin: 0 0 12px; }
 .studio__versions { display: flex; gap: 10px; overflow-x: auto; }
+.studio__compare { border-top: 1px solid var(--ink-100); margin-top: 18px; padding-top: 4px; }
+.studio__compare select { width: 100%; }
+.studio__compare-images { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }
+.studio__compare-images figure { margin: 0; min-width: 0; }
+.studio__compare-images img { display: block; width: 100%; border-radius: 8px; }
+.studio__compare-images figcaption { margin-top: 4px; color: var(--ink-600); font-size: 12px; }
 .studio-canvas { width: 100%; height: min(68vh, 760px); min-height: 500px; margin-bottom: 12px; border: 1px solid var(--ink-200); border-radius: 10px; overflow: hidden; background: var(--paper); }
 .studio-canvas .react-flow__node { width: 190px; padding: 6px; border-radius: 9px; border: 1px solid var(--ink-200); background: var(--paper); box-shadow: 0 3px 12px rgba(0,0,0,.1); }
 .studio-canvas .react-flow__node.selected { border: 2px solid var(--indigo-500); }
