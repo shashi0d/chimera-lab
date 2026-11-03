@@ -662,6 +662,16 @@ class RetryingImageGen(_Retrying):
         return await self.retry(lambda: self.inner.generate(prompt, reference_images, aspect, previous_response_id))
 
 
+def build_studio_chat(settings: Settings) -> Any:
+    """The creative studio's raw chat calls (direction, collaboration, review) on Spark Open."""
+    if not settings.baseten_api_key:
+        raise ChimeraError(ErrorCode.UPSTREAM_ERROR, "The creative collaborator is not configured on this server.",
+                           retryable=False)
+    from app.adapters.baseten.client import BasetenEvoSpark
+
+    return BasetenEvoSpark(settings)
+
+
 def build_live(settings: Settings, image_gen: ImageGenAdapter) -> tuple[Any, MetaSegmenter, RetryingImageGen]:
     """S2: Spark calls are routed per call type (evo_config `routing`): Spark Open on Baseten where configured,
     Meta Spark 1.3 for the rest and as the fallback. Without a Baseten key everything goes to Meta (logged)."""

@@ -4,6 +4,7 @@ import { Button } from "../ui/Button";
 
 type Point = { x: number; y: number };
 type Stroke = { points: Point[]; width: number; erase: boolean };
+const CHECK_SIZE = 256;
 
 export function RegionEditor({ imageUrl, disabled, onSubmit }: { imageUrl: string; disabled: boolean; onSubmit: (mask: Blob, instruction: string) => void }) {
   const canvas = useRef<HTMLCanvasElement>(null);
@@ -36,9 +37,18 @@ export function RegionEditor({ imageUrl, disabled, onSubmit }: { imageUrl: strin
   function updateState() {
     const el = canvas.current, ctx = el?.getContext("2d");
     if (!el || !ctx) return;
-    const pixels = ctx.getImageData(0, 0, el.width, el.height).data;
-    let hasPaint = false;
-    for (let i = 3; i < pixels.length; i += 4) if (pixels[i]) { hasPaint = true; break; }
+    // Check a downscaled copy: the scan stays small on large images, and any brush stroke survives the scaling.
+    const scale = Math.min(1, CHECK_SIZE / Math.max(el.width, el.height));
+    const probe = document.createElement("canvas");
+    probe.width = Math.max(1, Math.round(el.width * scale)); probe.height = Math.max(1, Math.round(el.height * scale));
+    const probeCtx = probe.getContext("2d");
+    let hasPaint = strokes.current.length > 0;
+    if (probeCtx) {
+      probeCtx.drawImage(el, 0, 0, probe.width, probe.height);
+      const pixels = probeCtx.getImageData(0, 0, probe.width, probe.height).data;
+      hasPaint = false;
+      for (let i = 3; i < pixels.length; i += 4) if (pixels[i]) { hasPaint = true; break; }
+    }
     setPainted(hasPaint); setHistory({ undo: strokes.current.length, redo: undone.current.length });
   }
   function redraw() {

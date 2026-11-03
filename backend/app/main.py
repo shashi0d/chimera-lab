@@ -77,7 +77,7 @@ def create_app(settings: Settings | None = None, services: Services | None = Non
     app.state.services = svc
     app.state.runs = RunManager(svc)
     app.state.agent = AgentApi(svc, build_public_files(settings))  # R1: the agent API under /evo
-    app.state.studio_slots = asyncio.Semaphore(settings.evo_max_concurrent_runs)
+    app.state.studio_slots = asyncio.Semaphore(settings.studio_max_concurrent_actions)
     app.state.studio_tasks = {}
     from app.agentapi.studio import StudioCaps
     app.state.studio_caps = StudioCaps(svc.db, settings)

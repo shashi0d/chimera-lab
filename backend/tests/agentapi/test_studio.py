@@ -216,7 +216,7 @@ async def test_review_is_saved_and_given_to_collaborator_for_that_version(client
 
 async def test_collaborator_inspects_then_proposes_without_rendering(client, monkeypatch):
     from app.agentapi import studio
-    from app.adapters.baseten import client as baseten
+    from app.evolution import live
     generated, chats = [], []
 
     class Renderer:
@@ -241,7 +241,7 @@ async def test_collaborator_inspects_then_proposes_without_rendering(client, mon
 
     client.app.state.services.image_gen = Renderer()
     version = (await client.post("/evo/studio/concept", data={"animal1": "monkey", "animal2": "spider", "brief": "Eight legs"})).json()
-    monkeypatch.setattr(baseten, "BasetenEvoSpark", Brain)
+    monkeypatch.setattr(live, "build_studio_chat", Brain)
     monkeypatch.setattr(studio, "review_image", fake_review)
     client.app.state.services.settings.chimera_mode = "real"
     result = await client.post(f"/evo/studio/versions/{version['id']}/collaborate", json={"messages": [{"role": "user", "content": "Inspect it and suggest a fix"}]})
@@ -285,3 +285,47 @@ async def test_final_mark_and_original_image_download_are_reversible_and_session
     assert (await client.get(url + "/download", headers={"X-Session-Id": "other-session-1"})).status_code == 404
     assert (await client.put(url + "/final", json={"isFinal": False})).status_code == 200
     assert (await client.get("/evo/studio/versions")).json()["versions"][0]["isFinal"] is False
+
+
+async def test_failed_actions_are_refunded_sync_and_background(client):
+    from app.errors import ChimeraError
+    from app.models.schemas import ErrorCode
+
+    class FailingRenderer:
+        async def generate(self, prompt, refs, aspect, previous_response_id=None):
+            raise ChimeraError(ErrorCode.UPSTREAM_ERROR, "The image provider is down.", retryable=True)
+
+    client.app.state.services.image_gen = FailingRenderer()
+    data = {"animal1": "monkey", "animal2": "spider", "brief": "Eight legs"}
+    failed = await client.post("/evo/studio/concept", data=data)
+    assert failed.status_code >= 500
+    assert (await client.get("/evo/studio/limits")).json()["used"] == 0
+    job = (await client.post("/evo/studio/concept?background=1", data=data)).json()
+    await asyncio.wait_for(client.app.state.studio_tasks[job["id"]], 2)
+    assert (await client.get("/evo/studio/jobs")).json()["jobs"][0]["status"] == "failed"
+    limits = (await client.get("/evo/studio/limits")).json()
+    assert limits["used"] == 0 and limits["totalUsed"] == 0
+
+
+async def test_refund_counts_against_the_day_it_was_charged(client):
+    from app.agentapi.caps import visitor_key
+    caps = client.app.state.studio_caps
+    visitor = visitor_key("test-session-1", "127.0.0.1")
+    await caps.charge(visitor)
+    await caps.refund(visitor, "2000-01-01")  # a day with nothing charged is left at zero
+    assert await caps.used(visitor) == (1, 1)
+    assert await caps.db.incr(caps._keys(visitor, "2000-01-01")[1], 0) == 0
+
+
+async def test_stale_job_is_interrupted_on_shared_storage_but_a_recent_one_is_not(client, monkeypatch):
+    from app.agentapi.caps import visitor_key
+    from app.util import now_iso
+    monkeypatch.setattr(client.app.state.services, "local_backend", False, raising=False)
+    visitor = visitor_key("test-session-1", "127.0.0.1")
+    db = client.app.state.services.db
+    base = {"kind": "studio_job", "visitor": visitor, "status": "running", "operation": "concept"}
+    await db.put("assets", "studiojob_old", {**base, "id": "studiojob_old", "createdAt": "2026-01-01T00:00:00.000Z",
+                                             "updatedAt": "2026-01-01T00:00:00.000Z"})
+    await db.put("assets", "studiojob_new", {**base, "id": "studiojob_new", "createdAt": now_iso(), "updatedAt": now_iso()})
+    jobs = {j["id"]: j["status"] for j in (await client.get("/evo/studio/jobs")).json()["jobs"]}
+    assert jobs == {"studiojob_old": "interrupted", "studiojob_new": "running"}

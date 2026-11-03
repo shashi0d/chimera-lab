@@ -49,7 +49,7 @@ export function Studio() {
   const projects = groupProjects(versions);
   const currentProject = current ? projectId(current, versions) : null;
   const projectVersions = projects.find((project) => project.id === currentProject)?.versions ?? [];
-  const compared = versions.find((v) => v.id === compareId && v.id !== selected);
+  const compared = projectVersions.find((v) => v.id === compareId && v.id !== selected);
   const root = currentProject ? versions.find((v) => v.id === currentProject) : undefined;
   const hasSources = Boolean(root?.sources?.some((source) => source.hasImage));
   const activeJob = jobs.find((job) => job.status === "queued" || job.status === "running");
@@ -120,10 +120,8 @@ export function Studio() {
   }
 
   function versionLabel(version: Version): string {
-    const id = projectId(version, versions);
-    const group = projects.find((project) => project.id === id);
-    const n = (group?.versions.findIndex((item) => item.id === version.id) ?? -1) + 1;
-    return `${id === currentProject ? "" : "Other idea · "}Version ${n}${version.isFinal ? " · final" : ""}`;
+    const n = projectVersions.findIndex((item) => item.id === version.id) + 1;
+    return `Version ${n}${version.isFinal ? " · final" : ""}`;
   }
 
   async function create() {
@@ -239,11 +237,11 @@ export function Studio() {
               <span>Version {i + 1}{v.parentId ? ` · from ${projectVersions.findIndex((p) => p.id === v.parentId) + 1}` : " · concept"}{v.isFinal ? " · final" : ""}</span>
             </button>)}
           </div>
-          {current && versions.length > 1 && <div className="studio__compare">
+          {current && projectVersions.length > 1 && <div className="studio__compare">
             <label htmlFor="compare-version">Compare selected draft with</label>
             <select id="compare-version" className="text-input" value={compared?.id ?? ""} onChange={(event) => setCompareId(event.target.value)}>
               <option value="">Choose another version</option>
-              {versions.map((v) => v.id !== current.id && <option key={v.id} value={v.id}>{versionLabel(v)}</option>)}
+              {projectVersions.map((v) => v.id !== current.id && <option key={v.id} value={v.id}>{versionLabel(v)}</option>)}
             </select>
             {compared && <div className="studio__compare-images"><figure><img src={absoluteUrl(current.imageUrl)} alt="Selected draft for comparison" /><figcaption>Selected · {versionLabel(current)}</figcaption></figure>
               <figure><img src={absoluteUrl(compared.imageUrl)} alt="Comparison draft" /><figcaption>{versionLabel(compared)}</figcaption></figure></div>}

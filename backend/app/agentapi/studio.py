@@ -5,7 +5,9 @@ import asyncio
 import io
 import json
 import logging
-from collections.abc import Awaitable, Callable
+from collections.abc import AsyncIterator, Awaitable, Callable
+from contextlib import asynccontextmanager
+from datetime import UTC, datetime
 from typing import Any
 
 from fastapi import APIRouter, Request
@@ -34,9 +36,23 @@ class StudioCaps(Caps):
             "evo_runs_per_minute_per_ip": settings.studio_actions_per_minute_per_ip,
         }))
 
-    def _keys(self, visitor: str) -> tuple[str, str]:
-        day = day_key()
+    def _keys(self, visitor: str, day: str | None = None) -> tuple[str, str]:
+        day = day or day_key()
         return f"studio_actions:{day}", f"studio_actions:{day}:v:{visitor}"
+
+    async def charge(self, visitor: str) -> str:
+        """Take one action and return the UTC day it was counted on, for a refund if the action fails."""
+        day = day_key()
+        await self.take(visitor)
+        return day
+
+    async def refund(self, visitor: str, day: str) -> None:
+        """Give back an action that did not complete, on the day it was counted."""
+        total, mine = self._keys(visitor, day)
+        if await self.db.incr(mine, 0) > 0:
+            await self.db.incr(mine, -1)
+        if await self.db.incr(total, 0) > 0:
+            await self.db.incr(total, -1)
 
     async def check(self, visitor: str) -> None:
         try:
@@ -65,11 +81,22 @@ async def studio_limits(request: Request) -> JSONResponse:
                          "resetsAt": resets_at()}, headers={"Cache-Control": "no-store"})
 
 
+@asynccontextmanager
+async def charged_slot(request: Request, visitor: str, day: str) -> AsyncIterator[None]:
+    """Hold a model slot for an action already charged on `day`. An action that fails or is cancelled is refunded."""
+    try:
+        async with request.app.state.studio_slots:
+            yield
+    except BaseException:
+        await request.app.state.studio_caps.refund(visitor, day)
+        raise
+
+
 def public_job(doc: dict[str, Any]) -> dict[str, Any]:
     return {k: doc.get(k) for k in ("id", "operation", "status", "stage", "createdAt", "updatedAt", "result", "error")}
 
 
-async def start_background(request: Request, visitor: str, operation: str,
+async def start_background(request: Request, visitor: str, day: str, operation: str,
                            work: Callable[[Callable[[str], Awaitable[None]]], Awaitable[dict[str, Any]]]) -> JSONResponse:
     """Keep a paid operation alive independently of its initiating HTTP connection."""
     a = api(request)
@@ -87,7 +114,7 @@ async def start_background(request: Request, visitor: str, operation: str,
 
     async def run() -> None:
         try:
-            async with request.app.state.studio_slots:
+            async with charged_slot(request, visitor, day):
                 await stage("Starting")
                 result = await work(stage)
                 await save(status="succeeded", stage="Ready", result=result)
@@ -108,15 +135,27 @@ async def start_background(request: Request, visitor: str, operation: str,
     return JSONResponse(public_job(doc), status_code=202)
 
 
+def job_is_stale(doc: dict[str, Any], stale_seconds: float, now: datetime | None = None) -> bool:
+    stamp = doc.get("updatedAt") or doc.get("createdAt")
+    try:
+        updated = datetime.fromisoformat(str(stamp).replace("Z", "+00:00"))
+    except ValueError:
+        return True  # an unreadable timestamp cannot prove the job is alive
+    if updated.tzinfo is None:
+        updated = updated.replace(tzinfo=UTC)
+    return ((now or datetime.now(UTC)) - updated).total_seconds() > stale_seconds
+
+
 @router.get("/jobs")
 async def jobs(request: Request) -> JSONResponse:
     a = api(request)
     visitor, _ = _visitor(request, a)
     docs = [d for d in await a.services.db.list("assets", "visitor", visitor) if d.get("kind") == "studio_job"]
-    # Local storage is single-process. A nonterminal job missing from this process was interrupted by a restart.
-    if a.services.local_backend:
-        for doc in docs:
-            if doc.get("status") in ("queued", "running") and doc["id"] not in request.app.state.studio_tasks:
+    # A nonterminal job that this process is not running was interrupted by a restart: at once with local storage
+    # (single-process), else once it has had no update for longer than any stage takes (it may live in another process).
+    for doc in docs:
+        if doc.get("status") in ("queued", "running") and doc["id"] not in request.app.state.studio_tasks:
+            if a.services.local_backend or job_is_stale(doc, a.settings.studio_job_stale_seconds):
                 doc.update(status="interrupted", stage="Interrupted", updatedAt=now_iso(),
                            error="The server stopped while this was running. Please try again.")
                 await a.services.db.put("assets", doc["id"], doc)
@@ -128,9 +167,9 @@ async def creative_direction(settings: Any, names: list[str], brief: str) -> str
     """A collaborator suggests phrasing; the creator's original words remain authoritative."""
     if settings.chimera_mode == "mock":
         return "Create a coherent, imaginative creature concept that follows the creator's direction."
-    from app.adapters.baseten.client import BasetenEvoSpark
+    from app.evolution.live import build_studio_chat
 
-    brain = BasetenEvoSpark(settings)
+    brain = build_studio_chat(settings)
     result = await brain.chat("studio_direction", {
         "messages": [
             {"role": "system", "content": "You are a creature concept artist collaborating with a human. Write a concise image-generation direction based on their exact request. Preserve all explicitly requested anatomy, positions and counts. Do not impose biological feasibility or invent conflicting anatomy. Output only the direction."},
@@ -227,8 +266,8 @@ async def plan_collaboration(settings: Any, brief: str, selected_instruction: st
                     "review": review, "steps": [{"tool": "inspect_draft", "reason": "You asked me to inspect it."}]}
         return {"message": "I can turn that into a revision of the selected draft.",
                 "action": {"type": "revise", "instruction": last, "reason": "Follow your direction."}, "steps": []}
-    from app.adapters.baseten.client import BasetenEvoSpark
-    brain = BasetenEvoSpark(settings)
+    from app.evolution.live import build_studio_chat
+    brain = build_studio_chat(settings)
     tools = [
         {"type": "function", "function": {"name": "propose_revision", "description": "Propose one editable image revision for the selected draft; never run it yourself.",
          "parameters": {"type": "object", "properties": {"instruction": {"type": "string"}, "reason": {"type": "string"}}, "required": ["instruction", "reason"], "additionalProperties": False}}},
@@ -324,8 +363,8 @@ async def collaborate(version_id: str, request: Request) -> JSONResponse:
         selected["review"] = result
         await a.services.db.put("assets", version_id, selected)
         return result
-    await request.app.state.studio_caps.take(visitor)
-    async with request.app.state.studio_slots:
+    day = await request.app.state.studio_caps.charge(visitor)
+    async with charged_slot(request, visitor, day):
         result = await plan_collaboration(a.settings, str(root.get("instruction") or ""),
                                           str(selected.get("instruction") or ""), conversation,
                                           str((selected.get("review") or {}).get("observation") or ""), inspect_selected)
@@ -403,14 +442,13 @@ async def review_image(settings: Any, image: bytes, brief: str, change: str) -> 
     if settings.chimera_mode == "mock":
         return {"observation": "Mock preview: visual inspection is not available in mock mode.",
                 "suggestions": "Describe what you want to change in the revision field."}
-    from app.evolution.live import LiveEvoSpark
-    from app.adapters.baseten.client import BasetenEvoSpark
+    from app.evolution.live import LiveEvoSpark, build_studio_chat
 
     observation = await LiveEvoSpark(settings).describe(image)
     description = str(observation.get("description") or "").strip()
     if not description:
         raise _err(ErrorCode.UPSTREAM_ERROR, "The visual reviewer could not describe this image.", 502)
-    brain = BasetenEvoSpark(settings)
+    brain = build_studio_chat(settings)
     result = await brain.chat("studio_review", {"messages": [
         {"role": "system", "content": "You are a collaborative creature concept artist. Compare an independent visual description to the creator's intent. Give up to three concise, concrete, optional revision ideas. Mention apparent mismatches cautiously because the visual description can be wrong. Do not claim to see details not in the description, impose biological rules, or decide what the creator should choose."},
         {"role": "user", "content": json.dumps({"creator_brief": brief, "latest_revision": change,
@@ -432,8 +470,8 @@ async def review(version_id: str, request: Request) -> JSONResponse:
     selected = await get_version(a, version_id, visitor)
     root = await root_version(a, selected, visitor)
     image = await version_image(a, selected)
-    await request.app.state.studio_caps.take(visitor)
-    async with request.app.state.studio_slots:
+    day = await request.app.state.studio_caps.charge(visitor)
+    async with charged_slot(request, visitor, day):
         result = await review_image(a.settings, image, str(root.get("instruction") or ""),
                                     str(selected.get("instruction") or "") if selected.get("parentId") else "")
     selected["review"] = result
@@ -484,7 +522,7 @@ async def concept(request: Request) -> JSONResponse:
             refs.append(prepared)
             labels.append(f"Reference image {len(refs)} depicts animal {index}: {names[-1]}.")
         slot_refs.append(prepared)
-    await request.app.state.studio_caps.take(visitor)
+    day = await request.app.state.studio_caps.charge(visitor)
     async def render(stage: Callable[[str], Awaitable[None]]) -> dict[str, Any]:
         await stage("Developing your creative direction")
         direction = await creative_direction(a.settings, names, brief)
@@ -503,8 +541,8 @@ async def concept(request: Request) -> JSONResponse:
         await stage("Saving your concept")
         return await save_image(a, image, visitor, brief, direction, None, source_inputs=list(zip(names, slot_refs)))
     if request.query_params.get("background") == "1":
-        return await start_background(request, visitor, "concept", render)
-    async with request.app.state.studio_slots:
+        return await start_background(request, visitor, day, "concept", render)
+    async with charged_slot(request, visitor, day):
         async def no_stage(_message: str) -> None:
             pass
         version = await render(no_stage)
@@ -537,7 +575,7 @@ async def revise(version_id: str, request: Request) -> JSONResponse:
         if not source_refs:
             raise _err(ErrorCode.VALIDATION_FAILED, "This concept has no saved source images to include.", 422)
     instruction = instruction.strip()
-    await request.app.state.studio_caps.take(visitor)
+    day = await request.app.state.studio_caps.charge(visitor)
     async def render(stage: Callable[[str], Awaitable[None]]) -> dict[str, Any]:
         await stage("Revising the selected draft")
         refs = [await version_image(a, doc)] if doc.get("referenceOnly") or source_refs else []
@@ -553,8 +591,8 @@ async def revise(version_id: str, request: Request) -> JSONResponse:
         await stage("Saving your revision")
         return await save_image(a, image, visitor, instruction, "", version_id)
     if request.query_params.get("background") == "1":
-        return await start_background(request, visitor, "revision", render)
-    async with request.app.state.studio_slots:
+        return await start_background(request, visitor, day, "revision", render)
+    async with charged_slot(request, visitor, day):
         async def no_stage(_message: str) -> None:
             pass
         version = await render(no_stage)
@@ -587,7 +625,7 @@ async def region(version_id: str, request: Request) -> JSONResponse:
         raise _err(ErrorCode.FILE_TOO_LARGE, "The painted mask is too large.", 413)
     original = await version_image(a, doc)
     await asyncio.to_thread(composite_region, original, original, mask)  # validate before spending a call
-    await request.app.state.studio_caps.take(visitor)
+    day = await request.app.state.studio_caps.charge(visitor)
 
     async def render(stage: Callable[[str], Awaitable[None]]) -> dict[str, Any]:
         await stage("Generating an edit for your painted region")
@@ -602,8 +640,8 @@ async def region(version_id: str, request: Request) -> JSONResponse:
         return await save_image(a, image, visitor, instruction, "", version_id, reference_only=True)
 
     if request.query_params.get("background") == "1":
-        return await start_background(request, visitor, "region", render)
-    async with request.app.state.studio_slots:
+        return await start_background(request, visitor, day, "region", render)
+    async with charged_slot(request, visitor, day):
         async def no_stage(_message: str) -> None:
             pass
         version = await render(no_stage)

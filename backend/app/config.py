@@ -81,6 +81,11 @@ class Settings(BaseSettings):
     studio_daily_actions: int = Field(default=100, ge=1)
     studio_visitor_daily_actions: int = Field(default=20, ge=1)
     studio_actions_per_minute_per_ip: int = Field(default=10, ge=1)
+    # Studio model work has its own pool, in addition to the agent runner's evo_max_concurrent_runs.
+    studio_max_concurrent_actions: int = Field(default=2, ge=1)
+    # A queued or running studio job with no update for this long is reported as interrupted (its process stopped).
+    # Longer than any one stage can take: a Spark Open call with retries is at most ~15 minutes.
+    studio_job_stale_seconds: float = Field(default=1800.0, gt=0)
     evo_run_soft_seconds: float = 840.0  # the agent finalizes its best image here (cap_reached scope time)
     evo_run_hard_seconds: float = 900.0  # the runner stops the run here
     evo_choice_seconds: float = 120.0  # host-tie choice wait
