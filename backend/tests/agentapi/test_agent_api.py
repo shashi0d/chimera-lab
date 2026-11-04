@@ -21,7 +21,7 @@ from app.agentapi.creatures import build_creature
 from app.agentapi.jobs import Job
 from app.main import create_app
 from app.util import new_id, now_iso
-from tests.conftest import IMAGES, SIGNED_OUT, auth, make_settings, visitor_id, offline_services
+from tests.conftest import IMAGES, SIGNED_OUT, auth, make_settings, offline_services, visitor_id
 from tests.fakes.faults import current_fault
 
 

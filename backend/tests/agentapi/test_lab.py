@@ -18,7 +18,7 @@ from app.errors import ChimeraError
 from app.main import create_app
 from app.models.schemas import ErrorCode
 from tests.agentapi.test_agent_api import ScriptedDriver, events_of, named_run
-from tests.conftest import SIGNED_OUT, auth, make_settings, visitor_id, offline_services
+from tests.conftest import SIGNED_OUT, auth, make_settings, offline_services, visitor_id
 
 OTHER = auth("user-2")
 
