@@ -50,12 +50,18 @@ origin, as in production (where the backend serves the built frontend at `/`).
 
 ### Supabase
 
-1. Create a project; put its URL, secret key and publishable key in `.env`.
+1. Create a project; put its URL and secret key in `.env`.
 2. In the SQL editor run `backend/app/adapters/supabase/schema.sql`, then `001` to `004` in order.
-3. Authentication → URL Configuration: set the Site URL to your app's address and add `<address>/**` to the
-   Redirect URLs (for development `http://localhost:5173/**`).
-4. Authentication → Emails: Supabase's built-in email only reaches your own team's addresses, a few per hour. Connect
-   an SMTP provider before inviting anyone else.
+
+There is no sign-in: each browser makes a random visitor id on its first visit, keeps it in localStorage and sends it
+as `X-Visitor-Id`. Workspaces, creatures and the per-visitor caps belong to that id; clearing site data starts over.
+
+### The tutorial
+
+A first visit opens a guided tour through an example workspace (Tiger × Bat, anime): the Fusion, its image, the
+edit tools, the animal card and Chimeras, ending with "Start your own workspace". The example is static
+(`frontend/public/example/`, `frontend/src/example/example.json`), so the tour makes no model calls. To make a new
+example, run the backend and `python scripts/make_example.py --base http://127.0.0.1:8000` (one Fusion and one card).
 
 ## Tests
 

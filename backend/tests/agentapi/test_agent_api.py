@@ -21,7 +21,7 @@ from app.agentapi.creatures import build_creature
 from app.agentapi.jobs import Job
 from app.main import create_app
 from app.util import new_id, now_iso
-from tests.conftest import IMAGES, FakeAuth, auth, make_settings, offline_services
+from tests.conftest import IMAGES, SIGNED_OUT, auth, make_settings, offline_services, visitor_id
 from tests.fakes.faults import current_fault
 
 
@@ -74,7 +74,6 @@ async def make_client(tmp_path: Path) -> AsyncIterator[Any]:
         settings = api_settings(tmp_path / f"app{len(stack)}", **over)
         svc = offline_services(settings)
         app = create_app(settings, services=svc)
-        app.state.auth = FakeAuth()
         app.state.agent.driver_factory = driver or (lambda: ScriptedDriver())
         ctx = app.router.lifespan_context(app)
         await ctx.__aenter__()
@@ -156,11 +155,11 @@ async def assert_served(c: httpx.AsyncClient, url: str) -> None:
 # ====================================================================== sign-in and ownership
 
 
-async def test_starting_and_reading_a_run_needs_sign_in(client):
-    signed_out = {"Authorization": ""}
+async def test_starting_and_reading_a_run_needs_a_visitor_id(client):
+    signed_out = SIGNED_OUT
     r = await post_run(client, headers=signed_out)
     assert r.status_code == 401 and r.json()["error"]["code"] == "UNAUTHORIZED"
-    bad = await post_run(client, headers={"Authorization": "Bearer forged"})
+    bad = await post_run(client, headers={"X-Visitor-Id": "not-a-uuid"})
     assert bad.status_code == 401
     rid = (await named_run(client)).json()["runId"]
     for path in (f"/evo/agent/runs/{rid}", f"/evo/agent/runs/{rid}/events"):
@@ -174,15 +173,6 @@ async def test_a_run_is_visible_only_to_its_owner(client):
     for path in (f"/evo/agent/runs/{rid}", f"/evo/agent/runs/{rid}/events"):
         r = await client.get(path, headers=other)
         assert r.status_code == 404 and r.json()["error"]["code"] == "RUN_NOT_FOUND"
-
-
-async def test_config_exposes_only_public_sign_in_settings(make_client):
-    c = await make_client(supabase_url="https://example.supabase.co", supabase_publishable_key="sb_publishable_x",
-                          supabase_service_key="sb_secret_never_sent")
-    body = (await c.get("/evo/config", headers={"Authorization": ""})).json()
-    assert body == {"supabaseUrl": "https://example.supabase.co", "supabasePublishableKey": "sb_publishable_x",
-                    "authConfigured": True}
-    assert "sb_secret" not in json.dumps(body)
 
 
 # ====================================================================== events
@@ -305,7 +295,7 @@ async def test_limits_signed_in_and_out(client):
     assert body["liveRuns"] == "open" and set(body) == {"liveRuns", "unlimited", "dailyTotal", "visitor", "concurrent"}
     assert body["concurrent"] == {"running": 0, "limit": 3, "queued": 0}
     assert body["visitor"] == {"used": 0, "limit": 1000}
-    out = await client.get("/evo/agent/limits", headers={"Authorization": ""})
+    out = await client.get("/evo/agent/limits", headers=SIGNED_OUT)
     assert out.status_code == 200 and out.json()["dailyTotal"]["used"] == 0
 
 
@@ -345,7 +335,7 @@ async def test_a_stale_run_is_interrupted_when_read(client):
     await db.put("agent_runs", "run_stale", {"runId": "run_stale", "status": "running", "position": None,
                                              "sire": None, "dam": None, "mode": "realistic", "createdAt": old,
                                              "updatedAt": old, "lastEventId": 1, "creatureId": None,
-                                             "error": None, "pendingChoice": None, "owner": "user-1",
+                                             "error": None, "pendingChoice": None, "owner": visitor_id(),
                                              "events": [{"id": 1, "type": "started", "runId": "run_stale",
                                                          "at": old}]})
     snap = (await client.get("/evo/agent/runs/run_stale")).json()
@@ -410,7 +400,7 @@ async def test_single_origin_serves_the_frontend(tmp_path, make_client):
     r = await c.get("/evo/nope")
     assert r.status_code == 404 and r.json()["error"]["code"] == "NOT_FOUND"
     assert (await c.get("/health")).json()["status"] == "ok"
-    assert (await c.get("/evo/config")).status_code == 200
+    assert (await c.get("/evo/agent/limits")).status_code == 200
     assert "root:" not in (await c.get("/..%2F..%2Fetc%2Fpasswd")).text
 
 

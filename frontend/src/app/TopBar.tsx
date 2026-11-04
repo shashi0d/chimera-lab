@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { signOut, useAuth } from "../auth/auth";
+import { useAuth } from "../auth/auth";
 import { copy } from "../copy";
 import { derived, isTerminal, useEvoRuns } from "../evo/runs";
+import { isExampleWorkspace } from "../example/example";
 import { saveNow, useSaveState } from "../persistence/autosave";
 import { useWorkspaces } from "../persistence/workspaces";
 import { BrandMark } from "../ui/BrandMark";
@@ -66,7 +67,6 @@ function WorkspaceName() {
 
 export function TopBar() {
   const auth = useAuth((s) => s.status);
-  const email = useAuth((s) => s.email);
   const theme = useUi((s) => s.theme);
   const setTheme = useUi((s) => s.setTheme);
   const setShortcutsOpen = useUi((s) => s.setShortcutsOpen);
@@ -98,7 +98,9 @@ export function TopBar() {
         <NavLink to={{ view: "chimeras" }} label={copy.nav.chimeras} current={route.view === "chimeras"} />
       </nav>
       <div className="topbar__doc">
-        {inLab && signedIn ? (
+        {inLab && isExampleWorkspace(currentWs) ? (
+          <span className="topbar__title">{copy.tour.exampleName}</span>
+        ) : inLab && signedIn ? (
           <>
             <WorkspaceName />
             <Button size="sm" variant="ghost" icon="check" busy={saving} disabled={saving} onClick={() => void saveClick()}>
@@ -117,16 +119,6 @@ export function TopBar() {
           <a className="topbar__run" href={hrefFor({ view: "lab", runId: liveRunId, workspaceId: currentWs })} onClick={linkHandler({ view: "lab", runId: liveRunId, workspaceId: currentWs })} aria-label={copy.app.openRun}>
             <LiveIndicator tone="running" label={copy.status.running} />
           </a>
-        ) : null}
-        {signedIn ? (
-          <span className="topbar__account">
-            <span className="topbar__email" title={email ?? undefined}>
-              {email}
-            </span>
-            <button type="button" className="btn btn--ghost btn--sm" onClick={() => void signOut()}>
-              Sign out
-            </button>
-          </span>
         ) : null}
         <IconButton
           icon={theme === "dark" ? "sun" : "moon"}

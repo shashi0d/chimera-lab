@@ -18,7 +18,7 @@ from app.errors import ChimeraError
 from app.main import create_app
 from app.models.schemas import ErrorCode
 from tests.agentapi.test_agent_api import ScriptedDriver, events_of, named_run
-from tests.conftest import FakeAuth, auth, make_settings, offline_services
+from tests.conftest import SIGNED_OUT, auth, make_settings, offline_services, visitor_id
 
 OTHER = auth("user-2")
 
@@ -50,7 +50,6 @@ async def client(tmp_path: Path) -> AsyncIterator[httpx.AsyncClient]:
     settings = make_settings(tmp_path, evo_runs_per_minute_per_ip=1000, lab_actions_per_minute_per_ip=1000,
                              retry_max_attempts=1)
     app = create_app(settings, services=offline_services(settings))
-    app.state.auth = FakeAuth()
     app.state.agent.driver_factory = lambda: ScriptedDriver()
     app.state.services.image_gen = Renderer()
     async with app.router.lifespan_context(app):
@@ -106,7 +105,7 @@ async def test_another_users_run_and_versions_are_unavailable(client):
     assert (await client.post(f"/evo/lab/versions/{v1['id']}/revise", json={"instruction": "x"},
                               headers=OTHER)).status_code == 404
     assert (await client.get("/evo/lab/versions", headers=OTHER)).json()["versions"] == []
-    assert (await client.get("/evo/lab/versions", headers={"Authorization": ""})).status_code == 401
+    assert (await client.get("/evo/lab/versions", headers=SIGNED_OUT)).status_code == 401
 
 
 async def test_a_running_run_cannot_become_a_version(client):
@@ -202,7 +201,7 @@ async def test_a_stale_job_is_interrupted_on_shared_storage(client, monkeypatch)
 
     monkeypatch.setattr(client.app.state.services, "local_backend", False)
     db = client.app.state.services.db
-    base = {"kind": "lab_job", "owner": "user-1", "status": "running", "operation": "revise"}
+    base = {"kind": "lab_job", "owner": visitor_id(), "status": "running", "operation": "revise"}
     await db.put("assets", "labjob_old", {**base, "id": "labjob_old", "createdAt": "2026-01-01T00:00:00.000Z",
                                           "updatedAt": "2026-01-01T00:00:00.000Z"})
     await db.put("assets", "labjob_new", {**base, "id": "labjob_new", "createdAt": now_iso(), "updatedAt": now_iso()})

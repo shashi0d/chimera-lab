@@ -1,6 +1,7 @@
 import { useReactFlow } from "@xyflow/react";
 import { useEffect, useId, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
+import { copy } from "../copy";
 import { evo } from "../evo/index";
 import { useGraph } from "../graph/store";
 import type { GraphNode } from "../graph/types";
@@ -99,6 +100,8 @@ export function ToolsPanel({ nodeId }: { nodeId: string }) {
   const [finalBusy, setFinalBusy] = useState(false);
   const version = (node?.data as VersionData | undefined)?.version ?? null;
   const n = useGraph(() => versionNumber(nodeId));
+  // The tutorial's example: the tools are shown, not used (the image is not on the server).
+  const readOnly = useGraph((s) => s.readOnly);
   useEffect(() => {
     void useLab.getState().refreshLimits();
   }, [nodeId]);
@@ -130,26 +133,27 @@ export function ToolsPanel({ nodeId }: { nodeId: string }) {
           <img src={evo().imageUrl(version.imageUrl)} alt={`${label}`} />
           {version.operation !== "fusion" ? <figcaption>{version.instruction}</figcaption> : null}
         </figure>
+        {readOnly ? <p className="tools__note">{copy.tour.readOnlyTools}</p> : null}
         <div className="tools__row tools__row--wrap">
-          <Button size="sm" variant="primary" icon="replace" onClick={() => addEditNode(nodeId, "revise")}>
+          <Button disabled={readOnly} size="sm" variant="primary" icon="replace" onClick={() => addEditNode(nodeId, "revise")}>
             Revise
           </Button>
-          <Button size="sm" icon="brush" onClick={() => addEditNode(nodeId, "paint")}>
+          <Button disabled={readOnly} size="sm" icon="brush" onClick={() => addEditNode(nodeId, "paint")}>
             Paint an area
           </Button>
-          <Button size="sm" icon="star" busy={finalBusy} aria-pressed={version.isFinal} onClick={() => void toggleFinal()}>
+          <Button disabled={readOnly} size="sm" icon="star" busy={finalBusy} aria-pressed={version.isFinal} onClick={() => void toggleFinal()}>
             {version.isFinal ? "Final ✓" : "Mark as final"}
           </Button>
-          <Button size="sm" icon="brush" onClick={() => addEditNode(nodeId, "sketch")}>
+          <Button disabled={readOnly} size="sm" icon="brush" onClick={() => addEditNode(nodeId, "sketch")}>
             Draw on it
           </Button>
-          <Button size="sm" variant={version.saved ? "secondary" : "primary"} icon="card" aria-pressed={Boolean(version.saved)} onClick={() => void saveCreature(version, !version.saved)}>
+          <Button disabled={readOnly} size="sm" variant={version.saved ? "secondary" : "primary"} icon="card" aria-pressed={Boolean(version.saved)} onClick={() => void saveCreature(version, !version.saved)}>
             {version.saved ? "Saved ✓" : "Save"}
           </Button>
-          <Button size="sm" variant="ghost" icon="download" onClick={() => void downloadVersion(version, label)}>
+          <Button disabled={readOnly} size="sm" variant="ghost" icon="download" onClick={() => void downloadVersion(version, label)}>
             Download
           </Button>
-          <Button size="sm" variant="ghost" icon="trash" onClick={() => void deleteNodes([nodeId])}>
+          <Button disabled={readOnly} size="sm" variant="ghost" icon="trash" onClick={() => void deleteNodes([nodeId])}>
             Delete
           </Button>
         </div>

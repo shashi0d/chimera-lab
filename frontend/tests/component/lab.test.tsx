@@ -1,7 +1,8 @@
 import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { setTestSession, useAuth } from "../../src/auth/auth";
+import { baseHeaders } from "../../src/api/client";
+import { initAuth, setTestSession, useAuth } from "../../src/auth/auth";
 import { setTransport } from "../../src/evo/index";
 import { useGraph } from "../../src/graph/store";
 import { labApi, type AnimalCard, type LabJob, type LabVersion } from "../../src/lab/api";
@@ -13,7 +14,6 @@ import { followJobs, generateEdit, stopFollowingJobs, useLab } from "../../src/l
 import { ToolsPanel } from "../../src/lab/ToolsPanel";
 import type { EditData } from "../../src/nodes/edit/types";
 import type { VersionData } from "../../src/nodes/version/types";
-import { LabView } from "../../src/screens/LabView";
 import { mockTransport, resetMock } from "../fakes/evoTransport";
 import { renderInFlow, renderNode } from "./render";
 
@@ -134,19 +134,18 @@ describe("tools for the selected image", () => {
   });
 });
 
-describe("sign-in", () => {
-  it("the Lab asks to sign in", () => {
+describe("visitor session", () => {
+  beforeEach(() => localStorage.clear());
+
+  it("a first visit gets a visitor id that is kept in localStorage and sent on every request", async () => {
     setTestSession(null);
-    renderInFlow(<LabView ready runId={null} />);
-    expect(screen.getByRole("heading", { name: "Sign in to create" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Email me a sign-in link" })).toBeDisabled();
+    await initAuth();
+    const id = localStorage.getItem("chimera.visitorId");
+    expect(id).toMatch(/^[0-9a-f-]{36}$/);
+    expect(useAuth.getState()).toMatchObject({ status: "signed-in", userId: id });
+    expect(baseHeaders()).toEqual({ "X-Visitor-Id": id });
   });
 
-  it("explains when sign-in is not configured", () => {
-    useAuth.setState({ status: "unavailable", error: "Sign-in is not configured on this server." });
-    renderInFlow(<LabView ready runId={null} />);
-    expect(screen.getByRole("alert")).toHaveTextContent("not configured");
-  });
 });
 
 describe("building on a generated image", () => {

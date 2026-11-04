@@ -42,17 +42,12 @@ push to main ──► Deploy: the same checks, then build the site and `modal d
 4. **Production URL** (lets the deploy job check the site after each deploy):
    `gh variable set PRODUCTION_URL --body "https://<workspace>--chimera-lab-fastapi-app.modal.run"`
 
-5. **Supabase sign-in** (Authentication > URL Configuration): set the **Site URL** to the production URL and add
-   `<production URL>/**` to the **Redirect URLs**. Without this, sign-in links lead to localhost.
-
-6. **Email for friends** (Authentication > Emails > SMTP settings): Supabase's built-in email only delivers to your
-   own project team's addresses, a few per hour. To let friends sign in, connect an SMTP provider (Resend, Postmark,
-   SendGrid, Amazon SES and others have free tiers).
-
 ## Settings worth reviewing for a public link
 
-- `EVO_LIMITS_ENABLED`: `false` means anyone signed in can run Fusions and edits without a cap, on your Meta key.
-  `true` turns on the daily caps (`EVO_VISITOR_DAILY_RUNS`, `LAB_USER_DAILY_ACTIONS`, ...); raise them as needed.
+- `EVO_LIMITS_ENABLED`: `false` means anyone with the link can run Fusions and edits without a cap, on your Meta key
+  (there is no sign-in).
+  `true` turns on the daily caps (`EVO_VISITOR_DAILY_RUNS`, `LAB_USER_DAILY_ACTIONS`, ...); raise them as needed. A visitor can reset
+  their own cap by clearing site data; the total daily cap and the per-IP rate limit still hold.
 - The container is kept warm around the clock (`min_containers=1`): runs and jobs live in the web process, so it
   costs a small always-on container. Moving jobs to Modal functions removes this limit (the next step).
 

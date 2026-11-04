@@ -24,7 +24,7 @@ interface WorkspacesState {
 }
 
 function remember(userId: string | null, id: string | null): void {
-  if (!userId) return;
+  if (!userId || id === "example") return; // the tutorial's example workspace (example/example.ts) is not reopened
   try {
     if (id) localStorage.setItem(lastKey(userId), id);
     else localStorage.removeItem(lastKey(userId));

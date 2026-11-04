@@ -10,6 +10,9 @@ from PIL import Image
 
 from tests.agentapi.test_agent_api import make_client, named_run, post_run  # noqa: F401  (make_client: fixture)
 from tests.agentapi.test_prompt_mode import finished_version, prompt_client, wait_card, wait_job
+from tests.conftest import auth, visitor_id
+
+USER = visitor_id()
 
 
 async def v1_in(c: Any, ws: str | None = None) -> dict[str, Any]:
@@ -28,7 +31,7 @@ async def test_the_old_canvas_becomes_the_first_workspace(make_client):  # noqa:
     c, _ = await prompt_client(make_client)
     graph = {"nodes": [{"id": "n1"}], "edges": []}
     # The canvas as the app stored it before workspaces existed.
-    await c.app.state.agent.services.db.put("graphs", "workspace:user-1", {"owner": "user-1", "graph": graph,
+    await c.app.state.agent.services.db.put("graphs", f"workspace:{USER}", {"owner": USER, "graph": graph,
                                                                          "revision": 1, "updatedAt": "2026-11-01"})
     [ws] = (await c.get("/evo/lab/workspaces")).json()["workspaces"]
     assert ws["id"] == "main" and ws["name"] == "My workspace" and ws["imageCount"] == 0
@@ -84,8 +87,8 @@ async def test_deleting_a_workspace_deletes_its_images_but_not_ones_another_canv
 
 async def test_deleting_the_main_workspace_does_not_bring_the_old_canvas_back(make_client):  # noqa: F811
     c, _ = await prompt_client(make_client)
-    await c.app.state.agent.services.db.put("graphs", "workspace:user-1", {
-        "owner": "user-1", "graph": {"nodes": [{"id": "old"}], "edges": []}, "revision": 1, "updatedAt": "2026-11-01"})
+    await c.app.state.agent.services.db.put("graphs", f"workspace:{USER}", {
+        "owner": USER, "graph": {"nodes": [{"id": "old"}], "edges": []}, "revision": 1, "updatedAt": "2026-11-01"})
     await c.get("/evo/lab/workspaces")
     other = (await c.post("/evo/lab/workspaces", json={"name": "B"})).json()["id"]
     assert (await c.delete("/evo/lab/workspaces/main")).status_code == 200
@@ -124,7 +127,7 @@ async def test_an_edit_survives_deleting_the_image_it_came_from(make_client):  #
 async def test_only_the_owner_can_delete(make_client):  # noqa: F811
     c, _ = await prompt_client(make_client)
     v1 = await v1_in(c)
-    r = await c.delete(f"/evo/lab/versions/{v1['id']}", headers={"Authorization": "Bearer user:user-2"})
+    r = await c.delete(f"/evo/lab/versions/{v1['id']}", headers=auth("user-2"))
     assert r.status_code == 404
     assert await c.app.state.agent.services.db.get("assets", v1["id"]) is not None
 

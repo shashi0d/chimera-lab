@@ -4,6 +4,7 @@ Supabase project): settings are built with _env_file=None and the services are t
 from __future__ import annotations
 
 import sys
+import uuid
 from collections.abc import AsyncIterator
 from pathlib import Path
 from typing import Any
@@ -13,7 +14,6 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from app.auth import User, unauthorized
 from app.config import Settings
 from app.main import create_app
 from app.services import Services, build_storage
@@ -35,19 +35,16 @@ def make_settings(tmp_path: Path, **overrides: Any) -> Settings:
     return Settings(**base)
 
 
-class FakeAuth:
-    """Accepts "user:<id>" bearer tokens (no keys, no network). Anything else is a failed sign-in."""
-
-    configured = True
-
-    async def verify(self, token: str) -> User:
-        if token.startswith("user:") and len(token) > 5:
-            return User(id=token[5:], email=f"{token[5:]}@example.test")
-        raise unauthorized()
+def visitor_id(user: str = "user-1") -> str:
+    """A stable visitor UUID for a test user name."""
+    return str(uuid.uuid5(uuid.NAMESPACE_URL, f"chimera-test:{user}"))
 
 
 def auth(user: str = "user-1") -> dict[str, str]:
-    return {"Authorization": f"Bearer user:{user}"}
+    return {"X-Visitor-Id": visitor_id(user)}
+
+
+SIGNED_OUT = {"X-Visitor-Id": ""}
 
 
 def offline_services(settings: Settings, delay_scale: float = 0.0) -> Services:
@@ -64,7 +61,6 @@ def offline_app(settings: Settings) -> Any:
     svc = offline_services(settings)
     app = create_app(settings, services=svc)
     app.state.agent.driver_factory = lambda: PromptDriver(svc)
-    app.state.auth = FakeAuth()
     return app
 
 

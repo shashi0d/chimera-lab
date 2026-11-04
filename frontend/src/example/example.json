@@ -1,0 +1,70 @@
+{
+  "names": {
+    "a": "Tiger",
+    "b": "Bat"
+  },
+  "style": "anime",
+  "version": {
+    "id": "example_v1",
+    "parentId": null,
+    "runId": null,
+    "creatureId": null,
+    "operation": "fusion",
+    "instruction": "Tiger \u00d7 Bat",
+    "imageUrl": "/example/tiger-bat.webp",
+    "createdAt": "2026-11-04T20:55:52.627Z",
+    "isFinal": false,
+    "title": "Nightstripe",
+    "style": "anime",
+    "card": {
+      "status": "ready",
+      "startedAt": "2026-11-04T20:55:52.655Z",
+      "profile": {
+        "name": "Nightstripe",
+        "length": "2.4 m",
+        "weight": "185 kg",
+        "habitat": "Moonlit jungle cliffs and caves",
+        "explorers_notes": "I met it at dusk where tiger trails meet the bat caves, a stocky striped hunter with wings outstretched. It is a Tiger crossed with a Bat, keeping the tiger's muscular four-legged build and bold orange coat. Its huge dark-brown membranous wings lift it into a near-silent glide, while its tall bat ears swivel to track prey in the dark. It hunts by night, dropping from above on soft paws with golden eyes fixed and small white fangs bared. The cliff villagers say if its shadow crosses you, you will dream in stripes for a week.",
+        "trait": "WINGS",
+        "summary": "A stocky four-legged orange tiger with black stripes, cream chest, golden eyes, small white fangs and pink-lined tall bat ears, bearing huge dark-brown membranous bat wings from its shoulders and a black-ringed orange tail.",
+        "accent_color": "#f2b06e",
+        "reasoning": "I saw a front-facing anime tiger body in orange with black stripes paired with large dark-brown bat wings and tall pointed bat ears. As a Tiger x Bat fusion in cel-shaded anime style, I focused the entry on WINGS and chose a soft tiger-orange accent."
+      },
+      "angles": [
+        {
+          "view": "front",
+          "url": "/example/angle-front.webp"
+        },
+        {
+          "view": "side",
+          "url": "/example/angle-side.webp"
+        },
+        {
+          "view": "back",
+          "url": "/example/angle-back.webp"
+        },
+        {
+          "view": "above",
+          "url": "/example/angle-above.webp"
+        }
+      ],
+      "error": null,
+      "finishedAt": "2026-11-04T20:56:18.495Z",
+      "missingAngles": 0
+    },
+    "profile": {
+      "name": "Nightstripe",
+      "length": "2.4 m",
+      "weight": "185 kg",
+      "habitat": "Moonlit jungle cliffs and caves",
+      "explorers_notes": "I met it at dusk where tiger trails meet the bat caves, a stocky striped hunter with wings outstretched. It is a Tiger crossed with a Bat, keeping the tiger's muscular four-legged build and bold orange coat. Its huge dark-brown membranous wings lift it into a near-silent glide, while its tall bat ears swivel to track prey in the dark. It hunts by night, dropping from above on soft paws with golden eyes fixed and small white fangs bared. The cliff villagers say if its shadow crosses you, you will dream in stripes for a week.",
+      "trait": "WINGS",
+      "summary": "A stocky four-legged orange tiger with black stripes, cream chest, golden eyes, small white fangs and pink-lined tall bat ears, bearing huge dark-brown membranous bat wings from its shoulders and a black-ringed orange tail.",
+      "accent_color": "#f2b06e",
+      "reasoning": "I saw a front-facing anime tiger body in orange with black stripes paired with large dark-brown bat wings and tall pointed bat ears. As a Tiger x Bat fusion in cel-shaded anime style, I focused the entry on WINGS and chose a soft tiger-orange accent."
+    },
+    "saved": true,
+    "savedAt": "2026-11-04T20:56:22.724Z",
+    "workspaceId": "example"
+  }
+}

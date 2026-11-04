@@ -7,4 +7,3 @@ pillow>=10.4
 httpx>=0.27
 openai>=1.60
 supabase>=2.6
-pyjwt[crypto]>=2.10  # verifies Supabase Auth access tokens (ES256) locally

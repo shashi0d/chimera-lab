@@ -22,17 +22,17 @@ export function absoluteUrl(url: string): string {
   return /^(https?:|blob:|data:)/.test(url) ? url : `${apiConfig.baseUrl}${url}`;
 }
 
-let tokenProvider: () => string | null = () => null;
+let visitorIdProvider: () => string | null = () => null;
 
-/** The auth module installs this: the signed-in user's current access token (refreshed by Supabase). */
-export function setAccessTokenProvider(fn: () => string | null): void {
-  tokenProvider = fn;
+/** The auth module installs this: this browser's visitor id (auth/auth.ts). */
+export function setVisitorIdProvider(fn: () => string | null): void {
+  visitorIdProvider = fn;
 }
 
-/** Every request carries the signed-in user's access token, when there is one. */
+/** Every request carries this browser's visitor id, when there is one. */
 export function baseHeaders(extra: Record<string, string> = {}): Record<string, string> {
-  const token = tokenProvider();
-  return token ? { Authorization: `Bearer ${token}`, ...extra } : { ...extra };
+  const id = visitorIdProvider();
+  return id ? { "X-Visitor-Id": id, ...extra } : { ...extra };
 }
 
 export async function parseError(res: Response): Promise<ApiRequestError> {
