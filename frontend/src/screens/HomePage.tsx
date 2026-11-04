@@ -4,7 +4,6 @@ import { toAppError } from "../api/errors";
 import { presentError } from "../api/errorMessages";
 import { navigate } from "../app/route";
 import { useAuth } from "../auth/auth";
-import { SignIn } from "../auth/SignIn";
 import { evo } from "../evo/index";
 import { labApi, type LabVersion, type WorkspaceInfo } from "../lab/api";
 import { useWorkspaces } from "../persistence/workspaces";
@@ -175,8 +174,6 @@ export function HomePage() {
   useEffect(() => {
     if (status === "signed-in" && loaded) void useWorkspaces.getState().refresh();
   }, [status, loaded]);
-
-  if (status !== "signed-in" && status !== "loading") return <SignIn />;
 
   const create = async () => {
     setBusy(true);

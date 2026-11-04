@@ -54,7 +54,7 @@ describe("http event stream (resume, reconnect, terminal)", () => {
   beforeEach(() => vi.useFakeTimers());
   afterEach(() => vi.useRealTimers());
 
-  it("sends the access token, Last-Event-ID and ?after=, delivers in order, stops at the terminal event", async () => {
+  it("sends the visitor id, Last-Event-ID and ?after=, delivers in order, stops at the terminal event", async () => {
     setTestSession({ id: "user-1", email: "a@example.test" });
     const all = success;
     const fetch = vi.fn(async () => new Response(sseBody(all.slice(1)), { status: 200 }));
@@ -65,7 +65,7 @@ describe("http event stream (resume, reconnect, terminal)", () => {
     const [url, init] = fetch.mock.calls[0] as unknown as [string, RequestInit];
     expect(url).toContain("/evo/agent/runs/run_x/events?after=1");
     expect((init.headers as Record<string, string>)["Last-Event-ID"]).toBe("1");
-    expect((init.headers as Record<string, string>).Authorization).toBe("Bearer test-token");
+    expect((init.headers as Record<string, string>)["X-Visitor-Id"]).toBe("user-1");
     expect(got).toEqual(all.slice(1).map((e) => e.id));
     expect(states.at(-1)).toBe("closed");
     expect(fetch).toHaveBeenCalledTimes(1);

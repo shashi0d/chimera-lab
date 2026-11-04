@@ -3,7 +3,6 @@ import { toAppError } from "../api/errors";
 import { presentError } from "../api/errorMessages";
 import { linkHandler, hrefFor } from "../app/route";
 import { useAuth } from "../auth/auth";
-import { SignIn } from "../auth/SignIn";
 import { CardTile } from "../lab/CardTile";
 import { labApi, type LabVersion } from "../lab/api";
 import { Button } from "../ui/Button";
@@ -36,8 +35,6 @@ export function ChimerasPage() {
     const id = window.setInterval(() => void load(), POLL_MS);
     return () => window.clearInterval(id);
   }, [drawing, load]);
-
-  if (status !== "signed-in" && status !== "loading") return <SignIn />;
 
   const replace = (v: LabVersion) => setItems((list) => list?.map((x) => (x.id === v.id ? { ...x, ...v } : x)) ?? null);
   const unsave = async (v: LabVersion) => {

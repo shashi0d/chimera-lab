@@ -24,7 +24,7 @@ export function toEvent(data: string): AgentEvent | null {
 }
 
 /**
- * Reads GET /evo/agent/runs/{id}/events with fetch (EventSource can't send the Authorization header).
+ * Reads GET /evo/agent/runs/{id}/events with fetch (EventSource can't send the X-Visitor-Id header).
  * Resumes with Last-Event-ID and ?after=, reconnects with backoff, and treats 45 s without a byte
  * (the server pings every 15 s) as a dead connection.
  */

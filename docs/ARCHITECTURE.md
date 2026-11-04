@@ -1,7 +1,8 @@
 # Architecture
 
 One FastAPI app serves the API under `/evo` and the built React app at `/` (one origin, no CORS). Models are Meta's
-(Muse Image, Muse Spark); data, images and sign-in are Supabase's. Locally, without Supabase, a SQLite file and a
+(Muse Image, Muse Spark); data and images are Supabase's. There is no sign-in: each browser
+sends a random visitor id (`X-Visitor-Id`, kept in localStorage) that owns its workspaces and images. Locally, without Supabase, a SQLite file and a
 folder stand in.
 
 ```mermaid
@@ -25,7 +26,7 @@ flowchart LR
   Prompt --> MI[(Muse Image)]
   LabAPI --> MI
   AI --> MS[(Muse Spark)]
-  Backend --> SB[(Supabase\nPostgres, Storage, Auth)]
+  Backend --> SB[(Supabase\nPostgres, Storage)]
 ```
 
 ## The flow

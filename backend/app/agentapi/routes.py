@@ -256,14 +256,6 @@ async def limits(request: Request) -> Response:
     return JSONResponse(body, headers={"Cache-Control": "no-cache"})
 
 
-@router.get("/config", response_model=None)
-async def public_config(request: Request) -> Response:
-    """What the browser needs to sign in: the project URL and its publishable key (both public by design)."""
-    st = api(request).settings
-    return JSONResponse({"supabaseUrl": st.supabase_url, "supabasePublishableKey": st.supabase_publishable_key,
-                         "authConfigured": request.app.state.auth.configured}, headers={"Cache-Control": "no-cache"})
-
-
 # ====================================================================== files
 
 

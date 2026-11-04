@@ -50,12 +50,11 @@ origin, as in production (where the backend serves the built frontend at `/`).
 
 ### Supabase
 
-1. Create a project; put its URL, secret key and publishable key in `.env`.
+1. Create a project; put its URL and secret key in `.env`.
 2. In the SQL editor run `backend/app/adapters/supabase/schema.sql`, then `001` to `004` in order.
-3. Authentication → URL Configuration: set the Site URL to your app's address and add `<address>/**` to the
-   Redirect URLs (for development `http://localhost:5173/**`).
-4. Authentication → Emails: Supabase's built-in email only reaches your own team's addresses, a few per hour. Connect
-   an SMTP provider before inviting anyone else.
+
+There is no sign-in: each browser makes a random visitor id on its first visit, keeps it in localStorage and sends it
+as `X-Visitor-Id`. Workspaces, creatures and the per-visitor caps belong to that id; clearing site data starts over.
 
 ## Tests
 

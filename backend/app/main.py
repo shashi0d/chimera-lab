@@ -49,9 +49,6 @@ def create_app(settings: Settings | None = None, services: Services | None = Non
     app = FastAPI(title="Chimera Lab API", version=APP_VERSION, lifespan=lifespan)
     app.state.services = svc
     app.state.agent = AgentApi(svc, build_public_files(settings))  # the Fusion API under /evo
-    from app.auth import Auth
-
-    app.state.auth = Auth(settings)
     from app.agentapi.lab import LabCaps, LabState
 
     app.state.lab = LabState(LabCaps(svc.db, settings), asyncio.Semaphore(settings.lab_max_concurrent_actions))
@@ -60,7 +57,7 @@ def create_app(settings: Settings | None = None, services: Services | None = Non
         CORSMiddleware,
         allow_origins=settings.cors_origin_list,
         allow_methods=["GET", "POST", "PUT", "DELETE"],
-        allow_headers=["Content-Type", "Authorization", "X-Session-Id", "Last-Event-ID"],
+        allow_headers=["Content-Type", "X-Visitor-Id", "X-Session-Id", "Last-Event-ID"],
         expose_headers=["ETag"],
         max_age=600,
     )

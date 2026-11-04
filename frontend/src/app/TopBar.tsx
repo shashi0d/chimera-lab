@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { signOut, useAuth } from "../auth/auth";
+import { useAuth } from "../auth/auth";
 import { copy } from "../copy";
 import { derived, isTerminal, useEvoRuns } from "../evo/runs";
 import { saveNow, useSaveState } from "../persistence/autosave";
@@ -66,7 +66,6 @@ function WorkspaceName() {
 
 export function TopBar() {
   const auth = useAuth((s) => s.status);
-  const email = useAuth((s) => s.email);
   const theme = useUi((s) => s.theme);
   const setTheme = useUi((s) => s.setTheme);
   const setShortcutsOpen = useUi((s) => s.setShortcutsOpen);
@@ -117,16 +116,6 @@ export function TopBar() {
           <a className="topbar__run" href={hrefFor({ view: "lab", runId: liveRunId, workspaceId: currentWs })} onClick={linkHandler({ view: "lab", runId: liveRunId, workspaceId: currentWs })} aria-label={copy.app.openRun}>
             <LiveIndicator tone="running" label={copy.status.running} />
           </a>
-        ) : null}
-        {signedIn ? (
-          <span className="topbar__account">
-            <span className="topbar__email" title={email ?? undefined}>
-              {email}
-            </span>
-            <button type="button" className="btn btn--ghost btn--sm" onClick={() => void signOut()}>
-              Sign out
-            </button>
-          </span>
         ) : null}
         <IconButton
           icon={theme === "dark" ? "sun" : "moon"}

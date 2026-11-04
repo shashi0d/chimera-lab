@@ -1,5 +1,4 @@
 import { useAuth } from "../auth/auth";
-import { SignIn } from "../auth/SignIn";
 import { Canvas } from "../canvas/Canvas";
 import { copy } from "../copy";
 import { useGraph } from "../graph/store";
@@ -16,12 +15,11 @@ function useSelectedVersion(): string | null {
   });
 }
 
-/** The Lab: sign in, then the canvas with the selected image's tools (or a run's live trace) docked beside it. */
+/** The Lab: the canvas with the selected image's tools (or a run's live trace) docked beside it. */
 // The run trace panel (trace/TracePanel) is hidden for now; a run shows on the canvas only.
 export function LabView({ ready }: { ready: boolean; runId: string | null }) {
   const status = useAuth((s) => s.status);
   const selected = useSelectedVersion();
-  if (status !== "signed-in" && status !== "loading") return <SignIn />;
   const side = selected ? <ToolsPanel key={selected} nodeId={selected} /> : null;
   return (
     <div className={`workspace${side ? " has-trace" : ""}`} aria-busy={!ready}>

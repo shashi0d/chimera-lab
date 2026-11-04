@@ -26,9 +26,6 @@ class Settings(BaseSettings):
     # Server-side key (bypasses RLS). Supabase now calls it the secret key (sb_secret_...); the legacy name still works.
     supabase_service_key: str | None = Field(
         default=None, validation_alias=AliasChoices("SUPABASE_SECRET_KEY", "SUPABASE_SERVICE_KEY", "supabase_service_key"))
-    # Browser-safe key: the frontend signs in with it (served by GET /evo/config). Row level security keeps it from
-    # reading or writing any table.
-    supabase_publishable_key: str | None = None
     storage_bucket: str = "chimera-assets"
     evo_public_bucket: str = "chimera-public"  # generated images, public read
 

@@ -1865,22 +1865,6 @@ p.image-node__banner { display: flex; align-items: flex-start; gap: var(--space-
 .region-editor__tools .btn[aria-pressed="true"] { border-color: var(--brand-500); color: var(--brand-700); }
 .region-editor > .btn { justify-self: start; }
 
-/* ============================================================== Sign-in */
-
-.signin { display: grid; place-items: center; height: 100%; padding: var(--space-10) var(--space-8); overflow: auto; }
-.signin__card { width: min(460px, 100%); display: grid; gap: var(--space-6); padding: var(--space-11); border: var(--border-card); border-radius: var(--radius-3xl); background: var(--surface-card); box-shadow: var(--shadow-card); }
-.signin__card h1 { font: var(--type-h1); letter-spacing: var(--tracking-display); }
-.signin__lead { font: var(--type-body); color: var(--text-body); }
-.signin__form { display: grid; gap: var(--space-4); }
-.signin__form label { font: var(--type-label); }
-.signin__form .btn { justify-content: center; }
-.signin__sent { display: grid; grid-template-columns: auto 1fr; gap: var(--space-3) var(--space-4); align-items: start; padding: var(--space-6); border-radius: var(--radius-xl); background: var(--well); font: var(--type-body-sm); }
-.signin__sent .btn { grid-column: 2; justify-self: start; }
-.signin__error { display: flex; gap: var(--space-2); font: var(--type-body-sm); color: var(--danger-text-aa); }
-.signin__alt { font: var(--type-body-sm); color: var(--text-muted); }
-.topbar__account { display: flex; align-items: center; gap: var(--space-3); }
-.topbar__email { font: var(--type-meta); color: var(--text-muted); max-width: 22ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
 /* ============================================================== Gallery: a published creation and its path */
 
 .page--creation { display: grid; gap: var(--space-9); max-width: 1280px; margin: 0 auto; padding: var(--space-9) var(--space-8) var(--space-11); overflow: auto; }
