@@ -1,0 +1,57 @@
+# Checks on every push and pull request. The deploy workflow runs the same checks before it deploys main.
+name: CI
+
+on:
+  push:
+    branches-ignore: [main] # main is checked by the deploy workflow
+  pull_request:
+  workflow_call:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    name: Backend (ruff, pytest)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11" # the Modal image's version
+          cache: pip
+          cache-dependency-path: |
+            backend/requirements.txt
+            backend/requirements-dev.txt
+      - run: pip install -r requirements-dev.txt
+      - run: ruff check app tests
+      # The tests use fakes: no keys, no paid model calls, no live project.
+      - run: pytest -q
+
+  frontend:
+    name: Frontend (types, tests, CSS rules, build)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npx tsc --noEmit -p .
+      - run: npx vitest run
+      - run: bash ../scripts/check-css.sh
+      - run: npm run build

@@ -9,5 +9,6 @@ frontend/playwright-report/
 backend/.localdata/
 .localdata/
 .env
+.env.modal
 *.log
 chimera-lab.bundle

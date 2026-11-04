@@ -1,0 +1,63 @@
+# Production: every push to main is checked, then deployed to Modal (one app: the site at / and the API at /evo).
+# Setup and secrets: docs/DEPLOY.md.
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # "Run workflow" redeploys main by hand
+
+permissions:
+  contents: read
+
+# One deploy at a time; a newer push waits for the running deploy instead of cancelling it.
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  checks:
+    uses: ./.github/workflows/ci.yml
+
+  deploy:
+    name: Deploy to Modal
+    needs: checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment:
+      name: production
+      url: ${{ vars.PRODUCTION_URL }}
+    env:
+      MODAL_TOKEN_ID: ${{ secrets.MODAL_TOKEN_ID }}
+      MODAL_TOKEN_SECRET: ${{ secrets.MODAL_TOKEN_SECRET }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Build the site
+        working-directory: frontend
+        run: npm ci && npm run build
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Check the Modal token is set
+        run: |
+          if [ -z "$MODAL_TOKEN_ID" ] || [ -z "$MODAL_TOKEN_SECRET" ]; then
+            echo "::error::Add MODAL_TOKEN_ID and MODAL_TOKEN_SECRET as repository secrets (docs/DEPLOY.md)."
+            exit 1
+          fi
+      - run: pip install "modal==1.6.3"
+      - name: Deploy
+        run: modal deploy backend/app/modal_app.py
+      - name: Smoke test
+        if: ${{ vars.PRODUCTION_URL != '' }}
+        run: |
+          for i in $(seq 1 30); do
+            if curl -fsS "${{ vars.PRODUCTION_URL }}/health"; then echo; break; fi
+            sleep 5
+          done
+          curl -fsS "${{ vars.PRODUCTION_URL }}/health"
+          curl -fsS -o /dev/null "${{ vars.PRODUCTION_URL }}/"
