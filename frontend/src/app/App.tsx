@@ -5,6 +5,7 @@ import { startConnectivity } from "../connectivity/store";
 import { copy } from "../copy";
 import { useLimits } from "../evo/data";
 import { Tour } from "../tutorial/Tour";
+import { Intro, hasSeenIntro } from "../intro/Intro";
 import { hasToured, useTour } from "../tutorial/tourStore";
 import { stopAllStreams, useEvoRuns } from "../evo/runs";
 import { useGraph } from "../graph/store";
@@ -79,6 +80,10 @@ function useWorkspace(): boolean {
 export function App() {
   const route = useRoute();
   const ready = useWorkspace();
+  // First visit (not when a link opens a page directly): the welcome intro, then the tutorial or the workspaces.
+  const [intro, setIntro] = useState(
+    () => !hasSeenIntro() && !hasToured() && !useTour.getState().active && parseRoute(window.location.search).view === "home",
+  );
   const loaded = useWorkspaces((s) => s.loaded);
   // A workspace link (?ws=<id>) opens that workspace.
   const routeWs = route.view === "lab" ? route.workspaceId ?? null : null;
@@ -91,8 +96,6 @@ export function App() {
     stops.push(registerRunHandlers());
     stops.push(startConnectivity());
     void initAuth();
-    // First visit: the hands-on tutorial (not when a link opens a page directly).
-    if (!hasToured() && parseRoute(window.location.search).view === "home") useTour.getState().start();
     void useLimits.getState().refresh();
     return () => {
       stops.forEach((s) => s());
@@ -112,6 +115,7 @@ export function App() {
           {route.view === "chimeras" ? <ChimerasPage /> : route.view === "garden" ? <GardenPage /> : route.view === "home" ? <HomePage /> : <LabView ready={ready} runId={route.runId} />}
         </main>
         <Tour />
+        {intro ? <Intro onClose={() => setIntro(false)} /> : null}
         <Toasts />
         <ShortcutsDialog />
         <ConfirmDialog />
