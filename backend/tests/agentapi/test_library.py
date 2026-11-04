@@ -209,9 +209,15 @@ async def test_a_sketch_sends_the_image_with_the_drawing_and_makes_a_new_version
     done = await wait_job(c, r.json()["id"])
     assert done["status"] == "succeeded" and done["result"]["operation"] == "sketch"
     prompt, nrefs = rec.calls[-1]
-    assert nrefs == 2 and "a horn here" in prompt and "Remove every drawn line" in prompt  # marked + clean
-    assert "parent animals (horse or pangolin)" in prompt and "Never erase the area" in prompt
-    assert "white background" in prompt
+    assert nrefs == 2  # the image with the drawing, and the clean image
+    # The vision model read the drawing first; its grounded instruction and keep-list lead the prompt.
+    [brief] = c.app.state.agent.services.vision.briefs
+    assert "a horn here" in brief["messages"][1]["content"][0]["text"]
+    assert "Change the marked part:" in prompt and "Keep these exactly as they are: the striped coat" in prompt
+    assert "no drawn lines left" in prompt and "white background" in prompt
+    stored = await c.app.state.agent.services.db.get("assets", done["result"]["id"])
+    assert stored["generation"]["edit"]["brief"]["instruction"].startswith("Change the marked part")
+    assert stored["referenceOnly"] is True  # blended back: later edits send it as a reference
 
 
 async def test_an_empty_or_off_topic_sketch_is_refused(make_client):  # noqa: F811
@@ -237,27 +243,27 @@ def mask_png(size: int, box: tuple[int, int, int, int]) -> bytes:
     return out.getvalue()
 
 
-async def test_paint_shows_the_model_where_and_fills_it_from_the_parent_animals(make_client):  # noqa: F811
+async def test_paint_shows_the_model_where_and_edits_a_small_area_as_a_close_up(make_client):  # noqa: F811
     c, rec = await prompt_client(make_client)
     v1 = await v1_in(c)
     size = Image.open(io.BytesIO((await c.get(v1["imageUrl"])).content)).size[0]
     r = await c.post(f"/evo/lab/versions/{v1['id']}/paint", data={"instruction": "replace the tail with a tentacle"},
-                     files={"mask": ("m.png", mask_png(size, (4, 4, 20, 20)), "image/png")})
+                     files={"mask": ("m.png", mask_png(size, (4, 4, 10, 10)), "image/png")})
     assert r.status_code == 202, r.text
     done = await wait_job(c, r.json()["id"])
     assert done["status"] == "succeeded"
     prompt, nrefs = rec.calls[-1]
-    assert nrefs == 2  # the highlighted copy and the clean image
-    assert "highlighted in translucent magenta" in prompt and "parent animals (horse and pangolin)" in prompt
-    assert "Never erase the area" in prompt
+    assert nrefs == 3  # a small area: the highlighted close-up, the clean close-up and the whole creature
+    assert "close-up" in prompt and "highlighted in translucent magenta" in prompt
+    assert "Never leave an empty gap" in prompt and "Keep these exactly as they are" in prompt
     stored = await c.app.state.agent.services.db.get("assets", done["result"]["id"])
     assert [p["commonName"] for p in stored["generation"]["parents"]] == ["horse", "pangolin"]  # kept on edits
+    assert stored["generation"]["edit"]["closeUp"] is True
 
 
 def test_the_highlight_marks_only_the_painted_area():
-    from app.agentapi.lab import mark_region
+    from app.agentapi import edit_regions as R
 
-    base = io.BytesIO()
-    Image.new("RGB", (40, 40), (255, 255, 255)).save(base, "PNG")
-    marked = Image.open(io.BytesIO(mark_region(base.getvalue(), mask_png(40, (10, 10, 20, 20))))).convert("RGB")
+    base = Image.new("RGB", (40, 40), (255, 255, 255))
+    marked = R.highlight(base, R.alpha_of(mask_png(40, (10, 10, 20, 20)), base.size))
     assert marked.getpixel((15, 15)) != (255, 255, 255) and marked.getpixel((35, 35)) == (255, 255, 255)

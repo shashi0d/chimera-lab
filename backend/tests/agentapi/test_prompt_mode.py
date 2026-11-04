@@ -226,12 +226,18 @@ async def test_an_earlier_creature_skips_the_topic_check(make_client):  # noqa: 
 
 
 def test_the_paint_prompt_guards_the_whole_body():
-    from app.agentapi.lab import paint_prompt
+    from app.agentapi.edit_pipeline import paint_prompt
 
-    p = paint_prompt({"profile": {"name": "Scalesteed", "summary": "A horse in pangolin scales."}}, "blue mane")
-    assert "blue mane" in p and "Scalesteed: A horse in pangolin scales." in p
-    for rule in ("one living body", "number of heads, legs, wings and tails", "art style", "Do not add a second"):
-        assert rule in p
+    doc = {"profile": {"name": "Scalesteed", "summary": "A horse in pangolin scales."}, "style": "anime",
+           "generation": {"parents": [{"commonName": "horse"}, {"commonName": "pangolin"}]}}
+    template = paint_prompt(doc, "blue mane", None, close_up=False)
+    assert "blue mane" in template and "Scalesteed, a hybrid of horse and pangolin (A horse in pangolin scales)" in template
+    for rule in ("one living body", "number of heads, legs, wings and tails", "art style", "No text, no extra creatures"):
+        assert rule in template
+    brief = {"instruction": "Replace the mane with a blue mane", "keep": ["the scales", "the hooves"]}
+    grounded = paint_prompt(doc, "blue mane", brief, close_up=True)
+    assert grounded.index("Replace the mane") < grounded.index("Keep these exactly as they are: the scales; the hooves")
+    assert "close-up" in grounded
 
 
 async def test_one_animal_card_per_image_with_four_angles(make_client):  # noqa: F811
