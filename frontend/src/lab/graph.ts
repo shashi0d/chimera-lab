@@ -5,6 +5,8 @@ import type { GraphNode } from "../graph/types";
 import { createNode } from "../nodes/registry";
 import type { EditConfig, EditData, EditOperation } from "../nodes/edit/types";
 import type { VersionData } from "../nodes/version/types";
+import type { CardData } from "../nodes/card/types";
+import type { FusionData } from "../nodes/fusion/types";
 import type { LabVersion } from "./api";
 
 /**
@@ -54,6 +56,30 @@ export function addEditNode(versionNodeId: string, operation: EditOperation, ins
   g.addNodes([node], [{ id: `e-${node.id}`, source: versionNodeId, sourcePort: "out", target: node.id, targetPort: "in" }]);
   g.setSelection([node.id]);
   requestAnimationFrame(() => document.querySelector<HTMLTextAreaElement>(`[data-node-id="${CSS.escape(node.id)}"] textarea`)?.focus());
+  return node.id;
+}
+
+/** An animal card for an image (written as soon as the image is ready). */
+export function addCardNode(versionNodeId: string, at?: { x: number; y: number }): string {
+  const g = useGraph.getState();
+  const parent = g.nodes.find((n) => n.id === versionNodeId);
+  const size = FOOTPRINT.card!;
+  const position = at ? findFreeSpot(at, size.w, size.h) : parent ? rightOf(parent, "card") : { x: 0, y: 0 };
+  const node = createNode("card", position, { card: null, versionId: null, autoStart: true, error: null } satisfies CardData);
+  g.addNodes([node], [{ id: `e-${node.id}`, source: versionNodeId, sourcePort: "out", target: node.id, targetPort: "in" }]);
+  g.setSelection([node.id]);
+  return node.id;
+}
+
+/** A new Fusion with this image as animal A: type or connect animal B to make a creature from it. */
+export function addFusionFrom(versionNodeId: string, at?: { x: number; y: number }): string {
+  const g = useGraph.getState();
+  const parent = g.nodes.find((n) => n.id === versionNodeId);
+  const size = FOOTPRINT.fusion!;
+  const position = at ? findFreeSpot(at, size.w, size.h) : parent ? rightOf(parent, "fusion") : { x: 0, y: 0 };
+  const node = createNode("fusion", position, { activeRunId: null, runIds: [], names: { a: "", b: "" } } satisfies FusionData);
+  g.addNodes([node], [{ id: `e-${node.id}`, source: versionNodeId, sourcePort: "out", target: node.id, targetPort: "a" }]);
+  g.setSelection([node.id]);
   return node.id;
 }
 

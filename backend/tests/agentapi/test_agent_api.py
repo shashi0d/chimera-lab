@@ -429,7 +429,7 @@ async def test_daily_and_per_user_caps(make_client):
 
 async def test_limits_signed_in_and_out(client):
     body = (await client.get("/evo/agent/limits")).json()
-    assert body["liveRuns"] == "open" and set(body) == {"liveRuns", "dailyTotal", "visitor", "concurrent"}
+    assert body["liveRuns"] == "open" and set(body) == {"liveRuns", "unlimited", "dailyTotal", "visitor", "concurrent"}
     assert body["concurrent"] == {"running": 0, "limit": 3, "queued": 0}
     assert body["visitor"] == {"used": 0, "limit": 1000}
     out = await client.get("/evo/agent/limits", headers={"Authorization": ""})
@@ -584,3 +584,16 @@ async def test_single_origin_serves_the_frontend(tmp_path, make_client):
 async def test_no_frontend_build_serves_the_api_only(client):
     assert (await client.get("/")).status_code == 404
     assert (await client.get("/evo/agent/limits")).status_code == 200
+
+
+# ====================================================================== prompt mode
+
+
+def test_fusion_mode_picks_the_driver(tmp_path):
+    from app.agentapi.jobs import PromptDriver
+
+    assert make_settings(tmp_path).evo_fusion_mode == "prompt"
+    for mode, kind in (("prompt", PromptDriver), ("algorithm", AgentDriver)):
+        settings = make_settings(tmp_path / mode, evo_fusion_mode=mode)
+        app = create_app(settings, services=offline_services(settings))
+        assert isinstance(app.state.agent.driver_factory(), kind)

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from functools import lru_cache
 from pathlib import Path
+from typing import Literal
 
 from pydantic import AliasChoices, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -60,6 +61,8 @@ class Settings(BaseSettings):
     run_lease_seconds: float = 180.0
 
     # R1: the public agent API (docs/api_contract.md "Caps"). Env names are the upper-case field names.
+    # Off (the default): no daily caps and no per-minute rate limits; runs and lab actions are only counted.
+    evo_limits_enabled: bool = False
     evo_daily_runs: int = 50  # agent runs per day, all visitors
     evo_visitor_daily_runs: int = 3  # agent runs per signed-in user per day
     evo_max_concurrent_runs: int = Field(default=3, ge=1)  # more are queued
@@ -88,6 +91,13 @@ class Settings(BaseSettings):
     evo_public_bucket: str = "chimera-public"  # Supabase: generated images, public read
     evo_proxy_hops: int = Field(default=1, ge=0)  # trusted proxies in front of the app (X-Forwarded-For)
     frontend_dist: str = "frontend/dist"  # served at / when it exists
+    # Fusion: "prompt" renders one image from EVO_FUSION_PROMPT ({a} and {b} are the parents' names); "algorithm"
+    # runs the agent (plan, audit, render, inspect, edit).
+    evo_fusion_mode: Literal["prompt", "algorithm"] = "prompt"
+    evo_fusion_prompt: str = "create a hybrid of {a} and {b}"
+    # Every generated image (Fusion and edits) is asked for this background. Empty: no background rule.
+    evo_fusion_background: str = ("Show the whole creature, centred, on a plain pure white background with no "
+                                  "scenery.")
     evo_seed_on_start: bool = True  # seed the showcase in the background at startup (else on first gallery read)
 
     @property

@@ -370,7 +370,7 @@ export function ToolsPanel({ nodeId }: { nodeId: string }) {
             Download
           </Button>
         </div>
-        {limits ? (
+        {limits && limits.limit !== null ? (
           <p className="tools__note">
             {Math.max(0, limits.limit - limits.used)} of {limits.limit} lab actions left today (edits, reviews, messages). Resets at 00:00 UTC.
           </p>

@@ -72,7 +72,7 @@ export function LimitsLine() {
       </div>
     );
   }
-  if (!limits) return <p className="limits-line">{copy.trace.duration}</p>;
+  if (!limits || limits.unlimited) return <p className="limits-line">{copy.trace.duration}</p>;
   const left = Math.max(0, limits.dailyTotal.limit - limits.dailyTotal.used);
   const mine = Math.max(0, limits.visitor.limit - limits.visitor.used);
   return <p className="limits-line">{t.limits(left, limits.dailyTotal.limit, mine)}</p>;

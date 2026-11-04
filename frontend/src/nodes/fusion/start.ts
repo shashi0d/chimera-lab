@@ -13,7 +13,8 @@ import { useGraph } from "../../graph/store";
 import { getBlob } from "../../persistence/blobStore";
 import type { ImageInputData } from "../image-input/types";
 import { ensureRunVersion } from "../../lab/store";
-import { cleanName, readMode, type FusionData } from "./types";
+import type { VersionData } from "../version/types";
+import { cleanName, readMode, readStyle, type FusionData } from "./types";
 
 /** An identify question from the POST response, waiting for the user (no run exists yet). */
 export interface PendingIdentify {
@@ -125,32 +126,51 @@ async function post(nodeId: string, input: StartInput, typed: PendingIdentify["t
   }
 }
 
-/** Make creature: each slot sends its photo, or the typed name when no photo is connected. */
-export async function startFusion(nodeId: string): Promise<void> {
+/**
+ * What each slot sends: an earlier generated creature (its version id), a photo, or the typed name when nothing is
+ * connected. Photos and earlier creatures go to the image model as references. Null when a local photo is missing
+ * or an image card has not finished (the error is shown on the node).
+ */
+async function collectInput(nodeId: string): Promise<{ input: StartInput; typed: PendingIdentify["typed"] } | null> {
   const g = useGraph.getState();
   const node = g.nodes.find((n) => n.id === nodeId);
-  if (!node) return;
+  if (!node) return null;
   const names = (node.data as FusionData).names ?? { a: "", b: "" };
-  const input: StartInput = { mode: readMode(node.config) };
+  const input: StartInput = { mode: readMode(node.config), style: readStyle(node.config) };
   const typed: PendingIdentify["typed"] = { sire: null, dam: null };
   for (const s of ["sire", "dam"] as const) {
     const port = SLOT_PORT[s];
     const up = upstreamNode(g, nodeId, port);
+    if (up?.type === "version") {
+      const version = (up.data as VersionData).version;
+      if (!version) {
+        handleError(nodeId, new ApiRequestError({ code: "VALIDATION_FAILED", message: copy.nodes.fusion.imagePending, retryable: false, details: { slot: s } }));
+        return null;
+      }
+      Object.assign(input, s === "sire" ? { sireVersionId: version.id } : { damVersionId: version.id });
+      continue;
+    }
     const key = (up?.data as ImageInputData | undefined)?.blobKey;
     const blob = key ? await getBlob(key) : undefined;
     if (up && !blob) {
       handleError(nodeId, new ApiRequestError({ code: "IMAGE_CORRUPT", message: "Local copy missing.", retryable: false, details: { slot: s } }));
-      return;
+      return null;
     }
     const name = blob ? null : cleanName(names[port]);
     if (s === "sire") Object.assign(input, blob ? { sireImage: blob } : { sireName: name });
     else Object.assign(input, blob ? { damImage: blob } : { damName: name });
     typed[s] = name;
   }
-  await post(nodeId, input, typed);
+  return { input, typed };
 }
 
-/** Identify confirmation: post again with names only (no photos), as the contract says. */
+/** Make creature: each slot sends its photo, earlier creature, or typed name. */
+export async function startFusion(nodeId: string): Promise<void> {
+  const collected = await collectInput(nodeId);
+  if (collected) await post(nodeId, collected.input, collected.typed);
+}
+
+/** Identify confirmation: post again with the confirmed names, and the photos again (they go to the image model). */
 export async function confirmIdentify(answer: string): Promise<void> {
   const pending = useFusionStart.getState().identify;
   const name = cleanName(answer);
@@ -158,7 +178,12 @@ export async function confirmIdentify(answer: string): Promise<void> {
   useFusionStart.setState({ identify: null });
   const other: Slot = pending.choice.slot === "sire" ? "dam" : "sire";
   const otherName = pending.identified[other]?.commonName ?? pending.typed[other];
-  const input: StartInput =
-    pending.choice.slot === "sire" ? { mode: pending.mode, sireName: name, damName: otherName ?? null } : { mode: pending.mode, sireName: otherName ?? null, damName: name };
+  const collected = await collectInput(pending.nodeId);
+  const base: StartInput = collected?.input ?? { mode: pending.mode };
+  const names = pending.choice.slot === "sire" ? { sireName: name, damName: otherName ?? null } : { sireName: otherName ?? null, damName: name };
+  // A slot fed by an earlier creature keeps its version id; its name comes from that image.
+  const input: StartInput = { ...base, mode: pending.mode, ...names };
+  if (input.sireVersionId) input.sireName = null;
+  if (input.damVersionId) input.damName = null;
   await post(pending.nodeId, input, pending.typed);
 }

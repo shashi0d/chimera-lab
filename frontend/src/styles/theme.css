@@ -291,6 +291,7 @@ a:hover{color:var(--accent-hover);text-decoration:underline}
   --node-w-input: 240px;
   --node-w-fusion: 300px;
   --node-w-version: 340px;
+  --node-w-card: 340px;
   --node-w-edit: 320px;
   --hit: 36px;
   --hit-sm: 32px;
@@ -1319,6 +1320,18 @@ svg.react-flow__connectionline {
 .node--image-input { width: var(--node-w-input); }
 .node--fusion { width: var(--node-w-fusion); }
 .node--version { width: var(--node-w-version); }
+.node--card { width: var(--node-w-card); }
+.card-node__body { display: grid; gap: var(--space-4); max-height: 420px; overflow-y: auto; }
+.card-node__latin { font: var(--type-body-sm); font-style: italic; color: var(--text-muted); }
+.card-node__tagline { font: var(--type-body); color: var(--text-strong); }
+.card-node__fields { display: grid; gap: var(--space-4); margin: 0; }
+.card-node__field dt { font: var(--type-label); color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+.card-node__field dd { margin: var(--space-1) 0 0; font: var(--type-body-sm); color: var(--text-body); }
+.card-node__field ul { margin: 0; padding-left: 1.1em; }
+.card-node__reasoning { font: var(--type-body-sm); color: var(--text-body); padding: var(--space-4); border-radius: var(--radius-md); background: var(--well); }
+.drop-menu { position: absolute; z-index: 20; display: grid; min-width: 200px; padding: var(--space-2); border-radius: var(--radius-md); background: var(--surface-card); border: 1px solid var(--line); box-shadow: var(--shadow-popover); }
+.drop-menu__item { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); border: 0; border-radius: var(--radius-sm); background: none; color: var(--text-strong); font: var(--type-body-sm); text-align: left; cursor: pointer; }
+.drop-menu__item:hover, .drop-menu__item:focus-visible { background: var(--well); outline: none; }
 .node--edit { width: var(--node-w-edit); }
 .node--unsupported, .node--crashed { width: 280px; border-style: dashed; border-color: var(--line-input-strong); }
 

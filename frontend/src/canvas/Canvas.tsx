@@ -22,11 +22,11 @@ import { getDefinition, nodeRegistry, portsOf } from "../nodes/registry";
 import type { AnyNodeDefinition, ValidationIssue } from "../nodes/types";
 import { UnsupportedNodeView } from "../nodes/unsupported/NodeView";
 import { derived, isTerminal, useEvoRuns } from "../evo/runs";
-import { addEditNode } from "../lab/graph";
 import { createNode } from "../nodes/registry";
 import { toast } from "../ui/toastStore";
 import { useUi } from "../ui/uiStore";
 import { addImageFiles, FOOTPRINT } from "./addImages";
+import { DropMenu, type DropAt } from "./DropMenu";
 import { EmptyState } from "./EmptyState";
 import { NodeErrorBoundary } from "./NodeErrorBoundary";
 import { ToolRail } from "./ToolRail";
@@ -83,6 +83,8 @@ export function Canvas() {
   const wrapper = useRef<HTMLDivElement>(null);
   const [measured, setMeasured] = useState<Record<string, { width: number; height: number }>>({});
   const [dragging, setDragging] = useState(false);
+  const [dropAt, setDropAt] = useState<DropAt | null>(null);
+  const closeDropMenu = useCallback(() => setDropAt(null), []);
   const [shake, setShake] = useState<string | null>(null);
 
   // ---------------------------------------------------------------- derived flow state
@@ -205,11 +207,12 @@ export function Canvas() {
 
   const onConnectEnd = useCallback(
     (e: MouseEvent | TouchEvent, state: FinalConnectionState) => {
-      // FLORA-style: drag from an image's output onto empty canvas to start an edit of that image there.
+      // FLORA-style: drag from an image's output onto empty canvas, then choose what to make from it there.
       if (!state.toNode && state.fromNode?.type === "version" && state.fromHandle?.type === "source" && !useGraph.getState().readOnly) {
         const point = "changedTouches" in e ? e.changedTouches[0]! : e;
-        const p = flow.screenToFlowPosition({ x: point.clientX, y: point.clientY });
-        addEditNode(state.fromNode.id, "revise", "", { x: p.x, y: p.y - 60 });
+        const screen = { x: point.clientX, y: point.clientY };
+        const box = wrapper.current?.getBoundingClientRect() ?? { x: 0, y: 0 };
+        setDropAt({ nodeId: state.fromNode.id, local: { x: screen.x - box.x, y: screen.y - box.y }, flow: flow.screenToFlowPosition(screen) });
         return;
       }
       if (state.isValid || !state.toHandle || !state.fromHandle || !state.toNode || !state.fromNode) return;
@@ -360,6 +363,9 @@ export function Canvas() {
         <Background variant={BackgroundVariant.Dots} gap={28} size={1.6} className="canvas__grid" />
         {minimap ? <MiniMap pannable zoomable className="canvas__minimap" ariaLabel="Minimap" /> : null}
       </ReactFlow>
+      {dropAt ? (
+        <DropMenu at={dropAt} onClose={closeDropMenu} />
+      ) : null}
       <ToolRail onAddFiles={(files) => void addFiles(files)} />
       <ZoomControls />
       {nodes.length === 0 && !dragging ? <EmptyState onAddFiles={(files) => void addFiles(files)} onTypeNames={addNamesOnly} /> : null}

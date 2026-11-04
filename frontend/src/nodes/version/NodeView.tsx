@@ -3,7 +3,7 @@ import { NodeCard, type NodeStatus } from "../../canvas/NodeCard";
 import { evo } from "../../evo/index";
 import { isTerminal, useRun } from "../../evo/runs";
 import { useGraph } from "../../graph/store";
-import { addEditNode, versionNumber } from "../../lab/graph";
+import { addCardNode, addEditNode, addFusionFrom, versionNumber } from "../../lab/graph";
 import { downloadVersion } from "../../lab/store";
 import { IconButton } from "../../ui/Button";
 import { Icon } from "../../ui/Icon";
@@ -69,6 +69,8 @@ export function VersionView({ node, selected }: NodeViewProps<VersionConfig, Ver
           <>
             <IconButton icon="replace" label="Revise this image" onClick={() => addEditNode(node.id, "revise")} />
             <IconButton icon="brush" label="Paint an area to edit" onClick={() => addEditNode(node.id, "paint")} />
+            <IconButton icon="card" label="Write the animal card" onClick={() => addCardNode(node.id)} />
+            <IconButton icon="fusion" label="Fuse with another animal" onClick={() => addFusionFrom(node.id)} />
             <IconButton icon="download" label="Download image" onClick={() => void downloadVersion(version, label)} />
           </>
         ) : null

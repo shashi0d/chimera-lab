@@ -215,8 +215,9 @@ async def limits(request: Request) -> JSONResponse:
     user, _ = await _user(request)
     caps = lab(request).caps
     total, mine = await caps.used(user.id)
-    return JSONResponse({"used": mine, "limit": caps.settings.evo_visitor_daily_runs,
-                         "totalUsed": total, "totalLimit": caps.settings.evo_daily_runs,
+    unlimited = not caps.enabled  # no limits: the counts are shown, the limits are null
+    return JSONResponse({"used": mine, "limit": None if unlimited else caps.settings.evo_visitor_daily_runs,
+                         "totalUsed": total, "totalLimit": None if unlimited else caps.settings.evo_daily_runs,
                          "resetsAt": resets_at()}, headers={"Cache-Control": "no-store"})
 
 
@@ -265,7 +266,7 @@ async def put_workspace(request: Request) -> JSONResponse:
 
 def public_version(doc: dict[str, Any]) -> dict[str, Any]:
     return {k: doc.get(k) for k in ("id", "parentId", "runId", "creatureId", "operation", "instruction", "imageUrl",
-                                    "createdAt", "isFinal", "publicationId", "title")}
+                                    "createdAt", "isFinal", "publicationId", "title", "style", "card")}
 
 
 async def get_version(a: AgentApi, version_id: str, user: User) -> dict[str, Any]:
@@ -293,7 +294,7 @@ async def lineage(a: AgentApi, version: dict[str, Any], user: User) -> list[dict
 
 
 async def save_version(a: AgentApi, user: User, image: GeneratedImage, parent: dict[str, Any], operation: str,
-                       instruction: str, reference_only: bool) -> dict[str, Any]:
+                       instruction: str, reference_only: bool, prompt: str = "") -> dict[str, Any]:
     ext = EXT.get(image.content_type)
     if not ext:
         raise _err(ErrorCode.UPSTREAM_ERROR, "The image provider returned an unsupported image format.", 502)
@@ -303,7 +304,11 @@ async def save_version(a: AgentApi, user: User, image: GeneratedImage, parent: d
     doc = {"id": version_id, "kind": VERSION_KIND, "owner": user.id, "parentId": parent["id"],
            "runId": parent.get("runId"), "creatureId": parent.get("creatureId"), "title": parent.get("title"),
            "operation": operation, "instruction": instruction, "imageUrl": url, "imageKey": key,
-           "responseId": image.response_id, "referenceOnly": reference_only, "createdAt": now_iso(), "isFinal": False}
+           "responseId": image.response_id, "referenceOnly": reference_only, "createdAt": now_iso(), "isFinal": False,
+           "style": parent.get("style"),
+           # How this image was made, kept so later steps (the animal card) can build on it.
+           "generation": {"operation": operation, "instruction": instruction, "prompt": prompt,
+                          "model": image.model}}
     await a.services.db.put("assets", version_id, doc)
     return public_version(doc)
 
@@ -354,9 +359,25 @@ async def from_run(request: Request) -> JSONResponse:
            "creatureId": run["creatureId"], "title": view.get("title"), "operation": "fusion",
            "instruction": f"{view.get('title')} ({run.get('mode')})", "imageUrl": view["imageUrl"],
            "imageKey": _file_key(a, view["imageUrl"]), "responseId": None, "referenceOnly": True,
-           "createdAt": now_iso(), "isFinal": False}
+           "createdAt": now_iso(), "isFinal": False, "style": run.get("style"),
+           "generation": _run_generation(run, view)}
     await a.services.db.put("assets", version_id, doc)
     return JSONResponse(public_version(doc), status_code=201)
+
+
+def _run_generation(run: dict[str, Any], view: dict[str, Any]) -> dict[str, Any]:
+    """How a Fusion run made its image: prompt mode keeps its record in the plan; an agent run is summarised."""
+    plan = view.get("plan") or {}
+    if plan.get("fusion_mode") == "prompt":
+        return dict(plan)
+    return {"fusion_mode": "algorithm", "operation": "fusion", "style": run.get("style"),
+            "parents": [run.get("sire"), run.get("dam")], "host": (view.get("host") or {}).get("commonName"),
+            "prompt": "", "agent_reasoning": [s.get("reason") for s in (view.get("trace") or []) if s.get("reason")][:12]}
+
+
+def _with_background(settings: Any, prompt: str) -> str:
+    rule = str(settings.evo_fusion_background).strip()
+    return f"{prompt} {rule}" if rule else prompt
 
 
 def _instruction(value: Any) -> str:
@@ -393,11 +414,13 @@ async def revise(version_id: str, request: Request) -> JSONResponse:
     async def work(stage: Callable[[str], Awaitable[None]]) -> dict[str, Any]:
         await stage("Revising the image")
         refs = [await version_image(a, doc)] if doc.get("referenceOnly") else []
-        image = await _generate(a, doc, "Revise the image according to the creator's instruction. Keep the creature, "
-                                "framing and everything not mentioned as similar as possible. " + instruction, refs)
+        prompt = _with_background(a.settings, "Revise the image according to the creator's instruction. Keep the "
+                                  "creature, art style, framing and everything not mentioned as similar as possible. "
+                                  + instruction)
+        image = await _generate(a, doc, prompt, refs)
         await stage("Saving the new version")
         # The stored image is exactly the provider's response, so its children can chain on that response.
-        return await save_version(a, user, image, doc, "revise", instruction, reference_only=False)
+        return await save_version(a, user, image, doc, "revise", instruction, reference_only=False, prompt=prompt)
 
     return await start_job(request, user, day, "revise", version_id, instruction, work)
 
@@ -456,13 +479,14 @@ async def paint(version_id: str, request: Request) -> JSONResponse:
     async def work(stage: Callable[[str], Awaitable[None]]) -> dict[str, Any]:
         await stage("Editing the painted area")
         refs = [original] if doc.get("referenceOnly") else []
-        candidate = await _generate(a, doc, "Edit the image as follows, keeping its framing and everything else as "
-                                    "similar as possible: " + instruction, refs)
+        prompt = _with_background(a.settings, "Edit the image as follows, keeping its art style, framing and "
+                                  "everything else as similar as possible: " + instruction)
+        candidate = await _generate(a, doc, prompt, refs)
         await stage("Blending the painted area")
         merged = await asyncio.to_thread(composite_region, original, candidate.data, mask)
         image = GeneratedImage(merged, "image/png", candidate.model, candidate.response_id)
         # The saved composite is not the provider's response; later edits must use it as a reference.
-        return await save_version(a, user, image, doc, "paint", instruction, reference_only=True)
+        return await save_version(a, user, image, doc, "paint", instruction, reference_only=True, prompt=prompt)
 
     return await start_job(request, user, day, "paint", version_id, instruction, work)
 
@@ -550,6 +574,33 @@ async def saved_review(version_id: str, request: Request) -> JSONResponse:
     user, _ = await _user(request)
     doc = await get_version(a, version_id, user)
     return JSONResponse({"review": doc.get("review")}, headers={"Cache-Control": "no-store"})
+
+
+@router.post("/versions/{version_id}/card")
+async def animal_card(version_id: str, request: Request) -> JSONResponse:
+    """The animal card (on demand, one lab action): a profile built from the image and how it was made."""
+    from app.agentapi.animal_card import card_context, make_card
+
+    a = api(request)
+    user, _ = await _charge(request)
+    doc = await get_version(a, version_id, user)
+    chain = await lineage(a, doc, user)
+    image = await version_image(a, doc)
+    day = await lab(request).caps.charge(user.id)
+    async with charged_slot(request, user.id, day):
+        card = await make_card(a.settings, image, card_context(chain))
+    card["createdAt"] = now_iso()
+    doc["card"] = card
+    await a.services.db.put("assets", version_id, doc)
+    return JSONResponse(card, headers={"Cache-Control": "no-store"})
+
+
+@router.get("/versions/{version_id}/card")
+async def saved_card(version_id: str, request: Request) -> JSONResponse:
+    a = api(request)
+    user, _ = await _user(request)
+    doc = await get_version(a, version_id, user)
+    return JSONResponse({"card": doc.get("card")}, headers={"Cache-Control": "no-store"})
 
 
 TOOLS = [

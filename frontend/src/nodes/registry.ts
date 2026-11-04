@@ -5,11 +5,12 @@ import { fusionNode } from "./fusion/definition";
 import { imageInputNode } from "./image-input/definition";
 import { editNode } from "./edit/definition";
 import { versionNode } from "./version/definition";
+import { cardNode } from "./card/definition";
 import { onRunChange } from "../evo/runs";
 import { useGraph } from "../graph/store";
 import type { AnyNodeDefinition } from "./types";
 
-const definitions: AnyNodeDefinition[] = [imageInputNode, fusionNode, versionNode, editNode];
+const definitions: AnyNodeDefinition[] = [imageInputNode, fusionNode, versionNode, editNode, cardNode];
 
 export const nodeRegistry: Readonly<Record<string, AnyNodeDefinition>> = Object.freeze(
   Object.fromEntries(definitions.map((d) => [d.type, d])),

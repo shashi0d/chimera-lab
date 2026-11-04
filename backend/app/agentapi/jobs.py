@@ -481,3 +481,59 @@ class AgentDriver:
         return {"creatureId": cid, "imageId": result["image_id"], "imageUrl": view["imageUrl"],
                 "remainingFailures": fails, "hiddenChecks": hidden,
                 "agree": bool((card.get("final_choice") or {}).get("agree", True)), "stop": stop}
+
+
+class PromptDriver:
+    """Prompt mode (EVO_FUSION_MODE=prompt): one Muse Image call with a plain prompt, no plan, critics or edits.
+
+    The prompt comes from app.agentapi.fusion_prompt (EVO_FUSION_PROMPT, the art style, the white background). The
+    parents' photos or earlier creatures go to the image model as reference images. The run emits the same events
+    as the agent (one step, one render, finalize), so the Lab shows its image as V1. How the image was made (the
+    prompt, style, parents and references) is kept in the creature's plan, so later steps can build on it."""
+
+    def __init__(self, services: Services) -> None:
+        self.svc = services
+
+    def generation(self, job: Job) -> tuple[str, list[bytes], dict[str, Any]]:
+        from app.agentapi.fusion_prompt import SLOT_ORDER, build_fusion_prompt, style_phrase
+
+        doc = job.doc
+        refs_by_slot: dict[str, bytes] = job.extra.get("refs") or {}
+        slots = [s for s in SLOT_ORDER if refs_by_slot.get(s)]
+        style = doc.get("style") or "real"
+        prompt = build_fusion_prompt(self.svc.settings, doc["sire"], doc["dam"], style, slots)
+        record = {"fusion_mode": "prompt", "operation": "fusion", "prompt": prompt, "style": style,
+                  "style_wording": style_phrase(style), "references": slots,
+                  "parents": [{k: doc[s].get(k) for k in ("commonName", "scientificName", "source", "versionId")}
+                              for s in SLOT_ORDER]}
+        return prompt, [refs_by_slot[s] for s in slots], record
+
+    async def run(self, job: Job) -> dict[str, Any]:
+        from app.evolution.live import RetryingImageGen
+
+        svc, doc = self.svc, job.doc
+        prompt, refs, record = self.generation(job)
+        t0 = time.monotonic()
+        img = await RetryingImageGen(svc.image_gen, svc.settings).generate(prompt, refs, "1:1")
+        job.extra.pop("refs", None)
+        if not img.data:
+            raise RunFailed("UPSTREAM_ERROR", "The image model returned no image. Try again.", True)
+        summary = f"rendered with {len(refs)} reference image(s): {prompt}" if refs else f"rendered: {prompt}"
+        await job.emit("step", n=1, tool="render", args={"prompt": prompt}, summary=summary,
+                       reason="prompt mode: one image from a plain prompt", cards=[], ok=True, error=None)
+        ext = EXT.get(img.content_type, "webp")
+        url = await job.runner.files.put(f"runs/{job.run_id}/img1.{ext}", img.data, img.content_type)
+        await job.emit("render", n=1, imageId="img1", url=url, kind="render", parent=None, method="prompt",
+                       rendersUsed=1, rendersLeft=0)
+        cid = new_id("crt")
+        trace = [{"n": 1, "tool": "render", "arguments": {"prompt": prompt}, "summary": summary,
+                  "reason": "prompt mode", "ok": True}]
+        view = build_creature(
+            creature_id=cid, created_at=now_iso(), sire=doc["sire"], dam=doc["dam"], mode=doc["mode"], card={},
+            plan=record, route_mode=None, image_id="img1", trace=trace,
+            images=[{"imageId": "img1", "url": url, "kind": "render", "verdict": None}], overlay_url=None,
+            run_id=job.run_id, stats={"renders": 1, "edits": 0, "toolCalls": 1,
+                                      "seconds": round(time.monotonic() - t0, 1)})
+        await job.runner.creatures.save(view, "run", trace=trace, owner=doc.get("owner"))
+        return {"creatureId": cid, "imageId": "img1", "imageUrl": url, "remainingFailures": [], "hiddenChecks": 0,
+                "agree": True, "stop": "prompt mode: one render"}

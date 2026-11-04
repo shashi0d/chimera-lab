@@ -6,7 +6,6 @@ import { useGraph } from "../graph/store";
 import { ToolsPanel } from "../lab/ToolsPanel";
 import { IdentifyDialog } from "../nodes/fusion/IdentifyDialog";
 import type { VersionData } from "../nodes/version/types";
-import { TracePanel } from "../trace/TracePanel";
 
 /** The selected image card, when exactly one finished image is selected (its tools open beside the canvas). */
 function useSelectedVersion(): string | null {
@@ -18,11 +17,12 @@ function useSelectedVersion(): string | null {
 }
 
 /** The Lab: sign in, then the canvas with the selected image's tools (or a run's live trace) docked beside it. */
-export function LabView({ ready, runId }: { ready: boolean; runId: string | null }) {
+// The run trace panel (trace/TracePanel) is hidden for now; a run shows on the canvas only.
+export function LabView({ ready }: { ready: boolean; runId: string | null }) {
   const status = useAuth((s) => s.status);
   const selected = useSelectedVersion();
   if (status !== "signed-in" && status !== "loading") return <SignIn />;
-  const side = selected ? <ToolsPanel key={selected} nodeId={selected} /> : runId ? <TracePanel key={runId} runId={runId} /> : null;
+  const side = selected ? <ToolsPanel key={selected} nodeId={selected} /> : null;
   return (
     <div className={`workspace${side ? " has-trace" : ""}`} aria-busy={!ready}>
       <h1 className="sr-only">{copy.lab.heading}</h1>

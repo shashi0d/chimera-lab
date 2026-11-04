@@ -6,7 +6,10 @@ import { setTransport } from "../../src/evo/index";
 import type { Publication } from "../../src/evo/types";
 import { useGraph } from "../../src/graph/store";
 import { labApi, type LabJob, type LabVersion } from "../../src/lab/api";
-import { addEditNode, addVersionNode, lineage, versionNumber } from "../../src/lab/graph";
+import { addCardNode, addEditNode, addFusionFrom, addVersionNode, lineage, versionNumber } from "../../src/lab/graph";
+import type { CardData } from "../../src/nodes/card/types";
+import { startFusion } from "../../src/nodes/fusion/start";
+import type { FusionConfig, FusionData } from "../../src/nodes/fusion/types";
 import { followJobs, generateEdit, stopFollowingJobs, useLab } from "../../src/lab/store";
 import { ToolsPanel } from "../../src/lab/ToolsPanel";
 import type { EditData } from "../../src/nodes/edit/types";
@@ -180,5 +183,64 @@ describe("a published creation in the gallery", () => {
   it("an unpublished creation says it isn't in the gallery", async () => {
     renderInFlow(<CreationPage publicationId="pub_gone" />);
     expect(await screen.findByRole("button", { name: "Back to the gallery" })).toBeInTheDocument();
+  });
+});
+
+describe("building on a generated image", () => {
+  const card = {
+    name: "Scaled steed", scientific_style_name: "Equus squamatus", tagline: "Armoured grazer", inherited: [{ parent: "horse", traits: ["hooves", "mane"] }],
+    appearance: "Scales over a horse body", size: "Pony-sized", habitat: "Savanna", diet: "Grass", behaviour: "Rolls up when scared",
+    abilities: ["Scale armour"], weaknesses: ["Slow to turn"], fun_fact: "It sheds one scale a week.", reasoning: "The scales read as pangolin.",
+  };
+
+  it("an animal card is written for its image once it is added, and shows the model's reasoning on request", async () => {
+    const v1 = withV1();
+    const write = vi.spyOn(labApi, "card").mockResolvedValue(card);
+    const id = addCardNode(v1);
+    expect(useGraph.getState().edges.some((e) => e.source === v1 && e.target === id && e.targetPort === "in")).toBe(true);
+    renderNode(id);
+    await vi.waitFor(() => expect(screen.getByText("Armoured grazer")).toBeInTheDocument());
+    expect(write).toHaveBeenCalledTimes(1);
+    expect(write).toHaveBeenCalledWith("labv_1");
+    expect(screen.getByText("From the horse")).toBeInTheDocument();
+    expect(screen.queryByText("The scales read as pangolin.")).toBeNull();
+    await userEvent.click(screen.getByRole("button", { name: "Why this card?" }));
+    expect(screen.getByText("The scales read as pangolin.")).toBeInTheDocument();
+    expect((useGraph.getState().nodes.find((n) => n.id === id)?.data as CardData).card?.name).toBe("Scaled steed");
+  });
+
+  it("a saved card is not written again on reload", async () => {
+    const v1 = withV1();
+    const write = vi.spyOn(labApi, "card").mockResolvedValue(card);
+    const id = addCardNode(v1);
+    useGraph.getState().updateNodeData<CardData>(id, (d) => ({ ...d, card, versionId: "labv_1", autoStart: false }));
+    renderNode(id);
+    await settle(10);
+    expect(write).not.toHaveBeenCalled();
+    expect(screen.getByRole("button", { name: "Write again" })).toBeInTheDocument();
+  });
+
+  it("an image can be animal A of a new Fusion, which sends its version id", async () => {
+    const v1 = withV1();
+    const f2 = addFusionFrom(v1);
+    expect(useGraph.getState().edges.some((e) => e.source === v1 && e.target === f2 && e.targetPort === "a")).toBe(true);
+    useGraph.getState().updateNodeData<FusionData>(f2, (d) => ({ ...d, names: { a: "", b: "eagle" } }));
+    useGraph.getState().updateNodeConfig<FusionConfig>(f2, (c) => ({ ...c, style: "comic" }));
+    renderNode(f2);
+    expect(screen.getByText("lion × eagle")).toBeInTheDocument();
+    expect(screen.getByText("earlier creature")).toBeInTheDocument();
+    const start = vi.spyOn(mockTransport, "startRun");
+    await startFusion(f2);
+    expect(start).toHaveBeenCalledWith({ mode: "realistic", style: "comic", sireVersionId: "labv_1", damName: "eagle" });
+  });
+
+  it("a Fusion fed by an unfinished image waits for it", () => {
+    useGraph.getState().addNode({ id: "f", type: "fusion", version: 3, position: { x: 0, y: 0 }, config: { mode: "realistic" }, data: { activeRunId: null, runIds: [] } });
+    const pending = addVersionNode("f", { version: null, runId: "run_x", error: null });
+    const f2 = addFusionFrom(pending);
+    useGraph.getState().updateNodeData<FusionData>(f2, (d) => ({ ...d, names: { a: "", b: "eagle" } }));
+    renderNode(f2);
+    expect(screen.getByRole("button", { name: "Make creature" })).toBeDisabled();
+    expect(screen.getByText("Wait for the connected image to finish.")).toBeInTheDocument();
   });
 });

@@ -165,6 +165,9 @@ export const httpTransport: EvoTransport = {
   async startRun(input: StartInput): Promise<StartResult> {
     const form = new FormData();
     form.append("mode", input.mode);
+    if (input.style) form.append("style", input.style);
+    if (input.sireVersionId) form.append("sireVersionId", input.sireVersionId);
+    if (input.damVersionId) form.append("damVersionId", input.damVersionId);
     if (input.sireImage) form.append("sireImage", input.sireImage, "sire.jpg");
     if (input.damImage) form.append("damImage", input.damImage, "dam.jpg");
     if (input.sireName) form.append("sireName", input.sireName);

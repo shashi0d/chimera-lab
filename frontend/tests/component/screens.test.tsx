@@ -223,14 +223,14 @@ describe("Fusion node (agent)", () => {
     await waitFor(() => expect(screen.getByRole("button", { name: "Make creature" })).toBeEnabled());
   });
 
-  it("three modes as a radio group; the hint says what the mode allows", async () => {
+  it("five art styles as a radio group; the hint describes the style", async () => {
     seedFusion({ names: { a: "lion", b: "golden eagle" } });
     renderNode("f");
-    const group = screen.getByRole("radiogroup", { name: "Mode" });
-    expect(within(group).getAllByRole("radio").map((r) => r.textContent)).toEqual(["Realistic", "Speculative", "Mythic"]);
-    await userEvent.click(within(group).getByRole("radio", { name: "Mythic" }));
-    expect(useGraph.getState().nodes[0]?.config).toEqual({ mode: "mythic" });
-    expect(screen.getByText(/A creature of legend/)).toBeInTheDocument();
+    const group = screen.getByRole("radiogroup", { name: "Art style" });
+    expect(within(group).getAllByRole("radio").map((r) => r.textContent)).toEqual(["Real", "Drawing", "Anime", "Comic", "Cartoon"]);
+    await userEvent.click(within(group).getByRole("radio", { name: "Anime" }));
+    expect(useGraph.getState().nodes[0]?.config).toMatchObject({ style: "anime" });
+    expect(screen.getByText(/anime line art/)).toBeInTheDocument();
   });
 
   it("capped: Make creature is disabled and says why", async () => {
@@ -250,11 +250,11 @@ describe("Fusion node (agent)", () => {
     expect(screen.getByRole("alert")).toHaveTextContent("Chimera Lab only uses animal photos.");
   });
 
-  it("while a run is queued, the node shows its place and opens the trace", () => {
+  it("while a run is queued, the node shows its place and that it is generating", () => {
     putRun("q", evs(queued).slice(0, 1), { stream: "open" });
     seedFusion({ activeRunId: "q", runIds: ["q"], names: { a: "lion", b: "golden eagle" } });
     renderNode("f");
     expect(screen.getByText("Queued · #2")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Open live trace" })).toBeEnabled();
+    expect(screen.getByRole("button", { name: "Generating…" })).toBeDisabled();
   });
 });

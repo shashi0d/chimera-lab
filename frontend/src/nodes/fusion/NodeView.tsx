@@ -1,6 +1,5 @@
 import { useId } from "react";
 import { presentError } from "../../api/errorMessages";
-import { navigate, useRoute } from "../../app/route";
 import { NodeCard, type NodeStatus } from "../../canvas/NodeCard";
 import { ErrorBlock, useCountdown } from "../../canvas/RunParts";
 import { formatElapsed, useNow } from "../../canvas/useNow";
@@ -8,7 +7,8 @@ import { useConnectivity } from "../../connectivity/store";
 import { copy } from "../../copy";
 import { useCapped } from "../../evo/data";
 import { isTerminal, useRun, type DerivedRun } from "../../evo/runs";
-import { MODES, type Mode } from "../../evo/types";
+import { evo } from "../../evo/index";
+import { STYLES, type Style } from "../../evo/types";
 import { upstreamNode } from "../../graph/queries";
 import { useGraph } from "../../graph/store";
 import { Button, IconButton } from "../../ui/Button";
@@ -16,11 +16,12 @@ import { Icon } from "../../ui/Icon";
 import { SegmentedTabs } from "../../ui/SegmentedTabs";
 import { displaySpecies } from "../image-input/species";
 import type { ImageInputData } from "../image-input/types";
+import type { VersionData } from "../version/types";
 import { usePreview } from "../image-input/usePreview";
 import type { NodeViewProps } from "../types";
 import { FUSION_INPUTS, FUSION_OUTPUTS } from "./ports";
 import { startFusion, useFusionStart } from "./start";
-import { readMode, type FusionConfig, type FusionData } from "./types";
+import { readStyle, type FusionConfig, type FusionData } from "./types";
 
 const t = copy.nodes.fusion;
 
@@ -45,20 +46,23 @@ export function runStatus(run: DerivedRun | null, starting: boolean): NodeStatus
   }
 }
 
-/** Upstream photo for one slot: node, preview URL and identified species. */
+/** Upstream input for one slot: a photo (preview, identified species) or an earlier creature (its image and title). */
 function useSlot(fusionId: string, port: "a" | "b") {
   const nodes = useGraph((s) => s.nodes);
   const edges = useGraph((s) => s.edges);
   const up = upstreamNode({ nodes, edges }, fusionId, port);
-  const data = up?.data as ImageInputData | undefined;
-  const preview = usePreview(data ?? {});
-  return { up, preview, species: displaySpecies(data?.species) };
+  const isVersion = up?.type === "version";
+  const data = !isVersion ? (up?.data as ImageInputData | undefined) : undefined;
+  const photoPreview = usePreview(data ?? {});
+  const version = isVersion ? (up!.data as VersionData).version : null;
+  if (isVersion) return { up, isVersion, preview: version ? evo().imageUrl(version.imageUrl) : null, species: version?.title ?? null };
+  return { up, isVersion, preview: photoPreview, species: displaySpecies(data?.species) };
 }
 
 /** One parent: the connected photo with its identified name, or a name field (the contract's fallback). */
 function ParentSlot({ nodeId, port, name, disabled }: { nodeId: string; port: "a" | "b"; name: string; disabled: boolean }) {
   const slot = port.toUpperCase() as "A" | "B";
-  const { up, preview, species } = useSlot(nodeId, port);
+  const { up, isVersion, preview, species } = useSlot(nodeId, port);
   const inputId = useId();
   const setName = (v: string) =>
     useGraph.getState().updateNodeData<FusionData>(nodeId, (d) => ({ ...d, names: { ...(d.names ?? { a: "", b: "" }), [port]: v } }));
@@ -72,7 +76,7 @@ function ParentSlot({ nodeId, port, name, disabled }: { nodeId: string; port: "a
         <span className="donor-chip__text">
           <span className="sr-only">{t.slot(slot)}: </span>
           <span className="donor-chip__name">{species ?? t.photo}</span>
-          <span className="donor-chip__meta">{species ? t.identified : t.identifiedOnRun}</span>
+          <span className="donor-chip__meta">{isVersion ? t.earlierCreature : species ? t.identified : t.identifiedOnRun}</span>
         </span>
       </div>
     );
@@ -129,9 +133,8 @@ export function FusionView({ node, selected, issues }: NodeViewProps<FusionConfi
   const readOnly = useGraph((s) => s.readOnly);
   const connectivity = useConnectivity((s) => s.status);
   const { capped } = useCapped();
-  const route = useRoute();
   const names = node.data.names ?? { a: "", b: "" };
-  const mode = readMode(node.config);
+  const style = readStyle(node.config);
 
   const active = starting || Boolean(run && !isTerminal(run.status));
   const now = useNow(Boolean(run && !isTerminal(run.status)), 1000);
@@ -141,7 +144,6 @@ export function FusionView({ node, selected, issues }: NodeViewProps<FusionConfi
   const status = runStatus(run, starting) ?? (blocking.length ? { tone: "idle" as const, label: copy.status.idle } : { tone: "idle" as const, label: copy.status.ready });
   const shownError = startError ?? null;
   const countdown = useCountdown(shownError, () => void startFusion(node.id));
-  const traceOpen = route.view === "lab" && route.runId === runId;
   const disabledReason = blocking[0]?.message ?? (capped ? t.capped : null);
   // The CAP_REACHED error already says it; don't repeat it as a hint.
   const showHint = Boolean(disabledReason) && !(shownError?.code === "CAP_REACHED" && !blocking.length);
@@ -171,15 +173,9 @@ export function FusionView({ node, selected, issues }: NodeViewProps<FusionConfi
       footer={
         <>
           {active ? (
-            runId ? (
-              <Button variant="primary" icon="info" className="nodrag fusion-node__trace" onClick={() => navigate({ view: "lab", runId })} disabled={traceOpen}>
-                {traceOpen ? t.traceOpen : t.openTrace}
-              </Button>
-            ) : (
-              <Button variant="primary" icon="fusion" className="nodrag fusion-node__make" busy disabled>
-                {t.starting}
-              </Button>
-            )
+            <Button variant="primary" icon="fusion" className="nodrag fusion-node__make" busy disabled>
+              {runId ? t.generating : t.starting}
+            </Button>
           ) : (
             <Button
               variant="primary"
@@ -192,11 +188,6 @@ export function FusionView({ node, selected, issues }: NodeViewProps<FusionConfi
               {label}
             </Button>
           )}
-          {run && !active && runId && !traceOpen ? (
-            <Button variant="ghost" size="sm" className="nodrag" onClick={() => navigate({ view: "lab", runId })}>
-              {t.openTrace}
-            </Button>
-          ) : null}
           {since && run && !isTerminal(run.status) ? (
             <span className="node__timer" aria-label={`${t.elapsed} ${formatElapsed(elapsed)}`}>
               {formatElapsed(elapsed)}
@@ -213,17 +204,17 @@ export function FusionView({ node, selected, issues }: NodeViewProps<FusionConfi
         <ParentSlot nodeId={node.id} port="b" name={names.b} disabled={readOnly || active} />
       </div>
       <div className="fusion-node__mode">
-        <p className="fusion-node__mode-kicker" id={`${node.id}-mode`}>
-          {t.mode}
+        <p className="fusion-node__mode-kicker" id={`${node.id}-style`}>
+          {t.style}
         </p>
         <SegmentedTabs
-          label={t.mode}
-          value={mode}
-          onChange={(v) => useGraph.getState().updateNodeConfig<FusionConfig>(node.id, (c) => ({ ...c, mode: v as Mode }))}
-          items={MODES.map((m) => ({ value: m, label: copy.modes[m].label }))}
+          label={t.style}
+          value={style}
+          onChange={(v) => useGraph.getState().updateNodeConfig<FusionConfig>(node.id, (c) => ({ ...c, style: v as Style }))}
+          items={STYLES.map((s) => ({ value: s, label: copy.styles[s].label }))}
           disabled={active || readOnly}
         />
-        <p className="fusion-node__mode-hint">{copy.modes[mode].hint}</p>
+        <p className="fusion-node__mode-hint">{copy.styles[style].hint}</p>
       </div>
       <div className="fusion-node__messages" aria-live="polite">
         {active ? (

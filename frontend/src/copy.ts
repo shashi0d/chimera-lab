@@ -78,6 +78,13 @@ export const copy = {
     accepted: "JPEG, PNG or WebP photos of one animal each. Photos stay on this device until you make the creature, and are not stored after.",
     dropHere: "Drop to add to the canvas",
   },
+  styles: {
+    real: { label: "Real", hint: "A photorealistic wildlife photo." },
+    drawing: { label: "Drawing", hint: "A hand-drawn pencil and ink illustration." },
+    anime: { label: "Anime", hint: "Clean anime line art with cel shading." },
+    comic: { label: "Comic", hint: "Bold ink outlines and halftone shading." },
+    cartoon: { label: "Cartoon", hint: "Cute, simple shapes and flat colours." },
+  },
   modes: {
     realistic: { label: "Realistic", hint: "As real as it gets: every body part has to work, and only colour, texture and material may be invented." },
     speculative: { label: "Speculative", hint: "A plausible future animal: invented structures are allowed when the body could carry them." },
@@ -114,7 +121,7 @@ export const copy = {
     fusion: {
       label: "Fusion",
       title: "Fusion",
-      kicker: "Agent fusion",
+      kicker: "Fusion",
       swap: "Swap A and B",
       slot: (s: string) => `Animal ${s}`,
       photo: "Photo",
@@ -130,6 +137,10 @@ export const copy = {
       traceOpen: "Trace is open",
       elapsed: "Elapsed",
       mode: "Mode",
+      style: "Art style",
+      generating: "Generating…",
+      earlierCreature: "earlier creature",
+      imagePending: "Wait for the connected image to finish.",
       capped: "Today's live runs are used up. The gallery is still open.",
       pausedOffline: "Connection lost. The run keeps going on the server; the trace catches up when you're back.",
       retryIn: (s: number) => `Trying again in ${s}s`,

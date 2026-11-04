@@ -4,11 +4,17 @@
 export type Mode = "realistic" | "speculative" | "mythic";
 export const MODES: readonly Mode[] = ["realistic", "speculative", "mythic"];
 
+/** The art style a Fusion renders in (prompt mode). */
+export type Style = "real" | "drawing" | "anime" | "comic" | "cartoon";
+export const STYLES: readonly Style[] = ["real", "drawing", "anime", "comic", "cartoon"];
+
 export interface Parent {
   commonName: string;
   scientificName: string | null;
-  source: "image" | "name";
+  source: "image" | "name" | "version";
   confidence: number | null;
+  /** Set when the parent is an earlier generated creature (source "version"). */
+  versionId?: string;
 }
 
 export type Slot = "sire" | "dam";
@@ -44,6 +50,10 @@ export type StartResult = ({ kind: "accepted" } & RunAccepted) | ({ kind: "ident
 
 export interface StartInput {
   mode: Mode;
+  style?: Style;
+  /** An earlier generated creature as the parent: its image goes to the image model. */
+  sireVersionId?: string | null;
+  damVersionId?: string | null;
   sireImage?: Blob | null;
   damImage?: Blob | null;
   sireName?: string | null;
@@ -199,6 +209,8 @@ export function isTerminalEvent(e: AgentEvent): boolean {
 
 export interface Limits {
   liveRuns: "open" | "capped";
+  /** Set when the server has no limits (EVO_LIMITS_ENABLED off): the numbers are counts only. */
+  unlimited?: boolean;
   dailyTotal: { used: number; limit: number; resetsAt: string };
   visitor: { used: number; limit: number };
   concurrent: { running: number; limit: number; queued: number };

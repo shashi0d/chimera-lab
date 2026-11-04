@@ -14,7 +14,7 @@ export const fusionNode = defineNode<FusionConfig, FusionData>({
   addable: true,
   inputs: FUSION_INPUTS,
   outputs: FUSION_OUTPUTS,
-  defaultConfig: { mode: "realistic" },
+  defaultConfig: { mode: "realistic", style: "real" },
   defaultData: () => ({ activeRunId: null, runIds: [], names: { a: "", b: "" } }),
   validate: validateFusion,
   View: FusionView,

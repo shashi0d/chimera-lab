@@ -30,6 +30,7 @@ def make_settings(tmp_path: Path, **overrides: Any) -> Settings:
         retry_base_seconds=0.001,
         frontend_dist=str(tmp_path / "no-frontend"),  # tests that serve a frontend build their own dist
         evo_seed_on_start=False,
+        evo_limits_enabled=True,  # the cap tests run with limits on (the app's default is off)
     )
     base.update(overrides)
     return Settings(**base)

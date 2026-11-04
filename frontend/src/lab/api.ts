@@ -17,6 +17,29 @@ export interface LabVersion {
   isFinal: boolean;
   publicationId: string | null;
   title: string | null;
+  style?: string | null;
+  /** The animal card, once generated (on demand). */
+  card?: AnimalCard | null;
+}
+
+/** A generated creature's profile, written by the vision model from the image and how it was made. */
+export interface AnimalCard {
+  name: string;
+  scientific_style_name: string;
+  tagline: string;
+  inherited: { parent: string; traits: string[] }[];
+  appearance: string;
+  size: string;
+  habitat: string;
+  diet: string;
+  behaviour: string;
+  abilities: string[];
+  weaknesses: string[];
+  fun_fact: string;
+  /** The model's reasoning for this card. */
+  reasoning: string;
+  model?: string;
+  createdAt?: string;
 }
 
 export type JobStatus = "queued" | "running" | "succeeded" | "failed" | "interrupted";
@@ -53,9 +76,10 @@ export interface CollaboratorAnswer {
 
 export interface LabLimits {
   used: number;
-  limit: number;
+  /** Null when the server has no limits. */
+  limit: number | null;
   totalUsed: number;
-  totalLimit: number;
+  totalLimit: number | null;
   resetsAt: string;
 }
 
@@ -95,6 +119,12 @@ export const labApi = {
   },
   async review(versionId: string): Promise<Review> {
     return (await request<Review>(`/evo/lab/versions/${enc(versionId)}/review`, { method: "POST", headers: baseHeaders() })).data;
+  },
+  async card(versionId: string): Promise<AnimalCard> {
+    return (await request<AnimalCard>(`/evo/lab/versions/${enc(versionId)}/card`, { method: "POST", headers: baseHeaders(), timeoutMs: 120000 })).data;
+  },
+  async savedCard(versionId: string): Promise<AnimalCard | null> {
+    return (await request<{ card: AnimalCard | null }>(`/evo/lab/versions/${enc(versionId)}/card`, { headers: baseHeaders() })).data.card;
   },
   async savedReview(versionId: string): Promise<Review | null> {
     return (await request<{ review: Review | null }>(`/evo/lab/versions/${enc(versionId)}/review`, { headers: baseHeaders() })).data.review;

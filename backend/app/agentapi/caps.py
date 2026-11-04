@@ -54,7 +54,13 @@ class Caps:
         self.db, self.settings = db, settings
         self._recent: dict[str, deque[float]] = defaultdict(deque)
 
+    @property
+    def enabled(self) -> bool:
+        return bool(getattr(self.settings, "evo_limits_enabled", True))
+
     def rate_limit(self, ip: str) -> None:
+        if not self.enabled:
+            return
         per_minute = self.settings.evo_runs_per_minute_per_ip
         now = time.monotonic()
         q = self._recent[ip]
@@ -76,6 +82,8 @@ class Caps:
 
     async def check(self, visitor: str) -> None:
         """Refuse before any work (no identify call is spent on a capped request)."""
+        if not self.enabled:
+            return
         total, mine = await self.used(visitor)
         if total >= self.settings.evo_daily_runs:
             raise cap_error("daily_total", self.settings.evo_daily_runs)
@@ -86,6 +94,9 @@ class Caps:
         """Count one run; increment first, then roll back if a racing request took the last one."""
         total_key, mine_key = self._keys(visitor)
         total = await self.db.incr(total_key, 1)
+        if not self.enabled:  # counted, never refused
+            await self.db.incr(mine_key, 1)
+            return
         if total > self.settings.evo_daily_runs:
             await self.db.incr(total_key, -1)
             raise cap_error("daily_total", self.settings.evo_daily_runs)
@@ -99,8 +110,8 @@ class Caps:
         """`visitor` is the signed-in user's id; signed out, only the shared numbers are known."""
         total, mine = await self.used(visitor) if visitor else (await self.db.incr(self._keys("-")[0], 0), 0)
         s = self.settings
-        capped = total >= s.evo_daily_runs or mine >= s.evo_visitor_daily_runs
-        return {"liveRuns": "capped" if capped else "open",
+        capped = self.enabled and (total >= s.evo_daily_runs or mine >= s.evo_visitor_daily_runs)
+        return {"liveRuns": "capped" if capped else "open", "unlimited": not self.enabled,
                 "dailyTotal": {"used": total, "limit": s.evo_daily_runs, "resetsAt": resets_at()},
                 "visitor": {"used": mine, "limit": s.evo_visitor_daily_runs},
                 "concurrent": {"running": running, "limit": s.evo_max_concurrent_runs, "queued": queued}}

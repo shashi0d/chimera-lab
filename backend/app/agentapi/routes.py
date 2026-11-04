@@ -19,8 +19,9 @@ from app.agentapi import uploads as U
 from app.agentapi.caps import Caps, client_ip
 from app.agentapi.creature import parent_view
 from app.agentapi.files import PublicFiles, content_type_for
+from app.agentapi.fusion_prompt import DEFAULT_STYLE, STYLES
 from app.agentapi.gallery import Creatures
-from app.agentapi.jobs import AgentDriver, ChoiceRefused, Job, JobRunner
+from app.agentapi.jobs import AgentDriver, ChoiceRefused, Job, JobRunner, PromptDriver
 from app.agentapi.store import TERMINAL, RunStore, snapshot
 from app.auth import User, current_user, require_user
 from app.errors import ChimeraError
@@ -42,8 +43,9 @@ class AgentApi:
         self.creatures = Creatures(services.db, files, services.settings)
         self.runner = JobRunner(services, self.store, files, self.creatures)
         self.caps = Caps(services.db, services.settings)
-        # Builds the driver for one run. Tests replace it; the app always drives the live agent.
-        self.driver_factory: Any = lambda: AgentDriver(services)
+        # Builds the driver for one run (EVO_FUSION_MODE: prompt or algorithm). Tests replace it.
+        self.driver_factory: Any = lambda: (PromptDriver(services) if services.settings.evo_fusion_mode == "prompt"
+                                            else AgentDriver(services))
 
 
 def api(request: Request) -> AgentApi:
@@ -94,15 +96,30 @@ async def start_run(request: Request) -> Response:
     if mode not in U.MODES:
         raise _err(ErrorCode.VALIDATION_FAILED, "Choose a mode: realistic, speculative or mythic.", 422,
                    field="mode", modes=list(U.MODES))
+    style = str(form.get("style") or DEFAULT_STYLE).strip().lower()
+    if style not in STYLES:
+        raise _err(ErrorCode.VALIDATION_FAILED, "Choose an art style: " + ", ".join(STYLES) + ".", 422,
+                   field="style", styles=list(STYLES))
     names: dict[str, str | None] = {s: _clean_name(form.get(f"{s}Name"), s) for s in U.SLOTS}
-    photos: dict[str, bytes] = {}
+    photos: dict[str, bytes] = {}  # identified by the vision model
+    refs: dict[str, bytes] = {}  # sent to the image model as references (prompt mode)
+    versions: dict[str, str] = {}
     for s in U.SLOTS:
+        vid = form.get(f"{s}VersionId")
+        if isinstance(vid, str) and vid.strip():
+            # An earlier generated creature: its image is the reference, its title the name.
+            vdoc = await _own_version(a, vid.strip(), user, s)
+            refs[s] = await a.files.get(vdoc["imageKey"])
+            names[s] = names[s] or str(vdoc.get("title") or "an earlier creature")
+            versions[s] = vdoc["id"]
+            continue
         f = form.get(f"{s}Image")
         if isinstance(f, UploadFile) and (f.filename or f.size):
             data = await f.read()
             await f.close()
-            if data and not names[s]:  # a name confirms an identify choice: the photo is not needed then
-                photos[s] = await U.prepare(data, s, svc)
+            if data:
+                # Every photo is read (a person or a non-animal is refused); a typed name wins over the reading.
+                photos[s] = refs[s] = await U.prepare(data, s, svc)
             del data
         if not photos.get(s) and not names[s]:
             raise _err(ErrorCode.VALIDATION_FAILED, f"Add a photo or a name for the {s}.", 422, slot=s)
@@ -111,6 +128,9 @@ async def start_run(request: Request) -> Response:
     del photos
     if choice is not None:
         return JSONResponse(choice, status_code=200)
+    for s, parent in (("sire", sire), ("dam", dam)):
+        if s in versions:
+            parent.update(source="version", versionId=versions[s])
     driver = a.driver_factory()
 
     await a.caps.take(user.id)
@@ -118,13 +138,21 @@ async def start_run(request: Request) -> Response:
     ts = now_iso()
     doc = {"runId": run_id, "status": "queued", "position": None, "sire": sire, "dam": dam, "mode": mode,
            "createdAt": ts, "updatedAt": ts, "lastEventId": 0, "creatureId": None, "error": None,
-           "pendingChoice": None, "events": [], "owner": user.id}
+           "pendingChoice": None, "events": [], "owner": user.id, "style": style}
     job = Job(doc=doc, driver=driver, runner=a.runner)
+    job.extra["refs"] = refs  # in memory only: photos are never stored
     await a.runner.submit(job)
     body = {"runId": run_id, "status": doc["status"], "position": doc["position"],
             "eventsUrl": f"/evo/agent/runs/{run_id}/events", "runUrl": f"/evo/agent/runs/{run_id}",
-            "sire": sire, "dam": dam, "mode": mode}
+            "sire": sire, "dam": dam, "mode": mode, "style": style}
     return JSONResponse(body, status_code=202)
+
+
+async def _own_version(a: AgentApi, version_id: str, user: User, slot: str) -> dict[str, Any]:
+    doc = await a.services.db.get("assets", version_id)
+    if not doc or doc.get("kind") != "lab_version" or doc.get("owner") != user.id or not doc.get("imageKey"):
+        raise _err(ErrorCode.VALIDATION_FAILED, f"The image for the {slot} is unavailable.", 422, slot=slot)
+    return doc
 
 
 async def _identify(a: AgentApi, photos: dict[str, bytes], names: dict[str, str | None],
@@ -139,11 +167,12 @@ async def _identify(a: AgentApi, photos: dict[str, bytes], names: dict[str, str 
             parents[s] = parent_view(r.common_name, r.scientific_name, "image", round(r.confidence, 2))
     for s in U.SLOTS:
         r = readings.get(s)
-        if r is not None and (not r.common_name or r.confidence < a.settings.evo_identify_min_confidence):
+        if r is not None and not names[s] and (not r.common_name or
+                                               r.confidence < a.settings.evo_identify_min_confidence):
             ident = {k: (None if k == s else v) for k, v in parents.items()}
             for k in U.SLOTS:
                 rk = readings.get(k)
-                if rk is not None and k != s and (not rk.common_name or
+                if rk is not None and k != s and not names[k] and (not rk.common_name or
                                                   rk.confidence < a.settings.evo_identify_min_confidence):
                     ident[k] = None
             return parents["sire"], parents["dam"], U.needs_choice(s, r, ident)  # type: ignore[return-value]

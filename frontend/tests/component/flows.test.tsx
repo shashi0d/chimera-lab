@@ -141,7 +141,7 @@ describe("making a creature through the agent API (contract POST /evo/agent/runs
     await addImageFiles([], { x: 0, y: 0 });
     useGraph.getState().addNode({ id: "f", type: "fusion", version: 3, position: { x: 0, y: 0 }, config: { mode: "mythic" }, data: { activeRunId: null, runIds: [], names: { a: " Indian  pangolin ", b: "horse" } } });
     await startFusion("f");
-    expect(spy).toHaveBeenCalledWith({ mode: "mythic", sireName: "Indian pangolin", damName: "horse" });
+    expect(spy).toHaveBeenCalledWith({ mode: "mythic", style: "real", sireName: "Indian pangolin", damName: "horse" });
     const runId = fusionData().activeRunId as string;
     expect(runId).toMatch(/^run_fx_success-/);
     expect(window.location.search).toBe(`?run=${encodeURIComponent(runId)}`);
@@ -191,7 +191,7 @@ describe("making a creature through the agent API (contract POST /evo/agent/runs
     expect(result.current).toMatchObject({ capped: true, resetsAt: "2026-11-03T00:00:00Z" });
   });
 
-  it("identify choice: no run yet; confirming posts again with names only", async () => {
+  it("identify choice: no run yet; confirming posts again with the names and the photos (they go to the image model)", async () => {
     mockConfig.scenario = "identify_choice";
     const spy = vi.spyOn(mockTransport, "startRun");
     await addImageFiles([file("a.jpg"), file("b.jpg")], { x: 0, y: 0 });
@@ -199,7 +199,13 @@ describe("making a creature through the agent API (contract POST /evo/agent/runs
     expect(useFusionStart.getState().identify).toMatchObject({ choice: { slot: "sire" } });
     expect(fusionData().activeRunId ?? null).toBeNull();
     await confirmIdentify("Galápagos tortoise");
-    expect(spy.mock.calls[1]![0]).toEqual({ mode: "realistic", sireName: "Galápagos tortoise", damName: "domestic goat" });
+    const again = spy.mock.calls[1]![0];
+    expect(again).toMatchObject({ mode: "realistic", style: "real", sireName: "Galápagos tortoise", damName: "domestic goat" });
+    const first = spy.mock.calls[0]![0];
+    expect(again.sireImage).toBeTruthy();
+    expect(again.sireImage).toEqual(first.sireImage);
+    expect(again.damImage).toBeTruthy();
+    expect(again.damImage).toEqual(first.damImage);
     expect(fusionData().activeRunId).toMatch(/^run_fx_host_tie-/);
   });
 
