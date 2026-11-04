@@ -50,7 +50,7 @@ const imgs = () => useGraph.getState().nodes.filter((x) => x.type === "image-inp
 const fusionId = () => useGraph.getState().nodes.find((x) => x.type === "fusion")?.id as string;
 const fusionData = () => useGraph.getState().nodes.find((x) => x.type === "fusion")?.data as FusionData;
 
-describe("adding images (TASKSHEET 7.1, R1: kept on this device until a run starts)", () => {
+describe("adding images", () => {
   it("drop of 2 on an empty canvas: two ready nodes and a fusion node, both connected; nothing uploaded", async () => {
     const fetchSpy = vi.spyOn(globalThis, "fetch");
     await addImageFiles([file("lion.jpg"), file("tiger.jpg")], { x: 0, y: 0 });
@@ -125,23 +125,23 @@ describe("workspace restore (the signed-in user's canvas)", () => {
     await restoreWorkspace("user-1", "main");
     const byId = Object.fromEntries(useGraph.getState().nodes.map((x) => [x.id, x]));
     expect(byId.a?.data).toMatchObject({ status: "ready", blobKey: "k" });
-    expect(byId.f?.config).toEqual({ mode: "realistic" });
+    expect(byId.f?.config).toEqual({ style: "real" });
     expect(byId.f?.data).toMatchObject({ activeRunId: null, runIds: [] });
     expect(byId.r?.type).toBe("result"); // the retired Result node: shown as "unsupported", not lost
     expect(byId.c?.type).toBe("field-card"); // kept for the "unsupported" placeholder
   });
 });
 
-describe("making a creature through the agent API (contract POST /evo/agent/runs)", () => {
+describe("making a creature (POST /evo/agent/runs)", () => {
   it("typed names only: posts the names, attaches the run, puts its id in the URL, and the finished creature becomes image V1", async () => {
     const stop = registerRunHandlers();
     const spy = vi.spyOn(mockTransport, "startRun");
-    const v1 = (runId: string): LabVersion => ({ id: `labv_run_${runId}`, parentId: null, runId, creatureId: "crt_fx_b09", operation: "fusion", instruction: "Indian pangolin × horse (mythic)", imageUrl: "/evo/files/runs/x/img2.webp", createdAt: "2026-11-03T00:00:00Z", isFinal: false, publicationId: null, title: "Indian pangolin × horse" });
+    const v1 = (runId: string): LabVersion => ({ id: `labv_run_${runId}`, parentId: null, runId, creatureId: "crt_fx_b09", operation: "fusion", instruction: "Indian pangolin × horse", imageUrl: "/evo/files/runs/x/img2.webp", createdAt: "2026-11-03T00:00:00Z", isFinal: false, title: "Indian pangolin × horse" });
     const fromRun = vi.spyOn(labApi, "versionFromRun").mockImplementation(async (runId) => v1(runId));
     await addImageFiles([], { x: 0, y: 0 });
-    useGraph.getState().addNode({ id: "f", type: "fusion", version: 3, position: { x: 0, y: 0 }, config: { mode: "mythic" }, data: { activeRunId: null, runIds: [], names: { a: " Indian  pangolin ", b: "horse" } } });
+    useGraph.getState().addNode({ id: "f", type: "fusion", version: 3, position: { x: 0, y: 0 }, config: { style: "real" }, data: { activeRunId: null, runIds: [], names: { a: " Indian  pangolin ", b: "horse" } } });
     await startFusion("f");
-    expect(spy).toHaveBeenCalledWith({ mode: "mythic", style: "real", sireName: "Indian pangolin", damName: "horse" });
+    expect(spy).toHaveBeenCalledWith({ style: "real", sireName: "Indian pangolin", damName: "horse" });
     const runId = fusionData().activeRunId as string;
     expect(runId).toMatch(/^run_fx_success-/);
     expect(window.location.search).toBe(`?run=${encodeURIComponent(runId)}`);
@@ -184,7 +184,7 @@ describe("making a creature through the agent API (contract POST /evo/agent/runs
 
   it("429 CAP_REACHED switches the app to the capped state", async () => {
     mockConfig.scenario = "cap_daily";
-    useGraph.getState().addNode({ id: "f", type: "fusion", version: 3, position: { x: 0, y: 0 }, config: { mode: "realistic" }, data: { names: { a: "lion", b: "tiger" } } });
+    useGraph.getState().addNode({ id: "f", type: "fusion", version: 3, position: { x: 0, y: 0 }, config: { style: "real" }, data: { names: { a: "lion", b: "tiger" } } });
     await startFusion("f");
     expect(useFusionStart.getState().errors.f?.code).toBe("CAP_REACHED");
     const { result } = renderHook(() => useCapped());
@@ -200,18 +200,18 @@ describe("making a creature through the agent API (contract POST /evo/agent/runs
     expect(fusionData().activeRunId ?? null).toBeNull();
     await confirmIdentify("Galápagos tortoise");
     const again = spy.mock.calls[1]![0];
-    expect(again).toMatchObject({ mode: "realistic", style: "real", sireName: "Galápagos tortoise", damName: "domestic goat" });
+    expect(again).toMatchObject({ style: "real", sireName: "Galápagos tortoise", damName: "domestic goat" });
     const first = spy.mock.calls[0]![0];
     expect(again.sireImage).toBeTruthy();
     expect(again.sireImage).toEqual(first.sireImage);
     expect(again.damImage).toBeTruthy();
     expect(again.damImage).toEqual(first.damImage);
-    expect(fusionData().activeRunId).toMatch(/^run_fx_host_tie-/);
+    expect(fusionData().activeRunId).toMatch(/^run_fx_identify-/);
   });
 
   it("a double click starts one run", async () => {
     const spy = vi.spyOn(mockTransport, "startRun");
-    useGraph.getState().addNode({ id: "f", type: "fusion", version: 3, position: { x: 0, y: 0 }, config: { mode: "realistic" }, data: { names: { a: "lion", b: "tiger" } } });
+    useGraph.getState().addNode({ id: "f", type: "fusion", version: 3, position: { x: 0, y: 0 }, config: { style: "real" }, data: { names: { a: "lion", b: "tiger" } } });
     await Promise.all([startFusion("f"), startFusion("f")]);
     expect(spy).toHaveBeenCalledTimes(1);
     await settle(10);

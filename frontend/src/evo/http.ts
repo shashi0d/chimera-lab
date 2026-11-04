@@ -2,7 +2,7 @@ import { absoluteUrl, baseHeaders, parseError, reportNetwork, request } from "..
 import { ApiRequestError, toAppError } from "../api/errors";
 import { SseParser } from "./sse";
 import type { EventStream, EvoTransport, StreamHandlers } from "./transport";
-import { EVENT_TYPES, isTerminalEvent, type AgentEvent, type Creature, type GalleryPage, type Health, type Limits, type Publication, type RunSnapshot, type StartInput, type StartResult } from "./types";
+import { EVENT_TYPES, isTerminalEvent, type AgentEvent, type Health, type Limits, type RunSnapshot, type StartInput, type StartResult } from "./types";
 
 const TERMINAL_STATUS = new Set(["succeeded", "failed", "interrupted"]);
 export const STREAM = { backoffMs: [1000, 2000, 4000, 8000, 15000], idleMs: 45_000 };
@@ -164,7 +164,6 @@ export const httpTransport: EvoTransport = {
 
   async startRun(input: StartInput): Promise<StartResult> {
     const form = new FormData();
-    form.append("mode", input.mode);
     if (input.style) form.append("style", input.style);
     if (input.sireVersionId) form.append("sireVersionId", input.sireVersionId);
     if (input.damVersionId) form.append("damVersionId", input.damVersionId);
@@ -194,33 +193,8 @@ export const httpTransport: EvoTransport = {
     return streamRunEvents(runId, after, handlers);
   },
 
-  async postChoice(runId, choiceId, answer) {
-    await request<{ accepted: boolean }>(`/evo/agent/runs/${enc(runId)}/choice`, {
-      method: "POST",
-      headers: headers({ "Content-Type": "application/json" }),
-      body: JSON.stringify({ choiceId, answer }),
-    });
-  },
-
   async getLimits() {
     const { data } = await request<Limits>("/evo/agent/limits", { headers: headers(), timeoutMs: 10000 });
-    return data;
-  },
-
-  async getCreature(id) {
-    const { data } = await request<Creature>(`/evo/creatures/${enc(id)}`, { headers: headers(), timeoutMs: 15000 });
-    return data;
-  },
-
-  async getPublication(id) {
-    const { data } = await request<Publication>(`/evo/publications/${enc(id)}`, { headers: headers(), timeoutMs: 15000 });
-    return data;
-  },
-
-  async getGallery(cursor, limit = 24) {
-    const q = new URLSearchParams({ limit: String(limit) });
-    if (cursor) q.set("cursor", cursor);
-    const { data } = await request<GalleryPage>(`/evo/gallery?${q.toString()}`, { headers: headers(), timeoutMs: 15000 });
     return data;
   },
 

@@ -10,7 +10,7 @@ export interface ErrorPresentation {
 
 /**
  * One user-facing message per error code. Raw server/upstream text is never shown: the R1 refusal and cap
- * wording follows docs/api_contract.md, written here so it can be edited in one place.
+ * wording follows written here so it can be edited in one place.
  */
 export const errorMessages: Record<ErrorCode, ErrorPresentation> = {
   VALIDATION_FAILED: { title: "Something in the request wasn't valid.", fix: "Check both animals and try again.", retry: false },
@@ -27,7 +27,7 @@ export const errorMessages: Record<ErrorCode, ErrorPresentation> = {
   UPSTREAM_ERROR: { title: "The image model stopped answering, so this run ended.", fix: "Nothing was charged to you. Try again in a few minutes.", retry: true },
   MODEL_REFUSED: { title: "The image model declined this pair.", fix: "Try a different photo of either animal.", retry: false },
   BUDGET_EXCEEDED: { title: "This run reached its budget and stopped.", fix: "Start a new creature, or come back tomorrow.", retry: false },
-  CAP_REACHED: { title: "Today's live creature runs are used up.", fix: "The gallery is still open. New runs open again tomorrow.", retry: false },
+  CAP_REACHED: { title: "Today's Fusion runs are used up.", fix: "New runs open again tomorrow.", retry: false },
   RUN_NOT_FOUND: { title: "This run can't be found.", fix: "It may have expired. Start a new creature instead.", retry: false },
   RUN_INTERRUPTED: { title: "The server restarted while this creature was being made.", fix: "Nothing was charged to you. Start it again.", retry: true },
   NOT_FOUND: { title: "That item no longer exists.", retry: false },
@@ -48,7 +48,7 @@ function utc(iso: unknown): string | null {
 export function presentError(err: AppError): ErrorPresentation & { errorId?: string } {
   let p = errorMessages[err.code] ?? errorMessages.UNKNOWN;
   const at = err.code === "CAP_REACHED" ? utc((err.details as { resetsAt?: unknown } | undefined)?.resetsAt) : null;
-  if (at) p = { ...p, fix: `The gallery is still open; new runs open again at ${at}.` };
+  if (at) p = { ...p, fix: `New runs open again at ${at}.` };
   const errorId = err.code === "INTERNAL" || err.code === "UNKNOWN" ? err.errorId ?? undefined : undefined;
   return { ...p, retry: p.retry && err.retryable !== false, errorId };
 }

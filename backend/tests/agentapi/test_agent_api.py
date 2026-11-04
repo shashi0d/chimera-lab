@@ -1,7 +1,7 @@
-"""The agent API (docs/api_contract.md) with sign-in: runs, SSE events, choices, caps, queue, leases, the gallery.
+"""The Fusion API with sign-in: runs, SSE events, uploads and identify, caps, queue, leases, files and serving.
 
 Runs go through the real job runner, event store and SSE path. The work itself is a scripted driver (fast and
-precise about events), or the engine's real agent loop over its offline adapters. No paid call is made.
+precise about events). No paid call is made.
 """
 
 from __future__ import annotations
@@ -17,8 +17,8 @@ import httpx
 import pytest
 from PIL import Image
 
-from app.agentapi.creature import short_args, visible
-from app.agentapi.jobs import AgentDriver, Job
+from app.agentapi.creatures import build_creature
+from app.agentapi.jobs import Job
 from app.main import create_app
 from app.util import new_id, now_iso
 from tests.conftest import IMAGES, FakeAuth, auth, make_settings, offline_services
@@ -32,37 +32,31 @@ def png(color: str = "blue") -> bytes:
 
 
 class ScriptedDriver:
-    """A run that emits a few steps, optionally asks the host-tie question, renders one image and saves a creature."""
+    """A run that emits one step, renders one image and saves a creature (optionally failing or waiting first)."""
 
-    def __init__(self, ask: bool = False, fail: str | None = None, hold: asyncio.Event | None = None) -> None:
-        self.ask, self.fail, self.hold = ask, fail, hold
+    def __init__(self, fail: str | None = None, hold: asyncio.Event | None = None) -> None:
+        self.fail, self.hold = fail, hold
 
     async def run(self, job: Job) -> dict[str, Any]:
         from app.agentapi.jobs import RunFailed
 
-        await job.emit("step", n=1, tool="plan", args={}, summary="planned the body", reason="", cards=[], ok=True,
+        await job.emit("step", n=1, tool="render", args={}, summary="rendered", reason="", cards=[], ok=True,
                        error=None)
         if self.hold is not None:
             await self.hold.wait()
         if self.fail:
             raise RunFailed(self.fail, "The model service returned an error.", True)
-        n = 2
-        if self.ask:
-            answer = await job.ask("host_tie", "Which animal is the host?", ["tortoise", "domestic goat"], n)
-            await job.emit("step", n=n, tool="ask_user", args={}, summary=f"answer: {answer}" if answer else
-                           "no answer: the agent decides", reason="", cards=[], ok=True, error=None)
-            n += 1
         url = await job.runner.files.put(f"runs/{job.run_id}/img1.png", png(), "image/png")
-        await job.emit("render", n=n, imageId="img1", url=url, kind="render", parent=None, method="generate",
-                       rendersUsed=1, rendersLeft=3)
-        cid = new_id("crt")
+        await job.emit("render", n=1, imageId="img1", url=url, kind="render", parent=None, method="prompt",
+                       rendersUsed=1, rendersLeft=0)
         doc = job.doc
-        view = {"creatureId": cid, "createdAt": now_iso(), "title": f"{doc['sire']['commonName']} × "
-                f"{doc['dam']['commonName']}", "sire": doc["sire"], "dam": doc["dam"], "mode": doc["mode"],
-                "imageUrl": url, "showcase": False, "runId": job.run_id}
-        await job.runner.creatures.save(view, "run", trace=[], owner=doc.get("owner"))
-        return {"creatureId": cid, "imageId": "img1", "imageUrl": url, "remainingFailures": [], "hiddenChecks": 0,
-                "agree": True, "stop": "finalized"}
+        view = build_creature(creature_id=new_id("crt"), created_at=now_iso(), sire=doc["sire"], dam=doc["dam"],
+                              image_url=url, generation={"operation": "fusion", "prompt": "p",
+                                                         "parents": [doc["sire"], doc["dam"]]},
+                              run_id=job.run_id, seconds=0.1)
+        await job.runner.creatures.save(view, doc.get("owner"))
+        return {"creatureId": view["creatureId"], "imageId": "img1", "imageUrl": url, "remainingFailures": [],
+                "hiddenChecks": 0, "agree": True, "stop": "finalized"}
 
 
 def api_settings(tmp_path: Path, **over: Any):  # type: ignore[no-untyped-def]
@@ -106,10 +100,10 @@ def photos(sire: str = "lion.jpg", dam: str = "red_fox.jpg") -> dict[str, Any]:
             "damImage": (dam, (IMAGES / dam).read_bytes(), "image/jpeg")}
 
 
-async def post_run(c: httpx.AsyncClient, mode: str = "realistic", files: dict[str, Any] | None = None,
-                   data: dict[str, Any] | None = None, headers: dict[str, str] | None = None) -> httpx.Response:
-    return await c.post("/evo/agent/runs", data={"mode": mode, **(data or {})},
-                        files=photos() if files is None else files, headers=headers)
+async def post_run(c: httpx.AsyncClient, files: dict[str, Any] | None = None, data: dict[str, Any] | None = None,
+                   headers: dict[str, str] | None = None) -> httpx.Response:
+    return await c.post("/evo/agent/runs", data=data or {}, files=photos() if files is None else files,
+                        headers=headers)
 
 
 async def named_run(c: httpx.AsyncClient, **kw: Any) -> httpx.Response:
@@ -175,17 +169,11 @@ async def test_starting_and_reading_a_run_needs_sign_in(client):
 
 async def test_a_run_is_visible_only_to_its_owner(client):
     rid = (await named_run(client)).json()["runId"]
-    events = await events_of(client, rid)
+    await events_of(client, rid)  # the run finishes first
     other = auth("user-2")
     for path in (f"/evo/agent/runs/{rid}", f"/evo/agent/runs/{rid}/events"):
         r = await client.get(path, headers=other)
         assert r.status_code == 404 and r.json()["error"]["code"] == "RUN_NOT_FOUND"
-    r = await client.post(f"/evo/agent/runs/{rid}/choice", json={"choiceId": "x", "answer": "y"}, headers=other)
-    assert r.status_code == 404
-    cid = events[-1]["creatureId"]
-    assert (await client.get(f"/evo/creatures/{cid}")).status_code == 200
-    assert (await client.get(f"/evo/creatures/{cid}", headers=other)).status_code == 404
-    assert (await client.get(f"/evo/creatures/{cid}", headers={"Authorization": ""})).status_code == 404
 
 
 async def test_config_exposes_only_public_sign_in_settings(make_client):
@@ -235,45 +223,6 @@ async def test_unknown_run_is_404(client):
     for path in ("/evo/agent/runs/run_nope", "/evo/agent/runs/run_nope/events"):
         r = await client.get(path)
         assert r.status_code == 404 and r.json()["error"]["code"] == "RUN_NOT_FOUND"
-
-
-# ====================================================================== choices
-
-
-async def test_host_tie_waits_for_the_users_choice(make_client):
-    c = await make_client(driver=lambda: ScriptedDriver(ask=True))
-    rid = (await named_run(c)).json()["runId"]
-    pc = (await wait_status(c, rid, "needs_choice"))["pendingChoice"]
-    assert pc["kind"] == "host_tie" and pc["options"] == ["tortoise", "domestic goat"]
-    reader = asyncio.create_task(events_of(c, rid))
-    await asyncio.sleep(0.05)
-    bad = await c.post(f"/evo/agent/runs/{rid}/choice", json={"choiceId": pc["choiceId"], "answer": "giraffe"})
-    assert bad.status_code == 422
-    wrong = await c.post(f"/evo/agent/runs/{rid}/choice", json={"choiceId": "choice_nope", "answer": "tortoise"})
-    assert wrong.status_code == 409
-    r = await c.post(f"/evo/agent/runs/{rid}/choice", json={"choiceId": pc["choiceId"], "answer": "domestic goat"})
-    assert r.status_code == 200 and r.json() == {"accepted": True}
-    events = await reader
-    res = next(e for e in events if e["type"] == "choice_resolved")
-    assert res["answer"] == "domestic goat" and res["by"] == "user"
-    assert events[-1]["type"] == "finalize"
-    again = await c.post(f"/evo/agent/runs/{rid}/choice", json={"choiceId": pc["choiceId"], "answer": "tortoise"})
-    assert again.status_code == 409
-
-
-async def test_choice_expires_and_the_run_continues(make_client):
-    c = await make_client(driver=lambda: ScriptedDriver(ask=True), evo_choice_seconds=0.05)
-    events = await events_of(c, (await named_run(c)).json()["runId"])
-    res = next(e for e in events if e["type"] == "choice_resolved")
-    assert res["answer"] is None and res["by"] == "timeout" and events[-1]["type"] == "finalize"
-
-
-async def test_keep_alive_pings_while_waiting(make_client):
-    c = await make_client(driver=lambda: ScriptedDriver(ask=True), evo_choice_seconds=0.4,
-                          evo_keepalive_seconds=0.05)
-    r = await c.get(f"/evo/agent/runs/{(await named_run(c)).json()['runId']}/events")
-    events, pings = parse_sse(r.text)
-    assert pings >= 2 and events[-1]["type"] == "finalize"
 
 
 # ====================================================================== uploads and identify
@@ -328,84 +277,8 @@ async def test_low_confidence_returns_needs_choice_and_no_run(make_client):
 async def test_validation_errors(client):
     r = await post_run(client, files={"sireImage": photos()["sireImage"]})
     assert r.status_code == 422 and r.json()["error"]["details"]["slot"] == "dam"
-    r = await post_run(client, mode="goal")
-    assert r.status_code == 422 and r.json()["error"]["code"] == "VALIDATION_FAILED"
     r = await post_run(client, files={}, data={"sireName": "lion", "damName": "<script>"})
     assert r.status_code == 422 and r.json()["error"]["details"]["slot"] == "dam"
-
-
-# ====================================================================== the engine's agent (offline)
-
-
-async def test_the_engine_agent_runs_end_to_end_offline(make_client):
-    holder: dict[str, Any] = {}
-
-    def factory() -> AgentDriver:
-        return AgentDriver(holder["svc"], offline=True)
-
-    c = await make_client(driver=factory)
-    holder["svc"] = c.app.state.services
-    rid = (await post_run(c)).json()["runId"]
-    events = await events_of(c, rid)
-    types = [e["type"] for e in events]
-    assert types[0] == "started" and types[-1] == "finalize"
-    assert events[0]["caps"] == {"renders": 4, "toolCalls": 30, "seconds": 900}
-    steps = [e for e in events if e["type"] == "step"]
-    assert [s["n"] for s in steps] == list(range(1, len(steps) + 1))
-    for e in events:
-        if e["type"] == "render":
-            await assert_served(c, e["url"])
-    cr = (await c.get(f"/evo/creatures/{events[-1]['creatureId']}")).json()
-    assert cr["runId"] == rid and cr["imageUrl"] == events[-1]["imageUrl"]
-
-
-async def test_soft_time_cap_fires_and_hard_cap_stops(make_client):
-    holder: dict[str, Any] = {}
-    c = await make_client(driver=lambda: AgentDriver(holder["svc"], offline=True), evo_run_soft_seconds=0.0)
-    holder["svc"] = c.app.state.services
-    events = await events_of(c, (await post_run(c)).json()["runId"])
-    caps = [e for e in events if e["type"] == "cap_reached"]
-    assert caps and caps[0]["scope"] == "time"
-    hold = asyncio.Event()
-    c2 = await make_client(driver=lambda: ScriptedDriver(hold=hold), evo_run_hard_seconds=0.05)
-    events = await events_of(c2, (await named_run(c2)).json()["runId"])
-    assert events[-1]["type"] == "error" and events[-1]["code"] == "RUN_INTERRUPTED"
-
-
-async def test_deadline_brain_finalizes_the_best_image():
-    from app.agentapi.jobs import DeadlineBrain
-
-    class St:
-        finalized = None
-        order = ["img1", "img2"]
-        images = {"img2": type("I", (), {"inspect": None})()}
-
-    class R:
-        state = St()
-
-        def best_image_id(self):  # noqa: ANN201
-            return "img1"
-
-    class J:
-        soft_deadline = 0.0
-        runner = type("X", (), {"settings": type("S", (), {"evo_run_soft_seconds": 840})()})()
-        extra: dict[str, Any] = {}
-        capped: list[str] = []
-
-        async def cap(self, scope, limit):  # noqa: ANN001, ANN201
-            self.capped.append(scope)
-
-    async def flush():  # noqa: ANN202
-        return None
-
-    j = J()
-    j.extra["flush"] = flush
-    b = DeadlineBrain(object(), j)
-    b.bind(R())
-    t = await b.next([], [])
-    assert j.capped == ["time"] and t.calls[0]["name"] == "finalize" and t.calls[0]["arguments"]["image_id"] == "img1"
-    await b.next([], [])
-    assert j.capped == ["time"]  # once
 
 
 # ====================================================================== caps, queue, rate limit
@@ -493,72 +366,32 @@ async def test_orphans_are_interrupted_at_startup(tmp_path):
 
 
 async def test_a_live_run_heartbeat_keeps_its_lease(make_client):
-    c = await make_client(driver=lambda: ScriptedDriver(ask=True), evo_choice_seconds=0.5, run_lease_seconds=0.2)
+    hold = asyncio.Event()
+    c = await make_client(driver=lambda: ScriptedDriver(hold=hold), run_lease_seconds=0.2)
     rid = (await named_run(c)).json()["runId"]
-    await wait_status(c, rid, "needs_choice")
+    await wait_status(c, rid, "running")
     await asyncio.sleep(0.3)
     doc = await c.app.state.services.db.get("agent_runs", rid)
-    assert doc["status"] == "needs_choice"
+    assert doc["status"] == "running"
     store = c.app.state.agent.store
     store.live.pop(rid)  # as if another process read it: fresh enough, not interrupted
-    assert (await store.get(rid))["status"] == "needs_choice"
+    assert (await store.get(rid))["status"] == "running"
+    hold.set()
     store.live[rid] = doc
 
 
-# ====================================================================== gallery, showcase, files
-
-
-SHOWCASE = [f"crt_s5_{c}" for c in ("b09", "b01", "b03", "b08", "b11", "b05")]
-
-
-async def test_gallery_is_the_showcase_and_runs_stay_private(client):
-    g = (await client.get("/evo/gallery", headers={"Authorization": ""})).json()
-    assert [i["creatureId"] for i in g["items"]] == SHOWCASE and g["nextCursor"] is None
-    for item in g["items"]:
-        assert item["kind"] == "showcase" and item["showcase"] is True
-        await assert_served(client, item["imageUrl"])
-    await events_of(client, (await named_run(client)).json()["runId"])
-    items = (await client.get("/evo/gallery")).json()["items"]
-    assert [i["creatureId"] for i in items] == SHOWCASE  # a finished run is not published automatically
-    page1 = (await client.get("/evo/gallery", params={"limit": 4})).json()
-    page2 = (await client.get("/evo/gallery", params={"limit": 4, "cursor": page1["nextCursor"]})).json()
-    assert [i["creatureId"] for i in page1["items"] + page2["items"]] == SHOWCASE and page2["nextCursor"] is None
-
-
-async def test_showcase_creature_is_public(client):
-    cr = (await client.get("/evo/creatures/crt_s5_b09", headers={"Authorization": ""})).json()
-    assert cr["showcase"] is True and cr["runId"] is None and cr["title"]
-    assert [i["imageId"] for i in cr["images"]] == ["img1", "img2"]
-    r = await client.get("/evo/creatures/crt_nope")
-    assert r.status_code == 404 and r.json()["error"]["code"] == "NOT_FOUND"
-
-
-async def test_showcase_list_is_configurable(make_client):
-    c = await make_client(evo_showcase="b05,b02")
-    assert [i["creatureId"] for i in (await c.get("/evo/gallery")).json()["items"]] == ["crt_s5_b05", "crt_s5_b02"]
-    c2 = await make_client(evo_showcase="")
-    assert (await c2.get("/evo/gallery")).json() == {"items": [], "nextCursor": None}
+# ====================================================================== files and serving
 
 
 async def test_files_endpoint(client):
-    await client.get("/evo/gallery")
-    r = await client.get("/evo/files/showcase/b09/img2.jpg")
-    assert r.status_code == 200 and r.headers["content-type"] == "image/jpeg"
-    assert (await client.get("/evo/files/showcase/b09/nope.jpg")).status_code == 404
+    url = await client.app.state.agent.files.put("runs/x/img1.png", png(), "image/png")
+    r = await client.get(url)
+    assert r.status_code == 200 and r.headers["content-type"] == "image/png"
+    assert (await client.get("/evo/files/runs/x/nope.png")).status_code == 404
     assert (await client.get("/evo/files/..%2F..%2Fchimera.sqlite3")).status_code in (404, 422)
 
 
 # ====================================================================== helpers and serving
-
-
-def test_visible_and_short_args():
-    fails = [{"key": "material_look", "kind": "covering", "text": "a"}, {"key": "third_animal", "kind": "structural",
-                                                                         "text": "b", "status": "fail"}]
-    keep, hidden = visible(fails)
-    assert keep == [{"key": "third_animal", "kind": "structural", "text": "b"}] and hidden == 1
-    out = short_args({"a": "x" * 200, "b": ["k"] * 50, "c": 3, "d": ["ok"]})
-    assert len(out["a"]) == 120 and out["a"].endswith("…") and isinstance(out["b"], str) and len(out["b"]) == 120
-    assert out["c"] == 3 and out["d"] == ["ok"]
 
 
 async def test_single_origin_serves_the_frontend(tmp_path, make_client):
@@ -568,7 +401,7 @@ async def test_single_origin_serves_the_frontend(tmp_path, make_client):
     (dist / "assets" / "index-abc123.js").write_text("console.log('app')")
     (dist / "favicon.svg").write_text("<svg/>")
     c = await make_client(frontend_dist=str(dist))
-    for path in ("/", "/gallery", "/creature/crt_s5_b09", "/run/run_x"):
+    for path in ("/", "/chimeras", "/run/run_x"):
         r = await c.get(path)
         assert r.status_code == 200 and "Chimera Lab" in r.text and r.headers["cache-control"] == "no-cache", path
     r = await c.get("/assets/index-abc123.js")
@@ -577,23 +410,10 @@ async def test_single_origin_serves_the_frontend(tmp_path, make_client):
     r = await c.get("/evo/nope")
     assert r.status_code == 404 and r.json()["error"]["code"] == "NOT_FOUND"
     assert (await c.get("/health")).json()["status"] == "ok"
-    assert (await c.get("/evo/gallery")).status_code == 200
+    assert (await c.get("/evo/config")).status_code == 200
     assert "root:" not in (await c.get("/..%2F..%2Fetc%2Fpasswd")).text
 
 
 async def test_no_frontend_build_serves_the_api_only(client):
     assert (await client.get("/")).status_code == 404
     assert (await client.get("/evo/agent/limits")).status_code == 200
-
-
-# ====================================================================== prompt mode
-
-
-def test_fusion_mode_picks_the_driver(tmp_path):
-    from app.agentapi.jobs import PromptDriver
-
-    assert make_settings(tmp_path).evo_fusion_mode == "prompt"
-    for mode, kind in (("prompt", PromptDriver), ("algorithm", AgentDriver)):
-        settings = make_settings(tmp_path / mode, evo_fusion_mode=mode)
-        app = create_app(settings, services=offline_services(settings))
-        assert isinstance(app.state.agent.driver_factory(), kind)

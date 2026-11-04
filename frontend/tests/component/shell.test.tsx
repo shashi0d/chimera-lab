@@ -17,7 +17,7 @@ beforeEach(() => {
   useConnectivity.setState({ browserOnline: true, serverReachable: true, forced: null, status: "online" });
 });
 
-describe("broken states (TASKSHEET 7.6)", () => {
+describe("broken states", () => {
   it("a crashing node renders a recoverable card", async () => {
     let crash = true;
     function Maybe() {
@@ -59,7 +59,7 @@ describe("broken states (TASKSHEET 7.6)", () => {
   });
 });
 
-describe("connectivity banners (TASKSHEET 7.7)", () => {
+describe("connectivity banners", () => {
   it("offline banner", () => {
     useConnectivity.getState().setBrowserOnline(false);
     render(<Banners />);

@@ -29,7 +29,6 @@ def make_settings(tmp_path: Path, **overrides: Any) -> Settings:
         local_data_dir=str(tmp_path / "local"),
         retry_base_seconds=0.001,
         frontend_dist=str(tmp_path / "no-frontend"),  # tests that serve a frontend build their own dist
-        evo_seed_on_start=False,
         evo_limits_enabled=True,  # the cap tests run with limits on (the app's default is off)
     )
     base.update(overrides)
@@ -60,11 +59,11 @@ def offline_services(settings: Settings, delay_scale: float = 0.0) -> Services:
 
 
 def offline_app(settings: Settings) -> Any:
-    from app.agentapi.jobs import AgentDriver
+    from app.agentapi.jobs import PromptDriver
 
     svc = offline_services(settings)
     app = create_app(settings, services=svc)
-    app.state.agent.driver_factory = lambda: AgentDriver(svc, offline=True)
+    app.state.agent.driver_factory = lambda: PromptDriver(svc)
     app.state.auth = FakeAuth()
     return app
 

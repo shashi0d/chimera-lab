@@ -66,8 +66,8 @@ def new_card() -> dict[str, Any]:
 
 async def build_card(a: Any, doc: dict[str, Any], image: bytes) -> dict[str, Any]:
     """The finished card for a version doc: its profile (written now if missing) and its four angles."""
+    from app.adapters.retrying import RetryingImageGen
     from app.agentapi.creature_ai import make_profile
-    from app.evolution.live import RetryingImageGen
 
     svc = a.services
     profile = doc.get("profile")

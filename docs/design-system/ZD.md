@@ -118,14 +118,14 @@ Chimera Lab keeps its existing bar of 4.5:1 for all essential text. The ZD value
 2. Kickers and meta text use `--text-muted` on cards. ZD's dashboard uses `--text-subtle` for kickers, which fails; do not copy that.
 3. `--text-subtle` and `--text-faint` are only for disabled states, placeholders and decoration that carries no information.
 4. **Success text in the light theme** needs a decision:
-   - Use one Chimera deviation token, `--success-text-aa`, darkened only until it reaches 4.5:1 on white. Light theme only; dark keeps ZD's value. Log it in DECISIONS.md.
+   - Use one Chimera deviation token, `--success-text-aa`, darkened only until it reaches 4.5:1 on white. Light theme only; dark keeps ZD's value.
    - Or pair the success color with a glyph and put the words in `--text-body`.
 5. **Filled indigo buttons** use `--indigo-600` or darker behind white text. Check the exact ratio in `contrast.test.ts`.
 6. **The gradient** appears on the brand mark and nowhere else.
    - The gradient is decoration; the Fuse button is a solid fill that passes contrast.
    - Blue-violet gradients are the most common "generic AI tool" signal. Keeping the gradient to one spot is what stops this system from reading as a template.
 
-Every deviation from ZD values gets a token whose name ends in `-aa` and a DECISIONS.md entry. Never edit `zd-tokens.css`.
+Every deviation from ZD values gets a token whose name ends in `-aa`. Never edit `zd-tokens.css`.
 
 ## 4. Mapping onto Chimera Lab
 

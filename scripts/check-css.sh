@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Enforces TASKSHEET Section 6:
+# Enforces the CSS rules:
 #  - theme.css is the only CSS file in frontend/src
 #  - no inline style props in .tsx
 #  - no CSS modules / CSS-in-JS imports

@@ -3,7 +3,7 @@ import { errorMessages, presentError } from "../../src/api/errorMessages";
 import { ApiRequestError, toAppError } from "../../src/api/errors";
 import api from "../../src/types/api.ts?raw";
 
-describe("error message map (TASKSHEET 7.5)", () => {
+describe("error message map", () => {
   it("has a message for every server error code", () => {
     const block = api.slice(api.indexOf("export type ErrorCode"), api.indexOf(";", api.indexOf("export type ErrorCode")));
     const codes = [...block.matchAll(/"([A-Z_]+)"/g)].map((m) => m[1] as keyof typeof errorMessages);

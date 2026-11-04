@@ -1,4 +1,4 @@
--- R1 agent API (docs/api_contract.md). Run after schema.sql, in the Supabase SQL editor (or `supabase db push`).
+-- R1 agent API. Run after schema.sql, in the Supabase SQL editor (or `supabase db push`).
 -- Adds only what schema.sql lacks:
 --   1. agent_runs: one row per agent run (snapshot plus its stored SSE events), same key -> jsonb shape as the
 --      other collections. Creatures reuse the existing `creatures` table (doc->>'kind' = 'evo_agent').

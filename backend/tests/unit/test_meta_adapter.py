@@ -1,6 +1,5 @@
-"""Recorded-shape fake responses for the real Meta adapters (unverified against live API)."""
+"""The real Meta adapters' request builders, parsers and error mapping, on wire-shaped fake answers."""
 
-import base64
 import json
 
 import httpx
@@ -9,10 +8,7 @@ import pytest
 from app.adapters.meta import client as meta
 from app.errors import ChimeraError
 from app.models.schemas import ErrorCode
-from tests.conftest import FIXTURES, IMAGES
-
-LIVE = FIXTURES / "live"
-RECORDED = FIXTURES / "recorded"
+from tests.conftest import IMAGES
 
 
 def chat(content, finish="stop"):
@@ -63,11 +59,11 @@ def test_generate_request_uses_responses_input_parts():
 
 
 def test_generate_response_takes_the_image_generation_call():
-    webp = (LIVE / "lion.webp").read_bytes()
-    recorded = json.loads((RECORDED / "text_to_image-01.json").read_text())["response"]
-    recorded["output"] = [dict(i) for i in recorded["output"]]
-    call = next(i for i in recorded["output"] if i["type"] == "image_generation_call")
-    call["result"] = base64.b64encode(webp).decode()
+    from tests.fakes.image_gen import render
+    from tests.fakes.payloads import responses_payload
+
+    webp = render("a lion", [])
+    recorded = responses_payload(webp)
     out = meta.parse_generate_response(recorded, "muse-image-1.0")
     assert out.content_type == "image/webp" and out.data == webp
     assert out.response_id == recorded["id"] and out.usage["total_tokens"] > 0

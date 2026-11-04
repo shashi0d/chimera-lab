@@ -1,4 +1,4 @@
-import { MODES, STYLES, type Mode, type Style } from "../../evo/types";
+import { STYLES, type Style } from "../../evo/types";
 
 /** Fields every runnable node keeps in its data (convention shared with the registry). */
 export interface RunnableData extends Record<string, unknown> {
@@ -7,21 +7,15 @@ export interface RunnableData extends Record<string, unknown> {
   stale?: boolean;
 }
 
-/** v3 (R1): the agent API takes a mode, and a typed animal name for a slot that has no photo. */
+/** The art style; a typed animal name is used for a slot that has no photo or image connected. */
 export interface FusionConfig extends Record<string, unknown> {
-  mode: Mode;
-  /** The art style (prompt mode). Older canvases have none: "real". */
+  /** Older canvases have none: "real". */
   style?: Style;
 }
 
 export interface FusionData extends RunnableData {
   /** Typed names, used for a slot with no photo connected (the contract's name fallback). */
   names?: { a: string; b: string };
-}
-
-export function readMode(config: unknown): Mode {
-  const m = (config as { mode?: unknown } | null)?.mode;
-  return MODES.includes(m as Mode) ? (m as Mode) : "realistic";
 }
 
 export function readStyle(config: unknown): Style {

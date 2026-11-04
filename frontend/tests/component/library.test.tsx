@@ -20,12 +20,12 @@ import { renderNode } from "./render";
 
 const version = (id: string, over: Partial<LabVersion> = {}): LabVersion => ({
   id, parentId: null, runId: "run_1", creatureId: "crt_1", operation: "fusion", instruction: "lion × eagle",
-  imageUrl: `/evo/files/lab/${id}.png`, createdAt: "2026-11-04T00:00:00Z", isFinal: false, publicationId: null, title: "Sky Lion", ...over,
+  imageUrl: `/evo/files/lab/${id}.png`, createdAt: "2026-11-04T00:00:00Z", isFinal: false, title: "Sky Lion", ...over,
 });
 const ws = (id: string, name: string, imageCount = 0): WorkspaceInfo => ({ id, name, imageCount, createdAt: "2026-11-04T00:00:00Z", updatedAt: "2026-11-04T00:00:00Z" });
 
 function withV1(): string {
-  useGraph.getState().addNode({ id: "f", type: "fusion", version: 3, position: { x: 0, y: 0 }, config: { mode: "realistic" }, data: { activeRunId: null, runIds: [] } });
+  useGraph.getState().addNode({ id: "f", type: "fusion", version: 3, position: { x: 0, y: 0 }, config: { style: "real" }, data: { activeRunId: null, runIds: [] } });
   return addVersionNode("f", { version: version("labv_1"), runId: null, error: null });
 }
 

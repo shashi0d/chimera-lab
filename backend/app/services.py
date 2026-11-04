@@ -41,7 +41,7 @@ def build_services(settings: Settings) -> Services:
     if not settings.meta_api_key:
         raise RuntimeError("Chimera Lab needs META_API_KEY")
     vision = MetaVision(settings.meta_api_base_url, settings.meta_api_key, settings.meta_vision_model,
-                        timeout=max(settings.identify_timeout_seconds, settings.plan_timeout_seconds))
+                        timeout=max(settings.identify_timeout_seconds, settings.vision_timeout_seconds))
     image_gen = MetaImageGen(settings.meta_api_base_url, settings.meta_api_key, settings.meta_image_model,
                              timeout=settings.generate_timeout_seconds)
     storage, db, local = build_storage(settings)

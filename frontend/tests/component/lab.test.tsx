@@ -19,7 +19,7 @@ import { renderInFlow, renderNode } from "./render";
 
 const version = (id: string, over: Partial<LabVersion> = {}): LabVersion => ({
   id, parentId: null, runId: "run_1", creatureId: "crt_1", operation: "fusion", instruction: "lion × eagle (realistic)",
-  imageUrl: `/evo/files/lab/${id}.png`, createdAt: "2026-11-03T00:00:00Z", isFinal: false, publicationId: null, title: "lion × eagle", ...over,
+  imageUrl: `/evo/files/lab/${id}.png`, createdAt: "2026-11-03T00:00:00Z", isFinal: false, title: "lion × eagle", ...over,
 });
 
 const job = (id: string, over: Partial<LabJob> = {}): LabJob => ({
@@ -32,7 +32,7 @@ const nodesOf = (type: string) => useGraph.getState().nodes.filter((n) => n.type
 
 /** A canvas with a Fusion node and its finished V1 card. Returns the V1 card's node id. */
 function withV1(): string {
-  useGraph.getState().addNode({ id: "f", type: "fusion", version: 3, position: { x: 0, y: 0 }, config: { mode: "realistic" }, data: { activeRunId: null, runIds: [] } });
+  useGraph.getState().addNode({ id: "f", type: "fusion", version: 3, position: { x: 0, y: 0 }, config: { style: "real" }, data: { activeRunId: null, runIds: [] } });
   return addVersionNode("f", { version: version("labv_1"), runId: null, error: null });
 }
 
@@ -235,11 +235,11 @@ describe("building on a generated image", () => {
     expect(screen.getByText("earlier creature")).toBeInTheDocument();
     const start = vi.spyOn(mockTransport, "startRun");
     await startFusion(f2);
-    expect(start).toHaveBeenCalledWith({ mode: "realistic", style: "comic", sireVersionId: "labv_1", damName: "eagle" });
+    expect(start).toHaveBeenCalledWith({ style: "comic", sireVersionId: "labv_1", damName: "eagle" });
   });
 
   it("a Fusion fed by an unfinished image waits for it", () => {
-    useGraph.getState().addNode({ id: "f", type: "fusion", version: 3, position: { x: 0, y: 0 }, config: { mode: "realistic" }, data: { activeRunId: null, runIds: [] } });
+    useGraph.getState().addNode({ id: "f", type: "fusion", version: 3, position: { x: 0, y: 0 }, config: { style: "real" }, data: { activeRunId: null, runIds: [] } });
     const pending = addVersionNode("f", { version: null, runId: "run_x", error: null });
     const f2 = addFusionFrom(pending);
     useGraph.getState().updateNodeData<FusionData>(f2, (d) => ({ ...d, names: { a: "", b: "eagle" } }));

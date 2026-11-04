@@ -1,7 +1,6 @@
-"""The agent API under /evo (docs/api_contract.md): runs, events (SSE), choices, limits, creatures, gallery, files.
+"""The Fusion API under /evo: start a run, follow it (snapshot and SSE events), limits, public config, files.
 
-Starting and following a run needs a signed-in user (app/auth.py); a run belongs to the user who started it. The
-gallery, showcase and published creatures are public."""
+Starting and following a run needs a signed-in user (app/auth.py); a run belongs to the user who started it."""
 
 from __future__ import annotations
 
@@ -17,11 +16,10 @@ from starlette.datastructures import UploadFile
 
 from app.agentapi import uploads as U
 from app.agentapi.caps import Caps, client_ip
-from app.agentapi.creature import parent_view
+from app.agentapi.creatures import Creatures, parent_view
 from app.agentapi.files import PublicFiles, content_type_for
 from app.agentapi.fusion_prompt import DEFAULT_STYLE, STYLES
-from app.agentapi.gallery import Creatures
-from app.agentapi.jobs import AgentDriver, ChoiceRefused, Job, JobRunner, PromptDriver
+from app.agentapi.jobs import Job, JobRunner, PromptDriver
 from app.agentapi.store import TERMINAL, RunStore, snapshot
 from app.auth import User, current_user, require_user
 from app.errors import ChimeraError
@@ -40,12 +38,11 @@ class AgentApi:
     def __init__(self, services: Services, files: PublicFiles) -> None:
         self.services, self.settings, self.files = services, services.settings, files
         self.store = RunStore(services.db, services.settings.run_lease_seconds)
-        self.creatures = Creatures(services.db, files, services.settings)
+        self.creatures = Creatures(services.db)
         self.runner = JobRunner(services, self.store, files, self.creatures)
         self.caps = Caps(services.db, services.settings)
-        # Builds the driver for one run (EVO_FUSION_MODE: prompt or algorithm). Tests replace it.
-        self.driver_factory: Any = lambda: (PromptDriver(services) if services.settings.evo_fusion_mode == "prompt"
-                                            else AgentDriver(services))
+        # Builds the driver for one run. Tests replace it.
+        self.driver_factory: Any = lambda: PromptDriver(services)
 
 
 def api(request: Request) -> AgentApi:
@@ -92,10 +89,6 @@ async def start_run(request: Request) -> Response:
     except Exception as exc:  # malformed multipart
         raise _err(ErrorCode.VALIDATION_FAILED, "Send the parents as multipart/form-data.", 422) from exc
 
-    mode = str(form.get("mode") or "").strip().lower()
-    if mode not in U.MODES:
-        raise _err(ErrorCode.VALIDATION_FAILED, "Choose a mode: realistic, speculative or mythic.", 422,
-                   field="mode", modes=list(U.MODES))
     style = str(form.get("style") or DEFAULT_STYLE).strip().lower()
     if style not in STYLES:
         raise _err(ErrorCode.VALIDATION_FAILED, "Choose an art style: " + ", ".join(STYLES) + ".", 422,
@@ -142,7 +135,7 @@ async def start_run(request: Request) -> Response:
     await a.caps.take(user.id)
     run_id = new_id("run")
     ts = now_iso()
-    doc = {"runId": run_id, "status": "queued", "position": None, "sire": sire, "dam": dam, "mode": mode,
+    doc = {"runId": run_id, "status": "queued", "position": None, "sire": sire, "dam": dam,
            "createdAt": ts, "updatedAt": ts, "lastEventId": 0, "creatureId": None, "error": None,
            "pendingChoice": None, "events": [], "owner": user.id, "style": style,
            "workspaceId": _workspace_id(form.get("workspaceId"))}
@@ -151,7 +144,7 @@ async def start_run(request: Request) -> Response:
     await a.runner.submit(job)
     body = {"runId": run_id, "status": doc["status"], "position": doc["position"],
             "eventsUrl": f"/evo/agent/runs/{run_id}/events", "runUrl": f"/evo/agent/runs/{run_id}",
-            "sire": sire, "dam": dam, "mode": mode, "style": style}
+            "sire": sire, "dam": dam, "style": style}
     return JSONResponse(body, status_code=202)
 
 
@@ -255,23 +248,6 @@ async def run_events(run_id: str, request: Request) -> Response:
                                       "Connection": "keep-alive"})
 
 
-@router.post("/agent/runs/{run_id}/choice", response_model=None)
-async def answer_choice(run_id: str, request: Request) -> Response:
-    a = api(request)
-    await _doc(a, run_id, await require_user(request))
-    try:
-        body = await request.json()
-    except ValueError as exc:
-        raise _err(ErrorCode.VALIDATION_FAILED, "Send {choiceId, answer} as JSON.", 422) from exc
-    if not isinstance(body, dict) or not isinstance(body.get("choiceId"), str):
-        raise _err(ErrorCode.VALIDATION_FAILED, "Send {choiceId, answer} as JSON.", 422)
-    try:
-        a.runner.answer(run_id, body["choiceId"], body.get("answer"))
-    except ChoiceRefused as e:
-        raise _err(ErrorCode.VALIDATION_FAILED, e.message, e.status) from e
-    return JSONResponse({"accepted": True})
-
-
 @router.get("/agent/limits", response_model=None)
 async def limits(request: Request) -> Response:
     a = api(request)
@@ -288,29 +264,7 @@ async def public_config(request: Request) -> Response:
                          "authConfigured": request.app.state.auth.configured}, headers={"Cache-Control": "no-cache"})
 
 
-# ====================================================================== creatures, gallery, files
-
-
-@router.get("/creatures/{creature_id}", response_model=None)
-async def get_creature(creature_id: str, request: Request) -> Response:
-    view = await api(request).creatures.get(creature_id, await current_user(request))
-    if view is None:
-        raise ChimeraError(ErrorCode.NOT_FOUND, "This creature doesn't exist.")
-    return JSONResponse(view)
-
-
-@router.get("/publications/{publication_id}", response_model=None)
-async def get_publication(publication_id: str, request: Request) -> Response:
-    view = await api(request).creatures.publication(publication_id)
-    if view is None:
-        raise ChimeraError(ErrorCode.NOT_FOUND, "This creation isn't in the gallery.")
-    return JSONResponse(view)
-
-
-@router.get("/gallery", response_model=None)
-async def gallery(request: Request, limit: int = 24, cursor: str | None = None) -> Response:
-    limit = max(1, min(100, limit))
-    return JSONResponse(await api(request).creatures.gallery(limit, cursor), headers={"Cache-Control": "no-cache"})
+# ====================================================================== files
 
 
 @router.get("/files/{key:path}", response_model=None)

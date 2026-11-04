@@ -27,7 +27,9 @@ async def file_exists(c: Any, url: str) -> bool:
 async def test_the_old_canvas_becomes_the_first_workspace(make_client):  # noqa: F811
     c, _ = await prompt_client(make_client)
     graph = {"nodes": [{"id": "n1"}], "edges": []}
-    assert (await c.put("/evo/lab/workspace", json={"graph": graph})).status_code == 200
+    # The canvas as the app stored it before workspaces existed.
+    await c.app.state.agent.services.db.put("graphs", "workspace:user-1", {"owner": "user-1", "graph": graph,
+                                                                         "revision": 1, "updatedAt": "2026-11-01"})
     [ws] = (await c.get("/evo/lab/workspaces")).json()["workspaces"]
     assert ws["id"] == "main" and ws["name"] == "My workspace" and ws["imageCount"] == 0
     assert (await c.get("/evo/lab/workspaces/main")).json()["graph"] == graph
@@ -82,7 +84,8 @@ async def test_deleting_a_workspace_deletes_its_images_but_not_ones_another_canv
 
 async def test_deleting_the_main_workspace_does_not_bring_the_old_canvas_back(make_client):  # noqa: F811
     c, _ = await prompt_client(make_client)
-    await c.put("/evo/lab/workspace", json={"graph": {"nodes": [{"id": "old"}], "edges": []}})
+    await c.app.state.agent.services.db.put("graphs", "workspace:user-1", {
+        "owner": "user-1", "graph": {"nodes": [{"id": "old"}], "edges": []}, "revision": 1, "updatedAt": "2026-11-01"})
     await c.get("/evo/lab/workspaces")
     other = (await c.post("/evo/lab/workspaces", json={"name": "B"})).json()["id"]
     assert (await c.delete("/evo/lab/workspaces/main")).status_code == 200

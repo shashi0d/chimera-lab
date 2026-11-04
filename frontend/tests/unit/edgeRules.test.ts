@@ -5,7 +5,7 @@ import { edge, fusion, img, result } from "./helpers";
 
 const graph = (edges = [edge("a", "f", "a")]) => ({ nodes: [img("a"), img("b"), fusion("f"), result("r")], edges });
 
-describe("edge rules (TASKSHEET 4.1, 7.2)", () => {
+describe("edge rules", () => {
   it("accepts image -> fusion input", () => {
     expect(checkConnection(graph(), { source: "b", sourcePort: "out", target: "f", targetPort: "b" }, portsOf)).toEqual({ ok: true });
   });

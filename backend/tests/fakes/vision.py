@@ -1,4 +1,4 @@
-"""Mock vision + planning adapter.
+"""Fake Muse Spark: identifies animals deterministically, plus the topic check and the creature profile.
 
 Identification is deterministic and survives re-encoding: the image's average
 hue picks an animal from MOCK_SPECIES. The shipped fixture photos in
@@ -18,9 +18,9 @@ from PIL import Image
 
 from app.adapters.meta.client import parse_describe_response
 from app.errors import ChimeraError
-from app.evolution.recorded import chat_payload
 from app.models.schemas import AnimalReading, ErrorCode
 from tests.fakes.faults import current_fault
+from tests.fakes.payloads import chat_payload
 
 OFF_TOPIC = re.compile(r"\b(ignore|poem|essay|president|password|person|people|logo)\b", re.IGNORECASE)
 
@@ -101,7 +101,7 @@ class MockVision:
     async def describe_animal(self, image: bytes, slot: str) -> AnimalReading:
         reading = await self._describe(image, slot)
         # L1-09: same wire shape and parser as the live API (snake_case JSON in a chat completion).
-        return parse_describe_response(chat_payload("describe", reading.model_dump()))
+        return parse_describe_response(chat_payload(reading.model_dump()))
 
     async def _describe(self, image: bytes, slot: str) -> AnimalReading:
         await self._delay(0.8)

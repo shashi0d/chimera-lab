@@ -24,7 +24,7 @@ function fakeCodec(width: number, height: number, opts: { fail?: boolean } = {})
 
 afterEach(() => setImageCodec(browserCodec));
 
-describe("client image checks (TASKSHEET 7.1)", () => {
+describe("client image checks", () => {
   it("sniffs real formats from magic bytes", () => {
     expect(sniffKind(new Uint8Array(JPEG))).toBe("jpeg");
     expect(sniffKind(new Uint8Array(PNG))).toBe("png");
