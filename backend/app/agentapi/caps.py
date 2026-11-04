@@ -42,9 +42,9 @@ def resets_at(now: datetime | None = None) -> str:
 
 
 def cap_error(scope: str, limit: int) -> ChimeraError:
-    message = ("Today's live creature runs are used up. The gallery is still open; new runs open again at 00:00 UTC."
+    message = ("Today's Fusion runs are used up. New runs open again at 00:00 UTC."
                if scope == "daily_total" else
-               "You've used today's live creature runs. The gallery is still open; new runs open again at 00:00 UTC.")
+               "You've used today's Fusion runs. New runs open again at 00:00 UTC.")
     return ChimeraError(ErrorCode.CAP_REACHED, message, retryable=False,
                         details={"scope": scope, "limit": limit, "resetsAt": resets_at()})
 

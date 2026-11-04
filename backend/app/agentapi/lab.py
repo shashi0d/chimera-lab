@@ -1,9 +1,8 @@
 """The Lab after a Fusion run: every edit of a generated creature is a new version on the user's canvas.
 
-One flow (FLORA-style lineage): a finished Fusion run becomes version 1 (`POST /evo/lab/versions/from-run`); a
-revision or a painted edit of any version makes a child version, so the user's canvas shows the whole path from the
-two animals to the final image. A visual review and a collaborator chat help decide the next edit; the
-collaborator only proposes, the user runs. A final version can be published to the gallery with its whole path.
+A finished Fusion run becomes version 1 (`POST /evo/lab/versions/from-run`); Revise, Paint and Draw of any version make
+a child version, so the canvas shows the whole path from the two animals to the final image. Each version keeps how it
+was made and the creature's profile; its animal card (one per image) is made on demand in the background.
 
 Everything here belongs to the signed-in user (app/auth.py). Image edits run as background jobs that survive the
 request (and a page reload); each lab action counts against the user's daily lab budget and is refunded if it
@@ -13,7 +12,6 @@ from __future__ import annotations
 
 import asyncio
 import io
-import json
 import logging
 from collections.abc import AsyncIterator, Awaitable, Callable
 from contextlib import asynccontextmanager
@@ -41,7 +39,6 @@ log = logging.getLogger(__name__)
 
 VERSION_KIND = "lab_version"
 JOB_KIND = "lab_job"
-PUBLICATION_KIND = "lab_publication"
 CAP_MESSAGE = "Today's lab action limit is reached. More actions are available at 00:00 UTC."
 INTERRUPTED = "The server stopped while this was running. Please try again."
 MAX_INSTRUCTION = 2000
@@ -222,52 +219,12 @@ async def limits(request: Request) -> JSONResponse:
                          "resetsAt": resets_at()}, headers={"Cache-Control": "no-store"})
 
 
-# ====================================================================== workspace (the user's canvas)
-
-
-def _workspace_key(user: User) -> str:
-    return f"workspace:{user.id}"
-
-
-@router.get("/workspace")
-async def get_workspace(request: Request) -> JSONResponse:
-    user, _ = await _user(request)
-    doc = await api(request).services.db.get("graphs", _workspace_key(user))
-    body = {"graph": doc.get("graph"), "revision": doc.get("revision", 0), "updatedAt": doc.get("updatedAt")} \
-        if doc else {"graph": None, "revision": 0, "updatedAt": None}
-    return JSONResponse(body, headers={"Cache-Control": "no-store"})
-
-
-@router.put("/workspace")
-async def put_workspace(request: Request) -> JSONResponse:
-    """Save the canvas (last write wins). The document is opaque here beyond its shape and size."""
-    user, _ = await _user(request)
-    a = api(request)
-    raw = await request.body()
-    if len(raw) > a.settings.lab_workspace_max_bytes:
-        raise _err(ErrorCode.FILE_TOO_LARGE, "The workspace is too large to save.", 413)
-    try:
-        body = json.loads(raw)
-    except ValueError as exc:
-        raise _err(ErrorCode.VALIDATION_FAILED, "Send the workspace as JSON.", 422) from exc
-    graph = body.get("graph") if isinstance(body, dict) else None
-    if not isinstance(graph, dict) or not isinstance(graph.get("nodes"), list) or not isinstance(graph.get("edges"),
-                                                                                                    list):
-        raise _err(ErrorCode.VALIDATION_FAILED, "The workspace needs nodes and edges.", 422)
-    key = _workspace_key(user)
-    old = await a.services.db.get("graphs", key)
-    revision = int((old or {}).get("revision", 0)) + 1
-    doc = {"owner": user.id, "graph": graph, "revision": revision, "updatedAt": now_iso()}
-    await a.services.db.put("graphs", key, doc)
-    return JSONResponse({"revision": revision, "updatedAt": doc["updatedAt"]}, headers={"Cache-Control": "no-store"})
-
-
 # ====================================================================== versions
 
 
 def public_version(doc: dict[str, Any]) -> dict[str, Any]:
     return {k: doc.get(k) for k in ("id", "parentId", "runId", "creatureId", "operation", "instruction", "imageUrl",
-                                    "createdAt", "isFinal", "publicationId", "title", "style", "card", "profile",
+                                    "createdAt", "isFinal", "title", "style", "card", "profile",
                                     "saved", "savedAt", "workspaceId")}
 
 
@@ -376,13 +333,9 @@ async def from_run(request: Request) -> JSONResponse:
 
 
 def _run_generation(run: dict[str, Any], view: dict[str, Any]) -> dict[str, Any]:
-    """How a Fusion run made its image: prompt mode keeps its record in the plan; an agent run is summarised."""
-    plan = view.get("plan") or {}
-    if plan.get("fusion_mode") == "prompt":
-        return dict(plan)
-    return {"fusion_mode": "algorithm", "operation": "fusion", "style": run.get("style"),
-            "parents": [run.get("sire"), run.get("dam")], "host": (view.get("host") or {}).get("commonName"),
-            "prompt": "", "agent_reasoning": [s.get("reason") for s in (view.get("trace") or []) if s.get("reason")][:12]}
+    """How a Fusion run made its image (prompt, style, parents, references, profile), kept with V1."""
+    return dict(view.get("plan") or {"operation": "fusion", "style": run.get("style"),
+                                      "parents": [run.get("sire"), run.get("dam")]})
 
 
 def parent_animals(doc: dict[str, Any]) -> list[str]:
@@ -456,7 +409,7 @@ def _instruction(value: Any) -> str:
 async def _generate(a: AgentApi, doc: dict[str, Any], prompt: str, refs: list[bytes]) -> GeneratedImage:
     """An edit of `doc`: chained on the provider's response when the stored image is exactly that response, else
     with the stored image as the reference."""
-    from app.evolution.live import RetryingImageGen
+    from app.adapters.retrying import RetryingImageGen
 
     gen = RetryingImageGen(a.services.image_gen, a.settings)
     chain = doc.get("responseId") if not doc.get("referenceOnly") and not refs else None
@@ -644,7 +597,7 @@ async def sketch(version_id: str, request: Request) -> JSONResponse:
     async def work(stage: Callable[[str], Awaitable[None]]) -> dict[str, Any]:
         await stage("Turning the drawing into the creature")
         prompt = _with_background(a.settings, sketch_prompt(doc, instruction))
-        from app.evolution.live import RetryingImageGen
+        from app.adapters.retrying import RetryingImageGen
 
         image = await RetryingImageGen(a.services.image_gen, a.settings).generate(prompt, [guide, original], "1:1")
         if not image.data:
@@ -683,64 +636,6 @@ async def download(version_id: str, request: Request) -> Response:
     return Response(await version_image(a, doc), media_type=content_type_for(key), headers={
         "Cache-Control": "no-store",
         "Content-Disposition": f'attachment; filename="chimera-{version_id}.{key.rsplit(".", 1)[-1]}"'})
-
-
-# ====================================================================== review and collaborator
-
-
-def _brief(chain: list[dict[str, Any]]) -> str:
-    return str(chain[0].get("instruction") or "")
-
-
-def _latest_change(chain: list[dict[str, Any]]) -> str:
-    return str(chain[-1].get("instruction") or "") if len(chain) > 1 else ""
-
-
-async def review_image(settings: Any, image: bytes, brief: str, change: str) -> dict[str, str]:
-    """Observe without the brief first, then suggest options with the creator's intent in view."""
-    from app.evolution.live import LiveEvoSpark, build_collaborator_chat
-
-    observation = await LiveEvoSpark(settings).describe(image)
-    description = str(observation.get("description") or "").strip()
-    if not description:
-        raise _err(ErrorCode.UPSTREAM_ERROR, "The visual reviewer could not describe this image.", 502)
-    brain = build_collaborator_chat(settings)
-    result = await brain.chat("lab_review", {"messages": [
-        {"role": "system", "content": "You are a collaborative creature concept artist. Compare an independent visual "
-         "description to the creator's creature. Give up to three concise, concrete, optional revision ideas. Mention "
-         "apparent mismatches cautiously because the visual description can be wrong. Do not claim to see details "
-         "not in the description, impose biological rules, or decide what the creator should choose."},
-        {"role": "user", "content": json.dumps({"creature": brief, "latest_change": change,
-                                                "visual_observation": observation}, ensure_ascii=False)},
-    ], "max_tokens": 4096})
-    choice = (result.get("choices") or [{}])[0]
-    text = (choice.get("message") or {}).get("content")
-    if choice.get("finish_reason") not in (None, "stop") or not isinstance(text, str) or not text.strip():
-        raise _err(ErrorCode.UPSTREAM_ERROR, "The collaborator did not return a complete review.", 502)
-    return {"observation": description[:3000], "suggestions": text.strip()[:4000]}
-
-
-@router.post("/versions/{version_id}/review")
-async def review(version_id: str, request: Request) -> JSONResponse:
-    a = api(request)
-    user, _ = await _charge(request)
-    doc = await get_version(a, version_id, user)
-    chain = await lineage(a, doc, user)
-    image = await version_image(a, doc)
-    day = await lab(request).caps.charge(user.id)
-    async with charged_slot(request, user.id, day):
-        result = await review_image(a.settings, image, _brief(chain), _latest_change(chain))
-    doc["review"] = result
-    await a.services.db.put("assets", version_id, doc)
-    return JSONResponse(result, headers={"Cache-Control": "no-store"})
-
-
-@router.get("/versions/{version_id}/review")
-async def saved_review(version_id: str, request: Request) -> JSONResponse:
-    a = api(request)
-    user, _ = await _user(request)
-    doc = await get_version(a, version_id, user)
-    return JSONResponse({"review": doc.get("review")}, headers={"Cache-Control": "no-store"})
 
 
 def card_task_key(version_id: str) -> str:
@@ -819,188 +714,3 @@ async def saved_card(version_id: str, request: Request) -> JSONResponse:
     if card and card.get("status") == "running" and not card_is_live(request, card, version_id):
         card = {**card, "status": "failed", "error": INTERRUPTED}
     return JSONResponse({"card": card}, headers={"Cache-Control": "no-store"})
-
-
-TOOLS = [
-    {"type": "function", "function": {
-        "name": "propose_revision",
-        "description": "Propose one editable image revision for the selected version; never run it yourself.",
-        "parameters": {"type": "object", "properties": {"instruction": {"type": "string"},
-                                                        "reason": {"type": "string"}},
-                       "required": ["instruction", "reason"], "additionalProperties": False}}},
-    {"type": "function", "function": {
-        "name": "inspect_image",
-        "description": "Inspect the selected image with a visual model when the user asks you to look or an "
-                       "observation is needed. This performs a model call.",
-        "parameters": {"type": "object", "properties": {"reason": {"type": "string"}}, "required": ["reason"],
-                       "additionalProperties": False}}},
-]
-
-
-def _one_call(response: dict[str, Any], what: str) -> tuple[dict[str, Any], dict[str, Any], list[dict[str, Any]]]:
-    choice = (response.get("choices") or [{}])[0]
-    message = choice.get("message") or {}
-    calls = message.get("tool_calls") or []
-    if len(calls) > 1 or (calls and choice.get("finish_reason") not in (None, "tool_calls")):
-        raise _err(ErrorCode.UPSTREAM_ERROR, f"The collaborator returned too many actions{what}.", 502)
-    return choice, message, calls
-
-
-def _arguments(call: dict[str, Any], what: str) -> dict[str, Any]:
-    try:
-        args = json.loads((call.get("function") or {}).get("arguments") or "{}")
-    except (ValueError, TypeError) as exc:
-        raise _err(ErrorCode.UPSTREAM_ERROR, f"The collaborator returned an invalid {what}.", 502) from exc
-    if not isinstance(args, dict) or not isinstance(args.get("reason"), str) or not args["reason"].strip():
-        raise _err(ErrorCode.UPSTREAM_ERROR, f"The collaborator returned an invalid {what}.", 502)
-    return args
-
-
-async def plan_collaboration(settings: Any, brief: str, selected_instruction: str,
-                             conversation: list[dict[str, str]], observation: str,
-                             inspect: Callable[[], Awaitable[dict[str, str]]]) -> dict[str, Any]:
-    """At most one visual inspection, then answer or propose an editable revision (never run it)."""
-    from app.evolution.live import build_collaborator_chat
-
-    brain = build_collaborator_chat(settings)
-    prompt = ("You are a creative collaborator in Chimera Lab. The user directs an imaginary creature fused from two "
-              "animals. You cannot see the selected image directly. A separate visual review may be provided; its "
-              "observations are uncertain and can be wrong. Do not imply that you personally saw the image. You may "
-              "propose one revision with the tools, or respond conversationally or ask a clarifying question. Never "
-              "change the user's explicit anatomy or assert biological rules. A proposed revision is shown for the "
-              "user to edit and run. For a request to visually inspect the image, call inspect_image. You can "
-              "inspect at most once per message. For a concrete visual change, call propose_revision. Do not create "
-              "or modify an image yourself. If the user mentions painting an area, explain they should use the "
-              "Paint tool; you cannot paint a mask.\n"
-              + json.dumps({"creature": brief, "selected_version_change": selected_instruction,
-                            "independent_visual_observation": observation or None}, ensure_ascii=False))
-    messages: list[dict[str, Any]] = [{"role": "system", "content": prompt}, *conversation]
-    response = await brain.chat("lab_collaborate", {"messages": messages, "tools": TOOLS, "tool_choice": "auto",
-                                                    "max_tokens": 4096})
-    choice, message, calls = _one_call(response, "")
-    review: dict[str, str] | None = None
-    steps: list[dict[str, str]] = []
-    if calls and (calls[0].get("function") or {}).get("name") == "inspect_image":
-        if not calls[0].get("id"):
-            raise _err(ErrorCode.UPSTREAM_ERROR, "The collaborator could not inspect this image.", 502)
-        reason = _arguments(calls[0], "inspection")["reason"].strip()[:500]
-        review = await inspect()
-        steps.append({"tool": "inspect_image", "reason": reason})
-        messages.extend([{"role": "assistant", "content": message.get("content") or None, "tool_calls": calls},
-                         {"role": "tool", "tool_call_id": calls[0]["id"],
-                          "content": json.dumps(review, ensure_ascii=False)}])
-        # A second inspection is intentionally unavailable in this turn.
-        response = await brain.chat("lab_collaborate_after_inspection", {
-            "messages": messages, "tools": TOOLS[:1], "tool_choice": "auto", "max_tokens": 4096})
-        choice, message, calls = _one_call(response, " after inspection")
-    text = str(message.get("content") or "").strip()[:3000]
-    if not calls:
-        if not text or choice.get("finish_reason") not in (None, "stop"):
-            raise _err(ErrorCode.UPSTREAM_ERROR, "The collaborator did not finish its response. Please try again.", 502)
-        return {"message": text, "action": None, "review": review, "steps": steps}
-    fn = calls[0].get("function") or {}
-    args = _arguments(calls[0], "action")
-    if fn.get("name") != "propose_revision" or not isinstance(args.get("instruction"), str) \
-            or not args["instruction"].strip():
-        raise _err(ErrorCode.UPSTREAM_ERROR, "The collaborator returned an unsupported action. Please try again.", 502)
-    action = {"type": "revise", "instruction": args["instruction"].strip()[:MAX_INSTRUCTION],
-              "reason": args["reason"].strip()[:500]}
-    return {"message": text or "Here's a possible next step for this version.", "action": action, "review": review,
-            "steps": steps}
-
-
-@router.post("/versions/{version_id}/collaborate")
-async def collaborate(version_id: str, request: Request) -> JSONResponse:
-    a = api(request)
-    user, _ = await _charge(request)
-    selected = await get_version(a, version_id, user)
-    try:
-        body = await request.json()
-    except ValueError as exc:
-        raise _err(ErrorCode.VALIDATION_FAILED, "Send a message to the collaborator.", 422) from exc
-    messages = body.get("messages") if isinstance(body, dict) else None
-    if not isinstance(messages, list) or not 1 <= len(messages) <= 12:
-        raise _err(ErrorCode.VALIDATION_FAILED, "Send between one and twelve conversation messages.", 422)
-    conversation = []
-    for item in messages:
-        if not isinstance(item, dict) or item.get("role") not in ("user", "assistant") \
-                or not isinstance(item.get("content"), str) or not 1 <= len(item["content"].strip()) <= 2000:
-            raise _err(ErrorCode.VALIDATION_FAILED, "Each message must contain up to 2,000 characters.", 422)
-        conversation.append({"role": item["role"], "content": item["content"].strip()})
-    if conversation[-1]["role"] != "user":
-        raise _err(ErrorCode.VALIDATION_FAILED, "The last message must be yours.", 422)
-    chain = await lineage(a, selected, user)
-
-    async def inspect_selected() -> dict[str, str]:
-        result = await review_image(a.settings, await version_image(a, selected), _brief(chain), _latest_change(chain))
-        selected["review"] = result
-        await a.services.db.put("assets", version_id, selected)
-        return result
-
-    day = await lab(request).caps.charge(user.id)
-    async with charged_slot(request, user.id, day):
-        result = await plan_collaboration(a.settings, _brief(chain), str(selected.get("instruction") or ""),
-                                          conversation, str((selected.get("review") or {}).get("observation") or ""),
-                                          inspect_selected)
-    return JSONResponse(result, headers={"Cache-Control": "no-store"})
-
-
-# ====================================================================== publishing to the gallery
-
-
-def _publication_id(version_id: str) -> str:
-    return f"pub_{version_id}"
-
-
-@router.post("/versions/{version_id}/publish")
-async def publish(version_id: str, request: Request) -> JSONResponse:
-    """Put this version in the gallery with its whole path (animals, Fusion run, every edit)."""
-    a = api(request)
-    user, _ = await _user(request)
-    doc = await get_version(a, version_id, user)
-    try:
-        body = await request.json()
-    except ValueError:
-        body = {}
-    title = (body.get("title") if isinstance(body, dict) else None) or doc.get("title") or "Untitled creature"
-    if not isinstance(title, str) or len(title.strip()) > 80:
-        raise _err(ErrorCode.VALIDATION_FAILED, "Give the creature a title of up to 80 characters.", 422)
-    chain = await lineage(a, doc, user)
-    run = await a.store.get(str(chain[0].get("runId") or "")) or {}
-    source = await a.services.db.get("creatures", str(chain[0].get("creatureId") or "")) or {}
-    pub_id = _publication_id(version_id)
-    publication = {
-        "kind": PUBLICATION_KIND, "creatureId": pub_id, "owner": user.id, "versionId": version_id,
-        "createdAt": now_iso(), "title": title.strip(), "imageUrl": doc["imageUrl"],
-        "sire": run.get("sire"), "dam": run.get("dam"), "mode": run.get("mode"),
-        "sourceCreatureId": chain[0].get("creatureId"),
-        "steps": [{"versionId": v["id"], "operation": v.get("operation"), "instruction": v.get("instruction"),
-                   "imageUrl": v.get("imageUrl"), "createdAt": v.get("createdAt")} for v in chain],
-    }
-    await a.services.db.put("creatures", pub_id, publication)
-    if source:
-        source["publications"] = sorted({*source.get("publications", []), pub_id})
-        await a.services.db.put("creatures", source["creatureId"], source)
-    doc["publicationId"] = pub_id
-    await a.services.db.put("assets", version_id, doc)
-    return JSONResponse(public_version(doc), status_code=201)
-
-
-@router.delete("/versions/{version_id}/publish")
-async def unpublish(version_id: str, request: Request) -> JSONResponse:
-    a = api(request)
-    user, _ = await _user(request)
-    doc = await get_version(a, version_id, user)
-    pub_id = doc.get("publicationId")
-    if pub_id:
-        pub = await a.services.db.get("creatures", pub_id)
-        if pub:
-            pub["unpublished"] = True
-            await a.services.db.put("creatures", pub_id, pub)
-            source = await a.services.db.get("creatures", str(pub.get("sourceCreatureId") or ""))
-            if source:
-                source["publications"] = [p for p in source.get("publications", []) if p != pub_id]
-                await a.services.db.put("creatures", source["creatureId"], source)
-        doc["publicationId"] = None
-        await a.services.db.put("assets", version_id, doc)
-    return JSONResponse(public_version(doc))

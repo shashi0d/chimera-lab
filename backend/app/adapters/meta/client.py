@@ -201,8 +201,8 @@ def map_sdk_error(exc: Exception) -> ChimeraError:
 # ------------------------------------------------------------- record and replay (L1-09)
 
 ELIDED = "<elided>"
-# Every API key a recording must never contain (S1 adds the Baseten key).
-SECRET_ENV = ("META_API_KEY", "BASETEN_API_KEY_MODEL_MUSE_SPARK_OPEN_26")
+# Every API key a recording must never contain.
+SECRET_ENV = ("META_API_KEY",)
 
 
 def _elide(obj: Any) -> Any:
@@ -259,12 +259,12 @@ class _MetaClient:
 
         # The SDK does not read our key from the environment by itself: pass it explicitly.
         self.client = openai.AsyncOpenAI(base_url=base_url, api_key=api_key, timeout=timeout, max_retries=0)
-        self.provider = "baseten" if "baseten" in base_url else "meta" if "meta.ai" in base_url else "other"
+        self.provider = "meta" if "meta.ai" in base_url else "other"
 
     async def call(self, kind: CallKind, purpose: str, model: str, body: dict[str, Any], responses: bool = False,
                    raw: bool = False) -> dict[str, Any]:
-        """One attempt. `raw` returns the HTTP body as sent by the server (Responses API only), for models
-        whose output items the SDK has no type for (SAM 3.1)."""
+        """One attempt. `raw` returns the HTTP body as sent by the server (Responses API only), for output items
+        the SDK has no type for."""
         guard(kind)
         payload: dict[str, Any] | None = None
         outcome = "ok"

@@ -18,11 +18,10 @@ from app.util import now_iso, parse_iso
 COLLECTION = "agent_runs"
 TERMINAL = {"succeeded", "failed", "interrupted"}
 TERMINAL_EVENTS = {"finalize", "error"}
-PUBLIC_FIELDS = ("runId", "status", "position", "sire", "dam", "mode", "createdAt", "updatedAt", "lastEventId",
+PUBLIC_FIELDS = ("runId", "status", "position", "sire", "dam", "style", "createdAt", "updatedAt", "lastEventId",
                  "creatureId", "error", "pendingChoice")
 INTERRUPTED = {"code": "RUN_INTERRUPTED", "retryable": True,
-               "message": "The server stopped while this run was going, so it ended. Start it again; the gallery is "
-                          "still open."}
+               "message": "The server stopped while this run was going, so it ended. Start it again."}
 
 
 def snapshot(doc: dict[str, Any]) -> dict[str, Any]:

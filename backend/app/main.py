@@ -41,17 +41,14 @@ def create_app(settings: Settings | None = None, services: Services | None = Non
         if svc.local_backend:
             n = await app.state.agent.store.interrupt_orphans()
             if n:
-                log.warning("Marked %d orphaned agent run(s) as interrupted", n)
-        seed = asyncio.create_task(app.state.agent.creatures.ensure_showcase()) if settings.evo_seed_on_start else None
+                log.warning("Marked %d orphaned run(s) as interrupted", n)
         yield
-        if seed is not None:
-            seed.cancel()
         await app.state.lab.shutdown()
         await app.state.agent.runner.shutdown()
 
     app = FastAPI(title="Chimera Lab API", version=APP_VERSION, lifespan=lifespan)
     app.state.services = svc
-    app.state.agent = AgentApi(svc, build_public_files(settings))  # R1: the agent API under /evo
+    app.state.agent = AgentApi(svc, build_public_files(settings))  # the Fusion API under /evo
     from app.auth import Auth
 
     app.state.auth = Auth(settings)

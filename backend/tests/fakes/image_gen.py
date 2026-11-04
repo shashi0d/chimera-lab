@@ -1,9 +1,7 @@
-"""Mock image generation.
+"""Fake Muse Image: deterministic pictures, answered through the real Responses API parser.
 
-Instead of a fixed fixture, it paints a deterministic "specimen plate" from
-the two reference images (A's head region blended over B's body), so mock
-screenshots look like a fusion and the same inputs always give the same
-output. See DECISIONS.md D-007.
+With reference images it blends them (so a fusion of two photos looks like both); without, it paints a colour
+derived from the prompt. Same inputs, same output. `current_fault` simulates refusals, bad data and errors.
 """
 
 from __future__ import annotations
@@ -11,62 +9,34 @@ from __future__ import annotations
 import asyncio
 import hashlib
 import io
-import re
 
-from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageOps
+from PIL import Image, ImageChops, ImageOps
 
 from app.adapters.base import GeneratedImage
 from app.adapters.meta.client import parse_generate_response
 from app.errors import ChimeraError
-from app.evolution.recorded import responses_payload
 from app.models.schemas import ErrorCode
 from tests.fakes.faults import current_fault
+from tests.fakes.payloads import responses_payload
 
-SIZE = 1024
-PAPER = (241, 235, 222)
-INK = (31, 42, 36)
+SIZE = 512
 
 
-def _square(data: bytes, size: int) -> Image.Image:
+def _square(data: bytes) -> Image.Image:
     with Image.open(io.BytesIO(data)) as im:
-        return ImageOps.fit(im.convert("RGB"), (size, size), method=Image.Resampling.LANCZOS)
+        return ImageOps.fit(im.convert("RGB"), (SIZE, SIZE), method=Image.Resampling.LANCZOS)
 
 
-def _blob_mask(size: int, seed: int) -> Image.Image:
-    mask = Image.new("L", (size, size), 0)
-    d = ImageDraw.Draw(mask)
-    cx = size * (0.36 + (seed % 7) / 100)
-    cy = size * (0.38 + (seed % 5) / 100)
-    r = size * 0.27
-    d.ellipse([cx - r, cy - r * 0.9, cx + r, cy + r * 0.9], fill=255)
-    return mask.filter(ImageFilter.GaussianBlur(size * 0.05))
-
-
-HEAD_RE = re.compile(r"Reference image (\d) shows [^.]*\. Use it only for the [^.]*\bhead\b")
-
-
-def head_donor_index(prompt: str) -> int:
-    """Which reference the prompt assigns the head to (the real model reads the same sentence)."""
-    m = HEAD_RE.search(prompt)
-    return int(m.group(1)) - 1 if m else 0
-
-
-def render_plate(prompt: str, refs: list[bytes]) -> bytes:
-    seed = int(hashlib.sha256(b"".join(hashlib.sha256(r).digest() for r in refs)).hexdigest()[:8], 16)
-    inner = SIZE
-    h = head_donor_index(prompt) if len(refs) > 1 else 0
-    a = _square(refs[h], inner)  # head donor
-    b = _square(refs[1 - h] if len(refs) > 1 else refs[0], inner)  # body donor
-    body = ImageOps.autocontrast(b, cutoff=1)
-    head = ImageOps.autocontrast(a, cutoff=1)
-    fused = Image.composite(head, body, _blob_mask(inner, seed))
-    # Shared tone so the two halves read as one animal.
-    toned = ImageChops.blend(fused, ImageOps.colorize(ImageOps.grayscale(fused), INK, PAPER), 0.28)
-
-    # Full-bleed: the UI supplies the plate frame and the "Generated fusion" caption (PV1-08).
-    plate = toned.resize((SIZE, SIZE), Image.Resampling.LANCZOS)
+def render(prompt: str, refs: list[bytes]) -> bytes:
+    digest = hashlib.sha256(prompt.encode() + b"".join(refs)).digest()
+    if refs:
+        img = _square(refs[0])
+        for r in refs[1:]:
+            img = ImageChops.blend(img, _square(r), 0.5)
+    else:
+        img = Image.new("RGB", (SIZE, SIZE), (digest[0], digest[1], digest[2]))
     out = io.BytesIO()
-    plate.save(out, "WEBP", quality=85, method=4)  # Muse Image returns WebP (L1-01)
+    img.save(out, "WEBP", quality=80)  # Muse Image returns WebP
     return out.getvalue()
 
 
@@ -75,30 +45,28 @@ class MockImageGen:
 
     def __init__(self, delay_scale: float = 1.0) -> None:
         self.delay_scale = delay_scale
-        self.turns: dict[str, tuple[str, list[bytes]]] = {}  # response id -> (prompt, refs), for edit turns
+        self.turns: dict[str, tuple[str, list[bytes]]] = {}  # response id -> (prompt, refs), for chained edits
 
     async def generate(self, prompt: str, reference_images: list[bytes], aspect: str | None,
                        previous_response_id: str | None = None) -> GeneratedImage:
-        """S2: with previous_response_id, an edit turn on that render (the instruction is added to its prompt)."""
+        """With previous_response_id, an edit turn on that image (the instruction is added to its prompt)."""
         if previous_response_id and previous_response_id in self.turns:
             base, refs = self.turns[previous_response_id]
             prompt, reference_images = f"{base} {prompt}", refs
-        out = await self._generate(prompt, reference_images, aspect)
+        out = await self._generate(prompt, reference_images)
         if out.response_id:
             self.turns[out.response_id] = (prompt, list(reference_images))
         return out
 
-    async def _generate(self, prompt: str, reference_images: list[bytes], aspect: str | None) -> GeneratedImage:
-        fault = current_fault.get()
-        seed = int(hashlib.sha256(b"".join(reference_images) + prompt.encode()).hexdigest()[:4], 16)
+    async def _generate(self, prompt: str, refs: list[bytes]) -> GeneratedImage:
         if self.delay_scale > 0:
-            await asyncio.sleep((2.0 + (seed % 2000) / 1000) * self.delay_scale)
+            await asyncio.sleep(0.5 * self.delay_scale)
+        fault = current_fault.get()
         if fault == "server_error":
             raise ChimeraError(ErrorCode.UPSTREAM_ERROR)
-        # L1-09: answers go through the recorded Responses API shape and the real parser.
         if fault == "refusal":
             return parse_generate_response(responses_payload(None, "Sorry, I can't create that image."), self.model_id)
         if fault == "corrupt_output":
             return parse_generate_response(responses_payload(b"\x00not-an-image"), self.model_id)
-        data = await asyncio.to_thread(render_plate, prompt, reference_images)
+        data = await asyncio.to_thread(render, prompt, refs)
         return parse_generate_response(responses_payload(data), self.model_id)

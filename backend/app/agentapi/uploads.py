@@ -18,7 +18,6 @@ from app.services import Services
 
 SLOTS = ("sire", "dam")
 VISION_SLOT = {"sire": "A", "dam": "B"}  # the vision adapter's slot labels
-MODES = ("realistic", "speculative", "mythic")
 
 MSG_HUMAN = "This looks like a photo of a person. Chimera Lab only uses animal photos."
 MSG_NOT_ANIMAL = "We couldn't find an animal in this image."
