@@ -56,7 +56,7 @@ describe("Fusion node", () => {
     seedFusion({ names: { a: "lion", b: "golden eagle" } });
     renderNode("f");
     const group = screen.getByRole("radiogroup", { name: "Art style" });
-    expect(within(group).getAllByRole("radio").map((r) => r.textContent)).toEqual(["Real", "Drawing", "Anime", "Comic", "Cartoon"]);
+    expect(within(group).getAllByRole("radio").map((r) => r.textContent)).toEqual(["Real", "Sketch", "Anime", "Comic", "Cartoon"]);
     await userEvent.click(within(group).getByRole("radio", { name: "Anime" }));
     expect(useGraph.getState().nodes[0]?.config).toMatchObject({ style: "anime" });
     expect(screen.getByText(/anime line art/)).toBeInTheDocument();

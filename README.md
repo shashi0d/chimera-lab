@@ -58,10 +58,16 @@ as `X-Visitor-Id`. Workspaces, creatures and the per-visitor caps belong to that
 
 ### The tutorial
 
-A first visit opens a guided tour through an example workspace (Tiger × Bat, anime): the Fusion, its image, the
-edit tools, the animal card and Chimeras, ending with "Start your own workspace". The example is static
-(`frontend/public/example/`, `frontend/src/example/example.json`), so the tour makes no model calls. To make a new
-example, run the backend and `python scripts/make_example.py --base http://127.0.0.1:8000` (one Fusion and one card).
+A first visit opens a hands-on tutorial in the real Lab: add a Fusion node (prefilled Tiger + Bat, anime), press Make
+creature, save the result, open Chimeras, then create a workspace. The glowing element is the next thing to click;
+Skip goes to the workspace list. Its calls are answered in the browser (`frontend/src/tutorial/sandbox.ts`): the run
+is a replay of a creature made once with the live models (`frontend/public/example/`), so the tutorial costs no
+model calls and never reaches the server.
+
+### The Garden
+
+Share to Garden (on a saved creature in Chimeras) makes it visible to everyone at `/?view=garden`; only its card is
+shown, never who made it. Optional index: `backend/app/adapters/supabase/005_garden_index.sql`.
 
 ## Tests
 

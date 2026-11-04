@@ -24,6 +24,7 @@ export const copy = {
     lab: "Lab",
     workspaces: "Workspaces",
     chimeras: "Chimeras",
+    garden: "Garden",
   },
   lab: {
     heading: "Lab: make a new creature",
@@ -63,54 +64,67 @@ export const copy = {
     accepted: "JPEG, PNG or WebP photos of one animal each. Photos stay on this device until you make the creature, and are not stored after.",
     dropHere: "Drop to add to the canvas",
   },
+  garden: {
+    title: "Garden",
+    lead: "Creatures everyone shared. Tap a card to open its field-guide page. Share yours from Chimeras.",
+    loading: "Loading the Garden",
+    empty: "Nothing in the Garden yet. Share a creature from your Chimeras and it grows here.",
+    toChimeras: "Go to your chimeras",
+    mine: "Yours",
+  },
   tour: {
     kicker: "Tutorial",
-    skip: "Skip tour",
-    back: "Back",
+    skip: "Skip tutorial",
     next: "Next",
-    start: "Start your own workspace",
-    firstWorkspace: "My first creature",
-    progress: (n: number, total: number) => `${n} of ${total}`,
-    exampleName: "Example: Tiger × Bat",
-    exampleMeta: "Tutorial · how a creature is made",
-    exampleLabel: "Example",
-    replay: "Replay the tutorial",
-    readOnlyTools: "This is the example. Try these tools in your own workspace.",
+    finish: "Finish",
+    workspaceName: "Tutorial",
+    take: "Take the tutorial",
+    takeMeta: "Make a creature step by step",
+    progress: (n: number, total: number) => `Step ${n} of ${total}`,
+    clickHint: "Click the glowing button.",
+    backToTutorial: "Back to the tutorial",
     steps: {
-      fusion: {
-        title: "Pick two animals",
-        body: "This is an example workspace. A Fusion node takes two animals: drop a photo on each slot or type their names (here Tiger and Bat). Pick an art style, here Anime, and press Make creature.",
+      return: {
+        title: "Your tutorial is waiting",
+        body: "You left the tutorial canvas. Go back to make your first creature, or skip the tutorial.",
       },
-      image: {
-        title: "The creature arrives",
-        body: "In about a minute the new creature appears as an image card, connected to its Fusion. Select any image card to open its tools.",
+      "add-fusion": {
+        title: "Add a Fusion node",
+        body: "A Fusion node mixes two animals into one creature. Add one from the toolbar on the left.",
       },
-      tools: {
-        title: "Change anything",
-        body: "The panel on the right acts on the selected image. Every edit adds a new image card after it, so the whole path stays on the canvas.",
-        points: [
-          { label: "Paint an area:", text: "brush over a part, like the wings or the tail, and say what should be there." },
-          { label: "Draw on it:", text: "sketch a shape, like horns or a crest, and it appears in the image." },
-          { label: "Revise:", text: "describe a change in words, like “make it a snow tiger”." },
-        ],
+      make: {
+        title: "Make the creature",
+        body: "We filled in Tiger and Bat and picked the Anime style. You could also drop photos on the slots or pick another style. Press Make creature.",
       },
-      card: {
-        title: "Make its animal card",
-        body: "The animal card is a field-guide page: name, size, habitat, explorer's notes and four more angles of the creature. Tap the card to open it.",
+      wait: {
+        title: "Your creature is being made",
+        body: "The model is drawing it now; the Fusion node shows the progress. A real run takes about a minute, this tutorial replays one faster.",
+      },
+      save: {
+        title: "Here it is! Save it",
+        body: "Every creature arrives as an image card. Its toolbar edits it: paint an area, sketch on it, revise it in words. Save it to keep it in Chimeras; its animal card gets drawn.",
+      },
+      "open-chimeras": {
+        title: "Open Chimeras",
+        body: "Your saved creatures are collected in Chimeras, each with its animal card.",
       },
       chimeras: {
         title: "Your collection",
-        body: "Press Save on an image you like and it is collected here in Chimeras, with its animal card. The example creature is here too.",
+        body: "The animal card fills in by itself: name, size, habitat, notes and four more angles. Tap a card to open it. Share to Garden puts a creature where everyone can see it.",
       },
-      start: {
-        title: "Your turn",
-        body: "Start your own workspace and make your first creature. You can replay this tour from the Workspaces page any time.",
+      "nav-workspaces": {
+        title: "Now it's your turn",
+        body: "Go back to your workspaces to start your own.",
+      },
+      "new-workspace": {
+        title: "Start your own workspace",
+        body: "Each workspace is a canvas for your creatures. Create one and make your first chimera.",
       },
     },
   },
   styles: {
     real: { label: "Real", hint: "A photorealistic wildlife photo." },
-    drawing: { label: "Drawing", hint: "A hand-drawn pencil and ink illustration." },
+    drawing: { label: "Sketch", hint: "A hand-drawn pencil and ink sketch." },
     anime: { label: "Anime", hint: "Clean anime line art with cel shading." },
     comic: { label: "Comic", hint: "Bold ink outlines and halftone shading." },
     cartoon: { label: "Cartoon", hint: "Cute, simple shapes and flat colours." },

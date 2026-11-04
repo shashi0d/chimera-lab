@@ -24,6 +24,8 @@ import { UnsupportedNodeView } from "../nodes/unsupported/NodeView";
 import { derived, isTerminal, useEvoRuns } from "../evo/runs";
 import { createNode } from "../nodes/registry";
 import { toast } from "../ui/toastStore";
+import { useWorkspaces } from "../persistence/workspaces";
+import { TUTORIAL_WS } from "../tutorial/sandbox";
 import { useUi } from "../ui/uiStore";
 import { addImageFiles, findFreeSpot, FOOTPRINT } from "./addImages";
 import { DropMenu, type DropAt } from "./DropMenu";
@@ -89,6 +91,8 @@ export function Canvas() {
   const [dropAt, setDropAt] = useState<DropAt | null>(null);
   const closeDropMenu = useCallback(() => setDropAt(null), []);
   const [library, setLibrary] = useState(false);
+  // The tutorial's empty canvas: the tour says what to do instead of the Add images card.
+  const tutorial = useWorkspaces((s) => s.currentId === TUTORIAL_WS);
   const closeLibrary = useCallback(() => setLibrary(false), []);
   const addVersionCard = useCallback(
     (v: LabVersion) => {
@@ -409,7 +413,7 @@ export function Canvas() {
       <ToolRail onAddImage={() => setLibrary(true)} />
       {library ? <LibraryDialog onClose={closeLibrary} onAddFiles={(files) => void addFiles(files)} onAddVersion={addVersionCard} /> : null}
       <ZoomControls />
-      {nodes.length === 0 && !dragging ? <EmptyState onAddImage={() => setLibrary(true)} onTypeNames={addNamesOnly} /> : null}
+      {nodes.length === 0 && !dragging && !tutorial ? <EmptyState onAddImage={() => setLibrary(true)} onTypeNames={addNamesOnly} /> : null}
       {dragging ? (
         <div className="drop-overlay" aria-hidden="true">
           <p className="drop-overlay__label">{copy.empty.dropHere}</p>

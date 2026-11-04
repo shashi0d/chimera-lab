@@ -1,4 +1,4 @@
-import { createStore, get, set } from "idb-keyval";
+import { createStore, del, get, set } from "idb-keyval";
 import { create } from "zustand";
 import { copy } from "../copy";
 import { GraphLoadError, loadGraph } from "../graph/migrate";
@@ -24,6 +24,15 @@ function db() {
   return store;
 }
 const localKey = (userId: string, workspaceId: string) => (workspaceId === "main" ? `graph:${userId}` : `graph:${userId}:${workspaceId}`);
+
+/** Drop this device's copy of a canvas (the tutorial's, when it starts over or ends). */
+export async function forgetLocalCanvas(userId: string, workspaceId: string): Promise<void> {
+  try {
+    await del(localKey(userId, workspaceId), db());
+  } catch {
+    // no copy, or storage blocked
+  }
+}
 
 /** Save now (the Save button); resolves when the server has the canvas, or it was kept on this device. */
 let flushNow: (() => Promise<void>) | null = null;

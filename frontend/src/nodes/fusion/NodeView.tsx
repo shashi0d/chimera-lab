@@ -22,6 +22,8 @@ import type { NodeViewProps } from "../types";
 import { FUSION_INPUTS, FUSION_OUTPUTS } from "./ports";
 import { startFusion, useFusionStart } from "./start";
 import { readStyle, type FusionConfig, type FusionData } from "./types";
+import { useWorkspaces } from "../../persistence/workspaces";
+import { TUTORIAL_WS } from "../../tutorial/sandbox";
 
 const t = copy.nodes.fusion;
 
@@ -143,7 +145,9 @@ export function FusionView({ node, selected, issues }: NodeViewProps<FusionConfi
   const status = runStatus(run, starting) ?? (blocking.length ? { tone: "idle" as const, label: copy.status.idle } : { tone: "idle" as const, label: copy.status.ready });
   const shownError = startError ?? null;
   const countdown = useCountdown(shownError, () => void startFusion(node.id));
-  const disabledReason = blocking[0]?.message ?? (capped ? t.capped : null);
+  // The tutorial's run is a replay (tutorial/sandbox.ts): today's cap doesn't apply to it.
+  const tutorial = useWorkspaces((s) => s.currentId === TUTORIAL_WS);
+  const disabledReason = blocking[0]?.message ?? (capped && !tutorial ? t.capped : null);
   // The CAP_REACHED error already says it; don't repeat it as a hint.
   const showHint = Boolean(disabledReason) && !(shownError?.code === "CAP_REACHED" && !blocking.length);
 
@@ -180,6 +184,7 @@ export function FusionView({ node, selected, issues }: NodeViewProps<FusionConfi
               variant="primary"
               icon="fusion"
               className="nodrag fusion-node__make"
+              data-tour="make"
               disabled={Boolean(disabledReason) || countdown !== null}
               aria-describedby={showHint ? `${node.id}-hint` : undefined}
               onClick={make}

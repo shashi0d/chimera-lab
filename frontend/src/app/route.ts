@@ -5,15 +5,18 @@ import { useSyncExternalStore } from "react";
 //   /?ws=<id>                  that workspace's canvas
 //   /?ws=<id>&run=<runId>      the canvas, following that run (reload resumes it)
 //   /?view=chimeras            the saved creatures, each with its animal card
+//   /?view=garden              the Garden: creatures everyone shared
 
 export type Route =
   | { view: "home" }
   | { view: "lab"; runId: string | null; workspaceId?: string | null }
-  | { view: "chimeras" };
+  | { view: "chimeras" }
+  | { view: "garden" };
 
 export function parseRoute(search: string): Route {
   const q = new URLSearchParams(search);
   if (q.get("view") === "chimeras") return { view: "chimeras" };
+  if (q.get("view") === "garden") return { view: "garden" };
   const ws = q.get("ws");
   const run = q.get("run");
   if (ws || run) return { view: "lab", runId: run, workspaceId: ws };
@@ -26,6 +29,8 @@ export function hrefFor(r: Route): string {
       return "/";
     case "chimeras":
       return "/?view=chimeras";
+    case "garden":
+      return "/?view=garden";
     case "lab": {
       const q = new URLSearchParams();
       if (r.workspaceId) q.set("ws", r.workspaceId);
