@@ -144,7 +144,8 @@ async def start_run(request: Request) -> Response:
     ts = now_iso()
     doc = {"runId": run_id, "status": "queued", "position": None, "sire": sire, "dam": dam, "mode": mode,
            "createdAt": ts, "updatedAt": ts, "lastEventId": 0, "creatureId": None, "error": None,
-           "pendingChoice": None, "events": [], "owner": user.id, "style": style}
+           "pendingChoice": None, "events": [], "owner": user.id, "style": style,
+           "workspaceId": _workspace_id(form.get("workspaceId"))}
     job = Job(doc=doc, driver=driver, runner=a.runner)
     job.extra["refs"] = refs  # in memory only: photos are never stored
     await a.runner.submit(job)
@@ -152,6 +153,11 @@ async def start_run(request: Request) -> Response:
             "eventsUrl": f"/evo/agent/runs/{run_id}/events", "runUrl": f"/evo/agent/runs/{run_id}",
             "sire": sire, "dam": dam, "mode": mode, "style": style}
     return JSONResponse(body, status_code=202)
+
+
+def _workspace_id(raw: Any) -> str | None:
+    value = str(raw).strip() if isinstance(raw, str) else ""
+    return value if re.match(r"^[A-Za-z0-9_-]{1,64}$", value) else None
 
 
 async def _own_version(a: AgentApi, version_id: str, user: User, slot: str) -> dict[str, Any]:

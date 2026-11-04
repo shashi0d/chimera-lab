@@ -1,4 +1,4 @@
-import { createStore, del, get, set } from "idb-keyval";
+import { createStore, del, get, keys, set } from "idb-keyval";
 
 // Local copies of input images: previews work offline and queued uploads survive reloads.
 let store: ReturnType<typeof createStore> | null = null;
@@ -43,4 +43,13 @@ export function rememberBlobUrl(key: string, blob: Blob): string {
   const url = URL.createObjectURL(blob);
   objectUrls.set(key, url);
   return url;
+}
+
+/** Keys of stored photos (input images; masks and drawings are not photos). */
+export async function photoKeys(): Promise<string[]> {
+  try {
+    return ((await keys(db())) as IDBValidKey[]).map(String).filter((k) => k.startsWith("img-"));
+  } catch {
+    return [];
+  }
 }

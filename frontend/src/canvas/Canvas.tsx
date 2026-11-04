@@ -25,8 +25,11 @@ import { derived, isTerminal, useEvoRuns } from "../evo/runs";
 import { createNode } from "../nodes/registry";
 import { toast } from "../ui/toastStore";
 import { useUi } from "../ui/uiStore";
-import { addImageFiles, FOOTPRINT } from "./addImages";
+import { addImageFiles, findFreeSpot, FOOTPRINT } from "./addImages";
 import { DropMenu, type DropAt } from "./DropMenu";
+import { LibraryDialog } from "./LibraryDialog";
+import type { LabVersion } from "../lab/api";
+import { afterNodesDeleted, confirmImageDelete } from "../lab/deletion";
 import { EmptyState } from "./EmptyState";
 import { NodeErrorBoundary } from "./NodeErrorBoundary";
 import { ToolRail } from "./ToolRail";
@@ -85,6 +88,17 @@ export function Canvas() {
   const [dragging, setDragging] = useState(false);
   const [dropAt, setDropAt] = useState<DropAt | null>(null);
   const closeDropMenu = useCallback(() => setDropAt(null), []);
+  const [library, setLibrary] = useState(false);
+  const closeLibrary = useCallback(() => setLibrary(false), []);
+  const addVersionCard = useCallback(
+    (v: LabVersion) => {
+      const center = flow.screenToFlowPosition({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
+      const size = FOOTPRINT.version!;
+      const node = createNode("version", findFreeSpot({ x: center.x - size.w / 2, y: center.y - size.h / 2 }, size.w, size.h), { version: v, runId: null, error: null });
+      useGraph.getState().addNode(node, { select: true });
+    },
+    [flow],
+  );
   const [shake, setShake] = useState<string | null>(null);
 
   // ---------------------------------------------------------------- derived flow state
@@ -190,6 +204,13 @@ export function Canvas() {
       selection: [],
       revision: s.revision + 1,
     }));
+    afterNodesDeleted();
+  }, []);
+
+  // Deleting images is permanent (server and device): ask first.
+  const onBeforeDelete = useCallback(async ({ nodes: ns }: { nodes: Node[]; edges: Edge[] }) => {
+    if (useGraph.getState().readOnly) return false;
+    return confirmImageDelete(ns.map((n) => n.id));
   }, []);
 
   const attempt = (c: Connection): ConnectionAttempt => ({
@@ -359,6 +380,7 @@ export function Canvas() {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onDelete={onDelete}
+        onBeforeDelete={onBeforeDelete}
         onConnect={onConnect}
         onConnectEnd={onConnectEnd}
         isValidConnection={isValidConnection}
@@ -384,9 +406,10 @@ export function Canvas() {
       {dropAt ? (
         <DropMenu at={dropAt} onClose={closeDropMenu} />
       ) : null}
-      <ToolRail onAddFiles={(files) => void addFiles(files)} />
+      <ToolRail onAddImage={() => setLibrary(true)} />
+      {library ? <LibraryDialog onClose={closeLibrary} onAddFiles={(files) => void addFiles(files)} onAddVersion={addVersionCard} /> : null}
       <ZoomControls />
-      {nodes.length === 0 && !dragging ? <EmptyState onAddFiles={(files) => void addFiles(files)} onTypeNames={addNamesOnly} /> : null}
+      {nodes.length === 0 && !dragging ? <EmptyState onAddImage={() => setLibrary(true)} onTypeNames={addNamesOnly} /> : null}
       {dragging ? (
         <div className="drop-overlay" aria-hidden="true">
           <p className="drop-overlay__label">{copy.empty.dropHere}</p>

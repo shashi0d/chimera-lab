@@ -125,11 +125,6 @@ function ResultSummary({ run }: { run: DerivedRun }) {
           {fin.remainingFailures.length ? t.remaining(fin.remainingFailures.length) : t.noRemaining}
           {fin.hiddenChecks > 0 ? ` ${copy.labels.hiddenChecks(fin.hiddenChecks)}` : ""}
         </p>
-        <div className="result-sum__actions">
-          <Button variant="primary" icon="card" onClick={() => navigate({ view: "creature", creatureId: fin.creatureId })}>
-            {t.openCard}
-          </Button>
-        </div>
       </div>
     </section>
   );
@@ -218,9 +213,6 @@ export function TracePanel({ runId }: { runId: string }) {
             <div className="now-card__actions">
               <Button variant="primary" icon="fusion" onClick={() => navigate({ view: "lab", runId: null })}>
                 {copy.gallery.make}
-              </Button>
-              <Button variant="ghost" onClick={() => navigate({ view: "gallery" })}>
-                {copy.nav.gallery}
               </Button>
             </div>
           </section>

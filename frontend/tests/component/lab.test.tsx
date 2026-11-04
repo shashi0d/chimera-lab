@@ -3,7 +3,6 @@ import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { setTestSession, useAuth } from "../../src/auth/auth";
 import { setTransport } from "../../src/evo/index";
-import type { Publication } from "../../src/evo/types";
 import { useGraph } from "../../src/graph/store";
 import { labApi, type AnimalCard, type LabJob, type LabVersion } from "../../src/lab/api";
 import { addCardNode, addEditNode, addFusionFrom, addVersionNode, lineage, versionNumber } from "../../src/lab/graph";
@@ -14,7 +13,6 @@ import { followJobs, generateEdit, stopFollowingJobs, useLab } from "../../src/l
 import { ToolsPanel } from "../../src/lab/ToolsPanel";
 import type { EditData } from "../../src/nodes/edit/types";
 import type { VersionData } from "../../src/nodes/version/types";
-import { CreationPage } from "../../src/screens/CreationPage";
 import { LabView } from "../../src/screens/LabView";
 import { mockTransport, resetMock } from "../fakes/evoTransport";
 import { renderInFlow, renderNode } from "./render";
@@ -112,21 +110,19 @@ describe("the Lab path (FLORA-style: image card -> edit card -> image card)", ()
 });
 
 describe("tools for the selected image", () => {
-  it("shows the path, and publishing puts the version in the gallery", async () => {
+  it("shows the path, and Save keeps the creature (its card is made in the background)", async () => {
     const v1 = withV1();
     const edit = addEditNode(v1, "revise", "Blue fur");
     const v2 = addVersionNode(edit, { version: version("labv_2", { parentId: "labv_1", operation: "revise", instruction: "Blue fur" }), runId: null, error: null });
-    vi.spyOn(labApi, "savedReview").mockResolvedValue(null);
-    const publish = vi.spyOn(labApi, "publish").mockResolvedValue(version("labv_2", { parentId: "labv_1", operation: "revise", instruction: "Blue fur", publicationId: "pub_labv_2" }));
+    const save = vi.spyOn(labApi, "setSaved").mockResolvedValue(version("labv_2", { parentId: "labv_1", operation: "revise", instruction: "Blue fur", saved: true }));
     renderInFlow(<ToolsPanel nodeId={v2} />);
     const path = screen.getByRole("list");
     expect(within(path).getAllByRole("listitem")).toHaveLength(2);
     expect(within(path).getByText("V2 · Revise")).toBeInTheDocument();
-    await userEvent.click(screen.getByRole("button", { name: "Publish to the gallery" }));
-    expect(publish).toHaveBeenCalledWith("labv_2", "lion × eagle");
-    await vi.waitFor(() => expect(screen.getByRole("link", { name: "View in the gallery" })).toHaveAttribute("href", "/?creation=pub_labv_2"));
-    expect((useGraph.getState().nodes.find((n) => n.id === v2)?.data as VersionData).version?.publicationId).toBe("pub_labv_2");
-    expect(await screen.findByText(/19 of 20 lab actions left today/)).toBeInTheDocument();
+    expect(screen.queryByText(/gallery/i)).toBeNull();
+    await userEvent.click(screen.getByRole("button", { name: "Save" }));
+    expect(save).toHaveBeenCalledWith("labv_2", true);
+    await vi.waitFor(() => expect((useGraph.getState().nodes.find((n) => n.id === v2)?.data as VersionData).version?.saved).toBe(true));
   });
 
   it("the panel has no visual review or collaborator", () => {
@@ -139,44 +135,17 @@ describe("tools for the selected image", () => {
 });
 
 describe("sign-in", () => {
-  it("the Lab asks to sign in; the gallery doesn't", () => {
+  it("the Lab asks to sign in", () => {
     setTestSession(null);
     renderInFlow(<LabView ready runId={null} />);
     expect(screen.getByRole("heading", { name: "Sign in to create" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Email me a sign-in link" })).toBeDisabled();
-    expect(screen.getByRole("link", { name: "browse the gallery" })).toHaveAttribute("href", "/");
   });
 
   it("explains when sign-in is not configured", () => {
     useAuth.setState({ status: "unavailable", error: "Sign-in is not configured on this server." });
     renderInFlow(<LabView ready runId={null} />);
     expect(screen.getByRole("alert")).toHaveTextContent("not configured");
-  });
-});
-
-describe("a published creation in the gallery", () => {
-  it("shows the final image and every step from the animals", async () => {
-    const pub: Publication = {
-      publicationId: "pub_labv_3", title: "Fox-lion", createdAt: "2026-11-03T00:00:00Z", mode: "realistic", imageUrl: "/evo/files/lab/labv_3.png", sourceCreatureId: "crt_1",
-      sire: { commonName: "lion", scientificName: "Panthera leo", source: "name", confidence: null }, dam: { commonName: "red fox", scientificName: null, source: "name", confidence: null },
-      steps: [
-        { versionId: "labv_1", operation: "fusion", instruction: "lion × red fox (realistic)", imageUrl: "/a.png", createdAt: "" },
-        { versionId: "labv_2", operation: "revise", instruction: "Longer legs", imageUrl: "/b.png", createdAt: "" },
-        { versionId: "labv_3", operation: "paint", instruction: "Blue mane", imageUrl: "/c.png", createdAt: "" },
-      ],
-    };
-    vi.spyOn(mockTransport, "getPublication").mockResolvedValue(pub);
-    renderInFlow(<CreationPage publicationId="pub_labv_3" />);
-    expect(await screen.findByRole("heading", { name: "Fox-lion" })).toBeInTheDocument();
-    expect(screen.getByText("2 edits after the agent's image")).toBeInTheDocument();
-    const steps = screen.getAllByRole("listitem").map((li) => li.textContent);
-    expect(steps).toEqual(["Animals: lion and red fox", "V1 · Fusion: the agent's image", "V2 · Revise: Longer legs", "V3 · Paint: Blue mane"]);
-    expect(screen.getByRole("link", { name: "How the agent made V1" })).toHaveAttribute("href", "/?creature=crt_1");
-  });
-
-  it("an unpublished creation says it isn't in the gallery", async () => {
-    renderInFlow(<CreationPage publicationId="pub_gone" />);
-    expect(await screen.findByRole("button", { name: "Back to the gallery" })).toBeInTheDocument();
   });
 });
 
@@ -197,17 +166,41 @@ describe("building on a generated image", () => {
     expect(addCardNode(v1)).toBe(id); // one card per image
     expect(nodesOf("card")).toHaveLength(1);
     renderNode(id);
-    await vi.waitFor(() => expect(screen.getByRole("heading", { name: "Scalesteed" })).toBeInTheDocument(), { timeout: 5000 });
+    // On the canvas the card is small (the closed card); a click opens the full card in a modal.
+    const tile = await screen.findByRole("button", { name: "Scalesteed. Open card" }, { timeout: 5000 });
     expect(make).toHaveBeenCalledTimes(1);
     expect(make).toHaveBeenCalledWith("labv_1");
     expect(saved).toHaveBeenCalledWith("labv_1");
-    expect(screen.getByText(/Length - 3 m/)).toBeInTheDocument();
-    expect(screen.getByText("Habitat - Dry savanna")).toBeInTheDocument();
-    expect(screen.getByText("SCALES")).toBeInTheDocument();
-    expect(within(screen.getByRole("list", { name: "Other angles" })).getAllByRole("img")).toHaveLength(4);
-    expect(screen.queryByText("The scales read as pangolin.")).toBeNull();
-    await userEvent.click(screen.getByRole("button", { name: "Why this entry?" }));
-    expect(screen.getByText("The scales read as pangolin.")).toBeInTheDocument();
+    expect(tile.textContent).toContain("SCALES");
+    expect(screen.queryByRole("dialog")).toBeNull();
+    await userEvent.click(tile);
+    const modal = await screen.findByRole("dialog", { name: "Scalesteed, animal card" });
+    expect(modal.textContent).toMatch(/Length - 3 m\s+Weight - 420 kg/);
+    expect(modal.textContent).toContain("Habitat - Dry savanna");
+    expect(modal.textContent).toContain("It rolls its armoured tail when startled.");
+    expect(within(modal).getAllByRole("img", { name: /Scalesteed, (front|side|back|above) view/ })).toHaveLength(4);
+    await vi.waitFor(() => expect(within(modal).getByRole("group", { name: "Scalesteed card" })).toHaveAttribute("aria-expanded", "true"));
+    await userEvent.click(within(modal).getByRole("button", { name: "Close the card" }));
+    expect(screen.queryByRole("dialog")).toBeNull();
+  });
+
+  it("the open card's text can be edited and is saved to the server", async () => {
+    const v1 = withV1();
+    vi.spyOn(labApi, "card").mockResolvedValue(ready);
+    const editProfile = vi.spyOn(labApi, "editProfile").mockResolvedValue(version("labv_1", { title: "Dune Strider", profile: { ...profile, name: "Dune Strider" }, card: { ...ready, profile: { ...profile, name: "Dune Strider" } } }));
+    const id = addCardNode(v1);
+    renderNode(id);
+    await userEvent.click(await screen.findByRole("button", { name: "Scalesteed. Open card" }));
+    await screen.findByRole("dialog", { name: "Scalesteed, animal card" });
+    await userEvent.click(screen.getByRole("button", { name: "Edit" }));
+    const heading = screen.getByRole("heading", { name: "Scalesteed" });
+    expect(heading).toHaveAttribute("contenteditable", "true");
+    heading.textContent = "Dune Strider";
+    await userEvent.click(screen.getByRole("button", { name: "Save" }));
+    await vi.waitFor(() => expect(editProfile).toHaveBeenCalled());
+    expect(editProfile.mock.calls[0]![0]).toBe("labv_1");
+    expect(editProfile.mock.calls[0]![1]).toMatchObject({ name: "Dune Strider", length: "3 m", habitat: "Dry savanna" });
+    await vi.waitFor(() => expect((useGraph.getState().nodes.find((n) => n.id === v1)?.data as VersionData).version?.title).toBe("Dune Strider"));
   });
 
   it("a saved card is not asked for again on reload, and there is no way to make a second one", async () => {
@@ -228,7 +221,7 @@ describe("building on a generated image", () => {
     renderNode(id);
     await vi.waitFor(() => expect(screen.getByRole("button", { name: "Try again" })).toBeInTheDocument());
     await userEvent.click(screen.getByRole("button", { name: "Try again" }));
-    await vi.waitFor(() => expect(screen.getByRole("heading", { name: "Scalesteed" })).toBeInTheDocument());
+    expect(await screen.findByRole("button", { name: "Scalesteed. Open card" })).toBeInTheDocument();
   });
 
   it("an image can be animal A of a new Fusion, which sends its version id", async () => {

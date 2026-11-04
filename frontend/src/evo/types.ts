@@ -54,6 +54,8 @@ export interface StartInput {
   /** An earlier generated creature as the parent: its image goes to the image model. */
   sireVersionId?: string | null;
   damVersionId?: string | null;
+  /** The workspace the run's images belong to. */
+  workspaceId?: string | null;
   sireImage?: Blob | null;
   damImage?: Blob | null;
   sireName?: string | null;

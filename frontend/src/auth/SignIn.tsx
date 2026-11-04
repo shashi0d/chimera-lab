@@ -1,5 +1,4 @@
 import { useId, useState } from "react";
-import { hrefFor, linkHandler } from "../app/route";
 import { Button } from "../ui/Button";
 import { Icon } from "../ui/Icon";
 import { sendMagicLink, useAuth } from "./auth";
@@ -61,9 +60,6 @@ export function SignIn() {
             ) : null}
           </form>
         )}
-        <p className="signin__alt">
-          Or <a href={hrefFor({ view: "gallery" })} onClick={linkHandler({ view: "gallery" })}>browse the gallery</a> without an account.
-        </p>
       </div>
     </section>
   );

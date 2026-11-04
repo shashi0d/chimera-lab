@@ -90,13 +90,13 @@ describe("adding images (TASKSHEET 7.1, R1: kept on this device until a run star
 
 /** The server's saved workspace, as GET /evo/lab/workspace returns it. */
 function serverHas(graph: unknown) {
-  vi.spyOn(labApi, "getWorkspace").mockResolvedValue({ graph: graph as never, revision: 1, updatedAt: "2026-11-03T00:00:00Z" });
+  vi.spyOn(labApi, "loadWorkspace").mockResolvedValue({ id: "main", name: "My workspace", createdAt: "2026-11-03T00:00:00Z", graph: graph as never, revision: 1, updatedAt: "2026-11-03T00:00:00Z" });
 }
 
 describe("workspace restore (the signed-in user's canvas)", () => {
   it("corrupt saved workspace is discarded with a toast", async () => {
     serverHas("{{{ not a graph");
-    await restoreWorkspace("user-1");
+    await restoreWorkspace("user-1", "main");
     expect(useGraph.getState().nodes).toHaveLength(0);
     expect(useToasts.getState().toasts[0]?.message).toMatch(/couldn't be read/);
   });
@@ -104,7 +104,7 @@ describe("workspace restore (the signed-in user's canvas)", () => {
   it("orphan edges are removed on load with a note", async () => {
     vi.spyOn(console, "info").mockImplementation(() => undefined);
     serverHas({ schemaVersion: 1, graphId: "g1", nodes: [{ id: "a", type: "image-input", position: { x: 0, y: 0 } }], edges: [{ id: "e", source: "a", sourcePort: "out", target: "zz", targetPort: "a" }] });
-    await restoreWorkspace("user-1");
+    await restoreWorkspace("user-1", "main");
     expect(useGraph.getState().graphId).toBe("g1");
     expect(useGraph.getState().edges).toHaveLength(0);
     expect(useToasts.getState().toasts[0]?.message).toMatch(/Removed 1 broken connection/);
@@ -122,7 +122,7 @@ describe("workspace restore (the signed-in user's canvas)", () => {
       ],
       edges: [],
     });
-    await restoreWorkspace("user-1");
+    await restoreWorkspace("user-1", "main");
     const byId = Object.fromEntries(useGraph.getState().nodes.map((x) => [x.id, x]));
     expect(byId.a?.data).toMatchObject({ status: "ready", blobKey: "k" });
     expect(byId.f?.config).toEqual({ mode: "realistic" });
@@ -150,7 +150,7 @@ describe("making a creature through the agent API (contract POST /evo/agent/runs
     expect(useGraph.getState().edges.some((e) => e.source === "f" && e.target === card()?.id)).toBe(true);
     await vi.waitFor(() => expect(useEvoRuns.getState().runs[runId]?.stream).toBe("closed"), { timeout: 3000 });
     await vi.waitFor(() => expect((card()?.data as VersionData).version?.id).toBe(`labv_run_${runId}`));
-    expect(fromRun).toHaveBeenCalledWith(runId);
+    expect(fromRun.mock.calls[0]![0]).toBe(runId);
     expect(useGraph.getState().nodes.filter((x) => x.type === "version")).toHaveLength(1);
     stop();
   });

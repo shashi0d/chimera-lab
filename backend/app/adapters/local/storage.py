@@ -32,6 +32,10 @@ class LocalStorage:
             raise ChimeraError(ErrorCode.NOT_FOUND, "File not found.")
         return await asyncio.to_thread(path.read_bytes)
 
+    async def delete(self, key: str) -> None:
+        path = self._path(key)
+        await asyncio.to_thread(path.unlink, True)
+
     async def get_url(self, key: str) -> str:
         # Local development only (the engine's own saved images); public images go through PublicFiles.
         return f"/{key}/content"

@@ -36,9 +36,10 @@ export const copy = {
   },
   nav: {
     label: "Main",
-    home: "Chimera Lab: gallery",
-    gallery: "Gallery",
+    home: "Chimera Lab",
     lab: "Lab",
+    workspaces: "Workspaces",
+    chimeras: "Chimeras",
   },
   lab: {
     heading: "Lab: make a new creature",
@@ -197,7 +198,7 @@ export const copy = {
     scrollLabel: "Trace",
     steps: "Steps so far",
     howMade: (n: number) => `How the agent made it (${plural(n, "step")})`,
-    duration: "A creature takes about 5 minutes.",
+    duration: "A creature takes about a minute.",
     connecting: "Connecting to the run…",
     position: (n: number) => `Position ${n} in the queue`,
     queuedShort: (n: number) => `Queued · #${n}`,

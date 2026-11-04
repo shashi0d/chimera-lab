@@ -9,9 +9,9 @@ import { getDefinition } from "../nodes/registry";
 import { toast } from "../ui/toastStore";
 
 /**
- * The Lab canvas belongs to the signed-in user and is saved to the server (PUT /evo/lab/workspace), so it follows
- * them to another device. A copy per user stays in IndexedDB: it is used when the server can't be reached, and is
- * uploaded the next time a save goes through. Photos stay on the device where they were added.
+ * Each workspace's canvas belongs to the signed-in user and is saved to the server (PUT /evo/lab/workspaces/<id>),
+ * so it follows them to another device. A copy per workspace stays in IndexedDB: it is used when the server can't be
+ * reached, and is uploaded the next time a save goes through. Photos stay on the device where they were added.
  */
 
 const LOCAL_DEBOUNCE_MS = 500;
@@ -23,7 +23,13 @@ function db() {
   store ??= createStore("chimera-lab", "graphs");
   return store;
 }
-const localKey = (userId: string) => `graph:${userId}`;
+const localKey = (userId: string, workspaceId: string) => (workspaceId === "main" ? `graph:${userId}` : `graph:${userId}:${workspaceId}`);
+
+/** Save now (the Save button); resolves when the server has the canvas, or it was kept on this device. */
+let flushNow: (() => Promise<void>) | null = null;
+export async function saveNow(): Promise<void> {
+  await flushNow?.();
+}
 
 export type SaveState = "idle" | "saving" | "saved" | "saved-local";
 
@@ -49,16 +55,16 @@ function load(raw: unknown): boolean {
 }
 
 /** The user's canvas: from the server, else this device's copy (offline), else empty. */
-export async function restoreWorkspace(userId: string): Promise<void> {
+export async function restoreWorkspace(userId: string, workspaceId: string): Promise<void> {
   useGraph.getState().reset();
   let local: unknown;
   try {
-    local = await get(localKey(userId), db());
+    local = await get(localKey(userId, workspaceId), db());
   } catch {
     local = undefined;
   }
   try {
-    const remote = await labApi.getWorkspace();
+    const remote = await labApi.loadWorkspace(workspaceId);
     if (remote.graph) {
       load(remote.graph);
       return;
@@ -70,7 +76,7 @@ export async function restoreWorkspace(userId: string): Promise<void> {
 }
 
 /** Save every change: to this device at once, to the server a moment later (and before the page hides). */
-export function startAutosave(userId: string): () => void {
+export function startAutosave(userId: string, workspaceId: string): () => void {
   let localTimer: ReturnType<typeof setTimeout> | null = null;
   let serverTimer: ReturnType<typeof setTimeout> | null = null;
   let firstPendingAt: number | null = null;
@@ -79,7 +85,7 @@ export function startAutosave(userId: string): () => void {
 
   const saveLocal = () => {
     localTimer = null;
-    void set(localKey(userId), useGraph.getState().toDoc(), db()).catch(() => undefined);
+    void set(localKey(userId, workspaceId), useGraph.getState().toDoc(), db()).catch(() => undefined);
   };
 
   const saveServer = async (): Promise<void> => {
@@ -93,7 +99,7 @@ export function startAutosave(userId: string): () => void {
     dirty = false;
     useSaveState.getState().set("saving");
     inflight = labApi
-      .putWorkspace(doc)
+      .saveWorkspace(workspaceId, { graph: doc })
       .then(() => useSaveState.getState().set("saved"))
       .catch(() => useSaveState.getState().set("saved-local"))
       .finally(() => {
@@ -124,9 +130,18 @@ export function startAutosave(userId: string): () => void {
     }
   };
   window.addEventListener("pagehide", flush);
+  flushNow = async () => {
+    if (localTimer) clearTimeout(localTimer);
+    saveLocal();
+    if (serverTimer) clearTimeout(serverTimer);
+    serverTimer = null;
+    await saveServer();
+    await inflight;
+  };
   return () => {
     unsub();
     window.removeEventListener("pagehide", flush);
     flush();
+    flushNow = null;
   };
 }

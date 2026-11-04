@@ -3,7 +3,7 @@ import type { GraphDoc } from "../graph/types";
 
 /** The Lab API (/evo/lab): versions of a creature, edit jobs, review, collaborator, workspace, publishing. */
 
-export type Operation = "fusion" | "revise" | "paint";
+export type Operation = "fusion" | "revise" | "paint" | "sketch";
 
 export interface LabVersion {
   id: string;
@@ -22,6 +22,22 @@ export interface LabVersion {
   profile?: CreatureProfile | null;
   /** The animal card, once made (one per image, on demand). */
   card?: AnimalCard | null;
+  /** Saved to the chimeras page (its card is made in the background). */
+  saved?: boolean;
+  savedAt?: string | null;
+  /** The workspace it was made in. */
+  workspaceId?: string | null;
+}
+
+export interface WorkspaceInfo {
+  id: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  revision?: number;
+  imageCount?: number;
+  /** Up to four of its newest images (the home page's tile). */
+  thumbnails?: string[];
 }
 
 /** A generated creature's field-guide entry, written by the vision model from the image and how it was made. */
@@ -51,7 +67,7 @@ export type JobStatus = "queued" | "running" | "succeeded" | "failed" | "interru
 
 export interface LabJob {
   id: string;
-  operation: "revise" | "paint";
+  operation: "revise" | "paint" | "sketch";
   status: JobStatus;
   stage: string;
   parentId: string;
@@ -98,8 +114,44 @@ const enc = encodeURIComponent;
 const json = (body: unknown) => ({ headers: baseHeaders({ "Content-Type": "application/json" }), body: JSON.stringify(body) });
 
 export const labApi = {
-  async versionFromRun(runId: string): Promise<LabVersion> {
-    return (await request<LabVersion>("/evo/lab/versions/from-run", { method: "POST", ...json({ runId }) })).data;
+  async versionFromRun(runId: string, workspaceId?: string | null): Promise<LabVersion> {
+    return (await request<LabVersion>("/evo/lab/versions/from-run", { method: "POST", ...json({ runId, workspaceId }) })).data;
+  },
+  async sketch(versionId: string, drawing: Blob, instruction: string): Promise<LabJob> {
+    const form = new FormData();
+    form.append("sketch", drawing, "sketch.png");
+    if (instruction) form.append("instruction", instruction);
+    return (await request<LabJob>(`/evo/lab/versions/${enc(versionId)}/sketch`, { method: "POST", headers: baseHeaders(), body: form })).data;
+  },
+  async deleteVersion(versionId: string): Promise<void> {
+    await request(`/evo/lab/versions/${enc(versionId)}`, { method: "DELETE", headers: baseHeaders() });
+  },
+  async setSaved(versionId: string, saved: boolean): Promise<LabVersion> {
+    return (await request<LabVersion>(`/evo/lab/versions/${enc(versionId)}/saved`, { method: "PUT", ...json({ saved }) })).data;
+  },
+  async chimeras(): Promise<LabVersion[]> {
+    return (await request<{ chimeras: LabVersion[] }>("/evo/lab/chimeras", { headers: baseHeaders(), timeoutMs: 15000 })).data.chimeras;
+  },
+  async editProfile(versionId: string, fields: Partial<Pick<CreatureProfile, "name" | "length" | "weight" | "habitat" | "explorers_notes">>): Promise<LabVersion> {
+    return (await request<LabVersion>(`/evo/lab/versions/${enc(versionId)}/profile`, { method: "PUT", ...json(fields) })).data;
+  },
+  async workspaces(): Promise<WorkspaceInfo[]> {
+    return (await request<{ workspaces: WorkspaceInfo[] }>("/evo/lab/workspaces", { headers: baseHeaders(), timeoutMs: 15000 })).data.workspaces;
+  },
+  async createWorkspace(name: string): Promise<WorkspaceInfo> {
+    return (await request<WorkspaceInfo>("/evo/lab/workspaces", { method: "POST", ...json({ name }) })).data;
+  },
+  async loadWorkspace(id: string): Promise<WorkspaceInfo & { graph: GraphDoc | null }> {
+    return (await request<WorkspaceInfo & { graph: GraphDoc | null }>(`/evo/lab/workspaces/${enc(id)}`, { headers: baseHeaders(), timeoutMs: 15000 })).data;
+  },
+  async saveWorkspace(id: string, body: { graph?: GraphDoc; name?: string }): Promise<WorkspaceInfo> {
+    return (await request<WorkspaceInfo>(`/evo/lab/workspaces/${enc(id)}`, { method: "PUT", ...json(body), timeoutMs: 15000 })).data;
+  },
+  async deleteWorkspace(id: string): Promise<{ imagesDeleted: number }> {
+    return (await request<{ imagesDeleted: number }>(`/evo/lab/workspaces/${enc(id)}`, { method: "DELETE", headers: baseHeaders(), timeoutMs: 60000 })).data;
+  },
+  async workspaceImages(id: string): Promise<LabVersion[]> {
+    return (await request<{ images: LabVersion[] }>(`/evo/lab/workspaces/${enc(id)}/images`, { headers: baseHeaders() })).data.images;
   },
   async versions(): Promise<LabVersion[]> {
     return (await request<{ versions: LabVersion[] }>("/evo/lab/versions", { headers: baseHeaders() })).data.versions;

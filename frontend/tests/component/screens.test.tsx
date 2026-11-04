@@ -5,13 +5,11 @@ import { ApiRequestError } from "../../src/api/errors";
 import { useConnectivity } from "../../src/connectivity/store";
 import { useCreatures, useGallery, useLimits } from "../../src/evo/data";
 import { setTransport } from "../../src/evo/index";
-import { mockConfig, mockTransport, resetMock, SPLIT_CREATURE_ID } from "../fakes/evoTransport";
+import { mockConfig, mockTransport, resetMock } from "../fakes/evoTransport";
 import { stopAllStreams, useEvoRuns, type RunRecord } from "../../src/evo/runs";
 import type { AgentEvent } from "../../src/evo/types";
 import { useGraph } from "../../src/graph/store";
 import { useFusionStart } from "../../src/nodes/fusion/start";
-import { CreaturePage } from "../../src/screens/CreaturePage";
-import { GalleryPage } from "../../src/screens/GalleryPage";
 import { TracePanel } from "../../src/trace/TracePanel";
 import { renderNode } from "./render";
 import success from "../../../docs/api_fixtures/run_success.json";
@@ -53,91 +51,13 @@ function tieUpToQuestion(): AgentEvent[] {
   return all.slice(0, all.findIndex((e) => e.type === "needs_choice") + 1).map((e) => (e.type === "needs_choice" ? { ...e, expiresAt: new Date(Date.now() + 120_000).toISOString() } : e));
 }
 
-describe("gallery (first screen)", () => {
-  it("shows the showcase, each image labelled Generated fusion, and one clear action", async () => {
-    await act(() => useLimits.getState().refresh());
-    render(<GalleryPage />);
-    const cards = await screen.findAllByRole("link", { name: /×/ });
-    expect(cards).toHaveLength(6);
-    for (const c of cards) expect(within(c).getByText("Generated fusion")).toBeInTheDocument();
-    expect(screen.getAllByRole("img").every((i) => /Not a real animal/.test(i.getAttribute("alt") ?? ""))).toBe(true);
-    expect(screen.getByRole("button", { name: "Make a new creature" })).toBeEnabled();
-    expect(screen.getByText(/about 5 minutes/)).toBeInTheDocument();
-    expect(screen.getByText(/38 of 50 live runs left today/)).toBeInTheDocument();
-  });
-
-  it("capped (GET /evo/agent/limits) is shown before any upload, and the action is disabled with the reason beside it", async () => {
-    mockConfig.scenario = "limits_capped";
-    await act(() => useLimits.getState().refresh());
-    render(<GalleryPage />);
-    expect(screen.getByRole("button", { name: "Make a new creature" })).toBeDisabled();
-    expect(screen.getByText("Today's live creature runs are used up.")).toBeInTheDocument();
-    expect(screen.getByText(/new runs open again at 00:00 UTC/)).toBeInTheDocument();
-    await screen.findAllByRole("link", { name: /×/ }); // the gallery still works
-  });
-});
-
-describe("creature card (GET /evo/creatures/{id})", () => {
-  it("leads with the image, Generated fusion, host and reason, Can it live, and an honest hidden-check count", async () => {
-    render(<CreaturePage creatureId="crt_fx_b10" />);
-    expect(await screen.findByRole("heading", { level: 1, name: "tortoise × domestic goat" })).toBeInTheDocument();
-    expect(screen.getAllByText("Generated fusion").length).toBeGreaterThan(0);
-    expect(screen.getByText("Host: domestic goat.")).toBeInTheDocument();
-    expect(screen.getByText(/You chose it/)).toBeInTheDocument();
-    expect(screen.getByText(/You chose the domestic goat as host/)).toBeInTheDocument();
-    expect(screen.getByText("6 of 6 life functions work; no fiction licenses")).toBeInTheDocument();
-    expect(screen.getByText("3 checks hidden until reviewed.")).toBeInTheDocument();
-    expect(screen.getByText("described but not planned: horn")).toBeInTheDocument();
-    // agree is true: one pick, no both-picks block
-    expect(screen.queryByText(/disagree/)).not.toBeInTheDocument();
-    expect(screen.queryByText("Real hybrid exists")).not.toBeInTheDocument();
-  });
-
-  it("anatomy map: the toggle swaps in the overlay and shows a legend with words, parents and parts", async () => {
-    render(<CreaturePage creatureId="crt_fx_b09" />);
-    const toggle = await screen.findByRole("button", { name: "Anatomy map" });
-    expect(toggle).toHaveAttribute("aria-pressed", "false");
-    await userEvent.click(toggle);
-    expect(toggle).toHaveAttribute("aria-pressed", "true");
-    expect(screen.getByRole("img", { name: /Anatomy map of the generated fusion/ })).toHaveAttribute("src", "/__fixtures/images/b09_anatomy.jpg");
-    const legend = screen.getByLabelText("Anatomy map legend");
-    expect(within(legend).getByText("Host")).toBeInTheDocument();
-    expect(within(legend).getByText("head, body, legs, tail")).toBeInTheDocument();
-    expect(within(legend).getByText(/Not located in the image: indian pangolin covering/)).toBeInTheDocument();
-    expect(legend.querySelector("rect")?.getAttribute("fill")).toBe("#268bd2"); // the API's own overlay colour
-  });
-
-  it("both picks show, the agent's first, only when the agent and the code ranking disagree", async () => {
-    render(<CreaturePage creatureId={SPLIT_CREATURE_ID} />);
-    expect(await screen.findByText("The agent and the code ranking disagree")).toBeInTheDocument();
-    const picks = screen.getAllByRole("figure").filter((f) => f.classList.contains("pick"));
-    expect(within(picks[0]!).getByText("Agent's pick")).toBeInTheDocument();
-    expect(within(picks[1]!).getByText("Code ranking's pick")).toBeInTheDocument();
-    for (const p of picks) expect(within(p).getByText("Generated fusion")).toBeInTheDocument();
-  });
-
-  it("a real hybrid is labelled separately from the generated image", async () => {
-    const real = await mockTransport.getCreature("crt_fx_b09");
-    vi.spyOn(mockTransport, "getCreature").mockResolvedValue({ ...real, realHybrid: true });
-    render(<CreaturePage creatureId="crt_fx_b09" />);
-    expect(await screen.findByText("Real hybrid exists")).toBeInTheDocument();
-    expect(screen.getByText(/still a generated fusion, not a photo/)).toBeInTheDocument();
-  });
-
-  it("not found says so and offers the gallery", async () => {
-    render(<CreaturePage creatureId="crt_missing" />);
-    expect(await screen.findByRole("heading", { name: "This creature can't be found" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Gallery" })).toBeInTheDocument();
-  });
-});
-
 describe("live trace panel", () => {
   it("queued: the position, runs ahead and the 5-minute expectation", () => {
     putRun("q", evs(queued).slice(0, 1), { stream: "open" });
     render(<TracePanel runId="q" />);
     expect(screen.getByText("Position 2 in the queue")).toBeInTheDocument();
     expect(screen.getByText(/2 runs ahead of yours/)).toBeInTheDocument();
-    expect(screen.getAllByText(/about 5 minutes/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/about a minute/).length).toBeGreaterThan(0);
   });
 
   it("running: every step with the agent's reason in plain words, images labelled Generated fusion", () => {
@@ -185,7 +105,6 @@ describe("live trace panel", () => {
     putRun("done", evs(success));
     render(<TracePanel runId="done" />);
     expect(await screen.findByText("Host: horse.")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Open creature card" })).toBeInTheDocument();
     expect(screen.getByText("Generated fusion", { selector: ".pill" })).toBeTruthy();
     expect(screen.getByText(/How the agent made it \(10 steps\)/)).toBeInTheDocument();
   });

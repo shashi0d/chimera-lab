@@ -3,11 +3,18 @@ import { absoluteUrl } from "../api/client";
 import { Button } from "../ui/Button";
 
 type Point = { x: number; y: number };
-type Stroke = { points: Point[]; width: number; erase: boolean };
+type Stroke = { points: Point[]; width: number; erase: boolean; color: string };
 const CHECK_SIZE = 256;
+const MASK_COLOR = "#ff3f6d";
+const SKETCH_COLORS = ["#e5484d", "#f5a524", "#30a46c", "#0090ff", "#8e4ec6", "#1c2024", "#ffffff"];
 
-/** Paint the area an edit may change. Pixels outside the paint stay exactly as they are. */
-export function PaintEditor({ imageUrl, disabled, onSave }: { imageUrl: string; disabled: boolean; onSave: (mask: Blob) => void }) {
+/**
+ * Two uses. "mask": paint the area an edit may change (pixels outside the paint stay exactly as they are).
+ * "sketch": draw what you want on the creature, in colour; the model turns the drawing into the creature.
+ */
+export function PaintEditor({ imageUrl, disabled, onSave, mode = "mask" }: { imageUrl: string; disabled: boolean; onSave: (mask: Blob) => void; mode?: "mask" | "sketch" }) {
+  const sketch = mode === "sketch";
+  const [color, setColor] = useState(sketch ? SKETCH_COLORS[0]! : MASK_COLOR);
   const canvas = useRef<HTMLCanvasElement>(null);
   const active = useRef<Stroke | null>(null);
   const strokes = useRef<Stroke[]>([]);
@@ -15,7 +22,7 @@ export function PaintEditor({ imageUrl, disabled, onSave }: { imageUrl: string; 
   const [painted, setPainted] = useState(false);
   const [history, setHistory] = useState({ undo: 0, redo: 0 });
   const [erase, setErase] = useState(false);
-  const [size, setSize] = useState(60);
+  const [size, setSize] = useState(sketch ? 14 : 60);
 
   function point(event: PointerEvent<HTMLCanvasElement>) {
     const el = event.currentTarget, bounds = el.getBoundingClientRect();
@@ -23,7 +30,7 @@ export function PaintEditor({ imageUrl, disabled, onSave }: { imageUrl: string; 
   }
   function configure(ctx: CanvasRenderingContext2D, stroke: Stroke) {
     ctx.globalCompositeOperation = stroke.erase ? "destination-out" : "source-over";
-    ctx.strokeStyle = "#ff3f6d"; ctx.fillStyle = "#ff3f6d"; ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.lineWidth = stroke.width;
+    ctx.strokeStyle = stroke.color; ctx.fillStyle = stroke.color; ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.lineWidth = stroke.width;
   }
   function draw(ctx: CanvasRenderingContext2D, stroke: Stroke) {
     const first = stroke.points[0];
@@ -64,7 +71,7 @@ export function PaintEditor({ imageUrl, disabled, onSave }: { imageUrl: string; 
     if (!ctx) return;
     event.preventDefault(); el.setPointerCapture(event.pointerId);
     const p = point(event);
-    const stroke: Stroke = { points: [p], width: size * el.width / el.getBoundingClientRect().width, erase };
+    const stroke: Stroke = { points: [p], width: size * el.width / el.getBoundingClientRect().width, erase, color };
     active.current = stroke; configure(ctx, stroke);
     ctx.beginPath(); ctx.arc(p.x, p.y, stroke.width / 2, 0, Math.PI * 2); ctx.fill();
     ctx.beginPath(); ctx.moveTo(p.x, p.y);
@@ -84,24 +91,29 @@ export function PaintEditor({ imageUrl, disabled, onSave }: { imageUrl: string; 
   function undo() { const stroke = strokes.current.pop(); if (stroke) { undone.current.push(stroke); redraw(); } }
   function redo() { const stroke = undone.current.pop(); if (stroke) { strokes.current.push(stroke); redraw(); } }
   function clear() { active.current = null; strokes.current = []; undone.current = []; redraw(); }
-  return <div className="region-editor">
-    <p>Paint the area to change. The edit is blended into your paint; everything outside it stays exactly as it is. Edges may be visible.</p>
+  return <div className={`region-editor${sketch ? " region-editor--sketch" : ""}`}>
+    <p>{sketch
+      ? "Draw what you want on the creature: a horn, wings, a new pattern or colour. The model turns your drawing into the creature, in its art style, and removes the lines."
+      : "Paint the area to change. The edit is blended into your paint; everything outside it stays exactly as it is. Edges may be visible."}</p>
     <div className="region-editor__image"><img src={absoluteUrl(imageUrl)} alt="Image to paint a region on" onLoad={(event) => {
       const el = canvas.current; if (el) { el.width = event.currentTarget.naturalWidth; el.height = event.currentTarget.naturalHeight; clear(); }
     }} />
-      <canvas ref={canvas} tabIndex={0} aria-label="Paint the area to change" onPointerDown={down} onPointerMove={move} onPointerUp={finish} onPointerCancel={finish} onLostPointerCapture={finish}
+      <canvas ref={canvas} tabIndex={0} aria-label={sketch ? "Draw on the creature" : "Paint the area to change"} onPointerDown={down} onPointerMove={move} onPointerUp={finish} onPointerCancel={finish} onLostPointerCapture={finish}
         onKeyDown={(event) => { if (!disabled && (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "z") { event.preventDefault(); if (event.shiftKey) redo(); else undo(); } }} />
     </div>
-    <label htmlFor="region-size">Brush size: {size}px</label><input id="region-size" type="range" min="10" max="140" value={size} disabled={disabled} onChange={(event) => setSize(Number(event.target.value))} />
+    {sketch ? <div className="region-editor__colors" role="radiogroup" aria-label="Pen colour">
+      {SKETCH_COLORS.map((c) => <button key={c} type="button" role="radio" aria-checked={color === c && !erase} aria-label={`Colour ${c}`} className={`swatch swatch--${c.slice(1)}${color === c && !erase ? " is-on" : ""}`} disabled={disabled} onClick={() => { setColor(c); setErase(false); }} />)}
+    </div> : null}
+    <label htmlFor="region-size">{sketch ? "Pen size" : "Brush size"}: {size}px</label><input id="region-size" type="range" min={sketch ? 3 : 10} max={sketch ? 60 : 140} value={size} disabled={disabled} onChange={(event) => setSize(Number(event.target.value))} />
     <div className="region-editor__tools" aria-label="Paint tools">
-      <Button size="sm" disabled={disabled} aria-pressed={!erase} onClick={() => setErase(false)}>Brush</Button>
+      <Button size="sm" disabled={disabled} aria-pressed={!erase} onClick={() => setErase(false)}>{sketch ? "Pen" : "Brush"}</Button>
       <Button size="sm" disabled={disabled} aria-pressed={erase} onClick={() => setErase(true)}>Eraser</Button>
       <Button size="sm" disabled={disabled || !history.undo} onClick={undo}>Undo stroke</Button>
       <Button size="sm" disabled={disabled || !history.redo} onClick={redo}>Redo stroke</Button>
-      <Button size="sm" disabled={disabled || !history.undo} onClick={clear}>Clear paint</Button>
+      <Button size="sm" disabled={disabled || !history.undo} onClick={clear}>{sketch ? "Clear drawing" : "Clear paint"}</Button>
     </div>
     <Button variant="primary" icon="check" disabled={disabled || !painted} onClick={() => canvas.current?.toBlob((blob) => { if (blob) onSave(blob); }, "image/png")}>
-      Use this area
+      {sketch ? "Use this drawing" : "Use this area"}
     </Button>
   </div>;
 }

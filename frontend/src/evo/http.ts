@@ -168,6 +168,7 @@ export const httpTransport: EvoTransport = {
     if (input.style) form.append("style", input.style);
     if (input.sireVersionId) form.append("sireVersionId", input.sireVersionId);
     if (input.damVersionId) form.append("damVersionId", input.damVersionId);
+    if (input.workspaceId) form.append("workspaceId", input.workspaceId);
     if (input.sireImage) form.append("sireImage", input.sireImage, "sire.jpg");
     if (input.damImage) form.append("damImage", input.damImage, "dam.jpg");
     if (input.sireName) form.append("sireName", input.sireName);

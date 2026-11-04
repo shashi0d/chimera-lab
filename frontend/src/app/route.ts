@@ -1,40 +1,38 @@
 import { useSyncExternalStore } from "react";
 
 // Query-string routes on "/" so the same-origin backend needs no SPA fallback:
-//   /                     gallery (the first screen)
-//   /?view=lab            the canvas (make a new creature)
-//   /?run=<runId>         the canvas with the live trace of that run (reload resumes it)
-//   /?creature=<id>       one creature's card (showcase, or your own Fusion run)
-//   /?creation=<id>       a published creation and the path that made it
+//   /                          the home page: every workspace, and New workspace (the first screen)
+//   /?ws=<id>                  that workspace's canvas
+//   /?ws=<id>&run=<runId>      the canvas, following that run (reload resumes it)
+//   /?view=chimeras            the saved creatures, each with its animal card
 
 export type Route =
-  | { view: "gallery" }
-  | { view: "lab"; runId: string | null }
-  | { view: "creature"; creatureId: string }
-  | { view: "creation"; publicationId: string };
+  | { view: "home" }
+  | { view: "lab"; runId: string | null; workspaceId?: string | null }
+  | { view: "chimeras" };
 
 export function parseRoute(search: string): Route {
   const q = new URLSearchParams(search);
-  const creation = q.get("creation");
-  if (creation) return { view: "creation", publicationId: creation };
-  const creature = q.get("creature");
-  if (creature) return { view: "creature", creatureId: creature };
+  if (q.get("view") === "chimeras") return { view: "chimeras" };
+  const ws = q.get("ws");
   const run = q.get("run");
-  if (run) return { view: "lab", runId: run };
-  if (q.get("view") === "lab") return { view: "lab", runId: null };
-  return { view: "gallery" };
+  if (ws || run) return { view: "lab", runId: run, workspaceId: ws };
+  return { view: "home" };
 }
 
 export function hrefFor(r: Route): string {
   switch (r.view) {
-    case "gallery":
+    case "home":
       return "/";
-    case "lab":
-      return r.runId ? `/?run=${encodeURIComponent(r.runId)}` : "/?view=lab";
-    case "creature":
-      return `/?creature=${encodeURIComponent(r.creatureId)}`;
-    case "creation":
-      return `/?creation=${encodeURIComponent(r.publicationId)}`;
+    case "chimeras":
+      return "/?view=chimeras";
+    case "lab": {
+      const q = new URLSearchParams();
+      if (r.workspaceId) q.set("ws", r.workspaceId);
+      if (r.runId) q.set("run", r.runId);
+      const s = q.toString();
+      return s ? `/?${s}` : "/";
+    }
   }
 }
 
@@ -59,7 +57,7 @@ export function navigate(r: Route, opts: { replace?: boolean } = {}): void {
 }
 
 let cachedSearch: string | null = null;
-let cachedRoute: Route = { view: "gallery" };
+let cachedRoute: Route = { view: "home" };
 function snapshot(): Route {
   const s = typeof window === "undefined" ? "" : window.location.search;
   if (s !== cachedSearch) {

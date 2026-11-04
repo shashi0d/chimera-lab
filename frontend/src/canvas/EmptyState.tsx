@@ -1,10 +1,8 @@
 import { copy } from "../copy";
-import { LimitsLine } from "../screens/GalleryPage";
 import { Button } from "../ui/Button";
-import { pickImages } from "./filePicker";
 
 /** Centered invitation on an empty canvas; the whole canvas is the drop zone. */
-export function EmptyState({ onAddFiles, onTypeNames }: { onAddFiles: (files: File[]) => void; onTypeNames: () => void }) {
+export function EmptyState({ onAddImage, onTypeNames }: { onAddImage: () => void; onTypeNames: () => void }) {
   return (
     <section className="empty-state" aria-labelledby="empty-title">
       <div className="empty-state__card">
@@ -21,7 +19,7 @@ export function EmptyState({ onAddFiles, onTypeNames }: { onAddFiles: (files: Fi
         </h2>
         <p className="empty-state__body">{copy.empty.body}</p>
         <div className="empty-state__actions">
-          <Button variant="primary" icon="upload" onClick={async () => onAddFiles(await pickImages(true))}>
+          <Button variant="primary" icon="upload" onClick={onAddImage}>
             {copy.empty.addImages}
           </Button>
           <Button variant="secondary" icon="leaf" onClick={onTypeNames}>
@@ -29,7 +27,6 @@ export function EmptyState({ onAddFiles, onTypeNames }: { onAddFiles: (files: Fi
           </Button>
         </div>
         <p className="empty-state__fine">{copy.empty.accepted}</p>
-        <LimitsLine />
       </div>
     </section>
   );

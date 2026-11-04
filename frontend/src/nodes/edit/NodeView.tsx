@@ -11,9 +11,9 @@ import { Button, IconButton } from "../../ui/Button";
 import { Icon } from "../../ui/Icon";
 import { SegmentedTabs } from "../../ui/SegmentedTabs";
 import type { NodeViewProps } from "../types";
-import { EDIT_INPUTS, EDIT_OUTPUTS, maskKey, type EditConfig, type EditData, type EditOperation } from "./types";
+import { EDIT_INPUTS, EDIT_OUTPUTS, maskKey, sketchKey, type EditConfig, type EditData, type EditOperation } from "./types";
 
-function PaintDialog({ imageUrl, onSave, onClose }: { imageUrl: string; onSave: (mask: Blob) => void; onClose: () => void }) {
+function PaintDialog({ imageUrl, onSave, onClose, mode = "mask" }: { imageUrl: string; onSave: (mask: Blob) => void; onClose: () => void; mode?: "mask" | "sketch" }) {
   const titleId = useId();
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -26,30 +26,33 @@ function PaintDialog({ imageUrl, onSave, onClose }: { imageUrl: string; onSave: 
     <div className="dialog-backdrop" onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
       <div className="dialog paint-dialog" role="dialog" aria-modal="true" aria-labelledby={titleId}>
         <header className="dialog__head">
-          <h2 id={titleId}>Paint the area to change</h2>
+          <h2 id={titleId}>{mode === "sketch" ? "Draw what you want" : "Paint the area to change"}</h2>
           <IconButton icon="close" label="Close" onClick={onClose} />
         </header>
-        <PaintEditor imageUrl={imageUrl} disabled={false} onSave={onSave} />
+        <PaintEditor imageUrl={imageUrl} disabled={false} onSave={onSave} mode={mode} />
       </div>
     </div>,
     document.body,
   );
 }
 
-function MaskPreview({ nodeId, imageUrl }: { nodeId: string; imageUrl: string }) {
+function MaskPreview({ nodeId, imageUrl, sketch = false }: { nodeId: string; imageUrl: string; sketch?: boolean }) {
   const [url, setUrl] = useState<string | undefined>();
-  const has = useGraph((s) => Boolean((s.nodes.find((n) => n.id === nodeId)?.data as EditData | undefined)?.hasMask));
+  const has = useGraph((s) => {
+    const d = s.nodes.find((n) => n.id === nodeId)?.data as EditData | undefined;
+    return Boolean(sketch ? d?.hasSketch : d?.hasMask);
+  });
   useEffect(() => {
     let alive = true;
-    if (has) void blobUrl(maskKey(nodeId)).then((u) => alive && setUrl(u));
+    if (has) void blobUrl(sketch ? sketchKey(nodeId) : maskKey(nodeId)).then((u) => alive && setUrl(u));
     else setUrl(undefined);
     return () => {
       alive = false;
     };
-  }, [has, nodeId]);
+  }, [has, nodeId, sketch]);
   if (!has || !url) return null;
   return (
-    <div className="edit-node__mask" aria-label="Painted area">
+    <div className={`edit-node__mask${sketch ? " edit-node__mask--sketch" : ""}`} aria-label={sketch ? "Your drawing" : "Painted area"}>
       <img src={evo().imageUrl(imageUrl)} alt="" draggable={false} />
       <img className="edit-node__mask-paint" src={url} alt="" draggable={false} />
     </div>
@@ -72,11 +75,14 @@ export function EditView({ node, selected, issues }: NodeViewProps<EditConfig, E
 
   const setConfig = (patch: Partial<EditConfig>) => useGraph.getState().updateNodeConfig<EditConfig>(node.id, (c) => ({ ...c, ...patch }));
   const saveMask = async (mask: Blob) => {
-    await deleteBlob(maskKey(node.id)).catch(() => undefined);
-    await putBlob(maskKey(node.id), mask);
-    useGraph.getState().updateNodeData<EditData>(node.id, (d) => ({ ...d, hasMask: true, error: null }));
+    const sketching = operation === "sketch";
+    const key = sketching ? sketchKey(node.id) : maskKey(node.id);
+    await deleteBlob(key).catch(() => undefined);
+    await putBlob(key, mask);
+    useGraph.getState().updateNodeData<EditData>(node.id, (d) => ({ ...d, ...(sketching ? { hasSketch: true } : { hasMask: true }), error: null }));
     setPainting(false);
   };
+  const KIND: Record<EditOperation, string> = { revise: "Revise", paint: "Paint", sketch: "Draw" };
 
   let status: NodeStatus | undefined;
   if (running) status = { tone: "running", label: job?.stage ?? "Starting" };
@@ -87,8 +93,8 @@ export function EditView({ node, selected, issues }: NodeViewProps<EditConfig, E
     <NodeCard
       nodeId={node.id}
       kind="edit"
-      kicker={`Edit · ${operation === "paint" ? "Paint" : "Revise"}`}
-      title={operation === "paint" ? "Change a painted area" : "Change the image"}
+      kicker={`Edit · ${KIND[operation]}`}
+      title={operation === "paint" ? "Change a painted area" : operation === "sketch" ? "Draw what you want" : "Change the image"}
       status={status}
       inputs={EDIT_INPUTS}
       outputs={EDIT_OUTPUTS}
@@ -118,10 +124,11 @@ export function EditView({ node, selected, issues }: NodeViewProps<EditConfig, E
         items={[
           { value: "revise", label: "Revise" },
           { value: "paint", label: "Paint area" },
+          { value: "sketch", label: "Draw" },
         ]}
       />
       <label className="edit-node__label" htmlFor={fieldId}>
-        {operation === "paint" ? "What should change in the painted area?" : "What should change?"}
+        {operation === "paint" ? "What should change in the painted area?" : operation === "sketch" ? "Anything to add about your drawing? (optional)" : "What should change?"}
       </label>
       <textarea
         id={fieldId}
@@ -130,18 +137,18 @@ export function EditView({ node, selected, issues }: NodeViewProps<EditConfig, E
         maxLength={2000}
         value={instruction}
         disabled={readOnly || running}
-        placeholder={operation === "paint" ? "Blend the waist into the abdomen" : "Make the legs longer, keep the face"}
+        placeholder={operation === "paint" ? "Blend the waist into the abdomen" : operation === "sketch" ? "A curved horn, bone white" : "Make the legs longer, keep the face"}
         onChange={(e) => setConfig({ instruction: e.target.value })}
         onKeyDown={(e) => {
           e.stopPropagation();
           if ((e.metaKey || e.ctrlKey) && e.key === "Enter" && !running && !blocking.length) void generateEdit(node.id);
         }}
       />
-      {operation === "paint" && parent ? (
+      {(operation === "paint" || operation === "sketch") && parent ? (
         <div className="edit-node__paint">
-          <MaskPreview nodeId={node.id} imageUrl={parent.imageUrl} />
+          <MaskPreview nodeId={node.id} imageUrl={parent.imageUrl} sketch={operation === "sketch"} />
           <Button size="sm" icon="brush" className="nodrag" disabled={readOnly || running} onClick={() => setPainting(true)}>
-            {node.data.hasMask ? "Repaint area" : "Paint area"}
+            {operation === "sketch" ? (node.data.hasSketch ? "Draw again" : "Draw on the image") : node.data.hasMask ? "Repaint area" : "Paint area"}
           </Button>
         </div>
       ) : null}
@@ -151,7 +158,7 @@ export function EditView({ node, selected, issues }: NodeViewProps<EditConfig, E
         </p>
       ) : null}
       {jobIds.length > 0 && !running && !error ? <p className="edit-node__meta">Each run adds an image to the right. Change the text and generate again to explore.</p> : null}
-      {painting && parent ? <PaintDialog imageUrl={parent.imageUrl} onSave={(m) => void saveMask(m)} onClose={() => setPainting(false)} /> : null}
+      {painting && parent ? <PaintDialog imageUrl={parent.imageUrl} mode={operation === "sketch" ? "sketch" : "mask"} onSave={(m) => void saveMask(m)} onClose={() => setPainting(false)} /> : null}
     </NodeCard>
   );
 }

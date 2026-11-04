@@ -1,5 +1,8 @@
 import { useEffect, useRef } from "react";
 import { addCardNode, addEditNode, addFusionFrom } from "../lab/graph";
+import { saveCreature } from "../lab/store";
+import type { VersionData } from "../nodes/version/types";
+import { useGraph } from "../graph/store";
 import { Icon, type IconName } from "../ui/Icon";
 
 /** Where an image's output was dropped on empty canvas: the point inside the canvas element (for the menu) and on
@@ -13,6 +16,11 @@ export interface DropAt {
 const ITEMS: { id: string; icon: IconName; label: string; run(at: DropAt): void }[] = [
   { id: "revise", icon: "replace", label: "Revise the image", run: (at) => addEditNode(at.nodeId, "revise", "", { x: at.flow.x, y: at.flow.y - 60 }) },
   { id: "paint", icon: "brush", label: "Paint an area", run: (at) => addEditNode(at.nodeId, "paint", "", { x: at.flow.x, y: at.flow.y - 60 }) },
+  { id: "sketch", icon: "pencil", label: "Draw on it", run: (at) => addEditNode(at.nodeId, "sketch", "", { x: at.flow.x, y: at.flow.y - 60 }) },
+  { id: "save", icon: "star", label: "Save to chimeras", run: (at) => {
+    const v = (useGraph.getState().nodes.find((n) => n.id === at.nodeId)?.data as VersionData | undefined)?.version;
+    if (v) void saveCreature(v, true);
+  } },
   { id: "card", icon: "card", label: "Animal card", run: (at) => addCardNode(at.nodeId, { x: at.flow.x, y: at.flow.y - 60 }) },
   { id: "fuse", icon: "fusion", label: "Fuse with another animal", run: (at) => addFusionFrom(at.nodeId, { x: at.flow.x, y: at.flow.y - 60 }) },
 ];

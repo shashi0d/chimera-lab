@@ -2,7 +2,8 @@ import { create } from "zustand";
 import { toAppError } from "../api/errors";
 import { presentError } from "../api/errorMessages";
 import { useGraph } from "../graph/store";
-import { maskKey, type EditConfig, type EditData } from "../nodes/edit/types";
+import { maskKey, sketchKey, type EditConfig, type EditData } from "../nodes/edit/types";
+import { useWorkspaces } from "../persistence/workspaces";
 import type { VersionData } from "../nodes/version/types";
 import { getBlob } from "../persistence/blobStore";
 import { toast } from "../ui/toastStore";
@@ -125,6 +126,13 @@ export async function generateEdit(nodeId: string): Promise<void> {
         return;
       }
       job = await labApi.paint(parent.id, mask, config.instruction.trim());
+    } else if (config.operation === "sketch") {
+      const drawing = await getBlob(sketchKey(nodeId));
+      if (!drawing) {
+        updateEdit(nodeId, (d) => ({ ...d, hasSketch: false, error: "Draw on the image first." }));
+        return;
+      }
+      job = await labApi.sketch(parent.id, drawing, config.instruction.trim());
     } else job = await labApi.revise(parent.id, config.instruction.trim());
     useLab.setState((s) => ({ jobs: { ...s.jobs, [job.id]: job } }));
     updateEdit(nodeId, (d) => ({ ...d, jobIds: [...(d.jobIds ?? []), job.id], activeJobId: job.id, error: null }));
@@ -150,10 +158,20 @@ export function ensureRunVersion(fusionNodeId: string, runId: string, finished: 
   fetchingRuns.add(runId);
   const id = node.id;
   void labApi
-    .versionFromRun(runId)
+    .versionFromRun(runId, useWorkspaces.getState().currentId)
     .then((version) => useGraph.getState().updateNodeData<VersionData>(id, (d) => ({ ...d, version, error: null })))
     .catch((e) => useGraph.getState().updateNodeData<VersionData>(id, (d) => ({ ...d, error: message(e) })))
     .finally(() => fetchingRuns.delete(runId));
+}
+
+/** Save a creature to the chimeras page (at once); its animal card is made in the background. */
+export async function saveCreature(version: LabVersion, saved = true): Promise<void> {
+  try {
+    updateVersion(await labApi.setSaved(version.id, saved));
+    if (saved) toast.success(`Saved ${version.title ?? "the creature"}. Its card is being drawn.`);
+  } catch (e) {
+    toast.error(message(e));
+  }
 }
 
 /** Keep a card's copy of a version in step after a change on the server (final mark, publish). */

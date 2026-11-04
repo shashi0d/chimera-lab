@@ -1,11 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import { toAppError } from "../../api/errors";
 import { presentError } from "../../api/errorMessages";
 import { NodeCard, type NodeStatus } from "../../canvas/NodeCard";
-import { evo } from "../../evo/index";
 import { upstreamNode } from "../../graph/queries";
 import { useGraph } from "../../graph/store";
-import { labApi, type AnimalCard, type LabVersion } from "../../lab/api";
+import { CardTile } from "../../lab/CardTile";
+import { labApi, type LabVersion } from "../../lab/api";
+import { updateVersion } from "../../lab/store";
 import { Button } from "../../ui/Button";
 import { Icon } from "../../ui/Icon";
 import type { NodeViewProps } from "../types";
@@ -14,8 +15,6 @@ import { CARD_INPUTS, CARD_OUTPUTS, type CardConfig, type CardData } from "./typ
 
 const POLL_MS = 3000;
 const busy = new Set<string>(); // card node ids with a request in flight
-
-const VIEW_LABEL: Record<string, string> = { front: "Front", side: "Side", back: "Back", above: "Above" };
 
 function setCard(nodeId: string, patch: Partial<CardData>): void {
   useGraph.getState().updateNodeData<CardData>(nodeId, (d) => ({ ...d, ...patch }));
@@ -62,73 +61,7 @@ function usePoll(nodeId: string, versionId: string | null, running: boolean): vo
   }, [nodeId, versionId, running]);
 }
 
-/** The accent panel behind the creature takes the profile's colour (no inline style props: set on the element). */
-function useAccent(colour: string | undefined) {
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (ref.current && colour) ref.current.style.setProperty("--codex-accent", colour);
-  }, [colour]);
-  return ref;
-}
-
-function Codex({ card, version }: { card: AnimalCard; version: LabVersion }) {
-  const p = card.profile;
-  const accentRef = useAccent(p?.accent_color);
-  const [why, setWhy] = useState(false);
-  const image = evo().imageUrl(version.imageUrl);
-  const name = p?.name || version.title || "Unnamed creature";
-  return (
-    <div className="codex nodrag nowheel" ref={accentRef}>
-      <span className="codex__corner codex__corner--tr" aria-hidden="true" />
-      <span className="codex__corner codex__corner--bl" aria-hidden="true" />
-      <div className="codex__text">
-        <h4 className="codex__name">{name}</h4>
-        {p ? (
-          <>
-            <p className="codex__stat">
-              Length - {p.length || "unknown"}
-              <span className="codex__gap" />
-              Weight - {p.weight || "unknown"}
-            </p>
-            <p className="codex__stat">Habitat - {p.habitat || "unknown"}</p>
-          </>
-        ) : null}
-        <img className="codex__thumb" src={image} alt="" loading="lazy" decoding="async" />
-        {p?.explorers_notes ? (
-          <p className="codex__notes">
-            <strong>Explorer's Notes -</strong> {p.explorers_notes}
-          </p>
-        ) : null}
-      </div>
-      <figure className="codex__hero">
-        <span className="codex__panel" aria-hidden="true" />
-        <img src={image} alt={`${name}, the main view`} loading="lazy" decoding="async" />
-      </figure>
-      <ul className="codex__angles" aria-label="Other angles">
-        {card.angles.map((a) => (
-          <li key={a.view}>
-            <img src={evo().imageUrl(a.url)} alt={`${name}, ${VIEW_LABEL[a.view] ?? a.view} view`} loading="lazy" decoding="async" />
-            <span>{VIEW_LABEL[a.view] ?? a.view}</span>
-          </li>
-        ))}
-        {Array.from({ length: Math.max(0, 4 - card.angles.length) }, (_, i) => (
-          <li key={`empty-${i}`} className="is-empty" aria-hidden="true" />
-        ))}
-      </ul>
-      {p?.trait ? <p className="codex__trait">{p.trait}</p> : null}
-      {p?.reasoning ? (
-        <div className="codex__why">
-          <button type="button" className="btn btn--ghost btn--sm" aria-expanded={why} onClick={() => setWhy((v) => !v)}>
-            {why ? "Hide the model's reasoning" : "Why this entry?"}
-          </button>
-          {why ? <p className="codex__reasoning">{p.reasoning}</p> : null}
-        </div>
-      ) : null}
-    </div>
-  );
-}
-
-/** The animal card of the connected image (one per image): a field-guide page with four more angles. */
+/** The animal card of the connected image (one per image): the field-guide card, opened with a tap. */
 export function CardView({ node, selected }: NodeViewProps<CardConfig, CardData>) {
   const { card, autoStart, error } = node.data;
   const readOnly = useGraph((s) => s.readOnly);
@@ -149,7 +82,12 @@ export function CardView({ node, selected }: NodeViewProps<CardConfig, CardData>
   else if (error || card?.status === "failed") status = { tone: "error", label: "Failed" };
   else if (card?.status === "ready") status = { tone: "ok", label: "Ready" };
 
+  const onEdited = (v: LabVersion) => {
+    updateVersion(v);
+    if (v.card) setCard(node.id, { card: v.card });
+  };
   const canRetry = Boolean(version && !readOnly && (error || card?.status === "failed" || (!card && !autoStart)));
+  const shown = card && card.status !== "failed" && version ? { ...version, card } : null;
   return (
     <NodeCard
       nodeId={node.id}
@@ -161,7 +99,7 @@ export function CardView({ node, selected }: NodeViewProps<CardConfig, CardData>
       outputs={CARD_OUTPUTS}
       selected={selected}
       className={running ? "is-running" : ""}
-      media={card?.status === "ready" && version ? <Codex card={card} version={version} /> : undefined}
+      media={shown ? <CardTile version={shown} onChange={onEdited} editable={!readOnly} /> : undefined}
       footer={
         canRetry ? (
           <Button size="sm" variant="primary" icon="card" className="nodrag" onClick={() => void requestCard(node.id, version!.id)}>
@@ -172,7 +110,7 @@ export function CardView({ node, selected }: NodeViewProps<CardConfig, CardData>
     >
       {running ? (
         <p className="node__note">
-          <span className="spinner" /> Drawing four more angles and laying out the page. This takes about a minute.
+          <span className="spinner" /> Drawing four more angles (about a minute). Click the card to open it.
         </p>
       ) : null}
       {!card && !version ? (

@@ -1,25 +1,17 @@
 import { useReactFlow } from "@xyflow/react";
 import { useEffect, useId, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
-import { toAppError } from "../api/errors";
-import { presentError } from "../api/errorMessages";
-import { hrefFor, linkHandler } from "../app/route";
 import { evo } from "../evo/index";
 import { useGraph } from "../graph/store";
 import type { GraphNode } from "../graph/types";
 import type { VersionData } from "../nodes/version/types";
 import { Button, IconButton } from "../ui/Button";
-import { Icon } from "../ui/Icon";
 import { labApi, type LabVersion } from "./api";
 import { addEditNode, lineage, treeOf, versionNumber } from "./graph";
-import { downloadVersion, updateVersion, useLab } from "./store";
+import { deleteNodes } from "./deletion";
+import { downloadVersion, saveCreature, updateVersion, useLab } from "./store";
 
-const OPERATION: Record<string, string> = { fusion: "Fusion", revise: "Revise", paint: "Paint" };
-
-function errorText(e: unknown): string {
-  const p = presentError(toAppError(e));
-  return p.fix ? `${p.title} ${p.fix}` : p.title;
-}
+const OPERATION: Record<string, string> = { fusion: "Fusion", revise: "Revise", paint: "Paint", sketch: "Draw" };
 
 function useFocusNode() {
   const flow = useReactFlow();
@@ -98,59 +90,6 @@ function Compare({ nodeId, version }: { nodeId: string; version: LabVersion }) {
   );
 }
 
-function Publish({ version }: { version: LabVersion }) {
-  const [title, setTitle] = useState(version.title ?? "");
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState("");
-  const fieldId = useId();
-  useEffect(() => setTitle(version.title ?? ""), [version.id, version.title]);
-  const act = async (fn: () => Promise<LabVersion>) => {
-    setBusy(true);
-    setError("");
-    try {
-      updateVersion(await fn());
-    } catch (e) {
-      setError(errorText(e));
-    } finally {
-      setBusy(false);
-    }
-  };
-  return (
-    <section className="tools__section" aria-labelledby="tools-publish">
-      <h3 id="tools-publish">Gallery</h3>
-      {version.publicationId ? (
-        <>
-          <p className="tools__note">
-            <Icon name="globe" size={14} /> This version is in the gallery with its whole path.
-          </p>
-          <div className="tools__row">
-            <a className="btn btn--secondary btn--sm" href={hrefFor({ view: "creation", publicationId: version.publicationId })} onClick={linkHandler({ view: "creation", publicationId: version.publicationId })}>
-              View in the gallery
-            </a>
-            <Button size="sm" variant="ghost" busy={busy} disabled={busy} onClick={() => void act(() => labApi.unpublish(version.id))}>
-              Remove from the gallery
-            </Button>
-          </div>
-        </>
-      ) : (
-        <>
-          <p className="tools__note">Publishing shows this image and every step that led to it. Your photos are never published.</p>
-          <label htmlFor={fieldId}>Title</label>
-          <input id={fieldId} className="text-input" maxLength={80} value={title} onChange={(e) => setTitle(e.target.value)} />
-          <Button size="sm" variant="primary" icon="globe" busy={busy} disabled={busy || !title.trim()} onClick={() => void act(() => labApi.publish(version.id, title.trim()))}>
-            Publish to the gallery
-          </Button>
-        </>
-      )}
-      {error ? (
-        <p className="tools__error" role="alert">
-          {error}
-        </p>
-      ) : null}
-    </section>
-  );
-}
-
 // ------------------------------------------------------------------ panel
 
 /** Tools for the selected image card (FLORA-style: the canvas holds the path, the panel acts on one image). */
@@ -201,8 +140,17 @@ export function ToolsPanel({ nodeId }: { nodeId: string }) {
           <Button size="sm" icon="star" busy={finalBusy} aria-pressed={version.isFinal} onClick={() => void toggleFinal()}>
             {version.isFinal ? "Final ✓" : "Mark as final"}
           </Button>
+          <Button size="sm" icon="brush" onClick={() => addEditNode(nodeId, "sketch")}>
+            Draw on it
+          </Button>
+          <Button size="sm" variant={version.saved ? "secondary" : "primary"} icon="card" aria-pressed={Boolean(version.saved)} onClick={() => void saveCreature(version, !version.saved)}>
+            {version.saved ? "Saved ✓" : "Save"}
+          </Button>
           <Button size="sm" variant="ghost" icon="download" onClick={() => void downloadVersion(version, label)}>
             Download
+          </Button>
+          <Button size="sm" variant="ghost" icon="trash" onClick={() => void deleteNodes([nodeId])}>
+            Delete
           </Button>
         </div>
         {limits && limits.limit !== null ? (
@@ -212,14 +160,6 @@ export function ToolsPanel({ nodeId }: { nodeId: string }) {
         ) : null}
         <Path nodeId={nodeId} />
         <Compare nodeId={nodeId} version={version} />
-        <Publish version={version} />
-        {version.operation === "fusion" && version.creatureId ? (
-          <p className="tools__note">
-            <a href={hrefFor({ view: "creature", creatureId: version.creatureId })} onClick={linkHandler({ view: "creature", creatureId: version.creatureId })}>
-              Open the Fusion run's creature card
-            </a>
-          </p>
-        ) : null}
       </div>
     </aside>
   );

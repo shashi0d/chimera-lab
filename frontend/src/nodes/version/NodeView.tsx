@@ -4,14 +4,15 @@ import { evo } from "../../evo/index";
 import { isTerminal, useRun } from "../../evo/runs";
 import { useGraph } from "../../graph/store";
 import { addCardNode, addEditNode, addFusionFrom, versionNumber } from "../../lab/graph";
-import { downloadVersion } from "../../lab/store";
+import { deleteNodes } from "../../lab/deletion";
+import { downloadVersion, saveCreature } from "../../lab/store";
 import { IconButton } from "../../ui/Button";
 import { Icon } from "../../ui/Icon";
 import { Pill } from "../../ui/Pill";
 import type { NodeViewProps } from "../types";
 import { VERSION_INPUTS, VERSION_OUTPUTS, type VersionConfig, type VersionData } from "./types";
 
-const OPERATION: Record<string, string> = { fusion: "Fusion", revise: "Revise", paint: "Paint" };
+const OPERATION: Record<string, string> = { fusion: "Fusion", revise: "Revise", paint: "Paint", sketch: "Draw" };
 
 /** One image in the creature's path. The tools act on the selected card; edits branch from it to the right. */
 export function VersionView({ node, selected }: NodeViewProps<VersionConfig, VersionData>) {
@@ -69,24 +70,27 @@ export function VersionView({ node, selected }: NodeViewProps<VersionConfig, Ver
           <>
             <IconButton icon="replace" label="Revise this image" onClick={() => addEditNode(node.id, "revise")} />
             <IconButton icon="brush" label="Paint an area to edit" onClick={() => addEditNode(node.id, "paint")} />
+            <IconButton icon="pencil" label="Draw on it" onClick={() => addEditNode(node.id, "sketch")} />
+            <IconButton icon="star" label={version.saved ? "Saved to chimeras (click to unsave)" : "Save to chimeras"} pressed={Boolean(version.saved)} onClick={() => void saveCreature(version, !version.saved)} />
             <IconButton icon="card" label="Animal card" onClick={() => addCardNode(node.id)} />
             <IconButton icon="fusion" label="Fuse with another animal" onClick={() => addFusionFrom(node.id)} />
             <IconButton icon="download" label="Download image" onClick={() => void downloadVersion(version, label)} />
+            <IconButton icon="trash" label="Delete image" onClick={() => void deleteNodes([node.id])} />
           </>
         ) : null
       }
     >
       {version ? <p className="version-node__instruction">{version.instruction}</p> : null}
-      {version?.isFinal || version?.publicationId ? (
+      {version?.isFinal || version?.saved ? (
         <div className="version-node__pills">
           {version.isFinal ? (
             <Pill tone="brand">
               <Icon name="star" size={12} /> Final
             </Pill>
           ) : null}
-          {version.publicationId ? (
+          {version.saved ? (
             <Pill tone="info">
-              <Icon name="globe" size={12} /> In the gallery
+              <Icon name="card" size={12} /> Saved
             </Pill>
           ) : null}
         </div>

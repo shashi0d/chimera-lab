@@ -27,8 +27,9 @@ GUARD_SCHEMA: dict[str, Any] = {
 
 GUARD_INSTRUCTIONS = (
     "You check user input for Chimera Lab, an app that only creates fictional hybrid animal creatures (chimeras) and "
-    "edits their images. Each item is either an animal name typed for a Fusion, or an edit instruction for a "
-    "creature image. ALLOW: names of real, extinct or mythical animals (any language, misspellings are fine); "
+    "edits their images. Each item is an animal name typed for a Fusion, a name for an invented creature, or an "
+    "edit instruction for a creature image. ALLOW: names of real, extinct or mythical animals (any language, "
+    "misspellings are fine) and made-up creature names that are not a real person's name; "
     "instructions about the creature's body, parts, proportions, pose, colours, patterns, texture, expression, art "
     "style, lighting or framing, and adding or removing animal features. DENY anything else: people or real persons "
     "(including adding a person or a rider), body parts of humans, text, logos or brands, objects or scenes that are "

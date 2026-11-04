@@ -1,6 +1,6 @@
 import type { PortSpec } from "../../graph/types";
 
-export type EditOperation = "revise" | "paint";
+export type EditOperation = "revise" | "paint" | "sketch";
 
 /** What to change. Paint also has a mask, kept on this device (IndexedDB) until it is sent. */
 export interface EditConfig extends Record<string, unknown> {
@@ -15,6 +15,8 @@ export interface EditData extends Record<string, unknown> {
   error: string | null;
   /** A painted mask is saved for this card. */
   hasMask?: boolean;
+  /** A drawing is saved for this card (sketch). */
+  hasSketch?: boolean;
 }
 
 export const EDIT_INPUTS: PortSpec[] = [{ id: "in", accepts: ["version"] }];
@@ -22,4 +24,8 @@ export const EDIT_OUTPUTS: PortSpec[] = [{ id: "out", emits: "version" }];
 
 export function maskKey(nodeId: string): string {
   return `mask:${nodeId}`;
+}
+
+export function sketchKey(nodeId: string): string {
+  return `sketch:${nodeId}`;
 }

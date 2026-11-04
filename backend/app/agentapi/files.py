@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import asyncio
 import io
+import logging
 import mimetypes
 from typing import Any
 
@@ -15,6 +16,8 @@ from PIL import Image
 
 from app.adapters.base import StorageAdapter
 from app.config import Settings
+
+log = logging.getLogger(__name__)
 
 CONTENT_TYPES = {".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png", ".webp": "image/webp"}
 EXT = {"image/jpeg": "jpg", "image/png": "png", "image/webp": "webp"}
@@ -54,6 +57,18 @@ class PublicFiles:
 
     def url(self, key: str) -> str:
         return f"{self.url_base}/{key}"
+
+    def key_of(self, url: str) -> str | None:
+        """The storage key of one of our public URLs (None for anything else)."""
+        base = f"{self.url_base}/"
+        return url[len(base):] if isinstance(url, str) and url.startswith(base) else None
+
+    async def delete(self, key: str) -> None:
+        """Remove a file; a file that is already gone is not an error."""
+        try:
+            await self.storage.delete(key)
+        except Exception:  # noqa: BLE001 - a missing file or a storage hiccup must not block deleting the record
+            log.warning("could not delete file %s", key, exc_info=True)
 
 
 def build_public_files(settings: Settings) -> PublicFiles:

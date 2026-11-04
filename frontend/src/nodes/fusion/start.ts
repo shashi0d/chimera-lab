@@ -14,6 +14,7 @@ import { getBlob } from "../../persistence/blobStore";
 import type { ImageInputData } from "../image-input/types";
 import { ensureRunVersion } from "../../lab/store";
 import type { VersionData } from "../version/types";
+import { useWorkspaces } from "../../persistence/workspaces";
 import { cleanName, readMode, readStyle, type FusionData } from "./types";
 
 /** An identify question from the POST response, waiting for the user (no run exists yet). */
@@ -89,7 +90,7 @@ function accepted(nodeId: string, res: RunAccepted): void {
   ensureRunVersion(nodeId, res.runId, false);
   useEvoRuns.getState().attach(res.runId, res);
   void useLimits.getState().refresh();
-  navigate({ view: "lab", runId: res.runId });
+  navigate({ view: "lab", runId: res.runId, workspaceId: useWorkspaces.getState().currentId });
 }
 
 function handleError(nodeId: string, e: unknown): void {
@@ -137,6 +138,8 @@ async function collectInput(nodeId: string): Promise<{ input: StartInput; typed:
   if (!node) return null;
   const names = (node.data as FusionData).names ?? { a: "", b: "" };
   const input: StartInput = { mode: readMode(node.config), style: readStyle(node.config) };
+  const workspaceId = useWorkspaces.getState().currentId;
+  if (workspaceId) input.workspaceId = workspaceId;
   const typed: PendingIdentify["typed"] = { sire: null, dam: null };
   for (const s of ["sire", "dam"] as const) {
     const port = SLOT_PORT[s];

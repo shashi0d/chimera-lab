@@ -252,8 +252,10 @@ describe("trace cache and routes", () => {
     expect(readCache("x").map((e) => e.id)).toEqual([1, 2]);
   });
   it("routes round-trip through the query string", () => {
-    for (const r of [{ view: "gallery" }, { view: "lab", runId: null }, { view: "lab", runId: "run_a" }, { view: "creature", creatureId: "crt_1" }] as const) {
+    for (const r of [{ view: "home" }, { view: "chimeras" }, { view: "lab", runId: null, workspaceId: "ws_1" }, { view: "lab", runId: "run_a", workspaceId: "ws_1" }] as const) {
       expect(parseRoute(hrefFor(r).replace("/", ""))).toEqual(r);
     }
+    expect(parseRoute("?run=run_a")).toEqual({ view: "lab", runId: "run_a", workspaceId: null }); // an old run link
+    expect(parseRoute("?creature=crt_1")).toEqual({ view: "home" }); // old gallery links open the home page
   });
 });

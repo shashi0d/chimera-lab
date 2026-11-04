@@ -11,12 +11,13 @@ import { registerRunHandlers } from "../nodes/registry";
 import type { FusionData } from "../nodes/fusion/types";
 import type { VersionData } from "../nodes/version/types";
 import { restoreWorkspace, startAutosave } from "../persistence/autosave";
-import { CreationPage } from "../screens/CreationPage";
-import { CreaturePage } from "../screens/CreaturePage";
-import { GalleryPage } from "../screens/GalleryPage";
+import { useWorkspaces } from "../persistence/workspaces";
+import { ChimerasPage } from "../screens/ChimerasPage";
+import { HomePage } from "../screens/HomePage";
 import { LabView } from "../screens/LabView";
+import { ConfirmDialog } from "../ui/ConfirmDialog";
 import { Banners } from "./Banners";
-import { useRoute } from "./route";
+import { parseRoute, useRoute } from "./route";
 import { ShortcutsDialog } from "./ShortcutsDialog";
 import { Toasts } from "./Toasts";
 import { TopBar } from "./TopBar";
@@ -30,40 +31,57 @@ function resume(): void {
   followJobs();
 }
 
-/** Load the signed-in user's Lab (once per user); signing out clears it. */
+/** Load the signed-in user's open workspace (and again when they switch); signing out clears it. */
 function useWorkspace(): boolean {
   const status = useAuth((s) => s.status);
   const userId = useAuth((s) => s.userId);
+  const workspaceId = useWorkspaces((s) => (s.userId === userId ? s.currentId : null));
   const [readyFor, setReadyFor] = useState<string | null>(null);
 
   useEffect(() => {
     if (status !== "signed-in" || !userId) {
       useGraph.getState().reset();
+      useWorkspaces.getState().reset();
       stopFollowingJobs();
       stopAllStreams();
       setReadyFor(null);
       return;
     }
+    if (useWorkspaces.getState().userId !== userId) {
+      const r = parseRoute(window.location.search);
+      void useWorkspaces.getState().init(userId, r.view === "lab" ? r.workspaceId : null);
+    }
+  }, [status, userId]);
+
+  useEffect(() => {
+    if (status !== "signed-in" || !userId || !workspaceId) return;
     let alive = true;
     let stop: (() => void) | null = null;
-    void restoreWorkspace(userId).then(() => {
+    setReadyFor(null);
+    void restoreWorkspace(userId, workspaceId).then(() => {
       if (!alive) return;
-      stop = startAutosave(userId);
+      stop = startAutosave(userId, workspaceId);
       resume();
-      setReadyFor(userId);
+      setReadyFor(`${userId}:${workspaceId}`);
     });
     return () => {
       alive = false;
       stop?.();
     };
-  }, [status, userId]);
+  }, [status, userId, workspaceId]);
 
-  return status === "signed-in" ? readyFor === userId : status !== "loading";
+  return status === "signed-in" ? readyFor === `${userId}:${workspaceId}` : status !== "loading";
 }
 
 export function App() {
   const route = useRoute();
   const ready = useWorkspace();
+  const loaded = useWorkspaces((s) => s.loaded);
+  // A workspace link (?ws=<id>) opens that workspace.
+  const routeWs = route.view === "lab" ? route.workspaceId ?? null : null;
+  useEffect(() => {
+    if (loaded && routeWs) useWorkspaces.getState().open(routeWs);
+  }, [loaded, routeWs]);
 
   useEffect(() => {
     const stops: Array<() => void> = [];
@@ -86,18 +104,11 @@ export function App() {
         <TopBar />
         <Banners />
         <main id="main" className="main" tabIndex={-1}>
-          {route.view === "gallery" ? (
-            <GalleryPage />
-          ) : route.view === "creature" ? (
-            <CreaturePage key={route.creatureId} creatureId={route.creatureId} />
-          ) : route.view === "creation" ? (
-            <CreationPage key={route.publicationId} publicationId={route.publicationId} />
-          ) : (
-            <LabView ready={ready} runId={route.runId} />
-          )}
+          {route.view === "chimeras" ? <ChimerasPage /> : route.view === "home" ? <HomePage /> : <LabView ready={ready} runId={route.runId} />}
         </main>
         <Toasts />
         <ShortcutsDialog />
+        <ConfirmDialog />
       </div>
     </ReactFlowProvider>
   );

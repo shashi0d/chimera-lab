@@ -267,7 +267,8 @@ async def put_workspace(request: Request) -> JSONResponse:
 
 def public_version(doc: dict[str, Any]) -> dict[str, Any]:
     return {k: doc.get(k) for k in ("id", "parentId", "runId", "creatureId", "operation", "instruction", "imageUrl",
-                                    "createdAt", "isFinal", "publicationId", "title", "style", "card", "profile")}
+                                    "createdAt", "isFinal", "publicationId", "title", "style", "card", "profile",
+                                    "saved", "savedAt", "workspaceId")}
 
 
 async def get_version(a: AgentApi, version_id: str, user: User) -> dict[str, Any]:
@@ -290,7 +291,10 @@ async def lineage(a: AgentApi, version: dict[str, Any], user: User) -> list[dict
         if parent_id in seen or len(chain) > 200:
             raise _err(ErrorCode.VALIDATION_FAILED, "This version's history is invalid.", 422)
         seen.add(parent_id)
-        chain.insert(0, await get_version(a, parent_id, user))
+        parent = await a.services.db.get("assets", parent_id)
+        if not parent or parent.get("kind") != VERSION_KIND or parent.get("owner") != user.id:
+            break  # a deleted earlier image: the path starts at the oldest image that still exists
+        chain.insert(0, parent)
     return chain
 
 
@@ -308,9 +312,11 @@ async def save_version(a: AgentApi, user: User, image: GeneratedImage, parent: d
            "operation": operation, "instruction": instruction, "imageUrl": url, "imageKey": key,
            "responseId": image.response_id, "referenceOnly": reference_only, "createdAt": now_iso(), "isFinal": False,
            "style": parent.get("style"), "profile": profile or parent.get("profile"),
+           "workspaceId": parent.get("workspaceId"),
            # How this image was made, kept so later steps (the animal card) can build on it.
            "generation": {"operation": operation, "instruction": instruction, "prompt": prompt,
-                          "model": image.model}}
+                          "model": image.model,
+                          "parents": (parent.get("generation") or {}).get("parents")}}
     await a.services.db.put("assets", version_id, doc)
     return public_version(doc)
 
@@ -363,7 +369,8 @@ async def from_run(request: Request) -> JSONResponse:
            "imageUrl": view["imageUrl"],
            "imageKey": _file_key(a, view["imageUrl"]), "responseId": None, "referenceOnly": True,
            "createdAt": now_iso(), "isFinal": False, "style": run.get("style"),
-           "generation": _run_generation(run, view), "profile": (view.get("plan") or {}).get("profile")}
+           "generation": _run_generation(run, view), "profile": (view.get("plan") or {}).get("profile"),
+           "workspaceId": run.get("workspaceId") or (body.get("workspaceId") if isinstance(body, dict) else None)}
     await a.services.db.put("assets", version_id, doc)
     return JSONResponse(public_version(doc), status_code=201)
 
@@ -378,16 +385,47 @@ def _run_generation(run: dict[str, Any], view: dict[str, Any]) -> dict[str, Any]
             "prompt": "", "agent_reasoning": [s.get("reason") for s in (view.get("trace") or []) if s.get("reason")][:12]}
 
 
-def paint_prompt(doc: dict[str, Any], instruction: str) -> str:
-    """Paint guardrails: the painted area is part of one creature, so the change must fit the whole body (the result
-    is only blended into the painted pixels, so anything that does not connect shows as a seam)."""
+def parent_animals(doc: dict[str, Any]) -> list[str]:
+    """The creature's parent animals, from its generation record (an edit keeps its Fusion's parents)."""
+    names = []
+    for p in (doc.get("generation") or {}).get("parents") or []:
+        name = (p or {}).get("commonName") if isinstance(p, dict) else None
+        if name and name not in names:
+            names.append(str(name))
+    return names
+
+
+def _who(doc: dict[str, Any]) -> str:
     profile = doc.get("profile") or {}
-    who = f" This creature is {profile['name']}: {profile.get('summary', '')}".rstrip() if profile.get("name") else ""
-    return ("Edit one part of this creature image as follows: " + instruction + "." + who + " Treat the creature as "
-            "one living body: the changed part must match the rest of its anatomy (size, proportions, how it "
-            "attaches and where its joints are), its colours and markings, its lighting and its art style. Keep the "
-            "number of heads, legs, wings and tails unless the instruction asks to change them. Do not add a second "
-            "creature, people, text or scenery. Keep the framing and everything not mentioned exactly as it is.")
+    if not profile.get("name"):
+        return ""
+    return f" The creature is {profile['name']}: {profile.get('summary', '')}".rstrip()
+
+
+def _fill_rule(doc: dict[str, Any]) -> str:
+    """Marked areas are filled with real anatomy from the parent animals, never erased to background."""
+    parents = parent_animals(doc)
+    source = (f"the creature's own parent animals ({' and '.join(parents)}) and the parts it already has"
+              if parents else "the animals this creature is made of and the parts it already has")
+    return (f" Build what goes there from real anatomy: use body parts from {source}, choosing the part that best "
+            "fits that spot and the request. Never erase the area or leave it as empty or plain background: even "
+            "when something is removed, fill its place with the body part that naturally belongs there (the "
+            "surrounding skin, scales, fur, feathers, tentacles or limbs), so the body stays whole.")
+
+
+_BODY_RULES = (" Treat the creature as one living body: the new part must match the rest of its anatomy (size, "
+               "proportions, how it attaches, where its joints are), its colours and markings, its lighting and its "
+               "art style. Keep the number of heads, legs, wings and tails unless asked to change them. Do not add a "
+               "second creature, people, text or scenery.")
+
+
+def paint_prompt(doc: dict[str, Any], instruction: str) -> str:
+    """Paint: image 1 has the painted area highlighted, image 2 is clean. Only the highlighted area changes (the result
+    is blended into the painted pixels, so anything that does not connect shows as a seam)."""
+    return ("Image 1 shows a creature with one area highlighted in translucent magenta; image 2 is the same image "
+            "without the highlight. Change only what is inside the highlighted area: " + instruction.rstrip(".") +
+            "." + _fill_rule(doc) + _who(doc) + _BODY_RULES + " Leave no trace of the magenta highlight. Keep the "
+            "framing and everything outside the highlighted area exactly as in image 2.")
 
 
 async def _edit_profile(a: AgentApi, doc: dict[str, Any], image: bytes, operation: str,
@@ -458,6 +496,21 @@ async def revise(version_id: str, request: Request) -> JSONResponse:
     return await start_job(request, user, day, "revise", version_id, instruction, work)
 
 
+def mark_region(original: bytes, mask: bytes) -> bytes:
+    """The image with the painted area tinted magenta and outlined: the model sees exactly where to change."""
+    with Image.open(io.BytesIO(original)) as src, Image.open(io.BytesIO(mask)) as painted:
+        base = src.convert("RGBA")
+        alpha = painted.convert("RGBA").getchannel("A").resize(base.size)
+        tint = Image.new("RGBA", base.size, (255, 0, 200, 0))
+        tint.putalpha(alpha.point(lambda v: 120 if v > 0 else 0))
+        edge = alpha.point(lambda v: 255 if v > 0 else 0).filter(ImageFilter.FIND_EDGES).filter(ImageFilter.MaxFilter(5))
+        outline = Image.new("RGBA", base.size, (255, 0, 200, 255))
+        outline.putalpha(edge)
+        out = io.BytesIO()
+        Image.alpha_composite(Image.alpha_composite(base, tint), outline).convert("RGB").save(out, "PNG")
+        return out.getvalue()
+
+
 def composite_region(original: bytes, candidate: bytes, mask: bytes) -> bytes:
     """Blend inside the painted alpha only. All pixels outside that alpha remain unchanged."""
     try:
@@ -512,9 +565,10 @@ async def paint(version_id: str, request: Request) -> JSONResponse:
 
     async def work(stage: Callable[[str], Awaitable[None]]) -> dict[str, Any]:
         await stage("Editing the painted area")
-        refs = [original] if doc.get("referenceOnly") else []
+        # Like a markup editor: the model sees where (the highlighted copy) and what is there now (the clean image).
+        marked = await asyncio.to_thread(mark_region, original, mask)
         prompt = _with_background(a.settings, paint_prompt(doc, instruction))
-        candidate = await _generate(a, doc, prompt, refs)
+        candidate = await _generate(a, doc, prompt, [marked, original])
         await stage("Blending the painted area")
         merged = await asyncio.to_thread(composite_region, original, candidate.data, mask)
         image = GeneratedImage(merged, "image/png", candidate.model, candidate.response_id)
@@ -525,6 +579,83 @@ async def paint(version_id: str, request: Request) -> JSONResponse:
                                   profile=profile)
 
     return await start_job(request, user, day, "paint", version_id, instruction, work)
+
+
+def composite_sketch(original: bytes, sketch: bytes) -> bytes:
+    """The creator's drawing (a transparent layer) laid over the image, at the image's size, as a PNG."""
+    try:
+        with Image.open(io.BytesIO(original)) as base_img, Image.open(io.BytesIO(sketch)) as layer_img:
+            base = base_img.convert("RGBA")
+            layer = layer_img.convert("RGBA").resize(base.size)
+    except (UnidentifiedImageError, OSError) as exc:
+        raise _err(ErrorCode.VALIDATION_FAILED, "The drawing could not be read. Draw again.", 422) from exc
+    if layer.getchannel("A").getbbox() is None:
+        raise _err(ErrorCode.VALIDATION_FAILED, "Draw on the image first.", 422)
+    out = io.BytesIO()
+    Image.alpha_composite(base, layer).convert("RGB").save(out, "PNG")
+    return out.getvalue()
+
+
+def sketch_prompt(doc: dict[str, Any], instruction: str) -> str:
+    """Draw: image 1 has the creator's marks, image 2 is clean. The marks show what they envision: body parts, mostly
+    from the creature's parent animals. Each mark becomes the part it suggests; nothing is erased to background."""
+    parents = parent_animals(doc)
+    from_parents = f", usually a part of one of its parent animals ({' or '.join(parents)})" if parents else ""
+    wish = f" The creator says: {instruction.rstrip('.')}." if instruction else ""
+    return ("Image 1 shows a creature with coloured marks drawn on it by its creator; image 2 is the same image "
+            "without the marks. The marks show what the creator envisions: each drawn shape is a body part" +
+            from_parents + "." + wish + " Turn every mark into the real body part it suggests, using the parent "
+            "animal's part that best matches the shape: a long stroke becomes a tentacle, tail, neck or limb; dots or "
+            "circles become eyes, spots or scales; a jagged outline becomes spines, fins or a crest; a filled patch "
+            "becomes a colour or pattern on the body. Give the part the drawn size, position and direction. Where "
+            "marks cover existing parts, replace those parts with the new part." + _fill_rule(doc) + _who(doc) +
+            _BODY_RULES + " Remove every drawn line itself: the result must look like a finished image in the same "
+            "art style, not a sketch. Keep everything that was not drawn on exactly as in image 2.")
+
+
+@router.post("/versions/{version_id}/sketch")
+async def sketch(version_id: str, request: Request) -> JSONResponse:
+    """Draw on an image and generate from the drawing: the model turns the marks into parts of the creature."""
+    a = api(request)
+    user, _ = await _charge(request)
+    doc = await get_version(a, version_id, user)
+    length = request.headers.get("content-length")
+    if length and length.isdigit() and int(length) > a.settings.evo_max_upload_bytes + 1024 * 1024:
+        raise _err(ErrorCode.FILE_TOO_LARGE, "The drawing is too large.", 413)
+    try:
+        form = await request.form(max_files=1, max_fields=2)
+    except Exception as exc:
+        raise _err(ErrorCode.VALIDATION_FAILED, "Send a drawing and, if you like, a note.", 422) from exc
+    raw = form.get("instruction")
+    instruction = " ".join(str(raw).split())[:MAX_INSTRUCTION] if isinstance(raw, str) else ""
+    if instruction:
+        await check_topic(a.services.vision, [], [instruction], "instruction")
+    upload = form.get("sketch")
+    if not isinstance(upload, UploadFile):
+        raise _err(ErrorCode.VALIDATION_FAILED, "Draw on the image first.", 422)
+    drawing = await upload.read(a.settings.evo_max_upload_bytes + 1)
+    await upload.close()
+    if len(drawing) > a.settings.evo_max_upload_bytes:
+        raise _err(ErrorCode.FILE_TOO_LARGE, "The drawing is too large.", 413)
+    original = await version_image(a, doc)
+    guide = await asyncio.to_thread(composite_sketch, original, drawing)  # validate before spending a call
+    day = await lab(request).caps.charge(user.id)
+
+    async def work(stage: Callable[[str], Awaitable[None]]) -> dict[str, Any]:
+        await stage("Turning the drawing into the creature")
+        prompt = _with_background(a.settings, sketch_prompt(doc, instruction))
+        from app.evolution.live import RetryingImageGen
+
+        image = await RetryingImageGen(a.services.image_gen, a.settings).generate(prompt, [guide, original], "1:1")
+        if not image.data:
+            raise _err(ErrorCode.UPSTREAM_ERROR, "The image provider returned no image. Please try again.", 502)
+        await stage("Updating the creature's entry")
+        profile = await _edit_profile(a, doc, image.data, "sketch", instruction or "a drawn change")
+        await stage("Saving the new version")
+        return await save_version(a, user, image, doc, "sketch", instruction or "Drawn change", reference_only=False,
+                                  prompt=prompt, profile=profile)
+
+    return await start_job(request, user, day, "sketch", version_id, instruction or "Drawn change", work)
 
 
 @router.put("/versions/{version_id}/final")
@@ -612,26 +743,35 @@ async def saved_review(version_id: str, request: Request) -> JSONResponse:
     return JSONResponse({"review": doc.get("review")}, headers={"Cache-Control": "no-store"})
 
 
-@router.post("/versions/{version_id}/card")
-async def animal_card(version_id: str, request: Request) -> JSONResponse:
-    """The animal card (one per image, made in the background): asking again returns the same card; only a failed or
-    interrupted card is made again."""
-    from app.agentapi.animal_card import build_card, is_stale, new_card
+def card_task_key(version_id: str) -> str:
+    return f"card:{version_id}"
+
+
+def card_is_live(request: Request, card: dict[str, Any] | None, version_id: str) -> bool:
+    """A card that is ready, or running in this process (a card whose task is gone was interrupted)."""
+    from app.agentapi.animal_card import is_stale
+
+    if not card or card.get("status") not in ("ready", "running"):
+        return False
+    if card.get("status") == "ready":
+        return True
+    return not is_stale(card, api(request).settings.lab_job_stale_seconds) and         card_task_key(version_id) in lab(request).tasks
+
+
+async def start_card(request: Request, user: User, doc: dict[str, Any]) -> dict[str, Any]:
+    """Make the image's card in the background (one per image); returns the card as it is now."""
+    from app.agentapi.animal_card import build_card, new_card
 
     a, state = api(request), lab(request)
-    user, _ = await _user(request)
-    doc = await get_version(a, version_id, user)
-    card = doc.get("card") or {}
-    stale = is_stale(card, a.settings.lab_job_stale_seconds) or (
-        card.get("status") == "running" and f"card:{version_id}" not in state.tasks)
-    if card.get("status") in ("ready", "running") and not stale:
-        return JSONResponse(card, status_code=200, headers={"Cache-Control": "no-store"})
-    await _charge(request)
+    version_id = doc["id"]
+    if card_is_live(request, doc.get("card"), version_id):
+        return doc["card"]
     day = await state.caps.charge(user.id)
     doc["card"] = new_card()
     await a.services.db.put("assets", version_id, doc)
 
     async def run() -> None:
+        result: dict[str, Any] = {}
         try:
             async with charged_slot(request, user.id, day):
                 image = await version_image(a, doc)
@@ -644,27 +784,39 @@ async def animal_card(version_id: str, request: Request) -> JSONResponse:
             result = {"status": "failed", "error": "The card could not be made. Try again.", "profile": None,
                       "angles": []}
         finally:
-            fresh = await a.services.db.get("assets", version_id) or doc
-            fresh["card"] = {**fresh.get("card", {}), **result}
-            if result.get("profile") and not fresh.get("profile"):
-                fresh["profile"] = result["profile"]
-            await a.services.db.put("assets", version_id, fresh)
-            state.tasks.pop(f"card:{version_id}", None)
+            fresh = await a.services.db.get("assets", version_id)
+            if fresh is not None:  # the image may have been deleted meanwhile
+                fresh["card"] = {**fresh.get("card", {}), **result}
+                if result.get("profile") and not fresh.get("profile"):
+                    fresh["profile"] = result["profile"]
+                await a.services.db.put("assets", version_id, fresh)
+            state.tasks.pop(card_task_key(version_id), None)
 
-    state.tasks[f"card:{version_id}"] = asyncio.create_task(run(), name=f"card-{version_id}")
-    return JSONResponse(doc["card"], status_code=202, headers={"Cache-Control": "no-store"})
+    state.tasks[card_task_key(version_id)] = asyncio.create_task(run(), name=f"card-{version_id}")
+    return doc["card"]
+
+
+@router.post("/versions/{version_id}/card")
+async def animal_card(version_id: str, request: Request) -> JSONResponse:
+    """The animal card (one per image, made in the background): asking again returns the same card; only a failed or
+    interrupted card is made again."""
+    a = api(request)
+    user, _ = await _user(request)
+    doc = await get_version(a, version_id, user)
+    if card_is_live(request, doc.get("card"), version_id):
+        return JSONResponse(doc["card"], status_code=200, headers={"Cache-Control": "no-store"})
+    await _charge(request)
+    card = await start_card(request, user, doc)
+    return JSONResponse(card, status_code=202, headers={"Cache-Control": "no-store"})
 
 
 @router.get("/versions/{version_id}/card")
 async def saved_card(version_id: str, request: Request) -> JSONResponse:
-    from app.agentapi.animal_card import is_stale
-
     a = api(request)
     user, _ = await _user(request)
     doc = await get_version(a, version_id, user)
     card = doc.get("card")
-    if card and (is_stale(card, a.settings.lab_job_stale_seconds) or (
-            card.get("status") == "running" and f"card:{version_id}" not in lab(request).tasks)):
+    if card and card.get("status") == "running" and not card_is_live(request, card, version_id):
         card = {**card, "status": "failed", "error": INTERRUPTED}
     return JSONResponse({"card": card}, headers={"Cache-Control": "no-store"})
 
