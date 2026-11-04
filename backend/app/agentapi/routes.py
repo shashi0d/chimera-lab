@@ -101,17 +101,23 @@ async def start_run(request: Request) -> Response:
         raise _err(ErrorCode.VALIDATION_FAILED, "Choose an art style: " + ", ".join(STYLES) + ".", 422,
                    field="style", styles=list(STYLES))
     names: dict[str, str | None] = {s: _clean_name(form.get(f"{s}Name"), s) for s in U.SLOTS}
+    # Typed names must be animals (the topic check); photos are checked by identify; our own creatures pass.
+    from app.agentapi.creature_ai import check_topic
+
+    typed = [n for s, n in names.items() if n and not form.get(f"{s}VersionId")]
+    await check_topic(svc.vision, typed, [], "name")
     photos: dict[str, bytes] = {}  # identified by the vision model
     refs: dict[str, bytes] = {}  # sent to the image model as references (prompt mode)
-    versions: dict[str, str] = {}
+    versions: dict[str, dict[str, Any]] = {}
     for s in U.SLOTS:
         vid = form.get(f"{s}VersionId")
         if isinstance(vid, str) and vid.strip():
-            # An earlier generated creature: its image is the reference, its title the name.
+            # An earlier generated creature: its image is the reference, its profile (or title) names it.
             vdoc = await _own_version(a, vid.strip(), user, s)
             refs[s] = await a.files.get(vdoc["imageKey"])
-            names[s] = names[s] or str(vdoc.get("title") or "an earlier creature")
-            versions[s] = vdoc["id"]
+            profile = vdoc.get("profile") or {}
+            names[s] = str(profile.get("name") or vdoc.get("title") or "an earlier creature")[:80]
+            versions[s] = {"versionId": vdoc["id"], "summary": profile.get("summary") or ""}
             continue
         f = form.get(f"{s}Image")
         if isinstance(f, UploadFile) and (f.filename or f.size):
@@ -130,7 +136,7 @@ async def start_run(request: Request) -> Response:
         return JSONResponse(choice, status_code=200)
     for s, parent in (("sire", sire), ("dam", dam)):
         if s in versions:
-            parent.update(source="version", versionId=versions[s])
+            parent.update(source="version", **versions[s])
     driver = a.driver_factory()
 
     await a.caps.take(user.id)

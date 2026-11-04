@@ -1,97 +1,86 @@
-"""The animal card: a profile of a generated creature, made on demand from its image and its stored generation record.
+"""The animal card: one field-guide card per generated image, made on demand.
 
-One vision call (Muse Spark on the Meta API, structured output). The model sees the image and how the image was made
-(the Fusion prompt, the art style, the parents, every edit instruction from V1 to this image), so the card builds on
-the decisions already taken instead of inventing a new creature. The model's own reasoning is kept on the card."""
+The card's text is the creature's profile, written when the image was generated (app.agentapi.creature_ai); an image
+without one (an older image, or an agent run) gets it written now. Beside the main image the card shows four more
+angles of the same creature, made by the image model with the image as the reference. A card is made once per image
+(in the background, so a page reload does not lose it); asking again returns the same card. Only a failed card can
+be made again.
+"""
 
 from __future__ import annotations
 
-import json
+import asyncio
+import logging
+from datetime import UTC, datetime
 from typing import Any
 
-from app.adapters.meta.client import _data_url, _json_schema, _message_json
+from app.util import now_iso
 
-_STR = {"type": "string"}
-_LIST = {"type": "array", "items": _STR}
+log = logging.getLogger(__name__)
 
-CARD_SCHEMA: dict[str, Any] = {
-    "type": "object",
-    "additionalProperties": False,
-    "required": ["name", "scientific_style_name", "tagline", "inherited", "appearance", "size", "habitat", "diet",
-                 "behaviour", "abilities", "weaknesses", "fun_fact", "reasoning"],
-    "properties": {
-        "name": _STR,
-        "scientific_style_name": _STR,
-        "tagline": _STR,
-        "inherited": {"type": "array", "items": {
-            "type": "object", "additionalProperties": False, "required": ["parent", "traits"],
-            "properties": {"parent": _STR, "traits": _LIST}}},
-        "appearance": _STR,
-        "size": _STR,
-        "habitat": _STR,
-        "diet": _STR,
-        "behaviour": _STR,
-        "abilities": _LIST,
-        "weaknesses": _LIST,
-        "fun_fact": _STR,
-        "reasoning": _STR,
-    },
-}
-
-INSTRUCTIONS = (
-    "You write the profile card of an invented hybrid creature for a creative app. You get the creature's image and "
-    "the record of how it was made: the parents, the Fusion prompt, the art style and every later edit. Build on "
-    "those decisions: describe the creature that is in the image, and attribute each visible trait to the parent it "
-    "most plausibly came from. Never contradict the image. Keep it vivid but grounded: habitat, diet, size and "
-    "behaviour should follow from the body you see and the parents' real biology. Write short sentences. "
-    "`name`: a catchy common name. `scientific_style_name`: a playful Latin-style binomial. `tagline`: one line. "
-    "`inherited`: one entry per parent with the traits it gave. `abilities` and `weaknesses`: 2 to 4 short items "
-    "each. `reasoning`: two to four sentences on how you read the image and the record to decide this card.")
+ANGLES: list[tuple[str, str]] = [
+    ("front", "seen straight from the front"),
+    ("side", "seen from its side, in full profile"),
+    ("back", "seen from behind"),
+    ("above", "seen in a three-quarter view from above"),
+]
 
 
-def card_context(chain: list[dict[str, Any]]) -> dict[str, Any]:
-    """What the model is told about the image: the first version's Fusion record, then each edit in order."""
-    first = chain[0]
-    fusion = dict(first.get("generation") or {})
-    if len(json.dumps(fusion, default=str)) > 6000:
-        fusion.pop("agent_reasoning", None)
-    edits = [{"operation": v.get("operation"), "instruction": v.get("instruction")} for v in chain[1:]]
-    return {"title": first.get("title"), "style": first.get("style") or fusion.get("style"), "fusion": fusion,
-            "edits": edits}
+def angle_prompt(view: str, profile: dict[str, Any] | None, background: str) -> str:
+    who = f" ({profile['summary']})" if profile and profile.get("summary") else ""
+    return (f"Show this exact same creature{who}, {view}. Keep its body, proportions, number of limbs, colours, "
+            "markings and art style identical to the reference image; only the camera angle changes. Full body in "
+            f"frame, no other creatures, no text. {background}").strip()
 
 
-def build_card_request(model: str, image: bytes, context: dict[str, Any]) -> dict[str, Any]:
-    return {"model": model, "messages": [
-        {"role": "system", "content": INSTRUCTIONS},
-        {"role": "user", "content": [
-            {"type": "text", "text": "How this creature was made:\n" + json.dumps(context, ensure_ascii=False,
-                                                                                   default=str)},
-            {"type": "image_url", "image_url": {"url": _data_url(image)}}]},
-    ], "response_format": _json_schema("animal_card", CARD_SCHEMA)}
+def is_stale(card: dict[str, Any], stale_seconds: float) -> bool:
+    if card.get("status") != "running":
+        return False
+    try:
+        started = datetime.fromisoformat(str(card.get("startedAt")).replace("Z", "+00:00"))
+    except ValueError:
+        return True
+    return (datetime.now(UTC) - started).total_seconds() > stale_seconds
 
 
-def parse_card(payload: dict[str, Any]) -> dict[str, Any]:
-    data = _message_json(payload)
-    out: dict[str, Any] = {}
-    for key, spec in CARD_SCHEMA["properties"].items():
-        value = data.get(key)
-        if spec.get("type") == "string":
-            out[key] = str(value or "").strip()[:1200]
-        elif key == "inherited":
-            out[key] = [{"parent": str(r.get("parent") or "")[:120],
-                         "traits": [str(t)[:200] for t in (r.get("traits") or [])][:8]}
-                        for r in (value or []) if isinstance(r, dict)][:4]
-        else:
-            out[key] = [str(t).strip()[:200] for t in (value or []) if str(t).strip()][:6]
-    return out
+async def make_angles(gen: Any, files: Any, version_id: str, image: bytes, profile: dict[str, Any] | None,
+                      background: str) -> tuple[list[dict[str, str]], list[str]]:
+    """Four angles in parallel. A failed angle is left out (the card shows the others)."""
+    from app.agentapi.files import EXT
+
+    async def one(i: int, key: str, view: str) -> dict[str, str]:
+        img = await gen.generate(angle_prompt(view, profile, background), [image], "1:1")
+        ext = EXT.get(img.content_type, "webp")
+        url = await files.put(f"lab/{version_id}_angle_{i}_{key}.{ext}", img.data, img.content_type)
+        return {"view": key, "url": url}
+
+    results = await asyncio.gather(*(one(i, k, v) for i, (k, v) in enumerate(ANGLES, 1)), return_exceptions=True)
+    angles = [r for r in results if isinstance(r, dict)]
+    errors = [f"{ANGLES[i][0]}: {r}" for i, r in enumerate(results) if isinstance(r, BaseException)]
+    return angles, errors
 
 
-async def make_card(settings: Any, image: bytes, context: dict[str, Any]) -> dict[str, Any]:
-    from app.evolution.live import LiveEvoSpark
+def new_card() -> dict[str, Any]:
+    return {"status": "running", "startedAt": now_iso(), "profile": None, "angles": [], "error": None}
 
-    spark = LiveEvoSpark(settings)
-    payload = await spark._chat("lab_card", build_card_request(spark.model_id, image, context))
-    card = parse_card(payload)
-    card["model"] = spark.model_id
-    card["basedOn"] = context
-    return card
+
+async def build_card(a: Any, doc: dict[str, Any], image: bytes) -> dict[str, Any]:
+    """The finished card for a version doc: its profile (written now if missing) and its four angles."""
+    from app.agentapi.creature_ai import make_profile
+    from app.evolution.live import RetryingImageGen
+
+    svc = a.services
+    profile = doc.get("profile")
+    if not profile:
+        context = {"title": doc.get("title"), "style": doc.get("style"), **(doc.get("generation") or {})}
+        profile = await make_profile(svc.vision, image, context)
+    gen = RetryingImageGen(svc.image_gen, a.settings)
+    angles, errors = await make_angles(gen, a.files, doc["id"], image, profile,
+                                       str(a.settings.evo_fusion_background).strip())
+    if errors:
+        log.warning("card %s: %d angle(s) failed: %s", doc["id"], len(errors), "; ".join(errors)[:500])
+    if not profile and not angles:
+        return {"status": "failed", "error": "The card could not be made. Try again.", "profile": None,
+                "angles": [], "finishedAt": now_iso()}
+    return {"status": "ready", "profile": profile, "angles": angles, "error": None, "finishedAt": now_iso(),
+            "missingAngles": len(ANGLES) - len(angles)}

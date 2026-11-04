@@ -40,11 +40,18 @@ def build_fusion_prompt(settings: Any, a: dict[str, Any], b: dict[str, Any], sty
         said = []
         for i, slot in enumerate(ref_slots, 1):
             parent = a if slot == "sire" else b
-            kind = "an earlier generated creature" if parent.get("source") == "version" else "a photo"
-            said.append(f"reference image {i} is {kind} of {names[slot]}")
+            if parent.get("source") == "version":
+                summary = str(parent.get("summary") or "").strip().rstrip(".")
+                said.append(f"reference image {i} is {names[slot]}, a creature made earlier"
+                            + (f" ({summary})" if summary else ""))
+            else:
+                said.append(f"reference image {i} is a photo of {names[slot]}")
         parts.append("Use the attached reference images: " + "; ".join(said) + ". Keep each one's most "
-                     "recognisable features, but make one single new creature, not a collage.")
-    parts.append(f"Render it as {style_phrase(style)}.")
+                     "recognisable anatomy, colours and markings, but make one single new creature, not a collage.")
+        # The references may be in different art styles: blend the animals, never the styles.
+        parts.append("Blend the animals, not the art styles: take only anatomy, colours and markings from the "
+                     "references and ignore how they are drawn or photographed.")
+    parts.append(f"Render the whole image as {style_phrase(style)}; this art style decides the look.")
     rule = background_rule(settings)
     if rule:
         parts.append(rule)

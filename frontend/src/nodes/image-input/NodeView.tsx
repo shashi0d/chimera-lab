@@ -40,7 +40,7 @@ export function ImageInputView({ node, selected }: NodeViewProps<ImageInputConfi
   const media = (
     <div className="image-node__frame">
       {preview && !broken ? (
-        <img className="image-node__img" src={preview} alt={t.alt(d.fileName || t.untitled)} draggable={false} onError={() => setBroken(true)} />
+        <img className="image-node__img" decoding="async" src={preview} alt={t.alt(d.fileName || t.untitled)} draggable={false} onError={() => setBroken(true)} />
       ) : (
         <div className="image-node__placeholder">
           {broken || d.status === "error" ? <Icon name="image" size={28} /> : <span className="skeleton skeleton--fill" aria-hidden="true" />}

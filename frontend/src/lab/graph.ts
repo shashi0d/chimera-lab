@@ -59,9 +59,21 @@ export function addEditNode(versionNodeId: string, operation: EditOperation, ins
   return node.id;
 }
 
-/** An animal card for an image (written as soon as the image is ready). */
+/** The animal card already connected to this image, if any (one card per image). */
+export function cardNodeOf(versionNodeId: string): GraphNode | undefined {
+  const g = useGraph.getState();
+  const ids = new Set(g.edges.filter((e) => e.source === versionNodeId).map((e) => e.target));
+  return g.nodes.find((n) => n.type === "card" && ids.has(n.id));
+}
+
+/** The image's animal card: the existing one is selected; otherwise a new card is added and made. */
 export function addCardNode(versionNodeId: string, at?: { x: number; y: number }): string {
   const g = useGraph.getState();
+  const existing = cardNodeOf(versionNodeId);
+  if (existing) {
+    g.setSelection([existing.id]);
+    return existing.id;
+  }
   const parent = g.nodes.find((n) => n.id === versionNodeId);
   const size = FOOTPRINT.card!;
   const position = at ? findFreeSpot(at, size.w, size.h) : parent ? rightOf(parent, "card") : { x: 0, y: 0 };

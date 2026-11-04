@@ -504,8 +504,8 @@ class PromptDriver:
         prompt = build_fusion_prompt(self.svc.settings, doc["sire"], doc["dam"], style, slots)
         record = {"fusion_mode": "prompt", "operation": "fusion", "prompt": prompt, "style": style,
                   "style_wording": style_phrase(style), "references": slots,
-                  "parents": [{k: doc[s].get(k) for k in ("commonName", "scientificName", "source", "versionId")}
-                              for s in SLOT_ORDER]}
+                  "parents": [{k: doc[s].get(k) for k in ("commonName", "scientificName", "source", "versionId",
+                                                          "summary")} for s in SLOT_ORDER]}
         return prompt, [refs_by_slot[s] for s in slots], record
 
     async def run(self, job: Job) -> dict[str, Any]:
@@ -518,6 +518,10 @@ class PromptDriver:
         job.extra.pop("refs", None)
         if not img.data:
             raise RunFailed("UPSTREAM_ERROR", "The image model returned no image. Try again.", True)
+        # The creature's basic info (name, size, habitat, notes): its title now, its card and its next Fusion later.
+        from app.agentapi.creature_ai import make_profile
+
+        record["profile"] = await make_profile(svc.vision, img.data, record)
         summary = f"rendered with {len(refs)} reference image(s): {prompt}" if refs else f"rendered: {prompt}"
         await job.emit("step", n=1, tool="render", args={"prompt": prompt}, summary=summary,
                        reason="prompt mode: one image from a plain prompt", cards=[], ok=True, error=None)
@@ -534,6 +538,8 @@ class PromptDriver:
             images=[{"imageId": "img1", "url": url, "kind": "render", "verdict": None}], overlay_url=None,
             run_id=job.run_id, stats={"renders": 1, "edits": 0, "toolCalls": 1,
                                       "seconds": round(time.monotonic() - t0, 1)})
+        if record["profile"] and record["profile"].get("name"):
+            view["title"] = record["profile"]["name"]
         await job.runner.creatures.save(view, "run", trace=trace, owner=doc.get("owner"))
         return {"creatureId": cid, "imageId": "img1", "imageUrl": url, "remainingFailures": [], "hiddenChecks": 0,
-                "agree": True, "stop": "prompt mode: one render"}
+                "agree": True, "stop": "prompt mode: one render", "title": view["title"]}

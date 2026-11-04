@@ -18,7 +18,7 @@ export const FOOTPRINT: Record<string, { w: number; h: number }> = {
   fusion: { w: 320, h: 460 },
   version: { w: 340, h: 470 },
   edit: { w: 320, h: 380 },
-  card: { w: 340, h: 520 },
+  card: { w: 760, h: 560 },
 };
 const DEFAULT_FOOTPRINT = { w: 280, h: 300 };
 

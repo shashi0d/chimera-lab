@@ -89,16 +89,29 @@ export function Canvas() {
 
   // ---------------------------------------------------------------- derived flow state
 
+  // Dragging moves one node per frame: every other node keeps its `data` object (same node content, same issues), so
+  // its memoised view does not re-render. A node's content is its type, config and data; its position is not.
+  const dataCache = useRef(new Map<string, { node: GraphNode; issuesKey: string; data: FlowData }>());
   const flowNodes: FlowNode[] = useMemo(() => {
     const ctx = { graph: { nodes, edges }, connectivity, readOnly };
     const sel = new Set(selection);
-    return nodes.map((n, i) => {
+    const cache = dataCache.current;
+    const seen = new Set<string>();
+    const out = nodes.map((n, i) => {
       const def = getDefinition(n.type);
+      const issues = def ? def.validate(n, ctx) : [];
+      const issuesKey = issues.length ? JSON.stringify(issues) : "";
+      const prev = cache.get(n.id);
+      const same = prev && prev.issuesKey === issuesKey && prev.data.catalog === i + 1 && prev.node.type === n.type &&
+        prev.node.config === n.config && prev.node.data === n.data && prev.node.version === n.version;
+      const data = same ? prev.data : { node: n, issues, catalog: i + 1 };
+      if (!same) cache.set(n.id, { node: n, issuesKey, data });
+      seen.add(n.id);
       return {
         id: n.id,
         type: def ? def.type : "unsupported",
         position: n.position,
-        data: { node: n, issues: def ? def.validate(n, ctx) : [], catalog: i + 1 },
+        data,
         selected: sel.has(n.id),
         measured: measured[n.id],
         className: shake === n.id ? "is-shaking" : undefined,
@@ -107,6 +120,8 @@ export function Canvas() {
         connectable: !readOnly && Boolean(def),
       };
     });
+    for (const id of cache.keys()) if (!seen.has(id)) cache.delete(id);
+    return out;
   }, [nodes, edges, selection, connectivity, readOnly, measured, shake]);
 
   const flowEdges: Edge[] = useMemo(() => {
@@ -352,6 +367,9 @@ export function Canvas() {
         colorMode={theme}
         minZoom={0.2}
         maxZoom={2}
+        zoomOnDoubleClick={false}
+        onlyRenderVisibleElements
+        elevateNodesOnSelect={false}
         fitView
         fitViewOptions={{ padding: 0.25, maxZoom: 1 }}
         proOptions={{ hideAttribution: true }}

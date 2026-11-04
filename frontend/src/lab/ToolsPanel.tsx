@@ -10,7 +10,7 @@ import type { GraphNode } from "../graph/types";
 import type { VersionData } from "../nodes/version/types";
 import { Button, IconButton } from "../ui/Button";
 import { Icon } from "../ui/Icon";
-import { labApi, type ChatMessage, type CollaboratorAnswer, type LabVersion, type Review } from "./api";
+import { labApi, type LabVersion } from "./api";
 import { addEditNode, lineage, treeOf, versionNumber } from "./graph";
 import { downloadVersion, updateVersion, useLab } from "./store";
 
@@ -94,171 +94,6 @@ function Compare({ nodeId, version }: { nodeId: string; version: LabVersion }) {
           </figure>
         </div>
       ) : null}
-    </section>
-  );
-}
-
-function ReviewSection({ version }: { version: LabVersion }) {
-  const [review, setReview] = useState<Review | null>(null);
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState("");
-  useEffect(() => {
-    let alive = true;
-    setReview(null);
-    setError("");
-    void labApi.savedReview(version.id).then((r) => alive && setReview(r)).catch(() => undefined);
-    return () => {
-      alive = false;
-    };
-  }, [version.id]);
-  const run = async () => {
-    setBusy(true);
-    setError("");
-    try {
-      setReview(await labApi.review(version.id));
-    } catch (e) {
-      setError(errorText(e));
-    } finally {
-      setBusy(false);
-      void useLab.getState().refreshLimits();
-    }
-  };
-  return (
-    <section className="tools__section" aria-labelledby="tools-review">
-      <h3 id="tools-review">Visual review</h3>
-      <p className="tools__note">A model looks at this image and suggests next steps. Its observations can be wrong. One lab action.</p>
-      <Button size="sm" icon="eye" busy={busy} disabled={busy} onClick={() => void run()}>
-        {review ? "Review again" : "Review this image"}
-      </Button>
-      {error ? (
-        <p className="tools__error" role="alert">
-          {error}
-        </p>
-      ) : null}
-      {review ? (
-        <div className="tools-review" aria-live="polite">
-          <p>
-            <strong>Observed:</strong> {review.observation}
-          </p>
-          <p className="tools-review__ideas">
-            <strong>Ideas:</strong>
-            {"\n"}
-            {review.suggestions}
-          </p>
-        </div>
-      ) : null}
-    </section>
-  );
-}
-
-const chatKey = (versionId: string) => `chimera.lab.chat.${versionId}`;
-
-function restoreChat(versionId: string): { messages: ChatMessage[]; action: CollaboratorAnswer["action"] } {
-  try {
-    const v = JSON.parse(localStorage.getItem(chatKey(versionId)) || "{}");
-    const messages = Array.isArray(v.messages) ? v.messages.filter((m: ChatMessage) => (m.role === "user" || m.role === "assistant") && typeof m.content === "string") : [];
-    return { messages: messages.slice(-12), action: v.action?.type === "revise" ? v.action : null };
-  } catch {
-    return { messages: [], action: null };
-  }
-}
-
-function Collaborator({ nodeId, version }: { nodeId: string; version: LabVersion }) {
-  const [state, setState] = useState(() => restoreChat(version.id));
-  const [input, setInput] = useState("");
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState("");
-  const fieldId = useId();
-  useEffect(() => setState(restoreChat(version.id)), [version.id]);
-
-  const send = async () => {
-    const content = input.trim();
-    if (!content || busy) return;
-    const messages: ChatMessage[] = [...state.messages, { role: "user" as const, content }].slice(-11);
-    setState({ messages, action: null });
-    setInput("");
-    setBusy(true);
-    setError("");
-    try {
-      const answer = await labApi.collaborate(version.id, messages);
-      const steps = answer.steps.map((s) => `(Inspected the image: ${s.reason})`).join("\n");
-      const reply = `${steps ? `${steps}\n` : ""}${answer.message}`.slice(0, 2000);
-      const next = { messages: [...messages, { role: "assistant" as const, content: reply }], action: answer.action };
-      // The reply stays with the version it was about, even if another card is selected meanwhile.
-      localStorage.setItem(chatKey(version.id), JSON.stringify(next));
-      setState(next);
-    } catch (e) {
-      setError(errorText(e));
-    } finally {
-      setBusy(false);
-      void useLab.getState().refreshLimits();
-    }
-  };
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(chatKey(version.id), JSON.stringify(state));
-    } catch {
-      /* storage is optional */
-    }
-  }, [state, version.id]);
-
-  return (
-    <section className="tools__section" aria-labelledby="tools-chat">
-      <h3 id="tools-chat">Collaborator</h3>
-      <p className="tools__note">Talk the next step through. It can inspect the image and suggest a revision; you decide what runs. One lab action per message.</p>
-      {state.messages.length ? (
-        <div className="tools-chat" aria-live="polite">
-          {state.messages.map((m, i) => (
-            <p key={i} className={`tools-chat__msg tools-chat__msg--${m.role}`}>
-              <strong>{m.role === "user" ? "You" : "Collaborator"}</strong>
-              {m.content}
-            </p>
-          ))}
-        </div>
-      ) : null}
-      {state.action ? (
-        <div className="tools-chat__action">
-          <p>
-            <strong>Suggested revision:</strong> {state.action.instruction}
-          </p>
-          <Button
-            size="sm"
-            variant="primary"
-            icon="plus"
-            onClick={() => {
-              addEditNode(nodeId, "revise", state.action!.instruction);
-              setState((s) => ({ ...s, action: null }));
-            }}
-          >
-            Add as a Revise card
-          </Button>
-        </div>
-      ) : null}
-      {error ? (
-        <p className="tools__error" role="alert">
-          {error}
-        </p>
-      ) : null}
-      <label htmlFor={fieldId} className="sr-only">
-        Message the collaborator
-      </label>
-      <textarea
-        id={fieldId}
-        className="text-input"
-        rows={2}
-        maxLength={2000}
-        value={input}
-        disabled={busy}
-        placeholder="How could the join between the two animals look more natural?"
-        onChange={(e) => setInput(e.target.value)}
-        onKeyDown={(e) => {
-          if ((e.metaKey || e.ctrlKey) && e.key === "Enter") void send();
-        }}
-      />
-      <Button size="sm" icon="chat" busy={busy} disabled={busy || !input.trim()} onClick={() => void send()}>
-        Send
-      </Button>
     </section>
   );
 }
@@ -372,13 +207,11 @@ export function ToolsPanel({ nodeId }: { nodeId: string }) {
         </div>
         {limits && limits.limit !== null ? (
           <p className="tools__note">
-            {Math.max(0, limits.limit - limits.used)} of {limits.limit} lab actions left today (edits, reviews, messages). Resets at 00:00 UTC.
+            {Math.max(0, limits.limit - limits.used)} of {limits.limit} lab actions left today (edits and cards). Resets at 00:00 UTC.
           </p>
         ) : null}
         <Path nodeId={nodeId} />
         <Compare nodeId={nodeId} version={version} />
-        <ReviewSection version={version} />
-        <Collaborator key={version.id} nodeId={nodeId} version={version} />
         <Publish version={version} />
         {version.operation === "fusion" && version.creatureId ? (
           <p className="tools__note">

@@ -34,13 +34,13 @@ export function VersionView({ node, selected }: NodeViewProps<VersionConfig, Ver
   const media = version && !broken ? (
     <figure className="plate">
       <div className="plate__frame">
-        <img className="plate__img is-loaded" src={evo().imageUrl(version.imageUrl)} alt={`${title}, version ${n}`} draggable={false} onError={() => setBroken(true)} />
+        <img className="plate__img is-loaded" decoding="async" src={evo().imageUrl(version.imageUrl)} alt={`${title}, version ${n}`} draggable={false} onError={() => setBroken(true)} />
       </div>
     </figure>
   ) : active && latest ? (
     <figure className="plate plate--wip">
       <div className="plate__frame">
-        <img className="plate__img is-loaded" src={evo().imageUrl(latest.url)} alt={`Latest attempt ${latest.imageId}`} draggable={false} />
+        <img className="plate__img is-loaded" decoding="async" src={evo().imageUrl(latest.url)} alt={`Latest attempt ${latest.imageId}`} draggable={false} />
       </div>
       <figcaption className="plate__overlay-label plate__wip-label">Latest attempt · the agent is still working</figcaption>
     </figure>
@@ -69,14 +69,14 @@ export function VersionView({ node, selected }: NodeViewProps<VersionConfig, Ver
           <>
             <IconButton icon="replace" label="Revise this image" onClick={() => addEditNode(node.id, "revise")} />
             <IconButton icon="brush" label="Paint an area to edit" onClick={() => addEditNode(node.id, "paint")} />
-            <IconButton icon="card" label="Write the animal card" onClick={() => addCardNode(node.id)} />
+            <IconButton icon="card" label="Animal card" onClick={() => addCardNode(node.id)} />
             <IconButton icon="fusion" label="Fuse with another animal" onClick={() => addFusionFrom(node.id)} />
             <IconButton icon="download" label="Download image" onClick={() => void downloadVersion(version, label)} />
           </>
         ) : null
       }
     >
-      {version && version.operation !== "fusion" ? <p className="version-node__instruction">{version.instruction}</p> : null}
+      {version ? <p className="version-node__instruction">{version.instruction}</p> : null}
       {version?.isFinal || version?.publicationId ? (
         <div className="version-node__pills">
           {version.isFinal ? (

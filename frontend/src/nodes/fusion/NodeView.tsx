@@ -48,13 +48,14 @@ export function runStatus(run: DerivedRun | null, starting: boolean): NodeStatus
 
 /** Upstream input for one slot: a photo (preview, identified species) or an earlier creature (its image and title). */
 function useSlot(fusionId: string, port: "a" | "b") {
-  const nodes = useGraph((s) => s.nodes);
-  const edges = useGraph((s) => s.edges);
-  const up = upstreamNode({ nodes, edges }, fusionId, port);
-  const isVersion = up?.type === "version";
-  const data = !isVersion ? (up?.data as ImageInputData | undefined) : undefined;
+  // Select only the upstream node's type and data (stable while nodes are dragged), never the whole graph.
+  const upType = useGraph((s) => upstreamNode(s, fusionId, port)?.type ?? null);
+  const upData = useGraph((s) => upstreamNode(s, fusionId, port)?.data ?? null);
+  const isVersion = upType === "version";
+  const data = !isVersion ? (upData as ImageInputData | null) ?? undefined : undefined;
   const photoPreview = usePreview(data ?? {});
-  const version = isVersion ? (up!.data as VersionData).version : null;
+  const version = isVersion ? (upData as VersionData | null)?.version ?? null : null;
+  const up = upType !== null;
   if (isVersion) return { up, isVersion, preview: version ? evo().imageUrl(version.imageUrl) : null, species: version?.title ?? null };
   return { up, isVersion, preview: photoPreview, species: displaySpecies(data?.species) };
 }

@@ -28,6 +28,7 @@ from starlette.datastructures import UploadFile
 
 from app.adapters.base import GeneratedImage
 from app.agentapi.caps import Caps, client_ip, day_key, resets_at
+from app.agentapi.creature_ai import check_topic
 from app.agentapi.files import EXT, content_type_for
 from app.agentapi.routes import AgentApi, api
 from app.auth import User, require_user
@@ -266,7 +267,7 @@ async def put_workspace(request: Request) -> JSONResponse:
 
 def public_version(doc: dict[str, Any]) -> dict[str, Any]:
     return {k: doc.get(k) for k in ("id", "parentId", "runId", "creatureId", "operation", "instruction", "imageUrl",
-                                    "createdAt", "isFinal", "publicationId", "title", "style", "card")}
+                                    "createdAt", "isFinal", "publicationId", "title", "style", "card", "profile")}
 
 
 async def get_version(a: AgentApi, version_id: str, user: User) -> dict[str, Any]:
@@ -294,7 +295,8 @@ async def lineage(a: AgentApi, version: dict[str, Any], user: User) -> list[dict
 
 
 async def save_version(a: AgentApi, user: User, image: GeneratedImage, parent: dict[str, Any], operation: str,
-                       instruction: str, reference_only: bool, prompt: str = "") -> dict[str, Any]:
+                       instruction: str, reference_only: bool, prompt: str = "",
+                       profile: dict[str, Any] | None = None) -> dict[str, Any]:
     ext = EXT.get(image.content_type)
     if not ext:
         raise _err(ErrorCode.UPSTREAM_ERROR, "The image provider returned an unsupported image format.", 502)
@@ -305,7 +307,7 @@ async def save_version(a: AgentApi, user: User, image: GeneratedImage, parent: d
            "runId": parent.get("runId"), "creatureId": parent.get("creatureId"), "title": parent.get("title"),
            "operation": operation, "instruction": instruction, "imageUrl": url, "imageKey": key,
            "responseId": image.response_id, "referenceOnly": reference_only, "createdAt": now_iso(), "isFinal": False,
-           "style": parent.get("style"),
+           "style": parent.get("style"), "profile": profile or parent.get("profile"),
            # How this image was made, kept so later steps (the animal card) can build on it.
            "generation": {"operation": operation, "instruction": instruction, "prompt": prompt,
                           "model": image.model}}
@@ -357,10 +359,11 @@ async def from_run(request: Request) -> JSONResponse:
         raise _err(ErrorCode.NOT_FOUND, "This creature's image is unavailable.", 404)
     doc = {"id": version_id, "kind": VERSION_KIND, "owner": user.id, "parentId": None, "runId": run_id,
            "creatureId": run["creatureId"], "title": view.get("title"), "operation": "fusion",
-           "instruction": f"{view.get('title')} ({run.get('mode')})", "imageUrl": view["imageUrl"],
+           "instruction": f"{(run.get('sire') or {}).get('commonName')} × {(run.get('dam') or {}).get('commonName')}",
+           "imageUrl": view["imageUrl"],
            "imageKey": _file_key(a, view["imageUrl"]), "responseId": None, "referenceOnly": True,
            "createdAt": now_iso(), "isFinal": False, "style": run.get("style"),
-           "generation": _run_generation(run, view)}
+           "generation": _run_generation(run, view), "profile": (view.get("plan") or {}).get("profile")}
     await a.services.db.put("assets", version_id, doc)
     return JSONResponse(public_version(doc), status_code=201)
 
@@ -373,6 +376,32 @@ def _run_generation(run: dict[str, Any], view: dict[str, Any]) -> dict[str, Any]
     return {"fusion_mode": "algorithm", "operation": "fusion", "style": run.get("style"),
             "parents": [run.get("sire"), run.get("dam")], "host": (view.get("host") or {}).get("commonName"),
             "prompt": "", "agent_reasoning": [s.get("reason") for s in (view.get("trace") or []) if s.get("reason")][:12]}
+
+
+def paint_prompt(doc: dict[str, Any], instruction: str) -> str:
+    """Paint guardrails: the painted area is part of one creature, so the change must fit the whole body (the result
+    is only blended into the painted pixels, so anything that does not connect shows as a seam)."""
+    profile = doc.get("profile") or {}
+    who = f" This creature is {profile['name']}: {profile.get('summary', '')}".rstrip() if profile.get("name") else ""
+    return ("Edit one part of this creature image as follows: " + instruction + "." + who + " Treat the creature as "
+            "one living body: the changed part must match the rest of its anatomy (size, proportions, how it "
+            "attaches and where its joints are), its colours and markings, its lighting and its art style. Keep the "
+            "number of heads, legs, wings and tails unless the instruction asks to change them. Do not add a second "
+            "creature, people, text or scenery. Keep the framing and everything not mentioned exactly as it is.")
+
+
+async def _edit_profile(a: AgentApi, doc: dict[str, Any], image: bytes, operation: str,
+                        instruction: str) -> dict[str, Any] | None:
+    """The edited creature's entry: the previous one updated for this change (the name is kept)."""
+    from app.agentapi.creature_ai import make_profile
+
+    previous = doc.get("profile")
+    context = {"previous": previous, "change": {"operation": operation, "instruction": instruction},
+               "style": doc.get("style"), "parents": (doc.get("generation") or {}).get("parents")}
+    profile = await make_profile(a.services.vision, image, context)
+    if profile and previous and previous.get("name"):
+        profile["name"] = previous["name"]
+    return profile or previous
 
 
 def _with_background(settings: Any, prompt: str) -> str:
@@ -409,6 +438,7 @@ async def revise(version_id: str, request: Request) -> JSONResponse:
     except ValueError as exc:
         raise _err(ErrorCode.VALIDATION_FAILED, "Describe the revision you want.", 422) from exc
     instruction = _instruction(body.get("instruction") if isinstance(body, dict) else None)
+    await check_topic(a.services.vision, [], [instruction], "instruction")
     day = await lab(request).caps.charge(user.id)
 
     async def work(stage: Callable[[str], Awaitable[None]]) -> dict[str, Any]:
@@ -418,9 +448,12 @@ async def revise(version_id: str, request: Request) -> JSONResponse:
                                   "creature, art style, framing and everything not mentioned as similar as possible. "
                                   + instruction)
         image = await _generate(a, doc, prompt, refs)
+        await stage("Updating the creature's entry")
+        profile = await _edit_profile(a, doc, image.data, "revise", instruction)
         await stage("Saving the new version")
         # The stored image is exactly the provider's response, so its children can chain on that response.
-        return await save_version(a, user, image, doc, "revise", instruction, reference_only=False, prompt=prompt)
+        return await save_version(a, user, image, doc, "revise", instruction, reference_only=False, prompt=prompt,
+                                  profile=profile)
 
     return await start_job(request, user, day, "revise", version_id, instruction, work)
 
@@ -465,6 +498,7 @@ async def paint(version_id: str, request: Request) -> JSONResponse:
     except Exception as exc:
         raise _err(ErrorCode.VALIDATION_FAILED, "Send a painted mask and an edit instruction.", 422) from exc
     instruction = _instruction(form.get("instruction"))
+    await check_topic(a.services.vision, [], [instruction], "instruction")
     upload = form.get("mask")
     if not isinstance(upload, UploadFile):
         raise _err(ErrorCode.VALIDATION_FAILED, "Paint the area to change.", 422)
@@ -479,14 +513,16 @@ async def paint(version_id: str, request: Request) -> JSONResponse:
     async def work(stage: Callable[[str], Awaitable[None]]) -> dict[str, Any]:
         await stage("Editing the painted area")
         refs = [original] if doc.get("referenceOnly") else []
-        prompt = _with_background(a.settings, "Edit the image as follows, keeping its art style, framing and "
-                                  "everything else as similar as possible: " + instruction)
+        prompt = _with_background(a.settings, paint_prompt(doc, instruction))
         candidate = await _generate(a, doc, prompt, refs)
         await stage("Blending the painted area")
         merged = await asyncio.to_thread(composite_region, original, candidate.data, mask)
         image = GeneratedImage(merged, "image/png", candidate.model, candidate.response_id)
+        await stage("Updating the creature's entry")
+        profile = await _edit_profile(a, doc, merged, "paint", instruction)
         # The saved composite is not the provider's response; later edits must use it as a reference.
-        return await save_version(a, user, image, doc, "paint", instruction, reference_only=True, prompt=prompt)
+        return await save_version(a, user, image, doc, "paint", instruction, reference_only=True, prompt=prompt,
+                                  profile=profile)
 
     return await start_job(request, user, day, "paint", version_id, instruction, work)
 
@@ -578,29 +614,59 @@ async def saved_review(version_id: str, request: Request) -> JSONResponse:
 
 @router.post("/versions/{version_id}/card")
 async def animal_card(version_id: str, request: Request) -> JSONResponse:
-    """The animal card (on demand, one lab action): a profile built from the image and how it was made."""
-    from app.agentapi.animal_card import card_context, make_card
+    """The animal card (one per image, made in the background): asking again returns the same card; only a failed or
+    interrupted card is made again."""
+    from app.agentapi.animal_card import build_card, is_stale, new_card
 
-    a = api(request)
-    user, _ = await _charge(request)
+    a, state = api(request), lab(request)
+    user, _ = await _user(request)
     doc = await get_version(a, version_id, user)
-    chain = await lineage(a, doc, user)
-    image = await version_image(a, doc)
-    day = await lab(request).caps.charge(user.id)
-    async with charged_slot(request, user.id, day):
-        card = await make_card(a.settings, image, card_context(chain))
-    card["createdAt"] = now_iso()
-    doc["card"] = card
+    card = doc.get("card") or {}
+    stale = is_stale(card, a.settings.lab_job_stale_seconds) or (
+        card.get("status") == "running" and f"card:{version_id}" not in state.tasks)
+    if card.get("status") in ("ready", "running") and not stale:
+        return JSONResponse(card, status_code=200, headers={"Cache-Control": "no-store"})
+    await _charge(request)
+    day = await state.caps.charge(user.id)
+    doc["card"] = new_card()
     await a.services.db.put("assets", version_id, doc)
-    return JSONResponse(card, headers={"Cache-Control": "no-store"})
+
+    async def run() -> None:
+        try:
+            async with charged_slot(request, user.id, day):
+                image = await version_image(a, doc)
+                result = await build_card(a, doc, image)
+        except asyncio.CancelledError:
+            result = {"status": "failed", "error": INTERRUPTED, "profile": None, "angles": []}
+            raise
+        except Exception:
+            log.exception("animal card %s failed", version_id)
+            result = {"status": "failed", "error": "The card could not be made. Try again.", "profile": None,
+                      "angles": []}
+        finally:
+            fresh = await a.services.db.get("assets", version_id) or doc
+            fresh["card"] = {**fresh.get("card", {}), **result}
+            if result.get("profile") and not fresh.get("profile"):
+                fresh["profile"] = result["profile"]
+            await a.services.db.put("assets", version_id, fresh)
+            state.tasks.pop(f"card:{version_id}", None)
+
+    state.tasks[f"card:{version_id}"] = asyncio.create_task(run(), name=f"card-{version_id}")
+    return JSONResponse(doc["card"], status_code=202, headers={"Cache-Control": "no-store"})
 
 
 @router.get("/versions/{version_id}/card")
 async def saved_card(version_id: str, request: Request) -> JSONResponse:
+    from app.agentapi.animal_card import is_stale
+
     a = api(request)
     user, _ = await _user(request)
     doc = await get_version(a, version_id, user)
-    return JSONResponse({"card": doc.get("card")}, headers={"Cache-Control": "no-store"})
+    card = doc.get("card")
+    if card and (is_stale(card, a.settings.lab_job_stale_seconds) or (
+            card.get("status") == "running" and f"card:{version_id}" not in lab(request).tasks)):
+        card = {**card, "status": "failed", "error": INTERRUPTED}
+    return JSONResponse({"card": card}, headers={"Cache-Control": "no-store"})
 
 
 TOOLS = [

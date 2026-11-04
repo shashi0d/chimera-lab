@@ -18,28 +18,33 @@ export interface LabVersion {
   publicationId: string | null;
   title: string | null;
   style?: string | null;
-  /** The animal card, once generated (on demand). */
+  /** The creature's basic info, written when the image was generated (its title is the profile's name). */
+  profile?: CreatureProfile | null;
+  /** The animal card, once made (one per image, on demand). */
   card?: AnimalCard | null;
 }
 
-/** A generated creature's profile, written by the vision model from the image and how it was made. */
-export interface AnimalCard {
+/** A generated creature's field-guide entry, written by the vision model from the image and how it was made. */
+export interface CreatureProfile {
   name: string;
-  scientific_style_name: string;
-  tagline: string;
-  inherited: { parent: string; traits: string[] }[];
-  appearance: string;
-  size: string;
+  length: string;
+  weight: string;
   habitat: string;
-  diet: string;
-  behaviour: string;
-  abilities: string[];
-  weaknesses: string[];
-  fun_fact: string;
-  /** The model's reasoning for this card. */
+  explorers_notes: string;
+  /** Its defining feature as one word ("SCALES"). */
+  trait: string;
+  summary: string;
+  accent_color: string;
+  /** The model's reasoning for this entry. */
   reasoning: string;
-  model?: string;
-  createdAt?: string;
+}
+
+/** The animal card: the profile plus four more angles of the creature (made in the background). */
+export interface AnimalCard {
+  status: "running" | "ready" | "failed";
+  profile: CreatureProfile | null;
+  angles: { view: string; url: string }[];
+  error: string | null;
 }
 
 export type JobStatus = "queued" | "running" | "succeeded" | "failed" | "interrupted";
@@ -120,8 +125,9 @@ export const labApi = {
   async review(versionId: string): Promise<Review> {
     return (await request<Review>(`/evo/lab/versions/${enc(versionId)}/review`, { method: "POST", headers: baseHeaders() })).data;
   },
+  /** Make the image's card (or get the one it already has: one card per image). */
   async card(versionId: string): Promise<AnimalCard> {
-    return (await request<AnimalCard>(`/evo/lab/versions/${enc(versionId)}/card`, { method: "POST", headers: baseHeaders(), timeoutMs: 120000 })).data;
+    return (await request<AnimalCard>(`/evo/lab/versions/${enc(versionId)}/card`, { method: "POST", headers: baseHeaders(), timeoutMs: 30000 })).data;
   },
   async savedCard(versionId: string): Promise<AnimalCard | null> {
     return (await request<{ card: AnimalCard | null }>(`/evo/lab/versions/${enc(versionId)}/card`, { headers: baseHeaders() })).data.card;

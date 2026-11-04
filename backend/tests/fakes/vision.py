@@ -11,6 +11,8 @@ from __future__ import annotations
 import asyncio
 import colorsys
 import io
+import re
+from typing import Any
 
 from PIL import Image
 
@@ -19,6 +21,8 @@ from app.errors import ChimeraError
 from app.evolution.recorded import chat_payload
 from app.models.schemas import AnimalReading, ErrorCode
 from tests.fakes.faults import current_fault
+
+OFF_TOPIC = re.compile(r"\b(ignore|poem|essay|president|password|person|people|logo)\b", re.IGNORECASE)
 
 # (hue degrees, common name, scientific name, body plan, visible parts)
 MOCK_SPECIES: list[tuple[int, str, str, str, list[str]]] = [
@@ -76,6 +80,23 @@ class MockVision:
     async def _delay(self, seconds: float) -> None:
         if self.delay_scale > 0:
             await asyncio.sleep(seconds * self.delay_scale)
+
+    async def check_request(self, items: list[dict[str, str]]) -> dict[str, Any]:
+        """The fake topic check: refuses text with an off-topic marker word (the live check is a model call)."""
+        for item in items:
+            if OFF_TOPIC.search(item["text"]):
+                return {"allowed": False, "reason": "That is not about an animal creature."}
+        return {"allowed": True, "reason": ""}
+
+    async def profile(self, image: bytes, context: dict[str, Any]) -> dict[str, str]:
+        """A fixed entry; an edit keeps the previous name, as the live prompt asks."""
+        previous = context.get("previous") or {}
+        parents = [p.get("commonName") for p in (context.get("parents") or []) if p]
+        name = previous.get("name") or ("Mock " + "-".join(str(p).split()[0].lower() for p in parents if p)).strip()
+        return {"name": name or "Mock chimera", "length": "2 m", "weight": "150 kg", "habitat": "Open grassland",
+                "explorers_notes": "A mock creature for tests.", "trait": "SCALES",
+                "summary": f"A mock chimera of {', '.join(map(str, parents)) or 'two animals'}.",
+                "accent_color": "#9db8f5", "reasoning": "mock"}
 
     async def describe_animal(self, image: bytes, slot: str) -> AnimalReading:
         reading = await self._describe(image, slot)

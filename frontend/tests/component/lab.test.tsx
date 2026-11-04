@@ -5,7 +5,7 @@ import { setTestSession, useAuth } from "../../src/auth/auth";
 import { setTransport } from "../../src/evo/index";
 import type { Publication } from "../../src/evo/types";
 import { useGraph } from "../../src/graph/store";
-import { labApi, type LabJob, type LabVersion } from "../../src/lab/api";
+import { labApi, type AnimalCard, type LabJob, type LabVersion } from "../../src/lab/api";
 import { addCardNode, addEditNode, addFusionFrom, addVersionNode, lineage, versionNumber } from "../../src/lab/graph";
 import type { CardData } from "../../src/nodes/card/types";
 import { startFusion } from "../../src/nodes/fusion/start";
@@ -129,18 +129,12 @@ describe("tools for the selected image", () => {
     expect(await screen.findByText(/19 of 20 lab actions left today/)).toBeInTheDocument();
   });
 
-  it("a collaborator's suggestion becomes a Revise card the user can edit before running", async () => {
+  it("the panel has no visual review or collaborator", () => {
     const v1 = withV1();
-    vi.spyOn(labApi, "savedReview").mockResolvedValue(null);
-    vi.spyOn(labApi, "collaborate").mockResolvedValue({ message: "Try this.", action: { type: "revise", instruction: "Remove the extra face", reason: "Mismatch" }, review: null, steps: [] });
-    const revise = vi.spyOn(labApi, "revise");
     renderInFlow(<ToolsPanel nodeId={v1} />);
-    await userEvent.type(screen.getByLabelText("Message the collaborator"), "Anything off?");
-    await userEvent.click(screen.getByRole("button", { name: "Send" }));
-    await userEvent.click(await screen.findByRole("button", { name: "Add as a Revise card" }));
-    const edit = nodesOf("edit")[0]!;
-    expect(edit.config).toEqual({ operation: "revise", instruction: "Remove the extra face" });
-    expect(revise).not.toHaveBeenCalled();
+    expect(screen.queryByText(/Visual review/i)).toBeNull();
+    expect(screen.queryByText(/Collaborator/i)).toBeNull();
+    expect(screen.getByRole("button", { name: "Revise" })).toBeInTheDocument();
   });
 });
 
@@ -187,37 +181,54 @@ describe("a published creation in the gallery", () => {
 });
 
 describe("building on a generated image", () => {
-  const card = {
-    name: "Scaled steed", scientific_style_name: "Equus squamatus", tagline: "Armoured grazer", inherited: [{ parent: "horse", traits: ["hooves", "mane"] }],
-    appearance: "Scales over a horse body", size: "Pony-sized", habitat: "Savanna", diet: "Grass", behaviour: "Rolls up when scared",
-    abilities: ["Scale armour"], weaknesses: ["Slow to turn"], fun_fact: "It sheds one scale a week.", reasoning: "The scales read as pangolin.",
+  const profile = {
+    name: "Scalesteed", length: "3 m", weight: "420 kg", habitat: "Dry savanna", explorers_notes: "It rolls its armoured tail when startled.",
+    trait: "SCALES", summary: "A horse in pangolin scales.", accent_color: "#9db8f5", reasoning: "The scales read as pangolin.",
   };
+  const views = ["front", "side", "back", "above"];
+  const ready: AnimalCard = { status: "ready", profile, angles: views.map((v) => ({ view: v, url: `/evo/files/lab/a_${v}.png` })), error: null };
 
-  it("an animal card is written for its image once it is added, and shows the model's reasoning on request", async () => {
+  it("an animal card is made once for its image and shows the field-guide page with four more angles", async () => {
     const v1 = withV1();
-    const write = vi.spyOn(labApi, "card").mockResolvedValue(card);
+    const make = vi.spyOn(labApi, "card").mockResolvedValue({ status: "running", profile: null, angles: [], error: null });
+    const saved = vi.spyOn(labApi, "savedCard").mockResolvedValue(ready);
     const id = addCardNode(v1);
     expect(useGraph.getState().edges.some((e) => e.source === v1 && e.target === id && e.targetPort === "in")).toBe(true);
+    expect(addCardNode(v1)).toBe(id); // one card per image
+    expect(nodesOf("card")).toHaveLength(1);
     renderNode(id);
-    await vi.waitFor(() => expect(screen.getByText("Armoured grazer")).toBeInTheDocument());
-    expect(write).toHaveBeenCalledTimes(1);
-    expect(write).toHaveBeenCalledWith("labv_1");
-    expect(screen.getByText("From the horse")).toBeInTheDocument();
+    await vi.waitFor(() => expect(screen.getByRole("heading", { name: "Scalesteed" })).toBeInTheDocument(), { timeout: 5000 });
+    expect(make).toHaveBeenCalledTimes(1);
+    expect(make).toHaveBeenCalledWith("labv_1");
+    expect(saved).toHaveBeenCalledWith("labv_1");
+    expect(screen.getByText(/Length - 3 m/)).toBeInTheDocument();
+    expect(screen.getByText("Habitat - Dry savanna")).toBeInTheDocument();
+    expect(screen.getByText("SCALES")).toBeInTheDocument();
+    expect(within(screen.getByRole("list", { name: "Other angles" })).getAllByRole("img")).toHaveLength(4);
     expect(screen.queryByText("The scales read as pangolin.")).toBeNull();
-    await userEvent.click(screen.getByRole("button", { name: "Why this card?" }));
+    await userEvent.click(screen.getByRole("button", { name: "Why this entry?" }));
     expect(screen.getByText("The scales read as pangolin.")).toBeInTheDocument();
-    expect((useGraph.getState().nodes.find((n) => n.id === id)?.data as CardData).card?.name).toBe("Scaled steed");
   });
 
-  it("a saved card is not written again on reload", async () => {
+  it("a saved card is not asked for again on reload, and there is no way to make a second one", async () => {
     const v1 = withV1();
-    const write = vi.spyOn(labApi, "card").mockResolvedValue(card);
+    const make = vi.spyOn(labApi, "card").mockResolvedValue(ready);
     const id = addCardNode(v1);
-    useGraph.getState().updateNodeData<CardData>(id, (d) => ({ ...d, card, versionId: "labv_1", autoStart: false }));
+    useGraph.getState().updateNodeData<CardData>(id, (d) => ({ ...d, card: ready, versionId: "labv_1", autoStart: false }));
     renderNode(id);
     await settle(10);
-    expect(write).not.toHaveBeenCalled();
-    expect(screen.getByRole("button", { name: "Write again" })).toBeInTheDocument();
+    expect(make).not.toHaveBeenCalled();
+    expect(screen.queryByRole("button", { name: /Make the card|Try again/ })).toBeNull();
+  });
+
+  it("a failed card can be tried again", async () => {
+    const v1 = withV1();
+    vi.spyOn(labApi, "card").mockResolvedValueOnce({ status: "failed", profile: null, angles: [], error: "The card could not be made. Try again." }).mockResolvedValue(ready);
+    const id = addCardNode(v1);
+    renderNode(id);
+    await vi.waitFor(() => expect(screen.getByRole("button", { name: "Try again" })).toBeInTheDocument());
+    await userEvent.click(screen.getByRole("button", { name: "Try again" }));
+    await vi.waitFor(() => expect(screen.getByRole("heading", { name: "Scalesteed" })).toBeInTheDocument());
   });
 
   it("an image can be animal A of a new Fusion, which sends its version id", async () => {

@@ -23,6 +23,10 @@ class VisionAdapter(Protocol):
 
     async def describe_animal(self, image: bytes, slot: str) -> AnimalReading: ...
 
+    async def check_request(self, items: list[dict[str, str]]) -> dict[str, Any]: ...
+
+    async def profile(self, image: bytes, context: dict[str, Any]) -> dict[str, str]: ...
+
 
 class ImageGenAdapter(Protocol):
     model_id: str

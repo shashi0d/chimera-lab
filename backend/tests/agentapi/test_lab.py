@@ -94,7 +94,7 @@ def mask_png(size: int = 64, box: tuple[int, int, int, int] = (0, 0, 32, 64)) ->
 async def test_version_one_is_the_runs_final_image_and_is_idempotent(client):
     v1 = await first_version(client)
     assert v1["operation"] == "fusion" and v1["parentId"] is None and v1["title"] == "lion × red fox"
-    assert v1["instruction"] == "lion × red fox (realistic)" and v1["runId"] and v1["creatureId"]
+    assert v1["instruction"] == "lion × red fox" and v1["runId"] and v1["creatureId"]
     again = await client.post("/evo/lab/versions/from-run", json={"runId": v1["runId"]})
     assert again.status_code == 200 and again.json()["id"] == v1["id"]
     assert [v["id"] for v in (await client.get("/evo/lab/versions")).json()["versions"]] == [v1["id"]]
@@ -244,7 +244,7 @@ async def test_review_uses_the_selected_image_and_the_path(client, monkeypatch):
     v2 = (await revise(client, v1["id"], "Longer legs"))["result"]
     r = await client.post(f"/evo/lab/versions/{v2['id']}/review")
     assert r.status_code == 200 and r.json()["suggestions"] == "Try longer legs."
-    assert seen["brief"] == "lion × red fox (realistic)" and seen["change"] == "Longer legs"
+    assert seen["brief"] == "lion × red fox" and seen["change"] == "Longer legs"
     assert seen["image"] == (await client.get(v2["imageUrl"])).content
     assert (await client.get(f"/evo/lab/versions/{v2['id']}/review")).json()["review"]["observation"] == "A creature"
 

@@ -61,6 +61,14 @@
   --danger-text: #ab3229;
   --neutral: #8c958f;
 
+  /* Animal card (field-guide page): paper, ink and rules stay the same in both themes */
+  --codex-paper: #f3ede1;
+  --codex-paper-edge: #e4dccb;
+  --codex-ink: #22306b;
+  --codex-text: #2b2722;
+  --codex-rule: #8f97b3;
+  --codex-accent-default: #9db8f5;
+
   /* Categorical — for identity (people groups, content types, filters). Never for status. */
   --cat-charcoal: #2a312d;
   --cat-blue: #2f6fc4;
@@ -291,7 +299,7 @@ a:hover{color:var(--accent-hover);text-decoration:underline}
   --node-w-input: 240px;
   --node-w-fusion: 300px;
   --node-w-version: 340px;
-  --node-w-card: 340px;
+  --node-w-card: 760px;
   --node-w-edit: 320px;
   --hit: 36px;
   --hit-sm: 32px;
@@ -1317,18 +1325,57 @@ svg.react-flow__connectionline {
   transition: box-shadow var(--dur-base) var(--ease-spring), border-color var(--dur-base) var(--ease-spring);
 }
 .react-flow__node:hover .node { box-shadow: var(--shadow-card-hover); }
+/* Smooth dragging and zooming: no shadow or filter transitions while a node moves or the canvas pans. */
+.react-flow__node.dragging .node { transition: none; box-shadow: var(--shadow-card); }
 .node--image-input { width: var(--node-w-input); }
 .node--fusion { width: var(--node-w-fusion); }
 .node--version { width: var(--node-w-version); }
 .node--card { width: var(--node-w-card); }
-.card-node__body { display: grid; gap: var(--space-4); max-height: 420px; overflow-y: auto; }
-.card-node__latin { font: var(--type-body-sm); font-style: italic; color: var(--text-muted); }
-.card-node__tagline { font: var(--type-body); color: var(--text-strong); }
-.card-node__fields { display: grid; gap: var(--space-4); margin: 0; }
-.card-node__field dt { font: var(--type-label); color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
-.card-node__field dd { margin: var(--space-1) 0 0; font: var(--type-body-sm); color: var(--text-body); }
-.card-node__field ul { margin: 0; padding-left: 1.1em; }
-.card-node__reasoning { font: var(--type-body-sm); color: var(--text-body); padding: var(--space-4); border-radius: var(--radius-md); background: var(--well); }
+.node--card .node__title { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.node--card:not(.node--has-media) .node__title { position: static; width: auto; height: auto; clip: auto; }
+.node--card .node__media { padding: var(--space-4); }
+
+/* The animal card: a field-guide page. Left: name, stats, thumbnail, notes. Middle: the creature over a coloured
+   panel. Right: four more angles, stacked. Bottom: the trait word. */
+.codex {
+  --codex-accent: var(--codex-accent-default);
+  position: relative;
+  display: grid;
+  grid-template-columns: 220px 1fr 104px;
+  grid-template-rows: 1fr auto;
+  gap: var(--space-5) var(--space-6);
+  padding: 28px 26px 18px;
+  border-radius: var(--radius-md);
+  background: var(--codex-paper);
+  box-shadow: inset 0 0 0 1px var(--codex-paper-edge), inset 0 0 60px rgba(120, 96, 60, .12);
+  color: var(--codex-text);
+  font-family: Georgia, "Times New Roman", serif;
+}
+.codex::before, .codex::after { content: ""; position: absolute; left: 14px; right: 14px; height: 2px; background: var(--codex-rule); opacity: .7; }
+.codex::before { top: 12px; }
+.codex::after { bottom: 10px; }
+.codex__corner { position: absolute; width: 34px; height: 22px; border: 2px solid var(--codex-rule); opacity: .8; }
+.codex__corner--tr { top: 6px; right: 6px; border-left: 0; border-bottom: 0; border-radius: 0 6px 0 0; }
+.codex__corner--bl { bottom: 4px; left: 6px; border-right: 0; border-top: 0; border-radius: 0 0 0 6px; }
+.codex__text { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.codex__name { margin: 0; padding-bottom: 6px; border-bottom: 1px solid var(--codex-rule); color: var(--codex-ink); font: 700 22px/1.15 Georgia, "Times New Roman", serif; letter-spacing: .02em; text-transform: uppercase; }
+.codex__stat { margin: 0; font-size: 13px; line-height: 1.4; }
+.codex__gap { display: inline-block; width: 12px; }
+.codex__thumb { width: 52px; height: 52px; object-fit: cover; border: 1px solid var(--codex-rule); background: var(--white); margin: 4px 0; }
+.codex__notes { margin: 0; font-size: 12.5px; line-height: 1.5; }
+.codex__hero { position: relative; margin: 0; min-height: 300px; display: grid; place-items: center; }
+.codex__panel { position: absolute; top: 4%; bottom: 10%; left: 26%; right: 4%; background: var(--codex-accent); opacity: .75; }
+.codex__hero img { position: relative; width: 100%; max-height: 380px; object-fit: contain; mix-blend-mode: multiply; }
+.codex__angles { list-style: none; margin: 0; padding: 0; display: grid; grid-template-rows: repeat(4, 1fr); gap: 8px; }
+.codex__angles li { position: relative; aspect-ratio: 1; border: 1px solid var(--codex-rule); background: var(--white); overflow: hidden; }
+.codex__angles li.is-empty { background: repeating-linear-gradient(45deg, var(--codex-paper), var(--codex-paper) 6px, var(--codex-paper-edge) 6px, var(--codex-paper-edge) 12px); }
+.codex__angles img { width: 100%; height: 100%; object-fit: contain; }
+.codex__angles span { position: absolute; left: 4px; bottom: 2px; font-size: 10px; letter-spacing: .06em; text-transform: uppercase; color: var(--codex-ink); }
+.codex__trait { grid-column: 1 / 3; margin: 0; color: var(--codex-rule); font: italic 600 30px/1 Georgia, "Times New Roman", serif; letter-spacing: .08em; }
+.codex__why { grid-column: 3; align-self: end; justify-self: end; }
+.codex__why .btn { font-family: inherit; }
+.codex__reasoning { grid-column: 1 / -1; margin: 0; font-size: 12px; line-height: 1.5; padding: 10px; border: 1px dashed var(--codex-rule); }
+.codex:has(.codex__reasoning) .codex__why { grid-column: 1 / -1; justify-self: start; }
 .drop-menu { position: absolute; z-index: 20; display: grid; min-width: 200px; padding: var(--space-2); border-radius: var(--radius-md); background: var(--surface-card); border: 1px solid var(--line); box-shadow: var(--shadow-popover); }
 .drop-menu__item { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); border: 0; border-radius: var(--radius-sm); background: none; color: var(--text-strong); font: var(--type-body-sm); text-align: left; cursor: pointer; }
 .drop-menu__item:hover, .drop-menu__item:focus-visible { background: var(--well); outline: none; }

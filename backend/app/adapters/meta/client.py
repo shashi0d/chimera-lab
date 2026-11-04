@@ -311,6 +311,26 @@ class MetaVision:
         payload = await self.http.call("spark", "describe", self.model_id, build_describe_request(self.model_id, image))
         return parse_describe_response(payload)
 
+    async def _json(self, purpose: str, body: dict[str, Any], timeout: float) -> dict[str, Any]:
+        from app.retry import call_with_retry
+
+        payload = await call_with_retry(lambda: self.http.call("spark", purpose, self.model_id, body),
+                                        timeout=timeout, base_delay=1.0, max_attempts=2)
+        return _message_json(payload)
+
+    async def check_request(self, items: list[dict[str, str]]) -> dict[str, Any]:
+        """The topic check (app.agentapi.creature_ai): is this text about making or editing an animal chimera?"""
+        from app.agentapi.creature_ai import build_guard_request, parse_guard
+
+        return parse_guard(await self._json("topic_check", build_guard_request(self.model_id, items), 45.0))
+
+    async def profile(self, image: bytes, context: dict[str, Any]) -> dict[str, str]:
+        """The creature's basic info, written from its image and how it was made (app.agentapi.creature_ai)."""
+        from app.agentapi.creature_ai import build_profile_request, parse_profile
+
+        return parse_profile(await self._json("creature_profile", build_profile_request(self.model_id, image,
+                                                                                         context), 90.0))
+
 
 class MetaImageGen:
     def __init__(self, base_url: str, api_key: str, model: str, timeout: float = 120.0) -> None:

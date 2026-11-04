@@ -1,140 +1,186 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toAppError } from "../../api/errors";
 import { presentError } from "../../api/errorMessages";
 import { NodeCard, type NodeStatus } from "../../canvas/NodeCard";
+import { evo } from "../../evo/index";
 import { upstreamNode } from "../../graph/queries";
 import { useGraph } from "../../graph/store";
-import { labApi, type AnimalCard } from "../../lab/api";
+import { labApi, type AnimalCard, type LabVersion } from "../../lab/api";
 import { Button } from "../../ui/Button";
 import { Icon } from "../../ui/Icon";
 import type { NodeViewProps } from "../types";
 import type { VersionData } from "../version/types";
 import { CARD_INPUTS, CARD_OUTPUTS, type CardConfig, type CardData } from "./types";
 
-const busy = new Set<string>(); // node ids generating now (one request per card at a time)
+const POLL_MS = 3000;
+const busy = new Set<string>(); // card node ids with a request in flight
 
-async function generate(nodeId: string, versionId: string, setLoading: (v: boolean) => void): Promise<void> {
+const VIEW_LABEL: Record<string, string> = { front: "Front", side: "Side", back: "Back", above: "Above" };
+
+function setCard(nodeId: string, patch: Partial<CardData>): void {
+  useGraph.getState().updateNodeData<CardData>(nodeId, (d) => ({ ...d, ...patch }));
+}
+
+function errorText(e: unknown): string {
+  const p = presentError(toAppError(e));
+  return `${p.title}${p.fix ? ` ${p.fix}` : ""}`;
+}
+
+/** Ask for the image's card: the server makes it once (in the background) and returns the same card after that. */
+async function requestCard(nodeId: string, versionId: string): Promise<void> {
   if (busy.has(nodeId)) return;
   busy.add(nodeId);
-  setLoading(true);
-  const g = useGraph.getState();
-  g.updateNodeData<CardData>(nodeId, (d) => ({ ...d, autoStart: false, error: null }));
+  setCard(nodeId, { autoStart: false, error: null, versionId });
   try {
-    const card = await labApi.card(versionId);
-    useGraph.getState().updateNodeData<CardData>(nodeId, (d) => ({ ...d, card, versionId, error: null }));
+    setCard(nodeId, { card: await labApi.card(versionId) });
   } catch (e) {
-    const p = presentError(toAppError(e));
-    useGraph.getState().updateNodeData<CardData>(nodeId, (d) => ({ ...d, error: `${p.title}${p.fix ? ` ${p.fix}` : ""}` }));
+    setCard(nodeId, { error: errorText(e) });
   } finally {
     busy.delete(nodeId);
-    setLoading(false);
   }
 }
 
-function Field({ label, value }: { label: string; value: string }) {
-  return value ? (
-    <div className="card-node__field">
-      <dt>{label}</dt>
-      <dd>{value}</dd>
-    </div>
-  ) : null;
+/** Follow a card that is being made until it is ready or failed. */
+function usePoll(nodeId: string, versionId: string | null, running: boolean): void {
+  useEffect(() => {
+    if (!running || !versionId) return;
+    let stop = false;
+    const tick = async () => {
+      try {
+        const card = await labApi.savedCard(versionId);
+        if (!stop && card) setCard(nodeId, { card });
+      } catch {
+        // offline for a moment: try again on the next tick
+      }
+    };
+    const id = window.setInterval(() => void tick(), POLL_MS);
+    void tick();
+    return () => {
+      stop = true;
+      window.clearInterval(id);
+    };
+  }, [nodeId, versionId, running]);
 }
 
-function List({ label, items }: { label: string; items: string[] }) {
-  return items.length ? (
-    <div className="card-node__field">
-      <dt>{label}</dt>
-      <dd>
-        <ul>
-          {items.map((x) => (
-            <li key={x}>{x}</li>
-          ))}
-        </ul>
-      </dd>
-    </div>
-  ) : null;
+/** The accent panel behind the creature takes the profile's colour (no inline style props: set on the element). */
+function useAccent(colour: string | undefined) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (ref.current && colour) ref.current.style.setProperty("--codex-accent", colour);
+  }, [colour]);
+  return ref;
 }
 
-function CardBody({ card }: { card: AnimalCard }) {
+function Codex({ card, version }: { card: AnimalCard; version: LabVersion }) {
+  const p = card.profile;
+  const accentRef = useAccent(p?.accent_color);
   const [why, setWhy] = useState(false);
+  const image = evo().imageUrl(version.imageUrl);
+  const name = p?.name || version.title || "Unnamed creature";
   return (
-    <div className="card-node__body nodrag nowheel">
-      {card.scientific_style_name ? <p className="card-node__latin">{card.scientific_style_name}</p> : null}
-      {card.tagline ? <p className="card-node__tagline">{card.tagline}</p> : null}
-      <dl className="card-node__fields">
-        {card.inherited.map((r) => (
-          <List key={r.parent} label={`From the ${r.parent}`} items={r.traits} />
+    <div className="codex nodrag nowheel" ref={accentRef}>
+      <span className="codex__corner codex__corner--tr" aria-hidden="true" />
+      <span className="codex__corner codex__corner--bl" aria-hidden="true" />
+      <div className="codex__text">
+        <h4 className="codex__name">{name}</h4>
+        {p ? (
+          <>
+            <p className="codex__stat">
+              Length - {p.length || "unknown"}
+              <span className="codex__gap" />
+              Weight - {p.weight || "unknown"}
+            </p>
+            <p className="codex__stat">Habitat - {p.habitat || "unknown"}</p>
+          </>
+        ) : null}
+        <img className="codex__thumb" src={image} alt="" loading="lazy" decoding="async" />
+        {p?.explorers_notes ? (
+          <p className="codex__notes">
+            <strong>Explorer's Notes -</strong> {p.explorers_notes}
+          </p>
+        ) : null}
+      </div>
+      <figure className="codex__hero">
+        <span className="codex__panel" aria-hidden="true" />
+        <img src={image} alt={`${name}, the main view`} loading="lazy" decoding="async" />
+      </figure>
+      <ul className="codex__angles" aria-label="Other angles">
+        {card.angles.map((a) => (
+          <li key={a.view}>
+            <img src={evo().imageUrl(a.url)} alt={`${name}, ${VIEW_LABEL[a.view] ?? a.view} view`} loading="lazy" decoding="async" />
+            <span>{VIEW_LABEL[a.view] ?? a.view}</span>
+          </li>
         ))}
-        <Field label="Appearance" value={card.appearance} />
-        <Field label="Size" value={card.size} />
-        <Field label="Habitat" value={card.habitat} />
-        <Field label="Diet" value={card.diet} />
-        <Field label="Behaviour" value={card.behaviour} />
-        <List label="Abilities" items={card.abilities} />
-        <List label="Weaknesses" items={card.weaknesses} />
-        <Field label="Fun fact" value={card.fun_fact} />
-      </dl>
-      {card.reasoning ? (
-        <div className="card-node__why">
+        {Array.from({ length: Math.max(0, 4 - card.angles.length) }, (_, i) => (
+          <li key={`empty-${i}`} className="is-empty" aria-hidden="true" />
+        ))}
+      </ul>
+      {p?.trait ? <p className="codex__trait">{p.trait}</p> : null}
+      {p?.reasoning ? (
+        <div className="codex__why">
           <button type="button" className="btn btn--ghost btn--sm" aria-expanded={why} onClick={() => setWhy((v) => !v)}>
-            {why ? "Hide the model's reasoning" : "Why this card?"}
+            {why ? "Hide the model's reasoning" : "Why this entry?"}
           </button>
-          {why ? <p className="card-node__reasoning">{card.reasoning}</p> : null}
+          {why ? <p className="codex__reasoning">{p.reasoning}</p> : null}
         </div>
       ) : null}
     </div>
   );
 }
 
-/** The animal card of the connected image: name, traits from each parent, habitat, diet, abilities, reasoning. */
+/** The animal card of the connected image (one per image): a field-guide page with four more angles. */
 export function CardView({ node, selected }: NodeViewProps<CardConfig, CardData>) {
-  const { card, versionId, autoStart, error } = node.data;
+  const { card, autoStart, error } = node.data;
   const readOnly = useGraph((s) => s.readOnly);
-  const parent = useGraph((s) => upstreamNode(s, node.id, "in"));
-  const version = parent?.type === "version" ? (parent.data as VersionData).version : null;
-  const [loading, setLoading] = useState(() => busy.has(node.id));
-  const outdated = Boolean(card && version && versionId !== version.id);
+  const parentData = useGraph((s) => {
+    const up = upstreamNode(s, node.id, "in");
+    return up?.type === "version" ? (up.data as VersionData) : null;
+  });
+  const version = parentData?.version ?? null;
+  const running = card?.status === "running";
+  usePoll(node.id, version?.id ?? null, running);
 
   useEffect(() => {
-    if (autoStart && version && !readOnly && !card) void generate(node.id, version.id, setLoading);
+    if (autoStart && version && !readOnly && !card) void requestCard(node.id, version.id);
   }, [autoStart, version, readOnly, card, node.id]);
 
   let status: NodeStatus | undefined;
-  if (loading) status = { tone: "running", label: "Writing" };
-  else if (error) status = { tone: "error", label: "Failed" };
-  else if (card && !outdated) status = { tone: "ok", label: "Ready" };
+  if (running || busy.has(node.id)) status = { tone: "running", label: "Making the card" };
+  else if (error || card?.status === "failed") status = { tone: "error", label: "Failed" };
+  else if (card?.status === "ready") status = { tone: "ok", label: "Ready" };
 
-  const action = version && !readOnly && !loading ? (
-    <Button size="sm" variant={card ? "ghost" : "primary"} icon="card" className="nodrag" onClick={() => void generate(node.id, version.id, setLoading)}>
-      {card ? (outdated ? "Write for this image" : "Write again") : "Write the card"}
-    </Button>
-  ) : null;
-
+  const canRetry = Boolean(version && !readOnly && (error || card?.status === "failed" || (!card && !autoStart)));
   return (
     <NodeCard
       nodeId={node.id}
       kind="card"
       kicker="Animal card"
-      title={card?.name || "Animal card"}
+      title={`Animal card: ${card?.profile?.name || version?.title || "new creature"}`}
       status={status}
       inputs={CARD_INPUTS}
       outputs={CARD_OUTPUTS}
       selected={selected}
-      className={loading ? "is-running" : ""}
-      footer={action}
+      className={running ? "is-running" : ""}
+      media={card?.status === "ready" && version ? <Codex card={card} version={version} /> : undefined}
+      footer={
+        canRetry ? (
+          <Button size="sm" variant="primary" icon="card" className="nodrag" onClick={() => void requestCard(node.id, version!.id)}>
+            {card?.status === "failed" || error ? "Try again" : "Make the card"}
+          </Button>
+        ) : null
+      }
     >
-      {card ? <CardBody card={card} /> : null}
-      {!card && loading ? <p className="node__note"><span className="spinner" /> Reading the image and how it was made…</p> : null}
-      {!card && !loading && !version ? (
+      {running ? (
+        <p className="node__note">
+          <span className="spinner" /> Drawing four more angles and laying out the page. This takes about a minute.
+        </p>
+      ) : null}
+      {!card && !version ? (
         <p className="node__hint">
-          <Icon name="info" size={14} /> Connect a finished image to write its card.
+          <Icon name="info" size={14} /> Connect a finished image to make its card.
         </p>
       ) : null}
-      {outdated ? (
-        <p className="node__hint node__hint--warn">
-          <Icon name="info" size={14} /> This card describes a different image.
-        </p>
-      ) : null}
+      {card?.status === "failed" ? <p className="node__note node__note--warn">{card.error}</p> : null}
       {error ? <p className="node__note node__note--warn">{error}</p> : null}
     </NodeCard>
   );
