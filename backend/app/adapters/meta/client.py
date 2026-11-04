@@ -324,6 +324,10 @@ class MetaVision:
 
         return parse_guard(await self._json("topic_check", build_guard_request(self.model_id, items), 45.0))
 
+    async def edit_brief(self, body: dict[str, Any]) -> dict[str, Any]:
+        """An edit request grounded in the image (app.agentapi.edit_pipeline builds the request and reads it)."""
+        return await self._json("edit_brief", body, 45.0)
+
     async def profile(self, image: bytes, context: dict[str, Any]) -> dict[str, str]:
         """The creature's basic info, written from its image and how it was made (app.agentapi.creature_ai)."""
         from app.agentapi.creature_ai import build_profile_request, parse_profile

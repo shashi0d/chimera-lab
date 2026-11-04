@@ -25,6 +25,7 @@ from PIL import Image, ImageChops, ImageFilter, UnidentifiedImageError
 from starlette.datastructures import UploadFile
 
 from app.adapters.base import GeneratedImage
+from app.agentapi import edit_pipeline
 from app.agentapi.caps import Caps, client_ip, day_key, resets_at
 from app.agentapi.creature_ai import check_topic
 from app.agentapi.files import EXT, content_type_for
@@ -260,7 +261,8 @@ async def lineage(a: AgentApi, version: dict[str, Any], user: User) -> list[dict
 
 async def save_version(a: AgentApi, user: User, image: GeneratedImage, parent: dict[str, Any], operation: str,
                        instruction: str, reference_only: bool, prompt: str = "",
-                       profile: dict[str, Any] | None = None) -> dict[str, Any]:
+                       profile: dict[str, Any] | None = None, record: dict[str, Any] | None = None,
+                       chain_depth: int = 0) -> dict[str, Any]:
     ext = EXT.get(image.content_type)
     if not ext:
         raise _err(ErrorCode.UPSTREAM_ERROR, "The image provider returned an unsupported image format.", 502)
@@ -270,12 +272,12 @@ async def save_version(a: AgentApi, user: User, image: GeneratedImage, parent: d
     doc = {"id": version_id, "kind": VERSION_KIND, "owner": user.id, "parentId": parent["id"],
            "runId": parent.get("runId"), "creatureId": parent.get("creatureId"), "title": parent.get("title"),
            "operation": operation, "instruction": instruction, "imageUrl": url, "imageKey": key,
-           "responseId": image.response_id, "referenceOnly": reference_only, "createdAt": now_iso(), "isFinal": False,
+           "responseId": image.response_id, "referenceOnly": reference_only, "chainDepth": chain_depth, "createdAt": now_iso(), "isFinal": False,
            "style": parent.get("style"), "profile": profile or parent.get("profile"),
            "workspaceId": parent.get("workspaceId"),
            # How this image was made, kept so later steps (the animal card) can build on it.
            "generation": {"operation": operation, "instruction": instruction, "prompt": prompt,
-                          "model": image.model,
+                          "model": image.model, **({"edit": record} if record else {}),
                           "parents": (parent.get("generation") or {}).get("parents")}}
     await a.services.db.put("assets", version_id, doc)
     return public_version(doc)
@@ -343,45 +345,7 @@ def _run_generation(run: dict[str, Any], view: dict[str, Any]) -> dict[str, Any]
 
 def parent_animals(doc: dict[str, Any]) -> list[str]:
     """The creature's parent animals, from its generation record (an edit keeps its Fusion's parents)."""
-    names = []
-    for p in (doc.get("generation") or {}).get("parents") or []:
-        name = (p or {}).get("commonName") if isinstance(p, dict) else None
-        if name and name not in names:
-            names.append(str(name))
-    return names
-
-
-def _who(doc: dict[str, Any]) -> str:
-    profile = doc.get("profile") or {}
-    if not profile.get("name"):
-        return ""
-    return f" The creature is {profile['name']}: {profile.get('summary', '')}".rstrip()
-
-
-def _fill_rule(doc: dict[str, Any]) -> str:
-    """Marked areas are filled with real anatomy from the parent animals, never erased to background."""
-    parents = parent_animals(doc)
-    source = (f"the creature's own parent animals ({' and '.join(parents)}) and the parts it already has"
-              if parents else "the animals this creature is made of and the parts it already has")
-    return (f" Build what goes there from real anatomy: use body parts from {source}, choosing the part that best "
-            "fits that spot and the request. Never erase the area or leave it as empty or plain background: even "
-            "when something is removed, fill its place with the body part that naturally belongs there (the "
-            "surrounding skin, scales, fur, feathers, tentacles or limbs), so the body stays whole.")
-
-
-_BODY_RULES = (" Treat the creature as one living body: the new part must match the rest of its anatomy (size, "
-               "proportions, how it attaches, where its joints are), its colours and markings, its lighting and its "
-               "art style. Keep the number of heads, legs, wings and tails unless asked to change them. Do not add a "
-               "second creature, people, text or scenery.")
-
-
-def paint_prompt(doc: dict[str, Any], instruction: str) -> str:
-    """Paint: image 1 has the painted area highlighted, image 2 is clean. Only the highlighted area changes (the result
-    is blended into the painted pixels, so anything that does not connect shows as a seam)."""
-    return ("Image 1 shows a creature with one area highlighted in translucent magenta; image 2 is the same image "
-            "without the highlight. Change only what is inside the highlighted area: " + instruction.rstrip(".") +
-            "." + _fill_rule(doc) + _who(doc) + _BODY_RULES + " Leave no trace of the magenta highlight. Keep the "
-            "framing and everything outside the highlighted area exactly as in image 2.")
+    return edit_pipeline.parent_animals(doc)
 
 
 async def _edit_profile(a: AgentApi, doc: dict[str, Any], image: bytes, operation: str,
@@ -409,17 +373,15 @@ def _instruction(value: Any) -> str:
     return value.strip()
 
 
-async def _generate(a: AgentApi, doc: dict[str, Any], prompt: str, refs: list[bytes]) -> GeneratedImage:
-    """An edit of `doc`: chained on the provider's response when the stored image is exactly that response, else
-    with the stored image as the reference."""
-    from app.adapters.retrying import RetryingImageGen
+# Chain an edit on the provider's previous response (the model keeps its own context) only when the stored image is
+# exactly that response, and only for a few turns in a row: drift adds up along a chain.
+MAX_CHAIN = 4
 
-    gen = RetryingImageGen(a.services.image_gen, a.settings)
-    chain = doc.get("responseId") if not doc.get("referenceOnly") and not refs else None
-    image = await gen.generate(prompt, refs, "1:1", chain)
-    if not image.data:
-        raise _err(ErrorCode.UPSTREAM_ERROR, "The image provider returned no image. Please try again.", 502)
-    return image
+
+def chain_for(doc: dict[str, Any]) -> str | None:
+    if doc.get("referenceOnly") or not doc.get("responseId") or int(doc.get("chainDepth") or 0) >= MAX_CHAIN:
+        return None
+    return str(doc["responseId"])
 
 
 @router.post("/versions/{version_id}/revise")
@@ -436,39 +398,25 @@ async def revise(version_id: str, request: Request) -> JSONResponse:
     day = await lab(request).caps.charge(user.id)
 
     async def work(stage: Callable[[str], Awaitable[None]]) -> dict[str, Any]:
+        await stage("Reading your request")
+        original = await version_image(a, doc)
+        chain = chain_for(doc)
         await stage("Revising the image")
-        refs = [await version_image(a, doc)] if doc.get("referenceOnly") else []
-        prompt = _with_background(a.settings, "Revise the image according to the creator's instruction. Keep the "
-                                  "creature, art style, framing and everything not mentioned as similar as possible. "
-                                  + instruction)
-        image = await _generate(a, doc, prompt, refs)
+        res = await edit_pipeline.revise(a.services, a.settings, doc, original, instruction, chain)
         await stage("Updating the creature's entry")
-        profile = await _edit_profile(a, doc, image.data, "revise", instruction)
+        profile = await _edit_profile(a, doc, res.image.data, "revise", instruction)
         await stage("Saving the new version")
         # The stored image is exactly the provider's response, so its children can chain on that response.
-        return await save_version(a, user, image, doc, "revise", instruction, reference_only=False, prompt=prompt,
-                                  profile=profile)
+        depth = int(doc.get("chainDepth") or 0) + 1 if chain else 0
+        return await save_version(a, user, res.image, doc, "revise", instruction, reference_only=False,
+                                  prompt=res.prompt, profile=profile, record=res.record, chain_depth=depth)
 
     return await start_job(request, user, day, "revise", version_id, instruction, work)
 
 
-def mark_region(original: bytes, mask: bytes) -> bytes:
-    """The image with the painted area tinted magenta and outlined: the model sees exactly where to change."""
-    with Image.open(io.BytesIO(original)) as src, Image.open(io.BytesIO(mask)) as painted:
-        base = src.convert("RGBA")
-        alpha = painted.convert("RGBA").getchannel("A").resize(base.size)
-        tint = Image.new("RGBA", base.size, (255, 0, 200, 0))
-        tint.putalpha(alpha.point(lambda v: 120 if v > 0 else 0))
-        edge = alpha.point(lambda v: 255 if v > 0 else 0).filter(ImageFilter.FIND_EDGES).filter(ImageFilter.MaxFilter(5))
-        outline = Image.new("RGBA", base.size, (255, 0, 200, 255))
-        outline.putalpha(edge)
-        out = io.BytesIO()
-        Image.alpha_composite(Image.alpha_composite(base, tint), outline).convert("RGB").save(out, "PNG")
-        return out.getvalue()
-
-
 def composite_region(original: bytes, candidate: bytes, mask: bytes) -> bytes:
-    """Blend inside the painted alpha only. All pixels outside that alpha remain unchanged."""
+    """Blend inside the painted alpha only (all pixels outside it unchanged). The endpoint calls it with the original
+    twice to check the mask before spending a model call; the edit itself is put back by edit_pipeline."""
     try:
         with Image.open(io.BytesIO(original)) as src, Image.open(io.BytesIO(candidate)) as edited, \
                 Image.open(io.BytesIO(mask)) as painted:
@@ -520,19 +468,13 @@ async def paint(version_id: str, request: Request) -> JSONResponse:
     day = await lab(request).caps.charge(user.id)
 
     async def work(stage: Callable[[str], Awaitable[None]]) -> dict[str, Any]:
-        await stage("Editing the painted area")
-        # Like a markup editor: the model sees where (the highlighted copy) and what is there now (the clean image).
-        marked = await asyncio.to_thread(mark_region, original, mask)
-        prompt = _with_background(a.settings, paint_prompt(doc, instruction))
-        candidate = await _generate(a, doc, prompt, [marked, original])
-        await stage("Blending the painted area")
-        merged = await asyncio.to_thread(composite_region, original, candidate.data, mask)
-        image = GeneratedImage(merged, "image/png", candidate.model, candidate.response_id)
+        await stage("Reading the painted area")
+        res = await edit_pipeline.paint(a.services, a.settings, doc, original, mask, instruction)
         await stage("Updating the creature's entry")
-        profile = await _edit_profile(a, doc, merged, "paint", instruction)
-        # The saved composite is not the provider's response; later edits must use it as a reference.
-        return await save_version(a, user, image, doc, "paint", instruction, reference_only=True, prompt=prompt,
-                                  profile=profile)
+        profile = await _edit_profile(a, doc, res.image.data, "paint", instruction)
+        # A blended image is not the provider's response; later edits must use it as a reference.
+        return await save_version(a, user, res.image, doc, "paint", instruction, reference_only=res.reference_only,
+                                  prompt=res.prompt, profile=profile, record=res.record)
 
     return await start_job(request, user, day, "paint", version_id, instruction, work)
 
@@ -550,23 +492,6 @@ def composite_sketch(original: bytes, sketch: bytes) -> bytes:
     out = io.BytesIO()
     Image.alpha_composite(base, layer).convert("RGB").save(out, "PNG")
     return out.getvalue()
-
-
-def sketch_prompt(doc: dict[str, Any], instruction: str) -> str:
-    """Draw: image 1 has the creator's marks, image 2 is clean. The marks show what they envision: body parts, mostly
-    from the creature's parent animals. Each mark becomes the part it suggests; nothing is erased to background."""
-    parents = parent_animals(doc)
-    from_parents = f", usually a part of one of its parent animals ({' or '.join(parents)})" if parents else ""
-    wish = f" The creator says: {instruction.rstrip('.')}." if instruction else ""
-    return ("Image 1 shows a creature with coloured marks drawn on it by its creator; image 2 is the same image "
-            "without the marks. The marks show what the creator envisions: each drawn shape is a body part" +
-            from_parents + "." + wish + " Turn every mark into the real body part it suggests, using the parent "
-            "animal's part that best matches the shape: a long stroke becomes a tentacle, tail, neck or limb; dots or "
-            "circles become eyes, spots or scales; a jagged outline becomes spines, fins or a crest; a filled patch "
-            "becomes a colour or pattern on the body. Give the part the drawn size, position and direction. Where "
-            "marks cover existing parts, replace those parts with the new part." + _fill_rule(doc) + _who(doc) +
-            _BODY_RULES + " Remove every drawn line itself: the result must look like a finished image in the same "
-            "art style, not a sketch. Keep everything that was not drawn on exactly as in image 2.")
 
 
 @router.post("/versions/{version_id}/sketch")
@@ -594,22 +519,18 @@ async def sketch(version_id: str, request: Request) -> JSONResponse:
     if len(drawing) > a.settings.evo_max_upload_bytes:
         raise _err(ErrorCode.FILE_TOO_LARGE, "The drawing is too large.", 413)
     original = await version_image(a, doc)
-    guide = await asyncio.to_thread(composite_sketch, original, drawing)  # validate before spending a call
+    await asyncio.to_thread(composite_sketch, original, drawing)  # validate before spending a call
     day = await lab(request).caps.charge(user.id)
 
     async def work(stage: Callable[[str], Awaitable[None]]) -> dict[str, Any]:
-        await stage("Turning the drawing into the creature")
-        prompt = _with_background(a.settings, sketch_prompt(doc, instruction))
-        from app.adapters.retrying import RetryingImageGen
-
-        image = await RetryingImageGen(a.services.image_gen, a.settings).generate(prompt, [guide, original], "1:1")
-        if not image.data:
-            raise _err(ErrorCode.UPSTREAM_ERROR, "The image provider returned no image. Please try again.", 502)
+        await stage("Reading your drawing")
+        res = await edit_pipeline.sketch(a.services, a.settings, doc, original, drawing, instruction)
         await stage("Updating the creature's entry")
-        profile = await _edit_profile(a, doc, image.data, "sketch", instruction or "a drawn change")
+        profile = await _edit_profile(a, doc, res.image.data, "sketch", instruction or "a drawn change")
         await stage("Saving the new version")
-        return await save_version(a, user, image, doc, "sketch", instruction or "Drawn change", reference_only=False,
-                                  prompt=prompt, profile=profile)
+        return await save_version(a, user, res.image, doc, "sketch", instruction or "Drawn change",
+                                  reference_only=res.reference_only, prompt=res.prompt, profile=profile,
+                                  record=res.record)
 
     return await start_job(request, user, day, "sketch", version_id, instruction or "Drawn change", work)
 

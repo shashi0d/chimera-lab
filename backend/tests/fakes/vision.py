@@ -88,6 +88,15 @@ class MockVision:
                 return {"allowed": False, "reason": "That is not about an animal creature."}
         return {"allowed": True, "reason": ""}
 
+    async def edit_brief(self, body: dict[str, Any]) -> dict[str, Any]:
+        """The fake edit reading: the creator's request, restated (the live one grounds it in the image)."""
+        import json as _json
+
+        request = _json.loads(body["messages"][1]["content"][0]["text"]).get("request", "")
+        self.briefs = [*getattr(self, "briefs", []), body]
+        return {"target": "the marked part", "change": request, "instruction": f"Change the marked part: {request}",
+                "keep": ["the striped coat", "the face"]}
+
     async def profile(self, image: bytes, context: dict[str, Any]) -> dict[str, str]:
         """A fixed entry; an edit keeps the previous name, as the live prompt asks."""
         previous = context.get("previous") or {}
