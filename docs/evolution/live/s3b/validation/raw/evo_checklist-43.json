@@ -1,0 +1,130 @@
+{
+ "purpose": "evo_checklist",
+ "request": {
+  "model": "meta-models/muse-spark-open-1026",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture of an animal and check it against a list of visible features. For each item, answer yes if the feature is clearly visible, no if the picture clearly shows otherwise, or unclear if you cannot tell. Copy each item's text exactly, in the given order. Judge only what is visible. creatures: how many separate creatures are in the picture. animals: the real animal species whose features you can clearly see, as everyday English common names, at most three. notes: one short sentence."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "Features to check:\n1. a brown bear body shape\n2. a brown bear head with visible eyes\n3. thick supporting legs and visible breathing openings along the flanks\n4. no wings\n5. a single curved horn of hard, glossy chitin rising from the brow\n6. only parts and materials of the european rhinoceros beetle, no whole european rhinoceros beetle animals on the body\n7. hard, glossy chitin plates with fine seams patches on the head, neck, forequarters, back, flanks, belly, hindquarters, legs and tail"
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (681647 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "feature_checklist",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "answers",
+      "creatures",
+      "animals",
+      "notes"
+     ],
+     "properties": {
+      "answers": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "item",
+         "answer"
+        ],
+        "properties": {
+         "item": {
+          "type": "string"
+         },
+         "answer": {
+          "type": "string",
+          "enum": [
+           "yes",
+           "no",
+           "unclear"
+          ]
+         }
+        }
+       }
+      },
+      "creatures": {
+       "type": "integer"
+      },
+      "animals": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "notes": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0,
+  "max_tokens": 6000
+ },
+ "response": {
+  "id": "chatcmpl-2f159f274388478f8bb2b9748e4b31c3",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\n  \"answers\": [\n    {\"item\": \"a brown bear body shape\", \"answer\": \"yes\"},\n    {\"item\": \"a brown bear head with visible eyes\", \"answer\": \"yes\"},\n    {\"item\": \"thick supporting legs and visible breathing openings along the flanks\", \"answer\": \"yes\"},\n    {\"item\": \"no wings\", \"answer\": \"yes\"},\n    {\"item\": \"a single curved horn of hard, glossy chitin rising from the brow\", \"answer\": \"yes\"},\n    {\"item\": \"only parts and materials of the european rhinoceros beetle, no whole european rhinoceros beetle animals on the body\", \"answer\": \"yes\"},\n    {\"item\": \"hard, glossy chitin plates with fine seams patches on the head, neck, forequarters, back, flanks, belly, hindquarters, legs and tail\", \"answer\": \"yes\"}\n  ],\n  \"creatures\": 1,\n  \"animals\": [\"brown bear\", \"European rhinoceros beetle\"],\n  \"notes\": \"Single hybrid creature combines a brown bear with glossy beetle chitin armor and a forehead horn.\"\n}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null,
+     "reasoning_content": "<elided> (5671 chars)"
+    }
+   }
+  ],
+  "created": 1793549357,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 1567,
+   "prompt_tokens": 3737,
+   "total_tokens": 5304,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 1211,
+    "audio_tokens": 0,
+    "reasoning_tokens": 1315,
+    "rejected_prediction_tokens": 1281,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 128,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

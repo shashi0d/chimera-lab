@@ -6,11 +6,10 @@ import { createNode, nodeRegistry } from "../nodes/registry";
 import { IconButton } from "../ui/Button";
 import { useUi } from "../ui/uiStore";
 import { findFreeSpot, FOOTPRINT } from "./addImages";
-import { pickImages } from "./filePicker";
 
 const t = copy.toolbar;
 
-export function ToolRail({ onAddFiles }: { onAddFiles: (files: File[]) => void }) {
+export function ToolRail({ onAddImage }: { onAddImage: () => void }) {
   const flow = useReactFlow();
   const canUndo = useGraph((s) => s.past.length > 0 && !s.readOnly);
   const canRedo = useGraph((s) => s.future.length > 0 && !s.readOnly);
@@ -18,13 +17,13 @@ export function ToolRail({ onAddFiles }: { onAddFiles: (files: File[]) => void }
   const minimap = useUi((s) => s.minimap);
   const toggleMinimap = useUi((s) => s.toggleMinimap);
 
-  const addImage = async () => onAddFiles(await pickImages(true));
+  const addImage = () => onAddImage();
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "o") {
         e.preventDefault();
-        void addImage();
+        addImage();
       }
     };
     window.addEventListener("keydown", onKey);
@@ -50,7 +49,7 @@ export function ToolRail({ onAddFiles }: { onAddFiles: (files: File[]) => void }
       <IconButton variant="tool" icon="undo" label={t.undo} onClick={() => useGraph.getState().undo()} disabled={!canUndo} />
       <IconButton variant="tool" icon="redo" label={t.redo} onClick={() => useGraph.getState().redo()} disabled={!canRedo} />
       <span className="tool-rail__sep" aria-hidden="true" />
-      <IconButton variant="tool" icon="fit" label={t.fitView} onClick={() => void flow.fitView({ padding: 0.2, duration: 250 })} />
+      <IconButton variant="tool" icon="fit" label={t.fitView} onClick={() => void flow.fitView({ padding: 0.2, duration: 250, maxZoom: 1 })} />
       <IconButton variant="tool" icon="map" label={minimap ? t.minimapHide : t.minimapShow} pressed={minimap} onClick={toggleMinimap} />
     </nav>
   );

@@ -1,0 +1,53 @@
+{
+ "critic": {
+  "animals": [
+   "donkey"
+  ],
+  "creatures": 1,
+  "notes": "A brown donkey stands in profile against a light background."
+ },
+ "critic_thumbnail": {
+  "animals": [
+   "donkey"
+  ],
+  "creatures": 1,
+  "notes": "A single brown donkey stands facing right in a vintage illustration."
+ },
+ "mask": {
+  "fill": 0.284,
+  "aspect": 0.933,
+  "components": 1
+ },
+ "sam_prompt": "animal",
+ "soft_cards": [],
+ "scores": {
+  "critic": 0.5,
+  "silhouette": 0.733,
+  "thumbnail": 0.5,
+  "soft_penalty": 0.0,
+  "quality": 0.67
+ },
+ "third_animal": [],
+ "render_attempts": [
+  {
+   "prompt": "polished",
+   "critic": {
+    "animals": [
+     "donkey"
+    ],
+    "creatures": 1,
+    "notes": "A brown donkey stands in profile against a light background."
+   },
+   "third_animal": [],
+   "scores": {
+    "critic": 0.5,
+    "silhouette": 0.733,
+    "thumbnail": 0.5,
+    "soft_penalty": 0.0,
+    "quality": 0.67
+   }
+  }
+ ],
+ "warnings": [],
+ "polish": "accepted"
+}

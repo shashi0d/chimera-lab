@@ -1,0 +1,109 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Silhouette: Four-legged domestic goat frame. Host frame sets the outline, body size and overall frame from the domestic goat. Single creature combining tortoise and domestic goat. Head of domestic goat fully visible and uncluttered, with clear discernible eyes. Details: domestic goat body and legs with dense fur on face, neck, shoulders, flanks, belly, hips, legs and tail, plain coat with no stripes or spots; from tortoise as parts and materials on domestic goat's own body: hard shell plates in its own colors grown from skin as domestic goat's own covering over back, replacing dense fur there and conforming to body — one broad fused carapace shield over shoulders and back with short jointed plates on each limb section, sized to domestic goat's body; every covered part keeps domestic goat's own length and shape; dense fur stops at covering's edge, while face, neck, shoulders, flanks, belly, hips, legs and tail keep domestic goat's own dense fur. Covering follows body's own shape and bends at every joint. Bilaterally symmetrical with recognizable limbs and visible sense organs. Habitat cue (grassland): dark back and light belly with strong countershading. Prosaic detail: natural lighting, feet in firm contact with ground casting soft shadow, normal wear on hooves, claws and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "id": "resp_6ae7b0c6a06f21f19d4941fa",
+  "access_programs": null,
+  "created_at": 1793568966.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae7b0c65bac200729f741a5",
+    "summary": [
+     {
+      "text": "**Designing hybrid creature illustration**\nI'm planning a single four-legged creature with a domestic goat frame and head, adding tortoise shell plates grown from its skin, dense plain fur, and clear visible eyes for the illustration.\n**Composing natural history illustration**\nI'm arranging the goat with a fused shell over the back and jointed plates on each limb, keeping dense fur on the head, neck, flanks, belly, and legs, with dark-back, light-belly countershading in a side three-quarter view on a plain light background.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae7b0c668b0ae0588834cb4",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0pPX0F6UmNzdWZIYU9NSUFOVTZpd2pKY0xOSWJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczpiYTk4ZDYwNC0xMmUzLTRkMDEtYTFiMi1lYTIyYjNlMTEyZWY6R0FuZ3RqUVBVQVFUMDZNRkFLai1SX0RQVXpFdWJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM1Njg5NjZ9.Q8WLFwHeyh4S8MBxeq25Q8u-TbzQ",
+    "result": "<elided> (800864 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 11436,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 8256
+   },
+   "output_tokens": 1785,
+   "output_tokens_details": {
+    "reasoning_tokens": 594
+   },
+   "total_tokens": 13221
+  },
+  "user": null
+ }
+}

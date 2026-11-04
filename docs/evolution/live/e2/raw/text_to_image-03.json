@@ -1,0 +1,109 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Silhouette: Horizontal lion frame carried on two hind legs, golden eagle wings in place of the forelegs. Host frame: the lion sets the outline, body size, and overall frame. A single creature that combines a lion and a golden eagle. Head of the lion, fully visible and uncluttered, with clear, discernible eyes. Details: behavior follows lion head/brain donor; body is lion torso and frame; eagle contributes only surface graft regions; golden eagle feathers in a few large patches over the forequarters and neck, at full strength with clean edges, color and surface unchanged inside each patch; lion coat everywhere else; ears are lion rounded ears; face is lion muzzle and eyes; feet are lion paws; head is fully lion head tissue; limbs are four lion legs; no forelimb-to-wing substitution, avoids six-limb mythic plan; lion mane in place of the mane; mane gated off: neck carries eagle feathers so mane hair has no haired substrate to show; skull is lion skull; tail is lion tail with tuft, fully lion tissue; golden eagle wings in place of the forelegs, standing on two hind legs; wings held for display or gliding, not powered flight. Pattern lines and texture flow follow the body outline. Bilaterally symmetrical, recognizable limbs, visible sense organs. Habitat cue (forest): more patterned, irregular coat markings for a closed habitat. One creature, full body, side three-quarter view, plain light background, natural history illustration.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "id": "resp_6ae60c885aa85aaa69ed4e82",
+  "access_programs": null,
+  "created_at": 1793461384.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae60c88b2837fdff0154a46",
+    "summary": [
+     {
+      "text": "**Designing lion-eagle hybrid**\nI'm planning a single creature with a lion's head and torso on two hind legs, swapping the forelegs for golden eagle wings, and adding large feather patches over the forequarters in a silhouette that still reads like a natural history illustration.\n**Composing natural history illustration**\nI'm drafting a side three-quarter, bipedal lion with golden eagle wings replacing the forelegs, standing on two hind legs, with lion coat, mane, and feather patches, set on a plain light background in a scientific illustration style.\n**Refining lion illustration**\nI'm adjusting the design to show a two-legged lion with no forelimbs, removing the leopard spots and extra limbs from the previous version.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae60c88f5efb3de07a445b1",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0ktTEJEVFRhVmFXcEprRUFEa3ZvNHZCaUtCX2JnMWlBUUJlIiwicmVzdW1lX2lkIjoiczo1OWVmMGRiZi1mODg1LTQ5YTAtYjdjOS0zM2EwMjA3NGU1YjI6R05lOEF6VHZrbGtTT3dVRUFMVzVEQVlRajJrdmJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM0NjEzODR9.Q8WLFwGZdsvb1VNHQmzE4L75yfiq",
+    "result": "<elided> (707208 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 21274,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 16704
+   },
+   "output_tokens": 3126,
+   "output_tokens_details": {
+    "reasoning_tokens": 788
+   },
+   "total_tokens": 24400
+  },
+  "user": null
+ }
+}

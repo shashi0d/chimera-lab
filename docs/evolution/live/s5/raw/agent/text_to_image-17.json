@@ -1,0 +1,110 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Show a plain coat with no stripes or spots, as planned; keep everything else the same.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ],
+  "previous_response_id": "resp_6ae7ab094e95ed5140df4b96"
+ },
+ "response": {
+  "id": "resp_6ae7ab42fb95e8ae6aed465d",
+  "access_programs": null,
+  "created_at": 1793567554.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae7ab426fd4fa1565b24f09",
+    "summary": [
+     {
+      "text": "**Editing coat to plain**\nI'm removing the spots from the fur in the image and keeping the feathers and head plain, so the coat is a solid tawny color with no stripes or spots.\n**Finalizing portrait retouching**\nI'm completing the final edits to remove the remaining spots on the subject's face and polish the portrait for delivery.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae7ab42785f622e2a974239",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0VkV0t6VGRUUFFKMVpBR0FHV0ZzUUVfV1EwOWJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczozMzE4YTY4Yi01ZGRkLTRjMDktODI3OC0zMWY4ZDYwNzY0YzM6R0huSFRUU1A1anFyWURjR0FKU1phQkNpaWdBb2JnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM1Njc1NTR9.Q8WLFwGiPczLTvIiPGtnU_fNooPT",
+    "result": "<elided> (803296 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": "resp_6ae7ab094e95ed5140df4b96",
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 39134,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 19520
+   },
+   "output_tokens": 1080,
+   "output_tokens_details": {
+    "reasoning_tokens": 90
+   },
+   "total_tokens": 40214
+  },
+  "user": null
+ }
+}

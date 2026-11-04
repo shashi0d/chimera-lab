@@ -1,0 +1,75 @@
+[
+ {
+  "id": "C1",
+  "ops": [
+   {
+    "op": "set_host",
+    "args": {
+     "animal": "tortoise"
+    }
+   }
+  ],
+  "score": 2.5,
+  "host": "tortoise",
+  "silhouette": "four-legged tortoise frame",
+  "parts": [],
+  "dropped": [],
+  "identity_parts": [],
+  "covering": {
+   "extent": [
+    "head",
+    "neck",
+    "legs",
+    "tail"
+   ],
+   "plate_pattern": "",
+   "plate_source": ""
+  },
+  "licenses": [],
+  "labels": [
+   "speculative chimera, no real-world precedent"
+  ],
+  "notes": {
+   "niche": "habitat grassland (native to tortoise, domestic goat)",
+   "autonomy": "the tortoise body carries every function",
+   "survival": "0 license(s) of 0: none",
+   "identity": "covering over head, neck, legs, tail; the tortoise's shell keeps its own form and bony plates, with only its color taken from the domestic goat",
+   "host": "structural tie: tortoise is one of two equal options (RC-R10-01: never by size, mass or name order)"
+  }
+ },
+ {
+  "id": "C2",
+  "ops": [
+   {
+    "op": "set_host",
+    "args": {
+     "animal": "domestic goat"
+    }
+   }
+  ],
+  "score": 2.5,
+  "host": "domestic goat",
+  "silhouette": "four-legged domestic goat frame",
+  "parts": [],
+  "dropped": [],
+  "identity_parts": [],
+  "covering": {
+   "extent": [
+    "back"
+   ],
+   "plate_pattern": "one broad carapace shield with short jointed plates on the limbs (from 'high-domed brown-yellow carapace')",
+   "plate_source": "model-estimated"
+  },
+  "licenses": [],
+  "labels": [
+   "speculative chimera, no real-world precedent"
+  ],
+  "notes": {
+   "niche": "habitat grassland (native to tortoise, domestic goat)",
+   "autonomy": "the domestic goat body carries every function",
+   "survival": "0 license(s) of 0: none",
+   "identity": "covering over back, one broad carapace shield with short jointed plates on the limbs (from 'high-domed brown-yellow carapace')",
+   "host": "structural tie: domestic goat is one of two equal options (RC-R10-01: never by size, mass or name order)"
+  }
+ }
+]

@@ -1,0 +1,110 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Show the planned lion body shape and outline; keep everything else the same. The plan has no mane: show the planned neck with no mane; keep everything else the same. The plan has no mane: show the lion's own body there instead; keep everything else the same.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ],
+  "previous_response_id": "resp_6ae7a5a5d2a88f94a55348e4"
+ },
+ "response": {
+  "id": "resp_6ae7a6098ccd5c92d45f4aad",
+  "access_programs": null,
+  "created_at": 1793566217.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae7a60905b1ba81a0e24a6f",
+    "summary": [
+     {
+      "text": "**Editing lion image**\nI'm updating the image to remove the mane and show the lion's natural neck with short fur, while keeping the head, body shape, and all other details exactly the same.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae7a60906c5f4cd208141d7",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0tLU3lUVDBtd2NoUVRSbUFGUE1IQ1FSLUFvU2JnMWlBUUJlIiwicmVzdW1lX2lkIjoiczplNmU5MTM3OS1hNTQ2LTRiNzMtOWM5Zi0yMzVhNWJkMjY4Nzk6R0xBV3BUUldEd3FLVG1FSUFDQU96cDdjVktObmJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM1NjYyMTd9.Q8WLFwHl5aAuW3Kd5h9H1iCavhWs",
+    "result": "<elided> (819484 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": "resp_6ae7a5a5d2a88f94a55348e4",
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 16212,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 14848
+   },
+   "output_tokens": 639,
+   "output_tokens_details": {
+    "reasoning_tokens": 111
+   },
+   "total_tokens": 16851
+  },
+  "user": null
+ }
+}

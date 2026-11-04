@@ -1,0 +1,779 @@
+[
+ {
+  "at": "2026-11-01T13:33:14",
+  "budget": {
+   "before": {
+    "image": 123,
+    "spark": 556,
+    "sam": 115,
+    "spark_baseten": 754
+   },
+   "after": {
+    "image": 126,
+    "spark": 562,
+    "sam": 116,
+    "spark_baseten": 780
+   }
+  },
+  "calls": {
+   "baseten:spark_baseten:evo_agent": {
+    "ok": 15,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_polish": {
+    "ok": 2,
+    "failed": 0
+   },
+   "meta:image:text_to_image": {
+    "ok": 3,
+    "failed": 0
+   },
+   "meta:spark:evo_describe": {
+    "ok": 3,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_describe": {
+    "ok": 3,
+    "failed": 0
+   },
+   "meta:spark:evo_ask": {
+    "ok": 3,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_ask": {
+    "ok": 3,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_checklist": {
+    "ok": 2,
+    "failed": 0
+   },
+   "meta:sam:sam": {
+    "ok": 1,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_critic": {
+    "ok": 1,
+    "failed": 0
+   }
+  },
+  "summary": [
+   {
+    "run": "tortoise_goat",
+    "repeat": 1,
+    "held_out": false,
+    "renders": 2,
+    "edits": 1,
+    "tool_calls": 16,
+    "stop": null,
+    "final_image": "img2",
+    "remaining": [
+     {
+      "key": "grows_out",
+      "kind": "covering",
+      "text": "Do the hard shell plates grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending into scales), rather than"
+     },
+     {
+      "key": "on_top",
+      "kind": "covering",
+      "text": "Do the hard shell plates look like separate pieces laid on top of the fur, with a raised rim or a gap at the edge?"
+     },
+     {
+      "key": "follows_body",
+      "kind": "covering",
+      "text": "Do the hard shell plates follow this body's own shape and contours, the way its own skin would?"
+     },
+     {
+      "key": "separate_outline",
+      "kind": "covering",
+      "text": "Do the hard shell plates keep the outline of a separate object, such as another animal's shell or back, instead of the body's own shape?"
+     },
+     {
+      "key": "extra_horn",
+      "kind": "structural",
+      "text": "described but not planned: horn"
+     }
+    ],
+    "host": "domestic_goat"
+   }
+  ]
+ },
+ {
+  "at": "2026-11-01T13:37:29",
+  "budget": {
+   "before": {
+    "image": 126,
+    "spark": 562,
+    "sam": 116,
+    "spark_baseten": 780
+   },
+   "after": {
+    "image": 129,
+    "spark": 568,
+    "sam": 117,
+    "spark_baseten": 808
+   }
+  },
+  "calls": {
+   "baseten:spark_baseten:evo_agent": {
+    "ok": 17,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_polish": {
+    "ok": 2,
+    "failed": 0
+   },
+   "meta:image:text_to_image": {
+    "ok": 3,
+    "failed": 0
+   },
+   "meta:spark:evo_describe": {
+    "ok": 3,
+    "failed": 0
+   },
+   "meta:spark:evo_ask": {
+    "ok": 3,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_describe": {
+    "ok": 3,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_ask": {
+    "ok": 3,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_checklist": {
+    "ok": 2,
+    "failed": 0
+   },
+   "meta:sam:sam": {
+    "ok": 1,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_critic": {
+    "ok": 1,
+    "failed": 0
+   }
+  },
+  "summary": [
+   {
+    "run": "tortoise_goat",
+    "repeat": 2,
+    "held_out": false,
+    "renders": 2,
+    "edits": 1,
+    "tool_calls": 17,
+    "stop": null,
+    "final_image": "img2",
+    "remaining": [
+     {
+      "key": "grows_out",
+      "kind": "covering",
+      "text": "Do the hard shell plates grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending into scales), rather than"
+     },
+     {
+      "key": "on_top",
+      "kind": "covering",
+      "text": "Do the hard shell plates look like separate pieces laid on top of the fur, with a raised rim or a gap at the edge?"
+     },
+     {
+      "key": "scattered",
+      "kind": "covering",
+      "text": "Are the hard shell plates scattered as separate pieces over different parts of the body?"
+     },
+     {
+      "key": "cover_on_legs",
+      "kind": "covering",
+      "text": "Are there hard shell plates on the legs?"
+     },
+     {
+      "key": "cover_on_shoulders",
+      "kind": "covering",
+      "text": "Are there hard shell plates on the shoulders?"
+     },
+     {
+      "key": "follows_body",
+      "kind": "covering",
+      "text": "Do the hard shell plates follow this body's own shape and contours, the way its own skin would?"
+     },
+     {
+      "key": "separate_outline",
+      "kind": "covering",
+      "text": "Do the hard shell plates keep the outline of a separate object, such as another animal's shell or back, instead of the body's own shape?"
+     },
+     {
+      "key": "extra_horn",
+      "kind": "structural",
+      "text": "described but not planned: horn"
+     }
+    ],
+    "host": "domestic_goat"
+   }
+  ]
+ },
+ {
+  "at": "2026-11-01T13:44:09",
+  "budget": {
+   "before": {
+    "image": 129,
+    "spark": 568,
+    "sam": 117,
+    "spark_baseten": 808
+   },
+   "after": {
+    "image": 133,
+    "spark": 576,
+    "sam": 122,
+    "spark_baseten": 842
+   }
+  },
+  "calls": {
+   "baseten:spark_baseten:evo_agent": {
+    "ok": 19,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_polish": {
+    "ok": 4,
+    "failed": 0
+   },
+   "meta:image:text_to_image": {
+    "ok": 4,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_describe": {
+    "ok": 4,
+    "failed": 0
+   },
+   "meta:spark:evo_describe": {
+    "ok": 4,
+    "failed": 0
+   },
+   "meta:spark:evo_ask": {
+    "ok": 4,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_ask": {
+    "ok": 4,
+    "failed": 0
+   },
+   "meta:sam:sam": {
+    "ok": 5,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_checklist": {
+    "ok": 2,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_critic": {
+    "ok": 1,
+    "failed": 0
+   }
+  },
+  "summary": [
+   {
+    "run": "fox_owl",
+    "repeat": 1,
+    "held_out": true,
+    "renders": 4,
+    "edits": 0,
+    "tool_calls": 19,
+    "stop": null,
+    "final_image": "img4",
+    "remaining": [
+     {
+      "key": "extra_spots",
+      "kind": "structural",
+      "text": "described but not planned: spots"
+     }
+    ],
+    "host": "red_fox"
+   }
+  ]
+ },
+ {
+  "at": "2026-11-01T13:48:57",
+  "budget": {
+   "before": {
+    "image": 133,
+    "spark": 576,
+    "sam": 122,
+    "spark_baseten": 842
+   },
+   "after": {
+    "image": 136,
+    "spark": 582,
+    "sam": 126,
+    "spark_baseten": 869
+   }
+  },
+  "calls": {
+   "baseten:spark_baseten:evo_agent": {
+    "ok": 15,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_polish": {
+    "ok": 3,
+    "failed": 0
+   },
+   "meta:image:text_to_image": {
+    "ok": 3,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_describe": {
+    "ok": 3,
+    "failed": 0
+   },
+   "meta:spark:evo_describe": {
+    "ok": 3,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_ask": {
+    "ok": 3,
+    "failed": 0
+   },
+   "meta:spark:evo_ask": {
+    "ok": 3,
+    "failed": 0
+   },
+   "meta:sam:sam": {
+    "ok": 4,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_checklist": {
+    "ok": 2,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_critic": {
+    "ok": 1,
+    "failed": 0
+   }
+  },
+  "summary": [
+   {
+    "run": "fox_owl",
+    "repeat": 2,
+    "held_out": true,
+    "renders": 3,
+    "edits": 0,
+    "tool_calls": 16,
+    "stop": null,
+    "final_image": "img2",
+    "remaining": [
+     {
+      "key": "frame",
+      "kind": "structural",
+      "text": "Is the overall body shape that of a red fox?"
+     }
+    ],
+    "host": "red_fox"
+   }
+  ]
+ },
+ {
+  "at": "2026-11-01T13:55:51",
+  "budget": {
+   "before": {
+    "image": 136,
+    "spark": 582,
+    "sam": 126,
+    "spark_baseten": 869
+   },
+   "after": {
+    "image": 140,
+    "spark": 590,
+    "sam": 131,
+    "spark_baseten": 902
+   }
+  },
+  "calls": {
+   "baseten:spark_baseten:evo_agent": {
+    "ok": 19,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_polish": {
+    "ok": 3,
+    "failed": 0
+   },
+   "meta:image:text_to_image": {
+    "ok": 4,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_describe": {
+    "ok": 4,
+    "failed": 0
+   },
+   "meta:spark:evo_describe": {
+    "ok": 4,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_ask": {
+    "ok": 4,
+    "failed": 0
+   },
+   "meta:spark:evo_ask": {
+    "ok": 4,
+    "failed": 0
+   },
+   "meta:sam:sam": {
+    "ok": 5,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_checklist": {
+    "ok": 2,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_critic": {
+    "ok": 1,
+    "failed": 0
+   }
+  },
+  "summary": [
+   {
+    "run": "crab_wolf",
+    "repeat": 1,
+    "held_out": false,
+    "renders": 3,
+    "edits": 1,
+    "tool_calls": 20,
+    "stop": null,
+    "final_image": "img1",
+    "remaining": [
+     {
+      "key": "cover_present",
+      "kind": "covering",
+      "text": "Are there hard, glossy chitin plates with fine seams on the head, neck, shoulders, back, flanks, belly, hips, legs and tail?"
+     },
+     {
+      "key": "grows_out",
+      "kind": "covering",
+      "text": "Do the hard, glossy chitin plates with fine seams grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending "
+     },
+     {
+      "key": "on_top",
+      "kind": "covering",
+      "text": "Do the hard, glossy chitin plates with fine seams look like separate pieces laid on top of the fur, with a raised rim or a gap at the edge?"
+     },
+     {
+      "key": "continuous",
+      "kind": "covering",
+      "text": "Do the hard, glossy chitin plates with fine seams form one continuous structure over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, rather"
+     },
+     {
+      "key": "third_animal",
+      "kind": "structural",
+      "text": "an animal other than the two parents"
+     }
+    ],
+    "host": "gray_wolf"
+   }
+  ]
+ },
+ {
+  "at": "2026-11-01T14:03:11",
+  "budget": {
+   "before": {
+    "image": 140,
+    "spark": 590,
+    "sam": 131,
+    "spark_baseten": 902
+   },
+   "after": {
+    "image": 144,
+    "spark": 598,
+    "sam": 136,
+    "spark_baseten": 943
+   }
+  },
+  "calls": {
+   "baseten:spark_baseten:evo_agent": {
+    "ok": 26,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_polish": {
+    "ok": 4,
+    "failed": 0
+   },
+   "meta:image:text_to_image": {
+    "ok": 4,
+    "failed": 0
+   },
+   "meta:spark:evo_describe": {
+    "ok": 4,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_describe": {
+    "ok": 4,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_ask": {
+    "ok": 4,
+    "failed": 0
+   },
+   "meta:spark:evo_ask": {
+    "ok": 4,
+    "failed": 0
+   },
+   "meta:sam:sam": {
+    "ok": 5,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_checklist": {
+    "ok": 2,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_critic": {
+    "ok": 1,
+    "failed": 0
+   }
+  },
+  "summary": [
+   {
+    "run": "crab_wolf",
+    "repeat": 2,
+    "held_out": false,
+    "renders": 4,
+    "edits": 0,
+    "tool_calls": 26,
+    "stop": null,
+    "final_image": "img2",
+    "remaining": [
+     {
+      "key": "insect_legs",
+      "kind": "structural",
+      "text": "Are there jointed, insect-like leg pieces on or along the legs?"
+     },
+     {
+      "key": "grows_out",
+      "kind": "covering",
+      "text": "Do the hard, glossy chitin plates with fine seams grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending "
+     },
+     {
+      "key": "on_top",
+      "kind": "covering",
+      "text": "Do the hard, glossy chitin plates with fine seams look like separate pieces laid on top of the fur, with a raised rim or a gap at the edge?"
+     },
+     {
+      "key": "continuous",
+      "kind": "covering",
+      "text": "Do the hard, glossy chitin plates with fine seams form one continuous structure over the back and flanks, rather than scattered pieces?"
+     },
+     {
+      "key": "scattered",
+      "kind": "covering",
+      "text": "Are the hard, glossy chitin plates with fine seams scattered as separate pieces over different parts of the body?"
+     },
+     {
+      "key": "cover_on_legs",
+      "kind": "covering",
+      "text": "Are there hard, glossy chitin plates with fine seams on the legs?"
+     },
+     {
+      "key": "cover_on_shoulders",
+      "kind": "covering",
+      "text": "Are there hard, glossy chitin plates with fine seams on the shoulders?"
+     },
+     {
+      "key": "follows_body",
+      "kind": "covering",
+      "text": "Do the hard, glossy chitin plates with fine seams follow this body's own shape and contours, the way its own skin would?"
+     },
+     {
+      "key": "separate_outline",
+      "kind": "covering",
+      "text": "Do the hard, glossy chitin plates with fine seams keep the outline of a separate object, such as another animal's shell or back, instead of the body's own shape"
+     },
+     {
+      "key": "abrupt_stop",
+      "kind": "covering",
+      "text": "Do the hard, glossy chitin plates with fine seams stop abruptly partway across the body or legs, with no visible reason?"
+     }
+    ],
+    "host": "gray_wolf"
+   }
+  ]
+ },
+ {
+  "at": "2026-11-01T14:12:40",
+  "budget": {
+   "before": {
+    "image": 144,
+    "spark": 598,
+    "sam": 136,
+    "spark_baseten": 943
+   },
+   "after": {
+    "image": 150,
+    "spark": 609,
+    "sam": 142,
+    "spark_baseten": 982
+   }
+  },
+  "calls": {
+   "baseten:spark_baseten:evo_agent": {
+    "ok": 22,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_polish": {
+    "ok": 3,
+    "failed": 0
+   },
+   "meta:image:text_to_image": {
+    "ok": 6,
+    "failed": 0
+   },
+   "meta:spark:evo_describe": {
+    "ok": 6,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_describe": {
+    "ok": 6,
+    "failed": 0
+   },
+   "meta:spark:evo_ask": {
+    "ok": 5,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_ask": {
+    "ok": 5,
+    "failed": 0
+   },
+   "meta:sam:sam": {
+    "ok": 6,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_checklist": {
+    "ok": 2,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_critic": {
+    "ok": 1,
+    "failed": 0
+   }
+  },
+  "summary": [
+   {
+    "run": "beetle_bear",
+    "repeat": 1,
+    "held_out": false,
+    "renders": 4,
+    "edits": 2,
+    "tool_calls": 23,
+    "stop": null,
+    "final_image": "img5",
+    "remaining": [
+     {
+      "key": "grows_out",
+      "kind": "covering",
+      "text": "Do the hard, glossy chitin plates with fine seams grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending "
+     },
+     {
+      "key": "on_top",
+      "kind": "covering",
+      "text": "Do the hard, glossy chitin plates with fine seams look like separate pieces laid on top of the fur, with a raised rim or a gap at the edge?"
+     },
+     {
+      "key": "continuous",
+      "kind": "covering",
+      "text": "Do the hard, glossy chitin plates with fine seams form one continuous structure over the head, neck, shoulders, back, flanks, belly, hips and tail, rather than "
+     },
+     {
+      "key": "scattered",
+      "kind": "covering",
+      "text": "Are the hard, glossy chitin plates with fine seams scattered as separate pieces over different parts of the body?"
+     },
+     {
+      "key": "cover_on_legs",
+      "kind": "covering",
+      "text": "Are there hard, glossy chitin plates with fine seams on the legs?"
+     },
+     {
+      "key": "third_animal",
+      "kind": "structural",
+      "text": "an animal other than the two parents"
+     }
+    ],
+    "host": "brown_bear"
+   }
+  ]
+ },
+ {
+  "at": "2026-11-01T14:19:30",
+  "budget": {
+   "before": {
+    "image": 150,
+    "spark": 609,
+    "sam": 142,
+    "spark_baseten": 982
+   },
+   "after": {
+    "image": 154,
+    "spark": 617,
+    "sam": 147,
+    "spark_baseten": 1017
+   }
+  },
+  "calls": {
+   "baseten:spark_baseten:evo_agent": {
+    "ok": 21,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_polish": {
+    "ok": 3,
+    "failed": 0
+   },
+   "meta:image:text_to_image": {
+    "ok": 4,
+    "failed": 0
+   },
+   "meta:spark:evo_describe": {
+    "ok": 4,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_describe": {
+    "ok": 4,
+    "failed": 0
+   },
+   "meta:spark:evo_ask": {
+    "ok": 4,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_ask": {
+    "ok": 4,
+    "failed": 0
+   },
+   "meta:sam:sam": {
+    "ok": 5,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_checklist": {
+    "ok": 2,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_critic": {
+    "ok": 1,
+    "failed": 0
+   }
+  },
+  "summary": [
+   {
+    "run": "beetle_bear",
+    "repeat": 2,
+    "held_out": false,
+    "renders": 3,
+    "edits": 1,
+    "tool_calls": 21,
+    "stop": null,
+    "final_image": "img2",
+    "remaining": [
+     {
+      "key": "third_animal",
+      "kind": "structural",
+      "text": "an animal other than the two parents"
+     }
+    ],
+    "host": "brown_bear"
+   }
+  ]
+ }
+]

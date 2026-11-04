@@ -1,0 +1,72 @@
+{
+ "parts": [
+  {
+   "part": "head",
+   "sam_label": "head",
+   "parent": "axolotl",
+   "parent_role": "host",
+   "parent_name": "axolotl",
+   "mask_area": 0.0908,
+   "found": true,
+   "status": "found",
+   "color": "#268bd2"
+  },
+  {
+   "part": "body",
+   "sam_label": "torso",
+   "parent": "axolotl",
+   "parent_role": "host",
+   "parent_name": "axolotl",
+   "mask_area": 0.0,
+   "found": false,
+   "status": "not located",
+   "color": null
+  },
+  {
+   "part": "legs",
+   "sam_label": "legs",
+   "parent": "axolotl",
+   "parent_role": "host",
+   "parent_name": "axolotl",
+   "mask_area": 0.0734,
+   "found": true,
+   "status": "found",
+   "color": "#268bd2"
+  },
+  {
+   "part": "tail",
+   "sam_label": "tail",
+   "parent": "axolotl",
+   "parent_role": "host",
+   "parent_name": "axolotl",
+   "mask_area": 0.0161,
+   "found": true,
+   "status": "found",
+   "color": "#268bd2"
+  },
+  {
+   "part": "Chinese pangolin covering",
+   "sam_label": "large overlapping keratin scales",
+   "parent": "chinese_pangolin",
+   "parent_role": "donor",
+   "parent_name": "Chinese pangolin",
+   "mask_area": 0.0,
+   "found": false,
+   "status": "not located",
+   "color": null
+  }
+ ],
+ "colors": {
+  "host": "#268bd2",
+  "donor": "#e66e28",
+  "blend": "#825ac8"
+ },
+ "present_fill": 0.002,
+ "found": 3,
+ "not_located": 2,
+ "image_size": [
+  1600,
+  1600
+ ],
+ "overlay_key": "evo/crt_5816c9e8a21c.agent.img2.anatomy.png"
+}

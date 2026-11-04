@@ -1,0 +1,141 @@
+{
+ "budget": {
+  "before": {
+   "image": 80,
+   "spark": 473,
+   "sam": 74,
+   "spark_baseten": 489
+  },
+  "after": {
+   "image": 84,
+   "spark": 483,
+   "sam": 80,
+   "spark_baseten": 507
+  }
+ },
+ "calls": {
+  "meta:spark:evo_plan": {
+   "ok": 2,
+   "failed": 0
+  },
+  "baseten:spark_baseten:evo_polish": {
+   "ok": 1,
+   "failed": 0
+  },
+  "meta:image:text_to_image": {
+   "ok": 4,
+   "failed": 0
+  },
+  "baseten:spark_baseten:evo_checklist": {
+   "ok": 6,
+   "failed": 0
+  },
+  "meta:sam:sam": {
+   "ok": 6,
+   "failed": 0
+  },
+  "baseten:spark_baseten:evo_critic": {
+   "ok": 3,
+   "failed": 0
+  },
+  "meta:spark:evo_describe": {
+   "ok": 5,
+   "failed": 0
+  },
+  "baseten:spark_baseten:evo_describe": {
+   "ok": 5,
+   "failed": 0
+  },
+  "meta:spark:evo_ask": {
+   "ok": 3,
+   "failed": 0
+  },
+  "baseten:spark_baseten:evo_ask": {
+   "ok": 3,
+   "failed": 0
+  }
+ },
+ "summary": [
+  {
+   "run": "beetle_bear_default",
+   "repeat": 1,
+   "tuned": true,
+   "signals": [
+    [
+     "insect_legs",
+     "fail"
+    ],
+    [
+     "cover_present",
+     "fail"
+    ],
+    [
+     "continuous",
+     "fail"
+    ],
+    [
+     "connects_head_horn",
+     "fail"
+    ],
+    [
+     "separate_head_horn",
+     "fail"
+    ],
+    [
+     "third_animal",
+     "fail"
+    ]
+   ],
+   "warnings": [
+    "the edit left more structural misses than the first render: first render kept",
+    "structural miss after one edit turn: Do the hard, glossy chitin plates with fine seams grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending into scales), rather than looking attached on top?; Do the hard, glossy chitin plates with fine seams look like separate pieces laid on top of the fur, with a raised rim or a gap at the edge?; Do the hard, glossy chitin plates with fine seams follow this body's own shape and contours, the way its own skin would?; Do the hard, glossy chitin plates with fine seams keep the outline of a separate object, such as another animal's shell or back, instead of the body's own shape?; Are the legs covered by the hard, glossy chitin plates with fine seams as well as the body?; Do the hard, glossy chitin plates with fine seams stop abruptly partway across the body or legs, with no visible reason?; Does the head horn grow out of the hard, glossy chitin plates with fine seams at its base, so they look like one connected system?; Does the head horn look stuck on separately, with no connection to the hard, glossy chitin plates with fine seams?; an animal other than the two parents"
+   ],
+   "growth": null
+  },
+  {
+   "run": "beetle_bear_growth",
+   "repeat": 1,
+   "tuned": true,
+   "signals": [
+    [
+     "third_animal",
+     "fail"
+    ]
+   ],
+   "warnings": [
+    "structural miss (growth mode makes no repair edit): an animal other than the two parents"
+   ],
+   "growth": {
+    "drifted": false,
+    "changed": [],
+    "by_critic": {
+     "spark_open": {
+      "before": {
+       "heads": 1,
+       "walking_legs": 4,
+       "tails": 1
+      },
+      "after": {
+       "heads": 1,
+       "walking_legs": 4,
+       "tails": 1
+      }
+     },
+     "meta_spark": {
+      "before": {
+       "heads": 1,
+       "walking_legs": 4,
+       "tails": 1
+      },
+      "after": {
+       "heads": 1,
+       "walking_legs": 4,
+       "tails": 1
+      }
+     }
+    },
+    "any_change": []
+   }
+  }
+ ]
+}

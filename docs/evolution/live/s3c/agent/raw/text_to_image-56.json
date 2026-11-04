@@ -1,0 +1,110 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Show the planned hard, glossy chitin plates with fine seams over the head, neck, shoulders, back, flanks, belly, hips, legs and tail; keep everything else the same. Show the hard, glossy chitin plates with fine seams grown in the skin over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, as one covering that replaces the gray wolf's fur there; the fur stops at its edge; keep everything else the same. Show the hard, glossy chitin plates with fine seams as one continuous covering over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, not scattered pieces; the gray wolf's fur stays on the belly and legs; keep everything else the same.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ],
+  "previous_response_id": "resp_6ae789d719dac9f0b79f4189"
+ },
+ "response": {
+  "id": "resp_6ae78a1ba3303c3946434d48",
+  "access_programs": null,
+  "created_at": 1793559067.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae78a1bd2b7f2cb94e546b1",
+    "summary": [
+     {
+      "text": "**Clarifying chitin coverage details**\nI'm sorting out the conflicting coverage notes for the wolf edit, specifically whether the hard glossy chitin plates should cover the belly and legs or leave the fur there, before applying the changes.\n**Adjusting chitin armor details**\nI'm updating the design to add chitin plates to the head crown and tail while keeping the face, belly, and legs furry as requested, and leaving everything else unchanged.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae78a1b47081a20d060423f",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0NYY0R6UkZnNEw5S05vUEFOMk9CcW05eFRSSGJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczo1NmM3ZDg4My04NjQwLTQzZjctODRmMC1kMWJkMDU4OTI3NWE6R0k5b0lqU05Od29jMW1jUUFPd3g1UFRjQi1NOGJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM1NTkwNjd9.Q8WLFwFHYRn-AkVxHxXZ7U1JlcyD",
+    "result": "<elided> (842412 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": "resp_6ae789d719dac9f0b79f4189",
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 22728,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 21312
+   },
+   "output_tokens": 1074,
+   "output_tokens_details": {
+    "reasoning_tokens": 298
+   },
+   "total_tokens": 23802
+  },
+  "user": null
+ }
+}

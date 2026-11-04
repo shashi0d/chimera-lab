@@ -1,0 +1,1304 @@
+{
+ "purpose": "evo_cite_traits",
+ "request": {
+  "model": "muse-spark-1.3",
+  "instructions": "You describe a real animal for a natural-history engine, from sources. Use web search and open the pages you rely on: encyclopedias, museums, universities, zoos, government agencies or peer-reviewed papers. For each field give the value, source_url (the exact URL of a page you opened that supports the value) and evidence (a short quote from that page). If no source you opened supports a field, give your best estimate and leave source_url and evidence empty; never invent a URL. Use typical adult values. body_plan: the overall layout (winged means wings are the main limbs; insects are multi_legged). visible_features: three to six short visible features someone would draw. mouthparts: what the head eats with. breathing: the main breathing organ. claimed_crosses: scientific names of species it is documented to hybridize with, or an empty list.",
+  "tools": [
+   {
+    "type": "web_search"
+   }
+  ],
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Describe, with sources: Chinese pangolin (Manis pentadactyla)"
+     }
+    ]
+   }
+  ],
+  "text": {
+   "format": {
+    "type": "json_schema",
+    "name": "cited_traits",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "body_plan",
+      "primary_locomotor_part",
+      "covering",
+      "movement",
+      "habitat",
+      "climate",
+      "diet",
+      "active_time",
+      "body_mass_kg",
+      "body_length_m",
+      "visible_features",
+      "mouthparts",
+      "breathing",
+      "mouthparts_detail",
+      "breathing_detail",
+      "claimed_crosses"
+     ],
+     "properties": {
+      "body_plan": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "properties": {
+        "value": {
+         "type": "array",
+         "items": {
+          "type": "string",
+          "enum": [
+           "quadruped",
+           "biped",
+           "winged",
+           "finned",
+           "multi_legged",
+           "serpentine",
+           "radial"
+          ]
+         }
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "evidence": {
+         "type": "string"
+        }
+       }
+      },
+      "primary_locomotor_part": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "properties": {
+        "value": {
+         "type": "string",
+         "enum": [
+          "four legs",
+          "two legs",
+          "multiple legs",
+          "wings",
+          "fins",
+          "flippers",
+          "bell"
+         ]
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "evidence": {
+         "type": "string"
+        }
+       }
+      },
+      "covering": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "properties": {
+        "value": {
+         "type": "string",
+         "enum": [
+          "fur",
+          "feathers",
+          "scales",
+          "skin",
+          "exoskeleton",
+          "shell"
+         ]
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "evidence": {
+         "type": "string"
+        }
+       }
+      },
+      "movement": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "properties": {
+        "value": {
+         "type": "array",
+         "items": {
+          "type": "string",
+          "enum": [
+           "walk",
+           "run",
+           "swim",
+           "fly",
+           "climb",
+           "burrow",
+           "glide"
+          ]
+         }
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "evidence": {
+         "type": "string"
+        }
+       }
+      },
+      "habitat": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "properties": {
+        "value": {
+         "type": "array",
+         "items": {
+          "type": "string",
+          "enum": [
+           "grassland",
+           "forest",
+           "mountain",
+           "tundra",
+           "wetland",
+           "freshwater",
+           "marine",
+           "desert"
+          ]
+         }
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "evidence": {
+         "type": "string"
+        }
+       }
+      },
+      "climate": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "properties": {
+        "value": {
+         "type": "array",
+         "items": {
+          "type": "string",
+          "enum": [
+           "temperate",
+           "tropical",
+           "polar",
+           "arid"
+          ]
+         }
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "evidence": {
+         "type": "string"
+        }
+       }
+      },
+      "diet": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "properties": {
+        "value": {
+         "type": "string",
+         "enum": [
+          "carnivore",
+          "herbivore",
+          "omnivore",
+          "insectivore",
+          "piscivore"
+         ]
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "evidence": {
+         "type": "string"
+        }
+       }
+      },
+      "active_time": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "properties": {
+        "value": {
+         "type": "array",
+         "items": {
+          "type": "string",
+          "enum": [
+           "diurnal",
+           "nocturnal",
+           "crepuscular",
+           "unrecorded"
+          ]
+         }
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "evidence": {
+         "type": "string"
+        }
+       }
+      },
+      "body_mass_kg": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "properties": {
+        "value": {
+         "type": "object",
+         "additionalProperties": false,
+         "required": [
+          "min",
+          "max"
+         ],
+         "properties": {
+          "min": {
+           "type": "number"
+          },
+          "max": {
+           "type": "number"
+          }
+         }
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "evidence": {
+         "type": "string"
+        }
+       }
+      },
+      "body_length_m": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "properties": {
+        "value": {
+         "type": "object",
+         "additionalProperties": false,
+         "required": [
+          "min",
+          "max"
+         ],
+         "properties": {
+          "min": {
+           "type": "number"
+          },
+          "max": {
+           "type": "number"
+          }
+         }
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "evidence": {
+         "type": "string"
+        }
+       }
+      },
+      "visible_features": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "properties": {
+        "value": {
+         "type": "array",
+         "items": {
+          "type": "string"
+         }
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "evidence": {
+         "type": "string"
+        }
+       }
+      },
+      "mouthparts": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "properties": {
+        "value": {
+         "type": "string",
+         "enum": [
+          "grinding teeth",
+          "bladed teeth",
+          "mixed teeth",
+          "pointed teeth",
+          "beak",
+          "mandibles",
+          "toothless tongue",
+          "other"
+         ]
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "evidence": {
+         "type": "string"
+        }
+       }
+      },
+      "breathing": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "properties": {
+        "value": {
+         "type": "string",
+         "enum": [
+          "lungs",
+          "gills",
+          "external gills and lungs",
+          "skin and lungs",
+          "tracheae",
+          "book lungs",
+          "other"
+         ]
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "evidence": {
+         "type": "string"
+        }
+       }
+      },
+      "mouthparts_detail": {
+       "type": "string"
+      },
+      "breathing_detail": {
+       "type": "string"
+      },
+      "claimed_crosses": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      }
+     }
+    }
+   }
+  }
+ },
+ "response": {
+  "top_logprobs": 0,
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "service_tier": "auto",
+  "model": "muse-spark-1.3",
+  "reasoning": {
+   "effort": "high"
+  },
+  "background": false,
+  "text": {
+   "format": {
+    "type": "json_schema",
+    "name": "cited_traits",
+    "schema": {
+     "required": [
+      "body_plan",
+      "primary_locomotor_part",
+      "covering",
+      "movement",
+      "habitat",
+      "climate",
+      "diet",
+      "active_time",
+      "body_mass_kg",
+      "body_length_m",
+      "visible_features",
+      "mouthparts",
+      "breathing",
+      "mouthparts_detail",
+      "breathing_detail",
+      "claimed_crosses"
+     ],
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "active_time": {
+       "additionalProperties": false,
+       "properties": {
+        "evidence": {
+         "type": "string"
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "value": {
+         "items": {
+          "enum": [
+           "diurnal",
+           "nocturnal",
+           "crepuscular",
+           "unrecorded"
+          ],
+          "type": "string"
+         },
+         "type": "array"
+        }
+       },
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "type": "object"
+      },
+      "body_length_m": {
+       "additionalProperties": false,
+       "properties": {
+        "evidence": {
+         "type": "string"
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "value": {
+         "additionalProperties": false,
+         "properties": {
+          "max": {
+           "type": "number"
+          },
+          "min": {
+           "type": "number"
+          }
+         },
+         "required": [
+          "min",
+          "max"
+         ],
+         "type": "object"
+        }
+       },
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "type": "object"
+      },
+      "body_mass_kg": {
+       "additionalProperties": false,
+       "properties": {
+        "evidence": {
+         "type": "string"
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "value": {
+         "additionalProperties": false,
+         "properties": {
+          "max": {
+           "type": "number"
+          },
+          "min": {
+           "type": "number"
+          }
+         },
+         "required": [
+          "min",
+          "max"
+         ],
+         "type": "object"
+        }
+       },
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "type": "object"
+      },
+      "body_plan": {
+       "additionalProperties": false,
+       "properties": {
+        "evidence": {
+         "type": "string"
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "value": {
+         "items": {
+          "enum": [
+           "quadruped",
+           "biped",
+           "winged",
+           "finned",
+           "multi_legged",
+           "serpentine",
+           "radial"
+          ],
+          "type": "string"
+         },
+         "type": "array"
+        }
+       },
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "type": "object"
+      },
+      "breathing": {
+       "additionalProperties": false,
+       "properties": {
+        "evidence": {
+         "type": "string"
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "value": {
+         "enum": [
+          "lungs",
+          "gills",
+          "external gills and lungs",
+          "skin and lungs",
+          "tracheae",
+          "book lungs",
+          "other"
+         ],
+         "type": "string"
+        }
+       },
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "type": "object"
+      },
+      "breathing_detail": {
+       "type": "string"
+      },
+      "claimed_crosses": {
+       "items": {
+        "type": "string"
+       },
+       "type": "array"
+      },
+      "climate": {
+       "additionalProperties": false,
+       "properties": {
+        "evidence": {
+         "type": "string"
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "value": {
+         "items": {
+          "enum": [
+           "temperate",
+           "tropical",
+           "polar",
+           "arid"
+          ],
+          "type": "string"
+         },
+         "type": "array"
+        }
+       },
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "type": "object"
+      },
+      "covering": {
+       "additionalProperties": false,
+       "properties": {
+        "evidence": {
+         "type": "string"
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "value": {
+         "enum": [
+          "fur",
+          "feathers",
+          "scales",
+          "skin",
+          "exoskeleton",
+          "shell"
+         ],
+         "type": "string"
+        }
+       },
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "type": "object"
+      },
+      "diet": {
+       "additionalProperties": false,
+       "properties": {
+        "evidence": {
+         "type": "string"
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "value": {
+         "enum": [
+          "carnivore",
+          "herbivore",
+          "omnivore",
+          "insectivore",
+          "piscivore"
+         ],
+         "type": "string"
+        }
+       },
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "type": "object"
+      },
+      "habitat": {
+       "additionalProperties": false,
+       "properties": {
+        "evidence": {
+         "type": "string"
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "value": {
+         "items": {
+          "enum": [
+           "grassland",
+           "forest",
+           "mountain",
+           "tundra",
+           "wetland",
+           "freshwater",
+           "marine",
+           "desert"
+          ],
+          "type": "string"
+         },
+         "type": "array"
+        }
+       },
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "type": "object"
+      },
+      "mouthparts": {
+       "additionalProperties": false,
+       "properties": {
+        "evidence": {
+         "type": "string"
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "value": {
+         "enum": [
+          "grinding teeth",
+          "bladed teeth",
+          "mixed teeth",
+          "pointed teeth",
+          "beak",
+          "mandibles",
+          "toothless tongue",
+          "other"
+         ],
+         "type": "string"
+        }
+       },
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "type": "object"
+      },
+      "mouthparts_detail": {
+       "type": "string"
+      },
+      "movement": {
+       "additionalProperties": false,
+       "properties": {
+        "evidence": {
+         "type": "string"
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "value": {
+         "items": {
+          "enum": [
+           "walk",
+           "run",
+           "swim",
+           "fly",
+           "climb",
+           "burrow",
+           "glide"
+          ],
+          "type": "string"
+         },
+         "type": "array"
+        }
+       },
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "type": "object"
+      },
+      "primary_locomotor_part": {
+       "additionalProperties": false,
+       "properties": {
+        "evidence": {
+         "type": "string"
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "value": {
+         "enum": [
+          "four legs",
+          "two legs",
+          "multiple legs",
+          "wings",
+          "fins",
+          "flippers",
+          "bell"
+         ],
+         "type": "string"
+        }
+       },
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "type": "object"
+      },
+      "visible_features": {
+       "additionalProperties": false,
+       "properties": {
+        "evidence": {
+         "type": "string"
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "value": {
+         "items": {
+          "type": "string"
+         },
+         "type": "array"
+        }
+       },
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "type": "object"
+      }
+     }
+    },
+    "strict": true
+   }
+  },
+  "tools": [
+   {
+    "type": "web_search"
+   }
+  ],
+  "tool_choice": "auto",
+  "truncation": "disabled",
+  "id": "resp_6ae6a6f41a2a98abc6414ecf",
+  "object": "response",
+  "status": "completed",
+  "created_at": 1793500916.0,
+  "completed_at": 1793500972.0,
+  "error": null,
+  "incomplete_details": null,
+  "output": [
+   {
+    "type": "reasoning",
+    "id": "rs_6ae6a6f41a2a98abc6414ecf:rs_feaede78-b7df-4bf9-a050-92f07404caf0",
+    "summary": [],
+    "status": "completed"
+   },
+   {
+    "type": "message",
+    "id": "rs_e098a0df-b42a-4744-ad9a-2b201fa3e739",
+    "role": "assistant",
+    "content": [
+     {
+      "type": "output_text",
+      "text": "Gathering natural-history sources for the Chinese pangolin.",
+      "annotations": [],
+      "logprobs": []
+     }
+    ],
+    "phase": "commentary",
+    "status": "completed"
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_9e8ffff4-4fd9-41f1-ae2e-c6127ecacffd",
+    "status": "completed",
+    "action": {
+     "type": "search",
+     "query": "Chinese pangolin Manis pentadactyla size weight length"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_8e6230b4-a031-494a-92b5-9d7013a04f47",
+    "status": "completed",
+    "action": {
+     "type": "search",
+     "query": "Chinese pangolin habitat diet nocturnal"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_2ec97461-565f-4308-8164-236e4efeabb7",
+    "status": "completed",
+    "action": {
+     "type": "search",
+     "query": "Chinese pangolin scales burrow walk description"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_2b5fc2dd-0e8a-4051-b0b2-2c8519c6ff3b",
+    "status": "completed",
+    "action": {
+     "type": "search",
+     "query": "Manis pentadactyla Animal Diversity Web physical description tongue teeth stomach"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_79567ea2-2e8d-45fc-ac0c-2460fd0e93a6",
+    "status": "completed",
+    "action": {
+     "type": "search",
+     "query": "Chinese pangolin lungs mammal breathing"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_499f56f5-aa0c-4bf8-8448-fd65b02fa1af",
+    "status": "completed",
+    "action": {
+     "type": "search",
+     "query": "Chinese pangolin hybridization hybrid"
+    }
+   },
+   {
+    "type": "reasoning",
+    "id": "rs_6ae6a6f41a2a98abc6414ecf:rs_ad012cbe-ead1-4b66-95ab-b0c925450476",
+    "summary": [],
+    "status": "completed"
+   },
+   {
+    "type": "message",
+    "id": "rs_fce0a3b5-3674-47c8-bc15-6280b5c3a8f0",
+    "role": "assistant",
+    "content": [
+     {
+      "type": "output_text",
+      "text": "I've found initial data — now opening authoritative profiles to verify each trait.",
+      "annotations": [],
+      "logprobs": []
+     }
+    ],
+    "phase": "commentary",
+    "status": "completed"
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_193ba771-19cf-4e62-b35e-3c403d5ef83a",
+    "status": "completed",
+    "action": {
+     "type": "open_page",
+     "url": "https://animaldiversity.org/accounts/Manis_pentadactyla/"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_1ede7234-f595-4dc7-90c3-d994925142b0",
+    "status": "completed",
+    "action": {
+     "type": "open_page",
+     "url": "https://www.nationalgeographic.com/animals/mammals/facts/chinese-pangolin"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_2cbf8866-adfa-4eca-a1e4-91be4452b402",
+    "status": "failed",
+    "action": {
+     "type": "open_page",
+     "url": "https://pangolins.org/meet-the-species-chinese-pangolin/"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_4a3dd5a8-2693-42e7-8c6a-703a90d37472",
+    "status": "completed",
+    "action": {
+     "type": "search",
+     "query": "Chinese pangolin tropical subtropical temperate forest grassland habitat"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_f8a5ceb0-9b86-45f2-8f1d-c9fa5f7e4687",
+    "status": "completed",
+    "action": {
+     "type": "search",
+     "query": "\"Manis pentadactyla\" scales covering walk climb burrow swim"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_fb58bbe8-1ff4-4509-9ea6-9aad7db18763",
+    "status": "completed",
+    "action": {
+     "type": "open_page",
+     "url": "https://animalia.bio/chinese-pangolin"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_24354391-84f2-458e-8f88-8e58f6552fad",
+    "status": "failed",
+    "action": {
+     "type": "open_page",
+     "url": "https://www.oneearth.org/meet-the-chinese-pangolin-one-of-asias-most-threatened-mammals/"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_2124b74c-1071-4880-babc-04befaadc051",
+    "status": "completed",
+    "action": {
+     "type": "open_page",
+     "url": "https://en.wikipedia.org/wiki/Chinese_pangolin"
+    }
+   },
+   {
+    "type": "reasoning",
+    "id": "rs_6ae6a6f41a2a98abc6414ecf:rs_cd6dd5e1-28df-4a1f-961f-274b68d88add",
+    "summary": [],
+    "status": "completed"
+   },
+   {
+    "type": "message",
+    "id": "rs_55018d0e-afbd-47d3-be1f-76272089e560",
+    "role": "assistant",
+    "content": [
+     {
+      "type": "output_text",
+      "text": "Core traits are documented — now confirming locomotion and breathing details.",
+      "annotations": [],
+      "logprobs": []
+     }
+    ],
+    "phase": "commentary",
+    "status": "completed"
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_5a243774-8387-4f1e-880d-1a92c2715fa0",
+    "status": "failed",
+    "action": {
+     "type": "open_page",
+     "url": "https://www.gbif.org/species/9632830"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_d138e7d4-8fc2-448a-b64e-9bfff2d4fc57",
+    "status": "completed",
+    "action": {
+     "type": "search",
+     "query": "Smithsonian Chinese pangolin scales quadruped"
+    }
+   },
+   {
+    "type": "reasoning",
+    "id": "rs_6ae6a6f41a2a98abc6414ecf:rs_e186dec8-ca36-4092-b7ee-32a9a0484c18",
+    "summary": [],
+    "status": "completed"
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_5ff65072-e42e-4bc9-b9a6-eb0fb0c6558d",
+    "status": "failed",
+    "action": {
+     "type": "open_page",
+     "url": "https://nepaldesk.com/chinese-pangolin/"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_37ef0ff6-88ae-46c2-88fd-45d53d4a4355",
+    "status": "completed",
+    "action": {
+     "type": "open_page",
+     "url": "https://treatment.plazi.org/id/03F2C367-FFAD-5D2E-FF5C-F9CFFEBD64A7"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_225381a4-44ad-43ef-8be9-2339714dab19",
+    "status": "completed",
+    "action": {
+     "type": "search",
+     "query": "site:si.edu pangolin scales mammal"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_563f3388-a849-4ae0-a3cf-58393a1c2cfa",
+    "status": "completed",
+    "action": {
+     "type": "open_page",
+     "url": "https://nationalzoo.si.edu/animals/news/smithsonian-scientists-aid-decoding-mammalian-mystery-genetics-pangolin"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_2507887d-8bea-4ced-9754-e0f9d2375685",
+    "status": "failed",
+    "action": {
+     "type": "open_page",
+     "url": "https://insider.si.edu/2016/08/using-genetics-help-save-worlds-trafficked-mammal-pangolin/"
+    }
+   },
+   {
+    "type": "reasoning",
+    "id": "rs_6ae6a6f41a2a98abc6414ecf:rs_247a4617-cb28-4e31-b225-4d6196acf90d",
+    "summary": [],
+    "status": "completed"
+   },
+   {
+    "type": "message",
+    "id": "rs_cb4f8304-d58c-45ba-b7ef-d05fe9777b99",
+    "role": "assistant",
+    "content": [
+     {
+      "type": "output_text",
+      "text": "Most fields are ready — now sourcing breathing and other final details.",
+      "annotations": [],
+      "logprobs": []
+     }
+    ],
+    "phase": "commentary",
+    "status": "completed"
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_f969c24a-a0c7-4744-9194-3dd174902454",
+    "status": "completed",
+    "action": {
+     "type": "search",
+     "query": "mammals breathe lungs Britannica"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_9cd784e9-08db-4724-ab67-5566da7ceac3",
+    "status": "failed",
+    "action": {
+     "type": "open_page",
+     "url": "https://kids.britannica.com/students/article/respiratory-system/276754"
+    }
+   },
+   {
+    "type": "reasoning",
+    "id": "rs_6ae6a6f41a2a98abc6414ecf:rs_4078f314-a87a-4926-88f6-3f1692b78f18",
+    "summary": [],
+    "status": "completed"
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_4611f01b-6989-49e9-91e1-339d741afd74",
+    "status": "completed",
+    "action": {
+     "type": "search",
+     "query": "University Arizona mammals lungs breathe"
+    }
+   },
+   {
+    "type": "reasoning",
+    "id": "rs_6ae6a6f41a2a98abc6414ecf:rs_4ba1306e-bf9c-40ee-b9b7-e0ec088235a5",
+    "summary": [],
+    "status": "completed"
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_0427dabd-a9cb-4fd9-8118-0b92c0657c5f",
+    "status": "completed",
+    "action": {
+     "type": "open_page",
+     "url": "https://www.britannica.com/animal/mammal"
+    }
+   },
+   {
+    "type": "reasoning",
+    "id": "rs_6ae6a6f41a2a98abc6414ecf:rs_e1e86817-e641-4523-aa3b-19fd37ba687d",
+    "summary": [],
+    "status": "completed"
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_c1684cf2-6e3c-4b58-8081-b86aa9e67e48",
+    "status": "completed",
+    "action": {
+     "type": "search",
+     "query": "Encyclopedia of Life pangolins have no teeth sticky tongue"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_ee7cc0aa-d500-4208-b5f4-27d297e72dc7",
+    "status": "failed",
+    "action": {
+     "type": "open_page",
+     "url": "https://eol.org/pages/423963/articles"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_11448e67-7c8d-48b6-b98c-1ed24c09e8a7",
+    "status": "completed",
+    "action": {
+     "type": "open_page",
+     "url": "https://animaldiversity.org/accounts/Manidae/"
+    }
+   },
+   {
+    "type": "reasoning",
+    "id": "rs_6ae6a6f41a2a98abc6414ecf:rs_ebafded7-13bb-43e8-80cb-6c5e63ffbec5",
+    "summary": [],
+    "status": "completed"
+   },
+   {
+    "type": "message",
+    "id": "msg_427eb252-30c5-4f5d-83a4-22aa00f1f5ff",
+    "role": "assistant",
+    "content": [
+     {
+      "type": "output_text",
+      "text": "{\"active_time\": {\"evidence\": \"Not only are they nocturnal animals, but they are extremely shy and slow moving\", \"source_url\": \"https://animaldiversity.org/accounts/Manis_pentadactyla/\", \"value\": [\"nocturnal\"]}, \"body_length_m\": {\"evidence\": \"Its head and body measure about 40\\u201358 cm (16\\u201323 in) and its tail measures about 25\\u201338 cm (9.8\\u201315.0 in).\", \"source_url\": \"https://en.wikipedia.org/wiki/Chinese_pangolin\", \"value\": {\"max\": 0.96, \"min\": 0.65}}, \"body_mass_kg\": {\"evidence\": \"A mature Chinese pangolin weighs from 2 to 7 kilograms (4.4 to 15.4 lb).\", \"source_url\": \"https://animalia.bio/chinese-pangolin\", \"value\": {\"max\": 7.0, \"min\": 2.0}}, \"body_plan\": {\"evidence\": \"The forefeet and hind feet are equipped with sharp claws.\", \"source_url\": \"https://animaldiversity.org/accounts/Manis_pentadactyla/\", \"value\": [\"quadruped\"]}, \"breathing\": {\"evidence\": \"A muscular diaphragm separates the heart and the lungs from the abdominal cavity.\", \"source_url\": \"https://www.britannica.com/animal/mammal\", \"value\": \"lungs\"}, \"breathing_detail\": \"Terrestrial mammal that breathes air with lungs ventilated by a muscular diaphragm.\", \"claimed_crosses\": [], \"climate\": {\"evidence\": \"Chinese pangolins inhabit subtropical and deciduous forests.\", \"source_url\": \"https://animaldiversity.org/accounts/Manis_pentadactyla/\", \"value\": [\"tropical\", \"temperate\"]}, \"covering\": {\"evidence\": \"Pangolin bodies are covered in keratinous scales that act as body armor.\", \"source_url\": \"https://animaldiversity.org/accounts/Manidae/\", \"value\": \"scales\"}, \"diet\": {\"evidence\": \"Termites and ants make up 100 percent of the pangolin\\u2019s diet.\", \"source_url\": \"https://www.nationalgeographic.com/animals/mammals/facts/chinese-pangolin\", \"value\": \"insectivore\"}, \"habitat\": {\"evidence\": \"They are found across a wide range of habitats including coniferous, tropical, evergreen and bamboo forests, agricultural fields and grasslands.\", \"source_url\": \"https://animalia.bio/chinese-pangolin\", \"value\": [\"forest\", \"grassland\"]}, \"mouthparts\": {\"evidence\": \"Pangolins have no teeth. The tongue is connected to the lowest part of the sternum and measures between 37.8 and 40.8 cm in length\", \"source_url\": \"https://animaldiversity.org/accounts/Manidae/\", \"value\": \"toothless tongue\"}, \"mouthparts_detail\": \"No teeth; 25 cm long sticky tongue laps up ants and termites into narrow mouth, food ground in gizzard-like stomach with ingested sand and small stones.\", \"movement\": {\"evidence\": \"despite being highly terrestrial, it can climb trees and swim capably. Occasionally, when walking, it will rise onto its hind legs... The pangolin uses its long claws to excavate a burrow\", \"source_url\": \"https://animalia.bio/chinese-pangolin\", \"value\": [\"walk\", \"climb\", \"swim\", \"burrow\"]}, \"primary_locomotor_part\": {\"evidence\": \"The forefeet and hind feet are equipped with sharp claws.\", \"source_url\": \"https://animaldiversity.org/accounts/Manis_pentadactyla/\", \"value\": \"four legs\"}, \"visible_features\": {\"evidence\": \"It's scales are typically grayish blue. There are 18 rows of overlapping scales accompanied by hair... It has a small, narrow mouth and a little, pointed head. Its head and body measure about 40-58 cm and its tail measures about 25-38 cm.\", \"source_url\": \"https://animalia.bio/chinese-pangolin\", \"value\": [\"overlapping gray-blue scales in 18 rows\", \"small pointed head with narrow mouth\", \"long tapered tail\", \"large curved fore claws\"]}}",
+      "annotations": [],
+      "logprobs": []
+     }
+    ],
+    "status": "completed"
+   }
+  ],
+  "instructions": "You describe a real animal for a natural-history engine, from sources. Use web search and open the pages you rely on: encyclopedias, museums, universities, zoos, government agencies or peer-reviewed papers. For each field give the value, source_url (the exact URL of a page you opened that supports the value) and evidence (a short quote from that page). If no source you opened supports a field, give your best estimate and leave source_url and evidence empty; never invent a URL. Use typical adult values. body_plan: the overall layout (winged means wings are the main limbs; insects are multi_legged). visible_features: three to six short visible features someone would draw. mouthparts: what the head eats with. breathing: the main breathing organ. claimed_crosses: scientific names of species it is documented to hybridize with, or an empty list.",
+  "usage": {
+   "input_tokens": 568443,
+   "input_tokens_details": {
+    "cached_tokens": 403284
+   },
+   "output_tokens": 9384,
+   "output_tokens_details": {
+    "reasoning_tokens": 6649
+   },
+   "total_tokens": 577827
+  },
+  "parallel_tool_calls": true,
+  "store": true
+ }
+}

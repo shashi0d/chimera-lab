@@ -1,0 +1,202 @@
+{
+ "query": "rhinoceros beetle",
+ "animal": "european_rhinoceros_beetle",
+ "source": "learned",
+ "status": "cited",
+ "note": "12 of 13 fields web-cited",
+ "stored": "data/learned_animals.json (cited values stored, old values kept in corrections)",
+ "fields": [
+  {
+   "field": "body_plan",
+   "status": "matched",
+   "stored": [
+    "multi_legged"
+   ],
+   "cited": [
+    "multi_legged"
+   ],
+   "url": "https://monaconatureencyclopedia.com/oryctes-nasicornis/",
+   "evidence": "è un coleottero appartenente alla famiglia Scarabaeidae ... con tre paia di zampe nella zona toracica",
+   "class_parts": null
+  },
+  {
+   "field": "primary_locomotor_part",
+   "status": "matched",
+   "stored": "multiple legs",
+   "cited": "multiple legs",
+   "url": "https://monaconatureencyclopedia.com/oryctes-nasicornis/",
+   "evidence": "con tre paia di zampe nella zona toracica",
+   "class_parts": null
+  },
+  {
+   "field": "covering",
+   "status": "matched",
+   "stored": "exoskeleton",
+   "cited": "exoskeleton",
+   "url": "https://monaconatureencyclopedia.com/oryctes-nasicornis/",
+   "evidence": "nei Dynastinae l’eso-scheletro è molto spesso",
+   "class_parts": null
+  },
+  {
+   "field": "movement",
+   "status": "matched",
+   "stored": [
+    "walk",
+    "fly",
+    "burrow"
+   ],
+   "cited": [
+    "walk",
+    "fly",
+    "burrow"
+   ],
+   "url": "https://monaconatureencyclopedia.com/oryctes-nasicornis/",
+   "evidence": "Gli adulti sono in grado di volare ... Il corno è usato dai maschi ... per scavare gallerie sotterranee",
+   "class_parts": null
+  },
+  {
+   "field": "habitat",
+   "status": "corrected",
+   "stored": [
+    "forest",
+    "grassland"
+   ],
+   "cited": [
+    "forest"
+   ],
+   "url": "https://monaconatureencyclopedia.com/oryctes-nasicornis/",
+   "evidence": "Le larve si sviluppano nel legno in decomposizione di piante arboree, principalmente latifoglie.",
+   "class_parts": null
+  },
+  {
+   "field": "climate",
+   "status": "matched",
+   "stored": [
+    "temperate"
+   ],
+   "cited": [
+    "temperate"
+   ],
+   "url": "https://en.wikipedia.org/wiki/European_rhinoceros_beetle",
+   "evidence": "It is the only representative of the Dynastinae family found in Northern Europe.",
+   "class_parts": null
+  },
+  {
+   "field": "diet",
+   "status": "matched",
+   "stored": "herbivore",
+   "cited": "herbivore",
+   "url": "https://en.wikipedia.org/wiki/European_rhinoceros_beetle",
+   "evidence": "The larvae grow in decaying plants feeding on woody debris (xylophagy), generally non-resinous.",
+   "class_parts": null
+  },
+  {
+   "field": "active_time",
+   "status": "corrected",
+   "stored": [
+    "nocturnal"
+   ],
+   "cited": [
+    "nocturnal",
+    "crepuscular"
+   ],
+   "url": "https://en.wikipedia.org/wiki/European_rhinoceros_beetle",
+   "evidence": "very active, flying at dusk and by night, attracted by lights",
+   "class_parts": null
+  },
+  {
+   "field": "body_mass_kg",
+   "status": "uncited",
+   "stored": {
+    "min": 0.002,
+    "max": 0.006
+   },
+   "cited": {
+    "min": 0.001,
+    "max": 0.004
+   },
+   "url": "",
+   "evidence": "",
+   "class_parts": null
+  },
+  {
+   "field": "body_length_m",
+   "status": "matched",
+   "stored": {
+    "min": 0.02,
+    "max": 0.04
+   },
+   "cited": {
+    "min": 0.02,
+    "max": 0.047
+   },
+   "url": "https://en.wikipedia.org/wiki/European_rhinoceros_beetle",
+   "evidence": "Oryctes nasicornis reach a length of 20–42 millimetres, with a maximum of 47 mm",
+   "class_parts": null
+  },
+  {
+   "field": "visible_features",
+   "status": "corrected",
+   "stored": [
+    "long curved head horn in males",
+    "broad armored pronotum",
+    "reddish-brown glossy elytra",
+    "six spiny jointed legs"
+   ],
+   "cited": [
+    "long curved head horn in males",
+    "reddish-brown glossy wing cases",
+    "darker head and pronotum",
+    "long red hair on underside and legs"
+   ],
+   "url": "https://en.wikipedia.org/wiki/European_rhinoceros_beetle",
+   "evidence": "The elytra are reddish brown with a glazed appearance, while the head and pronotum are slightly darker. The underside of the body and the legs are covered with long red hair. The male's head is topped by a long curved horn",
+   "class_parts": null
+  },
+  {
+   "field": "mouthparts",
+   "status": "matched",
+   "stored": "mandibles",
+   "cited": "mandibles",
+   "url": "https://www.coleoptera.org.uk/what-are-beetles",
+   "evidence": "Beetles almost invariably have biting mouthparts, with sharp mandibles.",
+   "class_parts": null
+  },
+  {
+   "field": "breathing",
+   "status": "matched",
+   "stored": "tracheae",
+   "cited": "tracheae",
+   "url": "https://www.merriam-webster.com/dictionary/spiracle",
+   "evidence": "For insects, oxygen enters their bodies through tiny openings called spiracles, traveling through internal networks of tubes called tracheae.",
+   "class_parts": null
+  }
+ ],
+ "opened": [
+  "https://eol.org/pages/1027312/articles",
+  "https://monaconatureencyclopedia.com/oryctes-nasicornis/",
+  "https://en.wikipedia.org/wiki/European_rhinoceros_beetle",
+  "https://wiki.bugwood.org/Oryctes_nasicornis",
+  "https://evolution.berkeley.edu/respiration-gotta-have-oxygen/",
+  "https://www.coleoptera.org.uk/what-are-beetles",
+  "https://oumnh.ox.ac.uk/the-breath-of-life",
+  "https://bio.utexas.edu/courses/bio303/Ch34_Invertebrates/Insects.html",
+  "https://www.si.edu/spotlight/breathe-insect-how-do-bugs-breathe",
+  "https://entnemdept.ufl.edu/creatures/misc/beetles/Oryctes_nasicornis.htm",
+  "https://www.merriam-webster.com/dictionary/spiracle"
+ ],
+ "searches": [
+  "Oryctes nasicornis European rhinoceros beetle size length",
+  "Oryctes nasicornis habitat diet nocturnal",
+  "Oryctes nasicornis breathing tracheae insect",
+  "Oryctes nasicornis description horn mandibles chestnut exoskeleton",
+  "Oryctes nasicornis distribution temperate forest",
+  "Oryctes nasicornis larva decaying wood roots compost",
+  "Oryctes nasicornis weight grams mass",
+  "beetle mouthparts mandibles chewing herbivore decaying wood",
+  "insects breathe tracheae University museum",
+  "Oryctes nasicornis hybridize",
+  "Oxford University Museum insects breathe tracheae",
+  "Smithsonian insects spiracles tracheae breathe"
+ ]
+}

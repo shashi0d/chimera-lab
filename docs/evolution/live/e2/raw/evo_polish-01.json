@@ -1,0 +1,81 @@
+{
+ "purpose": "evo_polish",
+ "request": {
+  "model": "muse-spark-1.3",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You lightly edit a text-to-image prompt for readability. Keep the first sentence word for word. Do not add, remove or change any animal, body part, color, count, strength, habitat or view. Do not add brand or franchise names. Stay within 20 percent of the original length. Return the edited prompt only."
+   },
+   {
+    "role": "user",
+    "content": "Silhouette: Horse-height equine frame with the horse's neck and body, a short thick donkey head with long ears, a short upright mane, thin limbs on small hooves. Host frame: the horse sets the outline, body size and overall frame. A single creature that combines a donkey and a horse. Head of the donkey, fully visible and uncluttered, with clear, discernible eyes. Details: body: horse neck shape and body; head: short thick donkey head; ears: long donkey ears; mane: short donkey mane; tail: tail short-haired at the base and longer below; limbs: thin donkey limbs; feet: small donkey hooves; faint donkey pattern at about 50 percent strength on the flanks and legs; coat pattern: reduced: the pattern donor does not own the body; coat texture: coarse donkey coat; behavior: behavior may follow one parent. Pattern lines and texture flow follow the body outline. Bilaterally symmetrical, recognizable limbs, visible sense organs. Habitat cue (dry woodland): larger ears and longer tail for shedding heat. One creature, full body, side three-quarter view, plain light background, natural history illustration."
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "polished_prompt",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "prompt"
+     ],
+     "properties": {
+      "prompt": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0.2
+ },
+ "response": {
+  "id": "chatcmpl-01a1929d-d4e0-7098-87bd-f94d54db38aa",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\"prompt\":\"Silhouette: Horse-height equine frame with the horse's neck and body, a short thick donkey head with long ears, a short upright mane, thin limbs on small hooves. Host frame: the horse sets the outline, body size and overall frame. A single creature combining a donkey and a horse. Donkey head, fully visible and uncluttered, with clear, discernible eyes. Details: body with horse neck shape and body; head as short thick donkey head; ears as long donkey ears; mane as short donkey mane; tail short-haired at the base and longer below; limbs as thin donkey limbs; feet as small donkey hooves; faint donkey pattern at about 50 percent strength on the flanks and legs; coat pattern reduced, the pattern donor does not own the body; coat texture as coarse donkey coat; behavior may follow one parent. Pattern lines and texture flow follow the body outline. Bilaterally symmetrical, recognizable limbs, visible sense organs. Habitat cue (dry woodland): larger ears and longer tail for shedding heat. One creature, full body, side three-quarter view, plain light background, natural history illustration.\"}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null
+    }
+   }
+  ],
+  "created": 1793461179,
+  "model": "muse-spark-1.3",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 4286,
+   "prompt_tokens": 368,
+   "total_tokens": 4654,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": null,
+    "audio_tokens": null,
+    "reasoning_tokens": 4031,
+    "rejected_prediction_tokens": null,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": null,
+    "cache_write_tokens": null,
+    "cached_tokens": 0,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

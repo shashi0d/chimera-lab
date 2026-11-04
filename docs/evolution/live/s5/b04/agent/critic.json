@@ -1,0 +1,196 @@
+{
+ "img1": {
+  "file": "img1.webp",
+  "kind": "render",
+  "parent": null,
+  "plan_id": "crt_e67565bc4797",
+  "verdict": "pass",
+  "failures": [],
+  "drift": null,
+  "critic": [
+   {
+    "key": "frame",
+    "group": "structure",
+    "text": "Is the overall body shape that of a golden eagle?",
+    "expect": "yes",
+    "answers": {
+     "spark_open": "yes",
+     "meta_spark": "yes"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "head",
+    "group": "structure",
+    "text": "Does it have a golden eagle head with visible eyes?",
+    "expect": "yes",
+    "answers": {
+     "spark_open": "yes",
+     "meta_spark": "yes"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "wings_front",
+    "group": "structure",
+    "text": "Does it have golden eagle wings in place of its front legs?",
+    "expect": "yes",
+    "answers": {
+     "spark_open": "yes",
+     "meta_spark": "yes"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": true
+   },
+   {
+    "key": "legs_and_wings",
+    "group": "structure",
+    "text": "Does it stand on four walking legs and also have wings?",
+    "expect": "no",
+    "answers": {
+     "spark_open": "no",
+     "meta_spark": "no"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "whole_animal",
+    "group": "structure",
+    "text": "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?",
+    "expect": "no",
+    "answers": {
+     "spark_open": "no",
+     "meta_spark": "no"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "second_head",
+    "group": "structure",
+    "text": "Is there a second head anywhere?",
+    "expect": "no",
+    "answers": {
+     "spark_open": "no",
+     "meta_spark": "no"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "extra_legs",
+    "group": "structure",
+    "text": "Does it have more than 2 walking legs?",
+    "expect": "no",
+    "answers": {
+     "spark_open": "no",
+     "meta_spark": "no"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "no_mane",
+    "group": "structure",
+    "text": "Does it have a full mane of long hair around the head and neck?",
+    "expect": "no",
+    "answers": {
+     "spark_open": "no",
+     "meta_spark": "no"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "cover_present",
+    "group": "surface",
+    "text": "Is there dense fur on the back and flanks?",
+    "expect": "yes",
+    "answers": {
+     "spark_open": "yes",
+     "meta_spark": "yes"
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "separate_bodies",
+    "group": "structure",
+    "text": "separate bodies: 1",
+    "expect": 1,
+    "answers": {
+     "spark_open": 1,
+     "meta_spark": 1
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "heads",
+    "group": "structure",
+    "text": "heads: 1",
+    "expect": 1,
+    "answers": {
+     "spark_open": 1,
+     "meta_spark": 1
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "walking_legs",
+    "group": "structure",
+    "text": "walking legs: 2",
+    "expect": 2,
+    "answers": {
+     "spark_open": 2,
+     "meta_spark": 2
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "wings",
+    "group": "structure",
+    "text": "wings: 2",
+    "expect": 2,
+    "answers": {
+     "spark_open": 2,
+     "meta_spark": 2
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   },
+   {
+    "key": "extra_limb_pieces",
+    "group": "structure",
+    "text": "extra limb pieces: 0",
+    "expect": 0,
+    "answers": {
+     "spark_open": 0,
+     "meta_spark": 0
+    },
+    "status": "pass",
+    "pair_status": "pass",
+    "sam_found": null
+   }
+  ],
+  "decision": "meta_spark decides"
+ }
+}

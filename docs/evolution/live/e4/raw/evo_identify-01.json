@@ -1,0 +1,127 @@
+{
+ "purpose": "evo_identify",
+ "request": {
+  "model": "muse-spark-1.3",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You identify an animal from a name (common, scientific, misspelled or regional) or a photo. Return the scientific name of the species exactly as a taxonomist writes it (genus species, or genus species subspecies for a domestic form). kind: species; breed (a domestic breed: give the species' scientific name and the breed name in breed); extinct (a species known only from fossils or records); ambiguous (the name covers several species: pick the most common or best-known species as scientific_name and list up to four others in alternatives); not_animal; plant; human (any person or human group); mythic (a creature of myth, legend or fiction). For a misspelling, answer for the intended animal. Never invent a species; if unsure, say ambiguous and list candidates. note: one short sentence."
+   },
+   {
+    "role": "user",
+    "content": "Identify this animal name: golden retriever"
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "identify_animal",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "kind",
+      "scientific_name",
+      "common_name",
+      "breed",
+      "alternatives",
+      "note"
+     ],
+     "properties": {
+      "kind": {
+       "type": "string",
+       "enum": [
+        "species",
+        "breed",
+        "extinct",
+        "ambiguous",
+        "not_animal",
+        "plant",
+        "human",
+        "mythic"
+       ]
+      },
+      "scientific_name": {
+       "type": "string"
+      },
+      "common_name": {
+       "type": "string"
+      },
+      "breed": {
+       "type": "string"
+      },
+      "alternatives": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "scientific_name",
+         "common_name"
+        ],
+        "properties": {
+         "scientific_name": {
+          "type": "string"
+         },
+         "common_name": {
+          "type": "string"
+         }
+        }
+       }
+      },
+      "note": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0
+ },
+ "response": {
+  "id": "chatcmpl-01a19398-2ad1-768d-989a-8bc7d05f4022",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\"alternatives\":[],\"breed\":\"Golden Retriever\",\"common_name\":\"Golden Retriever\",\"kind\":\"breed\",\"note\":\"A friendly domestic dog breed originally developed for retrieving game.\",\"scientific_name\":\"Canis lupus familiaris\"}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null
+    }
+   }
+  ],
+  "created": 1793477585,
+  "model": "muse-spark-1.3",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 1186,
+   "prompt_tokens": 341,
+   "total_tokens": 1527,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": null,
+    "audio_tokens": null,
+    "reasoning_tokens": 1133,
+    "rejected_prediction_tokens": null,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": null,
+    "cache_write_tokens": null,
+    "cached_tokens": 0,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

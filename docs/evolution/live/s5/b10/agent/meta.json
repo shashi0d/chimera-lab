@@ -1,0 +1,54 @@
+{
+ "case": "b10",
+ "kind": "agent",
+ "sire": "tortoise",
+ "dam": "domestic goat",
+ "mode": "realistic",
+ "wall_seconds": 381.6,
+ "renders": 2,
+ "edits": 2,
+ "tool_calls": 16,
+ "host": "domestic_goat",
+ "note": null,
+ "calls_by_provider": {
+  "baseten": {
+   "spark_baseten:evo_agent": 15,
+   "spark_baseten:evo_polish": 2,
+   "spark_baseten:evo_describe": 5,
+   "spark_baseten:evo_ask": 4,
+   "spark_baseten:evo_checklist": 2,
+   "spark_baseten:evo_critic": 1
+  },
+  "meta": {
+   "image:text_to_image": 4,
+   "spark:evo_describe": 4,
+   "spark:evo_ask": 4,
+   "sam:sam": 6
+  }
+ },
+ "failed_calls": 0,
+ "stop": null,
+ "final_image": "img4",
+ "final_choice": {
+  "shown_first": "agent",
+  "agree": true,
+  "agent_pick": {
+   "image_id": "img4",
+   "image_key": "evo/crt_92feafbff025.agent.img4.webp",
+   "rank": 1,
+   "of": 4,
+   "structural": 1,
+   "failures": 5,
+   "reason": "Best inspected image despite persistent covering critiques; material-only tortoise coloration on goat fur is subtle and critics misread host goat horns as extra; structural counts correct, no third animal per Meta Spark, realistic mode maintained."
+  },
+  "code_pick": {
+   "image_id": "img4",
+   "image_key": "evo/crt_92feafbff025.agent.img4.webp",
+   "rank": 1,
+   "of": 4,
+   "structural": 1,
+   "failures": 5,
+   "reason": "code ranks inspected images by fewest structural failures, then fewest failures, then the latest"
+  }
+ }
+}

@@ -1,0 +1,109 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Silhouette: Four-legged axolotl frame. Host frame: the axolotl sets the outline, body size and overall frame. A single creature that combines a axolotl and a chinese pangolin. Head of the axolotl, fully visible and uncluttered, with clear, discernible eyes. Details: axolotl body and legs, with its own smooth, moist skin everywhere else, plain coat, no stripes or spots; from the chinese pangolin, as parts and materials on the axolotl's own body: large overlapping keratin scales in its own colors, in a few large patches over the back and flanks, with clean edges, color and surface unchanged inside each patch. Coat texture and patches follow the body outline. Bilaterally symmetrical, recognizable limbs, visible sense organs. Habitat cue (river forest): dark back and light belly (mild countershading). Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "id": "resp_6ae6c074dda854d48beb44b2",
+  "access_programs": null,
+  "created_at": 1793507444.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae6c0748d5f2f5d9e5a452f",
+    "summary": [
+     {
+      "text": "**Finding pangolin reference images**\nI'm looking up Chinese pangolin images to check body outline, limb symmetry, countershading, and natural-history illustration details for the 1:1 drawing.\n**Designing axolotl-pangolin hybrid**\nI'm shaping a silhouette where the axolotl sets the frame and pose, then adding large overlapping pangolin scales in clean patches over the back and flanks while keeping the head clear and the skin smooth.\n**Composing hybrid illustration**\nI'm putting together a natural-history style image that blends an axolotl's feathery gills, wide head, and smooth skin with pangolin scale patches along the back and flanks, using a side three-quarter view with a dark back and light belly.\n**Refining hybrid illustration**\nI'm preparing another generation to improve scale patches, tail detail, and a more natural background while keeping the overall hybrid look.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae6c074a566dca734a947c4",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0ZwR3ZqUzJKN2VWLUhJS0FDSHFxOE96YkMxWGJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczo2NzA2OTM5MC1kOGJkLTRmNDgtOTBkZi04MGI5YjBlZDg3ZGM6R0w1amRUUVNvYTA1M1NJRkFJeFpUZWFNdEF0Z2JnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM1MDc0NDR9.Q8WLFwGT6sPBjm21MYS-Xer30dHj",
+    "result": "<elided> (648440 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 31306,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 25152
+   },
+   "output_tokens": 2456,
+   "output_tokens_details": {
+    "reasoning_tokens": 463
+   },
+   "total_tokens": 33762
+  },
+  "user": null
+ }
+}

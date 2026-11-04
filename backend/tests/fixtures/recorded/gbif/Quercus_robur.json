@@ -1,0 +1,1 @@
+{"request": "https://api.gbif.org/v1/species/match?name=Quercus%20robur&strict=true&kingdom=Animalia", "response": {"confidence":99,"note":"No match because of too little confidence","matchType":"NONE","synonym":false}}

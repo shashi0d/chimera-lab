@@ -1,0 +1,109 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Silhouette: Four-legged gray wolf frame. Host frame: the gray wolf sets the outline, body size and overall frame. A single creature that combines a crab and a gray wolf. Head of the gray wolf, fully visible and uncluttered, with clear, discernible eyes. Details: gray wolf body and legs, with its own dense fur over the whole body, colored as below; from the crab, as parts and materials on the gray wolf's own body — claws grown from the front feet, each front foot ending in a pincer held folded against the foot when the animal walks: heavy, knobbed, hard-shelled claws with a fixed and a moving finger, large and evenly sized with black tips; the gray wolf's own dense fur stays dense fur everywhere, and over the back and flanks it takes the crab's colors, gloss, surface texture and pattern; the gray wolf's body outline is unchanged. The donor's colors and sheen follow the host's own coat and body shape. Declared fiction: arthropod parts at large size, shown with thick supporting legs. Bilaterally symmetrical, recognizable limbs, visible sense organs. Habitat cue (rocky coast): dark back and light belly (strong countershading). Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "id": "resp_6ae7b474802d0eaad5cf47b0",
+  "access_programs": null,
+  "created_at": 1793569908.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae7b47431197a1f6ac94203",
+    "summary": [
+     {
+      "text": "**Designing wolf-crab hybrid**\nI'm planning a gray wolf silhouette with dense fur, keeping the wolf head fully visible and body and legs intact, while adding crab claws as the front feet with heavy, knobbed, black-tipped pincers folded when walking.\n**Composing crab-wolf illustration**\nI'm drafting a natural history illustration of a gray wolf with crab pincers on the front feet and crab-shell plating over the back and flanks, keeping bilaterally symmetrical limbs, dark-back light-belly countershading, and a plain light background with soft shadows.\n**Refining hybrid creature design**\nI'm preparing another generation to better integrate the wolf and crab features, adding fur over the body and shaping the front feet with folded pincer claws and crab-colored back and flanks.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae7b4749fe52329dbec422c",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0w5TEJqUzJPV25rRy1FREFLSWlPOE1meUEwa2JnMWlBUUJlIiwicmVzdW1lX2lkIjoiczo3ZjFiMzAzYi00ZjY4LTQ4NTQtYmIyOC02NDkwNjkzZDlmZDk6R0NwQkJqUmtIR3lzZUFzRkFMTWRfaFRFNlFzcmJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM1Njk5MDh9.Q8WLFwH2PzQLB6Q6iWnlJQJoetK3",
+    "result": "<elided> (727016 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 21084,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 16704
+   },
+   "output_tokens": 3122,
+   "output_tokens_details": {
+    "reasoning_tokens": 654
+   },
+   "total_tokens": 24206
+  },
+  "user": null
+ }
+}

@@ -1,0 +1,411 @@
+{
+ "purpose": "evo_agent",
+ "request": {
+  "messages": [
+   {
+    "role": "system",
+    "content": "You are the design agent of Chimera Lab, a natural-history creature engine. You build one creature from two parent animals by calling tools; code tools do the work and check every step.\n\nRules:\n1. You never write a plan. Pick a candidate from propose_candidates with choose_candidate, and change it only with plan_op (typed operations). Code fills every derived field.\n2. Every call has a reason: what you decided and why, citing the rule cards the tools return when they apply.\n3. Order: resolve_animal for each parent, propose_candidates, choose_candidate, audit_plan, render, inspect.\n4. audit_plan: blocking items stop render until fixed; advice is yours to weigh.\n5. After inspect: if it passes, call finalize with that image. If it fails, choose and say why:\n   - covering or surface failures (kind \"covering\"): edit that image with those failure keys;\n   - structural failures (kind \"structural\": counts, extra or missing parts, the frame, part identity or connection, a third animal): change the plan with plan_op or choose another candidate, audit, and render again;\n   - or accept the failures and finalize, saying why.\n   An edit or a new render can make things worse: compare with images_so_far from inspect, and finalize the best image, not just the latest.\n6. A host tie: choose the host yourself from the candidates' notes, with a reason (this run is not interactive: ask_user returns no answer).\n7. Limits: at most 4 renders and 30 tool calls. Near a limit, finalize your best inspected image; its remaining failures go on the card.\nKeep reasons short. Call one tool at a time."
+   },
+   {
+    "role": "user",
+    "content": "Build one creature from the parents 'crab' (sire) and 'gray wolf' (dam) in speculative mode. Start with resolve_animal for each parent."
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-1ff2d6a3e1434563a7324c4568dc4726",
+      "type": "function",
+      "function": {
+       "name": "resolve_animal",
+       "arguments": "{\"name\": \"crab\", \"reason\": \"Starting workflow: resolve crab sire first.\"}"
+      }
+     },
+     {
+      "id": "chatcmpl-tool-cebdd5356871494d8411db66b6f8cbad",
+      "type": "function",
+      "function": {
+       "name": "resolve_animal",
+       "arguments": "{\"name\": \"gray wolf\", \"reason\": \"Resolve gray wolf dam second to complete parent pair.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-1ff2d6a3e1434563a7324c4568dc4726",
+    "content": "{\"ok\": true, \"status\": \"resolved\", \"note\": \"'crab' names several species; chose the crab (Cancer pagurus), the most common reading. Alternatives are listed.\", \"slot\": \"sire\", \"animal\": {\"id\": \"crab\", \"common_name\": \"crab\", \"scientific_name\": \"Cancer pagurus\", \"class\": \"Malacostraca\", \"body_plan\": \"multi_legged\", \"covering\": \"exoskeleton\", \"mass_kg\": 1.75, \"habitats\": [\"marine\"], \"breathing\": \"gills\", \"features\": [\"broad reddish-brown oval carapace\", \"pie-crust frilled edge with rounded lobes\", \"large evenly sized claws with black tips\", \"four pairs of small walking legs\"], \"features_source\": \"model-estimated\", \"source\": \"learned\"}}"
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-cebdd5356871494d8411db66b6f8cbad",
+    "content": "{\"ok\": true, \"status\": \"resolved\", \"note\": \"\", \"slot\": \"dam\", \"animal\": {\"id\": \"gray_wolf\", \"common_name\": \"gray wolf\", \"scientific_name\": \"Canis lupus\", \"class\": \"Mammalia\", \"body_plan\": \"quadruped\", \"covering\": \"fur\", \"mass_kg\": 51.5, \"habitats\": [\"tundra\", \"forest\", \"mountain\"], \"breathing\": \"lungs\", \"features\": [], \"features_source\": \"model-estimated (no source recorded)\", \"source\": \"database\"}}"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-3f9a6626f58546a3ba5856fabee6c183",
+      "type": "function",
+      "function": {
+       "name": "propose_candidates",
+       "arguments": "{\"reason\": \"Parents resolved, need candidate plans to choose from.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-3f9a6626f58546a3ba5856fabee6c183",
+    "content": "{\"ok\": true, \"host_tie\": null, \"candidates\": [{\"id\": \"C1\", \"ops\": [], \"score\": 2.3, \"host\": \"gray wolf\", \"silhouette\": \"four-legged gray wolf frame\", \"parts\": [\"crab claws\"], \"dropped\": [\"segmented tail\"], \"identity_parts\": [{\"donor\": \"crab\", \"part\": \"claws\", \"from_trait\": \"large evenly sized claws with black tips\", \"source\": \"model-estimated\", \"set_by\": \"code\"}], \"covering\": {\"extent\": [\"head\", \"neck\", \"forequarters\", \"back\", \"flanks\", \"belly\", \"hindquarters\", \"legs\", \"tail\"], \"plate_pattern\": \"one broad carapace shield with short jointed plates on the limbs (from 'broad reddish-brown oval carapace')\", \"plate_source\": \"model-estimated\"}, \"licenses\": [{\"rule\": \"arthropod_large\", \"card\": \"RC-R3-09\", \"compensation\": \"thick supporting legs\"}], \"labels\": [\"speculative chimera, no real-world precedent\", \"speculative: arthropod parts at large size (insect breathing limits size)\"], \"notes\": {\"niche\": \"habitat rocky coast (a bridging habitat)\", \"autonomy\": \"the gray wolf body carries every function\", \"survival\": \"1 license(s) of 1: arthropod parts at large size; labels: speculative: arthropod parts at large size (insect breathing limits size)\", \"identity\": \"identity part: claws (large evenly sized claws with black tips; model-estimated); covering over head, neck, forequarters, back, flanks, belly, hindquarters, legs, tail, one broad carapace shield with short jointed plates on the limbs (from 'broad reddish-brown oval carapace')\", \"host\": \"the gray wolf has the more structured body schema (RC-R6-08)\"}}, {\"id\": \"C2\", \"ops\": [{\"op\": \"set_host\", \"args\": {\"animal\": \"crab\"}}], \"score\": 0.3, \"host\": \"crab\", \"silhouette\": \"segmented crab frame\", \"parts\": [], \"dropped\": [], \"identity_parts\": [], \"covering\": {\"extent\": [\"back\", \"flanks\"], \"plate_pattern\": \"\", \"plate_source\": \"\"}, \"licenses\": [{\"rule\": \"land_gills\", \"card\": \"RC-R9-03\", \"compensation\": \"a wet habitat or a second, air-breathing system\"}], \"labels\": [\"speculative chimera, no real-world precedent\"], \"notes\": {\"niche\": \"habitat rocky coast (a bridging habitat)\", \"autonomy\": \"the crab body carries every function\", \"survival\": \"1 license(s) of 1: gills on a land creature\", \"identity\": \"covering over back, flanks; no identity part from the donor's own traits\", \"host\": \"the crab has the less structured body schema (RC-R6-08, soft): advised against\"}}], \"note\": \"advice only: you choose; scores rank the R10 notes, nothing more\", \"cards\": [\"RC-R10-01\", \"RC-R6-08\", \"RC-R6-09\", \"RC-R10-15\"]}"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-535f320ca8de4ee2b0086eca1ef3c4c7",
+      "type": "function",
+      "function": {
+       "name": "choose_candidate",
+       "arguments": "{\"candidate_id\": \"C1\", \"reason\": \"C1 provides superior R10 niche/autonomy/survival balance with gray wolf host providing structured body schema and clear identity (crab claws + carapace covering) - bridging rocky coast habitat.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-535f320ca8de4ee2b0086eca1ef3c4c7",
+    "content": "{\"ok\": true, \"chosen\": \"C1\", \"plan\": {\"plan_id\": \"crt_35617a44e2b1\", \"host\": \"gray wolf\", \"host_tie\": null, \"mode\": \"speculative\", \"habitat\": \"rocky coast\", \"silhouette\": \"four-legged gray wolf frame\", \"parts\": [\"crab claws\"], \"identity_parts\": [{\"donor\": \"crab\", \"part\": \"claws\", \"from_trait\": \"large evenly sized claws with black tips\", \"source\": \"model-estimated\", \"set_by\": \"code\"}], \"dropped\": [\"segmented tail\"], \"licenses\": [{\"rule\": \"arthropod_large\", \"card\": \"RC-R3-09\", \"compensation\": \"thick supporting legs\"}], \"covering\": {\"extent\": [\"head\", \"neck\", \"forequarters\", \"back\", \"flanks\", \"belly\", \"hindquarters\", \"legs\", \"tail\"], \"plate_pattern\": \"one broad carapace shield with short jointed plates on the limbs (from 'broad reddish-brown oval carapace')\"}, \"transfers\": [{\"feature\": \"claws\", \"class\": \"non_homologous\", \"anchor\": \"the front feet: each front foot ends in a pincer, held folded against the foot when the animal walks\"}]}, \"next\": \"audit_plan\"}"
+   }
+  ],
+  "tools": [
+   {
+    "type": "function",
+    "function": {
+     "name": "resolve_animal",
+     "description": "Resolve one parent name to an animal with sourced traits.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "name": {
+        "type": "string"
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "name",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "propose_candidates",
+     "description": "Ranked plan arrangements for the two resolved parents, each with R10 selection notes (niche, autonomy, survival, identity) and its reasons. Advice only.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "choose_candidate",
+     "description": "Adopt one candidate plan by id.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "candidate_id": {
+        "type": "string"
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "candidate_id",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "plan_op",
+     "description": "Change the current plan with one typed operation. Typed plan operations (args): set_host(animal); set_region(region, donor, operator) with regions head, tail, forelimbs (PICK) or neck, forequarters, back, flanks, belly, hindquarters, legs (PATCH, OVERLAY, PICK); set_habitat(name); set_mode(mode); add_license(rule, compensation); drop_part(part, reason); set_transfer_class(feature, cls); set_extent(feature, extent, reason); connect_features(a, b); set_identity_cues(feature, cues); set_identity_part(donor, part, reason). A failed operation changes nothing and returns errors with valid values.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "op": {
+        "type": "string",
+        "enum": [
+         "set_host",
+         "set_region",
+         "set_habitat",
+         "set_mode",
+         "add_license",
+         "drop_part",
+         "set_transfer_class",
+         "set_extent",
+         "connect_features",
+         "set_identity_cues",
+         "set_identity_part"
+        ]
+       },
+       "args": {
+        "type": "object"
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "op",
+       "args",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "audit_plan",
+     "description": "Audit the current plan: blocking items (hard cards, an unchosen host tie) and advice (soft cards, the function audit, the fiction budget). Required before render.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "render",
+     "description": "Render the audited plan. method single_pass (default) or growth_edit (host first, then one edit grows the covering; only for a plan with a donor covering).",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "method": {
+        "type": "string",
+        "enum": [
+         "single_pass",
+         "growth_edit"
+        ]
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "method",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "inspect",
+     "description": "Inspect an image with the plan-blind critics. Returns pass or the failures, each with a key and kind (covering or structural).",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "image_id": {
+        "type": "string"
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "image_id",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "edit",
+     "description": "One image edit turn fixing covering or surface failures of an image (keys from inspect). Structural failures need a plan change and a new render instead.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "image_id": {
+        "type": "string"
+       },
+       "failure_keys": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "image_id",
+       "failure_keys",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "ask_user",
+     "description": "Ask the user to choose (interactive runs only).",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "question": {
+        "type": "string"
+       },
+       "options": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "question",
+       "options",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "finalize",
+     "description": "Finish with this image. Any failures it still has are stated on the card.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "image_id": {
+        "type": "string"
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "image_id",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   }
+  ],
+  "tool_choice": "auto",
+  "max_tokens": 8000,
+  "model": "meta-models/muse-spark-open-1026"
+ },
+ "response": {
+  "id": "chatcmpl-814f1d67c67f451da3a56febfb1f13c5",
+  "choices": [
+   {
+    "finish_reason": "tool_calls",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": null,
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": [
+      {
+       "id": "chatcmpl-tool-7319a285707a4eb4a3e95e440b0b99e1",
+       "function": {
+        "arguments": "{\"reason\": \"Audit C1 plan before rendering to check blocking items.\"}",
+        "name": "audit_plan"
+       },
+       "type": "function"
+      }
+     ]
+    }
+   }
+  ],
+  "created": 1793555338,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 53,
+   "prompt_tokens": 3988,
+   "total_tokens": 4041,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 37,
+    "audio_tokens": 0,
+    "reasoning_tokens": 0,
+    "rejected_prediction_tokens": 75,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 3456,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

@@ -1,0 +1,298 @@
+{
+ "id": "crt_11ab36827eff",
+ "parents": {
+  "sire": "lion",
+  "dam": "golden_eagle"
+ },
+ "lineage": {
+  "parent_ids": [],
+  "generation": 0
+ },
+ "mode": "chimera",
+ "known_pair": null,
+ "host": "lion",
+ "identity_balance": 0.889,
+ "habitat": {
+  "name": "forest",
+  "source": "shared",
+  "adjustments": [
+   "more patterned, irregular coat markings for a closed habitat",
+   "dark back and light belly (mild countershading)"
+  ],
+  "visible_trait": "more patterned, irregular coat markings for a closed habitat"
+ },
+ "size": {
+  "mass_kg": 199.0,
+  "flags": []
+ },
+ "silhouette": "horizontal lion frame carried on two hind legs, golden eagle wings in place of the forelegs",
+ "limb_plan": {
+  "forelimbs": {
+   "kind": "wings",
+   "donor": "golden_eagle"
+  },
+  "hindlimbs": {
+   "kind": "legs",
+   "donor": "lion"
+  },
+  "extra_wings": null,
+  "appendages": [],
+  "wing_use": "gliding_or_display",
+  "requested_wings": null
+ },
+ "traits": {
+  "behavior": {
+   "op": "PICK",
+   "donor": "lion",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "Follows lion head/brain donor",
+   "flags": []
+  },
+  "body": {
+   "op": "PICK",
+   "donor": "lion",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "Lion torso and frame; eagle contributes only surface graft regions",
+   "flags": []
+  },
+  "coat_color": {
+   "op": "PATCH",
+   "donor": "golden_eagle",
+   "value": null,
+   "strength": 1.0,
+   "region": [
+    "forequarters",
+    "neck"
+   ],
+   "part": null,
+   "note": "Eagle dark-brown with golden nape color at full strength inside patches only",
+   "flags": []
+  },
+  "coat_pattern": {
+   "op": "PATCH",
+   "donor": "golden_eagle",
+   "value": null,
+   "strength": 1.0,
+   "region": [
+    "forequarters",
+    "neck"
+   ],
+   "part": null,
+   "note": "Few large eagle blocks with clear edges aligned to lion segments; blend only at edges, never inside block",
+   "flags": []
+  },
+  "coat_texture": {
+   "op": "PATCH",
+   "donor": "golden_eagle",
+   "value": null,
+   "strength": 1.0,
+   "region": [
+    "forequarters",
+    "neck"
+   ],
+   "part": null,
+   "note": "Eagle feathers at full strength inside patches; lion hair elsewhere",
+   "flags": []
+  },
+  "ears": {
+   "op": "PICK",
+   "donor": "lion",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "Lion rounded ears",
+   "flags": []
+  },
+  "face": {
+   "op": "PICK",
+   "donor": "lion",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "Lion muzzle and eyes",
+   "flags": []
+  },
+  "feet": {
+   "op": "PICK",
+   "donor": "lion",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "Lion paws",
+   "flags": []
+  },
+  "head": {
+   "op": "PICK",
+   "donor": "lion",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "Fully lion head tissue",
+   "flags": []
+  },
+  "limbs": {
+   "op": "PICK",
+   "donor": "lion",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "Four lion legs; no forelimb-to-wing substitution, avoids six-limb mythic plan",
+   "flags": []
+  },
+  "mane": {
+   "op": "PICK",
+   "donor": "lion",
+   "value": null,
+   "strength": null,
+   "region": [
+    "neck"
+   ],
+   "part": "mane",
+   "note": "Gated off: neck carries eagle feathers so mane hair has no haired substrate to show",
+   "flags": [
+    "gated"
+   ]
+  },
+  "size": {
+   "op": "PICK",
+   "donor": "lion",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "Host lion size; donor patches scaled to host frame",
+   "flags": []
+  },
+  "skull": {
+   "op": "PICK",
+   "donor": "lion",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "Lion skull",
+   "flags": []
+  },
+  "tail": {
+   "op": "PICK",
+   "donor": "lion",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "Lion tail with tuft, fully lion tissue",
+   "flags": []
+  }
+ },
+ "labels": [
+  "speculative chimera, no real-world precedent",
+  "non-flying wings: display or gliding only"
+ ],
+ "processes": [
+  "chimera patchwork: each region is one parent's tissue"
+ ],
+ "card_trace": [
+  "RC-R2-01",
+  "RC-R1-14",
+  "RC-R2-16",
+  "RC-R5-10",
+  "RC-R6-08",
+  "RC-R6-09",
+  "RC-R5-02",
+  "RC-R1-01",
+  "RC-R1-09",
+  "RC-R1-10",
+  "RC-R5-01",
+  "RC-R5-03",
+  "RC-R5-04",
+  "RC-R5-05",
+  "RC-R5-06",
+  "RC-R5-07",
+  "RC-R6-02",
+  "RC-R1-07",
+  "RC-R1-08",
+  "RC-R3-01",
+  "RC-R3-02",
+  "RC-R4-01",
+  "RC-R4-02",
+  "RC-R4-05",
+  "RC-R4-11",
+  "RC-R4-10",
+  "RC-R3-12",
+  "RC-R3-05",
+  "RC-R3-03",
+  "RC-R3-04",
+  "RC-R6-01",
+  "RC-R7-06",
+  "RC-R6-03",
+  "RC-R6-04",
+  "RC-R6-05",
+  "RC-R7-07",
+  "RC-R6-07",
+  "RC-R7-10"
+ ],
+ "checks": [
+  {
+   "step": "body_plan_class",
+   "result": "pass",
+   "detail": "host class: vertebrate (quadruped)",
+   "cards": []
+  },
+  {
+   "step": "limb_budget",
+   "result": "repaired",
+   "detail": "golden eagle wings take the forelimb slot",
+   "cards": [
+    "RC-R3-01"
+   ]
+  },
+  {
+   "step": "size_ceiling",
+   "result": "labeled",
+   "detail": "199.0 kg is above about 40 kg: wings for display or gliding",
+   "cards": [
+    "RC-R3-05"
+   ]
+  },
+  {
+   "step": "flight_anatomy",
+   "result": "labeled",
+   "detail": "too heavy for its flight muscles: wings labeled non-flying",
+   "cards": [
+    "RC-R3-03",
+    "RC-R3-04"
+   ]
+  },
+  {
+   "step": "posture",
+   "result": "pass",
+   "detail": "legs match the body size",
+   "cards": []
+  },
+  {
+   "step": "part_rendering",
+   "result": "pass",
+   "detail": "no soft parts",
+   "cards": []
+  }
+ ],
+ "scores": {
+  "critic": 1.0,
+  "silhouette": 0.392,
+  "thumbnail": 0.5,
+  "soft_penalty": 0.0,
+  "quality": 0.768
+ },
+ "seed": 0
+}

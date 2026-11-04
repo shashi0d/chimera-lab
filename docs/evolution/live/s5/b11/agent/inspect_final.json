@@ -1,0 +1,581 @@
+{
+ "protocol": "plan-blind (S3a)",
+ "critics": [
+  "spark_open",
+  "meta_spark"
+ ],
+ "items": [
+  {
+   "source": "checklist",
+   "key": "frame",
+   "text": "Is the overall body shape that of a gray wolf?",
+   "group": "structure",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "fix": "Show the planned gray wolf body shape and outline; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "head",
+   "text": "Does it have a gray wolf head with visible eyes?",
+   "group": "structure",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "fix": "Show the planned gray wolf head, fully visible with clear eyes; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "no_wings",
+   "text": "Are there wings anywhere on the body?",
+   "group": "structure",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "The plan has no wings: show the gray wolf's own body there instead; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "part_crab_claws",
+   "text": "Is there a pair of heavy, hard-shelled claws?",
+   "group": "structure",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "fix": "Show the planned a pair of heavy, hard-shelled claws, on the gray wolf's own body; keep everything else the same.",
+   "sam": "claws",
+   "pair_status": "pass",
+   "sam_found": true,
+   "sam_fill": 0.0225
+  },
+  {
+   "source": "checklist",
+   "key": "whole_animal",
+   "text": "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?",
+   "group": "structure",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "Show the planned crab contribution only as hard, glossy chitin plates with fine seams on the gray wolf's own body over the back and flanks, not as separate animals; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "second_head",
+   "text": "Is there a second head anywhere?",
+   "group": "structure",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "Show one single head, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "insect_legs",
+   "text": "Are there jointed, insect-like leg pieces on or along the legs?",
+   "group": "structure",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "Show the gray wolf's own legs with its own fur, with no insect leg pieces; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "extra_legs",
+   "text": "Does it have more than 4 walking legs?",
+   "group": "structure",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "Show exactly 4 walking legs, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "dropped_segmented_tail",
+   "text": "Are there segmented tail anywhere on the body?",
+   "group": "structure",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "The plan has no segmented tail: show the gray wolf's own body there instead; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "plain_fur",
+   "text": "Does the fur show stripes or spots?",
+   "group": "pattern",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "Show a plain coat with no stripes or spots, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "material_look",
+   "text": "Does the fur on the back and flanks have a crab's colors and sheen?",
+   "group": "integration",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "fail",
+   "fix": "Keep the gray wolf's own fur everywhere; over the back and flanks it takes only the crab's colors, gloss and texture; keep everything else the same.",
+   "sam": null,
+   "pair_status": "fail",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "host_cover_kept",
+   "text": "Is the back and flanks covered by fur?",
+   "group": "integration",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "fix": "Keep the gray wolf's own fur everywhere; over the back and flanks it takes only the crab's colors, gloss and texture; keep everything else the same.",
+   "sam": null,
+   "pair_status": "uncertain",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "donor_pieces",
+   "text": "Are there hard, glossy chitin plates with fine seams on the body?",
+   "group": "integration",
+   "expect": "no",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "fail",
+   "fix": "Keep the gray wolf's own fur everywhere; over the back and flanks it takes only the crab's colors, gloss and texture; keep everything else the same.",
+   "sam": null,
+   "pair_status": "fail",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "identity_claws",
+   "text": "Do the claws look like they came from a crab?",
+   "group": "identity",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "fix": "Show the claws with its own form (heavy, knobbed, hard-shelled claws with a fixed and a moving finger; large evenly sized claws with black tips), in its planned place; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "separate_bodies",
+   "text": "separate bodies: 1",
+   "group": "structure",
+   "expect": 1,
+   "answers": {
+    "spark_open": 1,
+    "meta_spark": 1
+   },
+   "status": "pass",
+   "fix": "Show the planned crab contribution only as hard, glossy chitin plates with fine seams on the gray wolf's own body over the back and flanks, not as separate animals; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "heads",
+   "text": "heads: 1",
+   "group": "structure",
+   "expect": 1,
+   "answers": {
+    "spark_open": 1,
+    "meta_spark": 1
+   },
+   "status": "pass",
+   "fix": "Show one single head, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "walking_legs",
+   "text": "walking legs: 4",
+   "group": "structure",
+   "expect": 4,
+   "answers": {
+    "spark_open": 4,
+    "meta_spark": 4
+   },
+   "status": "pass",
+   "fix": "Show exactly 4 walking legs, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "wings",
+   "text": "wings: 0",
+   "group": "structure",
+   "expect": 0,
+   "answers": {
+    "spark_open": 0,
+    "meta_spark": 0
+   },
+   "status": "pass",
+   "fix": "The plan has no wings: show the gray wolf's own body there instead; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "extra_limb_pieces",
+   "text": "extra limb pieces: 0",
+   "group": "structure",
+   "expect": 0,
+   "answers": {
+    "spark_open": 0,
+    "meta_spark": 0
+   },
+   "status": "pass",
+   "fix": "Show the gray wolf's own limbs only, with no extra limb-like pieces; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "description",
+   "key": "extra_spots",
+   "text": "described but not planned: spots",
+   "group": "structure",
+   "expect": "absent",
+   "answers": {
+    "spark_open": true,
+    "meta_spark": true
+   },
+   "status": "fail",
+   "fix": "The plan has no spots: show the gray wolf's own body there instead; keep everything else the same.",
+   "sam": null,
+   "pair_status": "fail",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "origin",
+   "key": "origin_claws",
+   "text": "which animal the claws came from",
+   "group": "identity",
+   "expect": "crab",
+   "answers": {
+    "spark_open": "crab",
+    "meta_spark": "crab"
+   },
+   "status": "pass",
+   "sam": null,
+   "fix": "Show the claws with its own form (heavy, knobbed, hard-shelled claws with a fixed and a moving finger; large evenly sized claws with black tips), in its planned place; keep everything else the same.",
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  }
+ ],
+ "failures": [
+  {
+   "source": "checklist",
+   "key": "material_look",
+   "text": "Does the fur on the back and flanks have a crab's colors and sheen?",
+   "group": "integration",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "fail",
+   "fix": "Keep the gray wolf's own fur everywhere; over the back and flanks it takes only the crab's colors, gloss and texture; keep everything else the same.",
+   "sam": null,
+   "pair_status": "fail",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "donor_pieces",
+   "text": "Are there hard, glossy chitin plates with fine seams on the body?",
+   "group": "integration",
+   "expect": "no",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "fail",
+   "fix": "Keep the gray wolf's own fur everywhere; over the back and flanks it takes only the crab's colors, gloss and texture; keep everything else the same.",
+   "sam": null,
+   "pair_status": "fail",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "description",
+   "key": "extra_spots",
+   "text": "described but not planned: spots",
+   "group": "structure",
+   "expect": "absent",
+   "answers": {
+    "spark_open": true,
+    "meta_spark": true
+   },
+   "status": "fail",
+   "fix": "The plan has no spots: show the gray wolf's own body there instead; keep everything else the same.",
+   "sam": null,
+   "pair_status": "fail",
+   "sam_found": null,
+   "sam_fill": null
+  }
+ ],
+ "structural_failures": 3,
+ "uncertain": 0,
+ "sam_calls": 1,
+ "descriptions": {
+  "spark_open": {
+   "description": "The creature is a four-legged, wolf-shaped animal shown in right-facing profile against a plain light background. Its head, neck, torso, hind legs and tail are covered in thick, shaggy fur in shades of gray, brown and cream like a gray wolf, while its back, shoulders and hips are covered by a dark, glossy, bluish-black bumpy carapace with raised nodules and barnacle-like bumps. Its two hind legs end in typical wolf paws with claws, while its two front legs are furry to the lower joint and then terminate in large, dark, spotted crab-like claws with pincers that rest on the ground. It has a long, bushy, fur-covered tail hanging down at the rear.",
+   "parts": [
+    {
+     "part": "head",
+     "looks_like": "a wolf head with an elongated muzzle, black nose, slightly open mouth, yellow-brown eyes, and gray, white and tan fur",
+     "where": "at the front end of the body, facing right"
+    },
+    {
+     "part": "ears",
+     "looks_like": "two pointed, upright, triangular ears with dark interiors and light fur edges",
+     "where": "on top of the head"
+    },
+    {
+     "part": "legs",
+     "looks_like": "four legs; the two hind legs are fully fur-covered wolf legs with visible joints, the two front legs are thickly furred on the upper portion and become smooth, dark, jointed crab-like limbs on the lower portion",
+     "where": "two hind legs under the rear body, two front legs under the chest and shoulders, all supporting the body on the ground"
+    },
+    {
+     "part": "feet",
+     "looks_like": "hind feet are wolf paws with toes and dark claws; front feet are large, dark bluish-black crab chelae (pincers) with spotted texture, a movable black-tipped finger and a joint where they meet the furry leg",
+     "where": "at the bottom of each leg; hind paws on the ground at the rear, crab claws on the ground at the front"
+    },
+    {
+     "part": "tail",
+     "looks_like": "a long, thick, bushy tail covered in gray and dark fur, tapering slightly toward the tip",
+     "where": "extending down and slightly outward from the rear of the body"
+    },
+    {
+     "part": "shell",
+     "looks_like": "a dark, glossy, hard-looking carapace with a bumpy, wet appearance and scattered raised round nodules in black, brown and gold tones",
+     "where": "covering the dorsal side from the back of the neck across the shoulders, mid-back and over the hips"
+    },
+    {
+     "part": "plates",
+     "looks_like": "several overlapping, segmented, spiny-edged plates with the same dark bumpy texture as the shell, with visible seams between them",
+     "where": "along the midline of the back, with one large plate over the shoulders, one over the mid-back, and smaller plates toward the rear and on the sides over the hips"
+    },
+    {
+     "part": "markings",
+     "looks_like": "thick shaggy fur with mixed gray, charcoal, cream and tan coloration, lighter on the muzzle, chest, belly and inner legs, darker on the back and tail, and a dense ruff around the neck",
+     "where": "covering the head, neck, sides, belly, legs and tail, surrounding the shell plates"
+    }
+   ],
+   "attached_objects": [],
+   "animals": [
+    "wolf",
+    "crab"
+   ],
+   "separate_bodies": 1,
+   "heads": 1,
+   "walking_legs": 4,
+   "wings": 0,
+   "extra_limb_pieces": 0,
+   "tails": 1
+  },
+  "meta_spark": {
+   "description": "A four-legged creature shown in right-facing profile with the overall size, posture, thick gray-white-tan fur, head shape, pointed ears, slender legs, hind paws, and long bushy tail of a gray wolf, but with dark blue-gray bumpy crab-like carapace plates fused into the fur along the back, shoulders and sides, and with both front feet replaced by large dark spotted crab pincers resting on the ground.",
+   "parts": [
+    {
+     "part": "head",
+     "looks_like": "gray wolf head with tan muzzle, black nose, amber eyes and white cheek fur",
+     "where": "at the front top of the body facing to the right"
+    },
+    {
+     "part": "ears",
+     "looks_like": "upright pointed wolf ears with gray fur",
+     "where": "on top of the head"
+    },
+    {
+     "part": "fur",
+     "looks_like": "thick shaggy gray, white and tan wolf fur covering torso, neck and legs",
+     "where": "over most of the body from neck to hindquarters and down the legs"
+    },
+    {
+     "part": "legs",
+     "looks_like": "long slender furred wolf legs",
+     "where": "underneath the torso, two in front and two in rear"
+    },
+    {
+     "part": "front feet",
+     "looks_like": "large dark blue-gray spotted crab claws with black pincer tips",
+     "where": "at the ends of the two front legs touching the ground"
+    },
+    {
+     "part": "hind feet",
+     "looks_like": "furred wolf paws with black claws",
+     "where": "at the ends of the two rear legs on the ground"
+    },
+    {
+     "part": "tail",
+     "looks_like": "long bushy gray wolf tail with darker tip",
+     "where": "at the rear of the body hanging down behind the hind legs"
+    },
+    {
+     "part": "shell",
+     "looks_like": "dark blue-gray glossy bumpy crab carapace with knobs, spots and segmented overlapping plates",
+     "where": "along the top of the back and over the shoulders and upper sides"
+    }
+   ],
+   "attached_objects": [],
+   "animals": [
+    "wolf",
+    "crab"
+   ],
+   "separate_bodies": 1,
+   "heads": 1,
+   "walking_legs": 4,
+   "wings": 0,
+   "extra_limb_pieces": 0,
+   "tails": 1
+  }
+ },
+ "matches": {
+  "spark_open": {
+   "seen": [
+    "plates",
+    "spots"
+   ],
+   "expected": [
+    "plates",
+    "scales"
+   ],
+   "extras": [
+    "spots"
+   ],
+   "omissions": []
+  },
+  "meta_spark": {
+   "seen": [
+    "plates",
+    "spots"
+   ],
+   "expected": [
+    "plates",
+    "scales"
+   ],
+   "extras": [
+    "spots"
+   ],
+   "omissions": []
+  }
+ },
+ "third_animals": {
+  "spark_open": [],
+  "meta_spark": []
+ },
+ "balance": {
+  "yes": 6,
+  "no": 8
+ },
+ "expected_counts": {
+  "separate_bodies": 1,
+  "heads": 1,
+  "walking_legs": 4,
+  "wings": 0,
+  "extra_limb_pieces": 0
+ }
+}

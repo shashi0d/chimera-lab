@@ -1,0 +1,977 @@
+{
+ "purpose": "evo_agent",
+ "request": {
+  "messages": [
+   {
+    "role": "system",
+    "content": "You are the design agent of Chimera Lab, a natural-history creature engine. You build one creature from two parent animals by calling tools; code tools do the work and check every step.\n\nRules:\n1. You never write a plan. Pick a candidate from propose_candidates with choose_candidate, and change it only with the typed plan-operation tools (set_host, set_region, set_extent, drop_part, set_covering_material_only and the others). Code fills every derived field. Their enums list the plan's own parts and features: use only those.\n2. Every call has a reason: what you decided and why, citing the rule cards the tools return when they apply.\n3. Order: resolve_animal for each parent, propose_candidates, choose_candidate, audit_plan, render, inspect.\n4. audit_plan: blocking items stop render until fixed; advice is yours to weigh.\n5. After inspect: if it passes, call finalize with that image. If it fails, choose and say why:\n   - covering or surface failures (kind \"covering\"): edit that image with those failure keys;\n   - structural failures (kind \"structural\": counts, extra or missing parts, the frame, part identity or connection, a third animal): change the plan with a plan operation or choose another candidate, audit, and render again. An unplanned feature the critics report (extra_*, third_animal) is not a plan part: render again or accept it;\n   - or accept the failures and finalize, saying why.\n   An edit or a new render can make things worse: compare with images_so_far from inspect, and finalize the best image. If you finalize an image other than best_so_far, give why_not_best.\n   Two-failure rule: after two inspects in a row with covering failures, stop editing the covering. Change the plan instead: reduce the covering's extent (set_extent with fewer zones and a plan_reason), or show the donor by material and color only (set_covering_material_only with a plan_reason; the host keeps its own covering, the donor's identity parts stay). Then audit_plan and render again. edit refuses covering fixes until the plan has changed.\n6. A host tie: choose the host yourself from the candidates' notes, with a reason (this run is not interactive: ask_user returns no answer).\n7. Limits: at most 4 renders and 30 tool calls. Near a limit, finalize your best inspected image; its remaining failures go on the card.\nKeep reasons short. Call one tool at a time."
+   },
+   {
+    "role": "user",
+    "content": "Build one creature from the parents 'crab' (sire) and 'gray wolf' (dam) in speculative mode. Start with resolve_animal for each parent."
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-ebee1e75a2ac4e0b997d372c4f12cacb",
+      "type": "function",
+      "function": {
+       "name": "resolve_animal",
+       "arguments": "{\"name\": \"crab\", \"reason\": \"Start of workflow: resolve first parent as instructed.\"}"
+      }
+     },
+     {
+      "id": "chatcmpl-tool-13b94486a66146849c136c6b82f56068",
+      "type": "function",
+      "function": {
+       "name": "resolve_animal",
+       "arguments": "{\"name\": \"gray wolf\", \"reason\": \"Resolve second parent as instructed.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-ebee1e75a2ac4e0b997d372c4f12cacb",
+    "content": "{\"ok\": true, \"status\": \"resolved\", \"note\": \"'crab' names several species; chose the crab (Cancer pagurus), the most common reading. Alternatives are listed.\", \"slot\": \"sire\", \"animal\": {\"id\": \"crab\", \"common_name\": \"crab\", \"scientific_name\": \"Cancer pagurus\", \"class\": \"Malacostraca\", \"body_plan\": \"multi_legged\", \"covering\": \"exoskeleton\", \"mass_kg\": 1.75, \"habitats\": [\"marine\"], \"breathing\": \"gills\", \"features\": [\"broad reddish-brown oval carapace\", \"pie-crust frilled edge with rounded lobes\", \"large evenly sized claws with black tips\", \"four pairs of small walking legs\"], \"features_source\": \"model-estimated\", \"source\": \"learned\"}}"
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-13b94486a66146849c136c6b82f56068",
+    "content": "{\"ok\": true, \"status\": \"resolved\", \"note\": \"\", \"slot\": \"dam\", \"animal\": {\"id\": \"gray_wolf\", \"common_name\": \"gray wolf\", \"scientific_name\": \"Canis lupus\", \"class\": \"Mammalia\", \"body_plan\": \"quadruped\", \"covering\": \"fur\", \"mass_kg\": 51.5, \"habitats\": [\"tundra\", \"forest\", \"mountain\"], \"breathing\": \"lungs\", \"features\": [], \"features_source\": \"model-estimated (no source recorded)\", \"source\": \"database\"}}"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-c8201d2e1e5340149e73c013cf043e49",
+      "type": "function",
+      "function": {
+       "name": "propose_candidates",
+       "arguments": "{\"reason\": \"Parents resolved, propose arrangements per workflow.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-c8201d2e1e5340149e73c013cf043e49",
+    "content": "{\"ok\": true, \"host_tie\": null, \"candidates\": [{\"id\": \"C1\", \"ops\": [], \"score\": 2.3, \"host\": \"gray wolf\", \"silhouette\": \"four-legged gray wolf frame\", \"parts\": [\"crab claws\"], \"dropped\": [\"segmented tail\"], \"identity_parts\": [{\"donor\": \"crab\", \"part\": \"claws\", \"from_trait\": \"large evenly sized claws with black tips\", \"source\": \"model-estimated\", \"set_by\": \"code\"}], \"covering\": {\"extent\": [\"head\", \"neck\", \"forequarters\", \"back\", \"flanks\", \"belly\", \"hindquarters\", \"legs\", \"tail\"], \"plate_pattern\": \"one broad carapace shield with short jointed plates on the limbs (from 'broad reddish-brown oval carapace')\", \"plate_source\": \"model-estimated\"}, \"licenses\": [{\"rule\": \"arthropod_large\", \"card\": \"RC-R3-09\", \"compensation\": \"thick supporting legs\"}], \"labels\": [\"speculative chimera, no real-world precedent\", \"speculative: arthropod parts at large size (insect breathing limits size)\"], \"notes\": {\"niche\": \"habitat rocky coast (a bridging habitat)\", \"autonomy\": \"the gray wolf body carries every function\", \"survival\": \"1 license(s) of 1: arthropod parts at large size; labels: speculative: arthropod parts at large size (insect breathing limits size)\", \"identity\": \"identity part: claws (large evenly sized claws with black tips; model-estimated); covering over head, neck, forequarters, back, flanks, belly, hindquarters, legs, tail, one broad carapace shield with short jointed plates on the limbs (from 'broad reddish-brown oval carapace')\", \"host\": \"the gray wolf has the more structured body schema (RC-R6-08)\"}}, {\"id\": \"C2\", \"ops\": [{\"op\": \"set_host\", \"args\": {\"animal\": \"crab\"}}], \"score\": 0.3, \"host\": \"crab\", \"silhouette\": \"segmented crab frame\", \"parts\": [], \"dropped\": [], \"identity_parts\": [], \"covering\": {\"extent\": [\"back\", \"flanks\"], \"plate_pattern\": \"\", \"plate_source\": \"\"}, \"licenses\": [{\"rule\": \"land_gills\", \"card\": \"RC-R9-03\", \"compensation\": \"a wet habitat or a second, air-breathing system\"}], \"labels\": [\"speculative chimera, no real-world precedent\"], \"notes\": {\"niche\": \"habitat rocky coast (a bridging habitat)\", \"autonomy\": \"the crab body carries every function\", \"survival\": \"1 license(s) of 1: gills on a land creature\", \"identity\": \"covering over back, flanks; no identity part from the donor's own traits\", \"host\": \"the crab has the less structured body schema (RC-R6-08, soft): advised against\"}}], \"note\": \"advice only: you choose; scores rank the R10 notes, nothing more\", \"cards\": [\"RC-R10-01\", \"RC-R6-08\", \"RC-R6-09\", \"RC-R10-15\"]}"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-621359b63ddc43d7b0386d0ddb5329ae",
+      "type": "function",
+      "function": {
+       "name": "choose_candidate",
+       "arguments": "{\"candidate_id\": \"C1\", \"reason\": \"C1 is best ranked: wolf host retains functional autonomy, crab claws as identity part, bridging rocky coast habitat, speculative mode fits arthropod license.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-621359b63ddc43d7b0386d0ddb5329ae",
+    "content": "{\"ok\": true, \"chosen\": \"C1\", \"plan\": {\"plan_id\": \"crt_e48f6771da38\", \"host\": \"gray wolf\", \"host_tie\": null, \"mode\": \"speculative\", \"habitat\": \"rocky coast\", \"silhouette\": \"four-legged gray wolf frame\", \"parts\": [\"crab claws\"], \"identity_parts\": [{\"donor\": \"crab\", \"part\": \"claws\", \"from_trait\": \"large evenly sized claws with black tips\", \"source\": \"model-estimated\", \"set_by\": \"code\"}], \"dropped\": [\"segmented tail\"], \"licenses\": [{\"rule\": \"arthropod_large\", \"card\": \"RC-R3-09\", \"compensation\": \"thick supporting legs\"}], \"covering\": {\"extent\": [\"head\", \"neck\", \"forequarters\", \"back\", \"flanks\", \"belly\", \"hindquarters\", \"legs\", \"tail\"], \"plate_pattern\": \"one broad carapace shield with short jointed plates on the limbs (from 'broad reddish-brown oval carapace')\"}, \"transfers\": [{\"feature\": \"claws\", \"class\": \"non_homologous\", \"anchor\": \"the front feet: each front foot ends in a pincer, held folded against the foot when the animal walks\"}]}, \"next\": \"audit_plan\"}"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-1193d5d7fac44011b1de8b4f713106dd",
+      "type": "function",
+      "function": {
+       "name": "audit_plan",
+       "arguments": "{\"reason\": \"Audit before render as required by workflow.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-1193d5d7fac44011b1de8b4f713106dd",
+    "content": "{\"ok\": true, \"blocking\": [], \"advice\": [], \"functions\": {\"breathing\": \"pass\", \"feeding\": \"pass\", \"support\": \"licensed\", \"movement\": \"pass\", \"heat\": \"pass\", \"senses\": \"pass\"}, \"fiction_budget\": {\"budget\": 1, \"licenses\": [{\"rule\": \"arthropod parts at large size\", \"card\": \"RC-R3-09\", \"compensation\": \"thick supporting legs\"}], \"identity_parts\": [{\"donor\": \"crab\", \"part\": \"claws\", \"from_trait\": \"large evenly sized claws with black tips\", \"source\": \"model-estimated\", \"set_by\": \"code\"}]}, \"labels\": [\"speculative chimera, no real-world precedent\", \"speculative: arthropod parts at large size (insect breathing limits size)\"], \"renderable\": true, \"cards\": []}"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-c9dea86f244b4fb3b7d3cc34e97490c7",
+      "type": "function",
+      "function": {
+       "name": "render",
+       "arguments": "{\"method\": \"single_pass\", \"reason\": \"Plan passes audit, render speculative chimera.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-c9dea86f244b4fb3b7d3cc34e97490c7",
+    "content": "{\"ok\": true, \"image_id\": \"img1\", \"method\": \"single_pass\", \"renders_used\": 1, \"renders_left\": 3, \"polish\": \"accepted\"}"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-4e1ef80faac24a72ab39d210b2a5f4e5",
+      "type": "function",
+      "function": {
+       "name": "inspect",
+       "arguments": "{\"image_id\": \"img1\", \"reason\": \"Inspect render for pass/fail.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-4e1ef80faac24a72ab39d210b2a5f4e5",
+    "content": "{\"ok\": true, \"image_id\": \"img1\", \"verdict\": \"fail\", \"failures\": [{\"key\": \"dropped_segmented_tail\", \"kind\": \"structural\", \"status\": \"fail\", \"text\": \"Are there segmented tail anywhere on the body?\", \"fix\": \"The plan has no segmented tail: show the gray wolf's own body there instead; keep everything else the same.\"}, {\"key\": \"cover_present\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Are there hard, glossy chitin plates with fine seams on the head, neck, shoulders, back, flanks, belly, hips, legs and tail?\", \"fix\": \"Show the planned hard, glossy chitin plates with fine seams over the head, neck, shoulders, back, flanks, belly, hips, legs and tail; keep everything else the same.\"}, {\"key\": \"grows_out\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the hard, glossy chitin plates with fine seams grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending \", \"fix\": \"Show the hard, glossy chitin plates with fine seams grown in the skin over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, as one covering that replaces the gray wolf's fur there;\"}, {\"key\": \"on_top\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the hard, glossy chitin plates with fine seams look like separate pieces laid on top of the fur, with a raised rim or a gap at the edge?\", \"fix\": \"Show the hard, glossy chitin plates with fine seams grown in the skin over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, as one covering that replaces the gray wolf's fur there;\"}, {\"key\": \"continuous\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the hard, glossy chitin plates with fine seams form one continuous structure over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, rather\", \"fix\": \"Show the hard, glossy chitin plates with fine seams as one continuous covering over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, not scattered pieces; the gray wolf's fur stays\"}, {\"key\": \"separate_outline\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the hard, glossy chitin plates with fine seams keep the outline of a separate object, such as another animal's shell or back, instead of the body's own shape\", \"fix\": \"Show the hard, glossy chitin plates with fine seams conforming to the gray wolf's own body shape, grown from its skin over the head, neck, shoulders, back, flanks, belly, hips, legs and tail; keep eve\"}], \"counts\": {\"separate_bodies\": 1, \"heads\": 1, \"walking_legs\": 4, \"wings\": 0, \"extra_limb_pieces\": 0}, \"third_animals\": {\"spark_open\": [], \"meta_spark\": []}, \"drift\": null, \"decision\": \"Meta Spark decides; Spark Open answers kept as information (D-084)\", \"images_so_far\": {\"img1\": {\"structural\": 1, \"covering\": 5}}, \"best_so_far\": \"img1\", \"cards\": [\"RC-R10-12\", \"RC-R10-15\", \"RC-R10-16\"]}"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-579b1d50ed6742268369c69f90dce4eb",
+      "type": "function",
+      "function": {
+       "name": "edit",
+       "arguments": "{\"image_id\": \"img1\", \"failure_keys\": [\"cover_present\", \"grows_out\", \"on_top\", \"continuous\", \"separate_outline\"], \"reason\": \"Covering failures dominate first inspect; editing to grow hard glossy chitin plates as continuous skin-integrated covering per RC-R10-15.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-579b1d50ed6742268369c69f90dce4eb",
+    "content": "{\"ok\": true, \"image_id\": \"img2\", \"instruction\": \"Show the planned hard, glossy chitin plates with fine seams over the head, neck, shoulders, back, flanks, belly, hips, legs and tail; keep everything else the same. Show the hard, glossy chitin plates with fine seams grown in the skin over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, as one covering that replaces the gray wolf's fur there; the fur stops at its edge; keep everything else the same. Show the hard, glossy chitin plates with fine seams as one continuous covering over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, not scattered pieces; the gray wolf's fur stays on the belly and legs; keep everything else the same.\", \"edits_used\": 1, \"next\": \"inspect the new image (host drift is checked there)\"}"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-43a1571674224ecb8a4b1437b8e477b6",
+      "type": "function",
+      "function": {
+       "name": "inspect",
+       "arguments": "{\"image_id\": \"img2\", \"reason\": \"Inspect edited image for improvement.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-43a1571674224ecb8a4b1437b8e477b6",
+    "content": "{\"ok\": true, \"image_id\": \"img2\", \"verdict\": \"fail\", \"failures\": [{\"key\": \"dropped_segmented_tail\", \"kind\": \"structural\", \"status\": \"fail\", \"text\": \"Are there segmented tail anywhere on the body?\", \"fix\": \"The plan has no segmented tail: show the gray wolf's own body there instead; keep everything else the same.\"}, {\"key\": \"cover_present\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Are there hard, glossy chitin plates with fine seams on the head, neck, shoulders, back, flanks, belly, hips, legs and tail?\", \"fix\": \"Show the planned hard, glossy chitin plates with fine seams over the head, neck, shoulders, back, flanks, belly, hips, legs and tail; keep everything else the same.\"}, {\"key\": \"grows_out\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the hard, glossy chitin plates with fine seams grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending \", \"fix\": \"Show the hard, glossy chitin plates with fine seams grown in the skin over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, as one covering that replaces the gray wolf's fur there;\"}, {\"key\": \"on_top\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the hard, glossy chitin plates with fine seams look like separate pieces laid on top of the fur, with a raised rim or a gap at the edge?\", \"fix\": \"Show the hard, glossy chitin plates with fine seams grown in the skin over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, as one covering that replaces the gray wolf's fur there;\"}, {\"key\": \"continuous\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the hard, glossy chitin plates with fine seams form one continuous structure over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, rather\", \"fix\": \"Show the hard, glossy chitin plates with fine seams as one continuous covering over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, not scattered pieces; the gray wolf's fur stays\"}, {\"key\": \"scattered\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Are the hard, glossy chitin plates with fine seams scattered as separate pieces over different parts of the body?\", \"fix\": \"Show the hard, glossy chitin plates with fine seams as one continuous covering over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, not scattered pieces; the gray wolf's fur stays\"}, {\"key\": \"follows_body\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the hard, glossy chitin plates with fine seams follow this body's own shape and contours, the way its own skin would?\", \"fix\": \"Show the hard, glossy chitin plates with fine seams conforming to the gray wolf's own body shape, grown from its skin over the head, neck, shoulders, back, flanks, belly, hips, legs and tail; keep eve\"}, {\"key\": \"separate_outline\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the hard, glossy chitin plates with fine seams keep the outline of a separate object, such as another animal's shell or back, instead of the body's own shape\", \"fix\": \"Show the hard, glossy chitin plates with fine seams conforming to the gray wolf's own body shape, grown from its skin over the head, neck, shoulders, back, flanks, belly, hips, legs and tail; keep eve\"}, {\"key\": \"abrupt_stop\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the hard, glossy chitin plates with fine seams stop abruptly partway across the body or legs, with no visible reason?\", \"fix\": \"Show the hard, glossy chitin plates with fine seam"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-a69d12826040439d81bd6ac1465738b6",
+      "type": "function",
+      "function": {
+       "name": "set_extent",
+       "arguments": "{\"extent\": [\"back\", \"flanks\"], \"plan_reason\": \"Dorsal carapace shields back and flanks only while legs stay bare for running agility\", \"reason\": \"Second consecutive covering failure per RC-R10-12/15, so reducing extent from full-body to dorsal-only to make continuous plates more renderable while keeping legs free.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-a69d12826040439d81bd6ac1465738b6",
+    "content": "{\"ok\": true, \"op\": \"set_extent\", \"errors\": [], \"warnings\": [], \"changed\": true, \"plan\": {\"plan_id\": \"crt_f826f35fa14b\", \"host\": \"gray wolf\", \"host_tie\": null, \"mode\": \"speculative\", \"habitat\": \"rocky coast\", \"silhouette\": \"four-legged gray wolf frame\", \"parts\": [\"crab claws\"], \"identity_parts\": [{\"donor\": \"crab\", \"part\": \"claws\", \"from_trait\": \"large evenly sized claws with black tips\", \"source\": \"model-estimated\", \"set_by\": \"code\"}], \"dropped\": [\"segmented tail\"], \"licenses\": [{\"rule\": \"arthropod_large\", \"card\": \"RC-R3-09\", \"compensation\": \"thick supporting legs\"}], \"covering\": {\"extent\": [\"back\", \"flanks\"], \"plate_pattern\": \"one broad carapace shield with short jointed plates on the limbs (from 'broad reddish-brown oval carapace')\"}, \"transfers\": [{\"feature\": \"claws\", \"class\": \"non_homologous\", \"anchor\": \"the front feet: each front foot ends in a pincer, held folded against the foot when the animal walks\"}]}, \"next\": \"audit_plan\"}"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-d0a2e9b83e6a44ecb91edb0d62eca90d",
+      "type": "function",
+      "function": {
+       "name": "audit_plan",
+       "arguments": "{\"reason\": \"Plan extent changed to dorsal only, need re-audit before second render per workflow.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-d0a2e9b83e6a44ecb91edb0d62eca90d",
+    "content": "{\"ok\": true, \"blocking\": [], \"advice\": [], \"functions\": {\"breathing\": \"pass\", \"feeding\": \"pass\", \"support\": \"licensed\", \"movement\": \"pass\", \"heat\": \"pass\", \"senses\": \"pass\"}, \"fiction_budget\": {\"budget\": 1, \"licenses\": [{\"rule\": \"arthropod parts at large size\", \"card\": \"RC-R3-09\", \"compensation\": \"thick supporting legs\"}], \"identity_parts\": [{\"donor\": \"crab\", \"part\": \"claws\", \"from_trait\": \"large evenly sized claws with black tips\", \"source\": \"model-estimated\", \"set_by\": \"code\"}]}, \"labels\": [\"speculative chimera, no real-world precedent\", \"speculative: arthropod parts at large size (insect breathing limits size)\"], \"renderable\": true, \"cards\": []}"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-4be2559ef0584adaa449045abe725147",
+      "type": "function",
+      "function": {
+       "name": "render",
+       "arguments": "{\"method\": \"single_pass\", \"reason\": \"Reduced dorsal carapace plan audited, rendering again.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-4be2559ef0584adaa449045abe725147",
+    "content": "{\"ok\": true, \"image_id\": \"img3\", \"method\": \"single_pass\", \"renders_used\": 2, \"renders_left\": 2, \"polish\": \"accepted\"}"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-f01ca6c737a542b989aec4c9cf7c07b9",
+      "type": "function",
+      "function": {
+       "name": "inspect",
+       "arguments": "{\"image_id\": \"img3\", \"reason\": \"Inspect second render for covering improvement.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-f01ca6c737a542b989aec4c9cf7c07b9",
+    "content": "{\"ok\": true, \"image_id\": \"img3\", \"verdict\": \"fail\", \"failures\": [{\"key\": \"whole_animal\", \"kind\": \"structural\", \"status\": \"fail\", \"text\": \"Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?\", \"fix\": \"Show the planned crab contribution only as hard, glossy chitin plates with fine seams on the gray wolf's own body over the back and flanks, not as separate animals; keep everything else the same.\"}, {\"key\": \"insect_legs\", \"kind\": \"structural\", \"status\": \"fail\", \"text\": \"Are there jointed, insect-like leg pieces on or along the legs?\", \"fix\": \"Show the gray wolf's own legs with its own fur, with no insect leg pieces; keep everything else the same.\"}, {\"key\": \"extra_legs\", \"kind\": \"structural\", \"status\": \"fail\", \"text\": \"Does it have more than 4 walking legs?\", \"fix\": \"Show exactly 4 walking legs, as planned; keep everything else the same.\"}, {\"key\": \"dropped_segmented_tail\", \"kind\": \"structural\", \"status\": \"fail\", \"text\": \"Are there segmented tail anywhere on the body?\", \"fix\": \"The plan has no segmented tail: show the gray wolf's own body there instead; keep everything else the same.\"}, {\"key\": \"grows_out\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the hard, glossy chitin plates with fine seams grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending \", \"fix\": \"Show the hard, glossy chitin plates with fine seams grown in the skin over the back and flanks, as one covering that replaces the gray wolf's fur there; the fur stops at its edge; keep everything else\"}, {\"key\": \"on_top\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the hard, glossy chitin plates with fine seams look like separate pieces laid on top of the fur, with a raised rim or a gap at the edge?\", \"fix\": \"Show the hard, glossy chitin plates with fine seams grown in the skin over the back and flanks, as one covering that replaces the gray wolf's fur there; the fur stops at its edge; keep everything else\"}, {\"key\": \"cover_on_legs\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Are there hard, glossy chitin plates with fine seams on the legs?\", \"fix\": \"Keep the gray wolf's own fur on the legs and shoulders; the hard, glossy chitin plates with fine seams only over the back and flanks; keep everything else the same.\"}, {\"key\": \"cover_on_shoulders\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Are there hard, glossy chitin plates with fine seams on the shoulders?\", \"fix\": \"Keep the gray wolf's own fur on the legs and shoulders; the hard, glossy chitin plates with fine seams only over the back and flanks; keep everything else the same.\"}, {\"key\": \"follows_body\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the hard, glossy chitin plates with fine seams follow this body's own shape and contours, the way its own skin would?\", \"fix\": \"Show the hard, glossy chitin plates with fine seams conforming to the gray wolf's own body shape, grown from its skin over the back and flanks; keep everything else the same.\"}, {\"key\": \"separate_outline\", \"kind\": \"covering\", \"status\": \"fail\", \"text\": \"Do the hard, glossy chitin plates with fine seams keep the outline of a separate object, such as another animal's shell or back, instead of the body's own shape\", \"fix\": \"Show the hard, glossy chitin plates with fine seams conforming to the gray wolf's own body shape, grown from its skin over the back and flanks; keep everything else the same.\"}, {\"key\": "
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-7b58ca258a2243f1bd7e32dd7f1eeaf9",
+      "type": "function",
+      "function": {
+       "name": "set_covering_material_only",
+       "arguments": "{\"plan_reason\": \"Reddish-brown carapace color and gloss show on wolf fur dorsally without heavy chitin plates for mobility\", \"reason\": \"After repeated covering failures RC-R10-12/15, switching to material-only lets donor show through color/gloss on wolf fur while keeping identity claws.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-7b58ca258a2243f1bd7e32dd7f1eeaf9",
+    "content": "{\"ok\": true, \"op\": \"set_covering_material_only\", \"errors\": [], \"warnings\": [], \"changed\": true, \"plan\": {\"plan_id\": \"crt_20286d65d31d\", \"host\": \"gray wolf\", \"host_tie\": null, \"mode\": \"speculative\", \"habitat\": \"rocky coast\", \"silhouette\": \"four-legged gray wolf frame\", \"parts\": [\"crab claws\"], \"identity_parts\": [{\"donor\": \"crab\", \"part\": \"claws\", \"from_trait\": \"large evenly sized claws with black tips\", \"source\": \"model-estimated\", \"set_by\": \"code\"}], \"dropped\": [\"segmented tail\"], \"licenses\": [{\"rule\": \"arthropod_large\", \"card\": \"RC-R3-09\", \"compensation\": \"thick supporting legs\"}], \"covering\": {\"extent\": [\"back\", \"flanks\"], \"plate_pattern\": \"one broad carapace shield with short jointed plates on the limbs (from 'broad reddish-brown oval carapace')\"}, \"transfers\": [{\"feature\": \"claws\", \"class\": \"non_homologous\", \"anchor\": \"the front feet: each front foot ends in a pincer, held folded against the foot when the animal walks\"}]}, \"next\": \"audit_plan\"}"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-9497a5c09f4644bf86d215d9c5c42fb3",
+      "type": "function",
+      "function": {
+       "name": "audit_plan",
+       "arguments": "{\"reason\": \"Material-only covering now, need audit before final render.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-9497a5c09f4644bf86d215d9c5c42fb3",
+    "content": "{\"ok\": true, \"blocking\": [], \"advice\": [], \"functions\": {\"breathing\": \"pass\", \"feeding\": \"pass\", \"support\": \"licensed\", \"movement\": \"pass\", \"heat\": \"pass\", \"senses\": \"pass\"}, \"fiction_budget\": {\"budget\": 1, \"licenses\": [{\"rule\": \"arthropod parts at large size\", \"card\": \"RC-R3-09\", \"compensation\": \"thick supporting legs\"}], \"identity_parts\": [{\"donor\": \"crab\", \"part\": \"claws\", \"from_trait\": \"large evenly sized claws with black tips\", \"source\": \"model-estimated\", \"set_by\": \"code\"}]}, \"labels\": [\"speculative chimera, no real-world precedent\", \"speculative: arthropod parts at large size (insect breathing limits size)\"], \"renderable\": true, \"cards\": []}"
+   }
+  ],
+  "tools": [
+   {
+    "type": "function",
+    "function": {
+     "name": "resolve_animal",
+     "description": "Resolve one parent name to an animal with sourced traits.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "name": {
+        "type": "string"
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "name",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "propose_candidates",
+     "description": "Ranked plan arrangements for the two resolved parents, each with R10 selection notes (niche, autonomy, survival, identity) and its reasons. Advice only.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "choose_candidate",
+     "description": "Adopt one candidate plan by id.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "candidate_id": {
+        "type": "string"
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "candidate_id",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "set_host",
+     "description": "Make this parent the host (the body frame). Required on a structural host tie.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "animal": {
+        "type": "string"
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "animal",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "set_region",
+     "description": "Give a body region to a parent. Regions head, tail, forelimbs take PICK; neck, forequarters, back, flanks, belly, hindquarters, legs take PATCH, OVERLAY or PICK.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "region": {
+        "type": "string",
+        "enum": [
+         "head",
+         "tail",
+         "forelimbs",
+         "neck",
+         "forequarters",
+         "back",
+         "flanks",
+         "belly",
+         "hindquarters",
+         "legs"
+        ]
+       },
+       "donor": {
+        "type": "string"
+       },
+       "operator": {
+        "type": "string",
+        "enum": [
+         "PICK",
+         "PATCH",
+         "OVERLAY"
+        ]
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "region",
+       "donor",
+       "operator",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "set_habitat",
+     "description": "Set the creature's habitat (a profiled habitat name).",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "name": {
+        "type": "string"
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "name",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "set_mode",
+     "description": "Set the design mode.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "mode": {
+        "type": "string",
+        "enum": [
+         "realistic",
+         "speculative",
+         "mythic"
+        ]
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "mode",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "add_license",
+     "description": "Declare one bendable rule (R9 3.2) the plan really bends, with its compensation, within the mode's fiction budget.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "rule": {
+        "type": "string"
+       },
+       "compensation": {
+        "type": "string"
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "rule",
+       "compensation",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "drop_part",
+     "description": "Remove one planned donor part. `part` must be one of the plan's parts (plan.parts). An unplanned feature the critics report (extra_*, third_animal, a misread) is not a part of the plan and cannot be dropped: render again, or accept it and finalize.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "part": {
+        "type": "string",
+        "enum": [
+         "crab claws"
+        ]
+       },
+       "plan_reason": {
+        "type": "string",
+        "minLength": 12,
+        "description": "The reason recorded in the plan and shown on the card (one short sentence)."
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "part",
+       "plan_reason",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "set_transfer_class",
+     "description": "Change how a discrete donor part transfers: homologous (its shape where the host has the matching structure) or non_homologous (only its material and function). Parts only: the covering is always material; to show the donor's covering by color and texture only, use set_covering_material_only.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "feature": {
+        "type": "string",
+        "enum": [
+         "claws"
+        ]
+       },
+       "cls": {
+        "type": "string",
+        "enum": [
+         "homologous",
+         "non_homologous"
+        ]
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "feature",
+       "cls",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "set_extent",
+     "description": "Set the body zones the donor covering grows over. `plan_reason` is its functional reason. For an exoskeleton donor (beetle, crab), a covering that leaves out the legs must say why the legs stay bare (name the legs in plan_reason); otherwise it is refused (RC-R10-16).",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "extent": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+         "type": "string",
+         "enum": [
+          "head",
+          "neck",
+          "forequarters",
+          "back",
+          "flanks",
+          "belly",
+          "hindquarters",
+          "legs",
+          "tail"
+         ]
+        }
+       },
+       "plan_reason": {
+        "type": "string",
+        "minLength": 12,
+        "description": "The reason recorded in the plan and shown on the card (one short sentence)."
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "extent",
+       "plan_reason",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "connect_features",
+     "description": "Two features of the same donor system grow from each other (for example a horn from the covering).",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "a": {
+        "type": "string",
+        "enum": [
+         "claws",
+         "covering"
+        ]
+       },
+       "b": {
+        "type": "string",
+        "enum": [
+         "claws",
+         "covering"
+        ]
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "a",
+       "b",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "set_identity_cues",
+     "description": "The positive form description that makes a discrete donor part the donor's. Parts only, not the covering.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "feature": {
+        "type": "string",
+        "enum": [
+         "claws"
+        ]
+       },
+       "cues": {
+        "type": "string"
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "feature",
+       "cues",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "set_identity_part",
+     "description": "Choose the donor's one identity part among its own diagnostic parts.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "donor": {
+        "type": "string"
+       },
+       "part": {
+        "type": "string"
+       },
+       "plan_reason": {
+        "type": "string",
+        "minLength": 12,
+        "description": "The reason recorded in the plan and shown on the card (one short sentence)."
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "donor",
+       "part",
+       "plan_reason",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "set_covering_material_only",
+     "description": "The host keeps its own covering (fur, skin, feathers); the donor covering contributes only its color, gloss, texture and pattern on it. Discrete identity parts are kept. The two-failure rule's second route.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "plan_reason": {
+        "type": "string",
+        "minLength": 12,
+        "description": "The reason recorded in the plan and shown on the card (one short sentence)."
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "plan_reason",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "audit_plan",
+     "description": "Audit the current plan: blocking items (hard cards, an unchosen host tie) and advice (soft cards, the function audit, the fiction budget). Required before render.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "render",
+     "description": "Render the audited plan. method single_pass (default) or growth_edit (host first, then one edit grows the covering; only for a plan with a grown donor covering).",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "method": {
+        "type": "string",
+        "enum": [
+         "single_pass",
+         "growth_edit"
+        ]
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "method",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "inspect",
+     "description": "Inspect an image with the plan-blind critics. Returns pass or the failures, each with a key and kind (covering or structural).",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "image_id": {
+        "type": "string"
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "image_id",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "edit",
+     "description": "One image edit turn fixing covering or surface failures of an image (keys from inspect). Structural failures need a plan change and a new render instead.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "image_id": {
+        "type": "string"
+       },
+       "failure_keys": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "image_id",
+       "failure_keys",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "ask_user",
+     "description": "Ask the user to choose (interactive runs only).",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "question": {
+        "type": "string"
+       },
+       "options": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "question",
+       "options",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "finalize",
+     "description": "Finish with this image. Any failures it still has are stated on the card. If code ranks another image higher (best_so_far from inspect), say why yours is better in why_not_best; without it the call is refused.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "image_id": {
+        "type": "string"
+       },
+       "why_not_best": {
+        "type": "string",
+        "description": "Only when image_id is not best_so_far: why this image is better."
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "image_id",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   }
+  ],
+  "tool_choice": "auto",
+  "max_tokens": 8000,
+  "model": "meta-models/muse-spark-open-1026"
+ },
+ "response": {
+  "id": "chatcmpl-31ffd92e8ab8429da0e932cdfaa024ca",
+  "choices": [
+   {
+    "finish_reason": "tool_calls",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": null,
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": [
+      {
+       "id": "chatcmpl-tool-fb69f10001c54703a30e9f8967ce5eb5",
+       "function": {
+        "arguments": "{\"method\": \"single_pass\", \"reason\": \"Material-only plan most likely to pass critics while retaining wolf frame and crab claw identity.\"}",
+        "name": "render"
+       },
+       "type": "function"
+      }
+     ]
+    }
+   }
+  ],
+  "created": 1793569871,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 72,
+   "prompt_tokens": 10834,
+   "total_tokens": 10906,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 53,
+    "audio_tokens": 0,
+    "reasoning_tokens": 0,
+    "rejected_prediction_tokens": 73,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 10496,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

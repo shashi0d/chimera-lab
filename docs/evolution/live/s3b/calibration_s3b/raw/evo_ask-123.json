@@ -1,0 +1,111 @@
+{
+ "purpose": "evo_ask",
+ "request": {
+  "model": "muse-spark-1.3",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture of a creature and answer numbered questions about it. Answer each question on its own: yes if the picture clearly shows it, no if it clearly does not, unclear if you cannot tell. Many questions describe things that should not be there, so do not lean toward yes. Judge only what is visible. answers: one word per question (yes, no or unclear), in the same order as the questions, nothing else. origins: for each listed part, in order, the one real animal that part looks like it came from, as an everyday English common name (or unclear); empty if no parts are listed. notes: one short sentence."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "Questions:\n1. Is the overall body shape that of a axolotl?\n2. Does it have a axolotl head with visible eyes?\n3. Are there wings anywhere on the body?\n4. Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?\n5. Is there a second head anywhere?\n6. Does it have more than 4 walking legs?\n7. Does it have a full mane of long hair around the head and neck?\n8. Are there large overlapping keratin scales on the back and flanks?\n9. Do the large overlapping keratin scales grow out of the body with a natural transition (for example skin stopping at a shield's edge, or skin blending into scales), rather than looking attached on top?\n10. Do the large overlapping keratin scales look like separate pieces laid on top of the skin, with a raised rim or a gap at the edge?\n11. Do the large overlapping keratin scales form one continuous structure over the back and flanks, rather than scattered pieces?\n12. Are the large overlapping keratin scales scattered as separate pieces over different parts of the body?\n13. Are there large overlapping keratin scales on the legs?\n14. Are there large overlapping keratin scales on the shoulders?\n15. Do the large overlapping keratin scales follow this body's own shape and contours, the way its own skin would?\n16. Do the large overlapping keratin scales keep the outline of a separate object, such as another animal's shell or back, instead of the body's own shape?\n17. Are the scales sized to this animal's body, about as large as its own muscles and body segments?\n18. Do the scales look made for a much smaller or much larger animal?"
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (717611 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "balanced_checklist",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "answers",
+      "origins",
+      "notes"
+     ],
+     "properties": {
+      "answers": {
+       "type": "array",
+       "items": {
+        "type": "string",
+        "enum": [
+         "yes",
+         "no",
+         "unclear"
+        ]
+       }
+      },
+      "origins": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "notes": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0
+ },
+ "response": {
+  "id": "chatcmpl-01a19777-0d69-77ad-99eb-d579876f10c1",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\"answers\": [\"yes\", \"yes\", \"no\", \"no\", \"no\", \"no\", \"no\", \"yes\", \"no\", \"yes\", \"yes\", \"no\", \"no\", \"no\", \"yes\", \"no\", \"yes\", \"no\"], \"notes\": \"Axolotl body with continuous pangolin-like scales on back.\", \"origins\": []}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null
+    }
+   }
+  ],
+  "created": 1793542524,
+  "model": "muse-spark-1.3",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 1566,
+   "prompt_tokens": 3958,
+   "total_tokens": 5524,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": null,
+    "audio_tokens": null,
+    "reasoning_tokens": 1477,
+    "rejected_prediction_tokens": null,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": null,
+    "cache_write_tokens": null,
+    "cached_tokens": 497,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

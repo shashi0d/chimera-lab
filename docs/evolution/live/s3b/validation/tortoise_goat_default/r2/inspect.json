@@ -1,0 +1,1099 @@
+{
+ "before": {
+  "protocol": "plan-blind (S3a)",
+  "critics": [
+   "spark_open",
+   "meta_spark"
+  ],
+  "items": [
+   {
+    "source": "checklist",
+    "key": "frame",
+    "text": "Is the overall body shape that of a tortoise?",
+    "group": "structure",
+    "expect": "yes",
+    "answers": {
+     "spark_open": "yes",
+     "meta_spark": "yes"
+    },
+    "status": "pass",
+    "fix": "Show the planned tortoise body shape and outline; keep everything else the same.",
+    "sam": null,
+    "pair_status": "pass",
+    "sam_found": null,
+    "sam_fill": null
+   },
+   {
+    "source": "checklist",
+    "key": "head",
+    "text": "Does it have a tortoise head with visible eyes?",
+    "group": "structure",
+    "expect": "yes",
+    "answers": {
+     "spark_open": "yes",
+     "meta_spark": "yes"
+    },
+    "status": "pass",
+    "fix": "Show the planned tortoise head, fully visible with clear eyes; keep everything else the same.",
+    "sam": null,
+    "pair_status": "pass",
+    "sam_found": null,
+    "sam_fill": null
+   },
+   {
+    "source": "checklist",
+    "key": "no_wings",
+    "text": "Are there wings anywhere on the body?",
+    "group": "structure",
+    "expect": "no",
+    "answers": {
+     "spark_open": "no",
+     "meta_spark": "no"
+    },
+    "status": "pass",
+    "fix": "The plan has no wings: show the tortoise's own body there instead; keep everything else the same.",
+    "sam": null,
+    "pair_status": "pass",
+    "sam_found": null,
+    "sam_fill": null
+   },
+   {
+    "source": "checklist",
+    "key": "whole_animal",
+    "text": "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?",
+    "group": "structure",
+    "expect": "no",
+    "answers": {
+     "spark_open": "no",
+     "meta_spark": "no"
+    },
+    "status": "pass",
+    "fix": "Show the planned domestic goat contribution only as dense fur on the tortoise's own body over the back and flanks, not as separate animals; keep everything else the same.",
+    "sam": null,
+    "pair_status": "pass",
+    "sam_found": null,
+    "sam_fill": null
+   },
+   {
+    "source": "checklist",
+    "key": "second_head",
+    "text": "Is there a second head anywhere?",
+    "group": "structure",
+    "expect": "no",
+    "answers": {
+     "spark_open": "no",
+     "meta_spark": "no"
+    },
+    "status": "pass",
+    "fix": "Show one single head, as planned; keep everything else the same.",
+    "sam": null,
+    "pair_status": "pass",
+    "sam_found": null,
+    "sam_fill": null
+   },
+   {
+    "source": "checklist",
+    "key": "extra_legs",
+    "text": "Does it have more than 4 walking legs?",
+    "group": "structure",
+    "expect": "no",
+    "answers": {
+     "spark_open": "no",
+     "meta_spark": "no"
+    },
+    "status": "pass",
+    "fix": "Show exactly 4 walking legs, as planned; keep everything else the same.",
+    "sam": null,
+    "pair_status": "pass",
+    "sam_found": null,
+    "sam_fill": null
+   },
+   {
+    "source": "checklist",
+    "key": "no_mane",
+    "text": "Does it have a full mane of long hair around the head and neck?",
+    "group": "structure",
+    "expect": "no",
+    "answers": {
+     "spark_open": "no",
+     "meta_spark": "no"
+    },
+    "status": "pass",
+    "fix": "The plan has no mane: show the planned neck with no mane; keep everything else the same.",
+    "sam": null,
+    "pair_status": "pass",
+    "sam_found": null,
+    "sam_fill": null
+   },
+   {
+    "source": "checklist",
+    "key": "cover_present",
+    "text": "Is there dense fur on the back and flanks?",
+    "group": "surface",
+    "expect": "yes",
+    "answers": {
+     "spark_open": "yes",
+     "meta_spark": "yes"
+    },
+    "status": "pass",
+    "fix": "Show the planned dense fur over the back and flanks; keep everything else the same.",
+    "sam": null,
+    "pair_status": "pass",
+    "sam_found": null,
+    "sam_fill": null
+   },
+   {
+    "source": "count",
+    "key": "separate_bodies",
+    "text": "separate bodies: 1",
+    "group": "structure",
+    "expect": 1,
+    "answers": {
+     "spark_open": 1,
+     "meta_spark": 1
+    },
+    "status": "pass",
+    "fix": "Show the planned domestic goat contribution only as dense fur on the tortoise's own body over the back and flanks, not as separate animals; keep everything else the same.",
+    "sam": null,
+    "pair_status": "pass",
+    "sam_found": null,
+    "sam_fill": null
+   },
+   {
+    "source": "count",
+    "key": "heads",
+    "text": "heads: 1",
+    "group": "structure",
+    "expect": 1,
+    "answers": {
+     "spark_open": 1,
+     "meta_spark": 1
+    },
+    "status": "pass",
+    "fix": "Show one single head, as planned; keep everything else the same.",
+    "sam": null,
+    "pair_status": "pass",
+    "sam_found": null,
+    "sam_fill": null
+   },
+   {
+    "source": "count",
+    "key": "walking_legs",
+    "text": "walking legs: 4",
+    "group": "structure",
+    "expect": 4,
+    "answers": {
+     "spark_open": 4,
+     "meta_spark": 4
+    },
+    "status": "pass",
+    "fix": "Show exactly 4 walking legs, as planned; keep everything else the same.",
+    "sam": null,
+    "pair_status": "pass",
+    "sam_found": null,
+    "sam_fill": null
+   },
+   {
+    "source": "count",
+    "key": "wings",
+    "text": "wings: 0",
+    "group": "structure",
+    "expect": 0,
+    "answers": {
+     "spark_open": 0,
+     "meta_spark": 0
+    },
+    "status": "pass",
+    "fix": "The plan has no wings: show the tortoise's own body there instead; keep everything else the same.",
+    "sam": null,
+    "pair_status": "pass",
+    "sam_found": null,
+    "sam_fill": null
+   },
+   {
+    "source": "count",
+    "key": "extra_limb_pieces",
+    "text": "extra limb pieces: 0",
+    "group": "structure",
+    "expect": 0,
+    "answers": {
+     "spark_open": 0,
+     "meta_spark": 0
+    },
+    "status": "pass",
+    "fix": "Show the tortoise's own limbs only, with no extra limb-like pieces; keep everything else the same.",
+    "sam": null,
+    "pair_status": "pass",
+    "sam_found": null,
+    "sam_fill": null
+   },
+   {
+    "source": "description",
+    "key": "extra_beak",
+    "text": "described but not planned: beak",
+    "group": "structure",
+    "expect": "absent",
+    "answers": {
+     "spark_open": true,
+     "meta_spark": true
+    },
+    "status": "fail",
+    "fix": "The plan has no beak: show the tortoise's own body there instead; keep everything else the same.",
+    "sam": null,
+    "pair_status": "fail",
+    "sam_found": null,
+    "sam_fill": null
+   },
+   {
+    "source": "description",
+    "key": "extra_horn",
+    "text": "described but not planned: horn",
+    "group": "structure",
+    "expect": "absent",
+    "answers": {
+     "spark_open": true,
+     "meta_spark": false
+    },
+    "status": "pass",
+    "fix": "The plan has no horn: show the tortoise's own body there instead; keep everything else the same.",
+    "sam": null,
+    "pair_status": "uncertain",
+    "sam_found": null,
+    "sam_fill": null
+   },
+   {
+    "source": "description",
+    "key": "extra_stripes",
+    "text": "described but not planned: stripes",
+    "group": "structure",
+    "expect": "absent",
+    "answers": {
+     "spark_open": true,
+     "meta_spark": true
+    },
+    "status": "fail",
+    "fix": "The plan has no stripes: show the tortoise's own body there instead; keep everything else the same.",
+    "sam": null,
+    "pair_status": "fail",
+    "sam_found": null,
+    "sam_fill": null
+   },
+   {
+    "source": "description",
+    "key": "third_animal",
+    "text": "an animal other than the two parents",
+    "group": "structure",
+    "expect": "none",
+    "answers": {
+     "spark_open": [
+      "sheep"
+     ],
+     "meta_spark": [
+      "sheep"
+     ]
+    },
+    "status": "fail",
+    "fix": "Show the planned domestic goat contribution only as dense fur on the tortoise's own body over the back and flanks, not as separate animals; keep everything else the same.",
+    "sam": null,
+    "pair_status": "fail",
+    "sam_found": null,
+    "sam_fill": null
+   }
+  ],
+  "failures": [
+   {
+    "source": "description",
+    "key": "extra_beak",
+    "text": "described but not planned: beak",
+    "group": "structure",
+    "expect": "absent",
+    "answers": {
+     "spark_open": true,
+     "meta_spark": true
+    },
+    "status": "fail",
+    "fix": "The plan has no beak: show the tortoise's own body there instead; keep everything else the same.",
+    "sam": null,
+    "pair_status": "fail",
+    "sam_found": null,
+    "sam_fill": null
+   },
+   {
+    "source": "description",
+    "key": "extra_stripes",
+    "text": "described but not planned: stripes",
+    "group": "structure",
+    "expect": "absent",
+    "answers": {
+     "spark_open": true,
+     "meta_spark": true
+    },
+    "status": "fail",
+    "fix": "The plan has no stripes: show the tortoise's own body there instead; keep everything else the same.",
+    "sam": null,
+    "pair_status": "fail",
+    "sam_found": null,
+    "sam_fill": null
+   },
+   {
+    "source": "description",
+    "key": "third_animal",
+    "text": "an animal other than the two parents",
+    "group": "structure",
+    "expect": "none",
+    "answers": {
+     "spark_open": [
+      "sheep"
+     ],
+     "meta_spark": [
+      "sheep"
+     ]
+    },
+    "status": "fail",
+    "fix": "Show the planned domestic goat contribution only as dense fur on the tortoise's own body over the back and flanks, not as separate animals; keep everything else the same.",
+    "sam": null,
+    "pair_status": "fail",
+    "sam_found": null,
+    "sam_fill": null
+   }
+  ],
+  "structural_failures": 3,
+  "uncertain": 0,
+  "sam_calls": 0,
+  "descriptions": {
+   "spark_open": {
+    "description": "The creature is shown in right-facing profile standing on a small patch of dry, sandy ground with sparse tufts of grass against a plain off-white background. Its overall form is that of a large, heavy-bodied land tortoise: a high-domed shell forming the trunk, a thick scaly neck and tortoise-like head at the anterior, four stout columnar limbs supporting the body, and a short pointed tail at the posterior. The lateral and ventral portions of the shell are exposed and show hard scutes with brown, tan and pale yellow radiating patterns and slightly flared, serrated margins. The entire dorsal surface of the carapace is completely obscured by a voluminous, dense, matted mass of curly, shaggy brown wool that overhangs the shell edges and hangs down over the sides, contrasting sharply in texture with the hard, scaly skin and shell below.",
+    "parts": [
+     {
+      "part": "head",
+      "looks_like": "tortoise-like, blunt and beaked, covered in small polygonal scales; at the anterior end on a thick neck, facing right",
+      "where": "anterior, extending from the front opening of the shell"
+     },
+     {
+      "part": "eye",
+      "looks_like": "single visible small round dark eye with a glossy highlight, surrounded by scaly eyelids and polygonal head scales",
+      "where": "on the right side of the head"
+     },
+     {
+      "part": "mouth/beak",
+      "looks_like": "short, hooked, horny beak with a slightly open mouth showing the lower jaw edge",
+      "where": "at the tip of the snout"
+     },
+     {
+      "part": "neck",
+      "looks_like": "thick, heavily wrinkled and folded, covered in small pebbly scales",
+      "where": "connecting the head to the anterior margin of the shell"
+     },
+     {
+      "part": "shell - carapace and plastron",
+      "looks_like": "large domed hard shell; exposed lateral and posterior scutes show distinct plates with radiating bands of dark brown, medium brown and pale yellow/cream; margins are flared and slightly serrated; ventral edge pale yellow; central dorsal area hidden",
+      "where": "forming the trunk, covering the back and sides from behind the neck to above the tail and legs"
+     },
+     {
+      "part": "plates/scutes",
+      "looks_like": "individual polygonal keratinous plates with concentric growth lines and radiating striped markings in brown and yellow tones",
+      "where": "covering the visible lateral, anterior and posterior surfaces of the shell"
+     },
+     {
+      "part": "scales/skin",
+      "looks_like": "small rounded to polygonal pebbly scales covering head, neck, legs and tail; forelimbs bear much larger, overlapping, pointed keeled tubercles on the anterior surface",
+      "where": "on all exposed skin of head, neck, limbs and tail"
+     },
+     {
+      "part": "legs - walking legs",
+      "looks_like": "four massive, columnar, elephantine limbs, thick and stout, heavily scaled; forelimbs more armored with large overlapping scales",
+      "where": "at the four corners of the shell, two forelimbs anterior and two hindlimbs posterior, supporting the body on the ground"
+     },
+     {
+      "part": "feet/claws",
+      "looks_like": "broad, stumpy feet with thick toes ending in short, blunt, light horn-colored nails/claws, 3-4 visible per foot",
+      "where": "at the distal end of each leg, in contact with the ground"
+     },
+     {
+      "part": "tail",
+      "looks_like": "short, tapering, pointed, armored tail covered in small scales and larger rounded tubercles",
+      "where": "protruding posteriorly from under the rear margin of the carapace, on the left side of the image"
+     },
+     {
+      "part": "dorsal woolly covering",
+      "looks_like": "dense, voluminous, curly and shaggy mass of brown wool-like fibers, matted and uneven, varying from dark brown to tan, with curled locks hanging over the shell edge; texture appears soft and fleecy",
+      "where": "covering the entire dorsal top of the carapace from just behind the neck to above the tail, sitting on top of the hard scutes and overhanging the shell margins"
+     }
+    ],
+    "attached_objects": [
+     "No separate manufactured object or whole small animal is sitting on the body. The dense curly brown woolly mass described above appears as a continuous covering sitting on top of the carapace rather than integrated skin; if strictly interpreted as not part of the reptile's natural integument, it can be described as a large blanket-like fleece draped over the dorsal shell. Otherwise, attached_objects is empty."
+    ],
+    "animals": [
+     "tortoise",
+     "sheep"
+    ],
+    "separate_bodies": 1,
+    "heads": 1,
+    "walking_legs": 4,
+    "wings": 0,
+    "extra_limb_pieces": 0,
+    "tails": 1
+   },
+   "meta_spark": {
+    "description": "A large four-legged tortoise-like reptile shown in side view facing right, standing on sparse dry ground. It has a high domed hard shell with brown and tan scutes, a thick scaly reptilian head on an extended neck, four stout columnar scaly legs ending in clawed feet, and a short pointed scaly tail at the rear. The top and sides of the shell are covered by a voluminous mass of dense shaggy curly brown wool-like fur that drapes over the rim of the shell.",
+    "parts": [
+     {
+      "part": "head",
+      "looks_like": "scaly tortoise head with pebbly scales and blunt beak-like snout",
+      "where": "at the front of the body on an extended neck, facing right"
+     },
+     {
+      "part": "eyes",
+      "looks_like": "small dark round eye with scaly eyelids",
+      "where": "on the side of the head"
+     },
+     {
+      "part": "mouth",
+      "looks_like": "short hooked beak-like mouth with a pointed upper tip",
+      "where": "at the front tip of the head"
+     },
+     {
+      "part": "neck",
+      "looks_like": "thick wrinkled scaly neck",
+      "where": "between the head and the front opening of the shell"
+     },
+     {
+      "part": "shell",
+      "looks_like": "large domed hard shell with polygonal brown and tan striped scutes",
+      "where": "covering the middle of the back and sides of the body"
+     },
+     {
+      "part": "fur",
+      "looks_like": "dense shaggy curly brown sheep-like wool",
+      "where": "covering the top of the shell and hanging over its edges"
+     },
+     {
+      "part": "legs",
+      "looks_like": "four thick stout reptilian legs covered in small round scales with larger pointed scales on the front pair",
+      "where": "two at the front under the shell and two at the rear under the shell, supporting the body"
+     },
+     {
+      "part": "feet",
+      "looks_like": "broad blunt feet with short conical claws",
+      "where": "at the ends of the four legs on the ground"
+     },
+     {
+      "part": "tail",
+      "looks_like": "short tapered pointed scaly tail",
+      "where": "at the rear of the body under the back edge of the shell"
+     },
+     {
+      "part": "scales",
+      "looks_like": "small pebbly reptile scales and larger overlapping pointed scutes",
+      "where": "on the head, neck, legs, feet and tail"
+     }
+    ],
+    "attached_objects": [],
+    "animals": [
+     "tortoise",
+     "sheep"
+    ],
+    "separate_bodies": 1,
+    "heads": 1,
+    "walking_legs": 4,
+    "wings": 0,
+    "extra_limb_pieces": 0,
+    "tails": 1
+   }
+  },
+  "matches": {
+   "spark_open": {
+    "seen": [
+     "beak",
+     "horn",
+     "plates",
+     "scales",
+     "stripes"
+    ],
+    "expected": [
+     "plates",
+     "scales"
+    ],
+    "extras": [
+     "beak",
+     "horn",
+     "stripes"
+    ],
+    "omissions": []
+   },
+   "meta_spark": {
+    "seen": [
+     "beak",
+     "plates",
+     "scales",
+     "stripes"
+    ],
+    "expected": [
+     "plates",
+     "scales"
+    ],
+    "extras": [
+     "beak",
+     "stripes"
+    ],
+    "omissions": []
+   }
+  },
+  "third_animals": {
+   "spark_open": [
+    "sheep"
+   ],
+   "meta_spark": [
+    "sheep"
+   ]
+  },
+  "balance": {
+   "yes": 3,
+   "no": 5
+  },
+  "expected_counts": {
+   "separate_bodies": 1,
+   "heads": 1,
+   "walking_legs": 4,
+   "wings": 0,
+   "extra_limb_pieces": 0
+  }
+ },
+ "edit": {
+  "instruction": "The plan has no beak: show the tortoise's own body there instead; keep everything else the same. The plan has no stripes: show the tortoise's own body there instead; keep everything else the same. Show the planned domestic goat contribution only as dense fur on the tortoise's own body over the back and flanks, not as separate animals; keep everything else the same.",
+  "previous_response_id": "resp_6ae7609cd110708865584fc6",
+  "response_id": "resp_6ae76130b66bc8ba8a8243ce"
+ },
+ "after": {
+  "protocol": "plan-blind (S3a)",
+  "critics": [
+   "spark_open",
+   "meta_spark"
+  ],
+  "items": [
+   {
+    "source": "checklist",
+    "key": "frame",
+    "text": "Is the overall body shape that of a tortoise?",
+    "group": "structure",
+    "expect": "yes",
+    "answers": {
+     "spark_open": "yes",
+     "meta_spark": "yes"
+    },
+    "status": "pass",
+    "fix": "Show the planned tortoise body shape and outline; keep everything else the same.",
+    "sam": null,
+    "pair_status": "pass",
+    "sam_found": null,
+    "sam_fill": null
+   },
+   {
+    "source": "checklist",
+    "key": "head",
+    "text": "Does it have a tortoise head with visible eyes?",
+    "group": "structure",
+    "expect": "yes",
+    "answers": {
+     "spark_open": "yes",
+     "meta_spark": "yes"
+    },
+    "status": "pass",
+    "fix": "Show the planned tortoise head, fully visible with clear eyes; keep everything else the same.",
+    "sam": null,
+    "pair_status": "pass",
+    "sam_found": null,
+    "sam_fill": null
+   },
+   {
+    "source": "checklist",
+    "key": "no_wings",
+    "text": "Are there wings anywhere on the body?",
+    "group": "structure",
+    "expect": "no",
+    "answers": {
+     "spark_open": "no",
+     "meta_spark": "no"
+    },
+    "status": "pass",
+    "fix": "The plan has no wings: show the tortoise's own body there instead; keep everything else the same.",
+    "sam": null,
+    "pair_status": "pass",
+    "sam_found": null,
+    "sam_fill": null
+   },
+   {
+    "source": "checklist",
+    "key": "whole_animal",
+    "text": "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?",
+    "group": "structure",
+    "expect": "no",
+    "answers": {
+     "spark_open": "no",
+     "meta_spark": "no"
+    },
+    "status": "pass",
+    "fix": "Show the planned domestic goat contribution only as dense fur on the tortoise's own body over the back and flanks, not as separate animals; keep everything else the same.",
+    "sam": null,
+    "pair_status": "pass",
+    "sam_found": null,
+    "sam_fill": null
+   },
+   {
+    "source": "checklist",
+    "key": "second_head",
+    "text": "Is there a second head anywhere?",
+    "group": "structure",
+    "expect": "no",
+    "answers": {
+     "spark_open": "no",
+     "meta_spark": "no"
+    },
+    "status": "pass",
+    "fix": "Show one single head, as planned; keep everything else the same.",
+    "sam": null,
+    "pair_status": "pass",
+    "sam_found": null,
+    "sam_fill": null
+   },
+   {
+    "source": "checklist",
+    "key": "extra_legs",
+    "text": "Does it have more than 4 walking legs?",
+    "group": "structure",
+    "expect": "no",
+    "answers": {
+     "spark_open": "no",
+     "meta_spark": "no"
+    },
+    "status": "pass",
+    "fix": "Show exactly 4 walking legs, as planned; keep everything else the same.",
+    "sam": null,
+    "pair_status": "pass",
+    "sam_found": null,
+    "sam_fill": null
+   },
+   {
+    "source": "checklist",
+    "key": "no_mane",
+    "text": "Does it have a full mane of long hair around the head and neck?",
+    "group": "structure",
+    "expect": "no",
+    "answers": {
+     "spark_open": "no",
+     "meta_spark": "no"
+    },
+    "status": "pass",
+    "fix": "The plan has no mane: show the planned neck with no mane; keep everything else the same.",
+    "sam": null,
+    "pair_status": "pass",
+    "sam_found": null,
+    "sam_fill": null
+   },
+   {
+    "source": "checklist",
+    "key": "cover_present",
+    "text": "Is there dense fur on the back and flanks?",
+    "group": "surface",
+    "expect": "yes",
+    "answers": {
+     "spark_open": "yes",
+     "meta_spark": "yes"
+    },
+    "status": "pass",
+    "fix": "Show the planned dense fur over the back and flanks; keep everything else the same.",
+    "sam": null,
+    "pair_status": "pass",
+    "sam_found": null,
+    "sam_fill": null
+   },
+   {
+    "source": "count",
+    "key": "separate_bodies",
+    "text": "separate bodies: 1",
+    "group": "structure",
+    "expect": 1,
+    "answers": {
+     "spark_open": 1,
+     "meta_spark": 1
+    },
+    "status": "pass",
+    "fix": "Show the planned domestic goat contribution only as dense fur on the tortoise's own body over the back and flanks, not as separate animals; keep everything else the same.",
+    "sam": null,
+    "pair_status": "pass",
+    "sam_found": null,
+    "sam_fill": null
+   },
+   {
+    "source": "count",
+    "key": "heads",
+    "text": "heads: 1",
+    "group": "structure",
+    "expect": 1,
+    "answers": {
+     "spark_open": 1,
+     "meta_spark": 1
+    },
+    "status": "pass",
+    "fix": "Show one single head, as planned; keep everything else the same.",
+    "sam": null,
+    "pair_status": "pass",
+    "sam_found": null,
+    "sam_fill": null
+   },
+   {
+    "source": "count",
+    "key": "walking_legs",
+    "text": "walking legs: 4",
+    "group": "structure",
+    "expect": 4,
+    "answers": {
+     "spark_open": 4,
+     "meta_spark": 4
+    },
+    "status": "pass",
+    "fix": "Show exactly 4 walking legs, as planned; keep everything else the same.",
+    "sam": null,
+    "pair_status": "pass",
+    "sam_found": null,
+    "sam_fill": null
+   },
+   {
+    "source": "count",
+    "key": "wings",
+    "text": "wings: 0",
+    "group": "structure",
+    "expect": 0,
+    "answers": {
+     "spark_open": 0,
+     "meta_spark": 0
+    },
+    "status": "pass",
+    "fix": "The plan has no wings: show the tortoise's own body there instead; keep everything else the same.",
+    "sam": null,
+    "pair_status": "pass",
+    "sam_found": null,
+    "sam_fill": null
+   },
+   {
+    "source": "count",
+    "key": "extra_limb_pieces",
+    "text": "extra limb pieces: 0",
+    "group": "structure",
+    "expect": 0,
+    "answers": {
+     "spark_open": 0,
+     "meta_spark": 0
+    },
+    "status": "pass",
+    "fix": "Show the tortoise's own limbs only, with no extra limb-like pieces; keep everything else the same.",
+    "sam": null,
+    "pair_status": "pass",
+    "sam_found": null,
+    "sam_fill": null
+   },
+   {
+    "source": "description",
+    "key": "extra_beak",
+    "text": "described but not planned: beak",
+    "group": "structure",
+    "expect": "absent",
+    "answers": {
+     "spark_open": false,
+     "meta_spark": true
+    },
+    "status": "fail",
+    "fix": "The plan has no beak: show the tortoise's own body there instead; keep everything else the same.",
+    "sam": null,
+    "pair_status": "uncertain",
+    "sam_found": null,
+    "sam_fill": null
+   },
+   {
+    "source": "description",
+    "key": "extra_mane",
+    "text": "described but not planned: mane",
+    "group": "structure",
+    "expect": "absent",
+    "answers": {
+     "spark_open": true,
+     "meta_spark": false
+    },
+    "status": "pass",
+    "fix": "The plan has no mane: show the tortoise's own body there instead; keep everything else the same.",
+    "sam": null,
+    "pair_status": "uncertain",
+    "sam_found": null,
+    "sam_fill": null
+   },
+   {
+    "source": "description",
+    "key": "extra_stripes",
+    "text": "described but not planned: stripes",
+    "group": "structure",
+    "expect": "absent",
+    "answers": {
+     "spark_open": true,
+     "meta_spark": true
+    },
+    "status": "fail",
+    "fix": "The plan has no stripes: show the tortoise's own body there instead; keep everything else the same.",
+    "sam": null,
+    "pair_status": "fail",
+    "sam_found": null,
+    "sam_fill": null
+   },
+   {
+    "source": "description",
+    "key": "third_animal",
+    "text": "an animal other than the two parents",
+    "group": "structure",
+    "expect": "none",
+    "answers": {
+     "spark_open": [
+      "sheep"
+     ],
+     "meta_spark": [
+      "sheep"
+     ]
+    },
+    "status": "fail",
+    "fix": "Show the planned domestic goat contribution only as dense fur on the tortoise's own body over the back and flanks, not as separate animals; keep everything else the same.",
+    "sam": null,
+    "pair_status": "fail",
+    "sam_found": null,
+    "sam_fill": null
+   }
+  ],
+  "failures": [
+   {
+    "source": "description",
+    "key": "extra_beak",
+    "text": "described but not planned: beak",
+    "group": "structure",
+    "expect": "absent",
+    "answers": {
+     "spark_open": false,
+     "meta_spark": true
+    },
+    "status": "fail",
+    "fix": "The plan has no beak: show the tortoise's own body there instead; keep everything else the same.",
+    "sam": null,
+    "pair_status": "uncertain",
+    "sam_found": null,
+    "sam_fill": null
+   },
+   {
+    "source": "description",
+    "key": "extra_stripes",
+    "text": "described but not planned: stripes",
+    "group": "structure",
+    "expect": "absent",
+    "answers": {
+     "spark_open": true,
+     "meta_spark": true
+    },
+    "status": "fail",
+    "fix": "The plan has no stripes: show the tortoise's own body there instead; keep everything else the same.",
+    "sam": null,
+    "pair_status": "fail",
+    "sam_found": null,
+    "sam_fill": null
+   },
+   {
+    "source": "description",
+    "key": "third_animal",
+    "text": "an animal other than the two parents",
+    "group": "structure",
+    "expect": "none",
+    "answers": {
+     "spark_open": [
+      "sheep"
+     ],
+     "meta_spark": [
+      "sheep"
+     ]
+    },
+    "status": "fail",
+    "fix": "Show the planned domestic goat contribution only as dense fur on the tortoise's own body over the back and flanks, not as separate animals; keep everything else the same.",
+    "sam": null,
+    "pair_status": "fail",
+    "sam_found": null,
+    "sam_fill": null
+   }
+  ],
+  "structural_failures": 3,
+  "uncertain": 0,
+  "sam_calls": 0,
+  "descriptions": {
+   "spark_open": {
+    "description": "The creature is a large tortoise-like reptile shown in right lateral profile standing on a small patch of dry, sparsely grassed ground. It has a high-domed shell whose lower sides and flared margins are visible as tan and dark brown scutes, four thick columnar legs heavily armored with scales ending in clawed feet, a short pointed scaly tail at the rear, and a reptilian head with a beaked mouth, dark eye, and scaly neck extended forward to the right. The entire dorsal surface of the shell is completely obscured by a dense, thick, matted mass of curly shaggy brown wool resembling a sheep's fleece that hangs down over the edges of the shell.",
+    "parts": [
+     {
+      "part": "head",
+      "looks_like": "reptilian and heavily scaled with small polygonal scales, a dark eye with eyelid, a nostril near the snout tip, and a blunt beaked mouth with a slightly overhanging upper jaw",
+      "where": "at the anterior end of the body on the right side of the image, extended forward on a thick neck beyond the front edge of the shell"
+     },
+     {
+      "part": "legs",
+      "looks_like": "thick, columnar and elephantine, covered in small rounded scales with larger pointed tubercles on the forelimbs",
+      "where": "four legs positioned under the shell supporting the body, two on the right side fully visible in the foreground and two on the left side partially visible behind them"
+     },
+     {
+      "part": "feet",
+      "looks_like": "broad and scaly with short blunt claws/nails on the toes, the soles contacting the ground",
+      "where": "at the distal end of each leg at the bottom of the image"
+     },
+     {
+      "part": "tail",
+      "looks_like": "short, tapering and pointed, armored with rounded overlapping scales",
+      "where": "protruding from beneath the posterior margin of the shell on the left side of the image"
+     },
+     {
+      "part": "shell",
+      "looks_like": "large high-domed carapace, lower portion visible as rows of large polygonal scutes in tan, cream and dark brown with concentric growth lines and slightly flared edges, dorsal portion hidden under wool",
+      "where": "covering the back and sides of the body, extending from behind the neck to above the tail"
+     },
+     {
+      "part": "plates",
+      "looks_like": "individual large scutes/plates of the shell with striped brown and cream coloration and upturned, leaf-like margins along the sides and rear",
+      "where": "forming the visible lower lateral and posterior wall of the shell around the body"
+     },
+     {
+      "part": "scales",
+      "looks_like": "small polygonal, overlapping and keeled scales in gray-brown tones, larger conical pointed scales on the front of the forelimbs and smaller pebbly scales on the hind limbs, neck and head",
+      "where": "covering the head, neck, legs, feet and tail"
+     },
+     {
+      "part": "mane",
+      "looks_like": "dense, thick, matted and very curly shaggy woolly fleece in mixed dark and light brown, with long curled locks hanging over the sides",
+      "where": "covering the entire dorsal surface of the shell on top of the back, draping over the upper edges of the shell plates"
+     }
+    ],
+    "attached_objects": [],
+    "animals": [
+     "tortoise",
+     "sheep"
+    ],
+    "separate_bodies": 1,
+    "heads": 1,
+    "walking_legs": 4,
+    "wings": 0,
+    "extra_limb_pieces": 0,
+    "tails": 1
+   },
+   "meta_spark": {
+    "description": "A large heavy-bodied tortoise shown in right-facing side profile standing on a small patch of sandy ground with sparse grass. It has a high domed shell with flared marginal scutes in brown and tan, and the entire top of the carapace is covered by a dense mass of thick curly shaggy brown wool-like fur that hangs down over the sides. The reptilian head is extended forward on a thick scaly neck, and the animal stands on four thick columnar scaly legs ending in short blunt claws, with a short tapered scaly tail protruding at the rear.",
+    "parts": [
+     {
+      "part": "head",
+      "looks_like": "reptilian with blunt beak, pebbly polygonal scales in gray-brown, dark eye and small nostril",
+      "where": "at front right, extended forward from the shell"
+     },
+     {
+      "part": "neck",
+      "looks_like": "thick and wrinkled with small round pebbly scales",
+      "where": "between the head and the front opening of the shell"
+     },
+     {
+      "part": "front legs",
+      "looks_like": "thick columnar with small pebbly scales below and large overlapping pointed conical scales on the upper front",
+      "where": "under the front of the shell, two legs supporting the front body"
+     },
+     {
+      "part": "hind legs",
+      "looks_like": "thick columnar covered in small pebbly scales",
+      "where": "under the rear of the shell, two legs supporting the rear body"
+     },
+     {
+      "part": "feet",
+      "looks_like": "broad rounded with short blunt conical claws",
+      "where": "at the bottom of each leg on the ground"
+     },
+     {
+      "part": "tail",
+      "looks_like": "short tapered and pointed, covered in large rounded overlapping scales",
+      "where": "at the rear left, protruding from under the back edge of the shell"
+     },
+     {
+      "part": "shell",
+      "looks_like": "domed with large polygonal scutes in striped dark brown and tan, flared serrated rim, yellow-brown on the sides and underside",
+      "where": "covering the middle of the body from behind the neck to above the tail"
+     },
+     {
+      "part": "fur covering",
+      "looks_like": "dense thick curly shaggy brown fleece like sheep's wool in clumps hanging over the edge",
+      "where": "covering the entire top of the shell and draping over the upper sides"
+     }
+    ],
+    "attached_objects": [],
+    "animals": [
+     "tortoise",
+     "sheep"
+    ],
+    "separate_bodies": 1,
+    "heads": 1,
+    "walking_legs": 4,
+    "wings": 0,
+    "extra_limb_pieces": 0,
+    "tails": 1
+   }
+  },
+  "matches": {
+   "spark_open": {
+    "seen": [
+     "mane",
+     "plates",
+     "scales",
+     "stripes"
+    ],
+    "expected": [
+     "plates",
+     "scales"
+    ],
+    "extras": [
+     "mane",
+     "stripes"
+    ],
+    "omissions": []
+   },
+   "meta_spark": {
+    "seen": [
+     "beak",
+     "plates",
+     "scales",
+     "stripes"
+    ],
+    "expected": [
+     "plates",
+     "scales"
+    ],
+    "extras": [
+     "beak",
+     "stripes"
+    ],
+    "omissions": []
+   }
+  },
+  "third_animals": {
+   "spark_open": [
+    "sheep"
+   ],
+   "meta_spark": [
+    "sheep"
+   ]
+  },
+  "balance": {
+   "yes": 3,
+   "no": 5
+  },
+  "expected_counts": {
+   "separate_bodies": 1,
+   "heads": 1,
+   "walking_legs": 4,
+   "wings": 0,
+   "extra_limb_pieces": 0
+  }
+ },
+ "kept": "edited"
+}

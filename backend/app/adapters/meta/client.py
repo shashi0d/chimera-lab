@@ -28,7 +28,7 @@ import httpx
 from app.adapters.base import GeneratedImage
 from app.adapters.usage import CallKind, CallRecord, Timer, current_step, guard, record, tokens_of
 from app.errors import ChimeraError
-from app.models.schemas import AnimalReading, ErrorCode, FieldCard, FusionPlan
+from app.models.schemas import AnimalReading, ErrorCode
 
 # ------------------------------------------------------------- formats
 
@@ -70,53 +70,11 @@ READING_SCHEMA: dict[str, Any] = {
     },
 }
 
-PARTS = ["head", "body", "limbs", "covering", "tail"]
-
-PLAN_SCHEMA: dict[str, Any] = {
-    "type": "object",
-    "additionalProperties": False,
-    "required": ["creature_name", "body_plan", "part_donors", "rationale"],
-    "properties": {
-        "creature_name": {"type": "string"},
-        "body_plan": {"type": "string"},
-        "part_donors": {
-            "type": "object",
-            "additionalProperties": False,
-            "required": PARTS,
-            "properties": {k: {"type": "string", "enum": ["A", "B"]} for k in PARTS},
-        },
-        "rationale": {"type": "string"},
-    },
-}
-
-CARD_SCHEMA: dict[str, Any] = {
-    "type": "object",
-    "additionalProperties": False,
-    "required": ["common_name", "binomial", "habitat", "diet", "size", "behaviour"],
-    "properties": {k: {"type": "string"} for k in ["common_name", "binomial", "habitat", "diet", "size", "behaviour"]},
-}
-
 DESCRIBE_INSTRUCTIONS = (
     "You are a field biologist. Identify the single main animal in the photo: its everyday English common name "
     "and its Latin binomial (genus species, the standard accepted name). If there is no animal, set is_animal=false. "
     "If any human or human body part is visible, set contains_human=true and do not describe the person. "
     "List only anatomy that is actually visible. body_plan is one of: " + ", ".join(BODY_PLANS) + "."
-)
-
-PLAN_INSTRUCTIONS = (
-    "You design anatomically plausible creature fusions from two real animals, A and B. Choose which parent donates "
-    "each part (head, body, limbs, covering, tail) so the result can plausibly stand, move and feed. Any part in "
-    "donor_pins is fixed by the user: keep it exactly. body_plan must be exactly one value from allowed_body_plans. "
-    "Respect the rule warnings and real-hybrid facts provided. Keep the rationale to two sentences. "
-    "creature_name: an evocative common name of two or three words, as a field guide would print it. "
-    "Do not glue the parents' names together (no portmanteaus like 'Liger' or 'Lioiger')."
-)
-
-CARD_INSTRUCTIONS = (
-    "Write a natural-history field-guide entry for an INVENTED creature fused from two real animals. "
-    "Invent a Latinate binomial. Base habitat and diet only on the parents' data provided. For size, quote "
-    "the parents' recorded ranges exactly as given and do not compute averages or midpoints. Two sentences "
-    "of behaviour at most. Never claim the creature exists."
 )
 
 # ------------------------------------------------------------- request builders (pure)
@@ -138,30 +96,6 @@ def build_describe_request(model: str, image: bytes) -> dict[str, Any]:
         ],
         "response_format": _json_schema("animal_reading", READING_SCHEMA),
         "temperature": 0,
-    }
-
-
-def build_plan_request(model: str, context: dict[str, Any]) -> dict[str, Any]:
-    return {
-        "model": model,
-        "messages": [
-            {"role": "system", "content": PLAN_INSTRUCTIONS},
-            {"role": "user", "content": json.dumps(context, ensure_ascii=False)},
-        ],
-        "response_format": _json_schema("fusion_plan", PLAN_SCHEMA),
-        "temperature": 0.4,
-    }
-
-
-def build_card_request(model: str, context: dict[str, Any]) -> dict[str, Any]:
-    return {
-        "model": model,
-        "messages": [
-            {"role": "system", "content": CARD_INSTRUCTIONS},
-            {"role": "user", "content": json.dumps(context, ensure_ascii=False)},
-        ],
-        "response_format": _json_schema("field_card", CARD_SCHEMA),
-        "temperature": 0.6,
     }
 
 
@@ -203,17 +137,6 @@ def _message_json(payload: dict[str, Any]) -> dict[str, Any]:
 
 def parse_describe_response(payload: dict[str, Any]) -> AnimalReading:
     return AnimalReading.model_validate(_message_json(payload))
-
-
-def parse_plan_response(payload: dict[str, Any]) -> FusionPlan:
-    data = _message_json(payload)
-    if "creature_name" in data:  # L1-10: the plan names the creature
-        data["name_suggestion"] = data.pop("creature_name")
-    return FusionPlan.model_validate(data)
-
-
-def parse_card_response(payload: dict[str, Any]) -> FieldCard:
-    return FieldCard.model_validate(_message_json(payload))
 
 
 def parse_generate_response(payload: dict[str, Any], model: str) -> GeneratedImage:
@@ -278,6 +201,8 @@ def map_sdk_error(exc: Exception) -> ChimeraError:
 # ------------------------------------------------------------- record and replay (L1-09)
 
 ELIDED = "<elided>"
+# Every API key a recording must never contain (S1 adds the Baseten key).
+SECRET_ENV = ("META_API_KEY", "BASETEN_API_KEY_MODEL_MUSE_SPARK_OPEN_26")
 
 
 def _elide(obj: Any) -> Any:
@@ -302,8 +227,8 @@ def save_recording(purpose: str, request: dict[str, Any], payload: dict[str, Any
         return
     text = json.dumps({"purpose": purpose, "request": _elide(request), "response": _elide(payload)}, indent=1,
                       ensure_ascii=False, default=str)
-    key = os.environ.get("META_API_KEY") or ""
-    if (key and key in text) or "Bearer " in text or "Authorization" in text:
+    keys = [os.environ.get(k) or "" for k in SECRET_ENV]
+    if any(k and k in text for k in keys) or "Bearer " in text or "Authorization" in text:
         raise RuntimeError("refusing to save a recording that contains credentials")
     path = Path(folder)
     path.mkdir(parents=True, exist_ok=True)
@@ -314,40 +239,61 @@ def save_recording(purpose: str, request: dict[str, Any], payload: dict[str, Any
 # ------------------------------------------------------------- adapters
 
 
+def _record_error(purpose: str, body: dict[str, Any], exc: Exception, mapped: ChimeraError) -> None:
+    """Keep the upstream status and error body (e.g. model_not_found) on the mapped error and in the recording."""
+    response = getattr(exc, "response", None)
+    if response is None:
+        return
+    try:
+        err_body: Any = response.json()
+    except ValueError:
+        err_body = response.text[:2000]
+    mapped.details.setdefault("upstream_status", getattr(exc, "status_code", None))
+    mapped.details.setdefault("upstream_body", err_body)
+    save_recording(f"{purpose}_error", body, {"status": getattr(exc, "status_code", None), "body": err_body})
+
+
 class _MetaClient:
     def __init__(self, base_url: str, api_key: str, timeout: float) -> None:
         import openai
 
         # The SDK does not read our key from the environment by itself: pass it explicitly.
         self.client = openai.AsyncOpenAI(base_url=base_url, api_key=api_key, timeout=timeout, max_retries=0)
+        self.provider = "baseten" if "baseten" in base_url else "meta" if "meta.ai" in base_url else "other"
 
-    async def call(self, kind: CallKind, purpose: str, model: str, body: dict[str, Any], responses: bool = False) -> dict[str, Any]:
+    async def call(self, kind: CallKind, purpose: str, model: str, body: dict[str, Any], responses: bool = False,
+                   raw: bool = False) -> dict[str, Any]:
+        """One attempt. `raw` returns the HTTP body as sent by the server (Responses API only), for models
+        whose output items the SDK has no type for (SAM 3.1)."""
         guard(kind)
         payload: dict[str, Any] | None = None
         outcome = "ok"
         with Timer() as t:
             try:
-                if responses:
-                    resp = await self.client.responses.create(**body)
+                if raw:
+                    resp = await self.client.responses.with_raw_response.create(**body)
+                    payload = resp.http_response.json()
+                elif responses:
+                    payload = (await self.client.responses.create(**body)).model_dump()
                 else:
-                    resp = await self.client.chat.completions.create(**body)
-                payload = resp.model_dump()
+                    payload = (await self.client.chat.completions.create(**body)).model_dump()
             except asyncio.CancelledError:
                 # The per-attempt timeout (asyncio.wait_for) cancelled us: still account for the attempt.
                 t.__exit__()
                 record(CallRecord(step=current_step.get(), kind=kind, purpose=purpose, model=model,
-                                  latency_ms=t.ms, outcome="TIMEOUT_CANCELLED"))
+                                  latency_ms=t.ms, outcome="TIMEOUT_CANCELLED", provider=self.provider))
                 raise
             except Exception as exc:  # noqa: BLE001 - mapped below, then recorded
                 mapped = exc if isinstance(exc, ChimeraError) else map_sdk_error(exc)
                 outcome = mapped.code.value
+                _record_error(purpose, body, exc, mapped)
                 error: ChimeraError | None = mapped
             else:
                 error = None
         inp, out, total = tokens_of((payload or {}).get("usage"))
         record(CallRecord(step=current_step.get(), kind=kind, purpose=purpose, model=model, latency_ms=t.ms,
                           input_tokens=inp, output_tokens=out, total_tokens=total, outcome=outcome,
-                          response_id=(payload or {}).get("id")))
+                          response_id=(payload or {}).get("id"), provider=self.provider))
         if payload is not None:
             save_recording(purpose, body, payload)
         if error is not None:
@@ -365,13 +311,25 @@ class MetaVision:
         payload = await self.http.call("spark", "describe", self.model_id, build_describe_request(self.model_id, image))
         return parse_describe_response(payload)
 
-    async def plan_fusion(self, context: dict[str, Any]) -> FusionPlan:
-        payload = await self.http.call("spark", "plan", self.model_id, build_plan_request(self.model_id, context))
-        return parse_plan_response(payload)
+    async def _json(self, purpose: str, body: dict[str, Any], timeout: float) -> dict[str, Any]:
+        from app.retry import call_with_retry
 
-    async def write_field_card(self, context: dict[str, Any]) -> FieldCard:
-        payload = await self.http.call("spark", "card", self.model_id, build_card_request(self.model_id, context))
-        return parse_card_response(payload)
+        payload = await call_with_retry(lambda: self.http.call("spark", purpose, self.model_id, body),
+                                        timeout=timeout, base_delay=1.0, max_attempts=2)
+        return _message_json(payload)
+
+    async def check_request(self, items: list[dict[str, str]]) -> dict[str, Any]:
+        """The topic check (app.agentapi.creature_ai): is this text about making or editing an animal chimera?"""
+        from app.agentapi.creature_ai import build_guard_request, parse_guard
+
+        return parse_guard(await self._json("topic_check", build_guard_request(self.model_id, items), 45.0))
+
+    async def profile(self, image: bytes, context: dict[str, Any]) -> dict[str, str]:
+        """The creature's basic info, written from its image and how it was made (app.agentapi.creature_ai)."""
+        from app.agentapi.creature_ai import build_profile_request, parse_profile
+
+        return parse_profile(await self._json("creature_profile", build_profile_request(self.model_id, image,
+                                                                                         context), 90.0))
 
 
 class MetaImageGen:

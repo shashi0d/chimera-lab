@@ -1,0 +1,1200 @@
+{
+ "purpose": "evo_cite_traits",
+ "request": {
+  "model": "muse-spark-1.3",
+  "instructions": "You describe a real animal for a natural-history engine, from sources. Use web search and open the pages you rely on: encyclopedias, museums, universities, zoos, government agencies or peer-reviewed papers. For each field give the value, source_url (the exact URL of a page you opened that supports the value) and evidence (a short quote from that page). If no source you opened supports a field, give your best estimate and leave source_url and evidence empty; never invent a URL. Use typical adult values. body_plan: the overall layout (winged means wings are the main limbs; insects are multi_legged). visible_features: three to six short visible features someone would draw. mouthparts: what the head eats with. breathing: the main breathing organ. claimed_crosses: scientific names of species it is documented to hybridize with, or an empty list.",
+  "tools": [
+   {
+    "type": "web_search"
+   }
+  ],
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Describe, with sources: indian pangolin (Manis crassicaudata)"
+     }
+    ]
+   }
+  ],
+  "text": {
+   "format": {
+    "type": "json_schema",
+    "name": "cited_traits",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "body_plan",
+      "primary_locomotor_part",
+      "covering",
+      "movement",
+      "habitat",
+      "climate",
+      "diet",
+      "active_time",
+      "body_mass_kg",
+      "body_length_m",
+      "visible_features",
+      "mouthparts",
+      "breathing",
+      "mouthparts_detail",
+      "breathing_detail",
+      "claimed_crosses"
+     ],
+     "properties": {
+      "body_plan": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "properties": {
+        "value": {
+         "type": "array",
+         "items": {
+          "type": "string",
+          "enum": [
+           "quadruped",
+           "biped",
+           "winged",
+           "finned",
+           "multi_legged",
+           "serpentine",
+           "radial"
+          ]
+         }
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "evidence": {
+         "type": "string"
+        }
+       }
+      },
+      "primary_locomotor_part": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "properties": {
+        "value": {
+         "type": "string",
+         "enum": [
+          "four legs",
+          "two legs",
+          "multiple legs",
+          "wings",
+          "fins",
+          "flippers",
+          "bell"
+         ]
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "evidence": {
+         "type": "string"
+        }
+       }
+      },
+      "covering": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "properties": {
+        "value": {
+         "type": "string",
+         "enum": [
+          "fur",
+          "feathers",
+          "scales",
+          "skin",
+          "exoskeleton",
+          "shell"
+         ]
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "evidence": {
+         "type": "string"
+        }
+       }
+      },
+      "movement": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "properties": {
+        "value": {
+         "type": "array",
+         "items": {
+          "type": "string",
+          "enum": [
+           "walk",
+           "run",
+           "swim",
+           "fly",
+           "climb",
+           "burrow",
+           "glide"
+          ]
+         }
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "evidence": {
+         "type": "string"
+        }
+       }
+      },
+      "habitat": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "properties": {
+        "value": {
+         "type": "array",
+         "items": {
+          "type": "string",
+          "enum": [
+           "grassland",
+           "forest",
+           "mountain",
+           "tundra",
+           "wetland",
+           "freshwater",
+           "marine",
+           "desert"
+          ]
+         }
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "evidence": {
+         "type": "string"
+        }
+       }
+      },
+      "climate": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "properties": {
+        "value": {
+         "type": "array",
+         "items": {
+          "type": "string",
+          "enum": [
+           "temperate",
+           "tropical",
+           "polar",
+           "arid"
+          ]
+         }
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "evidence": {
+         "type": "string"
+        }
+       }
+      },
+      "diet": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "properties": {
+        "value": {
+         "type": "string",
+         "enum": [
+          "carnivore",
+          "herbivore",
+          "omnivore",
+          "insectivore",
+          "piscivore"
+         ]
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "evidence": {
+         "type": "string"
+        }
+       }
+      },
+      "active_time": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "properties": {
+        "value": {
+         "type": "array",
+         "items": {
+          "type": "string",
+          "enum": [
+           "diurnal",
+           "nocturnal",
+           "crepuscular",
+           "unrecorded"
+          ]
+         }
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "evidence": {
+         "type": "string"
+        }
+       }
+      },
+      "body_mass_kg": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "properties": {
+        "value": {
+         "type": "object",
+         "additionalProperties": false,
+         "required": [
+          "min",
+          "max"
+         ],
+         "properties": {
+          "min": {
+           "type": "number"
+          },
+          "max": {
+           "type": "number"
+          }
+         }
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "evidence": {
+         "type": "string"
+        }
+       }
+      },
+      "body_length_m": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "properties": {
+        "value": {
+         "type": "object",
+         "additionalProperties": false,
+         "required": [
+          "min",
+          "max"
+         ],
+         "properties": {
+          "min": {
+           "type": "number"
+          },
+          "max": {
+           "type": "number"
+          }
+         }
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "evidence": {
+         "type": "string"
+        }
+       }
+      },
+      "visible_features": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "properties": {
+        "value": {
+         "type": "array",
+         "items": {
+          "type": "string"
+         }
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "evidence": {
+         "type": "string"
+        }
+       }
+      },
+      "mouthparts": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "properties": {
+        "value": {
+         "type": "string",
+         "enum": [
+          "grinding teeth",
+          "bladed teeth",
+          "mixed teeth",
+          "pointed teeth",
+          "beak",
+          "mandibles",
+          "toothless tongue",
+          "other"
+         ]
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "evidence": {
+         "type": "string"
+        }
+       }
+      },
+      "breathing": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "properties": {
+        "value": {
+         "type": "string",
+         "enum": [
+          "lungs",
+          "gills",
+          "external gills and lungs",
+          "skin and lungs",
+          "tracheae",
+          "book lungs",
+          "other"
+         ]
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "evidence": {
+         "type": "string"
+        }
+       }
+      },
+      "mouthparts_detail": {
+       "type": "string"
+      },
+      "breathing_detail": {
+       "type": "string"
+      },
+      "claimed_crosses": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      }
+     }
+    }
+   }
+  }
+ },
+ "response": {
+  "top_logprobs": 0,
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "service_tier": "auto",
+  "model": "muse-spark-1.3",
+  "reasoning": {
+   "effort": "high"
+  },
+  "background": false,
+  "text": {
+   "format": {
+    "type": "json_schema",
+    "name": "cited_traits",
+    "schema": {
+     "required": [
+      "body_plan",
+      "primary_locomotor_part",
+      "covering",
+      "movement",
+      "habitat",
+      "climate",
+      "diet",
+      "active_time",
+      "body_mass_kg",
+      "body_length_m",
+      "visible_features",
+      "mouthparts",
+      "breathing",
+      "mouthparts_detail",
+      "breathing_detail",
+      "claimed_crosses"
+     ],
+     "properties": {
+      "active_time": {
+       "additionalProperties": false,
+       "properties": {
+        "evidence": {
+         "type": "string"
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "value": {
+         "items": {
+          "enum": [
+           "diurnal",
+           "nocturnal",
+           "crepuscular",
+           "unrecorded"
+          ],
+          "type": "string"
+         },
+         "type": "array"
+        }
+       },
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "type": "object"
+      },
+      "body_length_m": {
+       "additionalProperties": false,
+       "properties": {
+        "evidence": {
+         "type": "string"
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "value": {
+         "additionalProperties": false,
+         "properties": {
+          "max": {
+           "type": "number"
+          },
+          "min": {
+           "type": "number"
+          }
+         },
+         "required": [
+          "min",
+          "max"
+         ],
+         "type": "object"
+        }
+       },
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "type": "object"
+      },
+      "body_mass_kg": {
+       "additionalProperties": false,
+       "properties": {
+        "evidence": {
+         "type": "string"
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "value": {
+         "additionalProperties": false,
+         "properties": {
+          "max": {
+           "type": "number"
+          },
+          "min": {
+           "type": "number"
+          }
+         },
+         "required": [
+          "min",
+          "max"
+         ],
+         "type": "object"
+        }
+       },
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "type": "object"
+      },
+      "body_plan": {
+       "additionalProperties": false,
+       "properties": {
+        "evidence": {
+         "type": "string"
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "value": {
+         "items": {
+          "enum": [
+           "quadruped",
+           "biped",
+           "winged",
+           "finned",
+           "multi_legged",
+           "serpentine",
+           "radial"
+          ],
+          "type": "string"
+         },
+         "type": "array"
+        }
+       },
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "type": "object"
+      },
+      "breathing": {
+       "additionalProperties": false,
+       "properties": {
+        "evidence": {
+         "type": "string"
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "value": {
+         "enum": [
+          "lungs",
+          "gills",
+          "external gills and lungs",
+          "skin and lungs",
+          "tracheae",
+          "book lungs",
+          "other"
+         ],
+         "type": "string"
+        }
+       },
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "type": "object"
+      },
+      "breathing_detail": {
+       "type": "string"
+      },
+      "claimed_crosses": {
+       "items": {
+        "type": "string"
+       },
+       "type": "array"
+      },
+      "climate": {
+       "additionalProperties": false,
+       "properties": {
+        "evidence": {
+         "type": "string"
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "value": {
+         "items": {
+          "enum": [
+           "temperate",
+           "tropical",
+           "polar",
+           "arid"
+          ],
+          "type": "string"
+         },
+         "type": "array"
+        }
+       },
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "type": "object"
+      },
+      "covering": {
+       "additionalProperties": false,
+       "properties": {
+        "evidence": {
+         "type": "string"
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "value": {
+         "enum": [
+          "fur",
+          "feathers",
+          "scales",
+          "skin",
+          "exoskeleton",
+          "shell"
+         ],
+         "type": "string"
+        }
+       },
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "type": "object"
+      },
+      "diet": {
+       "additionalProperties": false,
+       "properties": {
+        "evidence": {
+         "type": "string"
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "value": {
+         "enum": [
+          "carnivore",
+          "herbivore",
+          "omnivore",
+          "insectivore",
+          "piscivore"
+         ],
+         "type": "string"
+        }
+       },
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "type": "object"
+      },
+      "habitat": {
+       "additionalProperties": false,
+       "properties": {
+        "evidence": {
+         "type": "string"
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "value": {
+         "items": {
+          "enum": [
+           "grassland",
+           "forest",
+           "mountain",
+           "tundra",
+           "wetland",
+           "freshwater",
+           "marine",
+           "desert"
+          ],
+          "type": "string"
+         },
+         "type": "array"
+        }
+       },
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "type": "object"
+      },
+      "mouthparts": {
+       "additionalProperties": false,
+       "properties": {
+        "evidence": {
+         "type": "string"
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "value": {
+         "enum": [
+          "grinding teeth",
+          "bladed teeth",
+          "mixed teeth",
+          "pointed teeth",
+          "beak",
+          "mandibles",
+          "toothless tongue",
+          "other"
+         ],
+         "type": "string"
+        }
+       },
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "type": "object"
+      },
+      "mouthparts_detail": {
+       "type": "string"
+      },
+      "movement": {
+       "additionalProperties": false,
+       "properties": {
+        "evidence": {
+         "type": "string"
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "value": {
+         "items": {
+          "enum": [
+           "walk",
+           "run",
+           "swim",
+           "fly",
+           "climb",
+           "burrow",
+           "glide"
+          ],
+          "type": "string"
+         },
+         "type": "array"
+        }
+       },
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "type": "object"
+      },
+      "primary_locomotor_part": {
+       "additionalProperties": false,
+       "properties": {
+        "evidence": {
+         "type": "string"
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "value": {
+         "enum": [
+          "four legs",
+          "two legs",
+          "multiple legs",
+          "wings",
+          "fins",
+          "flippers",
+          "bell"
+         ],
+         "type": "string"
+        }
+       },
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "type": "object"
+      },
+      "visible_features": {
+       "additionalProperties": false,
+       "properties": {
+        "evidence": {
+         "type": "string"
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "value": {
+         "items": {
+          "type": "string"
+         },
+         "type": "array"
+        }
+       },
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "type": "object"
+      }
+     },
+     "additionalProperties": false,
+     "type": "object"
+    },
+    "strict": true
+   }
+  },
+  "tools": [
+   {
+    "type": "web_search"
+   }
+  ],
+  "tool_choice": "auto",
+  "truncation": "disabled",
+  "id": "resp_6ae75df3e95db1d330e34982",
+  "object": "response",
+  "status": "completed",
+  "created_at": 1793547763.0,
+  "completed_at": 1793547793.0,
+  "error": null,
+  "incomplete_details": null,
+  "output": [
+   {
+    "type": "reasoning",
+    "id": "rs_6ae75df3e95db1d330e34982:rs_676ba846-eed1-4f22-b4a3-147fd9767405",
+    "summary": [],
+    "status": "completed"
+   },
+   {
+    "type": "message",
+    "id": "rs_432942f3-0462-49e4-b486-022339322051",
+    "role": "assistant",
+    "content": [
+     {
+      "type": "output_text",
+      "text": "Gathering natural-history sources for the Indian pangolin.",
+      "annotations": [],
+      "logprobs": []
+     }
+    ],
+    "phase": "commentary",
+    "status": "completed"
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_00f27ca6-3b9e-4ec3-83a1-f34212d857a8",
+    "status": "completed",
+    "action": {
+     "type": "search",
+     "query": "Indian pangolin Manis crassicaudata size weight length"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_5efc297c-3926-4714-a1ef-2e208d9688cc",
+    "status": "completed",
+    "action": {
+     "type": "search",
+     "query": "Indian pangolin Manis crassicaudata habitat diet nocturnal"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_da2eb3f3-5532-46b0-98d2-e9cff380be1e",
+    "status": "completed",
+    "action": {
+     "type": "search",
+     "query": "Indian pangolin description scales claws tail"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_4f76d636-14c5-4381-871f-dd2d44267a01",
+    "status": "completed",
+    "action": {
+     "type": "search",
+     "query": "Indian pangolin walk climb swim burrow quadruped"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_193c8ee2-552f-46e1-bafb-041f8aac7534",
+    "status": "completed",
+    "action": {
+     "type": "search",
+     "query": "Indian pangolin tongue toothless mouth stomach breathing lungs"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_b7e3585b-c65f-4c1c-8d55-8a346534cd09",
+    "status": "completed",
+    "action": {
+     "type": "search",
+     "query": "Manis crassicaudata hybridize cross"
+    }
+   },
+   {
+    "type": "reasoning",
+    "id": "rs_6ae75df3e95db1d330e34982:rs_208d59bd-3050-4ce5-8c6b-a41ef840d6ff",
+    "summary": [],
+    "status": "completed"
+   },
+   {
+    "type": "message",
+    "id": "rs_d3bb0133-0bcf-4e81-b119-7f08bccb615a",
+    "role": "assistant",
+    "content": [
+     {
+      "type": "output_text",
+      "text": "I've found initial size and habit details — now opening authoritative profiles to verify them.",
+      "annotations": [],
+      "logprobs": []
+     }
+    ],
+    "phase": "commentary",
+    "status": "completed"
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_04a92f1f-66a1-4783-a467-602401bbf57d",
+    "status": "completed",
+    "action": {
+     "type": "open_page",
+     "url": "https://animaldiversity.org/accounts/Manis_crassicaudata/"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_17a26bb7-a1f5-4ad4-a54e-d368d23a9bf6",
+    "status": "completed",
+    "action": {
+     "type": "open_page",
+     "url": "https://en.wikipedia.org/wiki/Indian_pangolin"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_d5657f86-92e3-438c-9c09-12936d9fee1a",
+    "status": "failed",
+    "action": {
+     "type": "open_page",
+     "url": "https://www.bornfree.org.uk/indian-pangolins"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_f1439ed1-ccbd-49b0-903f-0cd64ca6f595",
+    "status": "completed",
+    "action": {
+     "type": "search",
+     "query": "Indian pangolin mammal lungs breathe Smithsonian Zoo"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_9e8fb516-aca0-4649-b879-4fabb28f9939",
+    "status": "completed",
+    "action": {
+     "type": "search",
+     "query": "San Diego Zoo pangolin scales mammals lungs"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_8e048480-5bbc-43da-883e-bd402ab54b77",
+    "status": "completed",
+    "action": {
+     "type": "open_page",
+     "url": "https://animals.sandiegozoo.org/animals/tree-pangolin"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_5c4d645b-86d8-4601-807f-9db363b9fb1b",
+    "status": "completed",
+    "action": {
+     "type": "search",
+     "query": "\"Indian pangolin\" tropical temperate climate habitat desert grassland forest"
+    }
+   },
+   {
+    "type": "reasoning",
+    "id": "rs_6ae75df3e95db1d330e34982:rs_07f54cda-078d-4523-87a4-1b07e8e2bf09",
+    "summary": [],
+    "status": "completed"
+   },
+   {
+    "type": "message",
+    "id": "rs_e98926ca-8b88-4698-9a5e-897af9fbea49",
+    "role": "assistant",
+    "content": [
+     {
+      "type": "output_text",
+      "text": "Core traits are lining up — now pinning down breathing and locomotion details.",
+      "annotations": [],
+      "logprobs": []
+     }
+    ],
+    "phase": "commentary",
+    "status": "completed"
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_64bc706a-bcb6-4011-bece-cef151182431",
+    "status": "completed",
+    "action": {
+     "type": "search",
+     "query": "mammals breathe lungs Britannica"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_d72ee665-f60d-4bb3-858d-34c7f00769e7",
+    "status": "failed",
+    "action": {
+     "type": "open_page",
+     "url": "https://kids.britannica.com/students/article/respiratory-system/276851"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_058347c6-2787-4112-9a33-01d7ff319961",
+    "status": "completed",
+    "action": {
+     "type": "search",
+     "query": "Smithsonian pangolin mammal scales"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_f9d0f879-8749-4022-847a-c22a820549e7",
+    "status": "completed",
+    "action": {
+     "type": "open_page",
+     "url": "https://nationalzoo.si.edu/animals/news/latest-pangolin-family-tree-provides-key-tracking-worlds-most-trafficked-mammal"
+    }
+   },
+   {
+    "type": "reasoning",
+    "id": "rs_6ae75df3e95db1d330e34982:rs_bc74a96b-075e-4545-8942-9f719b838246",
+    "summary": [],
+    "status": "completed"
+   },
+   {
+    "type": "message",
+    "id": "rs_9ce4e4fa-4c39-4cfe-b3e0-a3b643d321cb",
+    "role": "assistant",
+    "content": [
+     {
+      "type": "output_text",
+      "text": "Those pages didn't cover respiration — trying an encyclopedia entry on mammal anatomy.",
+      "annotations": [],
+      "logprobs": []
+     }
+    ],
+    "phase": "commentary",
+    "status": "completed"
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_cc10924c-206c-4ae3-a1b9-d2d08b56ec8f",
+    "status": "completed",
+    "action": {
+     "type": "open_page",
+     "url": "https://en.wikipedia.org/wiki/Mammal"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_3b4a1455-972d-43ea-9f9f-9b82a83a5b2c",
+    "status": "completed",
+    "action": {
+     "type": "find_in_page",
+     "url": "https://en.wikipedia.org/wiki/Mammal",
+     "pattern": "lungs"
+    }
+   },
+   {
+    "type": "reasoning",
+    "id": "rs_6ae75df3e95db1d330e34982:rs_f6e23710-a458-4da9-8b32-eb5bbd7d9279",
+    "summary": [],
+    "status": "completed"
+   },
+   {
+    "type": "message",
+    "id": "msg_a44deead-296a-4717-b3fb-b8fbfa26f4ad",
+    "role": "assistant",
+    "content": [
+     {
+      "type": "output_text",
+      "text": "<elided> (4300 chars)",
+      "annotations": [],
+      "logprobs": []
+     }
+    ],
+    "status": "completed"
+   }
+  ],
+  "instructions": "You describe a real animal for a natural-history engine, from sources. Use web search and open the pages you rely on: encyclopedias, museums, universities, zoos, government agencies or peer-reviewed papers. For each field give the value, source_url (the exact URL of a page you opened that supports the value) and evidence (a short quote from that page). If no source you opened supports a field, give your best estimate and leave source_url and evidence empty; never invent a URL. Use typical adult values. body_plan: the overall layout (winged means wings are the main limbs; insects are multi_legged). visible_features: three to six short visible features someone would draw. mouthparts: what the head eats with. breathing: the main breathing organ. claimed_crosses: scientific names of species it is documented to hybridize with, or an empty list.",
+  "usage": {
+   "input_tokens": 327937,
+   "input_tokens_details": {
+    "cached_tokens": 258749
+   },
+   "output_tokens": 6919,
+   "output_tokens_details": {
+    "reasoning_tokens": 4568
+   },
+   "total_tokens": 334856
+  },
+  "parallel_tool_calls": true,
+  "store": true
+ }
+}

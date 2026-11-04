@@ -1,0 +1,192 @@
+{
+ "id": "e2/1_donkey_x_horse",
+ "questions": [
+  {
+   "id": "frame",
+   "text": "Does the body look like one animal mixing a donkey and a horse?",
+   "expect": "yes",
+   "group": "structure",
+   "fix": "Show the planned in-between body of the donkey and the horse; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "head",
+   "text": "Does it have a donkey head with visible eyes?",
+   "expect": "yes",
+   "group": "structure",
+   "fix": "Show the planned donkey head, fully visible with clear eyes; keep everything else the same.",
+   "sam": "donkey head"
+  },
+  {
+   "id": "no_wings",
+   "text": "Are there wings anywhere on the body?",
+   "expect": "no",
+   "group": "structure",
+   "fix": "The plan has no wings: show the horse's own body there instead; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "whole_animal",
+   "text": "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?",
+   "expect": "no",
+   "group": "structure",
+   "fix": "Show one single creature with only its planned parts, no separate animals on it; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "second_head",
+   "text": "Is there a second head anywhere?",
+   "expect": "no",
+   "group": "structure",
+   "fix": "Show one single head, as planned; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "extra_legs",
+   "text": "Does it have more than 4 walking legs?",
+   "expect": "no",
+   "group": "structure",
+   "fix": "Show exactly 4 walking legs, as planned; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "bold_pattern",
+   "text": "Does the fur show bold, high-contrast stripes or spots over most of the body, more than faint markings?",
+   "expect": "no",
+   "group": "pattern",
+   "fix": "Show only faint donkey-type markings on the flanks and legs, as planned; keep everything else the same.",
+   "sam": null
+  }
+ ],
+ "raw": {
+  "spark_open": {
+   "describe": {
+    "description": "The creature is shown in right-facing profile against a plain off-white background, standing on all four legs. It has the overall body shape of a slender equid with a long neck, narrow torso, and long legs. Its coat is coarse and shaggy, predominantly brownish-gray with a lighter, off-white underbelly and muzzle, a short upright bristly mane along the neck, a thin hanging tail with a dark tuft at the tip, and faint irregular dark striping across the torso, hindquarters, shoulders, neck and lower legs, plus a dark dorsal stripe along the back and a dark vertical stripe over the shoulder.",
+    "parts": [
+     {
+      "part": "head",
+      "looks_like": "elongated equid head at the front of the neck, facing right, with brown fur on the forehead and cheeks, a white muzzle around the nose and mouth, a visible dark nostril, a dark eye with a pale ring around it, and short whiskers on the lower lip",
+      "where": "at the anterior end of the neck, highest point of the front of the body"
+     },
+     {
+      "part": "ears",
+      "looks_like": "two large, upright, pointed ears with dark outer edges and lighter inner fur, the inner surface showing dark markings",
+      "where": "on top of the head, one slightly behind the other in profile view"
+     },
+     {
+      "part": "mane",
+      "looks_like": "short, stiff, upright tufted hair forming a bristly crest, dark brown to black with lighter tips giving a striped appearance",
+      "where": "along the dorsal midline of the neck from just behind the ears to the top of the shoulders"
+     },
+     {
+      "part": "legs",
+      "looks_like": "four long, slender legs with light tan to off-white fur on the lower portions and faint dark horizontal striping, the two forelegs straight under the chest and the two hindlegs slightly angled under the rump",
+      "where": "two forelegs beneath the chest at the front of the body and two hindlegs beneath the hindquarters at the rear"
+     },
+     {
+      "part": "feet",
+      "looks_like": "four single-toed hooves, dark gray-brown, rounded and slightly flared at the base, with a small tuft of hair at the fetlock above each hoof",
+      "where": "at the distal tip of each leg, contacting the ground line"
+     },
+     {
+      "part": "tail",
+      "looks_like": "thin, medium-length tail with short hair along its length and a longer, darker tuft of hair at the tip, hanging straight down",
+      "where": "extending from the rear of the rump at the back of the body"
+     },
+     {
+      "part": "markings",
+      "looks_like": "irregular faint dark brown to black stripes of varying width and length across the torso, hindquarters, shoulders, neck and lower legs, plus a solid dark dorsal stripe running along the spine and a solid dark vertical shoulder stripe; the stripes are most distinct on the hindquarters and lower legs and more diffuse on the mid-body",
+      "where": "distributed over the sides of the body, hindquarters, shoulders, neck, and encircling the lower legs, with the dorsal stripe on the mid-back and the shoulder stripe just behind the neck"
+     }
+    ],
+    "attached_objects": [],
+    "animals": [
+     "donkey",
+     "zebra"
+    ],
+    "separate_bodies": 1,
+    "heads": 1,
+    "walking_legs": 4,
+    "wings": 0,
+    "extra_limb_pieces": 0
+   },
+   "answers": {
+    "Does the body look like one animal mixing a donkey and a horse?": "yes",
+    "Does it have a donkey head with visible eyes?": "yes",
+    "Are there wings anywhere on the body?": "no",
+    "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?": "no",
+    "Is there a second head anywhere?": "no",
+    "Does it have more than 4 walking legs?": "no",
+    "Does the fur show bold, high-contrast stripes or spots over most of the body, more than faint markings?": "no"
+   },
+   "error": null
+  },
+  "meta_spark": {
+   "describe": {
+    "description": "The creature is a slender four-legged equid shown in full side profile facing right. It has the long narrow face, large upright ears, thin neck, and thin tufted tail of a donkey, with a brown-gray shaggy coat, white muzzle and pale underbelly, a short upright dark bristly mane along the top of the neck, and faint dark striping over the torso, hindquarters and legs, standing on four slender legs ending in single dark hooves.",
+    "parts": [
+     {
+      "part": "head",
+      "looks_like": "long donkey-like face with brown fur, white muzzle, dark nostril and dark eye with pale ring",
+      "where": "at the front top of the body, facing right"
+     },
+     {
+      "part": "ears",
+      "looks_like": "very long upright pointed ears with dark edges and pale interiors",
+      "where": "on top of the head"
+     },
+     {
+      "part": "mane",
+      "looks_like": "short upright bristly dark mane",
+      "where": "along the top of the neck"
+     },
+     {
+      "part": "torso",
+      "looks_like": "donkey-shaped torso with brown-gray shaggy fur and pale white belly",
+      "where": "in the middle of the body between neck and hindquarters"
+     },
+     {
+      "part": "legs",
+      "looks_like": "four long slender legs with shaggy fur, paler on upper rear and front",
+      "where": "under the body, two front and two rear"
+     },
+     {
+      "part": "feet",
+      "looks_like": "small dark single hooves",
+      "where": "at the ends of the four legs"
+     },
+     {
+      "part": "tail",
+      "looks_like": "thin hanging tail with short fur and a dark tuft at the tip",
+      "where": "at the rear of the body hanging down"
+     },
+     {
+      "part": "markings",
+      "looks_like": "dark brown faint zebra-like stripes plus a dark stripe along the back and over the shoulder",
+      "where": "across the torso, hindquarters, neck and legs"
+     }
+    ],
+    "attached_objects": [],
+    "animals": [
+     "donkey",
+     "zebra"
+    ],
+    "separate_bodies": 1,
+    "heads": 1,
+    "walking_legs": 4,
+    "wings": 0,
+    "extra_limb_pieces": 0
+   },
+   "answers": {
+    "Does the body look like one animal mixing a donkey and a horse?": "no",
+    "Does it have a donkey head with visible eyes?": "yes",
+    "Are there wings anywhere on the body?": "no",
+    "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?": "no",
+    "Is there a second head anywhere?": "no",
+    "Does it have more than 4 walking legs?": "no",
+    "Does the fur show bold, high-contrast stripes or spots over most of the body, more than faint markings?": "no"
+   },
+   "error": null
+  }
+ }
+}

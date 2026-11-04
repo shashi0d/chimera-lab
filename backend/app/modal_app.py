@@ -1,32 +1,53 @@
-"""Modal entrypoint (P7-05: `modal deploy backend/app/modal_app.py`).
+"""Modal entrypoint: `modal deploy backend/app/modal_app.py` (CI does this on every push to main: docs/DEPLOY.md).
 
-Secrets are attached as a Modal secret named `chimera-lab` holding the env vars
-from TASKSHEET Section 13 (META_API_KEY, SUPABASE_URL, SUPABASE_SERVICE_KEY, ...).
+One app serves everything: the built frontend (frontend/dist) at / and the API under /evo, so there is one URL and
+no CORS setup. Build the frontend first (`cd frontend && npm run build`); deploying without it fails, so the site
+can never go live as an API without its pages.
+
+The app's settings come from a Modal secret named `chimera-lab` (META_API_KEY, SUPABASE_*, EVO_*; see .env.example).
+Runs, edit jobs and animal cards run inside the web process (D-016), so the app keeps exactly one warm container.
 """
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 import modal
 
 BACKEND_DIR = Path(__file__).resolve().parents[1]
+REPO = BACKEND_DIR.parent
+DIST = REPO / "frontend" / "dist"
+REMOTE_DIST = "/root/frontend/dist"
+SHOWCASE = REPO / "docs" / "evolution" / "live" / "s5"
+REMOTE_SHOWCASE = "/root/s5"
+SECRET_NAME = os.environ.get("CHIMERA_MODAL_SECRET", "chimera-lab")
+
+# Only the deploying machine checks for the build (inside the container the repo is not there).
+if modal.is_local() and not (DIST / "index.html").exists():
+    raise SystemExit("frontend/dist is missing: run `cd frontend && npm ci && npm run build` before deploying.")
 
 image = (
     modal.Image.debian_slim(python_version="3.11")
     .pip_install_from_requirements(str(BACKEND_DIR / "requirements.txt"))
+    .env({"EVO_SEED_ON_START": "false"})  # the gallery showcase is no longer shown
     .add_local_dir(str(BACKEND_DIR / "app"), remote_path="/root/app")
-    .add_local_dir(str(BACKEND_DIR / "tests" / "fixtures"), remote_path="/root/tests/fixtures")
-    .add_local_dir(str(BACKEND_DIR.parent / "data"), remote_path="/root/data")
+    .add_local_dir(str(BACKEND_DIR / "tests" / "fixtures"), remote_path="/root/tests/fixtures")  # recorded replays
+    .add_local_dir(str(REPO / "data"), remote_path="/root/data")
+    .add_local_dir(str(DIST), remote_path=REMOTE_DIST)
 )
+if SHOWCASE.exists():
+    image = image.add_local_dir(str(SHOWCASE), remote_path=REMOTE_SHOWCASE)
 
 app = modal.App("chimera-lab", image=image)
 
 
 @app.function(
-    secrets=[modal.Secret.from_name("chimera-lab")],
-    timeout=600,
-    # Runs execute as in-process tasks; keep one warm container so polling hits the same process.
+    secrets=[modal.Secret.from_name(SECRET_NAME)],
+    # An agent run lasts up to 15 minutes (EVO_RUN_HARD_SECONDS); Modal cuts a web request at 150 s, and the live
+    # stream reconnects and resumes from the last event.
+    timeout=1200,
+    # Jobs run as in-process tasks (D-016): one warm container, so every request reaches the process that owns them.
     min_containers=1,
     max_containers=1,
 )
@@ -36,4 +57,7 @@ def fastapi_app():  # type: ignore[no-untyped-def]
     from app.config import Settings
     from app.main import create_app
 
-    return create_app(Settings(data_path="/root/data/chimera_data.json"))
+    paths: dict[str, str] = {"frontend_dist": REMOTE_DIST}
+    if Path(REMOTE_SHOWCASE).exists():
+        paths["evo_showcase_dir"] = REMOTE_SHOWCASE
+    return create_app(Settings(**paths))

@@ -21,11 +21,15 @@ import type { GraphNode } from "../graph/types";
 import { getDefinition, nodeRegistry, portsOf } from "../nodes/registry";
 import type { AnyNodeDefinition, ValidationIssue } from "../nodes/types";
 import { UnsupportedNodeView } from "../nodes/unsupported/NodeView";
-import { useRuns } from "../runs/store";
-import { TERMINAL } from "../runs/transport";
+import { derived, isTerminal, useEvoRuns } from "../evo/runs";
+import { createNode } from "../nodes/registry";
 import { toast } from "../ui/toastStore";
 import { useUi } from "../ui/uiStore";
-import { addImageFiles, FOOTPRINT } from "./addImages";
+import { addImageFiles, findFreeSpot, FOOTPRINT } from "./addImages";
+import { DropMenu, type DropAt } from "./DropMenu";
+import { LibraryDialog } from "./LibraryDialog";
+import type { LabVersion } from "../lab/api";
+import { afterNodesDeleted, confirmImageDelete } from "../lab/deletion";
 import { EmptyState } from "./EmptyState";
 import { NodeErrorBoundary } from "./NodeErrorBoundary";
 import { ToolRail } from "./ToolRail";
@@ -38,21 +42,13 @@ interface FlowData extends Record<string, unknown> {
 }
 type FlowNode = Node<FlowData>;
 
-/** Test hook target: throws inside the node's error boundary. */
-function Crash(): never {
-  throw new Error("Forced node crash (test hook)");
-}
-
 function makeNodeComponent(def: AnyNodeDefinition): ComponentType<NodeProps<FlowNode>> {
   const View = def.View;
-  const Component = ({ id, data, selected }: NodeProps<FlowNode>) => {
-    const crash = useUi((s) => s.crashNodes.includes(id));
-    return (
-      <NodeErrorBoundary nodeId={id}>
-        {crash ? <Crash /> : <View node={data.node} selected={Boolean(selected)} issues={data.issues} catalog={data.catalog} />}
-      </NodeErrorBoundary>
-    );
-  };
+  const Component = ({ id, data, selected }: NodeProps<FlowNode>) => (
+    <NodeErrorBoundary nodeId={id}>
+      <View node={data.node} selected={Boolean(selected)} issues={data.issues} catalog={data.catalog} />
+    </NodeErrorBoundary>
+  );
   Component.displayName = `Node(${def.type})`;
   return memo(Component);
 }
@@ -83,27 +79,53 @@ export function Canvas() {
   const selection = useGraph((s) => s.selection);
   const readOnly = useGraph((s) => s.readOnly);
   const connectivity = useConnectivity((s) => s.status);
-  const runs = useRuns((s) => s.runs);
+  const runs = useEvoRuns((s) => s.runs);
   const minimap = useUi((s) => s.minimap);
   const theme = useUi((s) => s.theme);
   const flow = useReactFlow();
   const wrapper = useRef<HTMLDivElement>(null);
   const [measured, setMeasured] = useState<Record<string, { width: number; height: number }>>({});
   const [dragging, setDragging] = useState(false);
+  const [dropAt, setDropAt] = useState<DropAt | null>(null);
+  const closeDropMenu = useCallback(() => setDropAt(null), []);
+  const [library, setLibrary] = useState(false);
+  const closeLibrary = useCallback(() => setLibrary(false), []);
+  const addVersionCard = useCallback(
+    (v: LabVersion) => {
+      const center = flow.screenToFlowPosition({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
+      const size = FOOTPRINT.version!;
+      const node = createNode("version", findFreeSpot({ x: center.x - size.w / 2, y: center.y - size.h / 2 }, size.w, size.h), { version: v, runId: null, error: null });
+      useGraph.getState().addNode(node, { select: true });
+    },
+    [flow],
+  );
   const [shake, setShake] = useState<string | null>(null);
 
   // ---------------------------------------------------------------- derived flow state
 
+  // Dragging moves one node per frame: every other node keeps its `data` object (same node content, same issues), so
+  // its memoised view does not re-render. A node's content is its type, config and data; its position is not.
+  const dataCache = useRef(new Map<string, { node: GraphNode; issuesKey: string; data: FlowData }>());
   const flowNodes: FlowNode[] = useMemo(() => {
     const ctx = { graph: { nodes, edges }, connectivity, readOnly };
     const sel = new Set(selection);
-    return nodes.map((n, i) => {
+    const cache = dataCache.current;
+    const seen = new Set<string>();
+    const out = nodes.map((n, i) => {
       const def = getDefinition(n.type);
+      const issues = def ? def.validate(n, ctx) : [];
+      const issuesKey = issues.length ? JSON.stringify(issues) : "";
+      const prev = cache.get(n.id);
+      const same = prev && prev.issuesKey === issuesKey && prev.data.catalog === i + 1 && prev.node.type === n.type &&
+        prev.node.config === n.config && prev.node.data === n.data && prev.node.version === n.version;
+      const data = same ? prev.data : { node: n, issues, catalog: i + 1 };
+      if (!same) cache.set(n.id, { node: n, issuesKey, data });
+      seen.add(n.id);
       return {
         id: n.id,
         type: def ? def.type : "unsupported",
         position: n.position,
-        data: { node: n, issues: def ? def.validate(n, ctx) : [], catalog: i + 1 },
+        data,
         selected: sel.has(n.id),
         measured: measured[n.id],
         className: shake === n.id ? "is-shaking" : undefined,
@@ -112,6 +134,8 @@ export function Canvas() {
         connectable: !readOnly && Boolean(def),
       };
     });
+    for (const id of cache.keys()) if (!seen.has(id)) cache.delete(id);
+    return out;
   }, [nodes, edges, selection, connectivity, readOnly, measured, shake]);
 
   const flowEdges: Edge[] = useMemo(() => {
@@ -120,8 +144,8 @@ export function Canvas() {
       nodes
         .filter((n) => {
           const runId = n.data.activeRunId as string | undefined;
-          const run = runId ? runs[runId] : undefined;
-          return run && !TERMINAL.has(run.status);
+          const run = runId ? derived(runs[runId]) : null;
+          return run && !isTerminal(run.status);
         })
         .map((n) => n.id),
     );
@@ -180,6 +204,13 @@ export function Canvas() {
       selection: [],
       revision: s.revision + 1,
     }));
+    afterNodesDeleted();
+  }, []);
+
+  // Deleting images is permanent (server and device): ask first.
+  const onBeforeDelete = useCallback(async ({ nodes: ns }: { nodes: Node[]; edges: Edge[] }) => {
+    if (useGraph.getState().readOnly) return false;
+    return confirmImageDelete(ns.map((n) => n.id));
   }, []);
 
   const attempt = (c: Connection): ConnectionAttempt => ({
@@ -211,7 +242,15 @@ export function Canvas() {
   }, []);
 
   const onConnectEnd = useCallback(
-    (_e: MouseEvent | TouchEvent, state: FinalConnectionState) => {
+    (e: MouseEvent | TouchEvent, state: FinalConnectionState) => {
+      // FLORA-style: drag from an image's output onto empty canvas, then choose what to make from it there.
+      if (!state.toNode && state.fromNode?.type === "version" && state.fromHandle?.type === "source" && !useGraph.getState().readOnly) {
+        const point = "changedTouches" in e ? e.changedTouches[0]! : e;
+        const screen = { x: point.clientX, y: point.clientY };
+        const box = wrapper.current?.getBoundingClientRect() ?? { x: 0, y: 0 };
+        setDropAt({ nodeId: state.fromNode.id, local: { x: screen.x - box.x, y: screen.y - box.y }, flow: flow.screenToFlowPosition(screen) });
+        return;
+      }
       if (state.isValid || !state.toHandle || !state.fromHandle || !state.toNode || !state.fromNode) return;
       const fromIsSource = state.fromHandle.type === "source";
       const c: ConnectionAttempt = fromIsSource
@@ -220,7 +259,7 @@ export function Canvas() {
       const res = checkConnection(useGraph.getState(), c, portsOf);
       if (!res.ok) refuse(state.toNode.id, res.reason);
     },
-    [refuse],
+    [refuse, flow],
   );
 
   // ---------------------------------------------------------------- files: drop + paste
@@ -267,6 +306,17 @@ export function Canvas() {
     return () => document.removeEventListener("paste", onPaste);
   }, [addFiles]);
 
+  /** No photos: a Fusion node on its own takes two typed names (the contract's name fallback). */
+  const addNamesOnly = useCallback(() => {
+    const at = viewportCenter();
+    const node = createNode("fusion", { x: at.x + 100, y: at.y });
+    useGraph.getState().addNode(node, { select: true });
+    requestAnimationFrame(() => {
+      void flow.fitView({ padding: 0.3, duration: 300, maxZoom: 1 });
+      document.querySelector<HTMLInputElement>(`[data-node-id="${CSS.escape(node.id)}"] input`)?.focus();
+    });
+  }, [flow, viewportCenter]);
+
   // ---------------------------------------------------------------- keep new nodes in view
 
   const knownIds = useRef<Set<string> | null>(null);
@@ -279,12 +329,11 @@ export function Canvas() {
     if (!added.length) return;
     const rect = wrapper.current?.getBoundingClientRect();
     if (!rect) return;
-    const panelW = document.querySelector(".side-panel")?.getBoundingClientRect().width ?? 0;
     const offscreen = added.some((n) => {
       const p = flow.flowToScreenPosition(n.position);
       const size = measured[n.id] ?? { width: FOOTPRINT[n.type]?.w ?? 300, height: FOOTPRINT[n.type]?.h ?? 300 };
       const z = flow.getZoom();
-      return p.x < rect.left || p.y < rect.top || p.x + size.width * z > rect.right - panelW || p.y + size.height * z > rect.bottom;
+      return p.x < rect.left || p.y < rect.top || p.x + size.width * z > rect.right || p.y + size.height * z > rect.bottom;
     });
     // Zoom out only as far as needed; never zoom in on the user.
     // Wait a beat so React Flow has measured the new nodes before fitting.
@@ -331,6 +380,7 @@ export function Canvas() {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onDelete={onDelete}
+        onBeforeDelete={onBeforeDelete}
         onConnect={onConnect}
         onConnectEnd={onConnectEnd}
         isValidConnection={isValidConnection}
@@ -339,20 +389,27 @@ export function Canvas() {
         colorMode={theme}
         minZoom={0.2}
         maxZoom={2}
+        zoomOnDoubleClick={false}
+        onlyRenderVisibleElements
+        elevateNodesOnSelect={false}
         fitView
         fitViewOptions={{ padding: 0.25, maxZoom: 1 }}
         proOptions={{ hideAttribution: true }}
         nodesConnectable={!readOnly}
         elementsSelectable
         selectNodesOnDrag={false}
-        aria-label="Fusion canvas"
+        aria-label={copy.lab.canvasLabel}
       >
         <Background variant={BackgroundVariant.Dots} gap={28} size={1.6} className="canvas__grid" />
         {minimap ? <MiniMap pannable zoomable className="canvas__minimap" ariaLabel="Minimap" /> : null}
       </ReactFlow>
-      <ToolRail onAddFiles={(files) => void addFiles(files)} />
+      {dropAt ? (
+        <DropMenu at={dropAt} onClose={closeDropMenu} />
+      ) : null}
+      <ToolRail onAddImage={() => setLibrary(true)} />
+      {library ? <LibraryDialog onClose={closeLibrary} onAddFiles={(files) => void addFiles(files)} onAddVersion={addVersionCard} /> : null}
       <ZoomControls />
-      {nodes.length === 0 && !dragging ? <EmptyState onAddFiles={(files) => void addFiles(files)} /> : null}
+      {nodes.length === 0 && !dragging ? <EmptyState onAddImage={() => setLibrary(true)} onTypeNames={addNamesOnly} /> : null}
       {dragging ? (
         <div className="drop-overlay" aria-hidden="true">
           <p className="drop-overlay__label">{copy.empty.dropHere}</p>

@@ -1,0 +1,109 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Silhouette: Four-legged brown bear frame. Host frame: the brown bear sets the outline, body size and overall frame. A single creature that combines a european rhinoceros beetle and a brown bear. Head of the brown bear, fully visible and uncluttered, with clear, discernible eyes. Details: brown bear body and legs, with its own dense fur everywhere else, plain coat, no stripes or spots; from the european rhinoceros beetle, as parts and materials on the brown bear's own body: a head horn grown from the frontal bone of the head, above and between the eyes: smooth, glossy dark cuticle, one horn curving upward and back from the head. Coat texture and patches follow the body outline. Declared fiction: arthropod parts at large size, shown with thick supporting legs and visible breathing openings along the flanks. Bilaterally symmetrical, recognizable limbs, visible sense organs. Habitat cue (forest): dark back and light belly (mild countershading). Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "id": "resp_6ae7570505574c1f2d7b46fb",
+  "access_programs": null,
+  "created_at": 1793545989.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae7570572be003c899b4405",
+    "summary": [
+     {
+      "text": "**Composing hybrid bear silhouette**\nI'm shaping a single creature with a brown bear's head, body, and dense fur, then adding a smooth glossy horn from a European rhinoceros beetle above and between the eyes.\n**Planning beetle illustration**\nI'm organizing the creature's anatomy, pose, and forest countershading into a natural-history illustration plan, and deciding to look up a European rhinoceros beetle for reference details.\n**Drafting hybrid bear prompt**\nI'm composing a detailed natural-history illustration prompt that merges the two reference images, specifying a brown bear with a horned head, spiracles along the flanks, bear legs with claws, and a dark back with light belly in a side three-quarter view.\n**Refining spiracle details**\nI'm adjusting the prompt to make the spiracles look like small natural openings instead of beetle-like spots, then preparing one more generation with that refinement.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae75705901a67e0d1a44de5",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0dzYXV6UnZfRGw5U3FBSEFOM3pITS1JVy1SMWJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczpmNjQ2NzRkNC1lNjZhLTQ0MDktYjllMy0yYjc0OTNkZWI4YmI6R0lqX3V6UURLMGJUY1FCbkFFNFByU1QwYVo0aGJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM1NDU5ODl9.Q8WLFwEWLurbYGF_-maJI5veFAxa",
+    "result": "<elided> (775524 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 29594,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 24192
+   },
+   "output_tokens": 2759,
+   "output_tokens_details": {
+    "reasoning_tokens": 495
+   },
+   "total_tokens": 32353
+  },
+  "user": null
+ }
+}

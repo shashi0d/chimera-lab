@@ -1,0 +1,1347 @@
+{
+ "version": "00027e99",
+ "metrics": {
+  "old": {
+   "caught": 3,
+   "of_failures": 6,
+   "false_alarms": 0,
+   "of_goods": 5
+  },
+  "spark_open": {
+   "caught": 6,
+   "of_failures": 6,
+   "false_alarms": 1,
+   "of_goods": 5
+  },
+  "meta_spark": {
+   "caught": 6,
+   "of_failures": 6,
+   "false_alarms": 1,
+   "of_goods": 5
+  },
+  "pair": {
+   "caught": 6,
+   "of_failures": 6,
+   "false_alarms": 2,
+   "of_goods": 5
+  }
+ },
+ "new_union_caught": 6,
+ "rows": [
+  {
+   "id": "e2/1_donkey_x_horse",
+   "label": "fail",
+   "failures": [
+    "zebra-type stripes",
+    "third animal"
+   ],
+   "stale_questions": [],
+   "old": {
+    "verdict": "fail",
+    "signals": [
+     "only the two parents' features"
+    ]
+   },
+   "spark_open": {
+    "verdict": "fail",
+    "signals": [
+     {
+      "source": "description",
+      "key": "third_animal",
+      "text": "an animal other than the two parents",
+      "status": "fail",
+      "answers": {
+       "spark_open": [
+        "zebra"
+       ]
+      }
+     }
+    ]
+   },
+   "meta_spark": {
+    "verdict": "fail",
+    "signals": [
+     {
+      "source": "checklist",
+      "key": "frame",
+      "text": "Does the body look like one animal mixing a donkey and a horse?",
+      "status": "fail",
+      "answers": {
+       "meta_spark": "no"
+      }
+     },
+     {
+      "source": "description",
+      "key": "third_animal",
+      "text": "an animal other than the two parents",
+      "status": "fail",
+      "answers": {
+       "meta_spark": [
+        "zebra"
+       ]
+      }
+     }
+    ]
+   },
+   "pair": {
+    "verdict": "fail",
+    "signals": [
+     {
+      "source": "checklist",
+      "key": "frame",
+      "text": "Does the body look like one animal mixing a donkey and a horse?",
+      "status": "uncertain",
+      "answers": {
+       "spark_open": "yes",
+       "meta_spark": "no"
+      }
+     },
+     {
+      "source": "description",
+      "key": "third_animal",
+      "text": "an animal other than the two parents",
+      "status": "fail",
+      "answers": {
+       "spark_open": [
+        "zebra"
+       ],
+       "meta_spark": [
+        "zebra"
+       ]
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "e2/3_lion_x_eagle",
+   "label": "fail",
+   "failures": [
+    "leopard spots",
+    "third animal",
+    "full mane present although planned out"
+   ],
+   "stale_questions": [],
+   "old": {
+    "verdict": "fail",
+    "signals": [
+     "a lion body shape",
+     "only the two parents' features"
+    ]
+   },
+   "spark_open": {
+    "verdict": "fail",
+    "signals": [
+     {
+      "source": "checklist",
+      "key": "frame",
+      "text": "Is the overall body shape that of a lion?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "no"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "no_mane",
+      "text": "Does it have a full mane of long hair around the head and neck?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "yes"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "plain_fur",
+      "text": "Does the fur show stripes or spots?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "yes"
+      }
+     },
+     {
+      "source": "description",
+      "key": "extra_mane",
+      "text": "described but not planned: mane",
+      "status": "fail",
+      "answers": {
+       "spark_open": true
+      }
+     },
+     {
+      "source": "description",
+      "key": "extra_spots",
+      "text": "described but not planned: spots",
+      "status": "fail",
+      "answers": {
+       "spark_open": true
+      }
+     },
+     {
+      "source": "description",
+      "key": "third_animal",
+      "text": "an animal other than the two parents",
+      "status": "fail",
+      "answers": {
+       "spark_open": [
+        "leopard"
+       ]
+      }
+     }
+    ]
+   },
+   "meta_spark": {
+    "verdict": "fail",
+    "signals": [
+     {
+      "source": "checklist",
+      "key": "frame",
+      "text": "Is the overall body shape that of a lion?",
+      "status": "fail",
+      "answers": {
+       "meta_spark": "no"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "no_mane",
+      "text": "Does it have a full mane of long hair around the head and neck?",
+      "status": "fail",
+      "answers": {
+       "meta_spark": "yes"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "plain_fur",
+      "text": "Does the fur show stripes or spots?",
+      "status": "fail",
+      "answers": {
+       "meta_spark": "yes"
+      }
+     },
+     {
+      "source": "description",
+      "key": "extra_mane",
+      "text": "described but not planned: mane",
+      "status": "fail",
+      "answers": {
+       "meta_spark": true
+      }
+     },
+     {
+      "source": "description",
+      "key": "extra_spots",
+      "text": "described but not planned: spots",
+      "status": "fail",
+      "answers": {
+       "meta_spark": true
+      }
+     },
+     {
+      "source": "description",
+      "key": "third_animal",
+      "text": "an animal other than the two parents",
+      "status": "fail",
+      "answers": {
+       "meta_spark": [
+        "leopard"
+       ]
+      }
+     }
+    ]
+   },
+   "pair": {
+    "verdict": "fail",
+    "signals": [
+     {
+      "source": "checklist",
+      "key": "frame",
+      "text": "Is the overall body shape that of a lion?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "no",
+       "meta_spark": "no"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "no_mane",
+      "text": "Does it have a full mane of long hair around the head and neck?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "yes",
+       "meta_spark": "yes"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "plain_fur",
+      "text": "Does the fur show stripes or spots?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "yes",
+       "meta_spark": "yes"
+      }
+     },
+     {
+      "source": "description",
+      "key": "extra_mane",
+      "text": "described but not planned: mane",
+      "status": "fail",
+      "answers": {
+       "spark_open": true,
+       "meta_spark": true
+      }
+     },
+     {
+      "source": "description",
+      "key": "extra_spots",
+      "text": "described but not planned: spots",
+      "status": "fail",
+      "answers": {
+       "spark_open": true,
+       "meta_spark": true
+      }
+     },
+     {
+      "source": "description",
+      "key": "third_animal",
+      "text": "an animal other than the two parents",
+      "status": "fail",
+      "answers": {
+       "spark_open": [
+        "leopard"
+       ],
+       "meta_spark": [
+        "leopard"
+       ]
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "e4/b_axolotl_x_pangolin",
+   "label": "fail",
+   "failures": [
+    "external gills on a land creature"
+   ],
+   "stale_questions": [],
+   "old": {
+    "verdict": "pass",
+    "signals": []
+   },
+   "spark_open": {
+    "verdict": "fail",
+    "signals": [
+     {
+      "source": "checklist",
+      "key": "unplanned_three_pairs_of_feathery_extern",
+      "text": "Are there feathery external gills anywhere on the creature?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "yes"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "cover_present",
+      "text": "Is there smooth, moist skin on the back and flanks?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "no"
+      }
+     },
+     {
+      "source": "description",
+      "key": "extra_gills",
+      "text": "described but not planned: gills",
+      "status": "fail",
+      "answers": {
+       "spark_open": true
+      }
+     }
+    ]
+   },
+   "meta_spark": {
+    "verdict": "fail",
+    "signals": [
+     {
+      "source": "checklist",
+      "key": "unplanned_three_pairs_of_feathery_extern",
+      "text": "Are there feathery external gills anywhere on the creature?",
+      "status": "fail",
+      "answers": {
+       "meta_spark": "yes"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "cover_present",
+      "text": "Is there smooth, moist skin on the back and flanks?",
+      "status": "fail",
+      "answers": {
+       "meta_spark": "no"
+      }
+     },
+     {
+      "source": "description",
+      "key": "extra_gills",
+      "text": "described but not planned: gills",
+      "status": "fail",
+      "answers": {
+       "meta_spark": true
+      }
+     }
+    ]
+   },
+   "pair": {
+    "verdict": "fail",
+    "signals": [
+     {
+      "source": "checklist",
+      "key": "unplanned_three_pairs_of_feathery_extern",
+      "text": "Are there feathery external gills anywhere on the creature?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "yes",
+       "meta_spark": "yes"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "cover_present",
+      "text": "Is there smooth, moist skin on the back and flanks?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "no",
+       "meta_spark": "no"
+      }
+     },
+     {
+      "source": "description",
+      "key": "extra_gills",
+      "text": "described but not planned: gills",
+      "status": "fail",
+      "answers": {
+       "spark_open": true,
+       "meta_spark": true
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "e4/d_rhinoceros_beetle_x_brown_bear",
+   "label": "fail",
+   "failures": [
+    "whole beetle bodies attached",
+    "wings over four legs"
+   ],
+   "stale_questions": [],
+   "old": {
+    "verdict": "fail",
+    "signals": [
+     "only parts and materials of the european rhinoceros beetle, no whole european rhinoceros beetle animals on the body"
+    ]
+   },
+   "spark_open": {
+    "verdict": "fail",
+    "signals": [
+     {
+      "source": "checklist",
+      "key": "wings_front",
+      "text": "Does it have european rhinoceros beetle wings in place of its front legs?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "no"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "legs_and_wings",
+      "text": "Does it stand on four walking legs and also have wings?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "yes"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "whole_animal",
+      "text": "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "yes"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "extra_legs",
+      "text": "Does it have more than 2 walking legs?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "yes"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "grows_out",
+      "text": "Do the hard, glossy chitin plates with fine seams grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending into scales), rather than looking attached on top?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "no"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "on_top",
+      "text": "Do the hard, glossy chitin plates with fine seams look like separate pieces attached on top of the fur?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "yes"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "continuous",
+      "text": "Do the hard, glossy chitin plates with fine seams form one continuous structure over the shoulders and neck, rather than scattered pieces?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "no"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "scattered",
+      "text": "Are the hard, glossy chitin plates with fine seams scattered as separate pieces over different parts of the body?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "yes"
+      }
+     },
+     {
+      "source": "count",
+      "key": "walking_legs",
+      "text": "walking legs: 2",
+      "status": "fail",
+      "answers": {
+       "spark_open": 4
+      }
+     }
+    ]
+   },
+   "meta_spark": {
+    "verdict": "fail",
+    "signals": [
+     {
+      "source": "checklist",
+      "key": "wings_front",
+      "text": "Does it have european rhinoceros beetle wings in place of its front legs?",
+      "status": "fail",
+      "answers": {
+       "meta_spark": "no"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "legs_and_wings",
+      "text": "Does it stand on four walking legs and also have wings?",
+      "status": "fail",
+      "answers": {
+       "meta_spark": "yes"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "whole_animal",
+      "text": "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?",
+      "status": "fail",
+      "answers": {
+       "meta_spark": "yes"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "extra_legs",
+      "text": "Does it have more than 2 walking legs?",
+      "status": "fail",
+      "answers": {
+       "meta_spark": "yes"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "grows_out",
+      "text": "Do the hard, glossy chitin plates with fine seams grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending into scales), rather than looking attached on top?",
+      "status": "fail",
+      "answers": {
+       "meta_spark": "no"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "on_top",
+      "text": "Do the hard, glossy chitin plates with fine seams look like separate pieces attached on top of the fur?",
+      "status": "fail",
+      "answers": {
+       "meta_spark": "yes"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "continuous",
+      "text": "Do the hard, glossy chitin plates with fine seams form one continuous structure over the shoulders and neck, rather than scattered pieces?",
+      "status": "fail",
+      "answers": {
+       "meta_spark": "no"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "scattered",
+      "text": "Are the hard, glossy chitin plates with fine seams scattered as separate pieces over different parts of the body?",
+      "status": "fail",
+      "answers": {
+       "meta_spark": "yes"
+      }
+     },
+     {
+      "source": "count",
+      "key": "walking_legs",
+      "text": "walking legs: 2",
+      "status": "fail",
+      "answers": {
+       "meta_spark": 4
+      }
+     },
+     {
+      "source": "count",
+      "key": "extra_limb_pieces",
+      "text": "extra limb pieces: 0",
+      "status": "fail",
+      "answers": {
+       "meta_spark": 3
+      }
+     }
+    ]
+   },
+   "pair": {
+    "verdict": "fail",
+    "signals": [
+     {
+      "source": "checklist",
+      "key": "wings_front",
+      "text": "Does it have european rhinoceros beetle wings in place of its front legs?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "no",
+       "meta_spark": "no"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "legs_and_wings",
+      "text": "Does it stand on four walking legs and also have wings?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "yes",
+       "meta_spark": "yes"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "whole_animal",
+      "text": "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "yes",
+       "meta_spark": "yes"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "extra_legs",
+      "text": "Does it have more than 2 walking legs?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "yes",
+       "meta_spark": "yes"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "grows_out",
+      "text": "Do the hard, glossy chitin plates with fine seams grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending into scales), rather than looking attached on top?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "no",
+       "meta_spark": "no"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "on_top",
+      "text": "Do the hard, glossy chitin plates with fine seams look like separate pieces attached on top of the fur?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "yes",
+       "meta_spark": "yes"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "continuous",
+      "text": "Do the hard, glossy chitin plates with fine seams form one continuous structure over the shoulders and neck, rather than scattered pieces?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "no",
+       "meta_spark": "no"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "scattered",
+      "text": "Are the hard, glossy chitin plates with fine seams scattered as separate pieces over different parts of the body?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "yes",
+       "meta_spark": "yes"
+      }
+     },
+     {
+      "source": "count",
+      "key": "walking_legs",
+      "text": "walking legs: 2",
+      "status": "fail",
+      "answers": {
+       "spark_open": 4,
+       "meta_spark": 4
+      }
+     },
+     {
+      "source": "count",
+      "key": "extra_limb_pieces",
+      "text": "extra limb pieces: 0",
+      "status": "uncertain",
+      "answers": {
+       "spark_open": 0,
+       "meta_spark": 3
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "s2/beetlebear_run1",
+   "label": "fail",
+   "failures": [
+    "a plate reads as a whole beetle body",
+    "insect-leg pieces on the bear's legs"
+   ],
+   "stale_questions": [],
+   "old": {
+    "verdict": "pass",
+    "signals": []
+   },
+   "spark_open": {
+    "verdict": "fail",
+    "signals": [
+     {
+      "source": "checklist",
+      "key": "whole_animal",
+      "text": "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "yes"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "insect_legs",
+      "text": "Are there jointed, insect-like leg pieces on or along the legs?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "yes"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "grows_out",
+      "text": "Do the hard, glossy chitin plates with fine seams grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending into scales), rather than looking attached on top?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "no"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "on_top",
+      "text": "Do the hard, glossy chitin plates with fine seams look like separate pieces attached on top of the fur?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "yes"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "continuous",
+      "text": "Do the hard, glossy chitin plates with fine seams form one continuous structure over the back and flanks, rather than scattered pieces?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "no"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "scattered",
+      "text": "Are the hard, glossy chitin plates with fine seams scattered as separate pieces over different parts of the body?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "yes"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "cover_on_legs",
+      "text": "Are there hard, glossy chitin plates with fine seams on the legs?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "yes"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "cover_on_shoulders",
+      "text": "Are there hard, glossy chitin plates with fine seams on the shoulders?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "yes"
+      }
+     }
+    ]
+   },
+   "meta_spark": {
+    "verdict": "fail",
+    "signals": [
+     {
+      "source": "checklist",
+      "key": "insect_legs",
+      "text": "Are there jointed, insect-like leg pieces on or along the legs?",
+      "status": "fail",
+      "answers": {
+       "meta_spark": "yes"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "grows_out",
+      "text": "Do the hard, glossy chitin plates with fine seams grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending into scales), rather than looking attached on top?",
+      "status": "fail",
+      "answers": {
+       "meta_spark": "no"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "on_top",
+      "text": "Do the hard, glossy chitin plates with fine seams look like separate pieces attached on top of the fur?",
+      "status": "fail",
+      "answers": {
+       "meta_spark": "yes"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "continuous",
+      "text": "Do the hard, glossy chitin plates with fine seams form one continuous structure over the back and flanks, rather than scattered pieces?",
+      "status": "fail",
+      "answers": {
+       "meta_spark": "no"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "scattered",
+      "text": "Are the hard, glossy chitin plates with fine seams scattered as separate pieces over different parts of the body?",
+      "status": "fail",
+      "answers": {
+       "meta_spark": "yes"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "cover_on_legs",
+      "text": "Are there hard, glossy chitin plates with fine seams on the legs?",
+      "status": "fail",
+      "answers": {
+       "meta_spark": "yes"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "cover_on_shoulders",
+      "text": "Are there hard, glossy chitin plates with fine seams on the shoulders?",
+      "status": "fail",
+      "answers": {
+       "meta_spark": "yes"
+      }
+     }
+    ]
+   },
+   "pair": {
+    "verdict": "fail",
+    "signals": [
+     {
+      "source": "checklist",
+      "key": "whole_animal",
+      "text": "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?",
+      "status": "uncertain",
+      "answers": {
+       "spark_open": "yes",
+       "meta_spark": "no"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "insect_legs",
+      "text": "Are there jointed, insect-like leg pieces on or along the legs?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "yes",
+       "meta_spark": "yes"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "grows_out",
+      "text": "Do the hard, glossy chitin plates with fine seams grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending into scales), rather than looking attached on top?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "no",
+       "meta_spark": "no"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "on_top",
+      "text": "Do the hard, glossy chitin plates with fine seams look like separate pieces attached on top of the fur?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "yes",
+       "meta_spark": "yes"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "continuous",
+      "text": "Do the hard, glossy chitin plates with fine seams form one continuous structure over the back and flanks, rather than scattered pieces?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "no",
+       "meta_spark": "no"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "scattered",
+      "text": "Are the hard, glossy chitin plates with fine seams scattered as separate pieces over different parts of the body?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "yes",
+       "meta_spark": "yes"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "cover_on_legs",
+      "text": "Are there hard, glossy chitin plates with fine seams on the legs?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "yes",
+       "meta_spark": "yes"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "cover_on_shoulders",
+      "text": "Are there hard, glossy chitin plates with fine seams on the shoulders?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "yes",
+       "meta_spark": "yes"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "s2/beetlebear",
+   "label": "fail",
+   "failures": [
+    "donor parts sit on top of the fur like armor pieces, with no transition",
+    "donor parts scattered over shoulders and legs instead of forming one dorsal shield"
+   ],
+   "stale_questions": [],
+   "old": {
+    "verdict": "pass",
+    "signals": []
+   },
+   "spark_open": {
+    "verdict": "fail",
+    "signals": [
+     {
+      "source": "checklist",
+      "key": "grows_out",
+      "text": "Do the hard, glossy chitin plates with fine seams grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending into scales), rather than looking attached on top?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "no"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "on_top",
+      "text": "Do the hard, glossy chitin plates with fine seams look like separate pieces attached on top of the fur?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "yes"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "continuous",
+      "text": "Do the hard, glossy chitin plates with fine seams form one continuous structure over the back and flanks, rather than scattered pieces?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "no"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "scattered",
+      "text": "Are the hard, glossy chitin plates with fine seams scattered as separate pieces over different parts of the body?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "yes"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "cover_on_legs",
+      "text": "Are there hard, glossy chitin plates with fine seams on the legs?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "yes"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "cover_on_shoulders",
+      "text": "Are there hard, glossy chitin plates with fine seams on the shoulders?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "yes"
+      }
+     }
+    ]
+   },
+   "meta_spark": {
+    "verdict": "fail",
+    "signals": [
+     {
+      "source": "checklist",
+      "key": "grows_out",
+      "text": "Do the hard, glossy chitin plates with fine seams grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending into scales), rather than looking attached on top?",
+      "status": "fail",
+      "answers": {
+       "meta_spark": "no"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "on_top",
+      "text": "Do the hard, glossy chitin plates with fine seams look like separate pieces attached on top of the fur?",
+      "status": "fail",
+      "answers": {
+       "meta_spark": "yes"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "continuous",
+      "text": "Do the hard, glossy chitin plates with fine seams form one continuous structure over the back and flanks, rather than scattered pieces?",
+      "status": "fail",
+      "answers": {
+       "meta_spark": "no"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "scattered",
+      "text": "Are the hard, glossy chitin plates with fine seams scattered as separate pieces over different parts of the body?",
+      "status": "fail",
+      "answers": {
+       "meta_spark": "yes"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "cover_on_legs",
+      "text": "Are there hard, glossy chitin plates with fine seams on the legs?",
+      "status": "fail",
+      "answers": {
+       "meta_spark": "yes"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "cover_on_shoulders",
+      "text": "Are there hard, glossy chitin plates with fine seams on the shoulders?",
+      "status": "fail",
+      "answers": {
+       "meta_spark": "yes"
+      }
+     },
+     {
+      "source": "description",
+      "key": "extra_spots",
+      "text": "described but not planned: spots",
+      "status": "fail",
+      "answers": {
+       "meta_spark": true
+      }
+     }
+    ]
+   },
+   "pair": {
+    "verdict": "fail",
+    "signals": [
+     {
+      "source": "checklist",
+      "key": "grows_out",
+      "text": "Do the hard, glossy chitin plates with fine seams grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending into scales), rather than looking attached on top?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "no",
+       "meta_spark": "no"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "on_top",
+      "text": "Do the hard, glossy chitin plates with fine seams look like separate pieces attached on top of the fur?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "yes",
+       "meta_spark": "yes"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "continuous",
+      "text": "Do the hard, glossy chitin plates with fine seams form one continuous structure over the back and flanks, rather than scattered pieces?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "no",
+       "meta_spark": "no"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "scattered",
+      "text": "Are the hard, glossy chitin plates with fine seams scattered as separate pieces over different parts of the body?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "yes",
+       "meta_spark": "yes"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "cover_on_legs",
+      "text": "Are there hard, glossy chitin plates with fine seams on the legs?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "yes",
+       "meta_spark": "yes"
+      }
+     },
+     {
+      "source": "checklist",
+      "key": "cover_on_shoulders",
+      "text": "Are there hard, glossy chitin plates with fine seams on the shoulders?",
+      "status": "fail",
+      "answers": {
+       "spark_open": "yes",
+       "meta_spark": "yes"
+      }
+     },
+     {
+      "source": "description",
+      "key": "extra_spots",
+      "text": "described but not planned: spots",
+      "status": "uncertain",
+      "answers": {
+       "spark_open": false,
+       "meta_spark": true
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "e2/2_lion_x_tiger",
+   "label": "good",
+   "failures": [],
+   "stale_questions": [],
+   "old": {
+    "verdict": "pass",
+    "signals": []
+   },
+   "spark_open": {
+    "verdict": "pass",
+    "signals": []
+   },
+   "meta_spark": {
+    "verdict": "pass",
+    "signals": []
+   },
+   "pair": {
+    "verdict": "pass",
+    "signals": []
+   }
+  },
+  {
+   "id": "e4/c_lion_x_eagle",
+   "label": "good",
+   "failures": [],
+   "stale_questions": [],
+   "old": {
+    "verdict": "pass",
+    "signals": []
+   },
+   "spark_open": {
+    "verdict": "pass",
+    "signals": []
+   },
+   "meta_spark": {
+    "verdict": "pass",
+    "signals": []
+   },
+   "pair": {
+    "verdict": "pass",
+    "signals": []
+   }
+  },
+  {
+   "id": "e2/4_eagle_x_octopus",
+   "label": "good",
+   "failures": [],
+   "stale_questions": [],
+   "old": {
+    "verdict": "pass",
+    "signals": []
+   },
+   "spark_open": {
+    "verdict": "pass",
+    "signals": []
+   },
+   "meta_spark": {
+    "verdict": "fail",
+    "signals": [
+     {
+      "source": "checklist",
+      "key": "cover_present",
+      "text": "Is there soft, color-changing skin with fine bumps on the belly and flanks?",
+      "status": "fail",
+      "answers": {
+       "meta_spark": "no"
+      }
+     }
+    ]
+   },
+   "pair": {
+    "verdict": "fail",
+    "signals": [
+     {
+      "source": "checklist",
+      "key": "cover_present",
+      "text": "Is there soft, color-changing skin with fine bumps on the belly and flanks?",
+      "status": "uncertain",
+      "answers": {
+       "spark_open": "yes",
+       "meta_spark": "no"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "e2c/1_donkey_x_horse",
+   "label": "good",
+   "failures": [],
+   "stale_questions": [],
+   "old": {
+    "verdict": "pass",
+    "signals": []
+   },
+   "spark_open": {
+    "verdict": "fail",
+    "signals": [
+     {
+      "source": "description",
+      "key": "extra_stripes",
+      "text": "described but not planned: stripes",
+      "status": "fail",
+      "answers": {
+       "spark_open": true
+      }
+     }
+    ]
+   },
+   "meta_spark": {
+    "verdict": "pass",
+    "signals": []
+   },
+   "pair": {
+    "verdict": "fail",
+    "signals": [
+     {
+      "source": "description",
+      "key": "extra_stripes",
+      "text": "described but not planned: stripes",
+      "status": "uncertain",
+      "answers": {
+       "spark_open": true,
+       "meta_spark": false
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "e4/b_axolotl_x_pangolin_rerender",
+   "label": "good",
+   "failures": [],
+   "stale_questions": [],
+   "old": {
+    "verdict": "pass",
+    "signals": []
+   },
+   "spark_open": {
+    "verdict": "pass",
+    "signals": []
+   },
+   "meta_spark": {
+    "verdict": "pass",
+    "signals": []
+   },
+   "pair": {
+    "verdict": "pass",
+    "signals": []
+   }
+  }
+ ]
+}

@@ -34,7 +34,8 @@ export interface GraphDoc {
   edges: GraphEdge[];
 }
 
-export type PortType = "image" | "creature";
+/** image: a photo; creature: a Fusion run; version: a generated image in the Lab (V1, V2, …). */
+export type PortType = "image" | "creature" | "version";
 
 export interface PortSpec {
   id: string;

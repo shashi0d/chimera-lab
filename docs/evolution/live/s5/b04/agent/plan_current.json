@@ -1,0 +1,371 @@
+{
+ "id": "crt_e67565bc4797",
+ "parents": {
+  "sire": "lion",
+  "dam": "golden_eagle"
+ },
+ "lineage": {
+  "parent_ids": [],
+  "generation": 0
+ },
+ "mode": "chimera",
+ "known_pair": null,
+ "host": "golden_eagle",
+ "identity_balance": 0.952,
+ "habitat": {
+  "name": "forest",
+  "source": "shared",
+  "adjustments": [
+   "dark back and light belly (mild countershading)"
+  ],
+  "visible_trait": "dark back and light belly (mild countershading)"
+ },
+ "size": {
+  "mass_kg": 4.5625,
+  "flags": []
+ },
+ "silhouette": "upright golden eagle frame on two legs",
+ "limb_plan": {
+  "forelimbs": {
+   "kind": "wings",
+   "donor": "golden_eagle"
+  },
+  "hindlimbs": {
+   "kind": "legs",
+   "donor": "golden_eagle"
+  },
+  "extra_wings": null,
+  "appendages": [],
+  "wing_use": "powered",
+  "requested_wings": null
+ },
+ "traits": {
+  "size": {
+   "op": "PICK",
+   "donor": "golden_eagle",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "host value; donor parts scaled to host size",
+   "flags": []
+  },
+  "body": {
+   "op": "PICK",
+   "donor": "golden_eagle",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "host value; donor parts scaled to host size; deep keel and heavy flight chest",
+   "flags": []
+  },
+  "limbs": {
+   "op": "PICK",
+   "donor": "golden_eagle",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": null,
+   "flags": []
+  },
+  "tail": {
+   "op": "PICK",
+   "donor": "golden_eagle",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "host value; donor parts scaled to host size",
+   "flags": []
+  },
+  "ears": {
+   "op": "PICK",
+   "donor": "golden_eagle",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": null,
+   "flags": []
+  },
+  "skull": {
+   "op": "PICK",
+   "donor": "golden_eagle",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": null,
+   "flags": []
+  },
+  "head": {
+   "op": "PICK",
+   "donor": "golden_eagle",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": null,
+   "flags": []
+  },
+  "face": {
+   "op": "PICK",
+   "donor": "golden_eagle",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": null,
+   "flags": []
+  },
+  "mane": {
+   "op": "PICK",
+   "donor": null,
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "absent: no hair on the neck",
+   "flags": [
+    "gated"
+   ]
+  },
+  "feet": {
+   "op": "PICK",
+   "donor": "golden_eagle",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": null,
+   "flags": []
+  },
+  "coat_pattern": {
+   "op": "PATCH",
+   "donor": "lion",
+   "value": null,
+   "strength": 1.0,
+   "region": [
+    "back",
+    "flanks"
+   ],
+   "part": null,
+   "note": "lion-type surface, no stripes or spots in few large patches following the golden eagle's body regions",
+   "flags": []
+  },
+  "coat_color": {
+   "op": "PATCH",
+   "donor": "lion",
+   "value": null,
+   "strength": 1.0,
+   "region": [
+    "back",
+    "flanks"
+   ],
+   "part": null,
+   "note": "lion color in few large patches following the golden eagle's body regions",
+   "flags": []
+  },
+  "coat_texture": {
+   "op": "PATCH",
+   "donor": "lion",
+   "value": null,
+   "strength": 1.0,
+   "region": [
+    "back",
+    "flanks"
+   ],
+   "part": null,
+   "note": "lion fur in few large patches following the golden eagle's body regions",
+   "flags": []
+  },
+  "behavior": {
+   "op": "PICK",
+   "donor": "golden_eagle",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "follows the head donor",
+   "flags": []
+  }
+ },
+ "labels": [
+  "speculative chimera, no real-world precedent"
+ ],
+ "processes": [
+  "chimera patchwork: each region is one parent's tissue"
+ ],
+ "card_trace": [
+  "RC-R2-01",
+  "RC-R1-14",
+  "RC-R2-16",
+  "RC-R5-10",
+  "RC-R6-01",
+  "RC-R5-02",
+  "RC-R1-01",
+  "RC-R1-09",
+  "RC-R1-10",
+  "RC-R5-01",
+  "RC-R5-03",
+  "RC-R5-04",
+  "RC-R5-05",
+  "RC-R5-06",
+  "RC-R5-07",
+  "RC-R6-02",
+  "RC-R1-07",
+  "RC-R1-08",
+  "RC-R4-01",
+  "RC-R4-02",
+  "RC-R4-05",
+  "RC-R4-11",
+  "RC-R4-10",
+  "RC-R3-12",
+  "RC-R3-05",
+  "RC-R3-03",
+  "RC-R3-04",
+  "RC-R9-02",
+  "RC-R9-04",
+  "RC-R9-05",
+  "RC-R9-13",
+  "RC-R6-03",
+  "RC-R6-04",
+  "RC-R9-10",
+  "RC-R10-15",
+  "RC-R7-06",
+  "RC-R6-05",
+  "RC-R7-07",
+  "RC-R6-07",
+  "RC-R7-10"
+ ],
+ "checks": [
+  {
+   "step": "body_plan_class",
+   "result": "pass",
+   "detail": "host class: vertebrate (biped|winged)",
+   "cards": []
+  },
+  {
+   "step": "limb_budget",
+   "result": "pass",
+   "detail": "4 limbs",
+   "cards": []
+  },
+  {
+   "step": "size_ceiling",
+   "result": "pass",
+   "detail": "within ceilings",
+   "cards": [
+    "RC-R3-05"
+   ]
+  },
+  {
+   "step": "flight_anatomy",
+   "result": "repaired",
+   "detail": "flyer gets a deep keel and heavy chest",
+   "cards": [
+    "RC-R3-03"
+   ]
+  },
+  {
+   "step": "posture",
+   "result": "pass",
+   "detail": "legs match the body size",
+   "cards": []
+  },
+  {
+   "step": "part_rendering",
+   "result": "pass",
+   "detail": "no soft parts",
+   "cards": []
+  }
+ ],
+ "scores": {},
+ "seed": 0,
+ "design_mode": "realistic",
+ "audit": [
+  {
+   "function": "breathing",
+   "result": "pass",
+   "detail": "lungs suit a land habitat",
+   "cards": [],
+   "source": "code"
+  },
+  {
+   "function": "feeding",
+   "result": "pass",
+   "detail": "golden eagle beak, carnivore: beak shape is never a reason to reject (it explains under 12 percent of diet)",
+   "cards": [
+    "RC-R9-04",
+    "RC-R9-05"
+   ],
+   "source": "code"
+  },
+  {
+   "function": "support",
+   "result": "pass",
+   "detail": "legs match the body size",
+   "cards": [],
+   "source": "code"
+  },
+  {
+   "function": "movement",
+   "result": "repaired",
+   "detail": "flyer gets a deep keel and heavy chest",
+   "cards": [
+    "RC-R3-03",
+    "RC-R9-13"
+   ],
+   "source": "code"
+  },
+  {
+   "function": "heat",
+   "result": "pass",
+   "detail": "temperate forest habitat: no heat adjustment needed",
+   "cards": [
+    "RC-R4-11"
+   ],
+   "source": "code"
+  },
+  {
+   "function": "senses",
+   "result": "pass",
+   "detail": "golden eagle head and eyes kept fully visible",
+   "cards": [
+    "RC-R6-03",
+    "RC-R6-04"
+   ],
+   "source": "code"
+  }
+ ],
+ "licenses": [],
+ "render_details": [
+  "deep keel and heavy flight chest"
+ ],
+ "transfers": [
+  {
+   "feature": "covering",
+   "donor": "lion",
+   "kind": "covering",
+   "cls": "material",
+   "anchor": "the skin, as the host's own covering",
+   "extent": [
+    "back",
+    "flanks"
+   ],
+   "extent_reason": "plan regions: the donor covering is a surface patch, not a body system",
+   "scale": "sized to the golden eagle's body and following its contours",
+   "connects": [],
+   "identity_cues": "",
+   "set_by": "code",
+   "plate_pattern": "",
+   "plate_source": "",
+   "host_shell": "",
+   "form": "grown",
+   "form_reason": ""
+  }
+ ],
+ "identity_parts": []
+}

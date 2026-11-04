@@ -2,46 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import type { AppError } from "../api/errors";
 import { presentError } from "../api/errorMessages";
 import { copy } from "../copy";
-import type { Step } from "../types/api";
 import { Icon } from "../ui/Icon";
-import { Timeline, type TimelineItem } from "../ui/Timeline";
-import { formatSeconds } from "./useNow";
 
-// Shared by every runnable node (Fusion, Field Card, …): step list, error block, retry countdown.
-
-const t = copy.nodes.fusion;
-
-export function stepDuration(s: Step, now: number): string {
-  const started = s.startedAt ? Date.parse(s.startedAt) : null;
-  const ended = s.endedAt ? Date.parse(s.endedAt) : null;
-  return started && s.status !== "skipped" ? formatSeconds((ended ?? now) - started) : "";
-}
-
-export function totalMs(steps: Step[]): number {
-  const starts = steps.map((s) => (s.startedAt ? Date.parse(s.startedAt) : NaN)).filter(Number.isFinite);
-  const ends = steps.map((s) => (s.endedAt ? Date.parse(s.endedAt) : NaN)).filter(Number.isFinite);
-  return starts.length && ends.length ? Math.max(...ends) - Math.min(...starts) : 0;
-}
-
-export function StepList({ steps, now, allDetails = false }: { steps: Step[]; now: number; allDetails?: boolean }) {
-  const done = steps.filter((s) => s.status === "succeeded").length;
-  // While running, only the latest finished step explains itself; failures always do.
-  const lastDone = [...steps].reverse().find((s) => s.status === "succeeded")?.key;
-  const items: TimelineItem[] = steps.map((s) => ({
-    key: s.key,
-    label: s.label,
-    status: s.status,
-    statusText: copy.steps[s.status],
-    duration: stepDuration(s, now),
-    detail: s.detail && (s.status === "failed" || (s.status === "succeeded" && (allDetails || s.key === lastDone))) ? s.detail : undefined,
-  }));
-  return (
-    <div className="steps">
-      {allDetails ? null : <p className="steps__count">{t.stepCount(done, steps.length)}</p>}
-      <Timeline items={items} dense />
-    </div>
-  );
-}
+// Shared by the Fusion node and the trace panel: the error block and the retry countdown.
 
 /** Auto-retry countdown for RATE_LIMITED (uses retryAfterMs). */
 export function useCountdown(err: AppError | null | undefined, onDone: () => void): number | null {
@@ -70,11 +33,11 @@ export function useCountdown(err: AppError | null | undefined, onDone: () => voi
   return left;
 }
 
-/** The footer's primary button is the retry action; this block explains what happened. */
-export function ErrorBlock({ err, countdown }: { err: AppError; countdown: number | null }) {
+/** Title, what to change, and an error id when there is one. The retry action sits next to it. */
+export function ErrorBlock({ err, countdown = null, className }: { err: AppError; countdown?: number | null; className?: string }) {
   const p = presentError(err);
   return (
-    <div className="node__error" role="alert">
+    <div className={`node__error${className ? ` ${className}` : ""}`} role="alert">
       <p className="node__error-title">
         <Icon name="error" size={14} /> {p.title}
       </p>
@@ -82,7 +45,7 @@ export function ErrorBlock({ err, countdown }: { err: AppError; countdown: numbe
       {p.errorId ? <p className="node__error-id">{copy.errors.reportId(p.errorId)}</p> : null}
       {countdown !== null ? (
         <p className="node__error-fix" aria-live="polite">
-          {t.retryIn(countdown)}
+          {copy.nodes.fusion.retryIn(countdown)}
         </p>
       ) : null}
     </div>

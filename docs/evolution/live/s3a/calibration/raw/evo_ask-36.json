@@ -1,0 +1,106 @@
+{
+ "purpose": "evo_ask",
+ "request": {
+  "model": "meta-models/muse-spark-open-1026",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture of a creature and answer numbered questions about it. Answer each question on its own: yes if the picture clearly shows it, no if it clearly does not, unclear if you cannot tell. Many questions describe things that should not be there, so do not lean toward yes. Judge only what is visible. answers: one word per question (yes, no or unclear), in the same order as the questions, nothing else. notes: one short sentence."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "Questions:\n1. Does the body look like one animal mixing a lion and a tiger?\n2. Does it have a lion head with visible eyes?\n3. Are there wings anywhere on the body?\n4. Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?\n5. Is there a second head anywhere?\n6. Does it have more than 4 walking legs?\n7. Does the fur show bold, high-contrast stripes or spots over most of the body, more than faint markings?"
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (781975 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "balanced_checklist",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "answers",
+      "notes"
+     ],
+     "properties": {
+      "answers": {
+       "type": "array",
+       "items": {
+        "type": "string",
+        "enum": [
+         "yes",
+         "no",
+         "unclear"
+        ]
+       }
+      },
+      "notes": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0,
+  "max_tokens": 8000
+ },
+ "response": {
+  "id": "chatcmpl-926e36d09b3947d9a78eb94a40f380bc",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{ \"answers\": [\"yes\", \"yes\", \"no\", \"no\", \"no\", \"no\", \"no\"], \"notes\": \"Image shows a single liger-like felid with faint stripes and no wings or extra animals.\" }",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null,
+     "reasoning_content": "We need to answer numbered questions about picture. Provide one word per question (yes, no or unclear), in same order as questions, nothing else. notes: one short sentence.\n\nBut instructions: answers: one word per question (yes, no or unclear), in same order as questions, nothing else. notes: one short sentence.\n\nProbably need to output answers list and notes? The system says answer each question on its own: yes if picture clearly shows it, no if clearly does not, unclear if cannot tell. Many questions describe things that should not be there, so do not lean toward yes. Judge only what is visible. answers: one word per question (yes, no or unclear), in same order as questions, nothing else. notes: one short sentence.\n\nSo we need to produce 7 answers.\n\nLet's analyze image: It's a liger? Body looks like one animal mixing lion and tiger. Yes. It has lion head with visible eyes? Yes, eyes visible. Are there wings anywhere on body? No. Is there a whole separate animal, or animal-shaped object with its own head, legs or wing cases, attached to or sitting on body? No. Is there a second head anywhere? No. Does it have more than 4 walking legs? No, it has 4 legs. Does fur show bold, high-contrast stripes or spots over most of body, more than faint markings? The image shows faint stripes, not bold high-contrast over most body. The stripes are faint, especially on torso. Legs have darker stripes but body overall faint. So answer no? The question: Does the fur show bold, high-contrast stripes or spots over most of the body, more than faint markings? Over most of body, it's faint. So no.\n\nThus answers:\n\n1 yes\n2 yes\n3 no\n4 no\n5 no\n6 no\n7 no\n\nCheck question 7: bold high-contrast stripes or spots over most of body, more than faint markings. The animal has faint tiger stripes, not bold. So no.\n\nNeed to provide notes: one short sentence.\n\nWe must output one word per question in same order, nothing else. But also notes? The prompt says notes: one short sentence. Possibly need to include notes line. The instruction says answers: one word per question (yes, no or unclear), in same order as questions, nothing else. notes: one short sentence.\n\nMaybe they want two sections: answers and notes. Provide answers list then notes.\n\nWe should output:\n\nyes\nyes\nno\nno\nno\nno\nno\n\nNotes: ... Provide one short sentence.\n\nEnsure compliance.\n\nProbably format:\n\n1. yes\n2. yes\netc? But says one word per question, nothing else. So maybe just list words line by line.\n\nWe will output 7 lines each with yes/no.\n\nThen add a notes line.\n\nLet's do:\n\nyes\nyes\nno\nno\nno\nno\nno\n\nNotes: The creature is a single liger-like felid with faint striping and no extra appendages.\n\nThat satisfies.\n\nCheck if any trick: Does it have a lion head with visible eyes? Yes, eyes visible. Does body look like one animal mixing lion and tiger? Yes, liger.\n\nWings? No.\n\nWhole separate animal attached? No.\n\nSecond head? No.\n\nMore than 4 walking legs? No, exactly 4.\n\nBold high-contrast stripes over most body? No, faint.\n\nThus final answer.\n\nWe must not lean toward yes for things that should not be there. So correct.\n\nProvide final output."
+    }
+   }
+  ],
+  "created": 1793505866,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 789,
+   "prompt_tokens": 3725,
+   "total_tokens": 4514,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 569,
+    "audio_tokens": 0,
+    "reasoning_tokens": 731,
+    "rejected_prediction_tokens": 971,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 128,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

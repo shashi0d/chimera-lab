@@ -1,0 +1,313 @@
+{
+ "id": "crt_8aefc31a88f1",
+ "parents": {
+  "sire": "lion",
+  "dam": "tiger"
+ },
+ "lineage": {
+  "parent_ids": [],
+  "generation": 0
+ },
+ "mode": "hybrid",
+ "known_pair": "liger",
+ "host": "lion",
+ "identity_balance": 0.716,
+ "habitat": {
+  "name": "grassland",
+  "source": "shared",
+  "adjustments": [
+   "plainer coat with fewer markings for an open habitat",
+   "dark back and light belly (strong countershading)"
+  ],
+  "visible_trait": "plainer coat with fewer markings for an open habitat"
+ },
+ "size": {
+  "mass_kg": 321.2,
+  "flags": [
+   "beyond both parents"
+  ]
+ },
+ "silhouette": "very large cat frame, longer and heavier than either parent, long body, heavy forequarters, small or no mane",
+ "limb_plan": {
+  "forelimbs": {
+   "kind": "legs",
+   "donor": null
+  },
+  "hindlimbs": {
+   "kind": "legs",
+   "donor": null
+  },
+  "extra_wings": null,
+  "appendages": [],
+  "wing_use": "none",
+  "requested_wings": null
+ },
+ "traits": {
+  "behavior": {
+   "op": "PICK",
+   "donor": "lion",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "social lion-like behavior may follow one parent without full performance behind it",
+   "flags": []
+  },
+  "body": {
+   "op": "BLEND",
+   "donor": [
+    "lion",
+    "tiger"
+   ],
+   "value": 0.5,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "long heavy intermediate cat body with heavy forequarters",
+   "flags": []
+  },
+  "coat_color": {
+   "op": "BLEND",
+   "donor": [
+    "lion",
+    "tiger"
+   ],
+   "value": 0.25,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "tawny lion-like base, incomplete-dominance blend leaning to sire",
+   "flags": []
+  },
+  "coat_pattern": {
+   "op": "OVERLAY",
+   "donor": "tiger",
+   "value": null,
+   "strength": 0.2,
+   "region": [
+    "flanks",
+    "legs"
+   ],
+   "part": null,
+   "note": "faint tiger stripes diluted because body is not tiger-owned, overlay on tawny base",
+   "flags": [
+    "habitat pattern -0.10"
+   ]
+  },
+  "coat_texture": {
+   "op": "PICK",
+   "donor": "tiger",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "short dense coat from tiger",
+   "flags": []
+  },
+  "ears": {
+   "op": "BLEND",
+   "donor": [
+    "lion",
+    "tiger"
+   ],
+   "value": 0.35,
+   "strength": null,
+   "region": [
+    "ears"
+   ],
+   "part": null,
+   "note": "rounded intermediate ears leaning to lion, shifted with face",
+   "flags": []
+  },
+  "face": {
+   "op": "PICK",
+   "donor": "lion",
+   "value": null,
+   "strength": null,
+   "region": [
+    "face"
+   ],
+   "part": null,
+   "note": "lion-like muzzle and face, same neural-crest group as ears",
+   "flags": []
+  },
+  "feet": {
+   "op": "PICK",
+   "donor": "lion",
+   "value": null,
+   "strength": null,
+   "region": [
+    "feet"
+   ],
+   "part": null,
+   "note": "lion-like feet consistent with head and forequarter group",
+   "flags": []
+  },
+  "head": {
+   "op": "PICK",
+   "donor": "lion",
+   "value": null,
+   "strength": null,
+   "region": [
+    "head"
+   ],
+   "part": null,
+   "note": "lion-like head shape",
+   "flags": []
+  },
+  "limbs": {
+   "op": "BLEND",
+   "donor": [
+    "lion",
+    "tiger"
+   ],
+   "value": 0.4,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "intermediate limb proportions near midpoint",
+   "flags": []
+  },
+  "mane": {
+   "op": "PICK",
+   "donor": "lion",
+   "value": null,
+   "strength": 0.3,
+   "region": [
+    "neck"
+   ],
+   "part": null,
+   "note": "reduced mane or none in males, never full mane with full-strength stripes",
+   "flags": []
+  },
+  "size": {
+   "op": "BLEND",
+   "donor": [
+    "lion",
+    "tiger"
+   ],
+   "value": 0.5,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "midpoint blend with direction-specific gigantism beyond both parents for lion sire x tiger dam",
+   "flags": [
+    "beyond both parents"
+   ]
+  },
+  "skull": {
+   "op": "BLEND",
+   "donor": [
+    "lion",
+    "tiger"
+   ],
+   "value": 0.35,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "skull proportions intermediate leaning to lion with face and ears",
+   "flags": []
+  },
+  "tail": {
+   "op": "BLEND",
+   "donor": [
+    "lion",
+    "tiger"
+   ],
+   "value": 0.53,
+   "strength": null,
+   "region": [
+    "tail"
+   ],
+   "part": null,
+   "note": "intermediate tail length near midpoint",
+   "flags": []
+  }
+ },
+ "labels": [
+  "real hybrid precedent"
+ ],
+ "processes": [
+  "in-between blend as in real hybrids",
+  "diluted pattern from a non-body donor",
+  "growth beyond both parents in one cross direction"
+ ],
+ "card_trace": [
+  "RC-R2-01",
+  "RC-R2-16",
+  "RC-R2-05",
+  "RC-R2-08",
+  "RC-R2-06",
+  "RC-R1-01",
+  "RC-R1-02",
+  "RC-R1-04",
+  "RC-R1-05",
+  "RC-R1-06",
+  "RC-R1-11",
+  "RC-R2-02",
+  "RC-R2-07",
+  "RC-R2-15",
+  "RC-R1-13",
+  "RC-R4-01",
+  "RC-R4-02",
+  "RC-R4-05",
+  "RC-R4-11",
+  "RC-R4-10",
+  "RC-R3-12",
+  "RC-R6-01",
+  "RC-R7-06",
+  "RC-R6-03",
+  "RC-R6-04",
+  "RC-R6-02",
+  "RC-R6-05",
+  "RC-R7-07",
+  "RC-R6-07",
+  "RC-R7-10"
+ ],
+ "checks": [
+  {
+   "step": "body_plan_class",
+   "result": "pass",
+   "detail": "host class: vertebrate (quadruped)",
+   "cards": []
+  },
+  {
+   "step": "limb_budget",
+   "result": "pass",
+   "detail": "4 limbs",
+   "cards": []
+  },
+  {
+   "step": "size_ceiling",
+   "result": "pass",
+   "detail": "within ceilings",
+   "cards": []
+  },
+  {
+   "step": "flight_anatomy",
+   "result": "pass",
+   "detail": "no wings",
+   "cards": []
+  },
+  {
+   "step": "posture",
+   "result": "pass",
+   "detail": "legs match the body size",
+   "cards": []
+  },
+  {
+   "step": "part_rendering",
+   "result": "pass",
+   "detail": "no soft parts",
+   "cards": []
+  }
+ ],
+ "scores": {
+  "critic": 1.0,
+  "silhouette": 0.96,
+  "thumbnail": 1.0,
+  "soft_penalty": 0.167,
+  "quality": 0.955
+ },
+ "seed": 0
+}

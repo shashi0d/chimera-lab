@@ -1,13 +1,10 @@
 from tests.conftest import IMAGES
 
 
-async def test_health_reports_mock_mode(client):
+async def test_health(client):
     r = await client.get("/health")
     assert r.status_code == 200
-    body = r.json()
-    assert body["mode"] == "mock"
-    assert body["status"] == "ok"
-    assert body["dataSource"] == "full"  # fixture path given explicitly and exists
+    assert r.json()["status"] == "ok"
 
 
 def test_fixture_images_exist():

@@ -9,13 +9,12 @@
     "typecheck": "tsc -p tsconfig.json",
     "test": "vitest run",
     "test:watch": "vitest",
-    "e2e": "playwright test",
-    "shots": "tsx tests/visual/capture.ts",
     "fonts": "node scripts/copy-fonts.mjs",
     "check:bundle": "../scripts/check-bundle.sh",
     "check:css": "../scripts/check-css.sh"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.118.0",
     "@xyflow/react": "^12.12.0",
     "idb-keyval": "^6.3.0",
     "react": "^18.3.1",
@@ -23,11 +22,9 @@
     "zustand": "^5.0.16"
   },
   "devDependencies": {
-    "@axe-core/playwright": "^4.14.0",
     "@fontsource/hanken-grotesk": "^5.3.0",
     "@fontsource/jetbrains-mono": "^5.3.0",
     "@fontsource/space-grotesk": "^5.3.0",
-    "@playwright/test": "1.63.0",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
     "@testing-library/user-event": "^14.6.8",

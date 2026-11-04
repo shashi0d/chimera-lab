@@ -1,0 +1,40 @@
+{
+ "critic": {
+  "animals": [
+   "lion",
+   "tiger"
+  ],
+  "creatures": 1,
+  "notes": "A large tawny hybrid big cat with faint tiger stripes stands in profile."
+ },
+ "critic_thumbnail": {
+  "animals": [
+   "lion",
+   "tiger"
+  ],
+  "creatures": 1,
+  "notes": "A large tawny lion-like cat with faint tiger striping stands in view."
+ },
+ "mask": {
+  "fill": 0.333,
+  "aspect": 1.16,
+  "components": 1
+ },
+ "sam_prompt": "lion",
+ "soft_cards": [
+  {
+   "card": "RC-R1-11",
+   "weight": 1.0,
+   "severity": 0.5,
+   "penalty": 0.5,
+   "detail": "face and pigment pattern from different parents"
+  }
+ ],
+ "scores": {
+  "critic": 1.0,
+  "silhouette": 0.96,
+  "thumbnail": 1.0,
+  "soft_penalty": 0.167,
+  "quality": 0.955
+ }
+}

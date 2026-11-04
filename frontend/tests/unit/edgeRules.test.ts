@@ -9,8 +9,18 @@ describe("edge rules (TASKSHEET 4.1, 7.2)", () => {
   it("accepts image -> fusion input", () => {
     expect(checkConnection(graph(), { source: "b", sourcePort: "out", target: "f", targetPort: "b" }, portsOf)).toEqual({ ok: true });
   });
-  it("accepts fusion -> result", () => {
+  it("accepts fusion -> image card", () => {
     expect(checkConnection(graph(), { source: "f", sourcePort: "out", target: "r", targetPort: "in" }, portsOf).ok).toBe(true);
+  });
+  it("the Lab path: image card -> edit -> image card; a photo never feeds an image card or an edit; an image card can feed a Fusion or an animal card", () => {
+    const g = { nodes: [img("a"), fusion("f"), result("r"), { ...result("r2") }, { id: "e", type: "edit", version: 1, position: { x: 0, y: 0 }, config: { operation: "revise", instruction: "" }, data: {} }], edges: [] };
+    expect(checkConnection(g, { source: "r", sourcePort: "out", target: "e", targetPort: "in" }, portsOf).ok).toBe(true);
+    expect(checkConnection(g, { source: "e", sourcePort: "out", target: "r2", targetPort: "in" }, portsOf).ok).toBe(true);
+    expect(checkConnection(g, { source: "a", sourcePort: "out", target: "e", targetPort: "in" }, portsOf)).toEqual({ ok: false, reason: "type" });
+    expect(checkConnection(g, { source: "r", sourcePort: "out", target: "f", targetPort: "a" }, portsOf).ok).toBe(true);
+    const withCard = { ...g, nodes: [...g.nodes, { id: "c", type: "card", version: 1, position: { x: 0, y: 0 }, config: {}, data: {} }] };
+    expect(checkConnection(withCard, { source: "r", sourcePort: "out", target: "c", targetPort: "in" }, portsOf).ok).toBe(true);
+    expect(checkConnection(withCard, { source: "a", sourcePort: "out", target: "c", targetPort: "in" }, portsOf)).toEqual({ ok: false, reason: "type" });
   });
   it("refuses wrong port type", () => {
     expect(checkConnection(graph(), { source: "a", sourcePort: "out", target: "r", targetPort: "in" }, portsOf)).toEqual({ ok: false, reason: "type" });

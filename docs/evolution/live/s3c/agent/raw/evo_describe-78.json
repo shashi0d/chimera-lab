@@ -1,0 +1,156 @@
+{
+ "purpose": "evo_describe",
+ "request": {
+  "model": "meta-models/muse-spark-open-1026",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture with no other context and describe exactly what is drawn, like a careful field naturalist. Do not guess what was intended; describe only what is visible. description: a free paragraph describing the whole creature first. parts: every body part you see, one entry each (head, horns, ears, mane, legs, feet, tail, wings, gills, tentacles, shell, plates, scales, feathers, markings), with what it looks like and where it is. attached_objects: anything that looks attached to or sitting on the body rather than part of it, such as an object, an armor piece or a whole small animal; empty if none. animals: every real animal whose features you can see, as everyday English common names, at most four; include any animal that only one part resembles. Then count, looking carefully: separate_bodies: separate animal bodies or body-shaped objects in the picture, including any whole animal or animal-shaped object attached to or sitting on the main creature. heads: heads of any kind. walking_legs: legs the creature stands or walks on, including hidden ones you can infer. wings: wings of any kind. extra_limb_pieces: jointed leg-like, claw-like or tentacle-like pieces other than the walking legs and the tail. tails: tails of any kind (0 if none)."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "Describe this creature, then count."
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (687163 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "plan_blind_describe",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "description",
+      "parts",
+      "attached_objects",
+      "animals",
+      "separate_bodies",
+      "heads",
+      "walking_legs",
+      "wings",
+      "extra_limb_pieces",
+      "tails"
+     ],
+     "properties": {
+      "description": {
+       "type": "string"
+      },
+      "parts": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "part",
+         "looks_like",
+         "where"
+        ],
+        "properties": {
+         "part": {
+          "type": "string"
+         },
+         "looks_like": {
+          "type": "string"
+         },
+         "where": {
+          "type": "string"
+         }
+        }
+       }
+      },
+      "attached_objects": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "animals": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "separate_bodies": {
+       "type": "integer"
+      },
+      "heads": {
+       "type": "integer"
+      },
+      "walking_legs": {
+       "type": "integer"
+      },
+      "wings": {
+       "type": "integer"
+      },
+      "extra_limb_pieces": {
+       "type": "integer"
+      },
+      "tails": {
+       "type": "integer"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0,
+  "max_tokens": 8000
+ },
+ "response": {
+  "id": "chatcmpl-b74655e928e34d8998b615c110ff4acb",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\n  \"description\": \"The creature is shown in left-facing profile standing on sandy ground against a plain light background. It is a quadrupedal chimera with the head, legs, and long bushy tail of a reddish fox and the neck, chest, back, and folded wings of a barn owl. The front of the animal from the nose to the upper neck and the four legs and tail are covered in dense fox-like fur in reddish-orange and brown with white on the muzzle and chest, while the lower neck, chest, belly, back and sides are covered in pale owl-like feathers in white, buff, and mottled gray-brown with dark spotting and barring. Two folded feathered wings lie flat along the sides of the mid-body, and the overall posture and proportions are those of a standing fox.\",\n  \"parts\": [\n    {\n      \"part\": \"head\",\n      \"looks_like\": \"a fox head in profile facing left, with a pointed muzzle, black nose, white fur around the mouth and lower cheek, reddish-orange fur on the bridge of the nose and around the amber eye, fine whiskers on the muzzle, and a slightly open mouth\",\n      \"where\": \"at the front and top of the body, atop the neck\"\n    },\n    {\n      \"part\": \"ears\",\n      \"looks_like\": \"two large upright triangular pointed ears with reddish-brown outer fur, black edging along the back, and pale cream and dark brown interior fur with visible inner detail\",\n      \"where\": \"on top of the head, one slightly behind the other in profile view\"\n    },\n    {\n      \"part\": \"legs\",\n      \"looks_like\": \"four sturdy mammalian legs covered in reddish-brown fur that darkens to dark brown to black on the lower shanks, front legs straight and vertical, hind legs bent at the hock joint\",\n      \"where\": \"under the body, two front legs under the chest and two hind legs under the rear torso, supporting the body on the ground\"\n    },\n    {\n      \"part\": \"feet\",\n      \"looks_like\": \"four fur-covered paws with visible dark claws and toe pads, rounded at the toes, with darker fur blending into the lower leg\",\n      \"where\": \"at the bottom ends of the four legs, in contact with the sandy ground\"\n    },\n    {\n      \"part\": \"tail\",\n      \"looks_like\": \"one long, thick, very bushy tail covered in long reddish-brown fur with lighter tan and cream on the underside and tip, tapering slightly toward the end\",\n      \"where\": \"extending from the rear of the body to the right and downward, nearly touching the ground behind the hind legs\"\n    },\n    {\n      \"part\": \"wings\",\n      \"looks_like\": \"two folded wings with layered flight feathers in barn-owl patterning of buff, cream, white, and gray with black spots and dark barring, the primaries overlapping toward the rear\",\n      \"where\": \"along the left and right sides of the mid-back and torso, overlying the fur of the sides\"\n    },\n    {\n      \"part\": \"feathers\",\n      \"looks_like\": \"dense soft plumage covering the lower neck, chest, belly, back and wings, white and pale buff on the chest and underside, mottled gray-brown on the back and wing coverts, with layered overlapping vanes\",\n      \"where\": \"on the neck below the fox fur, across the chest and belly, over the back, and forming the wings\"\n    },\n    {\n      \"part\": \"markings\",\n      \"looks_like\": \"small scattered black and dark brown spots on the white and buff chest and neck, larger mottled gray patches with white-centered black spots on the back and wing coverts, and dark brown to black bars and spots on the flight feathers\",\n      \"where\": \"scattered across the feathered chest, neck, back, and wings\"\n    }\n  ],\n  \"attached_objects\": [],\n  \"animals\": [\"fox\", \"barn owl\"],\n  \"separate_bodies\": 1,\n  \"heads\": 1,\n  \"walking_legs\": 4,\n  \"wings\": 2,\n  \"extra_limb_pieces\": 0,\n  \"tails\": 1\n}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null,
+     "reasoning_content": "<elided> (8613 chars)"
+    }
+   }
+  ],
+  "created": 1793556655,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 2942,
+   "prompt_tokens": 3795,
+   "total_tokens": 6737,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 2100,
+    "audio_tokens": 0,
+    "reasoning_tokens": 2024,
+    "rejected_prediction_tokens": 3794,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 384,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

@@ -1,0 +1,152 @@
+{
+ "purpose": "evo_describe",
+ "request": {
+  "model": "meta-models/muse-spark-open-1026",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture with no other context and describe exactly what is drawn, like a careful field naturalist. Do not guess what was intended; describe only what is visible. description: a free paragraph describing the whole creature first. parts: every body part you see, one entry each (head, horns, ears, mane, legs, feet, tail, wings, gills, tentacles, shell, plates, scales, feathers, markings), with what it looks like and where it is. attached_objects: anything that looks attached to or sitting on the body rather than part of it, such as an object, an armor piece or a whole small animal; empty if none. animals: every real animal whose features you can see, as everyday English common names, at most four; include any animal that only one part resembles. Then count, looking carefully: separate_bodies: separate animal bodies or body-shaped objects in the picture, including any whole animal or animal-shaped object attached to or sitting on the main creature. heads: heads of any kind. walking_legs: legs the creature stands or walks on, including hidden ones you can infer. wings: wings of any kind. extra_limb_pieces: jointed leg-like, claw-like or tentacle-like pieces other than the walking legs and the tail."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "Describe this creature, then count."
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (803119 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "plan_blind_describe",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "description",
+      "parts",
+      "attached_objects",
+      "animals",
+      "separate_bodies",
+      "heads",
+      "walking_legs",
+      "wings",
+      "extra_limb_pieces"
+     ],
+     "properties": {
+      "description": {
+       "type": "string"
+      },
+      "parts": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "part",
+         "looks_like",
+         "where"
+        ],
+        "properties": {
+         "part": {
+          "type": "string"
+         },
+         "looks_like": {
+          "type": "string"
+         },
+         "where": {
+          "type": "string"
+         }
+        }
+       }
+      },
+      "attached_objects": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "animals": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "separate_bodies": {
+       "type": "integer"
+      },
+      "heads": {
+       "type": "integer"
+      },
+      "walking_legs": {
+       "type": "integer"
+      },
+      "wings": {
+       "type": "integer"
+      },
+      "extra_limb_pieces": {
+       "type": "integer"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0,
+  "max_tokens": 8000
+ },
+ "response": {
+  "id": "chatcmpl-6d19a1d74bd34143af4b1e4bb59af23e",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\n  \"description\": \"The creature is a single chimeric animal standing in right-facing profile on a small patch of bare ground with sparse tufts of grass. Its body is that of a large, muscular lion, covered in short tawny-brown fur with a lighter cream belly and inner legs, supported by four sturdy legs and ending in a long tail. Its head, neck, chest and wings are those of an eagle, covered in layered brown, golden-brown, cream and dark brown feathers, with a hooked beak and a sharp eye. Two large feathered wings are spread upward and outward from its upper back. The overall coloration is warm browns and golds with darker flight feathers and a dark tail tuft.\",\n  \"parts\": [\n    {\n      \"part\": \"head\",\n      \"looks_like\": \"eagle-like head at the front of the body facing right, with a large hooked beak that is dark gray at the tip and yellow at the base and cere, a forward-facing amber eye with a dark pupil and yellow orbital ring, and dense golden-brown feathers on the crown and cheeks with lighter cream patches on the side of the neck\",\n      \"where\": \"at the anterior end of the body, attached to the feathered neck above the chest\"\n    },\n    {\n      \"part\": \"mane\",\n      \"looks_like\": \"a thick ruff of elongated shaggy feathers and fur around the lower neck and chest, dark brown mixed with cream and golden streaks, hanging down between the forelegs\",\n      \"where\": \"encircling the front of the neck and covering the upper chest and throat\"\n    },\n    {\n      \"part\": \"legs\",\n      \"looks_like\": \"four thick, muscular lion-like legs covered in short tawny fur that is lighter on the undersides and inner surfaces, with visible joints and musculature\",\n      \"where\": \"two forelegs under the chest and two hind legs under the hindquarters, supporting the body on the ground\"\n    },\n    {\n      \"part\": \"feet\",\n      \"looks_like\": \"four large paw-like feet with rounded toes, short dark claws, and padded soles, covered in tawny fur with lighter fur on top\",\n      \"where\": \"at the distal ends of each leg, in contact with the ground\"\n    },\n    {\n      \"part\": \"tail\",\n      \"looks_like\": \"a long slender lion-like tail covered in short tawny fur, tapering to a dark brown to black bushy tuft at the tip\",\n      \"where\": \"extending from the rear of the hindquarters, hanging down and curving slightly outward behind the hind legs\"\n    },\n    {\n      \"part\": \"wings\",\n      \"looks_like\": \"two very large outstretched wings with layered feathers, golden-brown and medium brown coverts on the upper surfaces and darker brown to gray-brown flight feathers along the trailing edges and tips, with detailed individual feather barbs visible\",\n      \"where\": \"attached to the upper back behind the shoulders, spread upward and outward to the left and right above the body\"\n    },\n    {\n      \"part\": \"feathers\",\n      \"looks_like\": \"dense overlapping feathers of varying size and color - small golden-brown feathers on the head, larger layered brown and cream feathers on the neck and chest, and long broad flight feathers on the wings in shades of gold, brown, tan and dark brown\",\n      \"where\": \"covering the head, neck, chest, and entire dorsal surfaces of both wings\"\n    },\n    {\n      \"part\": \"markings\",\n      \"looks_like\": \"tawny lion body with a paler cream belly and inner legs, darker brown shading along the back and hindquarters, cream-white patches on the side of the neck and chest interspersed with dark brown feathered areas, and darker brown tips on the wing feathers and tail tuft\",\n      \"where\": \"over the whole body, with lighter ventral areas and darker dorsal and feathered areas\"\n    }\n  ],\n  \"attached_objects\": [],\n  \"animals\": [\n    \"eagle\",\n    \"lion\"\n  ],\n  \"separate_bodies\": 1,\n  \"heads\": 1,\n  \"walking_legs\": 4,\n  \"wings\": 2,\n  \"extra_limb_pieces\": 0\n}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null,
+     "reasoning_content": "<elided> (9293 chars)"
+    }
+   }
+  ],
+  "created": 1793505879,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 3062,
+   "prompt_tokens": 3784,
+   "total_tokens": 6846,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 2250,
+    "audio_tokens": 0,
+    "reasoning_tokens": 2141,
+    "rejected_prediction_tokens": 3441,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 3712,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

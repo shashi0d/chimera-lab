@@ -1,0 +1,197 @@
+{
+ "id": "e2/2_lion_x_tiger",
+ "questions": [
+  {
+   "id": "frame",
+   "text": "Does the body look like one animal mixing a lion and a tiger?",
+   "expect": "yes",
+   "group": "structure",
+   "fix": "Show the planned in-between body of the lion and the tiger; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "head",
+   "text": "Does it have a lion head with visible eyes?",
+   "expect": "yes",
+   "group": "structure",
+   "fix": "Show the planned lion head, fully visible with clear eyes; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "no_wings",
+   "text": "Are there wings anywhere on the body?",
+   "expect": "no",
+   "group": "structure",
+   "fix": "The plan has no wings: show the lion's own body there instead; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "whole_animal",
+   "text": "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?",
+   "expect": "no",
+   "group": "structure",
+   "fix": "Show one single creature with only its planned parts, no separate animals on it; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "second_head",
+   "text": "Is there a second head anywhere?",
+   "expect": "no",
+   "group": "structure",
+   "fix": "Show one single head, as planned; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "extra_legs",
+   "text": "Does it have more than 4 walking legs?",
+   "expect": "no",
+   "group": "structure",
+   "fix": "Show exactly 4 walking legs, as planned; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "bold_pattern",
+   "text": "Does the fur show bold, high-contrast stripes or spots over most of the body, more than faint markings?",
+   "expect": "no",
+   "group": "pattern",
+   "fix": "Show only faint tiger-type markings on the flanks and legs, as planned; keep everything else the same.",
+   "sam": null
+  }
+ ],
+ "raw": {
+  "spark_open": {
+   "describe": {
+    "description": "The image shows a single large, muscular four-legged felid standing in right-facing side profile with its head turned to face the viewer. Its coat is predominantly tawny golden-brown with a paler off-white underbelly, chest, throat and chin, overlaid with faint to distinct narrow dark stripes. It has a broad head with a short muzzle, small rounded ears, a shaggy ruff of longer fur around the neck and chest, four sturdy legs ending in large paws, and a short thin tail with a dark tip. The animal is rendered in detailed naturalistic style against a plain off-white background with a soft shadow beneath its feet, resembling a vintage scientific illustration.",
+    "parts": [
+     {
+      "part": "head",
+      "looks_like": "broad felid head at the front of the body, turned three-quarters toward the viewer; tawny fur with white on the muzzle, chin and around the eyes, a dark pink-brown nose, white whiskers, and amber-brown eyes with dark outlines; forehead and crown show faint dark spotting and narrow striping",
+      "where": "at the front end of the torso, above the chest ruff"
+     },
+     {
+      "part": "ears",
+      "looks_like": "two small rounded tufted ears with tawny fur and a distinct dark brown-black patch on the back of each ear",
+      "where": "on top of the head, one on each side"
+     },
+     {
+      "part": "mane",
+      "looks_like": "shaggy medium-length ruff of longer, tousled fur, tawny mixed with off-white and light brown, thicker and more textured than the short body fur",
+      "where": "encircling the neck, extending down the throat and over the upper chest and underside of the neck"
+     },
+     {
+      "part": "legs",
+      "looks_like": "four thick muscular legs covered in short tawny fur with prominent dark horizontal bands on the lower segments, especially distinct on the hind legs; forelegs are straight and vertical, hind legs are slightly bent at the hock",
+      "where": "two forelegs under the chest, two hind legs under the rear torso, supporting the body"
+     },
+     {
+      "part": "feet",
+      "looks_like": "four large rounded paws with visible toe pads and short dark claws, fur is lighter tawny on the paws with darker shading between toes",
+      "where": "at the bottom ends of each leg, flat on the ground"
+     },
+     {
+      "part": "tail",
+      "looks_like": "short thin tail with tawny fur, several dark rings and a dark blackish tuft at the tip",
+      "where": "protruding from the rear of the body, extending slightly outward behind the right hind leg"
+     },
+     {
+      "part": "markings",
+      "looks_like": "narrow dark brown to black vertical stripes and bars, fainter and more diffuse on the back and sides, more distinct and band-like on the lower legs and tail; small dark spots on the forehead and around the muzzle",
+      "where": "across the torso, flanks, hindquarters, limbs and tail, and on the face"
+     }
+    ],
+    "attached_objects": [],
+    "animals": [
+     "lion",
+     "tiger"
+    ],
+    "separate_bodies": 1,
+    "heads": 1,
+    "walking_legs": 4,
+    "wings": 0,
+    "extra_limb_pieces": 0
+   },
+   "answers": {
+    "Does the body look like one animal mixing a lion and a tiger?": "yes",
+    "Does it have a lion head with visible eyes?": "yes",
+    "Are there wings anywhere on the body?": "no",
+    "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?": "no",
+    "Is there a second head anywhere?": "no",
+    "Does it have more than 4 walking legs?": "no",
+    "Does the fur show bold, high-contrast stripes or spots over most of the body, more than faint markings?": "no"
+   },
+   "error": null
+  },
+  "meta_spark": {
+   "describe": {
+    "description": "A large, powerfully built four-legged felid shown in side view with its head turned toward the viewer. It has dense short tawny golden-brown fur, paler cream-white on the lower cheeks, chest, belly and lower legs, with faint narrow dark striping over the back, sides, legs and tail. The body is long and muscular with a deep chest, thick straight forelegs and bent hindlegs ending in large paws, and a short thin tail with a dark tip. The head is broad and cat-like with a short muzzle, rounded ears, and a slightly longer ruff of fur around the cheeks and under the neck.",
+    "parts": [
+     {
+      "part": "head",
+      "looks_like": "large broad felid head with short blunt muzzle, tawny fur, white around the eyes and on the muzzle and chin, dark nose and dark mouth line",
+      "where": "at the front of the body, turned to face forward"
+     },
+     {
+      "part": "ears",
+      "looks_like": "small rounded furry ears with dark patches on the back",
+      "where": "on the top sides of the head"
+     },
+     {
+      "part": "eyes",
+      "looks_like": "almond-shaped eyes with dark outlines and white below, brown irises",
+      "where": "on the front of the head, facing forward"
+     },
+     {
+      "part": "mane",
+      "looks_like": "slightly longer shaggy pale tawny and whitish fur forming a ruff",
+      "where": "around the cheeks, sides of the neck and chest"
+     },
+     {
+      "part": "torso",
+      "looks_like": "long deep-chested muscular torso covered in short tawny fur",
+      "where": "in the middle, between the forelegs and hindlegs"
+     },
+     {
+      "part": "legs",
+      "looks_like": "four thick muscular legs, straight in front and angled at the hock behind, tawny above becoming paler below with dark horizontal striping",
+      "where": "under the torso, two in front and two in back"
+     },
+     {
+      "part": "feet",
+      "looks_like": "large broad rounded paws with short claws and pale fur",
+      "where": "at the bottom ends of the four legs on the ground"
+     },
+     {
+      "part": "tail",
+      "looks_like": "short thin tapering tail with striped base and dark tufted tip",
+      "where": "extending from the rear of the torso to the left"
+     },
+     {
+      "part": "markings",
+      "looks_like": "faint narrow dark brown to black vertical stripes and spots",
+      "where": "over the forehead, back, sides, belly, legs and tail"
+     }
+    ],
+    "attached_objects": [],
+    "animals": [
+     "lion",
+     "tiger"
+    ],
+    "separate_bodies": 1,
+    "heads": 1,
+    "walking_legs": 4,
+    "wings": 0,
+    "extra_limb_pieces": 0
+   },
+   "answers": {
+    "Does the body look like one animal mixing a lion and a tiger?": "yes",
+    "Does it have a lion head with visible eyes?": "yes",
+    "Are there wings anywhere on the body?": "no",
+    "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?": "no",
+    "Is there a second head anywhere?": "no",
+    "Does it have more than 4 walking legs?": "no",
+    "Does the fur show bold, high-contrast stripes or spots over most of the body, more than faint markings?": "no"
+   },
+   "error": null
+  }
+ }
+}

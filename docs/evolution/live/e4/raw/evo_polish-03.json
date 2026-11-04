@@ -1,0 +1,81 @@
+{
+ "purpose": "evo_polish",
+ "request": {
+  "model": "muse-spark-1.3",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You lightly edit a text-to-image prompt for readability. Keep the first sentence word for word. Do not add, remove or change any animal, body part, color, count, strength, habitat or view. Do not add brand or franchise names. Stay within 20 percent of the original length. Return the edited prompt only."
+   },
+   {
+    "role": "user",
+    "content": "Silhouette: Horizontal brown bear frame carried on two hind legs, European rhinoceros beetle wings in place of the forelegs, jointed tail segments in place of the tail. Host frame: the brown bear sets the outline, body size and overall frame. A single creature that combines a european rhinoceros beetle and a brown bear. Head of the brown bear, fully visible and uncluttered, with clear, discernible eyes. Details: limbs: thick supporting legs and visible breathing openings along the flanks; european rhinoceros beetle jointed tail segments in place of the tail; tail: signature part of the second parent; european rhinoceros beetle exoskeleton in a few large patches over the forequarters and neck, at full strength with clean edges, color and surface unchanged inside each patch; brown bear coat everywhere else; behavior: follows the head donor; plain coat, no stripes or spots; european rhinoceros beetle wings in place of the forelegs, standing on two hind legs; wings held for display or gliding, not powered flight. Coat texture flows along the body outline. Declared fiction: arthropod parts at large size, shown with thick supporting legs and visible breathing openings along the flanks. Bilaterally symmetrical, recognizable limbs, visible sense organs. Habitat cue (grassland): dark back and light belly (strong countershading). Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration."
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "polished_prompt",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "prompt"
+     ],
+     "properties": {
+      "prompt": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0.2
+ },
+ "response": {
+  "id": "chatcmpl-01a1939c-4e73-74cc-8d19-6136a220d68f",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\"prompt\":\"Silhouette: Horizontal brown bear frame carried on two hind legs, European rhinoceros beetle wings in place of the forelegs, jointed tail segments in place of the tail. Host frame: the brown bear sets the outline, body size and overall frame. A single creature combining a European rhinoceros beetle and a brown bear. Head of the brown bear, fully visible and uncluttered, with clear, discernible eyes. Details: limbs with thick supporting legs and visible breathing openings along the flanks; European rhinoceros beetle jointed tail segments in place of the tail; tail as signature part of the second parent; European rhinoceros beetle exoskeleton in a few large patches over the forequarters and neck, at full strength with clean edges, color and surface unchanged inside each patch; brown bear coat everywhere else; behavior follows the head donor; plain coat with no stripes or spots; European rhinoceros beetle wings in place of the forelegs, standing on two hind legs; wings held for display or gliding, not powered flight. Coat texture flows along the body outline. Declared fiction: arthropod parts at large size, shown with thick supporting legs and visible breathing openings along the flanks. Bilaterally symmetrical with recognizable limbs and visible sense organs. Habitat cue (grassland): dark back and light belly with strong countershading. Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration.\"}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null
+    }
+   }
+  ],
+  "created": 1793477856,
+  "model": "muse-spark-1.3",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 5221,
+   "prompt_tokens": 457,
+   "total_tokens": 5678,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": null,
+    "audio_tokens": null,
+    "reasoning_tokens": 4871,
+    "rejected_prediction_tokens": null,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": null,
+    "cache_write_tokens": null,
+    "cached_tokens": 0,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

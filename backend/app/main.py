@@ -1,7 +1,11 @@
-"""FastAPI app factory. Run locally with `uvicorn app.main:app`; Modal wraps it in modal_app.py."""
+"""FastAPI app factory. Run with `uvicorn app.main:app` (any host); Modal wraps it in modal_app.py.
+
+One origin (D-096): the API under /evo (plus /health) and, when it is built, the frontend at / with an SPA
+fallback."""
 
 from __future__ import annotations
 
+import asyncio
 import logging
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
@@ -12,11 +16,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from app.api import assets, graphs, health, runs
+from app.agentapi.files import build_public_files
+from app.agentapi.routes import AgentApi
+from app.agentapi.routes import router as agent_router
+from app.agentapi.static import mount_frontend
 from app.config import APP_VERSION, Settings, get_settings
 from app.errors import ChimeraError
 from app.models.schemas import ApiError, ErrorCode, ErrorEnvelope
-from app.pipeline.runner import RunManager
 from app.services import Services, build_services
 
 log = logging.getLogger("chimera")
@@ -26,42 +32,38 @@ def _envelope(err: ApiError, status: int, headers: dict[str, str] | None = None)
     return JSONResponse(ErrorEnvelope(error=err).dump(), status_code=status, headers=headers)
 
 
-def check_data(svc: Services) -> None:
-    """D1-06: a data file that yields no hybrids or no runnable rules is an error, not a silent zero."""
-    from app.pipeline.steps.rules_check import CHECKS
-
-    report = svc.data.health(set(CHECKS))
-    for problem in report["problems"]:
-        log.error("Data check (%s): %s", svc.settings.resolved_data_path(), problem)
-    log.info(
-        "Data loaded (%s): %d animals, %d/%d hybrids resolve, %d/%d rules mapped, %d mythology rows",
-        svc.data.source, report["animals"], report["hybrids_resolved"], report["hybrids"],
-        report["rules_mapped"], report["rules"], report["mythology"],
-    )
-
-
 def create_app(settings: Settings | None = None, services: Services | None = None) -> FastAPI:
     settings = settings or get_settings()
     svc = services or build_services(settings)
-    check_data(svc)
 
     @asynccontextmanager
     async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         if svc.local_backend:
-            n = await app.state.runs.interrupt_orphans()
+            n = await app.state.agent.store.interrupt_orphans()
             if n:
-                log.warning("Marked %d orphaned run(s) as interrupted", n)
+                log.warning("Marked %d orphaned agent run(s) as interrupted", n)
+        seed = asyncio.create_task(app.state.agent.creatures.ensure_showcase()) if settings.evo_seed_on_start else None
         yield
+        if seed is not None:
+            seed.cancel()
+        await app.state.lab.shutdown()
+        await app.state.agent.runner.shutdown()
 
     app = FastAPI(title="Chimera Lab API", version=APP_VERSION, lifespan=lifespan)
     app.state.services = svc
-    app.state.runs = RunManager(svc)
+    app.state.agent = AgentApi(svc, build_public_files(settings))  # R1: the agent API under /evo
+    from app.auth import Auth
+
+    app.state.auth = Auth(settings)
+    from app.agentapi.lab import LabCaps, LabState
+
+    app.state.lab = LabState(LabCaps(svc.db, settings), asyncio.Semaphore(settings.lab_max_concurrent_actions))
 
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origin_list,
-        allow_methods=["GET", "POST", "PUT"],
-        allow_headers=["Content-Type", "Idempotency-Key", "If-None-Match", "X-Session-Id", "X-Mock-Fault"],
+        allow_methods=["GET", "POST", "PUT", "DELETE"],
+        allow_headers=["Content-Type", "Authorization", "X-Session-Id", "Last-Event-ID"],
         expose_headers=["ETag"],
         max_age=600,
     )
@@ -87,8 +89,18 @@ def create_app(settings: Settings | None = None, services: Services | None = Non
         log.exception("Unhandled error", exc_info=exc)
         return _envelope(ChimeraError(ErrorCode.INTERNAL).to_api(), 500)
 
-    for r in (health.router, assets.router, runs.router, graphs.router):
-        app.include_router(r)
+    @app.get("/health", response_model=None)
+    async def health() -> dict[str, str]:
+        return {"status": "ok", "version": APP_VERSION}
+
+    app.include_router(agent_router)
+    from app.agentapi.lab import router as lab_router
+
+    app.include_router(lab_router)
+    from app.agentapi.library import router as library_router
+
+    app.include_router(library_router)
+    mount_frontend(app, settings.repo_path(settings.frontend_dist))  # last: the SPA fallback
     return app
 
 

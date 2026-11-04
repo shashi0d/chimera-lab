@@ -1,0 +1,275 @@
+{
+ "name": "run_error",
+ "description": "Real S5 b02 rhinoceros beetle x brown bear up to its first inspect, then an upstream error ends the run (constructed).",
+ "request": {
+  "method": "POST",
+  "path": "/evo/agent/runs",
+  "contentType": "multipart/form-data",
+  "fields": {
+   "mode": "speculative"
+  },
+  "files": {
+   "sireImage": "<photo of a rhinoceros beetle>",
+   "damImage": "<photo of a brown bear>"
+  }
+ },
+ "response": {
+  "status": 202,
+  "body": {
+   "runId": "run_fx_error",
+   "status": "running",
+   "position": null,
+   "eventsUrl": "/evo/agent/runs/run_fx_error/events",
+   "runUrl": "/evo/agent/runs/run_fx_error",
+   "sire": {
+    "commonName": "rhinoceros beetle",
+    "scientificName": "Oryctes nasicornis",
+    "source": "image",
+    "confidence": 0.93
+   },
+   "dam": {
+    "commonName": "brown bear",
+    "scientificName": "Ursus arctos",
+    "source": "image",
+    "confidence": 0.93
+   },
+   "mode": "speculative"
+  }
+ },
+ "events": [
+  {
+   "id": 1,
+   "type": "started",
+   "runId": "run_fx_error",
+   "at": "2026-11-02T15:00:01Z",
+   "sire": {
+    "commonName": "rhinoceros beetle",
+    "scientificName": "Oryctes nasicornis",
+    "source": "image",
+    "confidence": 0.93
+   },
+   "dam": {
+    "commonName": "brown bear",
+    "scientificName": "Ursus arctos",
+    "source": "image",
+    "confidence": 0.93
+   },
+   "mode": "speculative",
+   "caps": {
+    "renders": 4,
+    "toolCalls": 30,
+    "seconds": 900
+   }
+  },
+  {
+   "id": 2,
+   "type": "step",
+   "runId": "run_fx_error",
+   "at": "2026-11-02T15:00:02Z",
+   "n": 1,
+   "tool": "resolve_animal",
+   "args": {
+    "name": "rhinoceros beetle"
+   },
+   "summary": "resolved: European rhinoceros beetle (Oryctes nasicornis)",
+   "reason": "First parent resolution as instructed to start build; required before candidate proposals.",
+   "cards": [],
+   "ok": true,
+   "error": null
+  },
+  {
+   "id": 3,
+   "type": "step",
+   "runId": "run_fx_error",
+   "at": "2026-11-02T15:00:03Z",
+   "n": 2,
+   "tool": "resolve_animal",
+   "args": {
+    "name": "brown bear"
+   },
+   "summary": "resolved: brown bear (Ursus arctos)",
+   "reason": "Second parent resolution required to proceed to candidate proposals for chimera.",
+   "cards": [],
+   "ok": true,
+   "error": null
+  },
+  {
+   "id": 4,
+   "type": "step",
+   "runId": "run_fx_error",
+   "at": "2026-11-02T15:00:04Z",
+   "n": 3,
+   "tool": "propose_candidates",
+   "args": {},
+   "summary": "2 candidates: C1 host brown bear, identity head horn, score 2.55; C2 host European rhinoceros beetle, identity -, score 1.0",
+   "reason": "Both parents resolved (beetle Insecta exoskeleton, bear Mammalia fur); need ranked chimera plans to choose from per speculative mode rules.",
+   "cards": [
+    "RC-R10-01",
+    "RC-R10-15",
+    "RC-R3-09",
+    "RC-R6-08",
+    "RC-R6-09"
+   ],
+   "ok": true,
+   "error": null
+  },
+  {
+   "id": 5,
+   "type": "step",
+   "runId": "run_fx_error",
+   "at": "2026-11-02T15:00:05Z",
+   "n": 4,
+   "tool": "choose_candidate",
+   "args": {
+    "candidate_id": "C1"
+   },
+   "summary": "C1: host brown bear, parts ['european rhinoceros beetle head horn']",
+   "reason": "C1 has proper identity part (head horn) and covering from beetle gloss, host brown bear provides quadruped frame; higher R10 score and correct speculative handling of arthropod size.",
+   "cards": [
+    "RC-R3-09"
+   ],
+   "ok": true,
+   "error": null
+  },
+  {
+   "id": 6,
+   "type": "step",
+   "runId": "run_fx_error",
+   "at": "2026-11-02T15:00:06Z",
+   "n": 5,
+   "tool": "audit_plan",
+   "args": {},
+   "summary": "renderable=True; blocking []; 1 advice items",
+   "reason": "Required audit before render to check blocking issues and fiction budget for speculative chimera.",
+   "cards": [
+    "RC-R3-09",
+    "RC-R9-10"
+   ],
+   "ok": true,
+   "error": null
+  },
+  {
+   "id": 7,
+   "type": "step",
+   "runId": "run_fx_error",
+   "at": "2026-11-02T15:01:07.800000Z",
+   "n": 6,
+   "tool": "render",
+   "args": {
+    "method": "single_pass"
+   },
+   "summary": "img1 (single_pass), renders used 1",
+   "reason": "Audited plan pass with licensed arthropod large support; rendering brown bear frame with beetle horn and glossy plates.",
+   "cards": [],
+   "ok": true,
+   "error": null
+  },
+  {
+   "id": 8,
+   "type": "render",
+   "runId": "run_fx_error",
+   "at": "2026-11-02T15:01:07.900000Z",
+   "n": 6,
+   "imageId": "img1",
+   "url": "images/b02_img1.jpg",
+   "kind": "render",
+   "parent": null,
+   "method": "single_pass",
+   "rendersUsed": 1,
+   "rendersLeft": 3
+  },
+  {
+   "id": 9,
+   "type": "step",
+   "runId": "run_fx_error",
+   "at": "2026-11-02T15:01:49.800000Z",
+   "n": 7,
+   "tool": "inspect",
+   "args": {
+    "image_id": "img1"
+   },
+   "summary": "img1: fail - cover_present (covering, fail); grows_out (covering, fail); on_top (covering, fail); continuous (covering, fail); scattered (covering, fail); follows_body (covering, fail); separate_outline (covering, fail); abrupt_stop (covering, fail); connects_head_horn (structural, fail); separate_head_horn (structural, fail)",
+   "reason": "Inspecting first render for proportion and identity fidelity before finalization.",
+   "cards": [
+    "RC-R10-12",
+    "RC-R10-15",
+    "RC-R10-16"
+   ],
+   "ok": true,
+   "error": null
+  },
+  {
+   "id": 10,
+   "type": "inspect",
+   "runId": "run_fx_error",
+   "at": "2026-11-02T15:01:49.900000Z",
+   "n": 7,
+   "imageId": "img1",
+   "verdict": "fail",
+   "failures": [
+    {
+     "key": "cover_present",
+     "kind": "covering",
+     "text": "Are there hard, glossy chitin plates with fine seams on the head, neck, shoulders, back, flanks, belly, hips, legs and tail?"
+    },
+    {
+     "key": "grows_out",
+     "kind": "covering",
+     "text": "Do the hard, glossy chitin plates with fine seams grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending "
+    },
+    {
+     "key": "on_top",
+     "kind": "covering",
+     "text": "Do the hard, glossy chitin plates with fine seams look like separate pieces laid on top of the fur, with a raised rim or a gap at the edge?"
+    },
+    {
+     "key": "continuous",
+     "kind": "covering",
+     "text": "Do the hard, glossy chitin plates with fine seams form one continuous structure over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, rather"
+    },
+    {
+     "key": "scattered",
+     "kind": "covering",
+     "text": "Are the hard, glossy chitin plates with fine seams scattered as separate pieces over different parts of the body?"
+    },
+    {
+     "key": "follows_body",
+     "kind": "covering",
+     "text": "Do the hard, glossy chitin plates with fine seams follow this body's own shape and contours, the way its own skin would?"
+    },
+    {
+     "key": "separate_outline",
+     "kind": "covering",
+     "text": "Do the hard, glossy chitin plates with fine seams keep the outline of a separate object, such as another animal's shell or back, instead of the body's own shape"
+    },
+    {
+     "key": "abrupt_stop",
+     "kind": "covering",
+     "text": "Do the hard, glossy chitin plates with fine seams stop abruptly partway across the body or legs, with no visible reason?"
+    },
+    {
+     "key": "connects_head_horn",
+     "kind": "structural",
+     "text": "Does the head horn grow out of the hard, glossy chitin plates with fine seams at its base, so they look like one connected system?"
+    },
+    {
+     "key": "separate_head_horn",
+     "kind": "structural",
+     "text": "Does the head horn look stuck on separately, with no connection to the hard, glossy chitin plates with fine seams?"
+    }
+   ],
+   "hiddenChecks": 0,
+   "bestSoFar": "img1",
+   "rule": null
+  },
+  {
+   "id": 11,
+   "type": "error",
+   "runId": "run_fx_error",
+   "at": "2026-11-02T15:02:19.900000Z",
+   "code": "UPSTREAM_ERROR",
+   "retryable": true,
+   "message": "The image model stopped answering, so this run ended. Nothing was charged to you; try again in a few minutes."
+  }
+ ]
+}

@@ -1,0 +1,109 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Silhouette: Upright golden eagle frame on two legs, tentacles in place of the tail. Host frame: the golden eagle sets the outline, body size and overall frame. A single creature combining a golden eagle and a common octopus. Head of the golden eagle, fully visible and uncluttered, with clear, discernible eyes. Details: behavior follows the head/brain donor golden eagle; host eagle body frame sets overall silhouette; donor parts scaled to host; deep keel and heavy flight chest; common octopus skin in a few large patches over the belly and flanks, at full strength with clean edges, color and surface unchanged inside each patch; golden eagle coat everywhere else; ears: host ear openings, feather-covered; face: host eagle beak and eyes; feet: host taloned feet; head: host head tissue sets brain and behavior; limbs: host wings and legs retain eagle structure; mane absent, no hair mane on feathered neck, gated by feathered coat; skull: host eagle skull; common octopus tentacles in place of the tail; tail: signature tentacle cluster in place of tail fan, graft-aligned tail segment, jointless and smoothly curving, longer means thinner; wings sized for flight. Pattern lines and texture flow follow the body outline. Bilaterally symmetrical, recognizable limbs, visible sense organs. Habitat cue (rocky coast): plainer coat with fewer markings for an open habitat. One creature, full body, side three-quarter view, plain light background, natural history illustration.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "id": "resp_6ae60cda760193843e614f80",
+  "access_programs": null,
+  "created_at": 1793461466.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae60cda4be570dced6a4e25",
+    "summary": [
+     {
+      "text": "**Designing eagle-octopus hybrid**\nI'm planning a single creature with an upright golden eagle silhouette on two legs, swapping the tail for octopus tentacles, keeping the eagle head clear and adding large octopus skin patches on the belly.\n**Composing natural history illustration**\nI'm assembling a full-body, side three-quarter natural history plate with a golden eagle silhouette, feathered body, octopus skin patches on belly and flanks, and a tentacle tail, on a plain light background in 1:1.\n**Refining octopus patch integration**\nI'm regenerating the illustration to make the octopus patches look more like natural skin, with cleaner edges and fewer patches for a more integrated, realistic effect.\n**Generating improved octopus patch**\nI'm creating another version of the octopus patch image, using feedback that the last attempt wasn't as strong and aiming for better integration and quality.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae60cdac5f007a4dce54270",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0xDX0F6UVpRN09FclFvRUFHWDJ2SUtVdmpsN2JnMWlBUUJlIiwicmVzdW1lX2lkIjoiczo3NTJjMzZjNi04NjQ2LTQ5MGQtOTE3Yi02NDEyODkwMDU0ZDc6R0pfY2FqUnExeUtXM2ZZRkFOa05rbHoyQWQxUGJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM0NjE0NjZ9.Q8WLFwGNd0qwNv4rb4YlPVMcb5At",
+    "result": "<elided> (654184 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 31840,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 26176
+   },
+   "output_tokens": 3444,
+   "output_tokens_details": {
+    "reasoning_tokens": 613
+   },
+   "total_tokens": 35284
+  },
+  "user": null
+ }
+}

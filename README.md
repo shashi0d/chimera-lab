@@ -1,121 +1,198 @@
 # Chimera Lab
 
-Fuse two animals into one science-grounded creature. Drop two animal photos onto a node canvas, press **Fuse**, and Chimera Lab:
+**Give Chimera Lab two animals (a photo or a name for each) and a design mode; an agent returns one generated
+creature with a card that says how it was built, which parent each part came from and what still looks wrong. It is
+for creature designers in games, film and tabletop, and for people learning biology by designing.**
 
-1. identifies both animals
-2. matches them against curated field data
-3. checks for documented real hybrids
-4. runs anatomy rules
-5. plans which parent donates each body part
-6. generates a single creature image
+Every creature is generated. The app labels each one "Generated fusion" and never presents it as a real animal.
+Documented real hybrids (a mule, a liger) are labelled separately.
 
-Every result shows how it was made, and every generated image is labelled as a generated fusion.
+**Status (Nov 3, on `evo`):** the app is live-only. The engine and the agent are built and benchmarked live (S5).
+After the agent's image, creators shape the creature in the **Lab**: a FLORA-style canvas where every edit is a
+card between two images, so the path from the two animals to the final creature stays visible
+(`docs/LAB.md`). Accounts are Supabase Auth (email magic link); runs, edits and the canvas are saved to Supabase.
+Hosting comes later.
 
-Beyond the core flow:
+- What was built during the hackathon, and what came from outside: `docs/submission/BUILT_DURING_HACKATHON.md`
+- Architecture diagrams: `docs/submission/ARCHITECTURE.md`
+- The benchmark behind the numbers below: `docs/evolution/S5_BENCHMARK.md`
 
-- **Anatomy controls:** pin any body part (head, body, limbs, covering, tail) to parent A or B, or leave it on Auto for the model.
-- **Field cards:** turn a Result into a field-guide specimen card (invented binomial, habitat, diet, the parents' recorded size ranges, provenance) and download it as a PNG.
+## What you get
 
-- **Frontend:** React 18, TypeScript, Vite, React Flow (`@xyflow/react`), Zustand. One stylesheet: `frontend/src/styles/theme.css`.
-- **Backend:** Python, FastAPI (`backend/app/main.py:create_app`). It runs locally with uvicorn and on Modal (`backend/app/modal_app.py`).
-- **Models:** Meta Model API (`muse-spark-1.3` for vision and planning, `muse-image-1.0` for generation), behind adapters; verified live on 5 fusions (`docs/LIVE_REPORT.md`).
-- **Storage/DB:** Supabase in real mode; local files plus SQLite in dev.
+- **The Lab: one flow.** Animals → Fusion agent → image V1 → edit cards (Revise, or Paint an area) → V2, V3 … Each
+  image card has tools: its path, compare, a visual review, a collaborator that proposes revisions, mark final,
+  download, and publish to the gallery with the whole path (`docs/LAB.md`).
+- **A gallery first.** Finished creatures, with six showcase creatures from the benchmark run first (D-096). The six
+  are proposed and wait for the owner's ratings (D-095).
+- **A live trace.** Every agent step appears as it happens: the tool, its arguments, the agent's reason and the
+  rule cards it cited. A run takes about 5 minutes; you can leave and come back to it (D-096).
+- **A creature card:**
+  - the creature's label (below) and its design mode;
+  - the host, the parent that sets the body frame, and why the agent chose it;
+  - "Can it live?": six body functions checked against the plan, with any declared rule-bends and what compensates
+    for them;
+  - the critic failures the final image still has, stated, not hidden;
+  - an anatomy map: each part SAM 3.1 finds, colored by the parent it came from (host blue, donor orange, a blend
+    purple), and every part it could not find listed as "not located".
 
-See `docs/ARCHITECTURE.md` for the design, `docs/DESIGN_U1.md` for the visual system (ZD design system, `docs/design-system/`; the older `docs/DESIGN.md` is kept for history), and `TASKSHEET.md` for the build plan and status.
+## Who it helps
 
-## Quick start (mock mode, no keys needed)
+- **Creature designers** (games, film, tabletop): a fast, reasoned starting design, with a stated reason for each
+  anatomy choice and a plain list of what does not work yet.
+- **People learning biology by designing:** the agent's choices cite rule cards built from research on real
+  hybrids, lab chimeras, body-plan limits and perception (`docs/evolution/research/`), so a learner can see why a
+  wing replaces a foreleg in a vertebrate or why a large insect needs a label.
+
+No user testing has been done. These are the intended users, not measured ones.
+
+## The three creature labels
+
+Code sets the label from taxonomy and the data, never the model (RC-R9-01, `backend/app/evolution/route.py`):
+
+| Label | When | Example from the benchmark |
+|---|---|---|
+| **real hybrid** ("real hybrid precedent") | the pair is a documented cross in the data | b05 donkey × horse, a mule |
+| **speculative chimera** ("speculative chimera, no real-world precedent") | any other pair, in realistic or speculative mode | b09 Indian pangolin × horse |
+| **mythic composite** | mythic mode; may bend up to 3 declared rules | b03 lion × golden eagle |
+
+A fourth label, "speculative hybrid of close relatives, no documented cross", covers close relatives with no
+recorded cross (D-055).
+
+## How the agent works
+
+The agent is **Muse Spark Open on Baseten**, running a tool loop over the engine
+(`backend/app/evolution/agent.py`). It decides; code supplies the tools and enforces the rules.
+
+1. **Resolve** both parents: the dataset, then a learned cache, then the open world (GBIF exact species match, and
+   traits from Muse Spark 1.3 web search with citations that code checks against the fetched page; D-068, D-074).
+2. **Propose:** code returns candidate plans, one per possible host, each with notes on niche, autonomy, survival
+   and identity. They are advice; the agent chooses (D-089).
+3. **Choose and edit the plan** with typed operations only (12 of them, such as `set_host`, `set_extent`,
+   `set_covering_material_only`). The agent never writes plan JSON. Each call is checked against its own schema
+   before it runs; in the benchmark run no call was refused (D-094).
+4. **Audit:** physical checks, a six-function audit and the hard rule cards. A plan with a blocking item cannot be
+   rendered.
+5. **Render** with Muse Image 1.0. The prompt is compiled by code from the structured plan only (D-066).
+6. **Inspect** with two critics that never see the plan (D-072): each describes the image and counts heads, legs and
+   tails, then answers a balanced checklist. Muse Spark 1.3 decides; Spark Open's answers are kept as information
+   (D-084). SAM 3.1 confirms that planned parts are present.
+7. **Edit or re-plan:** a covering or surface failure gets one plan-worded Muse Image edit; a structural failure
+   needs a plan change and a new render. **The two-failure rule:** after two inspects in a row with covering
+   failures, covering edits are locked until the plan changes (D-091).
+8. **Finalize** the best inspected image. If the agent picks an image the code ranks lower, it must say why, and
+   the card shows both picks (D-093).
+
+Guardrails in code: audit before render, a host tie must be chosen, a reason on every call, and runaway caps of 4
+renders, 30 tool calls and 6 edits per creature (`data/evo_config.json`, `agent`). The rule cards (126, 18 hard)
+come from ten research docs, `data/rule_cards.json`.
+
+## Models
+
+| Model | Where | What it does here |
+|---|---|---|
+| **Muse Spark Open** (`meta-models/muse-spark-open-1026`) | Baseten, OpenAI-compatible API | The agent brain (tool calling); one of the two critics; identify, checklist and prompt polish (`data/evo_config.json`, `routing`) |
+| **Muse Spark 1.3** | Meta Model API | Plans for the fixed pipeline, web-cited traits, the function audit, and the deciding critic |
+| **Muse Image 1.0** | Meta Model API, Responses API | Renders, and edit turns on the same image (`previous_response_id`) |
+| **SAM 3.1** | Meta Model API | Text-prompted part segmentation: presence checks during inspect, and the anatomy map |
+
+Calls in the 22-creature benchmark run: Spark Open 362, Muse Spark 1.3 110, Muse Image 49 images, SAM 3.1 179
+(`docs/evolution/S5_BENCHMARK.md`). Money cost per run was not measured.
+
+## The benchmark, stated honestly
+
+An 11-case benchmark (`data/evo_benchmark.json`, frozen; a test checks its hash) was run once with the agent and
+once with the fixed pipeline, live, 22 creatures, no reruns. Scores are computed in code from the saved results
+(`docs/evolution/live/s5/scores.json`).
+
+| | agent | fixed pipeline |
+|---|---|---|
+| full matches (no failing critic item) | 5 of 11 | 6 of 11 |
+| average critic failures | 1.82 | 1.91 |
+| structural / integration failures (average) | 0.55 / 1.27 | 0.91 / 1.0 |
+| both parents named by the deciding critic | 7 of 11 | 5 of 11 |
+| calls per creature | 39.3 | 24.4 |
+| wall time per creature | 295 s | 233 s |
+
+- **Overall the two are about even.** The agent does not beat the pipeline on the critics' scores.
+- **The agent wins host ties.** In 7 of 11 cases neither parent is structurally better as host, and the pipeline
+  has no rule, so it falls back to the first-named parent. The agent chose the horse for pangolin × horse and the
+  goat for tortoise × goat, with reasons, and in those two cases its images named both parents where the pipeline's did not.
+- **It loses when it re-rolls on a critic misread.** Octopus × horse spent all 4 renders on mottled skin the critic
+  read as a toad.
+- The owner has not yet rated the images (`docs/evolution/benchmark/s5_review.html`). The critic scores are the
+  only measurement so far.
+
+## Known limits
+
+- **Hard plates and shells over fur look worn, not grown.** Seen from S2 to S5. In b02 (beetle × bear) the prompt
+  says the plates grow from the skin, and both systems still drew armor (7 integration failures each). Scales over
+  skin or hide work (b01, b09).
+- **A run takes about 5 minutes** (295 s on average in S5, 141 s to 474 s). You can leave and resume.
+- **Daily caps:** 50 live runs per day in total and 3 per visitor, by default (D-096). The gallery stays open when
+  they are used up.
+- **The image model sometimes ignores a correct prompt.** The same compiled prompt gives different bodies: in b08
+  (fox × owl) the first render had one failure and the second, from the identical compiled prompt, had extra legs.
+  In b06 four renders of one unchanged plan all failed. In b01 a re-render of the same plan fixed a failure.
+- **The critics misread a donor's own pattern** (owl or cheetah spots called extra spots) or a texture (called a
+  third animal).
+- **The material-only critic checks are not calibrated.** They failed in all 4 uses, so the card hides them until
+  the owner has labelled examples (D-096).
+- **The anatomy map rarely finds the torso (3 of 22) or a covering (5 of 20),** and it colors by the plan's parent,
+  not by what is drawn.
+
+## Run it
+
+The app is live-only: every run, edit and review calls the real models.
 
 ```bash
 python3 -m venv .venv && .venv/bin/pip install -r backend/requirements-dev.txt
-```
-
-```bash
 cd frontend && npm install && cd ..
-```
-
-```bash
 scripts/dev.sh
 ```
 
-`dev.sh` starts the backend on <http://localhost:8000> (mock mode) and the frontend on <http://localhost:5173>. In mock mode no model is called. Identification is deterministic, and the image generator paints a composite plate from your two inputs. Try the fixture photos in `backend/tests/fixtures/images/` (`lion.jpg` + `tiger.jpg` shows a documented real hybrid; `common_octopus.jpg` + `scarlet_macaw.jpg` shows rule warnings).
+Open <http://localhost:5173>. The Vite dev server proxies `/evo` and `/health` to the backend on port 8000, so the
+browser sees one origin, as in production (the built frontend is served by the backend at `/`).
 
-The field data lives in `data/chimera_data.json` (committed: 200 animals, 1,778 tier-2 animals, 31 hybrids, 130 rules, 254 mythology rows). Without it, the backend falls back to `backend/tests/fixtures/chimera_data.sample.json`, and `/health` reports `dataSource: "sample"`. `/health` also reports what the data yields (`data.hybridsResolved`, `data.rulesMapped`, …) and turns `degraded` if a file with hybrids or rules resolves or maps none of them.
+Set these in the repo-root `.env` (see `.env.example`); keys stay on the backend:
 
-## Tests
+| Variable | What |
+|---|---|
+| `META_API_KEY` | Meta Model API: Muse Spark 1.3, Muse Image 1.0, SAM 3.1 |
+| `BASETEN_API_KEY_MODEL_MUSE_SPARK_OPEN_26` | Baseten: Muse Spark Open, the agent and the Lab collaborator |
+| `SUPABASE_URL`, `SUPABASE_SECRET_KEY`, `SUPABASE_PUBLISHABLE_KEY` | Postgres, Storage and Auth (without them: local SQLite and files, and no sign-in) |
+| `EVO_DAILY_RUNS`, `EVO_VISITOR_DAILY_RUNS` | Fusion runs per day, total and per user (defaults 50 and 3) |
+| `LAB_DAILY_ACTIONS`, `LAB_USER_DAILY_ACTIONS` | Lab edits, reviews and messages per day (defaults 100 and 20) |
+| `CHIMERA_LIVE_BUDGET_FILE` and `CHIMERA_LIVE_MAX_*` | optional hard cap on live calls across processes |
+
+Supabase setup (SQL migrations, sign-in redirect URLs, email): `docs/LAB.md` → Setup.
+
+The benchmark runner spends real calls, one creature per invocation, and resumes from disk:
+
+```bash
+.venv/bin/python scripts/s5_live.py run --max 1
+.venv/bin/python scripts/s5_live.py score
+```
+
+### Tests
 
 | Command | What |
 |---|---|
-| `.venv/bin/python -m pytest backend` | backend unit and integration tests: full fusion in mock mode, every fault, assets, spend guard |
-| `cd frontend && npm test` | Vitest unit and component tests (state matrix, edge rules, migration, contrast) |
-| `cd frontend && npm run e2e` | Playwright: happy path, every fault, offline, reload mid-run, broken graphs, axe, keyboard-only flow, layout, visual baselines. Starts its own servers. |
-| `cd backend && CHIMERA_LIVE=1 ../.venv/bin/python -m pytest tests/live` | **live** Meta API tests (marker `live`, never part of the default run). They spend real calls: identify 6 fixtures (6 Spark calls), then 5 fusions (about 15 Spark calls + 5 images). Capped by `docs/live/budget.json`. |
-| `cd frontend && npm run shots -- --round name` | screenshot matrix into `docs/visual-qa/<round>/` (see `docs/visual-qa/INDEX.md`) |
-| `scripts/check-css.sh` | single CSS file, no inline styles, no raw hex outside tokens |
-| `scripts/check-bundle.sh` | production bundle contains no secrets or test hooks |
-| `scripts/gen_types.sh` | regenerate `frontend/src/types/api.ts` from the Pydantic models |
-
-## Environment variables
-
-| Var | Default | Notes |
-|---|---|---|
-| `CHIMERA_MODE` | `mock` | `real` uses the Meta adapters (needs `META_API_KEY`) |
-| `META_API_BASE_URL` | `https://api.meta.ai/v1` | |
-| `META_API_KEY` | none | backend only, never in the frontend |
-| `META_VISION_MODEL` | `muse-spark-1.3` | identify, plan and card (chat completions); identify and plan verified live, card not yet |
-| `META_IMAGE_MODEL` | `muse-image-1.0` | generation (Responses API); verified live |
-| `SUPABASE_URL` / `SUPABASE_SERVICE_KEY` | none | if both are set, Supabase storage and DB replace the local adapters |
-| `STORAGE_BUCKET` | `chimera-assets` | |
-| `DATA_PATH` | `data/chimera_data.json` | relative to the repo root |
-| `MAX_GENERATIONS_PER_RUN` | `2` | spend guard; every attempt counts |
-| `MAX_VISION_CALLS_PER_RUN` | `4` | 2 identify + 1 plan + 1 spare retry |
-| `DAILY_GENERATION_CAP` | `200` | global counter; blocks runs with `BUDGET_EXCEEDED` |
-| `MAX_TOKENS_PER_RUN` / `DAILY_TOKEN_CAP` | `200000` / `5000000` | token spend guard (all models, every attempt). A live fusion used 29k to 57k tokens. |
-| `IDENTIFY_TIMEOUT_SECONDS` / `PLAN_TIMEOUT_SECONDS` / `GENERATE_TIMEOUT_SECONDS` | `20` / `60` / `80` | per attempt, about 2× the slowest live latency (docs/LIVE_REPORT.md) |
-| `CHIMERA_LIVE_BUDGET_FILE`, `CHIMERA_LIVE_MAX_IMAGES`, `CHIMERA_LIVE_MAX_SPARK` | unset, `15`, `60` | optional hard cap on live calls across processes (used by the live tests) |
-| `CHIMERA_LIVE_LOG` / `CHIMERA_RECORD_DIR` | unset | append every real call to a markdown log / save key-free request and response JSON |
-| `CORS_ORIGINS` | `http://localhost:5173,http://127.0.0.1:5173` | comma-separated allowlist |
-| `RUN_LEASE_SECONDS` | `180` | silent runs become `interrupted` |
-| `MOCK_DELAY_SCALE` | `1` | mock latency multiplier (tests use 0 to 0.1) |
-| `VITE_API_BASE_URL` | `http://localhost:8000` | frontend build-time |
-
-## Mock vs real, and switching adapters
-
-Adapters are chosen in exactly one place, `backend/app/services.py:build_services`:
-
-- `CHIMERA_MODE=mock`: `MockVision`, `MockImageGen`. These honour the `X-Mock-Fault` header (`timeout`, `rate_limit`, `server_error`, `refusal`, `not_animal`, `human`, `corrupt_output`, `slow`, `crash_mid_run`, `budget`), and only in mock mode. They fill **responses recorded from the live API** (`backend/tests/fixtures/recorded/`) and decode them with the same parsers as real mode, so mock mode returns the real wire shapes (chat completions, and Responses API output with a WebP `image_generation_call`).
-- `CHIMERA_MODE=real`: `MetaVision`, `MetaImageGen` (`backend/app/adapters/meta/client.py`, OpenAI SDK with `base_url` and `api_key` passed explicitly, SDK retries off).
-
-### What real mode has been verified to do (L1, 2026-10-30; see `docs/LIVE_REPORT.md`)
-
-- **Identify** (`muse-spark-1.3`, image as a data URL, `response_format` JSON schema): verified on 6 AI-generated fixture photos. All six matched the right animal in the real data by scientific name (confidence 0.85 to 1.00).
-- **Plan** (structured output, pins as hard constraints, the creature named by the model): verified on 5 fusions, including one with pins (head A, limbs B), which were honoured.
-- **Generate** (`muse-image-1.0` via `client.responses.create`, references as `input_image` parts; the image is the `image_generation_call` result, WebP 1600×1600): verified on 5 fusions. Each result stores Meta's response id (`metaResponseId`).
-- **Retry classification** (429, 5xx, timeouts and connection errors retried with backoff and jitter; 400, 401 and 404 never retried): one real timeout was retried successfully. 429 and 5xx were not observed live.
-- **Not verified live:** the field-card call (`write_field_card`), `previous_response_id` refinement turns, Supabase adapters and Modal deployment. The Spark-client timeout fix (`max(identify, plan)`) landed after the live runs and is also unverified live.
-- Supabase credentials present: `SupabaseStorage` and `SupabaseDb`. Otherwise `LocalStorage` and `SqliteDb` under `.localdata/`.
-
-## Deploy to Modal (P7)
-
-1. Create the Supabase tables and bucket: run `backend/app/adapters/supabase/schema.sql` in the SQL editor.
-2. Create a Modal secret named `chimera-lab` with `CHIMERA_MODE=real`, `META_API_KEY`, `SUPABASE_URL`, `SUPABASE_SERVICE_KEY` and `CORS_ORIGINS=<your frontend origin>`. The model ids default to the verified `muse-spark-1.3` / `muse-image-1.0`.
-3. `data/chimera_data.json` is in the repo and baked into the image.
-4. Deploy:
-
-   ```bash
-   modal deploy backend/app/modal_app.py
-   ```
-
-5. Build the frontend against the Modal URL and host `frontend/dist`:
-
-   ```bash
-   cd frontend && VITE_API_BASE_URL=https://<your-modal-app>.modal.run npm run build
-   ```
+| `.venv/bin/python -m pytest backend` | backend with offline fakes: no paid call, never reads `.env` (892 passed, 6 live tests skipped) |
+| `cd frontend && npm test` | frontend unit and component tests (201) |
 
 ## Repository map
 
 ```
-backend/app/        FastAPI app, adapters (mock / local / meta / supabase), pipeline steps, data loader, models
-frontend/src/       canvas, node registry + nodes, graph (schema, migrate, undo), runs, api, connectivity, persistence, ui
-docs/               ARCHITECTURE, DESIGN, UI_STANDARD, DECISIONS, BUILD_LOG, TEST_REPORT, visual-qa/, rounds/
-scripts/            dev.sh, gen_types.sh, check-css.sh, check-bundle.sh, fixture + contact-sheet tools
+backend/app/evolution/   the engine and the agent (agent.py, inspect.py, critic.py, anatomy.py, benchmark.py)
+backend/app/adapters/    Meta, Baseten and Supabase adapters (and local SQLite/files for development)
+backend/app/agentapi/    the API: agent runs, the Lab (lab.py), gallery; backend/app/auth.py verifies sign-in
+frontend/src/lab/        the Lab: edit jobs, tools panel, paint editor; nodes/version and nodes/edit are its cards
+data/                    dataset, rule cards, engine config, the frozen benchmark
+docs/evolution/          research, algorithm, step reports, live outputs (live/s5/ is the benchmark run)
+docs/submission/         submission documents
+frontend/src/            the UI
+scripts/                 dev server, live runners, review sheets, checks
 ```
+
+The v1 fusion app (`main` branch, node canvas) is still in the history and its backend endpoints still exist, but
+it is no longer in the UI (D-096).

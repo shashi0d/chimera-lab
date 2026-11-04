@@ -1,0 +1,1766 @@
+{
+ "purpose": "evo_plan",
+ "request": {
+  "model": "muse-spark-1.3",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You write creature plans for a natural-history fusion engine. You get rule cards and a code-built plan as JSON. Return the plan in the same schema, improved where the rule cards allow: clearer trait notes, a better silhouette sentence, sensible strengths and regions. Never change parents, mode, known_pair, host or labels. Use animal ids exactly as given. Every trait donor must be one of the two parents."
+   },
+   {
+    "role": "user",
+    "content": "<elided> (7852 chars)"
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "evo_plan",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "parents",
+      "mode",
+      "known_pair",
+      "host",
+      "identity_balance",
+      "habitat",
+      "size",
+      "silhouette",
+      "limb_plan",
+      "traits",
+      "labels",
+      "processes",
+      "card_trace"
+     ],
+     "properties": {
+      "parents": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "sire",
+        "dam"
+       ],
+       "properties": {
+        "sire": {
+         "type": "string"
+        },
+        "dam": {
+         "type": "string"
+        }
+       }
+      },
+      "mode": {
+       "type": "string",
+       "enum": [
+        "hybrid",
+        "chimera",
+        "mythic"
+       ]
+      },
+      "known_pair": {
+       "type": [
+        "string",
+        "null"
+       ]
+      },
+      "host": {
+       "type": [
+        "string",
+        "null"
+       ]
+      },
+      "identity_balance": {
+       "type": "number"
+      },
+      "habitat": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "name",
+        "source",
+        "adjustments",
+        "visible_trait"
+       ],
+       "properties": {
+        "name": {
+         "type": "string"
+        },
+        "source": {
+         "type": "string",
+         "enum": [
+          "shared",
+          "bridging",
+          "user"
+         ]
+        },
+        "adjustments": {
+         "type": "array",
+         "items": {
+          "type": "string"
+         }
+        },
+        "visible_trait": {
+         "type": [
+          "string",
+          "null"
+         ]
+        }
+       }
+      },
+      "size": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "mass_kg",
+        "flags"
+       ],
+       "properties": {
+        "mass_kg": {
+         "type": [
+          "number",
+          "null"
+         ]
+        },
+        "flags": {
+         "type": "array",
+         "items": {
+          "type": "string"
+         }
+        }
+       }
+      },
+      "silhouette": {
+       "type": "string"
+      },
+      "limb_plan": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "forelimbs",
+        "hindlimbs",
+        "extra_wings",
+        "appendages",
+        "wing_use",
+        "requested_wings"
+       ],
+       "properties": {
+        "forelimbs": {
+         "type": "object",
+         "additionalProperties": false,
+         "required": [
+          "kind",
+          "donor"
+         ],
+         "properties": {
+          "kind": {
+           "type": "string",
+           "enum": [
+            "legs",
+            "wings",
+            "fins",
+            "tentacles",
+            "arms",
+            "none"
+           ]
+          },
+          "donor": {
+           "type": [
+            "string",
+            "null"
+           ]
+          }
+         }
+        },
+        "hindlimbs": {
+         "type": "object",
+         "additionalProperties": false,
+         "required": [
+          "kind",
+          "donor"
+         ],
+         "properties": {
+          "kind": {
+           "type": "string",
+           "enum": [
+            "legs",
+            "wings",
+            "fins",
+            "tentacles",
+            "arms",
+            "none"
+           ]
+          },
+          "donor": {
+           "type": [
+            "string",
+            "null"
+           ]
+          }
+         }
+        },
+        "extra_wings": {
+         "anyOf": [
+          {
+           "type": "object",
+           "additionalProperties": false,
+           "required": [
+            "kind",
+            "donor"
+           ],
+           "properties": {
+            "kind": {
+             "type": "string",
+             "enum": [
+              "legs",
+              "wings",
+              "fins",
+              "tentacles",
+              "arms",
+              "none"
+             ]
+            },
+            "donor": {
+             "type": [
+              "string",
+              "null"
+             ]
+            }
+           }
+          },
+          {
+           "type": "null"
+          }
+         ]
+        },
+        "appendages": {
+         "type": "array",
+         "items": {
+          "type": "string"
+         }
+        },
+        "wing_use": {
+         "type": "string",
+         "enum": [
+          "powered",
+          "borderline",
+          "gliding_or_display",
+          "none"
+         ]
+        },
+        "requested_wings": {
+         "type": [
+          "string",
+          "null"
+         ]
+        }
+       }
+      },
+      "traits": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "size",
+        "body",
+        "head",
+        "face",
+        "ears",
+        "mane",
+        "tail",
+        "limbs",
+        "feet",
+        "coat_pattern",
+        "coat_color",
+        "coat_texture",
+        "skull",
+        "behavior"
+       ],
+       "properties": {
+        "size": {
+         "type": "object",
+         "additionalProperties": false,
+         "required": [
+          "op",
+          "donor",
+          "value",
+          "strength",
+          "region",
+          "part",
+          "note",
+          "flags"
+         ],
+         "properties": {
+          "op": {
+           "type": "string",
+           "enum": [
+            "BLEND",
+            "PICK",
+            "OVERLAY",
+            "PATCH"
+           ]
+          },
+          "donor": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "array",
+             "items": {
+              "type": "string"
+             }
+            },
+            {
+             "type": "null"
+            }
+           ]
+          },
+          "value": {
+           "type": [
+            "number",
+            "null"
+           ]
+          },
+          "strength": {
+           "type": [
+            "number",
+            "null"
+           ]
+          },
+          "region": {
+           "anyOf": [
+            {
+             "type": "array",
+             "items": {
+              "type": "string",
+              "enum": [
+               "head",
+               "face",
+               "ears",
+               "neck",
+               "forequarters",
+               "back",
+               "flanks",
+               "belly",
+               "hindquarters",
+               "legs",
+               "forelimbs",
+               "hindlimbs",
+               "feet",
+               "tail",
+               "wings"
+              ]
+             }
+            },
+            {
+             "type": "null"
+            }
+           ]
+          },
+          "part": {
+           "type": [
+            "string",
+            "null"
+           ]
+          },
+          "note": {
+           "type": [
+            "string",
+            "null"
+           ]
+          },
+          "flags": {
+           "type": "array",
+           "items": {
+            "type": "string"
+           }
+          }
+         }
+        },
+        "body": {
+         "type": "object",
+         "additionalProperties": false,
+         "required": [
+          "op",
+          "donor",
+          "value",
+          "strength",
+          "region",
+          "part",
+          "note",
+          "flags"
+         ],
+         "properties": {
+          "op": {
+           "type": "string",
+           "enum": [
+            "BLEND",
+            "PICK",
+            "OVERLAY",
+            "PATCH"
+           ]
+          },
+          "donor": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "array",
+             "items": {
+              "type": "string"
+             }
+            },
+            {
+             "type": "null"
+            }
+           ]
+          },
+          "value": {
+           "type": [
+            "number",
+            "null"
+           ]
+          },
+          "strength": {
+           "type": [
+            "number",
+            "null"
+           ]
+          },
+          "region": {
+           "anyOf": [
+            {
+             "type": "array",
+             "items": {
+              "type": "string",
+              "enum": [
+               "head",
+               "face",
+               "ears",
+               "neck",
+               "forequarters",
+               "back",
+               "flanks",
+               "belly",
+               "hindquarters",
+               "legs",
+               "forelimbs",
+               "hindlimbs",
+               "feet",
+               "tail",
+               "wings"
+              ]
+             }
+            },
+            {
+             "type": "null"
+            }
+           ]
+          },
+          "part": {
+           "type": [
+            "string",
+            "null"
+           ]
+          },
+          "note": {
+           "type": [
+            "string",
+            "null"
+           ]
+          },
+          "flags": {
+           "type": "array",
+           "items": {
+            "type": "string"
+           }
+          }
+         }
+        },
+        "head": {
+         "type": "object",
+         "additionalProperties": false,
+         "required": [
+          "op",
+          "donor",
+          "value",
+          "strength",
+          "region",
+          "part",
+          "note",
+          "flags"
+         ],
+         "properties": {
+          "op": {
+           "type": "string",
+           "enum": [
+            "BLEND",
+            "PICK",
+            "OVERLAY",
+            "PATCH"
+           ]
+          },
+          "donor": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "array",
+             "items": {
+              "type": "string"
+             }
+            },
+            {
+             "type": "null"
+            }
+           ]
+          },
+          "value": {
+           "type": [
+            "number",
+            "null"
+           ]
+          },
+          "strength": {
+           "type": [
+            "number",
+            "null"
+           ]
+          },
+          "region": {
+           "anyOf": [
+            {
+             "type": "array",
+             "items": {
+              "type": "string",
+              "enum": [
+               "head",
+               "face",
+               "ears",
+               "neck",
+               "forequarters",
+               "back",
+               "flanks",
+               "belly",
+               "hindquarters",
+               "legs",
+               "forelimbs",
+               "hindlimbs",
+               "feet",
+               "tail",
+               "wings"
+              ]
+             }
+            },
+            {
+             "type": "null"
+            }
+           ]
+          },
+          "part": {
+           "type": [
+            "string",
+            "null"
+           ]
+          },
+          "note": {
+           "type": [
+            "string",
+            "null"
+           ]
+          },
+          "flags": {
+           "type": "array",
+           "items": {
+            "type": "string"
+           }
+          }
+         }
+        },
+        "face": {
+         "type": "object",
+         "additionalProperties": false,
+         "required": [
+          "op",
+          "donor",
+          "value",
+          "strength",
+          "region",
+          "part",
+          "note",
+          "flags"
+         ],
+         "properties": {
+          "op": {
+           "type": "string",
+           "enum": [
+            "BLEND",
+            "PICK",
+            "OVERLAY",
+            "PATCH"
+           ]
+          },
+          "donor": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "array",
+             "items": {
+              "type": "string"
+             }
+            },
+            {
+             "type": "null"
+            }
+           ]
+          },
+          "value": {
+           "type": [
+            "number",
+            "null"
+           ]
+          },
+          "strength": {
+           "type": [
+            "number",
+            "null"
+           ]
+          },
+          "region": {
+           "anyOf": [
+            {
+             "type": "array",
+             "items": {
+              "type": "string",
+              "enum": [
+               "head",
+               "face",
+               "ears",
+               "neck",
+               "forequarters",
+               "back",
+               "flanks",
+               "belly",
+               "hindquarters",
+               "legs",
+               "forelimbs",
+               "hindlimbs",
+               "feet",
+               "tail",
+               "wings"
+              ]
+             }
+            },
+            {
+             "type": "null"
+            }
+           ]
+          },
+          "part": {
+           "type": [
+            "string",
+            "null"
+           ]
+          },
+          "note": {
+           "type": [
+            "string",
+            "null"
+           ]
+          },
+          "flags": {
+           "type": "array",
+           "items": {
+            "type": "string"
+           }
+          }
+         }
+        },
+        "ears": {
+         "type": "object",
+         "additionalProperties": false,
+         "required": [
+          "op",
+          "donor",
+          "value",
+          "strength",
+          "region",
+          "part",
+          "note",
+          "flags"
+         ],
+         "properties": {
+          "op": {
+           "type": "string",
+           "enum": [
+            "BLEND",
+            "PICK",
+            "OVERLAY",
+            "PATCH"
+           ]
+          },
+          "donor": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "array",
+             "items": {
+              "type": "string"
+             }
+            },
+            {
+             "type": "null"
+            }
+           ]
+          },
+          "value": {
+           "type": [
+            "number",
+            "null"
+           ]
+          },
+          "strength": {
+           "type": [
+            "number",
+            "null"
+           ]
+          },
+          "region": {
+           "anyOf": [
+            {
+             "type": "array",
+             "items": {
+              "type": "string",
+              "enum": [
+               "head",
+               "face",
+               "ears",
+               "neck",
+               "forequarters",
+               "back",
+               "flanks",
+               "belly",
+               "hindquarters",
+               "legs",
+               "forelimbs",
+               "hindlimbs",
+               "feet",
+               "tail",
+               "wings"
+              ]
+             }
+            },
+            {
+             "type": "null"
+            }
+           ]
+          },
+          "part": {
+           "type": [
+            "string",
+            "null"
+           ]
+          },
+          "note": {
+           "type": [
+            "string",
+            "null"
+           ]
+          },
+          "flags": {
+           "type": "array",
+           "items": {
+            "type": "string"
+           }
+          }
+         }
+        },
+        "mane": {
+         "type": "object",
+         "additionalProperties": false,
+         "required": [
+          "op",
+          "donor",
+          "value",
+          "strength",
+          "region",
+          "part",
+          "note",
+          "flags"
+         ],
+         "properties": {
+          "op": {
+           "type": "string",
+           "enum": [
+            "BLEND",
+            "PICK",
+            "OVERLAY",
+            "PATCH"
+           ]
+          },
+          "donor": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "array",
+             "items": {
+              "type": "string"
+             }
+            },
+            {
+             "type": "null"
+            }
+           ]
+          },
+          "value": {
+           "type": [
+            "number",
+            "null"
+           ]
+          },
+          "strength": {
+           "type": [
+            "number",
+            "null"
+           ]
+          },
+          "region": {
+           "anyOf": [
+            {
+             "type": "array",
+             "items": {
+              "type": "string",
+              "enum": [
+               "head",
+               "face",
+               "ears",
+               "neck",
+               "forequarters",
+               "back",
+               "flanks",
+               "belly",
+               "hindquarters",
+               "legs",
+               "forelimbs",
+               "hindlimbs",
+               "feet",
+               "tail",
+               "wings"
+              ]
+             }
+            },
+            {
+             "type": "null"
+            }
+           ]
+          },
+          "part": {
+           "type": [
+            "string",
+            "null"
+           ]
+          },
+          "note": {
+           "type": [
+            "string",
+            "null"
+           ]
+          },
+          "flags": {
+           "type": "array",
+           "items": {
+            "type": "string"
+           }
+          }
+         }
+        },
+        "tail": {
+         "type": "object",
+         "additionalProperties": false,
+         "required": [
+          "op",
+          "donor",
+          "value",
+          "strength",
+          "region",
+          "part",
+          "note",
+          "flags"
+         ],
+         "properties": {
+          "op": {
+           "type": "string",
+           "enum": [
+            "BLEND",
+            "PICK",
+            "OVERLAY",
+            "PATCH"
+           ]
+          },
+          "donor": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "array",
+             "items": {
+              "type": "string"
+             }
+            },
+            {
+             "type": "null"
+            }
+           ]
+          },
+          "value": {
+           "type": [
+            "number",
+            "null"
+           ]
+          },
+          "strength": {
+           "type": [
+            "number",
+            "null"
+           ]
+          },
+          "region": {
+           "anyOf": [
+            {
+             "type": "array",
+             "items": {
+              "type": "string",
+              "enum": [
+               "head",
+               "face",
+               "ears",
+               "neck",
+               "forequarters",
+               "back",
+               "flanks",
+               "belly",
+               "hindquarters",
+               "legs",
+               "forelimbs",
+               "hindlimbs",
+               "feet",
+               "tail",
+               "wings"
+              ]
+             }
+            },
+            {
+             "type": "null"
+            }
+           ]
+          },
+          "part": {
+           "type": [
+            "string",
+            "null"
+           ]
+          },
+          "note": {
+           "type": [
+            "string",
+            "null"
+           ]
+          },
+          "flags": {
+           "type": "array",
+           "items": {
+            "type": "string"
+           }
+          }
+         }
+        },
+        "limbs": {
+         "type": "object",
+         "additionalProperties": false,
+         "required": [
+          "op",
+          "donor",
+          "value",
+          "strength",
+          "region",
+          "part",
+          "note",
+          "flags"
+         ],
+         "properties": {
+          "op": {
+           "type": "string",
+           "enum": [
+            "BLEND",
+            "PICK",
+            "OVERLAY",
+            "PATCH"
+           ]
+          },
+          "donor": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "array",
+             "items": {
+              "type": "string"
+             }
+            },
+            {
+             "type": "null"
+            }
+           ]
+          },
+          "value": {
+           "type": [
+            "number",
+            "null"
+           ]
+          },
+          "strength": {
+           "type": [
+            "number",
+            "null"
+           ]
+          },
+          "region": {
+           "anyOf": [
+            {
+             "type": "array",
+             "items": {
+              "type": "string",
+              "enum": [
+               "head",
+               "face",
+               "ears",
+               "neck",
+               "forequarters",
+               "back",
+               "flanks",
+               "belly",
+               "hindquarters",
+               "legs",
+               "forelimbs",
+               "hindlimbs",
+               "feet",
+               "tail",
+               "wings"
+              ]
+             }
+            },
+            {
+             "type": "null"
+            }
+           ]
+          },
+          "part": {
+           "type": [
+            "string",
+            "null"
+           ]
+          },
+          "note": {
+           "type": [
+            "string",
+            "null"
+           ]
+          },
+          "flags": {
+           "type": "array",
+           "items": {
+            "type": "string"
+           }
+          }
+         }
+        },
+        "feet": {
+         "type": "object",
+         "additionalProperties": false,
+         "required": [
+          "op",
+          "donor",
+          "value",
+          "strength",
+          "region",
+          "part",
+          "note",
+          "flags"
+         ],
+         "properties": {
+          "op": {
+           "type": "string",
+           "enum": [
+            "BLEND",
+            "PICK",
+            "OVERLAY",
+            "PATCH"
+           ]
+          },
+          "donor": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "array",
+             "items": {
+              "type": "string"
+             }
+            },
+            {
+             "type": "null"
+            }
+           ]
+          },
+          "value": {
+           "type": [
+            "number",
+            "null"
+           ]
+          },
+          "strength": {
+           "type": [
+            "number",
+            "null"
+           ]
+          },
+          "region": {
+           "anyOf": [
+            {
+             "type": "array",
+             "items": {
+              "type": "string",
+              "enum": [
+               "head",
+               "face",
+               "ears",
+               "neck",
+               "forequarters",
+               "back",
+               "flanks",
+               "belly",
+               "hindquarters",
+               "legs",
+               "forelimbs",
+               "hindlimbs",
+               "feet",
+               "tail",
+               "wings"
+              ]
+             }
+            },
+            {
+             "type": "null"
+            }
+           ]
+          },
+          "part": {
+           "type": [
+            "string",
+            "null"
+           ]
+          },
+          "note": {
+           "type": [
+            "string",
+            "null"
+           ]
+          },
+          "flags": {
+           "type": "array",
+           "items": {
+            "type": "string"
+           }
+          }
+         }
+        },
+        "coat_pattern": {
+         "type": "object",
+         "additionalProperties": false,
+         "required": [
+          "op",
+          "donor",
+          "value",
+          "strength",
+          "region",
+          "part",
+          "note",
+          "flags"
+         ],
+         "properties": {
+          "op": {
+           "type": "string",
+           "enum": [
+            "BLEND",
+            "PICK",
+            "OVERLAY",
+            "PATCH"
+           ]
+          },
+          "donor": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "array",
+             "items": {
+              "type": "string"
+             }
+            },
+            {
+             "type": "null"
+            }
+           ]
+          },
+          "value": {
+           "type": [
+            "number",
+            "null"
+           ]
+          },
+          "strength": {
+           "type": [
+            "number",
+            "null"
+           ]
+          },
+          "region": {
+           "anyOf": [
+            {
+             "type": "array",
+             "items": {
+              "type": "string",
+              "enum": [
+               "head",
+               "face",
+               "ears",
+               "neck",
+               "forequarters",
+               "back",
+               "flanks",
+               "belly",
+               "hindquarters",
+               "legs",
+               "forelimbs",
+               "hindlimbs",
+               "feet",
+               "tail",
+               "wings"
+              ]
+             }
+            },
+            {
+             "type": "null"
+            }
+           ]
+          },
+          "part": {
+           "type": [
+            "string",
+            "null"
+           ]
+          },
+          "note": {
+           "type": [
+            "string",
+            "null"
+           ]
+          },
+          "flags": {
+           "type": "array",
+           "items": {
+            "type": "string"
+           }
+          }
+         }
+        },
+        "coat_color": {
+         "type": "object",
+         "additionalProperties": false,
+         "required": [
+          "op",
+          "donor",
+          "value",
+          "strength",
+          "region",
+          "part",
+          "note",
+          "flags"
+         ],
+         "properties": {
+          "op": {
+           "type": "string",
+           "enum": [
+            "BLEND",
+            "PICK",
+            "OVERLAY",
+            "PATCH"
+           ]
+          },
+          "donor": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "array",
+             "items": {
+              "type": "string"
+             }
+            },
+            {
+             "type": "null"
+            }
+           ]
+          },
+          "value": {
+           "type": [
+            "number",
+            "null"
+           ]
+          },
+          "strength": {
+           "type": [
+            "number",
+            "null"
+           ]
+          },
+          "region": {
+           "anyOf": [
+            {
+             "type": "array",
+             "items": {
+              "type": "string",
+              "enum": [
+               "head",
+               "face",
+               "ears",
+               "neck",
+               "forequarters",
+               "back",
+               "flanks",
+               "belly",
+               "hindquarters",
+               "legs",
+               "forelimbs",
+               "hindlimbs",
+               "feet",
+               "tail",
+               "wings"
+              ]
+             }
+            },
+            {
+             "type": "null"
+            }
+           ]
+          },
+          "part": {
+           "type": [
+            "string",
+            "null"
+           ]
+          },
+          "note": {
+           "type": [
+            "string",
+            "null"
+           ]
+          },
+          "flags": {
+           "type": "array",
+           "items": {
+            "type": "string"
+           }
+          }
+         }
+        },
+        "coat_texture": {
+         "type": "object",
+         "additionalProperties": false,
+         "required": [
+          "op",
+          "donor",
+          "value",
+          "strength",
+          "region",
+          "part",
+          "note",
+          "flags"
+         ],
+         "properties": {
+          "op": {
+           "type": "string",
+           "enum": [
+            "BLEND",
+            "PICK",
+            "OVERLAY",
+            "PATCH"
+           ]
+          },
+          "donor": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "array",
+             "items": {
+              "type": "string"
+             }
+            },
+            {
+             "type": "null"
+            }
+           ]
+          },
+          "value": {
+           "type": [
+            "number",
+            "null"
+           ]
+          },
+          "strength": {
+           "type": [
+            "number",
+            "null"
+           ]
+          },
+          "region": {
+           "anyOf": [
+            {
+             "type": "array",
+             "items": {
+              "type": "string",
+              "enum": [
+               "head",
+               "face",
+               "ears",
+               "neck",
+               "forequarters",
+               "back",
+               "flanks",
+               "belly",
+               "hindquarters",
+               "legs",
+               "forelimbs",
+               "hindlimbs",
+               "feet",
+               "tail",
+               "wings"
+              ]
+             }
+            },
+            {
+             "type": "null"
+            }
+           ]
+          },
+          "part": {
+           "type": [
+            "string",
+            "null"
+           ]
+          },
+          "note": {
+           "type": [
+            "string",
+            "null"
+           ]
+          },
+          "flags": {
+           "type": "array",
+           "items": {
+            "type": "string"
+           }
+          }
+         }
+        },
+        "skull": {
+         "type": "object",
+         "additionalProperties": false,
+         "required": [
+          "op",
+          "donor",
+          "value",
+          "strength",
+          "region",
+          "part",
+          "note",
+          "flags"
+         ],
+         "properties": {
+          "op": {
+           "type": "string",
+           "enum": [
+            "BLEND",
+            "PICK",
+            "OVERLAY",
+            "PATCH"
+           ]
+          },
+          "donor": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "array",
+             "items": {
+              "type": "string"
+             }
+            },
+            {
+             "type": "null"
+            }
+           ]
+          },
+          "value": {
+           "type": [
+            "number",
+            "null"
+           ]
+          },
+          "strength": {
+           "type": [
+            "number",
+            "null"
+           ]
+          },
+          "region": {
+           "anyOf": [
+            {
+             "type": "array",
+             "items": {
+              "type": "string",
+              "enum": [
+               "head",
+               "face",
+               "ears",
+               "neck",
+               "forequarters",
+               "back",
+               "flanks",
+               "belly",
+               "hindquarters",
+               "legs",
+               "forelimbs",
+               "hindlimbs",
+               "feet",
+               "tail",
+               "wings"
+              ]
+             }
+            },
+            {
+             "type": "null"
+            }
+           ]
+          },
+          "part": {
+           "type": [
+            "string",
+            "null"
+           ]
+          },
+          "note": {
+           "type": [
+            "string",
+            "null"
+           ]
+          },
+          "flags": {
+           "type": "array",
+           "items": {
+            "type": "string"
+           }
+          }
+         }
+        },
+        "behavior": {
+         "type": "object",
+         "additionalProperties": false,
+         "required": [
+          "op",
+          "donor",
+          "value",
+          "strength",
+          "region",
+          "part",
+          "note",
+          "flags"
+         ],
+         "properties": {
+          "op": {
+           "type": "string",
+           "enum": [
+            "BLEND",
+            "PICK",
+            "OVERLAY",
+            "PATCH"
+           ]
+          },
+          "donor": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "array",
+             "items": {
+              "type": "string"
+             }
+            },
+            {
+             "type": "null"
+            }
+           ]
+          },
+          "value": {
+           "type": [
+            "number",
+            "null"
+           ]
+          },
+          "strength": {
+           "type": [
+            "number",
+            "null"
+           ]
+          },
+          "region": {
+           "anyOf": [
+            {
+             "type": "array",
+             "items": {
+              "type": "string",
+              "enum": [
+               "head",
+               "face",
+               "ears",
+               "neck",
+               "forequarters",
+               "back",
+               "flanks",
+               "belly",
+               "hindquarters",
+               "legs",
+               "forelimbs",
+               "hindlimbs",
+               "feet",
+               "tail",
+               "wings"
+              ]
+             }
+            },
+            {
+             "type": "null"
+            }
+           ]
+          },
+          "part": {
+           "type": [
+            "string",
+            "null"
+           ]
+          },
+          "note": {
+           "type": [
+            "string",
+            "null"
+           ]
+          },
+          "flags": {
+           "type": "array",
+           "items": {
+            "type": "string"
+           }
+          }
+         }
+        }
+       }
+      },
+      "labels": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "processes": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "card_trace": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0.4
+ },
+ "response": {
+  "id": "chatcmpl-01a192a1-8ad6-7412-b3ca-afdbb5f2c708",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\"card_trace\": [\"RC-R2-01\", \"RC-R1-14\", \"RC-R2-16\", \"RC-R5-10\", \"RC-R6-08\", \"RC-R6-09\", \"RC-R5-02\", \"RC-R1-01\", \"RC-R1-09\", \"RC-R1-10\", \"RC-R5-01\", \"RC-R5-03\", \"RC-R5-04\", \"RC-R5-05\", \"RC-R5-06\", \"RC-R5-07\", \"RC-R6-02\", \"RC-R6-05\", \"RC-R1-07\", \"RC-R1-08\", \"RC-R4-09\"], \"habitat\": {\"adjustments\": [], \"name\": \"rocky coast\", \"source\": \"bridging\", \"visible_trait\": null}, \"host\": \"golden_eagle\", \"identity_balance\": 0.75, \"known_pair\": null, \"labels\": [\"speculative chimera, no real-world precedent\"], \"limb_plan\": {\"appendages\": [\"tentacles (tail)\"], \"extra_wings\": null, \"forelimbs\": {\"donor\": \"golden_eagle\", \"kind\": \"wings\"}, \"hindlimbs\": {\"donor\": \"golden_eagle\", \"kind\": \"legs\"}, \"requested_wings\": null, \"wing_use\": \"powered\"}, \"mode\": \"chimera\", \"parents\": {\"dam\": \"common_octopus\", \"sire\": \"golden_eagle\"}, \"processes\": [\"chimera patchwork: each region is one parent's tissue\"], \"silhouette\": \"Golden eagle host frame with powered wings as forelimbs and feathered hindlegs, octopus tentacle cluster replacing the tail fan in a graft-aligned region\", \"size\": {\"flags\": [], \"mass_kg\": 4.5625}, \"traits\": {\"behavior\": {\"donor\": \"golden_eagle\", \"flags\": [], \"note\": \"follows the head/brain donor golden_eagle\", \"op\": \"PICK\", \"part\": null, \"region\": null, \"strength\": null, \"value\": null}, \"body\": {\"donor\": \"golden_eagle\", \"flags\": [], \"note\": \"host eagle body frame sets overall silhouette; donor parts scaled to host\", \"op\": \"PICK\", \"part\": null, \"region\": null, \"strength\": null, \"value\": null}, \"coat_color\": {\"donor\": \"common_octopus\", \"flags\": [], \"note\": \"octopus color at full strength inside few large patches following eagle belly and flank regions, blend only at edges\", \"op\": \"PATCH\", \"part\": null, \"region\": [\"belly\", \"flanks\"], \"strength\": 1.0, \"value\": null}, \"coat_pattern\": {\"donor\": \"common_octopus\", \"flags\": [], \"note\": \"octopus pattern at full strength inside few large patches following eagle belly and flank regions, blend only at edges\", \"op\": \"PATCH\", \"part\": null, \"region\": [\"belly\", \"flanks\"], \"strength\": 1.0, \"value\": null}, \"coat_texture\": {\"donor\": \"common_octopus\", \"flags\": [], \"note\": \"octopus skin at full strength inside few large patches following eagle belly and flank regions, blend only at edges\", \"op\": \"PATCH\", \"part\": null, \"region\": [\"belly\", \"flanks\"], \"strength\": 1.0, \"value\": null}, \"ears\": {\"donor\": \"golden_eagle\", \"flags\": [], \"note\": \"host ear openings, feather-covered\", \"op\": \"PICK\", \"part\": null, \"region\": null, \"strength\": null, \"value\": null}, \"face\": {\"donor\": \"golden_eagle\", \"flags\": [], \"note\": \"host eagle beak and eyes\", \"op\": \"PICK\", \"part\": null, \"region\": null, \"strength\": null, \"value\": null}, \"feet\": {\"donor\": \"golden_eagle\", \"flags\": [], \"note\": \"host taloned feet\", \"op\": \"PICK\", \"part\": null, \"region\": null, \"strength\": null, \"value\": null}, \"head\": {\"donor\": \"golden_eagle\", \"flags\": [], \"note\": \"host head tissue sets brain and behavior\", \"op\": \"PICK\", \"part\": null, \"region\": null, \"strength\": null, \"value\": null}, \"limbs\": {\"donor\": \"golden_eagle\", \"flags\": [], \"note\": \"host wings and legs retain eagle structure\", \"op\": \"PICK\", \"part\": null, \"region\": null, \"strength\": null, \"value\": null}, \"mane\": {\"donor\": \"golden_eagle\", \"flags\": [\"gated\"], \"note\": \"absent: no hair mane on feathered neck; gated by feathered coat\", \"op\": \"PICK\", \"part\": null, \"region\": null, \"strength\": null, \"value\": null}, \"size\": {\"donor\": \"golden_eagle\", \"flags\": [], \"note\": \"host size; donor tentacle patch scaled to host\", \"op\": \"PICK\", \"part\": null, \"region\": null, \"strength\": null, \"value\": null}, \"skull\": {\"donor\": \"golden_eagle\", \"flags\": [], \"note\": \"host eagle skull\", \"op\": \"PICK\", \"part\": null, \"region\": null, \"strength\": null, \"value\": null}, \"tail\": {\"donor\": \"common_octopus\", \"flags\": [], \"note\": \"signature tentacle cluster in place of tail fan; graft-aligned tail segment\", \"op\": \"PICK\", \"part\": \"tentacles\", \"region\": null, \"strength\": null, \"value\": null}}}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null
+    }
+   }
+  ],
+  "created": 1793461422,
+  "model": "muse-spark-1.3",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 3943,
+   "prompt_tokens": 5363,
+   "total_tokens": 9306,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": null,
+    "audio_tokens": null,
+    "reasoning_tokens": 2651,
+    "rejected_prediction_tokens": null,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": null,
+    "cache_write_tokens": null,
+    "cached_tokens": 0,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

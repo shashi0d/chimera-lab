@@ -1,0 +1,237 @@
+{
+ "id": "e2/4_eagle_x_octopus",
+ "questions": [
+  {
+   "id": "frame",
+   "text": "Is the overall body shape that of a golden eagle?",
+   "expect": "yes",
+   "group": "structure",
+   "fix": "Show the planned golden eagle body shape and outline; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "head",
+   "text": "Does it have a golden eagle head with visible eyes?",
+   "expect": "yes",
+   "group": "structure",
+   "fix": "Show the planned golden eagle head, fully visible with clear eyes; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "wings_front",
+   "text": "Does it have golden eagle wings in place of its front legs?",
+   "expect": "yes",
+   "group": "structure",
+   "fix": "Show the planned golden eagle wings in place of the front legs, standing on two hind legs; keep everything else the same.",
+   "sam": "wings"
+  },
+  {
+   "id": "legs_and_wings",
+   "text": "Does it stand on four walking legs and also have wings?",
+   "expect": "no",
+   "group": "structure",
+   "fix": "The plan has wings in place of the front legs: show two hind legs only; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "part_tail",
+   "text": "Is there long, muscular arms lined with round suckers in place of the tail?",
+   "expect": "yes",
+   "group": "structure",
+   "fix": "Show the planned long, muscular arms lined with round suckers in place of the tail; keep everything else the same.",
+   "sam": "tentacles"
+  },
+  {
+   "id": "whole_animal",
+   "text": "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?",
+   "expect": "no",
+   "group": "structure",
+   "fix": "Show the planned common octopus contribution only as soft, color-changing skin with fine bumps on the golden eagle's own body over the belly and flanks, not as separate animals; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "second_head",
+   "text": "Is there a second head anywhere?",
+   "expect": "no",
+   "group": "structure",
+   "fix": "Show one single head, as planned; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "extra_legs",
+   "text": "Does it have more than 2 walking legs?",
+   "expect": "no",
+   "group": "structure",
+   "fix": "Show exactly 2 walking legs, as planned; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "cover_present",
+   "text": "Is there soft, color-changing skin with fine bumps on the belly and flanks?",
+   "expect": "yes",
+   "group": "surface",
+   "fix": "Show the planned soft, color-changing skin with fine bumps over the belly and flanks; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "human",
+   "text": "Is there a human figure or a human body part?",
+   "expect": "no",
+   "group": "structure",
+   "fix": "Show only the creature; keep everything else the same.",
+   "sam": null
+  }
+ ],
+ "raw": {
+  "spark_open": {
+   "describe": {
+    "description": "The creature in the image is shown in strict side profile facing right against a plain off-white background. From the head to the mid-body and wings it has the appearance of a large brown raptor, with dense layered brown feathers, folded wings, and thick feathered legs ending in large yellow scaly feet with black talons. The head is that of an eagle with a hooked beak and a golden eye. The posterior, where a feathered tail would normally be, instead bears a hanging cluster of fleshy, sucker-lined tentacle-like appendages. Circular sucker discs are also visible on the skin of the lower legs/thighs. The overall impression is a single upright standing bird-like body with a raptor front half and tentacles at the rear.",
+    "parts": [
+     {
+      "part": "head",
+      "looks_like": "large raptor head in right profile, covered in short brown feathers on crown and neck, with a prominent hooked beak that is dark gray at the tip and yellow at the cere and gape, a round golden-brown eye with a dark pupil and a pale gray area around the nostril, facing to the right at the top of the body",
+      "where": "at the top front of the body, atop the feathered neck"
+     },
+     {
+      "part": "legs",
+      "looks_like": "two thick, upright, heavily feathered legs, brown feathered thighs and shanks with patches of bare-looking skin bearing rows of circular white-rimmed sucker discs on the front and side surfaces",
+      "where": "extending down from the lower belly to the feet, one slightly forward of the other"
+     },
+     {
+      "part": "feet",
+      "looks_like": "large yellow scaly feet with thick textured scales, each with four toes bearing long, sharply curved black talons",
+      "where": "at the bottom ends of the two walking legs, in contact with the ground"
+     },
+     {
+      "part": "wings",
+      "looks_like": "two large folded wings with overlapping brown feathers in varying shades of tan to dark brown, each feather with a darker edge giving a scaled appearance, long primary feathers pointed at the rear",
+      "where": "on the left and right sides of the back and torso, folded against the body, the left wing fully visible in profile"
+     },
+     {
+      "part": "tail",
+      "looks_like": "not a normal feathered tail; the tail region is formed by a cluster of about seven fleshy, tapered, brownish tentacle-like appendages hanging vertically, each lined on the inner side with two rows of circular suckers, tips curling inward",
+      "where": "at the posterior of the body, below the tips of the folded wings, hanging down behind the legs"
+     },
+     {
+      "part": "tentacles",
+      "looks_like": "same as tail: fleshy, muscular, brown with mottled darker patches, tapered to curled tips, undersides covered in numerous small circular suckers with light rims",
+      "where": "emerging together from the rear/vent area and hanging down as the tail"
+     },
+     {
+      "part": "feathers",
+      "looks_like": "dense plumage covering head, neck, chest, back, wings and upper legs, individual feathers detailed with barbs and shading from light golden-brown on the neck to darker brown on the wings and back",
+      "where": "over most of the body except the beak, feet, sucker patches and tentacles"
+     },
+     {
+      "part": "markings",
+      "looks_like": "circular sucker discs with central pits and pale rims, arranged in clusters on the front of both thighs/shanks and in rows along the tentacles",
+      "where": "on the skin of the lower legs and on the entire length of the tail tentacles"
+     }
+    ],
+    "attached_objects": [],
+    "animals": [
+     "eagle",
+     "octopus"
+    ],
+    "separate_bodies": 1,
+    "heads": 1,
+    "walking_legs": 2,
+    "wings": 2,
+    "extra_limb_pieces": 0
+   },
+   "answers": {
+    "Is the overall body shape that of a golden eagle?": "yes",
+    "Does it have a golden eagle head with visible eyes?": "yes",
+    "Does it have golden eagle wings in place of its front legs?": "yes",
+    "Does it stand on four walking legs and also have wings?": "no",
+    "Is there long, muscular arms lined with round suckers in place of the tail?": "yes",
+    "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?": "no",
+    "Is there a second head anywhere?": "no",
+    "Does it have more than 2 walking legs?": "no",
+    "Is there soft, color-changing skin with fine bumps on the belly and flanks?": "yes",
+    "Is there a human figure or a human body part?": "no"
+   },
+   "error": null
+  },
+  "meta_spark": {
+   "describe": {
+    "description": "A large standing bird with the head, feathered body, folded wings, and yellow taloned feet of a brown eagle, shown in right-facing profile. The plumage is rich brown with layered wing feathers and shaggy feathering on the neck and upper legs. From the rear underside where a tail would be, a cluster of brown octopus-like tentacles with pale round suckers hangs down and curls. Additional pale circular sucker marks are scattered over the feathered lower breast and thighs.",
+    "parts": [
+     {
+      "part": "head",
+      "looks_like": "brown feathered eagle head",
+      "where": "at the top front of the body"
+     },
+     {
+      "part": "beak",
+      "looks_like": "hooked raptor beak, yellow at the base and dark gray at the hooked tip",
+      "where": "on the front of the head"
+     },
+     {
+      "part": "eye",
+      "looks_like": "golden-brown eagle eye with dark pupil",
+      "where": "on the side of the head"
+     },
+     {
+      "part": "wings",
+      "looks_like": "folded feathered eagle wings with overlapping coverts and long flight feathers",
+      "where": "on the sides of the body with tips pointing to the rear, one prominent on the near side and one partially visible on the far side"
+     },
+     {
+      "part": "legs",
+      "looks_like": "thick feathered bird legs",
+      "where": "on the lower body supporting the bird"
+     },
+     {
+      "part": "feet",
+      "looks_like": "yellow scaly bird feet with four toes each",
+      "where": "at the bottom of the legs"
+     },
+     {
+      "part": "talons",
+      "looks_like": "long curved black claws",
+      "where": "on the tips of the toes"
+     },
+     {
+      "part": "feathers",
+      "looks_like": "dense brown layered feathers",
+      "where": "covering the head, neck, body, wings and upper legs"
+     },
+     {
+      "part": "tentacles",
+      "looks_like": "long tapering brown octopus arms with mottled skin",
+      "where": "hanging from the rear underside in place of a tail and curling at the tips"
+     },
+     {
+      "part": "suckers",
+      "looks_like": "pale round cups with central pits",
+      "where": "in rows along the undersides of the tentacles and scattered on the lower belly and thighs"
+     }
+    ],
+    "attached_objects": [],
+    "animals": [
+     "eagle",
+     "octopus"
+    ],
+    "separate_bodies": 1,
+    "heads": 1,
+    "walking_legs": 2,
+    "wings": 2,
+    "extra_limb_pieces": 7
+   },
+   "answers": {
+    "Is the overall body shape that of a golden eagle?": "yes",
+    "Does it have a golden eagle head with visible eyes?": "yes",
+    "Does it have golden eagle wings in place of its front legs?": "yes",
+    "Does it stand on four walking legs and also have wings?": "no",
+    "Is there long, muscular arms lined with round suckers in place of the tail?": "yes",
+    "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?": "no",
+    "Is there a second head anywhere?": "no",
+    "Does it have more than 2 walking legs?": "no",
+    "Is there soft, color-changing skin with fine bumps on the belly and flanks?": "unclear",
+    "Is there a human figure or a human body part?": "no"
+   },
+   "error": null
+  }
+ }
+}

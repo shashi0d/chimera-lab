@@ -1,0 +1,62 @@
+{
+ "public": {
+  "id": "european_rhinoceros_beetle",
+  "common_name": "European rhinoceros beetle",
+  "scientific_name": "Oryctes nasicornis",
+  "class": "Insecta",
+  "order": "Coleoptera",
+  "family": "Scarabaeidae",
+  "genus": "Oryctes",
+  "body_plan": "multi_legged",
+  "group": "arthropod",
+  "mass_kg": 0.004,
+  "kind": "species",
+  "source": "learned",
+  "features": [
+   "long curved head horn in males",
+   "reddish-brown glossy wing cases",
+   "darker head and pronotum",
+   "long red hair on underside and legs"
+  ],
+  "mouthparts": "mandibles",
+  "breathing": "tracheae",
+  "diet": "herbivore",
+  "provenance": {
+   "active_time": "web-cited",
+   "body_length_m": "web-cited",
+   "body_mass_kg": "model-estimated",
+   "body_plan": "web-cited",
+   "breathing": "web-cited",
+   "class": "gbif",
+   "climate": "web-cited",
+   "common_name": "model-estimated",
+   "covering": "web-cited",
+   "diet": "web-cited",
+   "family": "gbif",
+   "gbif_key": "gbif",
+   "genus": "gbif",
+   "habitat": "web-cited",
+   "mouthparts": "web-cited",
+   "movement": "web-cited",
+   "order": "gbif",
+   "primary_locomotor_part": "web-cited",
+   "scientific_name": "gbif",
+   "visible_features": "web-cited"
+  },
+  "claims": [],
+  "citations": {
+   "active_time": "https://en.wikipedia.org/wiki/European_rhinoceros_beetle",
+   "body_length_m": "https://en.wikipedia.org/wiki/European_rhinoceros_beetle",
+   "body_plan": "https://monaconatureencyclopedia.com/oryctes-nasicornis/",
+   "breathing": "https://www.merriam-webster.com/dictionary/spiracle",
+   "climate": "https://en.wikipedia.org/wiki/European_rhinoceros_beetle",
+   "covering": "https://monaconatureencyclopedia.com/oryctes-nasicornis/",
+   "diet": "https://en.wikipedia.org/wiki/European_rhinoceros_beetle",
+   "habitat": "https://monaconatureencyclopedia.com/oryctes-nasicornis/",
+   "mouthparts": "https://www.coleoptera.org.uk/what-are-beetles",
+   "movement": "https://monaconatureencyclopedia.com/oryctes-nasicornis/",
+   "primary_locomotor_part": "https://monaconatureencyclopedia.com/oryctes-nasicornis/",
+   "visible_features": "https://en.wikipedia.org/wiki/European_rhinoceros_beetle"
+  }
+ }
+}

@@ -1,0 +1,109 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Silhouette: Four-legged cheetah frame. Host frame: the cheetah sets the outline, body size and overall frame. A single creature combining an emperor penguin and a cheetah. The head is that of the cheetah, fully visible and uncluttered, with clear, discernible eyes. Details: cheetah body and legs with dense fur over the whole body, colored as below; from the emperor penguin, as parts and materials on the cheetah's own body, the cheetah's dense fur remains dense fur everywhere, and over the back and flanks it takes the emperor penguin's colors, gloss, surface texture and pattern; the cheetah's body outline is unchanged. The donor's colors and sheen follow the host's coat and body shape. Bilaterally symmetrical, with recognizable limbs and visible sense organs. Habitat cue (alpine meadow): shorter ears and tail, dense coat for the cold. Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "id": "resp_6ae7ab94da6d57ac6862497d",
+  "access_programs": null,
+  "created_at": 1793567636.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae7ab94cd05800ec8894c2b",
+    "summary": [
+     {
+      "text": "**Designing hybrid creature image**\nI'm planning a text-to-image of a cheetah-bodied creature with emperor penguin coloring and sheen on the back and flanks, keeping the cheetah's dense fur, four-legged frame, and clear eyes, bilaterally symmetrical.\n**Designing hybrid creature illustration**\nI'm planning a natural-history illustration that blends a cheetah's body with emperor penguin coloring, including black back, white belly, yellow neck patches, shorter ears and tail, and dense fur on a plain light background.\n**Crafting natural history illustration**\nI'm generating the final hybrid illustration in a natural history style, with glossy feathers, a golden-yellow neck patch, black back and flanks, white belly, and cheetah fur with dense black spots.\n**Refining fur texture**\nI'm regenerating the illustration to replace the feather-like black with richer, furrier detail for a stronger final.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae7ab94646cdd1ffd0340ca",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0RjOEJ6VFJMYVRLX1I4RkFPSDZPVlhHdUFGb2JnMWlBUUJlIiwicmVzdW1lX2lkIjoiczphZmExZDFhZC1lYmY1LTRjMzItYmU0NC1jNmQ0NmYwMjYzNjk6R0RmSUJEVE95QzBmSXYwSUFIUGZETjZoRHpWbWJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM1Njc2MzZ9.Q8WLFwFkbG22yKMrde3SbLECakCS",
+    "result": "<elided> (863736 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 32868,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 26816
+   },
+   "output_tokens": 3107,
+   "output_tokens_details": {
+    "reasoning_tokens": 698
+   },
+   "total_tokens": 35975
+  },
+  "user": null
+ }
+}

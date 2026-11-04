@@ -1,0 +1,117 @@
+{
+ "purpose": "evo_ask",
+ "request": {
+  "model": "muse-spark-1.3",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture of a creature and answer questions about it. Answer each question on its own: yes if the picture clearly shows it, no if it clearly does not, unclear if you cannot tell. Many questions describe things that should not be there, so do not lean toward yes. Judge only what is visible. Copy each question's text exactly into item, in the given order. notes: one short sentence."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "Questions:\n1. Is the overall body shape that of a chinese pangolin?\n2. Does it have a chinese pangolin head with visible eyes?\n3. Are there wings anywhere on the body?\n4. Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?\n5. Is there a second head anywhere?\n6. Does it have more than 4 walking legs?\n7. Are there feathery external gills anywhere on the creature?\n8. Does it have a full mane of long hair around the head and neck?\n9. Is there smooth, moist skin on the back and flanks?\n10. Does the smooth, moist skin grow out of the body with a natural transition (for example scales stopping at a shield's edge, or skin blending into scales), rather than looking attached on top?\n11. Does the smooth, moist skin look like a separate piece attached on top of the scales?"
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (909823 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "balanced_checklist",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "answers",
+      "notes"
+     ],
+     "properties": {
+      "answers": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "item",
+         "answer"
+        ],
+        "properties": {
+         "item": {
+          "type": "string"
+         },
+         "answer": {
+          "type": "string",
+          "enum": [
+           "yes",
+           "no",
+           "unclear"
+          ]
+         }
+        }
+       }
+      },
+      "notes": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0
+ },
+ "response": {
+  "id": "chatcmpl-01a1953b-2c53-7434-8ead-aa7ae725e4c9",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\"answers\": [{\"answer\": \"yes\", \"item\": \"Is the overall body shape that of a chinese pangolin?\"}, {\"answer\": \"yes\", \"item\": \"Does it have a chinese pangolin head with visible eyes?\"}, {\"answer\": \"no\", \"item\": \"Are there wings anywhere on the body?\"}, {\"answer\": \"no\", \"item\": \"Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?\"}, {\"answer\": \"no\", \"item\": \"Is there a second head anywhere?\"}, {\"answer\": \"no\", \"item\": \"Does it have more than 4 walking legs?\"}, {\"answer\": \"yes\", \"item\": \"Are there feathery external gills anywhere on the creature?\"}, {\"answer\": \"no\", \"item\": \"Does it have a full mane of long hair around the head and neck?\"}, {\"answer\": \"no\", \"item\": \"Is there smooth, moist skin on the back and flanks?\"}, {\"answer\": \"no\", \"item\": \"Does the smooth, moist skin grow out of the body with a natural transition (for example scales stopping at a shield's edge, or skin blending into scales), rather than looking attached on top?\"}, {\"answer\": \"no\", \"item\": \"Does the smooth, moist skin look like a separate piece attached on top of the scales?\"}], \"notes\": \"The creature is a scaly pangolin with pink feathery external gills.\"}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null
+    }
+   }
+  ],
+  "created": 1793505045,
+  "model": "muse-spark-1.3",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 1711,
+   "prompt_tokens": 3753,
+   "total_tokens": 5464,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": null,
+    "audio_tokens": null,
+    "reasoning_tokens": 1379,
+    "rejected_prediction_tokens": null,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": null,
+    "cache_write_tokens": null,
+    "cached_tokens": 0,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

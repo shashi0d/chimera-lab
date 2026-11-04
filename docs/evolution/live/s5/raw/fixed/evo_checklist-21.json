@@ -1,0 +1,130 @@
+{
+ "purpose": "evo_checklist",
+ "request": {
+  "model": "meta-models/muse-spark-open-1026",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture of an animal and check it against a list of visible features. For each item, answer yes if the feature is clearly visible, no if the picture clearly shows otherwise, or unclear if you cannot tell. Copy each item's text exactly, in the given order. Judge only what is visible. creatures: how many separate creatures are in the picture. animals: the real animal species whose features you can clearly see, as everyday English common names, at most three. notes: one short sentence."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "Features to check:\n1. a emperor penguin body shape\n2. a emperor penguin head with visible eyes\n3. only parts and materials of the cheetah, no whole cheetah animals on the body\n4. dense fur patches on the back and flanks"
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (727083 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "feature_checklist",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "answers",
+      "creatures",
+      "animals",
+      "notes"
+     ],
+     "properties": {
+      "answers": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "item",
+         "answer"
+        ],
+        "properties": {
+         "item": {
+          "type": "string"
+         },
+         "answer": {
+          "type": "string",
+          "enum": [
+           "yes",
+           "no",
+           "unclear"
+          ]
+         }
+        }
+       }
+      },
+      "creatures": {
+       "type": "integer"
+      },
+      "animals": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "notes": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0,
+  "max_tokens": 6000
+ },
+ "response": {
+  "id": "chatcmpl-21fff4b8493e4f44bc5559d038503c8c",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{ \"answers\": [ { \"item\": \"a emperor penguin body shape\", \"answer\": \"yes\" }, { \"item\": \"a emperor penguin head with visible eyes\", \"answer\": \"yes\" }, { \"item\": \"only parts and materials of the cheetah, no whole cheetah animals on the body\", \"answer\": \"yes\" }, { \"item\": \"dense fur patches on the back and flanks\", \"answer\": \"yes\" } ], \"creatures\": 1, \"animals\": [\"emperor penguin\", \"cheetah\"], \"notes\": \"A single penguin-cheetah hybrid stands upright showing penguin shape with spotted fur on its back.\" }",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null,
+     "reasoning_content": "<elided> (7848 chars)"
+    }
+   }
+  ],
+  "created": 1793567807,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 1967,
+   "prompt_tokens": 3672,
+   "total_tokens": 5639,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 1511,
+    "audio_tokens": 0,
+    "reasoning_tokens": 1807,
+    "rejected_prediction_tokens": 1681,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 0,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

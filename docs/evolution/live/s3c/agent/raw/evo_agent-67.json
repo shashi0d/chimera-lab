@@ -1,0 +1,399 @@
+{
+ "purpose": "evo_agent",
+ "request": {
+  "messages": [
+   {
+    "role": "system",
+    "content": "You are the design agent of Chimera Lab, a natural-history creature engine. You build one creature from two parent animals by calling tools; code tools do the work and check every step.\n\nRules:\n1. You never write a plan. Pick a candidate from propose_candidates with choose_candidate, and change it only with plan_op (typed operations). Code fills every derived field.\n2. Every call has a reason: what you decided and why, citing the rule cards the tools return when they apply.\n3. Order: resolve_animal for each parent, propose_candidates, choose_candidate, audit_plan, render, inspect.\n4. audit_plan: blocking items stop render until fixed; advice is yours to weigh.\n5. After inspect: if it passes, call finalize with that image. If it fails, choose and say why:\n   - covering or surface failures (kind \"covering\"): edit that image with those failure keys;\n   - structural failures (kind \"structural\": counts, extra or missing parts, the frame, part identity or connection, a third animal): change the plan with plan_op or choose another candidate, audit, and render again;\n   - or accept the failures and finalize, saying why.\n   An edit or a new render can make things worse: compare with images_so_far from inspect, and finalize the best image, not just the latest.\n6. A host tie: choose the host yourself from the candidates' notes, with a reason (this run is not interactive: ask_user returns no answer).\n7. Limits: at most 4 renders and 30 tool calls. Near a limit, finalize your best inspected image; its remaining failures go on the card.\nKeep reasons short. Call one tool at a time."
+   },
+   {
+    "role": "user",
+    "content": "Build one creature from the parents 'tortoise' (sire) and 'domestic goat' (dam) in realistic mode. Start with resolve_animal for each parent."
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-06d79246fdd0499c8acd74bc159d2326",
+      "type": "function",
+      "function": {
+       "name": "resolve_animal",
+       "arguments": "{\"name\": \"tortoise\", \"reason\": \"Starting required parent resolution for sire tortoise per instructions, to get sourced traits for realistic mode hybrid.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-06d79246fdd0499c8acd74bc159d2326",
+    "content": "{\"ok\": true, \"status\": \"resolved\", \"note\": \"'tortoise' names several species; chose the tortoise (Testudo graeca), the most common reading. Alternatives are listed.\", \"slot\": \"sire\", \"animal\": {\"id\": \"tortoise\", \"common_name\": \"tortoise\", \"scientific_name\": \"Testudo graeca\", \"class\": \"Testudines\", \"body_plan\": \"quadruped\", \"covering\": \"shell\", \"mass_kg\": 1.6, \"habitats\": [\"grassland\", \"forest\", \"desert\"], \"breathing\": \"lungs\", \"features\": [\"high-domed brown-yellow carapace\", \"distinct thigh spurs\", \"sturdy scaly legs\", \"strong claws\"], \"features_source\": \"model-estimated\", \"source\": \"learned\"}}"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-1c0979b8bee74ac0a106cb3f7ebec372",
+      "type": "function",
+      "function": {
+       "name": "resolve_animal",
+       "arguments": "{\"name\": \"domestic goat\", \"reason\": \"Resolving dam domestic goat as second required parent to enable candidate proposal for realistic mode creature.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-1c0979b8bee74ac0a106cb3f7ebec372",
+    "content": "{\"ok\": true, \"status\": \"resolved\", \"note\": \"\", \"slot\": \"dam\", \"animal\": {\"id\": \"domestic_goat\", \"common_name\": \"domestic goat\", \"scientific_name\": \"Capra hircus\", \"class\": \"Mammalia\", \"body_plan\": \"quadruped\", \"covering\": \"fur\", \"mass_kg\": 61.0, \"habitats\": [\"desert\", \"grassland\", \"forest\", \"mountain\"], \"breathing\": \"lungs\", \"features\": [], \"features_source\": \"model-estimated (no source recorded)\", \"source\": \"database\"}}"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "chatcmpl-tool-2d7447ef42394afba3b4896cbac67caf",
+      "type": "function",
+      "function": {
+       "name": "propose_candidates",
+       "arguments": "{\"reason\": \"Both parents resolved, now proposing ranked arrangements with R10 selection notes for realistic mode tortoise x goat.\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "chatcmpl-tool-2d7447ef42394afba3b4896cbac67caf",
+    "content": "{\"ok\": true, \"host_tie\": [\"tortoise\", \"domestic goat\"], \"candidates\": [{\"id\": \"C1\", \"ops\": [{\"op\": \"set_host\", \"args\": {\"animal\": \"tortoise\"}}], \"score\": 2.5, \"host\": \"tortoise\", \"silhouette\": \"four-legged tortoise frame\", \"parts\": [], \"dropped\": [], \"identity_parts\": [], \"covering\": {\"extent\": [\"head\", \"neck\", \"legs\", \"tail\"], \"plate_pattern\": \"\", \"plate_source\": \"\"}, \"licenses\": [], \"labels\": [\"speculative chimera, no real-world precedent\"], \"notes\": {\"niche\": \"habitat grassland (native to tortoise, domestic goat)\", \"autonomy\": \"the tortoise body carries every function\", \"survival\": \"0 license(s) of 0: none\", \"identity\": \"covering over head, neck, legs, tail; the tortoise's shell keeps its own form and bony plates, with only its color taken from the domestic goat\", \"host\": \"structural tie: tortoise is one of two equal options (RC-R10-01: never by size, mass or name order)\"}}, {\"id\": \"C2\", \"ops\": [{\"op\": \"set_host\", \"args\": {\"animal\": \"domestic goat\"}}], \"score\": 2.5, \"host\": \"domestic goat\", \"silhouette\": \"four-legged domestic goat frame\", \"parts\": [], \"dropped\": [], \"identity_parts\": [], \"covering\": {\"extent\": [\"back\"], \"plate_pattern\": \"one broad carapace shield with short jointed plates on the limbs (from 'high-domed brown-yellow carapace')\", \"plate_source\": \"model-estimated\"}, \"licenses\": [], \"labels\": [\"speculative chimera, no real-world precedent\"], \"notes\": {\"niche\": \"habitat grassland (native to tortoise, domestic goat)\", \"autonomy\": \"the domestic goat body carries every function\", \"survival\": \"0 license(s) of 0: none\", \"identity\": \"covering over back, one broad carapace shield with short jointed plates on the limbs (from 'high-domed brown-yellow carapace')\", \"host\": \"structural tie: domestic goat is one of two equal options (RC-R10-01: never by size, mass or name order)\"}}], \"note\": \"advice only: you choose; scores rank the R10 notes, nothing more\", \"cards\": [\"RC-R10-01\", \"RC-R6-08\", \"RC-R6-09\", \"RC-R10-15\"]}"
+   }
+  ],
+  "tools": [
+   {
+    "type": "function",
+    "function": {
+     "name": "resolve_animal",
+     "description": "Resolve one parent name to an animal with sourced traits.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "name": {
+        "type": "string"
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "name",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "propose_candidates",
+     "description": "Ranked plan arrangements for the two resolved parents, each with R10 selection notes (niche, autonomy, survival, identity) and its reasons. Advice only.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "choose_candidate",
+     "description": "Adopt one candidate plan by id.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "candidate_id": {
+        "type": "string"
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "candidate_id",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "plan_op",
+     "description": "Change the current plan with one typed operation. Typed plan operations (args): set_host(animal); set_region(region, donor, operator) with regions head, tail, forelimbs (PICK) or neck, forequarters, back, flanks, belly, hindquarters, legs (PATCH, OVERLAY, PICK); set_habitat(name); set_mode(mode); add_license(rule, compensation); drop_part(part, reason); set_transfer_class(feature, cls); set_extent(feature, extent, reason); connect_features(a, b); set_identity_cues(feature, cues); set_identity_part(donor, part, reason). A failed operation changes nothing and returns errors with valid values.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "op": {
+        "type": "string",
+        "enum": [
+         "set_host",
+         "set_region",
+         "set_habitat",
+         "set_mode",
+         "add_license",
+         "drop_part",
+         "set_transfer_class",
+         "set_extent",
+         "connect_features",
+         "set_identity_cues",
+         "set_identity_part"
+        ]
+       },
+       "args": {
+        "type": "object"
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "op",
+       "args",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "audit_plan",
+     "description": "Audit the current plan: blocking items (hard cards, an unchosen host tie) and advice (soft cards, the function audit, the fiction budget). Required before render.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "render",
+     "description": "Render the audited plan. method single_pass (default) or growth_edit (host first, then one edit grows the covering; only for a plan with a donor covering).",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "method": {
+        "type": "string",
+        "enum": [
+         "single_pass",
+         "growth_edit"
+        ]
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "method",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "inspect",
+     "description": "Inspect an image with the plan-blind critics. Returns pass or the failures, each with a key and kind (covering or structural).",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "image_id": {
+        "type": "string"
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "image_id",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "edit",
+     "description": "One image edit turn fixing covering or surface failures of an image (keys from inspect). Structural failures need a plan change and a new render instead.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "image_id": {
+        "type": "string"
+       },
+       "failure_keys": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "image_id",
+       "failure_keys",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "ask_user",
+     "description": "Ask the user to choose (interactive runs only).",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "question": {
+        "type": "string"
+       },
+       "options": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "question",
+       "options",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "finalize",
+     "description": "Finish with this image. Any failures it still has are stated on the card.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "image_id": {
+        "type": "string"
+       },
+       "reason": {
+        "type": "string",
+        "description": "Why you make this call (one or two sentences; cite rule cards such as RC-R10-15 when they apply)."
+       }
+      },
+      "required": [
+       "image_id",
+       "reason"
+      ],
+      "additionalProperties": false
+     }
+    }
+   }
+  ],
+  "tool_choice": "auto",
+  "max_tokens": 8000,
+  "model": "meta-models/muse-spark-open-1026"
+ },
+ "response": {
+  "id": "chatcmpl-568119dad20d4e3296efee3de7e27d0a",
+  "choices": [
+   {
+    "finish_reason": "tool_calls",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": null,
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": [
+      {
+       "id": "chatcmpl-tool-c481c432728e47ff9b8054f352aae6b3",
+       "function": {
+        "arguments": "{\"candidate_id\": \"C2\", \"reason\": \"Choosing C2 (domestic goat host) over C1 due to stronger identity and autonomy: goat frame carries full function while tortoise carapace shield on back provides clear reciprocal traits from both parents; host tie break not by size/mass per RC-R10-01 but by distinct morphological integration.\"}",
+        "name": "choose_candidate"
+       },
+       "type": "function"
+      }
+     ],
+     "reasoning_content": "We have two parents: tortoise (Testudo graeca) and domestic goat. Need to build creature in realistic mode. Start with resolve... done. Propose candidates: C1 host tortoise, C2 host domestic goat. Both score 2.5 tie.\n\nWe must choose host ourselves from candidates' notes, with reason (not interactive). Rules: order resolve_animal for each parent, propose_candidates, choose_candidate, audit_plan, render, inspect.\n\nWe have host tie. Need to choose host. Which makes sense? Realistic mode - need to consider blending. Tortoise x goat. Both quadruped. Options: tortoise frame with goat covering? Actually C1: tortoise host, covering over head, neck, legs, tail extent; shell keeps own form and bony plates, only color taken from goat. So tortoise body with goat fur color? C2: goat host, covering over back, one broad carapace shield with short jointed plates on limbs (from high-domed carapace). That is interesting: goat with shell on back.\n\nWe need to pick one. Need to decide. Realistic mode, survival, niche etc.\n\nWe need to consider RC-R10-01: never by size mass or name order. Choose host ourselves with reason.\n\nWe should pick something that yields plausible realistic creature. Goat as host with tortoise shell patch on back is visually striking and common chimera trope. Tortoise as host with goat fur on legs/head is less distinct? Actually tortoise with fur? Could be weird.\n\nWhich to choose? Let's evaluate notes: C2 identity: covering over back, one broad carapace shield with short jointed plates on limbs. That seems more identifiable as both.\n\nC1 identity: covering over head, neck, legs, tail; tortoise's shell keeps its own form and bony plates, with only color taken from domestic goat - that sounds like tortoise shell color changes slightly, not strong hybrid.\n\nC2 gives clearer hybrid visual: goat body with shell armor. That better demonstrates blending.\n\nAlso for realistic mode, goat body (mammal) carrying shell would be heavy but plausible as speculative? Whereas tortoise body carrying fur is less plausible.\n\nChoose C2: host domestic goat.\n\nWe need to call choose_candidate with candidate_id C2 and reason citing rule cards.\n\nAfter that, audit_plan, render, inspect, finalize.\n\nWe must do choose_candidate first.\n\nAlso limits: at most 4 renders, 30 tool calls.\n\nProceed."
+    }
+   }
+  ],
+  "created": 1793555025,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 667,
+   "prompt_tokens": 3464,
+   "total_tokens": 4131,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 450,
+    "audio_tokens": 0,
+    "reasoning_tokens": 514,
+    "rejected_prediction_tokens": 1069,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 2688,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

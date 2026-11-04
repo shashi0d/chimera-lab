@@ -1,0 +1,109 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Silhouette: Four-legged gray wolf frame, jointed tail segments in place of the tail. Host frame: the gray wolf sets the outline, body size and overall frame. A single creature combining a crab and a gray wolf. The head is that of the gray wolf, fully visible and uncluttered, with clear, discernible eyes. Details: gray wolf body and legs, with its own dense fur on the face, plain coat, no stripes or spots; from the crab, as parts and materials on the gray wolf's own body, a segmented tail grown from the base of the spine out of the covering, which continues from there into the body covering as overlapping armored segments that taper to the tip; hard, glossy chitin plates with fine seams in its own colors, grown from the skin as the gray wolf's own covering over the crown of the head, neck, shoulders, back, flanks, belly, hips, legs and tail, replacing the gray wolf's dense fur there and conforming to the gray wolf's body, each plate sized to the gray wolf's own body segments and muscle masses, one plate per segment or muscle mass, joined by flexible cuticle at every joint; the dense fur stops at the covering's edge, and the face keeps the gray wolf's own dense fur. The covering follows the body's own shape and bends at every joint. Declared fiction: arthropod parts at large size, shown with thick supporting legs and visible breathing openings along the flanks. Bilaterally symmetrical, recognizable limbs, visible sense organs. Habitat cue (rocky coast): dark back and light belly (strong countershading). Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "id": "resp_6ae75c2e676128112a354c3c",
+  "access_programs": null,
+  "created_at": 1793547310.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae75c2eb322577569c64acd",
+    "summary": [
+     {
+      "text": "**Designing hybrid silhouette**\nI'm planning a natural-history illustration that merges a gray wolf's body, legs, and head with a crab's segmented, armored tail, using chitin plates and fine seams that grow from the spine as part of the wolf's coat.\n**Composing natural history illustration**\nI'm drafting a side three-quarter, full-body natural history illustration of a wolf with chitin armor plates over the crown, neck, torso, legs and segmented tail, adding flank spiracles, small antennae, countershading, and natural lighting on a plain light background.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae75c2e251cae510f6a4bb8",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0JJNnR6UUh3WjZrYnVvREFEcnlzWlFNUEVzdGJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczo5ZGY4ZDc1YS0yMTNhLTQzODQtYThlOS1lMWYzMTk4ZTdmNDg6R1BBZnZ6UWV2X3BrVVRBRkFJRGc4Y21pVU93TWJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM1NDczMTB9.Q8WLFwEKD7NPzC_98EKRbwvq5qHD",
+    "result": "<elided> (670416 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 11989,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 8320
+   },
+   "output_tokens": 2158,
+   "output_tokens_details": {
+    "reasoning_tokens": 636
+   },
+   "total_tokens": 14147
+  },
+  "user": null
+ }
+}

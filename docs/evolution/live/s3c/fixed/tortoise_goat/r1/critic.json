@@ -1,0 +1,457 @@
+{
+ "before": [
+  {
+   "key": "frame",
+   "group": "structure",
+   "text": "Is the overall body shape that of a tortoise?",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "head",
+   "group": "structure",
+   "text": "Does it have a tortoise head with visible eyes?",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "no_wings",
+   "group": "structure",
+   "text": "Are there wings anywhere on the body?",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "whole_animal",
+   "group": "structure",
+   "text": "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "second_head",
+   "group": "structure",
+   "text": "Is there a second head anywhere?",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "extra_legs",
+   "group": "structure",
+   "text": "Does it have more than 4 walking legs?",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "no_mane",
+   "group": "structure",
+   "text": "Does it have a full mane of long hair around the head and neck?",
+   "expect": "no",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "fail",
+   "pair_status": "fail",
+   "sam_found": null
+  },
+  {
+   "key": "cover_present",
+   "group": "surface",
+   "text": "Is there dense fur on the head, neck, legs and tail?",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "separate_bodies",
+   "group": "structure",
+   "text": "separate bodies: 1",
+   "expect": 1,
+   "answers": {
+    "spark_open": 1,
+    "meta_spark": 1
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "heads",
+   "group": "structure",
+   "text": "heads: 1",
+   "expect": 1,
+   "answers": {
+    "spark_open": 1,
+    "meta_spark": 1
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "walking_legs",
+   "group": "structure",
+   "text": "walking legs: 4",
+   "expect": 4,
+   "answers": {
+    "spark_open": 4,
+    "meta_spark": 4
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "wings",
+   "group": "structure",
+   "text": "wings: 0",
+   "expect": 0,
+   "answers": {
+    "spark_open": 0,
+    "meta_spark": 0
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "extra_limb_pieces",
+   "group": "structure",
+   "text": "extra limb pieces: 0",
+   "expect": 0,
+   "answers": {
+    "spark_open": 0,
+    "meta_spark": 0
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "extra_beak",
+   "group": "structure",
+   "text": "described but not planned: beak",
+   "expect": "absent",
+   "answers": {
+    "spark_open": true,
+    "meta_spark": false
+   },
+   "status": "pass",
+   "pair_status": "uncertain",
+   "sam_found": null
+  },
+  {
+   "key": "extra_mane",
+   "group": "structure",
+   "text": "described but not planned: mane",
+   "expect": "absent",
+   "answers": {
+    "spark_open": true,
+    "meta_spark": true
+   },
+   "status": "fail",
+   "pair_status": "fail",
+   "sam_found": null
+  },
+  {
+   "key": "extra_stripes",
+   "group": "structure",
+   "text": "described but not planned: stripes",
+   "expect": "absent",
+   "answers": {
+    "spark_open": true,
+    "meta_spark": false
+   },
+   "status": "pass",
+   "pair_status": "uncertain",
+   "sam_found": null
+  },
+  {
+   "key": "third_animal",
+   "group": "structure",
+   "text": "an animal other than the two parents",
+   "expect": "none",
+   "answers": {
+    "spark_open": [
+     "sheep"
+    ],
+    "meta_spark": [
+     "sheep"
+    ]
+   },
+   "status": "fail",
+   "pair_status": "fail",
+   "sam_found": null
+  }
+ ],
+ "after": [
+  {
+   "key": "frame",
+   "group": "structure",
+   "text": "Is the overall body shape that of a tortoise?",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "head",
+   "group": "structure",
+   "text": "Does it have a tortoise head with visible eyes?",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "no_wings",
+   "group": "structure",
+   "text": "Are there wings anywhere on the body?",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "whole_animal",
+   "group": "structure",
+   "text": "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "second_head",
+   "group": "structure",
+   "text": "Is there a second head anywhere?",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "extra_legs",
+   "group": "structure",
+   "text": "Does it have more than 4 walking legs?",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "no_mane",
+   "group": "structure",
+   "text": "Does it have a full mane of long hair around the head and neck?",
+   "expect": "no",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "fail",
+   "pair_status": "fail",
+   "sam_found": null
+  },
+  {
+   "key": "cover_present",
+   "group": "surface",
+   "text": "Is there dense fur on the head, neck, legs and tail?",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "separate_bodies",
+   "group": "structure",
+   "text": "separate bodies: 1",
+   "expect": 1,
+   "answers": {
+    "spark_open": 1,
+    "meta_spark": 1
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "heads",
+   "group": "structure",
+   "text": "heads: 1",
+   "expect": 1,
+   "answers": {
+    "spark_open": 1,
+    "meta_spark": 1
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "walking_legs",
+   "group": "structure",
+   "text": "walking legs: 4",
+   "expect": 4,
+   "answers": {
+    "spark_open": 4,
+    "meta_spark": 4
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "wings",
+   "group": "structure",
+   "text": "wings: 0",
+   "expect": 0,
+   "answers": {
+    "spark_open": 0,
+    "meta_spark": 0
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "extra_limb_pieces",
+   "group": "structure",
+   "text": "extra limb pieces: 0",
+   "expect": 0,
+   "answers": {
+    "spark_open": 0,
+    "meta_spark": 0
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "extra_beak",
+   "group": "structure",
+   "text": "described but not planned: beak",
+   "expect": "absent",
+   "answers": {
+    "spark_open": true,
+    "meta_spark": false
+   },
+   "status": "pass",
+   "pair_status": "uncertain",
+   "sam_found": null
+  },
+  {
+   "key": "extra_mane",
+   "group": "structure",
+   "text": "described but not planned: mane",
+   "expect": "absent",
+   "answers": {
+    "spark_open": true,
+    "meta_spark": true
+   },
+   "status": "fail",
+   "pair_status": "fail",
+   "sam_found": null
+  },
+  {
+   "key": "extra_stripes",
+   "group": "structure",
+   "text": "described but not planned: stripes",
+   "expect": "absent",
+   "answers": {
+    "spark_open": true,
+    "meta_spark": false
+   },
+   "status": "pass",
+   "pair_status": "uncertain",
+   "sam_found": null
+  },
+  {
+   "key": "third_animal",
+   "group": "structure",
+   "text": "an animal other than the two parents",
+   "expect": "none",
+   "answers": {
+    "spark_open": [
+     "sheep"
+    ],
+    "meta_spark": [
+     "sheep"
+    ]
+   },
+   "status": "fail",
+   "pair_status": "fail",
+   "sam_found": null
+  }
+ ],
+ "kept": "edited"
+}

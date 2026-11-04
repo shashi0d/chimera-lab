@@ -12,7 +12,7 @@ function files(dir: string): string[] {
 }
 
 describe("code rules (TASKSHEET Section 9)", () => {
-  it.each(["nodes", "graph", "runs", "api"])("no TypeScript any in src/%s", (dir) => {
+  it.each(["nodes", "graph", "evo", "api", "trace", "screens"])("no TypeScript any in src/%s", (dir) => {
     const offenders = files(join(SRC, dir)).filter((f) => /(:\s*any\b|as any\b|<any>|any\[\])/.test(readFileSync(f, "utf8")));
     expect(offenders).toEqual([]);
   });

@@ -1,0 +1,109 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "A single european rhinoceros beetle (Oryctes nasicornis) on its own, full body, top three-quarter view, its glossy reddish-brown wing cases clearly visible, plain light background, natural history illustration.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "id": "resp_6ae6bef0b907b05b5aa94de9",
+  "access_programs": null,
+  "created_at": 1793507056.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae6bef0d0342057a242400f",
+    "summary": [
+     {
+      "text": "**Finding beetle reference image**\nI'm looking up Oryctes nasicornis to verify the beetle's shape, glossy reddish-brown wing cases, and proportions before planning the natural history illustration.\n**Drafting natural history illustration**\nI'm preparing a detailed watercolor prompt for a single beetle in top three-quarter view, full body on an off-white background, with glossy reddish-brown wing cases and fine scientific illustration detail, using both provided references.\n**Refining rhinoceros beetle illustration**\nI'm correcting the horn to a single branch for Oryctes and regenerating the illustration to match the accurate morphology.\n**Refining single-horn beetle**\nI'm adjusting the prompt to emphasize a single horn and generate another rhinoceros beetle image, using the earlier versions as reference for acceptable natural-history detail.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae6bef0e23b91690e064f39",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0NfTXBEVGNfQ0NfMzJ3R0FEb0xaaFRydTF0TWJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczoyYWViNzI2Yy00ODIxLTRlNTItYmM2MC1jMjI1MTIyYmIzNDk6R0twT3VqUTdWUlJ5Z2ZBR0FJRm5pQmVZSkdzOWJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM1MDcwNTZ9.Q8WLFwHekLhcQEeib-KhG1DITZue",
+    "result": "<elided> (538228 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 39552,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 27328
+   },
+   "output_tokens": 2877,
+   "output_tokens_details": {
+    "reasoning_tokens": 319
+   },
+   "total_tokens": 42429
+  },
+  "user": null
+ }
+}

@@ -1,0 +1,109 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Silhouette: Four-legged brown bear frame. Host frame: the brown bear sets the outline, body size and overall frame. A single creature that combines a european rhinoceros beetle and a brown bear. Head of the brown bear, fully visible and uncluttered, with clear, discernible eyes. Details: brown bear body and legs, with its own dense fur everywhere else, plain coat, no stripes or spots; from the european rhinoceros beetle, as parts and materials on the brown bear's own body: a single curved horn of hard, glossy chitin rising from the brow; hard, glossy chitin plates with fine seams in its own colors, in a few large patches over the back and flanks, with clean edges, color and surface unchanged inside each patch. Coat texture and patches follow the body outline. Declared fiction: arthropod parts at large size, shown with thick supporting legs and visible breathing openings along the flanks. Bilaterally symmetrical, recognizable limbs, visible sense organs. Habitat cue (forest): dark back and light belly (mild countershading). Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "id": "resp_6ae6bcf8be4b028097254666",
+  "access_programs": null,
+  "created_at": 1793506552.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae6bcf8bf72f06be78845dc",
+    "summary": [
+     {
+      "text": "**Planning beetle illustration**\nI'm deciding to look up European rhinoceros beetle references to guide the arthropod anatomy, countershading, and natural-history pose for a full-body, side three-quarter illustration.\n**Designing hybrid creature image**\nI'm planning a single creature with a four-legged brown bear silhouette and head, adding a curved glossy chitin horn on the brow and a few large, clean-edged beetle plates over the back and flanks while keeping dense, plain fur elsewhere.\n**Creating detailed beetle image**\nI'm generating the detailed beetle illustration now, using the references to guide the subject, texture, and composition for a clear, high-detail final image.\n**Refining beetle chitin coverage**\nI'm adjusting the design to use fewer, larger chitin patches across the back and flanks, and reducing the amount on the legs for a cleaner look.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae6bcf8d88d159cf3724d39",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0g3bnVEVG0ycnZ3WDMwREFIOUJQU3RxQndncGJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczo2ZGM0NTU1NS05NTRjLTRjYjItOThhZC05ZTdkMjE2OGM3NTk6R0Vvem96UWFIRGprU0tzRkFBT1lITVJfcmd4aWJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM1MDY1NTJ9.Q8WLFwElQ86tt5ivTd3AfwvHcg2P",
+    "result": "<elided> (704808 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 29408,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 22208
+   },
+   "output_tokens": 2640,
+   "output_tokens_details": {
+    "reasoning_tokens": 378
+   },
+   "total_tokens": 32048
+  },
+  "user": null
+ }
+}

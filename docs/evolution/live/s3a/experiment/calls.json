@@ -1,0 +1,46 @@
+{
+ "budget": {
+  "before": {
+   "image": 28,
+   "spark": 170,
+   "sam": 33,
+   "spark_baseten": 129
+  },
+  "after": {
+   "image": 58,
+   "spark": 218,
+   "sam": 45,
+   "spark_baseten": 178
+  }
+ },
+ "calls": {
+  "meta:image:text_to_image": {
+   "ok": 26,
+   "failed": 0
+  },
+  "meta:spark:evo_describe": {
+   "ok": 24,
+   "failed": 0
+  },
+  "baseten:spark_baseten:evo_describe": {
+   "ok": 25,
+   "failed": 0
+  },
+  "meta:spark:evo_ask": {
+   "ok": 24,
+   "failed": 0
+  },
+  "baseten:spark_baseten:evo_ask": {
+   "ok": 24,
+   "failed": 0
+  },
+  "meta:sam:sam": {
+   "ok": 12,
+   "failed": 0
+  },
+  "meta:image:generate": {
+   "ok": 4,
+   "failed": 0
+  }
+ }
+}

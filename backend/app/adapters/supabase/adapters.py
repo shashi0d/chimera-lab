@@ -43,6 +43,9 @@ class SupabaseStorage:
         except Exception as exc:  # supabase raises its own StorageException
             raise ChimeraError(ErrorCode.NOT_FOUND, "File not found.") from exc
 
+    async def delete(self, key: str) -> None:
+        await asyncio.to_thread(lambda: self.client.storage.from_(self.bucket).remove([key]))
+
     async def get_url(self, key: str) -> str:
         def _sign() -> str:
             res = self.client.storage.from_(self.bucket).create_signed_url(key, self.signed_url_seconds)
@@ -77,3 +80,6 @@ class SupabaseDb:
     async def incr(self, counter: str, by: int = 1) -> int:
         res = await asyncio.to_thread(lambda: self.client.rpc("incr_counter", {"k": counter, "by": by}).execute())
         return int(res.data)
+
+    async def delete(self, collection: str, key: str) -> None:
+        await asyncio.to_thread(lambda: self.client.table(collection).delete().eq("key", key).execute())

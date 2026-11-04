@@ -1,0 +1,105 @@
+{
+ "purpose": "evo_critic",
+ "request": {
+  "model": "meta-models/muse-spark-open-1026",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture with no other context. animals: the real animal species whose features you can clearly see in it, as everyday English common names, most prominent first, at most three. If it looks like one ordinary animal, list only that animal. creatures: how many separate creatures are in the picture. notes: one short sentence on what you see."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "What animals do you see, and how many creatures?"
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (674027 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "readability_critic",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "animals",
+      "creatures",
+      "notes"
+     ],
+     "properties": {
+      "animals": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "creatures": {
+       "type": "integer"
+      },
+      "notes": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0,
+  "max_tokens": 4000
+ },
+ "response": {
+  "id": "chatcmpl-9944a27783a145408ce9ac73e79aff32",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\"animals\": [\"horse\", \"toad\"], \"creatures\": 1, \"notes\": \"A single horse standing in profile with its midsection and belly covered in warty, toad-like bumpy skin.\"}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null,
+     "reasoning_content": "We need to parse image. It looks like a horse but with toad-like skin? Or is it a composite? The instruction: animals: the real animal species whose features you can clearly see in it, as everyday English common names, most prominent first, at most three. If it looks like one ordinary animal, list only that animal. creatures: how many separate creatures are in the picture. notes: one short sentence on what you see.\n\nWe have a creature that looks like a horse but its midsection has toad/frog skin with warts. So animals: horse, toad? Or frog? The texture is like a toad. Could be horse and toad. Or horse and frog. Need to decide.\n\nThe image shows a single creature that is a hybrid: horse head, legs, tail, but body has amphibian warty skin. So we see features of horse and toad (or frog). Most prominent is horse.\n\nWe need to list at most three. So animals: [\"horse\", \"toad\"] maybe? Or \"horse\", \"frog\". Which is more accurate? The bumpy skin suggests toad. Could say toad.\n\nAlternatively could be horse only? But instruction says if it looks like one ordinary animal, list only that animal. This does NOT look like one ordinary animal; it has clear toad-like skin. So we should list both.\n\nCreatures: how many separate creatures are in the picture. There's one creature (a hybrid). So creatures: 1.\n\nNotes: one short sentence on what you see. e.g., \"A standing horse-like creature with warty, toad-like skin covering its torso and flank.\"\n\nWe need to output JSON? The prompt says: You look at one picture with no other context. animals: ... creatures: ... notes: ...\n\nProbably expects JSON with those fields. The user asks: What animals do you see, and how many creatures? We should respond with structured answer.\n\nWe need to follow format: likely JSON object with animals, creatures, notes.\n\nWe should provide animals as list of strings, creatures as integer, notes as string.\n\nMake sure to use everyday English common names.\n\nSo answer: animals: [\"horse\", \"toad\"] creatures: 1 notes: \"A brown horse standing in profile with its midsection covered in bumpy, toad-like warty skin.\"\n\nCould also include frog vs toad. Might be safer to say \"frog\" or \"toad\". The warts indicate toad. Could list both? At most three, so we could do [\"horse\", \"toad\", \"frog\"] but better to pick one. Toad is more distinctive for warty.\n\nAlternatively the animal could be horse and maybe barnacle? No.\n\nCheck: The skin looks like maybe a toad's belly. So toad.\n\nThus final answer: JSON.\n\nWe should ensure we comply with instruction: most prominent first. Horse is most prominent.\n\nProvide creatures count: 1.\n\nNotes: one short sentence.\n\nWe should not add extra explanation beyond required? The user asked what animals do you see, and how many creatures? We can provide the structured data.\n\nProbably respond with:\n\n{\n  \"animals\": [\"horse\", \"toad\"],\n  \"creatures\": 1,\n  \"notes\": \"A horse in profile with its torso covered in warty, amphibian-like skin.\"\n}\n\nMake sure to be concise.\n\nPotential nuance: Is the creature a horse or a mule? Looks like horse. So horse is correct.\n\nCould also argue it's a horse only with diseased skin, but the instruction says real animal species whose features you can clearly see. The warty texture is clearly toad-like, so we should list toad.\n\nIf we want to be safe, we could list horse and frog (since toad is a type of frog). But toad is more specific.\n\nWe should answer.\n\nWe must not hallucinate. Provide at most three.\n\nWe should output in final channel."
+    }
+   }
+  ],
+  "created": 1793567102,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 871,
+   "prompt_tokens": 3595,
+   "total_tokens": 4466,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 615,
+    "audio_tokens": 0,
+    "reasoning_tokens": 815,
+    "rejected_prediction_tokens": 1177,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 128,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

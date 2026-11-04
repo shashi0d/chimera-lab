@@ -1,0 +1,373 @@
+{
+ "id": "crt_59cf10819612",
+ "parents": {
+  "sire": "european_rhinoceros_beetle",
+  "dam": "brown_bear"
+ },
+ "lineage": {
+  "parent_ids": [],
+  "generation": 0
+ },
+ "mode": "chimera",
+ "known_pair": null,
+ "host": "brown_bear",
+ "identity_balance": 0.81,
+ "habitat": {
+  "name": "grassland",
+  "source": "shared",
+  "adjustments": [
+   "dark back and light belly (strong countershading)"
+  ],
+  "visible_trait": "dark back and light belly (strong countershading)"
+ },
+ "size": {
+  "mass_kg": 340.0,
+  "flags": []
+ },
+ "silhouette": "horizontal brown bear frame carried on two hind legs, European rhinoceros beetle wings in place of the forelegs, jointed tail segments in place of the tail",
+ "limb_plan": {
+  "forelimbs": {
+   "kind": "wings",
+   "donor": "european_rhinoceros_beetle"
+  },
+  "hindlimbs": {
+   "kind": "legs",
+   "donor": "brown_bear"
+  },
+  "extra_wings": null,
+  "appendages": [
+   "jointed tail segments (tail)"
+  ],
+  "wing_use": "gliding_or_display",
+  "requested_wings": null
+ },
+ "traits": {
+  "size": {
+   "op": "PICK",
+   "donor": "brown_bear",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "host value; donor parts scaled to host size",
+   "flags": []
+  },
+  "body": {
+   "op": "PICK",
+   "donor": "brown_bear",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "host value; donor parts scaled to host size; thick supporting legs and visible breathing openings along the flanks",
+   "flags": []
+  },
+  "limbs": {
+   "op": "PICK",
+   "donor": "brown_bear",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "thick supporting legs and visible breathing openings along the flanks",
+   "flags": []
+  },
+  "tail": {
+   "op": "PICK",
+   "donor": "european_rhinoceros_beetle",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": "jointed tail segments",
+   "note": "signature part of the second parent",
+   "flags": []
+  },
+  "ears": {
+   "op": "PICK",
+   "donor": "brown_bear",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": null,
+   "flags": []
+  },
+  "skull": {
+   "op": "PICK",
+   "donor": "brown_bear",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": null,
+   "flags": []
+  },
+  "head": {
+   "op": "PICK",
+   "donor": "brown_bear",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": null,
+   "flags": []
+  },
+  "face": {
+   "op": "PICK",
+   "donor": "brown_bear",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": null,
+   "flags": []
+  },
+  "mane": {
+   "op": "PICK",
+   "donor": null,
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "absent: no hair on the neck",
+   "flags": [
+    "gated"
+   ]
+  },
+  "feet": {
+   "op": "PICK",
+   "donor": "brown_bear",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": null,
+   "flags": []
+  },
+  "coat_pattern": {
+   "op": "PATCH",
+   "donor": "european_rhinoceros_beetle",
+   "value": null,
+   "strength": 1.0,
+   "region": [
+    "forequarters",
+    "neck"
+   ],
+   "part": null,
+   "note": "European rhinoceros beetle-type surface, no stripes or spots in few large patches following the brown bear's body regions",
+   "flags": []
+  },
+  "coat_color": {
+   "op": "PATCH",
+   "donor": "european_rhinoceros_beetle",
+   "value": null,
+   "strength": 1.0,
+   "region": [
+    "forequarters",
+    "neck"
+   ],
+   "part": null,
+   "note": "European rhinoceros beetle color in few large patches following the brown bear's body regions",
+   "flags": []
+  },
+  "coat_texture": {
+   "op": "PATCH",
+   "donor": "european_rhinoceros_beetle",
+   "value": null,
+   "strength": 1.0,
+   "region": [
+    "forequarters",
+    "neck"
+   ],
+   "part": null,
+   "note": "European rhinoceros beetle exoskeleton in few large patches following the brown bear's body regions",
+   "flags": []
+  },
+  "behavior": {
+   "op": "PICK",
+   "donor": "brown_bear",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "follows the head donor",
+   "flags": []
+  }
+ },
+ "labels": [
+  "speculative chimera, no real-world precedent",
+  "speculative: arthropod parts at large size (insect breathing limits size)",
+  "non-flying wings: display or gliding only"
+ ],
+ "processes": [
+  "chimera patchwork: each region is one parent's tissue"
+ ],
+ "card_trace": [
+  "RC-R2-01",
+  "RC-R1-14",
+  "RC-R2-16",
+  "RC-R5-10",
+  "RC-R6-08",
+  "RC-R6-09",
+  "RC-R5-02",
+  "RC-R1-01",
+  "RC-R1-09",
+  "RC-R1-10",
+  "RC-R5-01",
+  "RC-R5-03",
+  "RC-R5-04",
+  "RC-R5-05",
+  "RC-R5-06",
+  "RC-R5-07",
+  "RC-R6-02",
+  "RC-R6-05",
+  "RC-R1-07",
+  "RC-R1-08",
+  "RC-R4-01",
+  "RC-R4-02",
+  "RC-R4-05",
+  "RC-R4-11",
+  "RC-R4-10",
+  "RC-R3-12",
+  "RC-R3-01",
+  "RC-R3-05",
+  "RC-R3-09",
+  "RC-R3-03",
+  "RC-R3-04",
+  "RC-R9-02",
+  "RC-R9-04",
+  "RC-R9-08",
+  "RC-R9-13",
+  "RC-R6-03",
+  "RC-R6-04",
+  "RC-R9-10",
+  "RC-R6-01",
+  "RC-R7-06",
+  "RC-R7-07",
+  "RC-R6-07",
+  "RC-R7-10"
+ ],
+ "checks": [
+  {
+   "step": "body_plan_class",
+   "result": "pass",
+   "detail": "host class: vertebrate (quadruped)",
+   "cards": []
+  },
+  {
+   "step": "limb_budget",
+   "result": "repaired",
+   "detail": "European rhinoceros beetle wings take the forelimb slot",
+   "cards": [
+    "RC-R3-01"
+   ]
+  },
+  {
+   "step": "size_ceiling",
+   "result": "labeled",
+   "detail": "340.0 kg is above about 40 kg: wings for display or gliding; arthropod parts at 340.0 kg",
+   "cards": [
+    "RC-R3-05",
+    "RC-R3-09"
+   ]
+  },
+  {
+   "step": "flight_anatomy",
+   "result": "labeled",
+   "detail": "too heavy for its flight muscles: wings labeled non-flying",
+   "cards": [
+    "RC-R3-03",
+    "RC-R3-04"
+   ]
+  },
+  {
+   "step": "posture",
+   "result": "pass",
+   "detail": "legs match the body size",
+   "cards": []
+  },
+  {
+   "step": "part_rendering",
+   "result": "pass",
+   "detail": "no soft parts",
+   "cards": []
+  }
+ ],
+ "scores": {
+  "critic": 0.833,
+  "silhouette": 0.818,
+  "thumbnail": 0.667,
+  "soft_penalty": 0.0,
+  "quality": 0.845
+ },
+ "seed": 0,
+ "design_mode": "speculative",
+ "audit": [
+  {
+   "function": "breathing",
+   "result": "pass",
+   "detail": "lungs suit a land habitat",
+   "cards": [],
+   "source": "code"
+  },
+  {
+   "function": "feeding",
+   "result": "pass",
+   "detail": "mixed teeth fit an omnivore diet",
+   "cards": [
+    "RC-R9-04"
+   ],
+   "source": "code"
+  },
+  {
+   "function": "support",
+   "result": "licensed",
+   "detail": "arthropod parts at 340.0 kg, far above the Meganeura scale (about 70 cm); the oxygen explanation for giant insects is debated, not settled (RC-R9-09); licensed: arthropod parts at large size, shown with thick supporting legs and visible breathing openings along the flanks",
+   "cards": [
+    "RC-R3-09",
+    "RC-R9-08",
+    "RC-R9-10"
+   ],
+   "source": "code"
+  },
+  {
+   "function": "movement",
+   "result": "labeled",
+   "detail": "too heavy for its flight muscles: wings labeled non-flying; jointed tail segments: balance and defend",
+   "cards": [
+    "RC-R3-03",
+    "RC-R3-04",
+    "RC-R9-13"
+   ],
+   "source": "code"
+  },
+  {
+   "function": "heat",
+   "result": "pass",
+   "detail": "warm grassland habitat: no heat adjustment needed",
+   "cards": [
+    "RC-R4-11"
+   ],
+   "source": "code"
+  },
+  {
+   "function": "senses",
+   "result": "pass",
+   "detail": "brown bear head and eyes kept fully visible",
+   "cards": [
+    "RC-R6-03",
+    "RC-R6-04"
+   ],
+   "source": "code"
+  }
+ ],
+ "licenses": [
+  {
+   "id": "arthropod_large",
+   "card": "RC-R3-09",
+   "rule": "arthropod parts at large size",
+   "compensation": "thick supporting legs and visible breathing openings along the flanks",
+   "reason": "arthropod parts at 340.0 kg"
+  }
+ ]
+}

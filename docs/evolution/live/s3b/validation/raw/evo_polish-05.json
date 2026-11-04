@@ -1,0 +1,83 @@
+{
+ "purpose": "evo_polish",
+ "request": {
+  "model": "meta-models/muse-spark-open-1026",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You lightly edit a text-to-image prompt for readability. Keep the first sentence word for word. Do not add, remove or change any animal, body part, color, count, strength, habitat or view. Do not add brand or franchise names. Stay within 20 percent of the original length. Return the edited prompt only."
+   },
+   {
+    "role": "user",
+    "content": "Silhouette: Four-legged gray wolf frame, jointed tail segments in place of the tail. Host frame: the gray wolf sets the outline, body size and overall frame. A single creature that combines a crab and a gray wolf. Head of the gray wolf, fully visible and uncluttered, with clear, discernible eyes. Details: gray wolf body and legs, with its own dense fur on the face, plain coat, no stripes or spots; from the crab, as parts and materials on the gray wolf's own body: a segmented tail grown from the base of the spine, out of the covering, which continues from there into the body covering: overlapping armored segments that taper to the tip; hard, glossy chitin plates with fine seams in its own colors, grown from the skin as the gray wolf's own covering over the crown of the head, neck, shoulders, back, flanks, belly, hips, legs and tail: it replaces the gray wolf's dense fur there and conforms to the gray wolf's body, each plate sized to the gray wolf's own body segments and muscle masses, one plate per segment or muscle mass, joined by flexible cuticle at every joint; the dense fur stops at the covering's edge, and the face keeps the gray wolf's own dense fur. The covering follows the body's own shape and bends at every joint. Declared fiction: arthropod parts at large size, shown with thick supporting legs and visible breathing openings along the flanks. Bilaterally symmetrical, recognizable limbs, visible sense organs. Habitat cue (rocky coast): dark back and light belly (strong countershading). Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration."
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "polished_prompt",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "prompt"
+     ],
+     "properties": {
+      "prompt": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0.2,
+  "max_tokens": 15000
+ },
+ "response": {
+  "id": "chatcmpl-ee49a6c67c4a4dadbe6940edb6b47f0c",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{ \"prompt\": \"Silhouette: Four-legged gray wolf frame, jointed tail segments in place of the tail. Host frame: the gray wolf sets the outline, body size, and overall frame. It is a single creature combining a crab and a gray wolf. The head is that of the gray wolf, fully visible and uncluttered, with clear, discernible eyes. Details: gray wolf body and legs, with its own dense fur on the face and a plain coat with no stripes or spots; from the crab, as parts and materials on the gray wolf's own body, a segmented tail grown from the base of the spine out of the covering, which continues from there into the body covering of overlapping armored segments that taper to the tip; hard, glossy chitin plates with fine seams in its own colors, grown from the skin as the gray wolf's own covering over the crown of the head, neck, shoulders, back, flanks, belly, hips, legs, and tail. This covering replaces the gray wolf's dense fur there and conforms to the gray wolf's body, each plate sized to the gray wolf's own body segments and muscle masses, one plate per segment or muscle mass, joined by flexible cuticle at every joint; the dense fur stops at the covering's edge, and the face keeps the gray wolf's own dense fur. The covering follows the body's own shape and bends at every joint. Declared fiction: arthropod parts at large size, shown with thick supporting legs and visible breathing openings along the flanks. Bilaterally symmetrical, with recognizable limbs and visible sense organs. Habitat cue (rocky coast): dark back and light belly (strong countershading). Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws, and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration.\" }",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null,
+     "reasoning_content": "<elided> (18495 chars)"
+    }
+   }
+  ],
+  "created": 1793546991,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 5620,
+   "prompt_tokens": 597,
+   "total_tokens": 6217,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 4626,
+    "audio_tokens": 0,
+    "reasoning_tokens": 5209,
+    "rejected_prediction_tokens": 2332,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 0,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

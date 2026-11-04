@@ -1,0 +1,106 @@
+{
+ "purpose": "evo_ask",
+ "request": {
+  "model": "meta-models/muse-spark-open-1026",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture of a creature and answer numbered questions about it. Answer each question on its own: yes if the picture clearly shows it, no if it clearly does not, unclear if you cannot tell. Many questions describe things that should not be there, so do not lean toward yes. Judge only what is visible. answers: one word per question (yes, no or unclear), in the same order as the questions, nothing else. notes: one short sentence."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "Questions:\n1. Is the overall body shape that of a axolotl?\n2. Does it have a axolotl head with visible eyes?\n3. Are there wings anywhere on the body?\n4. Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?\n5. Is there a second head anywhere?\n6. Does it have more than 4 walking legs?\n7. Does it have a full mane of long hair around the head and neck?\n8. Are there large overlapping keratin scales on the back and flanks?\n9. Do the large overlapping keratin scales grow out of the body with a natural transition (for example skin stopping at a shield's edge, or skin blending into scales), rather than looking attached on top?\n10. Do the large overlapping keratin scales look like separate pieces attached on top of the skin?\n11. Do the large overlapping keratin scales form one continuous structure over the back and flanks, rather than scattered pieces?\n12. Are the large overlapping keratin scales scattered as separate pieces over different parts of the body?\n13. Are there large overlapping keratin scales on the legs?\n14. Are there large overlapping keratin scales on the shoulders?"
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (733455 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "balanced_checklist",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "answers",
+      "notes"
+     ],
+     "properties": {
+      "answers": {
+       "type": "array",
+       "items": {
+        "type": "string",
+        "enum": [
+         "yes",
+         "no",
+         "unclear"
+        ]
+       }
+      },
+      "notes": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0,
+  "max_tokens": 8000
+ },
+ "response": {
+  "id": "chatcmpl-ce4d64b1380d45dd9038f0b343309d4f",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{ \"answers\": [\"yes\", \"yes\", \"no\", \"no\", \"no\", \"no\", \"no\", \"yes\", \"yes\", \"no\", \"yes\", \"no\", \"no\", \"yes\"], \"notes\": \"Axolotl body with continuous pangolin-like scale armor covering back, flanks, head and tail but not legs.\" }",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null,
+     "reasoning_content": "We need to answer 14 questions about creature picture. Provide one word per question (yes, no or unclear) in same order, nothing else. Plus notes: one short sentence.\n\nWe need to judge.\n\nPicture shows axolotl-like creature with pangolin-like scales covering back, head, tail. Body shape axolotl? Overall body shape that of axolotl? It has axolotl head with gills, four legs, tail. So yes, overall body shape is axolotl.\n\n2. Does it have axolotl head with visible eyes? Yes, head with eyes visible.\n\n3. Are there wings anywhere on body? No.\n\n4. Is there a whole separate animal, or animal-shaped object with its own head, legs or wing cases, attached to or sitting on body? No. The scales are not separate animal. So no.\n\n5. Is there a second head anywhere? No.\n\n6. Does it have more than 4 walking legs? No, it has 4.\n\n7. Does it have a full mane of long hair around head and neck? No.\n\n8. Are there large overlapping keratin scales on back and flanks? Yes.\n\n9. Do the large overlapping keratin scales grow out of body with natural transition (for example skin stopping at shield's edge, or skin blending into scales), rather than looking attached on top? Need to judge. The scales appear to be continuous with skin, blending. The image shows scales covering back and sides, with natural transition to underbelly skin. So yes, they grow out with natural transition.\n\n10. Do the large overlapping keratin scales look like separate pieces attached on top of skin? This is opposite of 9. If 9 is yes, 10 should be no. The scales do not look like separate pieces attached on top; they look integrated. So no.\n\n11. Do the large overlapping keratin scales form one continuous structure over back and flanks, rather than scattered pieces? Yes, they form continuous armor.\n\n12. Are the large overlapping keratin scales scattered as separate pieces over different parts of body? No.\n\n13. Are there large overlapping keratin scales on legs? No, legs are bare skin.\n\n14. Are there large overlapping keratin scales on shoulders? Yes, shoulders are covered as part of back/flanks continuous. The scales cover shoulder area.\n\nNeed to provide answers one word per question in order.\n\nSo list:\n\n1 yes\n2 yes\n3 no\n4 no\n5 no\n6 no\n7 no\n8 yes\n9 yes\n10 no\n11 yes\n12 no\n13 no\n14 yes\n\nCheck 9 vs 10 nuance: The instruction: Do the large overlapping keratin scales grow out of the body with a natural transition (for example skin stopping at a shield's edge, or skin blending into scales), rather than looking attached on top? The image shows scales with clear edge where skin meets scales, but it looks like natural armor. So yes.\n\n10: Do the large overlapping keratin scales look like separate pieces attached on top of the skin? No.\n\nNeed notes: one short sentence.\n\nWe must output answers: one word per question (yes, no or unclear), in same order as questions, nothing else. notes: one short sentence.\n\nProbably format: numbered list? Instruction says answers: one word per question (yes, no or unclear), in same order as questions, nothing else. notes: one short sentence.\n\nSo we should provide 14 lines each with yes/no? Or comma separated? Likely each on new line. Provide exactly 14 answers in order.\n\nWe must ensure not to add extra text in answers section. Then notes sentence.\n\nWe should output something like:\n\nyes\nyes\nno\n...\n\nnotes: ...\n\nMake sure to follow.\n\nPotential edge: Question 14: Are there large overlapping keratin scales on shoulders? The shoulders are under scales, yes. So yes.\n\nDouble-check image: The creature's shoulders are covered by scales, yes.\n\nQuestion 13: scales on legs? No, legs are scaleless.\n\nQuestion 4: Is there a whole separate animal... attached to or sitting on body? No.\n\nAll good.\n\nProvide final answer."
+    }
+   }
+  ],
+  "created": 1793508087,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 945,
+   "prompt_tokens": 3866,
+   "total_tokens": 4811,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 684,
+    "audio_tokens": 0,
+    "reasoning_tokens": 860,
+    "rejected_prediction_tokens": 1143,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 384,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

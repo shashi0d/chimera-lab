@@ -1,0 +1,417 @@
+{
+  "about": "Evolution engine tables (ALGORITHM.md sections 4.1 to 4.6). Plain data so the numbers can be tuned without code changes.",
+  "aliases": {
+    "eagle": "golden_eagle",
+    "octopus": "common_octopus",
+    "grizzly": "brown_bear",
+    "grizzly bear": "brown_bear",
+    "grizzly_bear": "brown_bear",
+    "zebra": "plains_zebra",
+    "camel": "dromedary_camel",
+    "dromedary": "dromedary_camel",
+    "grey wolf": "gray_wolf",
+    "grey_wolf": "gray_wolf",
+    "wolf": "gray_wolf",
+    "goat": "domestic_goat"
+  },
+  "class_groups": {
+    "vertebrate": [
+      "Mammalia",
+      "Aves",
+      "Reptilia",
+      "Amphibia",
+      "Actinopterygii",
+      "Elasmobranchii",
+      "Testudines",
+      "Squamata",
+      "Crocodylia"
+    ],
+    "arthropod": [
+      "Insecta",
+      "Arachnida",
+      "Malacostraca"
+    ],
+    "soft_bodied": [
+      "Cephalopoda",
+      "Scyphozoa",
+      "Asteroidea",
+      "Gastropoda"
+    ]
+  },
+  "habitat_profiles": {
+    "grassland": {
+      "openness": "open",
+      "temp": "warm",
+      "sunny": true
+    },
+    "forest": {
+      "openness": "closed",
+      "temp": "temperate",
+      "sunny": false
+    },
+    "mountain": {
+      "openness": "open",
+      "temp": "cold",
+      "sunny": true
+    },
+    "tundra": {
+      "openness": "open",
+      "temp": "cold",
+      "sunny": false
+    },
+    "desert": {
+      "openness": "open",
+      "temp": "hot",
+      "sunny": true
+    },
+    "wetland": {
+      "openness": "closed",
+      "temp": "temperate",
+      "sunny": false,
+      "wet": true
+    },
+    "freshwater": {
+      "openness": "open",
+      "temp": "temperate",
+      "sunny": false,
+      "water": true,
+      "wet": true
+    },
+    "marine": {
+      "openness": "open",
+      "temp": "temperate",
+      "sunny": true,
+      "water": true,
+      "open_water": true,
+      "wet": true
+    },
+    "rocky coast": {
+      "openness": "open",
+      "temp": "temperate",
+      "sunny": true
+    },
+    "river forest": {
+      "openness": "closed",
+      "temp": "temperate",
+      "sunny": false
+    },
+    "dry woodland": {
+      "openness": "closed",
+      "temp": "hot",
+      "sunny": true
+    },
+    "alpine meadow": {
+      "openness": "open",
+      "temp": "cold",
+      "sunny": true
+    }
+  },
+  "bridging": [
+    {
+      "between": [
+        "desert",
+        "forest"
+      ],
+      "name": "dry woodland"
+    },
+    {
+      "between": [
+        "tundra",
+        "grassland"
+      ],
+      "name": "alpine meadow"
+    },
+    {
+      "either": [
+        "marine"
+      ],
+      "name": "rocky coast"
+    },
+    {
+      "either": [
+        "freshwater",
+        "wetland"
+      ],
+      "name": "river forest"
+    }
+  ],
+  "thresholds": {
+    "wing_glide_kg": 40,
+    "wing_borderline_kg": [
+      26,
+      75
+    ],
+    "arthropod_large_kg": 20,
+    "posture_scale": 2.0,
+    "thick_bones_kg": 500,
+    "heavy_land_kg": 50,
+    "hybrid_spread": 0.1,
+    "chimera_donor_share": [
+      0.2,
+      0.45
+    ],
+    "max_patches": 3,
+    "beyond_share_max": 0.25
+  },
+  "patch_regions": {
+    "winged": [
+      "forequarters",
+      "neck",
+      "back"
+    ],
+    "soft_bodied": [
+      "belly",
+      "flanks",
+      "back"
+    ],
+    "arthropod": [
+      "back",
+      "flanks",
+      "hindquarters"
+    ],
+    "default": [
+      "back",
+      "flanks",
+      "hindquarters"
+    ]
+  },
+  "signature_parts": {
+    "soft_bodied": {
+      "trait": "tail",
+      "part": "tentacles"
+    },
+    "arthropod": {
+      "trait": "tail",
+      "part": "jointed tail segments"
+    },
+    "finned": {
+      "trait": "tail",
+      "part": "broad fins"
+    },
+    "serpentine": {
+      "trait": "tail",
+      "part": "long scaled coils"
+    }
+  },
+  "coat_patterns_about": "E2b: the visible adult coat pattern of each parent, named in prompts as '<animal>-type <pattern>'. An animal not listed has no stripes or spots.",
+  "coat_patterns": {
+    "tiger": "stripes",
+    "plains_zebra": "stripes",
+    "okapi": "leg stripes",
+    "donkey": "dark dorsal stripe and shoulder cross",
+    "cheetah": "spots",
+    "leopard": "rosettes",
+    "jaguar": "rosettes",
+    "snow_leopard": "rosettes",
+    "clouded_leopard": "cloud-shaped blotches",
+    "ocelot": "chain-like blotches",
+    "serval": "spots",
+    "asian_leopard_cat": "spots",
+    "bobcat": "spots",
+    "spotted_hyena": "spots",
+    "giraffe": "patches",
+    "african_wild_dog": "mottled patches",
+    "ring_tailed_lemur": "tail rings",
+    "raccoon": "face mask and tail rings",
+    "red_panda": "tail rings",
+    "giant_panda": "black-and-white patches",
+    "whale_shark": "spots",
+    "burmese_python": "blotches",
+    "reticulated_python": "net-like blotches",
+    "western_diamondback_rattlesnake": "diamonds",
+    "gila_monster": "blotches",
+    "leopard_gecko": "spots",
+    "fire_salamander": "blotches",
+    "common_garter_snake": "stripes",
+    "seven_spotted_ladybug": "spots",
+    "ocellaris_clownfish": "bands"
+  },
+  "franchise_blocklist": [
+    "Pokemon",
+    "Pokémon",
+    "Digimon",
+    "Dolcetto",
+    "Chimera Ant",
+    "Meruem",
+    "Na'vi",
+    "Toruk",
+    "Ikran",
+    "Thanator",
+    "Banshee",
+    "Avatar"
+  ],
+  "function_defaults_about": "E4: breathing organ and mouthparts for database animals, by class (and by diet for mammal teeth). These are project defaults, marked as such in provenance; learned animals get theirs from Muse Spark (model-estimated). Per-animal overrides are data, not code.",
+  "function_defaults": {
+    "breathing_by_class": {
+      "Mammalia": "lungs",
+      "Aves": "lungs",
+      "Reptilia": "lungs",
+      "Amphibia": "skin and lungs",
+      "Actinopterygii": "gills",
+      "Elasmobranchii": "gills",
+      "Insecta": "tracheae",
+      "Arachnida": "book lungs",
+      "Malacostraca": "gills",
+      "Cephalopoda": "gills",
+      "Scyphozoa": "other",
+      "Asteroidea": "other",
+      "Gastropoda": "other"
+    },
+    "mouthparts_by_class": {
+      "Aves": "beak",
+      "Reptilia": "pointed teeth",
+      "Amphibia": "pointed teeth",
+      "Actinopterygii": "pointed teeth",
+      "Elasmobranchii": "pointed teeth",
+      "Insecta": "mandibles",
+      "Arachnida": "other",
+      "Malacostraca": "mandibles",
+      "Cephalopoda": "other",
+      "Scyphozoa": "other",
+      "Asteroidea": "other",
+      "Gastropoda": "other"
+    },
+    "mammal_teeth_by_diet": {
+      "herbivore": "grinding teeth",
+      "carnivore": "bladed teeth",
+      "piscivore": "pointed teeth",
+      "omnivore": "mixed teeth",
+      "insectivore": "pointed teeth"
+    },
+    "overrides": {
+      "axolotl": {
+        "breathing": "external gills and lungs",
+        "features": [
+          "three pairs of feathery external gills on the sides of the head"
+        ]
+      }
+    }
+  },
+  "insect_part_free_length_m": 0.7,
+  "fiction_budget_about": "E4, R9 section 3: licenses per design mode (RC-R9-10, RC-R9-11). 'several' for mythic is a product decision (R9 'What this doc does not settle'). 'bendable' is R9 3.2: each license bends one named card and always carries the compensation shown. 'never_licensable' is R9 3.3: honesty rules and the believability floor.",
+  "fiction_budget": {
+    "realistic": 0,
+    "speculative": 1,
+    "mythic": 3
+  },
+  "bendable": [
+    {
+      "id": "arthropod_large",
+      "card": "RC-R3-09",
+      "rule": "arthropod parts at large size",
+      "compensation": "thick supporting legs",
+      "compensation_from_traits": "breathing",
+      "repairable": false,
+      "note": "S3c: the respiratory clause comes from the donor's own breathing trait (visible_breathing), never from its phylum. A crab breathes with gills under its carapace, so it shows no flank openings."
+    },
+    {
+      "id": "insect_wings",
+      "card": "RC-R3-09",
+      "rule": "insect wings on a vertebrate body plan",
+      "compensation": "insect wings rising from a raised, plated mount between the shoulder blades, with all four legs kept",
+      "repairable": true,
+      "note": "S2 (E4c): RC-R3-01 and RC-R3-02 cover vertebrate wing donors only. Insect wings are an arthropod part (RC-R3-09 names insect wings) on a vertebrate frame: a body-plan license with a visible dorsal mount. Over budget, the repair drops them."
+    },
+    {
+      "id": "six_limbs",
+      "card": "RC-R3-02",
+      "rule": "six limbs (four legs plus wings)",
+      "compensation": "wings rooted in a heavy shoulder structure that can carry them, not floating",
+      "repairable": true
+    },
+    {
+      "id": "heavy_flight",
+      "card": "RC-R3-05",
+      "rule": "flight above about 40 kg",
+      "compensation": "huge chest and wing muscles",
+      "repairable": true
+    },
+    {
+      "id": "land_gills",
+      "card": "RC-R9-03",
+      "rule": "gills on a land creature",
+      "compensation": "a wet habitat or a second, air-breathing system",
+      "repairable": true
+    },
+    {
+      "id": "tentacle_legs",
+      "card": "RC-R3-11",
+      "rule": "tentacles carrying a heavy land body",
+      "compensation": "many thick tentacles, short and low to the ground",
+      "repairable": false
+    }
+  ],
+  "visible_breathing_about": "S3c: what a donor's breathing organ shows on the outside, by its resolved breathing trait. null: nothing visible to draw (gills inside a gill chamber, book lungs under the abdomen, lungs). A value is added to a license compensation only when the donor's own trait names that organ. Source: the donor's breathing provenance (web-cited, model-estimated or project default), recorded on the license.",
+  "visible_breathing": {
+    "tracheae": "rows of small breathing openings (spiracles) along the flanks",
+    "gills": null,
+    "book lungs": null,
+    "lungs": null,
+    "skin and lungs": null,
+    "external gills and lungs": null,
+    "other": null
+  },
+  "never_licensable": {
+    "honesty": [
+      "RC-R1-14",
+      "RC-R2-16",
+      "RC-R5-10",
+      "RC-R9-01",
+      "RC-R9-09",
+      "provenance"
+    ],
+    "floor": [
+      "RC-R9-14",
+      "RC-R6-03",
+      "RC-R6-04",
+      "RC-R6-11",
+      "RC-R7-07",
+      "ground contact"
+    ]
+  },
+  "part_jobs_about": "E4, RC-R9-12: the job of each donated part. 'needs' names a habitat condition without which the part has no job ('water': a wet habitat profile). A part with no job is dropped in realistic mode.",
+  "part_jobs": {
+    "wings": {
+      "job": "fly, glide or display"
+    },
+    "tentacles": {
+      "job": "grip and feel"
+    },
+    "broad fins": {
+      "job": "swim",
+      "needs": "water"
+    },
+    "jointed tail segments": {
+      "job": "balance and defend"
+    },
+    "long scaled coils": {
+      "job": "grip and balance"
+    },
+    "external gills": {
+      "job": "breathe in water",
+      "needs": "water"
+    }
+  },
+  "routing_about": "S2 (ROADMAP 5b): the provider per Spark call type. baseten = Muse Spark Open (meta-models/muse-spark-open-1026, OpenAI-compatible); meta = Muse Spark 1.3 on the Meta API. max_tokens caps a Spark Open answer at about 3x the largest output seen in S1 (reasoning tokens count): identify 1634, checklist 1848, polish 4881, open critic 1185. A failed or cut-off Baseten call falls back to Meta, logged. Plans (the legacy full-plan path), plain and web-cited traits, the function audit and vary stay on Meta (S1: Spark Open runs away on long JSON and trait lists).",
+  "critic_decision_about": "S3b recalibration (benchmark/calibration_s3b/ITERATIONS.md): on 33 owner-labeled images, Meta Spark 1.3 alone caught 18/18 failures with 3/15 false alarms; Spark Open alone 18/18 with 11/15 (it calls grown pangolin scales on an axolotl 'laid on top' in 8 of the 10 owner-good images); the S3a pair rule (disagreement is a fail signal) inherits Spark Open's false alarms, 11/15. So Meta decides; Spark Open still answers every image and its disagreements are kept on each row as pair_status. Set mode to 'pair' for the S3a rule. Pending owner confirmation.",
+  "critic_decision": {"mode": "primary", "primary": "meta_spark"},
+  "routing": {
+    "fallback": "meta",
+    "identify": {"provider": "baseten", "max_tokens": 5000},
+    "checklist": {"provider": "baseten", "max_tokens": 6000},
+    "polish": {"provider": "baseten", "max_tokens": 15000},
+    "critic": {"provider": "baseten", "max_tokens": 4000},
+    "write_plan": {"provider": "meta"},
+    "vary": {"provider": "meta"},
+    "learn_traits": {"provider": "meta"},
+    "cite_traits": {"provider": "meta"},
+    "judge_functions": {"provider": "meta"},
+    "describe": {"provider": "baseten", "max_tokens": 8000},
+    "ask": {"provider": "baseten", "max_tokens": 8000},
+    "agent": {"provider": "baseten", "max_tokens": 8000}
+  },
+  "agent_about": "S3c (ROADMAP step 3): the agent loop. Caps are runaway guards only (about 3x a creature's planned use: one render, one inspect, one repair). Every Spark Open agent call carries max_tokens (reasoning tokens count). Reference portraits stay off (ROADMAP 5b).",
+  "agent": {"max_renders": 4, "max_tool_calls": 30, "max_edits": 6, "max_tokens": 8000, "max_nudges": 3,
+            "reference_portraits": false},
+  "prosaic_detail": "natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin"
+}

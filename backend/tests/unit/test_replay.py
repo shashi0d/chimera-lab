@@ -3,7 +3,7 @@
 import json
 
 from app.adapters.meta import client as meta
-from app.adapters.mock.recorded import RECORDED, chat_payload, responses_payload
+from app.evolution.recorded import RECORDED, chat_payload, responses_payload
 from app.models.schemas import ErrorCode
 from tests.conftest import FIXTURES
 

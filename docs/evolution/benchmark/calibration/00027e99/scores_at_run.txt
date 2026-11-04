@@ -1,0 +1,82 @@
+critics: ['spark_open', 'meta_spark'] | version 00027e99
+done e2/1_donkey_x_horse {'spark_open': 'ok', 'meta_spark': 'ok'}
+done e2/3_lion_x_eagle {'spark_open': 'ok', 'meta_spark': 'ok'}
+done e4/b_axolotl_x_pangolin {'spark_open': 'ok', 'meta_spark': 'ok'}
+done e4/d_rhinoceros_beetle_x_brown_bear {'spark_open': 'ok', 'meta_spark': 'ok'}
+done s2/beetlebear_run1 {'spark_open': 'ok', 'meta_spark': 'ok'}
+done s2/beetlebear {'spark_open': 'ok', 'meta_spark': 'ok'}
+done e2/2_lion_x_tiger {'spark_open': 'ok', 'meta_spark': 'ok'}
+done e4/c_lion_x_eagle {'spark_open': 'ok', 'meta_spark': 'ok'}
+done e2/4_eagle_x_octopus {'spark_open': 'ok', 'meta_spark': 'ok'}
+done e2c/1_donkey_x_horse {'spark_open': 'ok', 'meta_spark': 'ok'}
+done e4/b_axolotl_x_pangolin_rerender {'spark_open': 'ok', 'meta_spark': 'ok'}
+old          caught 3/6  false alarms 0/5
+spark_open   caught 6/6  false alarms 1/5
+meta_spark   caught 6/6  false alarms 1/5
+pair         caught 6/6  false alarms 2/5
+
+e2/1_donkey_x_horse [fail]
+   old : fail ["only the two parents' features"]
+   spark_open: fail [('third_animal', 'fail')]
+   meta_spark: fail [('frame', 'fail'), ('third_animal', 'fail')]
+   pair: fail [('frame', 'uncertain'), ('third_animal', 'fail')]
+
+e2/3_lion_x_eagle [fail]
+   old : fail ['a lion body shape', "only the two parents' features"]
+   spark_open: fail [('frame', 'fail'), ('no_mane', 'fail'), ('plain_fur', 'fail'), ('extra_mane', 'fail'), ('extra_spots', 'fail'), ('third_animal', 'fail')]
+   meta_spark: fail [('frame', 'fail'), ('no_mane', 'fail'), ('plain_fur', 'fail'), ('extra_mane', 'fail'), ('extra_spots', 'fail'), ('third_animal', 'fail')]
+   pair: fail [('frame', 'fail'), ('no_mane', 'fail'), ('plain_fur', 'fail'), ('extra_mane', 'fail'), ('extra_spots', 'fail'), ('third_animal', 'fail')]
+
+e4/b_axolotl_x_pangolin [fail]
+   old : pass []
+   spark_open: fail [('unplanned_three_pairs_of_feathery_extern', 'fail'), ('cover_present', 'fail'), ('extra_gills', 'fail')]
+   meta_spark: fail [('unplanned_three_pairs_of_feathery_extern', 'fail'), ('cover_present', 'fail'), ('extra_gills', 'fail')]
+   pair: fail [('unplanned_three_pairs_of_feathery_extern', 'fail'), ('cover_present', 'fail'), ('extra_gills', 'fail')]
+
+e4/d_rhinoceros_beetle_x_brown_bear [fail]
+   old : fail ['only parts and materials of the european rhinoceros beetle, no whole european rhinoceros beetle animals on the body']
+   spark_open: fail [('wings_front', 'fail'), ('legs_and_wings', 'fail'), ('whole_animal', 'fail'), ('extra_legs', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('continuous', 'fail'), ('scattered', 'fail'), ('walking_legs', 'fail')]
+   meta_spark: fail [('wings_front', 'fail'), ('legs_and_wings', 'fail'), ('whole_animal', 'fail'), ('extra_legs', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('continuous', 'fail'), ('scattered', 'fail'), ('walking_legs', 'fail'), ('extra_limb_pieces', 'fail')]
+   pair: fail [('wings_front', 'fail'), ('legs_and_wings', 'fail'), ('whole_animal', 'fail'), ('extra_legs', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('continuous', 'fail'), ('scattered', 'fail'), ('walking_legs', 'fail'), ('extra_limb_pieces', 'uncertain')]
+
+s2/beetlebear_run1 [fail]
+   old : pass []
+   spark_open: fail [('whole_animal', 'fail'), ('insect_legs', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('continuous', 'fail'), ('scattered', 'fail'), ('cover_on_legs', 'fail'), ('cover_on_shoulders', 'fail')]
+   meta_spark: fail [('insect_legs', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('continuous', 'fail'), ('scattered', 'fail'), ('cover_on_legs', 'fail'), ('cover_on_shoulders', 'fail')]
+   pair: fail [('whole_animal', 'uncertain'), ('insect_legs', 'fail'), ('grows_out', 'fail'), ('on_top', 'fail'), ('continuous', 'fail'), ('scattered', 'fail'), ('cover_on_legs', 'fail'), ('cover_on_shoulders', 'fail')]
+
+s2/beetlebear [fail]
+   old : pass []
+   spark_open: fail [('grows_out', 'fail'), ('on_top', 'fail'), ('continuous', 'fail'), ('scattered', 'fail'), ('cover_on_legs', 'fail'), ('cover_on_shoulders', 'fail')]
+   meta_spark: fail [('grows_out', 'fail'), ('on_top', 'fail'), ('continuous', 'fail'), ('scattered', 'fail'), ('cover_on_legs', 'fail'), ('cover_on_shoulders', 'fail'), ('extra_spots', 'fail')]
+   pair: fail [('grows_out', 'fail'), ('on_top', 'fail'), ('continuous', 'fail'), ('scattered', 'fail'), ('cover_on_legs', 'fail'), ('cover_on_shoulders', 'fail'), ('extra_spots', 'uncertain')]
+
+e2/2_lion_x_tiger [good]
+   old : pass []
+   spark_open: pass []
+   meta_spark: pass []
+   pair: pass []
+
+e4/c_lion_x_eagle [good]
+   old : pass []
+   spark_open: pass []
+   meta_spark: pass []
+   pair: pass []
+
+e2/4_eagle_x_octopus [good]
+   old : pass []
+   spark_open: pass []
+   meta_spark: fail [('cover_present', 'fail')]
+   pair: fail [('cover_present', 'uncertain')]
+
+e2c/1_donkey_x_horse [good]
+   old : pass []
+   spark_open: fail [('extra_stripes', 'fail')]
+   meta_spark: pass []
+   pair: fail [('extra_stripes', 'uncertain')]
+
+e4/b_axolotl_x_pangolin_rerender [good]
+   old : pass []
+   spark_open: pass []
+   meta_spark: pass []
+   pair: pass []

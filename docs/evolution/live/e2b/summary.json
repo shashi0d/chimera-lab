@@ -1,0 +1,214 @@
+{
+ "budget_before": {
+  "image": 15,
+  "spark": 43,
+  "sam": 5
+ },
+ "budget_after": {
+  "image": 17,
+  "spark": 51,
+  "sam": 7
+ },
+ "caps": {
+  "image": 20,
+  "spark": 70,
+  "sam": 8
+ },
+ "predicted_per_example": {
+  "spark": 4,
+  "image": 1,
+  "sam": 1
+ },
+ "predicted_per_rerender": {
+  "spark": 2,
+  "image": 1,
+  "sam": 1
+ },
+ "predicted_total": {
+  "spark": 8,
+  "image": 2,
+  "sam": 2
+ },
+ "logical_calls_meter": {
+  "spark": 8,
+  "image": 2,
+  "sam": 2
+ },
+ "attempts_by_kind": {
+  "spark": 8,
+  "image": 2,
+  "sam": 2
+ },
+ "attempts_non_ok": [],
+ "results": [
+  {
+   "slug": "1_donkey_x_horse",
+   "sire": "donkey",
+   "dam": "horse",
+   "try": 1,
+   "creature_id": "crt_385f7ce8c223",
+   "route": {
+    "sire": "donkey",
+    "dam": "horse",
+    "mode": "hybrid",
+    "reason": "known pair: mule",
+    "known_pair": "mule",
+    "labels": [
+     "real hybrid precedent"
+    ],
+    "cards": [
+     "RC-R2-01",
+     "RC-R2-16",
+     "RC-R2-03"
+    ]
+   },
+   "host": "horse",
+   "labels": [
+    "real hybrid precedent"
+   ],
+   "scores": {
+    "critic": 0.5,
+    "silhouette": 0.733,
+    "thumbnail": 0.5,
+    "soft_penalty": 0.0,
+    "quality": 0.67
+   },
+   "critic": {
+    "animals": [
+     "donkey"
+    ],
+    "creatures": 1,
+    "notes": "A brown donkey stands in profile against a light background."
+   },
+   "critic_thumbnail": {
+    "animals": [
+     "donkey"
+    ],
+    "creatures": 1,
+    "notes": "A single brown donkey stands facing right in a vintage illustration."
+   },
+   "mask": {
+    "fill": 0.284,
+    "aspect": 0.933,
+    "components": 1
+   },
+   "model_plan": "rejected, code skeleton used (RC-R2-03: body: {'op': 'PICK', 'donor': 'horse', 'strength': 1.0, 'region': ['neck', 'forequarters', 'back', 'flanks', 'belly', 'hindquarters'], 'note': 'horse neck shape and body per documented mule')",
+   "meta_calls": {
+    "spark": 4,
+    "image": 1,
+    "sam": 1
+   },
+   "attempts": 6,
+   "polish": "accepted",
+   "render_attempts": [
+    {
+     "prompt": "polished",
+     "critic": {
+      "animals": [
+       "donkey"
+      ],
+      "creatures": 1,
+      "notes": "A brown donkey stands in profile against a light background."
+     },
+     "third_animal": [],
+     "scores": {
+      "critic": 0.5,
+      "silhouette": 0.733,
+      "thumbnail": 0.5,
+      "soft_penalty": 0.0,
+      "quality": 0.67
+     }
+    }
+   ],
+   "warnings": []
+  },
+  {
+   "slug": "3_lion_x_eagle",
+   "sire": "lion",
+   "dam": "eagle",
+   "try": 1,
+   "creature_id": "crt_3604be6ad45d",
+   "route": {
+    "sire": "lion",
+    "dam": "golden_eagle",
+    "mode": "chimera",
+    "reason": "distant pair: no documented hybrid and different genus",
+    "known_pair": null,
+    "labels": [
+     "speculative chimera, no real-world precedent"
+    ],
+    "cards": [
+     "RC-R2-01",
+     "RC-R1-14",
+     "RC-R2-16",
+     "RC-R5-10"
+    ]
+   },
+   "host": "lion",
+   "labels": [
+    "speculative chimera, no real-world precedent",
+    "non-flying wings: display or gliding only"
+   ],
+   "scores": {
+    "critic": 1.0,
+    "silhouette": 0.8,
+    "thumbnail": 1.0,
+    "soft_penalty": 0.0,
+    "quality": 0.94
+   },
+   "critic": {
+    "animals": [
+     "lion",
+     "eagle"
+    ],
+    "creatures": 1,
+    "notes": "A winged lion-like creature stands with outstretched feathered wings."
+   },
+   "critic_thumbnail": {
+    "animals": [
+     "lion",
+     "eagle"
+    ],
+    "creatures": 1,
+    "notes": "A winged lion-like creature standing on its hind legs."
+   },
+   "mask": {
+    "fill": 0.354,
+    "aspect": 1.0,
+    "components": 2
+   },
+   "model_plan": "accepted",
+   "meta_calls": {
+    "spark": 4,
+    "image": 1,
+    "sam": 1
+   },
+   "attempts": 6,
+   "polish": "accepted",
+   "render_attempts": [
+    {
+     "prompt": "polished",
+     "critic": {
+      "animals": [
+       "lion",
+       "eagle"
+      ],
+      "creatures": 1,
+      "notes": "A winged lion-like creature stands with outstretched feathered wings."
+     },
+     "third_animal": [],
+     "scores": {
+      "critic": 1.0,
+      "silhouette": 0.8,
+      "thumbnail": 1.0,
+      "soft_penalty": 0.0,
+      "quality": 0.94
+     }
+    }
+   ],
+   "warnings": []
+  }
+ ],
+ "failures": [],
+ "skipped": []
+}

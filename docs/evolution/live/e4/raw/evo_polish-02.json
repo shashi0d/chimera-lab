@@ -1,0 +1,81 @@
+{
+ "purpose": "evo_polish",
+ "request": {
+  "model": "muse-spark-1.3",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You lightly edit a text-to-image prompt for readability. Keep the first sentence word for word. Do not add, remove or change any animal, body part, color, count, strength, habitat or view. Do not add brand or franchise names. Stay within 20 percent of the original length. Return the edited prompt only."
+   },
+   {
+    "role": "user",
+    "content": "Silhouette: Four-legged lion frame, four legs plus a separate pair of golden eagle wings. Host frame: the lion sets the outline, body size and overall frame. A single creature that combines a lion and a golden eagle. Head of the golden eagle, fully visible and uncluttered, with clear, discernible eyes. Details: head: myth-style head swap; golden eagle feathers in a few large patches over the forequarters and neck, at full strength with clean edges, color and surface unchanged inside each patch; lion coat everywhere else; behavior: follows the head donor; plain coat, no stripes or spots; four legs plus a separate pair of golden eagle wings on the shoulders; wings held for display or gliding, not powered flight. Coat texture flows along the body outline. Declared fiction: six limbs (four legs plus wings), shown with wings rooted in a heavy shoulder structure that can carry them, not floating. Bilaterally symmetrical, recognizable limbs, visible sense organs. Habitat cue (forest): dark back and light belly (mild countershading). Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration."
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "polished_prompt",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "prompt"
+     ],
+     "properties": {
+      "prompt": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0.2
+ },
+ "response": {
+  "id": "chatcmpl-01a1939a-d2b3-768a-b577-18278a0b950f",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\"prompt\":\"Silhouette: Four-legged lion frame, four legs plus a separate pair of golden eagle wings. Host frame: the lion sets the outline, body size, and overall frame. A single creature that combines a lion and a golden eagle. Head of the golden eagle, fully visible and uncluttered, with clear, discernible eyes. Details: head: myth-style head swap. Golden eagle feathers in a few large patches over the forequarters and neck, at full strength with clean edges, color and surface unchanged inside each patch. Lion coat everywhere else. Behavior: follows the head donor. Plain coat, no stripes or spots. Four legs plus a separate pair of golden eagle wings on the shoulders. Wings held for display or gliding, not powered flight. Coat texture flows along the body outline. Declared fiction: six limbs (four legs plus wings), shown with wings rooted in a heavy shoulder structure that can carry them, not floating. Bilaterally symmetrical, recognizable limbs, visible sense organs. Habitat cue (forest): dark back and light belly (mild countershading). Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws, and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration.\"}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null
+    }
+   }
+  ],
+  "created": 1793477759,
+  "model": "muse-spark-1.3",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 4462,
+   "prompt_tokens": 387,
+   "total_tokens": 4849,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": null,
+    "audio_tokens": null,
+    "reasoning_tokens": 4178,
+    "rejected_prediction_tokens": null,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": null,
+    "cache_write_tokens": null,
+    "cached_tokens": 0,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

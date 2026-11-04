@@ -1,0 +1,83 @@
+{
+ "purpose": "evo_polish",
+ "request": {
+  "model": "meta-models/muse-spark-open-1026",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You lightly edit a text-to-image prompt for readability. Keep the first sentence word for word. Do not add, remove or change any animal, body part, color, count, strength, habitat or view. Do not add brand or franchise names. Stay within 20 percent of the original length. Return the edited prompt only."
+   },
+   {
+    "role": "user",
+    "content": "Silhouette: Four-legged gray wolf frame. Host frame: the gray wolf sets the outline, body size and overall frame. A single creature that combines a crab and a gray wolf. Head of the gray wolf, fully visible and uncluttered, with clear, discernible eyes. Details: gray wolf body and legs, with its own dense fur over the whole body, colored as below; from the crab, as parts and materials on the gray wolf's own body: claws grown from the front feet: each front foot ends in a pincer, held folded against the foot when the animal walks: heavy, knobbed, hard-shelled claws with a fixed and a moving finger; large evenly sized claws with black tips; the gray wolf's own dense fur stays dense fur everywhere, and over the back and flanks it takes the crab's colors, gloss, surface texture and pattern; the gray wolf's body outline is unchanged. The donor's colors and sheen follow the host's own coat and body shape. Declared fiction: arthropod parts at large size, shown with thick supporting legs. Bilaterally symmetrical, recognizable limbs, visible sense organs. Habitat cue (rocky coast): dark back and light belly (strong countershading). Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration."
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "polished_prompt",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "prompt"
+     ],
+     "properties": {
+      "prompt": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0.2,
+  "max_tokens": 15000
+ },
+ "response": {
+  "id": "chatcmpl-78796c988df4461195c873b018eba306",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{ \"prompt\": \"Silhouette: Four-legged gray wolf frame. Host frame: the gray wolf sets the outline, body size and overall frame. A single creature that combines a crab and a gray wolf. Head of the gray wolf, fully visible and uncluttered, with clear, discernible eyes. Details: gray wolf body and legs, with its own dense fur over the whole body, colored as below; from the crab, as parts and materials on the gray wolf's own body — claws grown from the front feet, each front foot ending in a pincer held folded against the foot when the animal walks: heavy, knobbed, hard-shelled claws with a fixed and a moving finger, large and evenly sized with black tips; the gray wolf's own dense fur stays dense fur everywhere, and over the back and flanks it takes the crab's colors, gloss, surface texture and pattern; the gray wolf's body outline is unchanged. The donor's colors and sheen follow the host's own coat and body shape. Declared fiction: arthropod parts at large size, shown with thick supporting legs. Bilaterally symmetrical, recognizable limbs, visible sense organs. Habitat cue (rocky coast): dark back and light belly (strong countershading). Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration.\" }",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null,
+     "reasoning_content": "<elided> (16257 chars)"
+    }
+   }
+  ],
+  "created": 1793569872,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 4763,
+   "prompt_tokens": 520,
+   "total_tokens": 5283,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 3908,
+    "audio_tokens": 0,
+    "reasoning_tokens": 4440,
+    "rejected_prediction_tokens": 2077,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 128,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

@@ -1,0 +1,381 @@
+{
+ "id": "crt_055f43ffb670",
+ "parents": {
+  "sire": "lion",
+  "dam": "golden_eagle"
+ },
+ "lineage": {
+  "parent_ids": [],
+  "generation": 0
+ },
+ "mode": "mythic",
+ "known_pair": null,
+ "host": "lion",
+ "identity_balance": 0.556,
+ "habitat": {
+  "name": "forest",
+  "source": "shared",
+  "adjustments": [
+   "dark back and light belly (mild countershading)"
+  ],
+  "visible_trait": "dark back and light belly (mild countershading)"
+ },
+ "size": {
+  "mass_kg": 199.0,
+  "flags": []
+ },
+ "silhouette": "four-legged lion frame, four legs plus a separate pair of golden eagle wings",
+ "limb_plan": {
+  "forelimbs": {
+   "kind": "legs",
+   "donor": "lion"
+  },
+  "hindlimbs": {
+   "kind": "legs",
+   "donor": "lion"
+  },
+  "extra_wings": {
+   "kind": "wings",
+   "donor": "golden_eagle"
+  },
+  "appendages": [],
+  "wing_use": "gliding_or_display",
+  "requested_wings": null
+ },
+ "traits": {
+  "size": {
+   "op": "PICK",
+   "donor": "lion",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "host value; donor parts scaled to host size",
+   "flags": []
+  },
+  "body": {
+   "op": "PICK",
+   "donor": "lion",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "host value; donor parts scaled to host size; wings rooted in a heavy shoulder structure that can carry them, not floating",
+   "flags": []
+  },
+  "limbs": {
+   "op": "PICK",
+   "donor": "lion",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": null,
+   "flags": []
+  },
+  "tail": {
+   "op": "PICK",
+   "donor": "lion",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "host value; donor parts scaled to host size",
+   "flags": []
+  },
+  "ears": {
+   "op": "PICK",
+   "donor": "golden_eagle",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": null,
+   "flags": []
+  },
+  "skull": {
+   "op": "PICK",
+   "donor": "golden_eagle",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": null,
+   "flags": []
+  },
+  "head": {
+   "op": "PICK",
+   "donor": "golden_eagle",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "myth-style head swap",
+   "flags": []
+  },
+  "face": {
+   "op": "PICK",
+   "donor": "golden_eagle",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": null,
+   "flags": []
+  },
+  "mane": {
+   "op": "PICK",
+   "donor": null,
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "absent: no hair on the neck",
+   "flags": [
+    "gated"
+   ]
+  },
+  "feet": {
+   "op": "PICK",
+   "donor": "lion",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": null,
+   "flags": []
+  },
+  "coat_pattern": {
+   "op": "PATCH",
+   "donor": "golden_eagle",
+   "value": null,
+   "strength": 1.0,
+   "region": [
+    "forequarters",
+    "neck"
+   ],
+   "part": null,
+   "note": "golden eagle-type surface, no stripes or spots in few large patches following the lion's body regions",
+   "flags": []
+  },
+  "coat_color": {
+   "op": "PATCH",
+   "donor": "golden_eagle",
+   "value": null,
+   "strength": 1.0,
+   "region": [
+    "forequarters",
+    "neck"
+   ],
+   "part": null,
+   "note": "golden eagle color in few large patches following the lion's body regions",
+   "flags": []
+  },
+  "coat_texture": {
+   "op": "PATCH",
+   "donor": "golden_eagle",
+   "value": null,
+   "strength": 1.0,
+   "region": [
+    "forequarters",
+    "neck"
+   ],
+   "part": null,
+   "note": "golden eagle feathers in few large patches following the lion's body regions",
+   "flags": []
+  },
+  "behavior": {
+   "op": "PICK",
+   "donor": "golden_eagle",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "follows the head donor",
+   "flags": []
+  }
+ },
+ "labels": [
+  "mythic composite",
+  "speculative design, no real-world precedent",
+  "six limbs: mythic composite, not a plausible animal",
+  "non-flying wings: display or gliding only",
+  "mythic composite with 1 declared license: believability drops with each extra license"
+ ],
+ "processes": [
+  "myth-style part swap, labeled as myth"
+ ],
+ "card_trace": [
+  "RC-R2-01",
+  "RC-R1-14",
+  "RC-R2-16",
+  "RC-R5-10",
+  "RC-R7-02",
+  "RC-R9-01",
+  "RC-R6-08",
+  "RC-R6-09",
+  "RC-R5-02",
+  "RC-R1-01",
+  "RC-R1-09",
+  "RC-R1-10",
+  "RC-R5-01",
+  "RC-R5-03",
+  "RC-R5-04",
+  "RC-R5-05",
+  "RC-R5-06",
+  "RC-R5-07",
+  "RC-R6-02",
+  "RC-R1-07",
+  "RC-R1-08",
+  "RC-R4-01",
+  "RC-R4-02",
+  "RC-R4-05",
+  "RC-R4-11",
+  "RC-R4-10",
+  "RC-R3-12",
+  "RC-R3-02",
+  "RC-R7-08",
+  "RC-R3-05",
+  "RC-R3-03",
+  "RC-R3-04",
+  "RC-R9-02",
+  "RC-R9-04",
+  "RC-R9-05",
+  "RC-R9-06",
+  "RC-R9-13",
+  "RC-R6-03",
+  "RC-R6-04",
+  "RC-R9-10",
+  "RC-R9-11",
+  "RC-R6-01",
+  "RC-R7-06",
+  "RC-R6-05",
+  "RC-R7-07",
+  "RC-R6-07",
+  "RC-R7-10"
+ ],
+ "checks": [
+  {
+   "step": "body_plan_class",
+   "result": "pass",
+   "detail": "host class: vertebrate (quadruped)",
+   "cards": []
+  },
+  {
+   "step": "limb_budget",
+   "result": "labeled",
+   "detail": "mythic: four legs plus golden eagle wings, labeled six-limbed",
+   "cards": [
+    "RC-R3-02",
+    "RC-R7-08"
+   ]
+  },
+  {
+   "step": "size_ceiling",
+   "result": "labeled",
+   "detail": "199.0 kg is above about 40 kg: wings for display or gliding",
+   "cards": [
+    "RC-R3-05"
+   ]
+  },
+  {
+   "step": "flight_anatomy",
+   "result": "labeled",
+   "detail": "too heavy for its flight muscles: wings labeled non-flying",
+   "cards": [
+    "RC-R3-03",
+    "RC-R3-04"
+   ]
+  },
+  {
+   "step": "posture",
+   "result": "pass",
+   "detail": "legs match the body size",
+   "cards": []
+  },
+  {
+   "step": "part_rendering",
+   "result": "pass",
+   "detail": "no soft parts",
+   "cards": []
+  }
+ ],
+ "scores": {
+  "critic": 1.0,
+  "silhouette": 0.873,
+  "thumbnail": 1.0,
+  "soft_penalty": 0.0,
+  "quality": 0.962
+ },
+ "seed": 0,
+ "design_mode": "mythic",
+ "audit": [
+  {
+   "function": "breathing",
+   "result": "pass",
+   "detail": "lungs suit a land habitat",
+   "cards": [],
+   "source": "code"
+  },
+  {
+   "function": "feeding",
+   "result": "pass",
+   "detail": "golden eagle beak, carnivore: beak shape is never a reason to reject (it explains under 12 percent of diet)",
+   "cards": [
+    "RC-R9-04",
+    "RC-R9-05"
+   ],
+   "source": "code"
+  },
+  {
+   "function": "support",
+   "result": "pass",
+   "detail": "legs match the body size",
+   "cards": [
+    "RC-R9-06"
+   ],
+   "source": "code"
+  },
+  {
+   "function": "movement",
+   "result": "licensed",
+   "detail": "four legs plus wings: six limbs; too heavy for its flight muscles: wings labeled non-flying; licensed: six limbs (four legs plus wings), shown with wings rooted in a heavy shoulder structure that can carry them, not floating",
+   "cards": [
+    "RC-R3-02",
+    "RC-R3-03",
+    "RC-R3-04",
+    "RC-R9-13",
+    "RC-R9-10"
+   ],
+   "source": "code"
+  },
+  {
+   "function": "heat",
+   "result": "pass",
+   "detail": "temperate forest habitat: no heat adjustment needed",
+   "cards": [
+    "RC-R4-11"
+   ],
+   "source": "code"
+  },
+  {
+   "function": "senses",
+   "result": "pass",
+   "detail": "golden eagle head and eyes kept fully visible",
+   "cards": [
+    "RC-R6-03",
+    "RC-R6-04"
+   ],
+   "source": "code"
+  }
+ ],
+ "licenses": [
+  {
+   "id": "six_limbs",
+   "card": "RC-R3-02",
+   "rule": "six limbs (four legs plus wings)",
+   "compensation": "wings rooted in a heavy shoulder structure that can carry them, not floating",
+   "reason": "four legs plus a separate pair of wings"
+  }
+ ]
+}

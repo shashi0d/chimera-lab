@@ -1,0 +1,105 @@
+{
+ "purpose": "evo_critic",
+ "request": {
+  "model": "meta-models/muse-spark-open-1026",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture with no other context. animals: the real animal species whose features you can clearly see in it, as everyday English common names, most prominent first, at most three. If it looks like one ordinary animal, list only that animal. creatures: how many separate creatures are in the picture. notes: one short sentence on what you see."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "What animals do you see, and how many creatures?"
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (621519 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "readability_critic",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "animals",
+      "creatures",
+      "notes"
+     ],
+     "properties": {
+      "animals": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "creatures": {
+       "type": "integer"
+      },
+      "notes": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0,
+  "max_tokens": 4000
+ },
+ "response": {
+  "id": "chatcmpl-9557839545144e66a210b53e9c3efd0d",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\"animals\": [\"fox\", \"owl\"], \"creatures\": 1, \"notes\": \"A single chimeric creature with the head, legs and tail of a fox and the wings and speckled chest feathers of a barn owl.\"}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null,
+     "reasoning_content": "We need to answer: animals: the real animal species whose features you can clearly see in it, as everyday English common names, most prominent first, at most three. If it looks like one ordinary animal, list only that animal. creatures: how many separate creatures are in the picture. notes: one short sentence on what you see.\n\nWe have a hybrid creature: fox head, legs, tail, but owl wings and chest feathers. So animals: fox and owl? Or barn owl? The instruction: everyday English common names. So \"fox\" and \"owl\" or \"barn owl\". Most prominent first. Which is more prominent? The fox head and legs are prominent, but owl wings also prominent. Probably fox first, then owl. Or maybe red fox and barn owl. But everyday common names: fox, owl.\n\nWe need to list at most three. So animals: [\"fox\", \"owl\"] or [\"red fox\", \"barn owl\"].\n\nCreatures: how many separate creatures are in the picture. There's one hybrid creature. So creatures: 1.\n\nNotes: one short sentence on what you see. Something like \"A fantastical hybrid with a fox's head, legs and tail and an owl's wings and feathered chest.\"\n\nWe must follow the required output format? The user says: You look at one picture with no other context. animals: ... creatures: ... notes: ...\n\nProbably need to output JSON? The instruction says animals: ... creatures: ... notes: ... Might be expecting JSON with those fields.\n\nWe should output something like:\nanimals: [\"fox\", \"owl\"]\ncreatures: 1\nnotes: \"A single chimeric creature combining fox and owl features stands in profile.\"\n\nWe need to ensure we follow exactly. Possibly need to output JSON object.\n\nThe system says: Reasoning strength: 512. Use appropriate recipient.\n\nWe should provide final answer in a clear format.\n\nWe must consider: \"If it looks like one ordinary animal, list only that animal.\" This does NOT look like one ordinary animal; it's a hybrid, so list both.\n\nMost prominent first: Fox head is most prominent, so fox first.\n\nAt most three: we have two.\n\nCreatures: 1 separate creature.\n\nNotes: one short sentence.\n\nWe should ensure we don't hallucinate.\n\nPotential nuance: Is it a fox or a red fox? Everyday English common name: fox is fine. Could also be \"red fox\". Both acceptable. Safer to use \"fox\" and \"barn owl\" or \"owl\". The owl looks like a barn owl specifically due to coloration. But \"owl\" is more generic everyday name. The instruction says everyday English common names. \"barn owl\" is also everyday. Could do \"fox\" and \"barn owl\". Might be better to be specific.\n\nLet's answer with animals: [\"fox\", \"barn owl\"] or [\"fox\", \"owl\"]. Which to choose? Provide \"fox\" and \"owl\" to be safe.\n\nWe should output JSON.\n\nProbably format:\n{\n  \"animals\": [\"fox\", \"owl\"],\n  \"creatures\": 1,\n  \"notes\": \"A single hybrid creature with the head, legs and tail of a fox and the wings and chest plumage of an owl.\"\n}\n\nMake sure notes is one short sentence.\n\nWe must not add extra fields.\n\nWe should comply.\n\nPotential edge: The user might expect exactly three lines? But JSON is likely expected.\n\nWe will output JSON.\n\nWe should also consider that the creature count is 1, not 2. Even though it has features of two animals, it's one creature.\n\nWe should ensure we answer correctly.\n\nWe might also add explanation? The instruction says animals: ... creatures: ... notes: ... So we should provide those.\n\nWe will output in a clear structured way.\n\nProbably best to output:\n\nanimals: [\"fox\", \"owl\"]\ncreatures: 1\nnotes: \"A fox-owl chimera standing with feathered wings and a bushy tail.\"\n\nMake it one sentence.\n\nWe should ensure we don't violate policy. It's fine.\n\nWe should provide final answer."
+    }
+   }
+  ],
+  "created": 1793561070,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 896,
+   "prompt_tokens": 3595,
+   "total_tokens": 4491,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 651,
+    "audio_tokens": 0,
+    "reasoning_tokens": 836,
+    "rejected_prediction_tokens": 1064,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 0,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

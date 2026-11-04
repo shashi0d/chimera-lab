@@ -1,0 +1,271 @@
+{
+ "purpose": "evo_learn_traits",
+ "request": {
+  "model": "muse-spark-1.3",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You describe a real animal for a natural-history engine. Use typical adult values. body_plan: the overall layout (winged means wings are the main limbs; a bird is biped and winged). visible_features: three to six short visible features someone would draw (for a breed, the breed's look). mouthparts: what the head eats with. breathing: the main breathing organ. claimed_crosses: scientific names of species this animal is documented to hybridize with, or an empty list; these are stored as unverified claims. Do not guess numbers wildly: give a plausible min and max."
+   },
+   {
+    "role": "user",
+    "content": "Describe: European rhinoceros beetle (Oryctes nasicornis)"
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "animal_traits",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "body_plan",
+      "primary_locomotor_part",
+      "covering",
+      "movement",
+      "habitat",
+      "climate",
+      "diet",
+      "active_time",
+      "body_mass_kg",
+      "body_length_m",
+      "visible_features",
+      "mouthparts",
+      "mouthparts_detail",
+      "breathing",
+      "breathing_detail",
+      "claimed_crosses"
+     ],
+     "properties": {
+      "body_plan": {
+       "type": "array",
+       "items": {
+        "type": "string",
+        "enum": [
+         "quadruped",
+         "biped",
+         "winged",
+         "finned",
+         "multi_legged",
+         "serpentine",
+         "radial"
+        ]
+       }
+      },
+      "primary_locomotor_part": {
+       "type": "string",
+       "enum": [
+        "four legs",
+        "two legs",
+        "multiple legs",
+        "wings",
+        "fins",
+        "flippers",
+        "bell"
+       ]
+      },
+      "covering": {
+       "type": "string",
+       "enum": [
+        "fur",
+        "feathers",
+        "scales",
+        "skin",
+        "exoskeleton",
+        "shell"
+       ]
+      },
+      "movement": {
+       "type": "array",
+       "items": {
+        "type": "string",
+        "enum": [
+         "walk",
+         "run",
+         "swim",
+         "fly",
+         "climb",
+         "burrow",
+         "glide"
+        ]
+       }
+      },
+      "habitat": {
+       "type": "array",
+       "items": {
+        "type": "string",
+        "enum": [
+         "grassland",
+         "forest",
+         "mountain",
+         "tundra",
+         "wetland",
+         "freshwater",
+         "marine",
+         "desert"
+        ]
+       }
+      },
+      "climate": {
+       "type": "array",
+       "items": {
+        "type": "string",
+        "enum": [
+         "temperate",
+         "tropical",
+         "polar",
+         "arid"
+        ]
+       }
+      },
+      "diet": {
+       "type": "string",
+       "enum": [
+        "carnivore",
+        "herbivore",
+        "omnivore",
+        "insectivore",
+        "piscivore"
+       ]
+      },
+      "active_time": {
+       "type": "array",
+       "items": {
+        "type": "string",
+        "enum": [
+         "diurnal",
+         "nocturnal",
+         "crepuscular",
+         "unrecorded"
+        ]
+       }
+      },
+      "body_mass_kg": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "min",
+        "max"
+       ],
+       "properties": {
+        "min": {
+         "type": "number"
+        },
+        "max": {
+         "type": "number"
+        }
+       }
+      },
+      "body_length_m": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "min",
+        "max"
+       ],
+       "properties": {
+        "min": {
+         "type": "number"
+        },
+        "max": {
+         "type": "number"
+        }
+       }
+      },
+      "visible_features": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "mouthparts": {
+       "type": "string",
+       "enum": [
+        "grinding teeth",
+        "bladed teeth",
+        "mixed teeth",
+        "pointed teeth",
+        "beak",
+        "mandibles",
+        "toothless tongue",
+        "other"
+       ]
+      },
+      "mouthparts_detail": {
+       "type": "string"
+      },
+      "breathing": {
+       "type": "string",
+       "enum": [
+        "lungs",
+        "gills",
+        "external gills and lungs",
+        "skin and lungs",
+        "tracheae",
+        "book lungs",
+        "other"
+       ]
+      },
+      "breathing_detail": {
+       "type": "string"
+      },
+      "claimed_crosses": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0
+ },
+ "response": {
+  "id": "chatcmpl-01a1939b-d43a-77bb-b4e8-9ebaaafd5d06",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\"active_time\":[\"nocturnal\"],\"body_length_m\":{\"max\":0.04,\"min\":0.02},\"body_mass_kg\":{\"max\":0.006,\"min\":0.002},\"body_plan\":[\"multi_legged\",\"winged\"],\"breathing\":\"tracheae\",\"breathing_detail\":\"air taken through lateral spiracles into branching tracheal tubes; no lungs\",\"claimed_crosses\":[],\"climate\":[\"temperate\"],\"covering\":\"exoskeleton\",\"diet\":\"herbivore\",\"habitat\":[\"forest\",\"grassland\"],\"mouthparts\":\"mandibles\",\"mouthparts_detail\":\"short chewing mandibles for soft decaying plant matter and tree sap; adults feed little or not at all\",\"movement\":[\"walk\",\"fly\",\"burrow\"],\"primary_locomotor_part\":\"multiple legs\",\"visible_features\":[\"long curved head horn in males\",\"broad armored pronotum\",\"reddish-brown glossy elytra\",\"six spiny jointed legs\"]}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null
+    }
+   }
+  ],
+  "created": 1793477825,
+  "model": "muse-spark-1.3",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 1905,
+   "prompt_tokens": 673,
+   "total_tokens": 2578,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": null,
+    "audio_tokens": null,
+    "reasoning_tokens": 1705,
+    "rejected_prediction_tokens": null,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": null,
+    "cache_write_tokens": null,
+    "cached_tokens": 0,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

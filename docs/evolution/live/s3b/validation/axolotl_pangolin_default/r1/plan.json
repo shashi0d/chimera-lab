@@ -1,0 +1,387 @@
+{
+ "id": "crt_c9891588b298",
+ "parents": {
+  "sire": "axolotl",
+  "dam": "chinese_pangolin"
+ },
+ "lineage": {
+  "parent_ids": [],
+  "generation": 0
+ },
+ "mode": "chimera",
+ "known_pair": null,
+ "host": "axolotl",
+ "identity_balance": 0.81,
+ "habitat": {
+  "name": "river forest",
+  "source": "bridging",
+  "adjustments": [
+   "dark back and light belly (mild countershading)"
+  ],
+  "visible_trait": "dark back and light belly (mild countershading)"
+ },
+ "size": {
+  "mass_kg": 0.085,
+  "flags": []
+ },
+ "silhouette": "four-legged axolotl frame",
+ "limb_plan": {
+  "forelimbs": {
+   "kind": "legs",
+   "donor": "axolotl"
+  },
+  "hindlimbs": {
+   "kind": "legs",
+   "donor": "axolotl"
+  },
+  "extra_wings": null,
+  "appendages": [],
+  "wing_use": "none",
+  "requested_wings": null
+ },
+ "traits": {
+  "behavior": {
+   "op": "PICK",
+   "donor": "axolotl",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "Follows head/brain donor: axolotl aquatic nocturnal foraging; needs river water for gills",
+   "flags": []
+  },
+  "body": {
+   "op": "PICK",
+   "donor": "axolotl",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "Axolotl trunk and frame throughout; pangolin tissue only as surface patches on back and flanks, blend only at patch edges",
+   "flags": []
+  },
+  "coat_color": {
+   "op": "PATCH",
+   "donor": "chinese_pangolin",
+   "value": null,
+   "strength": 1.0,
+   "region": [
+    "head",
+    "neck",
+    "forequarters",
+    "back",
+    "flanks",
+    "hindquarters",
+    "legs",
+    "tail"
+   ],
+   "part": null,
+   "note": "Pangolin brown-grey color at full strength inside patches; follows host skin regions",
+   "flags": [
+    "layer (RC-R10-06)"
+   ]
+  },
+  "coat_pattern": {
+   "op": "PATCH",
+   "donor": "chinese_pangolin",
+   "value": null,
+   "strength": 1.0,
+   "region": [
+    "head",
+    "neck",
+    "forequarters",
+    "back",
+    "flanks",
+    "hindquarters",
+    "legs",
+    "tail"
+   ],
+   "part": null,
+   "note": "Few large pangolin blocks with clear edges on host back and flanks layout; each block fully pangolin, no blending inside",
+   "flags": [
+    "layer (RC-R10-06)"
+   ]
+  },
+  "coat_texture": {
+   "op": "PATCH",
+   "donor": "chinese_pangolin",
+   "value": null,
+   "strength": 1.0,
+   "region": [
+    "head",
+    "neck",
+    "forequarters",
+    "back",
+    "flanks",
+    "hindquarters",
+    "legs",
+    "tail"
+   ],
+   "part": null,
+   "note": "Pangolin keratin scales at full strength inside patches; surrounding skin stays moist axolotl skin for river life",
+   "flags": [
+    "layer (RC-R10-06)"
+   ]
+  },
+  "ears": {
+   "op": "PICK",
+   "donor": "axolotl",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "Axolotl state: no external pinnae; lateral-line and inner ear retained",
+   "flags": []
+  },
+  "face": {
+   "op": "PICK",
+   "donor": "axolotl",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "Axolotl face with lidless eyes and wide gape; no pangolin snout tissue",
+   "flags": []
+  },
+  "feet": {
+   "op": "PICK",
+   "donor": "axolotl",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "Axolotl small digits without claws; no pangolin claws in feet",
+   "flags": []
+  },
+  "head": {
+   "op": "PICK",
+   "donor": "axolotl",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "Fully axolotl head with broad flat skull, wide mouth and feathery external gills; brain donor sets behavior",
+   "flags": []
+  },
+  "limbs": {
+   "op": "PICK",
+   "donor": "axolotl",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "Four short axolotl legs; proportions unchanged at host size so no weight-support reshape needed",
+   "flags": []
+  },
+  "mane": {
+   "op": "PICK",
+   "donor": null,
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "absent: no hair on the neck",
+   "flags": [
+    "gated"
+   ]
+  },
+  "size": {
+   "op": "PICK",
+   "donor": "axolotl",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "Host axolotl size; pangolin patches scaled down to fit ~85g host frame",
+   "flags": []
+  },
+  "skull": {
+   "op": "PICK",
+   "donor": "axolotl",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "Axolotl broad flat skull to house axolotl brain and gills; no pangolin skull tissue",
+   "flags": []
+  },
+  "tail": {
+   "op": "PICK",
+   "donor": "axolotl",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "Axolotl long keeled tail with fin fold for swimming; no pangolin tail tissue",
+   "flags": []
+  }
+ },
+ "labels": [
+  "speculative chimera, no real-world precedent"
+ ],
+ "processes": [
+  "chimera patchwork: each region is one parent's tissue"
+ ],
+ "card_trace": [
+  "RC-R2-01",
+  "RC-R1-14",
+  "RC-R2-16",
+  "RC-R5-10",
+  "RC-R6-01",
+  "RC-R5-02",
+  "RC-R1-01",
+  "RC-R1-09",
+  "RC-R1-10",
+  "RC-R5-01",
+  "RC-R5-03",
+  "RC-R5-04",
+  "RC-R5-05",
+  "RC-R5-06",
+  "RC-R5-07",
+  "RC-R6-02",
+  "RC-R1-07",
+  "RC-R1-08",
+  "RC-R4-09",
+  "RC-R4-01",
+  "RC-R4-02",
+  "RC-R4-05",
+  "RC-R4-11",
+  "RC-R4-10",
+  "RC-R3-12",
+  "RC-R9-02",
+  "RC-R9-04",
+  "RC-R6-03",
+  "RC-R6-04",
+  "RC-R9-10",
+  "RC-R10-15",
+  "RC-R7-06",
+  "RC-R6-05",
+  "RC-R7-07",
+  "RC-R6-07",
+  "RC-R7-10"
+ ],
+ "checks": [
+  {
+   "step": "body_plan_class",
+   "result": "pass",
+   "detail": "host class: vertebrate (quadruped)",
+   "cards": []
+  },
+  {
+   "step": "limb_budget",
+   "result": "pass",
+   "detail": "4 limbs",
+   "cards": []
+  },
+  {
+   "step": "size_ceiling",
+   "result": "pass",
+   "detail": "within ceilings",
+   "cards": []
+  },
+  {
+   "step": "flight_anatomy",
+   "result": "pass",
+   "detail": "no wings",
+   "cards": []
+  },
+  {
+   "step": "posture",
+   "result": "pass",
+   "detail": "legs match the body size",
+   "cards": []
+  },
+  {
+   "step": "part_rendering",
+   "result": "pass",
+   "detail": "no soft parts",
+   "cards": []
+  }
+ ],
+ "scores": {
+  "critic": 0.75,
+  "silhouette": 1.0,
+  "thumbnail": 1.0,
+  "soft_penalty": 0.0,
+  "quality": 0.9
+ },
+ "seed": 0,
+ "design_mode": "realistic",
+ "audit": [
+  {
+   "function": "breathing",
+   "result": "pass",
+   "detail": "external gills and lungs suit a land habitat",
+   "cards": [],
+   "source": "code"
+  },
+  {
+   "function": "feeding",
+   "result": "pass",
+   "detail": "pointed teeth fit a carnivore diet",
+   "cards": [
+    "RC-R9-04"
+   ],
+   "source": "code"
+  },
+  {
+   "function": "support",
+   "result": "pass",
+   "detail": "legs match the body size",
+   "cards": [],
+   "source": "code"
+  },
+  {
+   "function": "movement",
+   "result": "pass",
+   "detail": "walks on four legs",
+   "cards": [],
+   "source": "code"
+  },
+  {
+   "function": "heat",
+   "result": "pass",
+   "detail": "temperate river forest habitat: no heat adjustment needed",
+   "cards": [
+    "RC-R4-11"
+   ],
+   "source": "code"
+  },
+  {
+   "function": "senses",
+   "result": "pass",
+   "detail": "axolotl head and eyes kept fully visible",
+   "cards": [
+    "RC-R6-03",
+    "RC-R6-04"
+   ],
+   "source": "code"
+  }
+ ],
+ "licenses": [],
+ "render_details": [],
+ "transfers": [
+  {
+   "feature": "covering",
+   "donor": "chinese_pangolin",
+   "kind": "covering",
+   "cls": "material",
+   "anchor": "the skin, as the host's own covering",
+   "extent": [
+    "head",
+    "neck",
+    "forequarters",
+    "back",
+    "flanks",
+    "hindquarters",
+    "legs",
+    "tail"
+   ],
+   "extent_reason": "as on the donor: overlapping scales cover the crown, back, flanks, outer limbs and tail, and the belly and face stay soft-skinned",
+   "scale": "each scale sized to the axolotl's own body segments and muscle masses, one scale per segment or muscle mass",
+   "connects": [],
+   "identity_cues": "",
+   "set_by": "code"
+  }
+ ]
+}

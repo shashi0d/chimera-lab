@@ -1,0 +1,154 @@
+{
+ "purpose": "evo_describe",
+ "request": {
+  "model": "muse-spark-1.3",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture with no other context and describe exactly what is drawn, like a careful field naturalist. Do not guess what was intended; describe only what is visible. description: a free paragraph describing the whole creature first. parts: every body part you see, one entry each (head, horns, ears, mane, legs, feet, tail, wings, gills, tentacles, shell, plates, scales, feathers, markings), with what it looks like and where it is. attached_objects: anything that looks attached to or sitting on the body rather than part of it, such as an object, an armor piece or a whole small animal; empty if none. animals: every real animal whose features you can see, as everyday English common names, at most four; include any animal that only one part resembles. Then count, looking carefully: separate_bodies: separate animal bodies or body-shaped objects in the picture, including any whole animal or animal-shaped object attached to or sitting on the main creature. heads: heads of any kind. walking_legs: legs the creature stands or walks on, including hidden ones you can infer. wings: wings of any kind. extra_limb_pieces: jointed leg-like, claw-like or tentacle-like pieces other than the walking legs and the tail. tails: tails of any kind (0 if none)."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "Describe this creature, then count."
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (509631 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "plan_blind_describe",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "description",
+      "parts",
+      "attached_objects",
+      "animals",
+      "separate_bodies",
+      "heads",
+      "walking_legs",
+      "wings",
+      "extra_limb_pieces",
+      "tails"
+     ],
+     "properties": {
+      "description": {
+       "type": "string"
+      },
+      "parts": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "part",
+         "looks_like",
+         "where"
+        ],
+        "properties": {
+         "part": {
+          "type": "string"
+         },
+         "looks_like": {
+          "type": "string"
+         },
+         "where": {
+          "type": "string"
+         }
+        }
+       }
+      },
+      "attached_objects": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "animals": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "separate_bodies": {
+       "type": "integer"
+      },
+      "heads": {
+       "type": "integer"
+      },
+      "walking_legs": {
+       "type": "integer"
+      },
+      "wings": {
+       "type": "integer"
+      },
+      "extra_limb_pieces": {
+       "type": "integer"
+      },
+      "tails": {
+       "type": "integer"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0
+ },
+ "response": {
+  "id": "chatcmpl-01a1977f-e981-7057-bf77-d95086394dcd",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\"animals\": [\"donkey\", \"zebra\"], \"attached_objects\": [], \"description\": \"The creature is a slender four-legged equid shown in right-facing profile with a donkey-like build. It has a long narrow head with a pale muzzle, large upright ears, a short erect striped mane along its neck, and a thin tufted tail. Its coat is shaggy brown-gray with a white belly and muzzle, marked with a dark stripe along the back and over the shoulders and with faint dark zebra-like stripes on the torso, neck, and legs. It stands on four long thin legs ending in dark single hooves.\", \"extra_limb_pieces\": 0, \"heads\": 1, \"parts\": [{\"looks_like\": \"long narrow head with brown shaggy fur, white fur around nose and mouth, dark nostril and mouth line\", \"part\": \"head\", \"where\": \"at the front end of the neck, facing to the right\"}, {\"looks_like\": \"two very tall upright pointed ears, brown outside with pale inner fur and dark tips and inner markings\", \"part\": \"ears\", \"where\": \"on top of the head, pointing upward\"}, {\"looks_like\": \"dark oval eyes with a thin pale ring around them\", \"part\": \"eyes\", \"where\": \"on the sides of the head\"}, {\"looks_like\": \"short erect bristly mane with alternating dark and pale bands\", \"part\": \"mane\", \"where\": \"along the top of the neck from behind the ears to the shoulders\"}, {\"looks_like\": \"donkey-shaped torso covered in shaggy brown-gray fur with a white underside and belly\", \"part\": \"body\", \"where\": \"in the center between the neck and hindquarters\"}, {\"looks_like\": \"four long slender legs with brown-gray fur, paler on upper rear, with dark horizontal striping on lower sections\", \"part\": \"legs\", \"where\": \"extending down from the chest and hips, two in front and two in back\"}, {\"looks_like\": \"small dark single hooves\", \"part\": \"feet\", \"where\": \"at the bottom ends of each leg\"}, {\"looks_like\": \"thin narrow tail with short fur and a long dark hairy tuft at the tip\", \"part\": \"tail\", \"where\": \"hanging down from the rear of the body\"}, {\"looks_like\": \"thin dark dorsal stripe along the spine, a vertical dark shoulder stripe, and faint dark diagonal and horizontal zebra-like stripes\", \"part\": \"markings\", \"where\": \"along the back and shoulders and across the sides of the torso, neck, and legs\"}], \"separate_bodies\": 1, \"tails\": 1, \"walking_legs\": 4, \"wings\": 0}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null
+    }
+   }
+  ],
+  "created": 1793543104,
+  "model": "muse-spark-1.3",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 2666,
+   "prompt_tokens": 3852,
+   "total_tokens": 6518,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": null,
+    "audio_tokens": null,
+    "reasoning_tokens": 2066,
+    "rejected_prediction_tokens": null,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": null,
+    "cache_write_tokens": null,
+    "cached_tokens": 3825,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

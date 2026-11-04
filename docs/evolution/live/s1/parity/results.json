@@ -1,0 +1,697 @@
+{
+ "model": "meta-models/muse-spark-open-1026",
+ "plans": [
+  {
+   "case": "b axolotl x pangolin realistic",
+   "rebuilt_prompt_chars": 9004,
+   "recorded_prompt_chars": 9004,
+   "meta_plan": "accepted",
+   "error": null,
+   "attempts": [
+    {
+     "kind": "spark_baseten",
+     "purpose": "parity_plan",
+     "model": "meta-models/muse-spark-open-1026",
+     "latency_ms": 67530,
+     "input_tokens": 2516,
+     "output_tokens": 32768,
+     "outcome": "ok"
+    }
+   ],
+   "refusal": null,
+   "request_identical_length": true,
+   "json": {
+    "finish_reason": "length",
+    "content_chars": 49299,
+    "starts_with_brace": true,
+    "code_fence": false,
+    "think_tags": false,
+    "reasoning_field": "reasoning_content",
+    "refusal_field": false,
+    "json_valid": false,
+    "schema_valid": false,
+    "json_error": "Unterminated string starting at: line 1 column 49293 (char 49292)",
+    "content_head": "{\"parents\":{\"sire\":\"axolotl\",\"dam\":\"chinese_pangolin\"},\"mode\":\"chimera\",\"known_pair\":null,\"host\":\"chinese_pangolin\",\"identity_balance\":0.35,\"habitat\":{\"name\":\"river forest\",\"source\":\"bridging\",\"adjustments\":[],\"visible_trait\":\"moist axolotl skin patches on back and flanks and retained external gills"
+   },
+   "baseten_plan": {
+    "accepted": false,
+    "reason": "unreadable: The model returned an unreadable answer."
+   },
+   "runaway_field": "card_trace"
+  },
+  {
+   "case": "c lion x eagle mythic",
+   "rebuilt_prompt_chars": 8815,
+   "recorded_prompt_chars": 8815,
+   "meta_plan": "code skeleton (identical plan id: the model plan was rejected or came back unchanged)",
+   "error": null,
+   "attempts": [
+    {
+     "kind": "spark_baseten",
+     "purpose": "parity_plan",
+     "model": "meta-models/muse-spark-open-1026",
+     "latency_ms": 62796,
+     "input_tokens": 2465,
+     "output_tokens": 32768,
+     "outcome": "ok"
+    }
+   ],
+   "refusal": null,
+   "request_identical_length": true,
+   "json": {
+    "finish_reason": "length",
+    "content_chars": 49210,
+    "starts_with_brace": true,
+    "code_fence": false,
+    "think_tags": false,
+    "reasoning_field": "reasoning_content",
+    "refusal_field": false,
+    "json_valid": false,
+    "schema_valid": false,
+    "json_error": "Unterminated string starting at: line 1 column 49202 (char 49201)",
+    "content_head": "{\"parents\":{\"sire\":\"lion\",\"dam\":\"golden_eagle\"},\"mode\":\"mythic\",\"known_pair\":null,\"host\":\"lion\",\"identity_balance\":0.35,\"habitat\":{\"name\":\"forest\",\"source\":\"shared\",\"adjustments\":[],\"visible_trait\":null},\"size\":{\"mass_kg\":199.0,\"flags\":[]},\"silhouette\":\"quadrupedal lion body and limbs with golden ea"
+   },
+   "baseten_plan": {
+    "accepted": false,
+    "reason": "unreadable: The model returned an unreadable answer."
+   },
+   "runaway_field": "card_trace"
+  },
+  {
+   "case": "d rhinoceros beetle x brown bear speculative",
+   "rebuilt_prompt_chars": 9096,
+   "recorded_prompt_chars": 9096,
+   "meta_plan": "code skeleton (identical plan id: the model plan was rejected or came back unchanged)",
+   "error": null,
+   "attempts": [
+    {
+     "kind": "spark_baseten",
+     "purpose": "parity_plan",
+     "model": "meta-models/muse-spark-open-1026",
+     "latency_ms": 61990,
+     "input_tokens": 2540,
+     "output_tokens": 32768,
+     "outcome": "ok"
+    }
+   ],
+   "refusal": null,
+   "request_identical_length": true,
+   "json": {
+    "finish_reason": "length",
+    "content_chars": 50526,
+    "starts_with_brace": true,
+    "code_fence": false,
+    "think_tags": false,
+    "reasoning_field": "reasoning_content",
+    "refusal_field": false,
+    "json_valid": false,
+    "schema_valid": false,
+    "json_error": "Unterminated string starting at: line 1 column 50522 (char 50521)",
+    "content_head": "{\"parents\":{\"sire\":\"european_rhinoceros_beetle\",\"dam\":\"brown_bear\"},\"mode\":\"chimera\",\"known_pair\":null,\"host\":\"brown_bear\",\"identity_balance\":0.32,\"habitat\":{\"name\":\"grassland\",\"source\":\"shared\",\"adjustments\":[],\"visible_trait\":null},\"size\":{\"mass_kg\":340.0,\"flags\":[]},\"silhouette\":\"stocky four-legg"
+   },
+   "baseten_plan": {
+    "accepted": false,
+    "reason": "unreadable: The model returned an unreadable answer."
+   },
+   "runaway_field": "card_trace"
+  }
+ ],
+ "polish": [
+  {
+   "case": "b axolotl x pangolin (E4 run 1)",
+   "error": null,
+   "attempts": [
+    {
+     "kind": "spark_baseten",
+     "purpose": "parity_polish",
+     "model": "meta-models/muse-spark-open-1026",
+     "latency_ms": 10827,
+     "input_tokens": 547,
+     "output_tokens": 4881,
+     "outcome": "ok"
+    }
+   ],
+   "meta": {
+    "accepted": true,
+    "reason": null,
+    "chars": 1529
+   },
+   "original_chars": 1529,
+   "baseten": {
+    "accepted": true,
+    "reason": null,
+    "chars": 1530,
+    "json": {
+     "finish_reason": "stop",
+     "content_chars": 1546,
+     "starts_with_brace": true,
+     "code_fence": false,
+     "think_tags": false,
+     "reasoning_field": "reasoning_content",
+     "refusal_field": false,
+     "json_valid": true,
+     "schema_errors": [],
+     "schema_valid": true
+    }
+   }
+  },
+  {
+   "case": "c lion x eagle",
+   "error": null,
+   "attempts": [
+    {
+     "kind": "spark_baseten",
+     "purpose": "parity_polish",
+     "model": "meta-models/muse-spark-open-1026",
+     "latency_ms": 8016,
+     "input_tokens": 480,
+     "output_tokens": 3657,
+     "outcome": "ok"
+    }
+   ],
+   "meta": {
+    "accepted": true,
+    "reason": null,
+    "chars": 1277
+   },
+   "original_chars": 1275,
+   "baseten": {
+    "accepted": true,
+    "reason": null,
+    "chars": 1264,
+    "json": {
+     "finish_reason": "stop",
+     "content_chars": 1280,
+     "starts_with_brace": true,
+     "code_fence": false,
+     "think_tags": false,
+     "reasoning_field": "reasoning_content",
+     "refusal_field": false,
+     "json_valid": true,
+     "schema_errors": [],
+     "schema_valid": true
+    }
+   }
+  }
+ ],
+ "resolver": [
+  {
+   "case": "woolly mammoth",
+   "error": null,
+   "attempts": [
+    {
+     "kind": "spark_baseten",
+     "purpose": "parity_identify",
+     "model": "meta-models/muse-spark-open-1026",
+     "latency_ms": 2501,
+     "input_tokens": 326,
+     "output_tokens": 704,
+     "outcome": "ok"
+    }
+   ],
+   "meta": {
+    "kind": "extinct",
+    "scientific_name": "Mammuthus primigenius",
+    "common_name": "woolly mammoth",
+    "breed": "",
+    "alternatives": [],
+    "note": "Extinct Ice Age elephant relative known from frozen remains."
+   },
+   "baseten": {
+    "kind": "extinct",
+    "scientific_name": "Mammuthus primigenius",
+    "common_name": "woolly mammoth",
+    "breed": "",
+    "alternatives": [],
+    "note": "Extinct cold-adapted elephant that lived across northern Eurasia and North America during the Pleistocene."
+   },
+   "json": {
+    "finish_reason": "stop",
+    "content_chars": 247,
+    "starts_with_brace": true,
+    "code_fence": false,
+    "think_tags": false,
+    "reasoning_field": "reasoning_content",
+    "refusal_field": false,
+    "json_valid": true,
+    "schema_errors": [],
+    "schema_valid": true
+   },
+   "same_kind": true,
+   "same_scientific_name": true
+  },
+  {
+   "case": "pangolin (ambiguous)",
+   "error": null,
+   "attempts": [
+    {
+     "kind": "spark_baseten",
+     "purpose": "parity_identify",
+     "model": "meta-models/muse-spark-open-1026",
+     "latency_ms": 5700,
+     "input_tokens": 324,
+     "output_tokens": 1634,
+     "outcome": "ok"
+    }
+   ],
+   "meta": {
+    "kind": "ambiguous",
+    "scientific_name": "Manis pentadactyla",
+    "common_name": "Chinese pangolin",
+    "breed": "",
+    "alternatives": [
+     {
+      "scientific_name": "Manis javanica",
+      "common_name": "Sunda pangolin"
+     },
+     {
+      "scientific_name": "Manis crassicaudata",
+      "common_name": "Indian pangolin"
+     },
+     {
+      "scientific_name": "Smutsia temminckii",
+      "common_name": "Ground pangolin"
+     },
+     {
+      "scientific_name": "Phataginus tricuspis",
+      "common_name": "White-bellied pangolin"
+     }
+    ],
+    "note": "Pangolin is a common name for eight living scaly mammal species in Asia and Africa."
+   },
+   "baseten": {
+    "kind": "ambiguous",
+    "scientific_name": "Manis pentadactyla",
+    "common_name": "pangolin",
+    "breed": "Manis pentadactyla",
+    "alternatives": [
+     {
+      "scientific_name": "Manis javanica",
+      "common_name": "Sunda pangolin"
+     },
+     {
+      "scientific_name": "Manis crassicaudata",
+      "common_name": "Indian pangolin"
+     },
+     {
+      "scientific_name": "Phataginus tricuspis",
+      "common_name": "white-bellied pangolin"
+     },
+     {
+      "scientific_name": "Smutsia gigantea",
+      "common_name": "giant pangolin"
+     }
+    ],
+    "note": "Pangolin is a common name for eight extant scaly anteater species in the family Manidae."
+   },
+   "json": {
+    "finish_reason": "stop",
+    "content_chars": 545,
+    "starts_with_brace": true,
+    "code_fence": false,
+    "think_tags": false,
+    "reasoning_field": "reasoning_content",
+    "refusal_field": false,
+    "json_valid": true,
+    "schema_errors": [],
+    "schema_valid": true
+   },
+   "same_kind": true,
+   "same_scientific_name": true
+  }
+ ],
+ "checklist": [
+  {
+   "case": "b axolotl x pangolin (E4 run 1)",
+   "items": [
+    "a chinese pangolin body shape",
+    "a chinese pangolin head with visible eyes",
+    "axolotl skin patches on the back and flanks",
+    "feet resting on the ground"
+   ],
+   "error": null,
+   "attempts": [
+    {
+     "kind": "spark_baseten",
+     "purpose": "parity_checklist",
+     "model": "meta-models/muse-spark-open-1026",
+     "latency_ms": 11035,
+     "input_tokens": 3707,
+     "output_tokens": 1175,
+     "outcome": "ok"
+    }
+   ],
+   "meta": {
+    "answers": [
+     "yes",
+     "yes",
+     "yes",
+     "yes"
+    ],
+    "choice": "a mix of both",
+    "creatures": 1,
+    "animals": [
+     "chinese pangolin",
+     "axolotl"
+    ]
+   },
+   "baseten": {
+    "answers": [
+     "yes",
+     "yes",
+     "yes",
+     "yes"
+    ],
+    "choice": "a mix of both",
+    "creatures": 1,
+    "animals": [
+     "chinese pangolin",
+     "axolotl"
+    ],
+    "notes": "The illustration shows a single hybrid creature with pangolin scales and body combined with axolotl gills and pink skin patches.",
+    "json": {
+     "finish_reason": "stop",
+     "content_chars": 516,
+     "starts_with_brace": true,
+     "code_fence": false,
+     "think_tags": false,
+     "reasoning_field": "reasoning_content",
+     "refusal_field": false,
+     "json_valid": true,
+     "schema_errors": [],
+     "schema_valid": true
+    }
+   },
+   "agree": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "items_echoed_in_order": true
+  },
+  {
+   "case": "c lion x eagle",
+   "items": [
+    "a lion body shape",
+    "a golden eagle head with visible eyes",
+    "wings rooted in a heavy shoulder structure that can carry them, not floating",
+    "four legs plus a separate pair of golden eagle wings",
+    "golden eagle feathers patches on the forequarters and neck"
+   ],
+   "error": null,
+   "attempts": [
+    {
+     "kind": "spark_baseten",
+     "purpose": "parity_checklist",
+     "model": "meta-models/muse-spark-open-1026",
+     "latency_ms": 12507,
+     "input_tokens": 3722,
+     "output_tokens": 1375,
+     "outcome": "ok"
+    }
+   ],
+   "meta": {
+    "answers": [
+     "yes",
+     "yes",
+     "yes",
+     "yes",
+     "yes"
+    ],
+    "choice": "a mix of both",
+    "creatures": 1,
+    "animals": [
+     "lion",
+     "golden eagle"
+    ]
+   },
+   "baseten": {
+    "answers": [
+     "yes",
+     "yes",
+     "yes",
+     "yes",
+     "yes"
+    ],
+    "choice": "a mix of both",
+    "creatures": 1,
+    "animals": [
+     "lion",
+     "golden eagle"
+    ],
+    "notes": "The image shows a griffin illustration combining a lion's body and legs with a golden eagle's head, wings, and feathered chest.",
+    "json": {
+     "finish_reason": "stop",
+     "content_chars": 642,
+     "starts_with_brace": true,
+     "code_fence": false,
+     "think_tags": false,
+     "reasoning_field": "reasoning_content",
+     "refusal_field": false,
+     "json_valid": true,
+     "schema_errors": [],
+     "schema_valid": true
+    }
+   },
+   "agree": [
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "items_echoed_in_order": true
+  },
+  {
+   "case": "d rhinoceros beetle x brown bear",
+   "items": [
+    "a brown bear body shape",
+    "a brown bear head with visible eyes",
+    "thick supporting legs and visible breathing openings along the flanks",
+    "european rhinoceros beetle wings in place of the front legs",
+    "european rhinoceros beetle jointed tail segments in place of the tail",
+    "european rhinoceros beetle exoskeleton patches on the forequarters and neck"
+   ],
+   "error": null,
+   "attempts": [
+    {
+     "kind": "spark_baseten",
+     "purpose": "parity_checklist",
+     "model": "meta-models/muse-spark-open-1026",
+     "latency_ms": 13377,
+     "input_tokens": 3756,
+     "output_tokens": 1848,
+     "outcome": "ok"
+    }
+   ],
+   "meta": {
+    "answers": [
+     "yes",
+     "yes",
+     "yes",
+     "no",
+     "yes",
+     "yes"
+    ],
+    "choice": "a mix of both",
+    "creatures": 1,
+    "animals": [
+     "brown bear",
+     "european rhinoceros beetle"
+    ]
+   },
+   "baseten": {
+    "answers": [
+     "yes",
+     "yes",
+     "yes",
+     "no",
+     "yes",
+     "yes"
+    ],
+    "choice": "a mix of both",
+    "creatures": 1,
+    "animals": [
+     "brown bear",
+     "european rhinoceros beetle"
+    ],
+    "notes": "The image shows a single hybrid creature with a brown bear body and head combined with beetle wings, shell patches, and tail.",
+    "json": {
+     "finish_reason": "stop",
+     "content_chars": 782,
+     "starts_with_brace": true,
+     "code_fence": false,
+     "think_tags": false,
+     "reasoning_field": "reasoning_content",
+     "refusal_field": false,
+     "json_valid": true,
+     "schema_errors": [],
+     "schema_valid": true
+    }
+   },
+   "agree": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "items_echoed_in_order": true
+  }
+ ],
+ "checklist_agreement": "15/15",
+ "budget": {
+  "before": {
+   "image": 22,
+   "spark": 89,
+   "sam": 12,
+   "spark_baseten": 34
+  },
+  "after": {
+   "image": 22,
+   "spark": 89,
+   "sam": 12,
+   "spark_baseten": 44
+  },
+  "made": {
+   "image": 0,
+   "spark": 0,
+   "sam": 0,
+   "spark_baseten": 10
+  }
+ },
+ "attempts": [
+  {
+   "step": "s1:parity:parity_plan",
+   "kind": "spark_baseten",
+   "purpose": "parity_plan",
+   "model": "meta-models/muse-spark-open-1026",
+   "latency_ms": 67530,
+   "input_tokens": 2516,
+   "output_tokens": 32768,
+   "total_tokens": 35284,
+   "outcome": "ok",
+   "response_id": "chatcmpl-040f723a4b604c4988204966da97173e",
+   "ts": "2026-11-01T01:44:51+00:00"
+  },
+  {
+   "step": "s1:parity:parity_plan",
+   "kind": "spark_baseten",
+   "purpose": "parity_plan",
+   "model": "meta-models/muse-spark-open-1026",
+   "latency_ms": 62796,
+   "input_tokens": 2465,
+   "output_tokens": 32768,
+   "total_tokens": 35233,
+   "outcome": "ok",
+   "response_id": "chatcmpl-9fd5461fed8c472ab879dd9b0b41be17",
+   "ts": "2026-11-01T01:45:54+00:00"
+  },
+  {
+   "step": "s1:parity:parity_plan",
+   "kind": "spark_baseten",
+   "purpose": "parity_plan",
+   "model": "meta-models/muse-spark-open-1026",
+   "latency_ms": 61990,
+   "input_tokens": 2540,
+   "output_tokens": 32768,
+   "total_tokens": 35308,
+   "outcome": "ok",
+   "response_id": "chatcmpl-65e3b2a8b90a499387e95915f6c234bc",
+   "ts": "2026-11-01T01:46:56+00:00"
+  },
+  {
+   "step": "s1:parity:parity_polish",
+   "kind": "spark_baseten",
+   "purpose": "parity_polish",
+   "model": "meta-models/muse-spark-open-1026",
+   "latency_ms": 10827,
+   "input_tokens": 547,
+   "output_tokens": 4881,
+   "total_tokens": 5428,
+   "outcome": "ok",
+   "response_id": "chatcmpl-05235145955243dcb29d3ddd96571b75",
+   "ts": "2026-11-01T01:47:07+00:00"
+  },
+  {
+   "step": "s1:parity:parity_polish",
+   "kind": "spark_baseten",
+   "purpose": "parity_polish",
+   "model": "meta-models/muse-spark-open-1026",
+   "latency_ms": 8016,
+   "input_tokens": 480,
+   "output_tokens": 3657,
+   "total_tokens": 4137,
+   "outcome": "ok",
+   "response_id": "chatcmpl-b30498aa2001428ba89cba42dc24fb91",
+   "ts": "2026-11-01T01:47:15+00:00"
+  },
+  {
+   "step": "s1:parity:parity_identify",
+   "kind": "spark_baseten",
+   "purpose": "parity_identify",
+   "model": "meta-models/muse-spark-open-1026",
+   "latency_ms": 2501,
+   "input_tokens": 326,
+   "output_tokens": 704,
+   "total_tokens": 1030,
+   "outcome": "ok",
+   "response_id": "chatcmpl-a8165649df154f3680e3e4b1c2eda4b4",
+   "ts": "2026-11-01T01:47:18+00:00"
+  },
+  {
+   "step": "s1:parity:parity_identify",
+   "kind": "spark_baseten",
+   "purpose": "parity_identify",
+   "model": "meta-models/muse-spark-open-1026",
+   "latency_ms": 5700,
+   "input_tokens": 324,
+   "output_tokens": 1634,
+   "total_tokens": 1958,
+   "outcome": "ok",
+   "response_id": "chatcmpl-2dc4591ecfc74eeca32d0f1c0d46b680",
+   "ts": "2026-11-01T01:47:23+00:00"
+  },
+  {
+   "step": "s1:parity:parity_checklist",
+   "kind": "spark_baseten",
+   "purpose": "parity_checklist",
+   "model": "meta-models/muse-spark-open-1026",
+   "latency_ms": 11035,
+   "input_tokens": 3707,
+   "output_tokens": 1175,
+   "total_tokens": 4882,
+   "outcome": "ok",
+   "response_id": "chatcmpl-ccdd32ac2b094ff4845ff53606a3d4dc",
+   "ts": "2026-11-01T01:47:34+00:00"
+  },
+  {
+   "step": "s1:parity:parity_checklist",
+   "kind": "spark_baseten",
+   "purpose": "parity_checklist",
+   "model": "meta-models/muse-spark-open-1026",
+   "latency_ms": 12507,
+   "input_tokens": 3722,
+   "output_tokens": 1375,
+   "total_tokens": 5097,
+   "outcome": "ok",
+   "response_id": "chatcmpl-7abc78b567bc40ba981e5b302bd34f27",
+   "ts": "2026-11-01T01:47:47+00:00"
+  },
+  {
+   "step": "s1:parity:parity_checklist",
+   "kind": "spark_baseten",
+   "purpose": "parity_checklist",
+   "model": "meta-models/muse-spark-open-1026",
+   "latency_ms": 13377,
+   "input_tokens": 3756,
+   "output_tokens": 1848,
+   "total_tokens": 5604,
+   "outcome": "ok",
+   "response_id": "chatcmpl-4278ee5ff380466ebc09a6e268169606",
+   "ts": "2026-11-01T01:48:00+00:00"
+  }
+ ]
+}

@@ -1,0 +1,110 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Remove the beetle bodies on the shoulders; keep everything else.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ],
+  "previous_response_id": "resp_6ae64d00779eda4adde54ede"
+ },
+ "response": {
+  "id": "resp_6ae69ae90ba30f4266ca4750",
+  "access_programs": null,
+  "created_at": 1793497833.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae69ae99da8cd7197dd4a44",
+    "summary": [
+     {
+      "text": "**Editing image for removal**\nI'm removing the beetle bodies from the shoulders in the image while keeping the wings, tail, and spiracles exactly as they are.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae69ae9ccd4a81a0fc04ecd",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0gycUJ6U3BoR1BzampZREFBaGE4V1NOaE9kLWJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczo3OGIyNTY1YS0wY2UyLTQ0ZTgtODAwOS01NjE5YjM2YjVkMjA6R0JDbEJ6U2k2d19NSFVNTkFDWmNwMGd0T3NVNmJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM0OTc4MzN9.Q8WLFwEWHJ37pI4a1w20qwG-Tvn5",
+    "result": "<elided> (787696 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": "resp_6ae64d00779eda4adde54ede",
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 23341,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 7936
+   },
+   "output_tokens": 631,
+   "output_tokens_details": {
+    "reasoning_tokens": 78
+   },
+   "total_tokens": 23972
+  },
+  "user": null
+ }
+}

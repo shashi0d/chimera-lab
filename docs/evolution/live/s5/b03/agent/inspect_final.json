@@ -1,0 +1,466 @@
+{
+ "protocol": "plan-blind (S3a)",
+ "critics": [
+  "spark_open",
+  "meta_spark"
+ ],
+ "items": [
+  {
+   "source": "checklist",
+   "key": "frame",
+   "text": "Is the overall body shape that of a lion?",
+   "group": "structure",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "fix": "Show the planned lion body shape and outline; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "head",
+   "text": "Does it have a golden eagle head with visible eyes?",
+   "group": "structure",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "fix": "Show the planned golden eagle head, fully visible with clear eyes; keep everything else the same.",
+   "sam": "golden eagle head",
+   "pair_status": "pass",
+   "sam_found": true,
+   "sam_fill": 0.0181
+  },
+  {
+   "source": "checklist",
+   "key": "wings_extra",
+   "text": "Does it have four walking legs plus a separate pair of wings?",
+   "group": "structure",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "fix": "Show the planned four legs plus a separate pair of wings; keep everything else the same.",
+   "sam": "wings",
+   "pair_status": "pass",
+   "sam_found": true,
+   "sam_fill": 0.1522
+  },
+  {
+   "source": "checklist",
+   "key": "whole_animal",
+   "text": "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?",
+   "group": "structure",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "Show the planned golden eagle contribution only as layered contour feathers on the lion's own body over the shoulders and neck, not as separate animals; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "second_head",
+   "text": "Is there a second head anywhere?",
+   "group": "structure",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "Show one single head, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "extra_legs",
+   "text": "Does it have more than 4 walking legs?",
+   "group": "structure",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "Show exactly 4 walking legs, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "no_mane",
+   "text": "Does it have a full mane of long hair around the head and neck?",
+   "group": "structure",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "The plan has no mane: show the planned neck with no mane; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "plain_fur",
+   "text": "Does the fur show stripes or spots?",
+   "group": "pattern",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "Show a plain coat with no stripes or spots, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "cover_present",
+   "text": "Are there layered contour feathers on the shoulders and neck?",
+   "group": "surface",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "fix": "Show the planned layered contour feathers over the shoulders and neck; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "connects_feathered_wings",
+   "text": "Does the feathered wings grow out of the layered contour feathers at its base, so they look like one connected system?",
+   "group": "connection",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "fix": "Show the feathered wings growing out of the layered contour feathers at its base, as one system; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "separate_feathered_wings",
+   "text": "Does the feathered wings look stuck on separately, with no connection to the layered contour feathers?",
+   "group": "connection",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "Show the feathered wings growing out of the layered contour feathers at its base, as one system; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "separate_bodies",
+   "text": "separate bodies: 1",
+   "group": "structure",
+   "expect": 1,
+   "answers": {
+    "spark_open": 1,
+    "meta_spark": 1
+   },
+   "status": "pass",
+   "fix": "Show the planned golden eagle contribution only as layered contour feathers on the lion's own body over the shoulders and neck, not as separate animals; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "heads",
+   "text": "heads: 1",
+   "group": "structure",
+   "expect": 1,
+   "answers": {
+    "spark_open": 1,
+    "meta_spark": 1
+   },
+   "status": "pass",
+   "fix": "Show one single head, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "walking_legs",
+   "text": "walking legs: 4",
+   "group": "structure",
+   "expect": 4,
+   "answers": {
+    "spark_open": 4,
+    "meta_spark": 4
+   },
+   "status": "pass",
+   "fix": "Show exactly 4 walking legs, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "wings",
+   "text": "wings: 2",
+   "group": "structure",
+   "expect": 2,
+   "answers": {
+    "spark_open": 2,
+    "meta_spark": 2
+   },
+   "status": "pass",
+   "fix": "Show exactly one pair of wings, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "extra_limb_pieces",
+   "text": "extra limb pieces: 0",
+   "group": "structure",
+   "expect": 0,
+   "answers": {
+    "spark_open": 0,
+    "meta_spark": 0
+   },
+   "status": "pass",
+   "fix": "Show the lion's own limbs only, with no extra limb-like pieces; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "origin",
+   "key": "origin_feathered_wings",
+   "text": "which animal the feathered wings came from",
+   "group": "identity",
+   "expect": "golden eagle",
+   "answers": {
+    "spark_open": "golden eagle",
+    "meta_spark": "golden eagle"
+   },
+   "status": "pass",
+   "sam": null,
+   "fix": "Show the feathered wings with its own form (broad wings of layered flight feathers with fingered tips), in its planned place; keep everything else the same.",
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  }
+ ],
+ "failures": [],
+ "structural_failures": 0,
+ "uncertain": 0,
+ "sam_calls": 2,
+ "descriptions": {
+  "spark_open": {
+   "description": "The creature is a large quadrupedal chimera standing in side profile on a small patch of dry ground with sparse grass, facing to the right with its head turned slightly toward the viewer. Its front half, including the head, neck, chest, and wings, is covered in dense, overlapping brown feathers like a bird of prey, while its torso, hindquarters, and four limbs are covered in short tan fur like a large cat. It has two large outspread wings on its upper back, four sturdy legs ending in clawed paws, and a long slender tail with a dark tuft at the tip. The overall coloration is warm brown and tan with darker brown shading on the wing flight feathers and tail tip.",
+   "parts": [
+    {
+     "part": "head",
+     "looks_like": "an eagle-like head with a hooked dark gray beak with a yellow cere at the base, a golden-yellow eye with a dark pupil, and a feathered crown with a small spiky tuft at the back of the head",
+     "where": "at the front top of the body, atop the feathered neck, facing right in profile"
+    },
+    {
+     "part": "mane",
+     "looks_like": "a dense ruff of overlapping pointed brown feathers covering the neck and upper chest, transitioning below to longer shaggy tan fur on the lower chest",
+     "where": "around the neck and chest, extending from under the head down to between the front legs"
+    },
+    {
+     "part": "legs",
+     "looks_like": "four thick, muscular, lion-like legs covered in short tan fur with slightly darker shading on the joints and undersides",
+     "where": "two front legs under the chest and two hind legs under the torso and hips, supporting the body"
+    },
+    {
+     "part": "feet",
+     "looks_like": "four large rounded paws with visible dark claws and toe pads, with fur covering the top and bare pads underneath",
+     "where": "at the bottom end of each leg, in contact with the ground"
+    },
+    {
+     "part": "tail",
+     "looks_like": "a long, slender, lion-like tail covered in short tan fur with a darker brown bushy tuft at the very tip, hanging down and curving slightly outward",
+     "where": "extending from the rear of the hindquarters, hanging down past the hocks"
+    },
+    {
+     "part": "wings",
+     "looks_like": "two large, broad, feathered wings with layered coverts in golden-brown and darker brown flight feathers along the trailing edge, fully spread outward and upward",
+     "where": "attached to the upper back/shoulder area behind the feathered neck, one on the near side prominently visible and one partially visible behind the head on the far side"
+    },
+    {
+     "part": "feathers",
+     "looks_like": "dense, overlapping, pointed feathers in shades of light tan, golden-brown and dark brown, with detailed individual barbs visible, covering the head, neck, chest and wings",
+     "where": "covering the head, neck, chest, and both wings"
+    },
+    {
+     "part": "markings",
+     "looks_like": "no distinct spots or stripes; the fur is solid tan with subtle darker brown shading along the back, sides and legs, and the feathers are mottled with lighter and darker brown edges",
+     "where": "over the entire body, with darker tones on the back, wing tips and tail tuft"
+    }
+   ],
+   "attached_objects": [],
+   "animals": [
+    "eagle",
+    "lion"
+   ],
+   "separate_bodies": 1,
+   "heads": 1,
+   "walking_legs": 4,
+   "wings": 2,
+   "extra_limb_pieces": 0,
+   "tails": 1
+  },
+  "meta_spark": {
+   "description": "A large four-legged creature standing in side view facing right on a small patch of bare dirt with sparse grass. The front has the head, hooked beak, and densely feathered neck and chest of a large bird of prey in golden-brown tones, with two large outspread feathered wings rising from the shoulders. The mid-body, four muscular legs, broad paws with claws, and long tuft-tipped tail are covered in short smooth tawny fur like a big cat. The overall color is golden-brown on the feathered front grading to light tan on the furred legs and body, with darker brown flight feathers and tail tuft.",
+   "parts": [
+    {
+     "part": "head",
+     "looks_like": "eagle-like with golden-brown feathers, spiky tufts at the back, and a fierce expression",
+     "where": "at the front top of the body, shown in right profile"
+    },
+    {
+     "part": "eyes",
+     "looks_like": "amber-yellow with a round dark pupil",
+     "where": "on the side of the head"
+    },
+    {
+     "part": "beak",
+     "looks_like": "sharply hooked raptor beak, yellow at the base and dark gray at the tip",
+     "where": "on the front of the head"
+    },
+    {
+     "part": "neck and chest feathers",
+     "looks_like": "dense overlapping pointed golden-brown feathers grading down into shaggy pale brown fur",
+     "where": "covering the neck, throat and upper chest"
+    },
+    {
+     "part": "wings",
+     "looks_like": "large broad bird wings with layered brown coverts and long dark brown flight feathers",
+     "where": "rising from the shoulders on the upper back, one extending to the right and one raised behind the head"
+    },
+    {
+     "part": "torso",
+     "looks_like": "muscular tawny body covered in short smooth light brown fur",
+     "where": "in the middle and rear of the animal between the front and hind legs"
+    },
+    {
+     "part": "legs",
+     "looks_like": "sturdy feline legs covered in short tan fur",
+     "where": "two at the front under the chest and two at the rear under the hips, supporting the body"
+    },
+    {
+     "part": "feet",
+     "looks_like": "large rounded paws with short dark claws",
+     "where": "at the bottom of each of the four legs on the ground"
+    },
+    {
+     "part": "tail",
+     "looks_like": "long slender furred tail with a dark brown fluffy tuft at the tip",
+     "where": "extending from the rear of the body and curving down to the right"
+    }
+   ],
+   "attached_objects": [],
+   "animals": [
+    "eagle",
+    "lion"
+   ],
+   "separate_bodies": 1,
+   "heads": 1,
+   "walking_legs": 4,
+   "wings": 2,
+   "extra_limb_pieces": 0,
+   "tails": 1
+  }
+ },
+ "matches": {
+  "spark_open": {
+   "seen": [
+    "beak",
+    "feathers",
+    "wings"
+   ],
+   "expected": [
+    "beak",
+    "feathers",
+    "wings"
+   ],
+   "extras": [],
+   "omissions": []
+  },
+  "meta_spark": {
+   "seen": [
+    "beak",
+    "feathers",
+    "wings"
+   ],
+   "expected": [
+    "beak",
+    "feathers",
+    "wings"
+   ],
+   "extras": [],
+   "omissions": []
+  }
+ },
+ "third_animals": {
+  "spark_open": [],
+  "meta_spark": []
+ },
+ "balance": {
+  "yes": 5,
+  "no": 6
+ },
+ "expected_counts": {
+  "separate_bodies": 1,
+  "heads": 1,
+  "walking_legs": 4,
+  "wings": 2,
+  "extra_limb_pieces": 0
+ }
+}

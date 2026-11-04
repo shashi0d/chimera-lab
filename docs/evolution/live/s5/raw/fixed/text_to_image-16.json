@@ -1,0 +1,109 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Silhouette: Four-legged tortoise frame. Host frame: the tortoise sets the outline, body size and overall frame. A single creature that combines a tortoise and a domestic goat. Head of the tortoise, fully visible and uncluttered, with clear, discernible eyes. Details: tortoise body and legs, with its own shell over the shoulders, back, flanks, belly and hips, and its own scaly skin on the face; from the domestic goat, as parts and materials on the tortoise's own body, dense fur in its own colors grown from the skin as the tortoise's own covering over the crown of the head, neck, legs and tail — it replaces the tortoise's scaly skin there and conforms to the tortoise's body, sized to the tortoise's body and following its contours; every covered part keeps the tortoise's own length and shape, and the tail stays the tortoise's own tail; the scaly skin stops at the covering's edge, and the face keeps the tortoise's own scaly skin; the tortoise's shell keeps its own form and bony plates, with only its color taken from the domestic goat. The covering follows the body's own shape. Bilaterally symmetrical, recognizable limbs, visible sense organs. Habitat cue (grassland): dark back and light belly (strong countershading). Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "id": "resp_6ae7b2572d06680e44204d30",
+  "access_programs": null,
+  "created_at": 1793569367.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae7b2570bd639ecb70240db",
+    "summary": [
+     {
+      "text": "**Designing tortoise-goat creature**\nI'm planning a single four-legged silhouette with a tortoise frame and shell, adding dense goat fur grown from the skin while keeping the tortoise head fully visible with clear eyes and scaly skin.\n**Composing natural history illustration**\nI'm assembling the tortoise-goat hybrid with goat-colored shell and fur covering the crown, neck, legs, and tail, keeping scaly facial skin, countershading, and a side three-quarter pose on a plain light background.\n**Refining illustration details**\nI'm adjusting the countershading and adding more grassland to the scene, then preparing to generate another version of the natural history illustration.\n**Refining creature illustration**\nI'm preparing another version with stronger countershading, a darker back, lighter belly, and clearer goat-like shell tones while keeping the scaly face and furred legs.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae7b2579b1f4074d1d3485a",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0tBVnBUVDJFV1didHNVSEFMYTdFY1FPVUZoM2JnMWlBUUJlIiwicmVzdW1lX2lkIjoiczpjYjJiMTZlMi03YTQ3LTRiMDUtOTM1OC1jNGVkM2UyZjhhZjQ6R0Q0ZHBqUW1wWHc5akFVR0FCak9FUF9tMDBJNmJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM1NjkzNjd9.Q8WLFwEjfuD0G0Ora4J4gqjhaPtR",
+    "result": "<elided> (857496 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 21317,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 13184
+   },
+   "output_tokens": 3231,
+   "output_tokens_details": {
+    "reasoning_tokens": 795
+   },
+   "total_tokens": 24548
+  },
+  "user": null
+ }
+}

@@ -1,0 +1,789 @@
+{
+ "before": [
+  {
+   "key": "frame",
+   "group": "structure",
+   "text": "Is the overall body shape that of a brown bear?",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "head",
+   "group": "structure",
+   "text": "Does it have a brown bear head with visible eyes?",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "no_wings",
+   "group": "structure",
+   "text": "Are there wings anywhere on the body?",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "part_european_rhinoceros_beetle_head_horn",
+   "group": "structure",
+   "text": "Is there a single curved horn of hard, glossy chitin rising from the brow?",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": true
+  },
+  {
+   "key": "whole_animal",
+   "group": "structure",
+   "text": "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "second_head",
+   "group": "structure",
+   "text": "Is there a second head anywhere?",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "insect_legs",
+   "group": "structure",
+   "text": "Are there jointed, insect-like leg pieces on or along the legs?",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "yes"
+   },
+   "status": "fail",
+   "pair_status": "uncertain",
+   "sam_found": null
+  },
+  {
+   "key": "extra_legs",
+   "group": "structure",
+   "text": "Does it have more than 4 walking legs?",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "plain_fur",
+   "group": "pattern",
+   "text": "Does the fur show stripes or spots?",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "cover_present",
+   "group": "integration",
+   "text": "Are there hard, glossy chitin plates with fine seams on the head, neck, shoulders, back, flanks, belly, hips, legs and tail?",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "fail",
+   "pair_status": "fail",
+   "sam_found": null
+  },
+  {
+   "key": "grows_out",
+   "group": "integration",
+   "text": "Do the hard, glossy chitin plates with fine seams grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending into scales), rather than looking attached on top?",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "on_top",
+   "group": "integration",
+   "text": "Do the hard, glossy chitin plates with fine seams look like separate pieces laid on top of the fur, with a raised rim or a gap at the edge?",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "continuous",
+   "group": "integration",
+   "text": "Do the hard, glossy chitin plates with fine seams form one continuous structure over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, rather than scattered pieces?",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "fail",
+   "pair_status": "fail",
+   "sam_found": null
+  },
+  {
+   "key": "scattered",
+   "group": "integration",
+   "text": "Are the hard, glossy chitin plates with fine seams scattered as separate pieces over different parts of the body?",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "yes"
+   },
+   "status": "fail",
+   "pair_status": "uncertain",
+   "sam_found": null
+  },
+  {
+   "key": "follows_body",
+   "group": "integration",
+   "text": "Do the hard, glossy chitin plates with fine seams follow this body's own shape and contours, the way its own skin would?",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "separate_outline",
+   "group": "integration",
+   "text": "Do the hard, glossy chitin plates with fine seams keep the outline of a separate object, such as another animal's shell or back, instead of the body's own shape?",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "sized_to_body",
+   "group": "integration",
+   "text": "Are the plates sized to this animal's body, about as large as its own muscles and body segments?",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "wrong_scale",
+   "group": "integration",
+   "text": "Do the plates look made for a much smaller or much larger animal?",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "legs_covered",
+   "group": "coverage",
+   "text": "Are the legs covered by the hard, glossy chitin plates with fine seams as well as the body?",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "abrupt_stop",
+   "group": "coverage",
+   "text": "Do the hard, glossy chitin plates with fine seams stop abruptly partway across the body or legs, with no visible reason?",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "connects_head_horn",
+   "group": "connection",
+   "text": "Does the head horn grow out of the hard, glossy chitin plates with fine seams at its base, so they look like one connected system?",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "fail",
+   "pair_status": "fail",
+   "sam_found": null
+  },
+  {
+   "key": "separate_head_horn",
+   "group": "connection",
+   "text": "Does the head horn look stuck on separately, with no connection to the hard, glossy chitin plates with fine seams?",
+   "expect": "no",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "fail",
+   "pair_status": "fail",
+   "sam_found": null
+  },
+  {
+   "key": "identity_head_horn",
+   "group": "identity",
+   "text": "Does the head horn look like it came from a european rhinoceros beetle?",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "separate_bodies",
+   "group": "structure",
+   "text": "separate bodies: 1",
+   "expect": 1,
+   "answers": {
+    "spark_open": 1,
+    "meta_spark": 1
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "heads",
+   "group": "structure",
+   "text": "heads: 1",
+   "expect": 1,
+   "answers": {
+    "spark_open": 1,
+    "meta_spark": 1
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "walking_legs",
+   "group": "structure",
+   "text": "walking legs: 4",
+   "expect": 4,
+   "answers": {
+    "spark_open": 4,
+    "meta_spark": 4
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "wings",
+   "group": "structure",
+   "text": "wings: 0",
+   "expect": 0,
+   "answers": {
+    "spark_open": 0,
+    "meta_spark": 0
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "extra_limb_pieces",
+   "group": "structure",
+   "text": "extra limb pieces: 0",
+   "expect": 0,
+   "answers": {
+    "spark_open": 0,
+    "meta_spark": 0
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "extra_mane",
+   "group": "structure",
+   "text": "described but not planned: mane",
+   "expect": "absent",
+   "answers": {
+    "spark_open": true,
+    "meta_spark": false
+   },
+   "status": "pass",
+   "pair_status": "uncertain",
+   "sam_found": null
+  },
+  {
+   "key": "origin_head_horn",
+   "group": "identity",
+   "text": "which animal the head horn came from",
+   "expect": "european rhinoceros beetle",
+   "answers": {
+    "spark_open": "european rhinoceros beetle",
+    "meta_spark": "european rhinoceros beetle"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "third_animal",
+   "group": "structure",
+   "text": "an animal other than the two parents",
+   "expect": "none",
+   "answers": {
+    "spark_open": [],
+    "meta_spark": [
+     "pillbug"
+    ]
+   },
+   "status": "fail",
+   "pair_status": "uncertain",
+   "sam_found": null
+  }
+ ],
+ "after": [
+  {
+   "key": "frame",
+   "group": "structure",
+   "text": "Is the overall body shape that of a brown bear?",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "head",
+   "group": "structure",
+   "text": "Does it have a brown bear head with visible eyes?",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "no_wings",
+   "group": "structure",
+   "text": "Are there wings anywhere on the body?",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "part_european_rhinoceros_beetle_head_horn",
+   "group": "structure",
+   "text": "Is there a single curved horn of hard, glossy chitin rising from the brow?",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": true
+  },
+  {
+   "key": "whole_animal",
+   "group": "structure",
+   "text": "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "second_head",
+   "group": "structure",
+   "text": "Is there a second head anywhere?",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "insect_legs",
+   "group": "structure",
+   "text": "Are there jointed, insect-like leg pieces on or along the legs?",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "extra_legs",
+   "group": "structure",
+   "text": "Does it have more than 4 walking legs?",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "plain_fur",
+   "group": "pattern",
+   "text": "Does the fur show stripes or spots?",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "cover_present",
+   "group": "integration",
+   "text": "Are there hard, glossy chitin plates with fine seams on the head, neck, shoulders, back, flanks, belly, hips, legs and tail?",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "fail",
+   "pair_status": "fail",
+   "sam_found": null
+  },
+  {
+   "key": "grows_out",
+   "group": "integration",
+   "text": "Do the hard, glossy chitin plates with fine seams grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending into scales), rather than looking attached on top?",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "fail",
+   "pair_status": "fail",
+   "sam_found": null
+  },
+  {
+   "key": "on_top",
+   "group": "integration",
+   "text": "Do the hard, glossy chitin plates with fine seams look like separate pieces laid on top of the fur, with a raised rim or a gap at the edge?",
+   "expect": "no",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "fail",
+   "pair_status": "fail",
+   "sam_found": null
+  },
+  {
+   "key": "continuous",
+   "group": "integration",
+   "text": "Do the hard, glossy chitin plates with fine seams form one continuous structure over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, rather than scattered pieces?",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "fail",
+   "pair_status": "fail",
+   "sam_found": null
+  },
+  {
+   "key": "scattered",
+   "group": "integration",
+   "text": "Are the hard, glossy chitin plates with fine seams scattered as separate pieces over different parts of the body?",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "yes"
+   },
+   "status": "fail",
+   "pair_status": "uncertain",
+   "sam_found": null
+  },
+  {
+   "key": "follows_body",
+   "group": "integration",
+   "text": "Do the hard, glossy chitin plates with fine seams follow this body's own shape and contours, the way its own skin would?",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "no"
+   },
+   "status": "fail",
+   "pair_status": "uncertain",
+   "sam_found": null
+  },
+  {
+   "key": "separate_outline",
+   "group": "integration",
+   "text": "Do the hard, glossy chitin plates with fine seams keep the outline of a separate object, such as another animal's shell or back, instead of the body's own shape?",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "yes"
+   },
+   "status": "fail",
+   "pair_status": "uncertain",
+   "sam_found": null
+  },
+  {
+   "key": "sized_to_body",
+   "group": "integration",
+   "text": "Are the plates sized to this animal's body, about as large as its own muscles and body segments?",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "wrong_scale",
+   "group": "integration",
+   "text": "Do the plates look made for a much smaller or much larger animal?",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "legs_covered",
+   "group": "coverage",
+   "text": "Are the legs covered by the hard, glossy chitin plates with fine seams as well as the body?",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "fail",
+   "pair_status": "fail",
+   "sam_found": null
+  },
+  {
+   "key": "abrupt_stop",
+   "group": "coverage",
+   "text": "Do the hard, glossy chitin plates with fine seams stop abruptly partway across the body or legs, with no visible reason?",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "yes"
+   },
+   "status": "fail",
+   "pair_status": "uncertain",
+   "sam_found": null
+  },
+  {
+   "key": "connects_head_horn",
+   "group": "connection",
+   "text": "Does the head horn grow out of the hard, glossy chitin plates with fine seams at its base, so they look like one connected system?",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "no"
+   },
+   "status": "fail",
+   "pair_status": "uncertain",
+   "sam_found": null
+  },
+  {
+   "key": "separate_head_horn",
+   "group": "connection",
+   "text": "Does the head horn look stuck on separately, with no connection to the hard, glossy chitin plates with fine seams?",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "yes"
+   },
+   "status": "fail",
+   "pair_status": "uncertain",
+   "sam_found": null
+  },
+  {
+   "key": "identity_head_horn",
+   "group": "identity",
+   "text": "Does the head horn look like it came from a european rhinoceros beetle?",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "separate_bodies",
+   "group": "structure",
+   "text": "separate bodies: 1",
+   "expect": 1,
+   "answers": {
+    "spark_open": 1,
+    "meta_spark": 1
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "heads",
+   "group": "structure",
+   "text": "heads: 1",
+   "expect": 1,
+   "answers": {
+    "spark_open": 1,
+    "meta_spark": 1
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "walking_legs",
+   "group": "structure",
+   "text": "walking legs: 4",
+   "expect": 4,
+   "answers": {
+    "spark_open": 4,
+    "meta_spark": 4
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "wings",
+   "group": "structure",
+   "text": "wings: 0",
+   "expect": 0,
+   "answers": {
+    "spark_open": 0,
+    "meta_spark": 0
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "extra_limb_pieces",
+   "group": "structure",
+   "text": "extra limb pieces: 0",
+   "expect": 0,
+   "answers": {
+    "spark_open": 0,
+    "meta_spark": 0
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  },
+  {
+   "key": "origin_head_horn",
+   "group": "identity",
+   "text": "which animal the head horn came from",
+   "expect": "european rhinoceros beetle",
+   "answers": {
+    "spark_open": "european rhinoceros beetle",
+    "meta_spark": "european rhinoceros beetle"
+   },
+   "status": "pass",
+   "pair_status": "pass",
+   "sam_found": null
+  }
+ ],
+ "kept": "first"
+}

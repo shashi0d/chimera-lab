@@ -1,0 +1,29 @@
+{
+ "purpose": "text_to_image_error",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Show the hard, glossy chitin plates with fine seams grown in the skin over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, as one covering that replaces the brown bear's fur there; the fur stops at its edge; keep everything else the same. Show the hard, glossy chitin plates with fine seams as one continuous covering over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, not scattered pieces; the brown bear's fur stays on the belly and legs; keep everything else the same.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ],
+  "previous_response_id": "resp_6ae77367a2865a62a75f4c91"
+ },
+ "response": {
+  "status": 500,
+  "body": {
+   "error": {
+    "code": null,
+    "message": "internal server error",
+    "param": null,
+    "type": "server_error"
+   }
+  }
+ }
+}

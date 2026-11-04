@@ -1,0 +1,110 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "The plan has no spots: show the horse's own body there instead; keep everything else the same. Show the planned common octopus contribution only as soft, color-changing skin with fine bumps on the horse's own body over the back, flanks and belly, not as separate animals; keep everything else the same.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ],
+  "previous_response_id": "resp_6ae7a957056f7d5cc5164139"
+ },
+ "response": {
+  "id": "resp_6ae7a9b30224c0b1509043e5",
+  "access_programs": null,
+  "created_at": 1793567155.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae7a9b372117a08377d4949",
+    "summary": [
+     {
+      "text": "**Refining background gradient**\nI'm adjusting the background to a smooth gradient that goes from darker to lighter with no spots, while keeping the overall background consistent.\n**Refining horse skin texture**\nI'm updating the image to remove the spots and show the horse's own skin with a smooth, color-changing coat and fine bumps across the back, flanks, and belly, while keeping everything else the same.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae7a9b3165d5db740864051",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0F2TlREUl9jNkQxWlM0R0FFbE1Hb3J3amxWWWJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczoyMTg5YTk1Yy04OGJmLTQ0ZjctYTU4NC1kYTg5Yzc3Y2FkMjE6R09BcUhEUUpWY2hRZDFabkFHTnpHekdLUWgwM2JnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM1NjcxNTV9.Q8WLFwE7H9PnZnfth74udGmOdFdj",
+    "result": "<elided> (620960 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": "resp_6ae7a957056f7d5cc5164139",
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 16593,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 11904
+   },
+   "output_tokens": 752,
+   "output_tokens_details": {
+    "reasoning_tokens": 164
+   },
+   "total_tokens": 17345
+  },
+  "user": null
+ }
+}

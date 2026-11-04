@@ -5,7 +5,6 @@ import { useGraph } from "../graph/store";
 import type { GraphEdge, GraphNode, Position } from "../graph/types";
 import { prepareImage } from "../nodes/image-input/codec";
 import type { ImageInputData } from "../nodes/image-input/types";
-import { startUpload } from "../nodes/image-input/uploads";
 import { createNode } from "../nodes/registry";
 import { putBlob, rememberBlobUrl } from "../persistence/blobStore";
 import { toast } from "../ui/toastStore";
@@ -16,9 +15,10 @@ export const LAYOUT = { imageGapY: 330, fusionDx: 320, resultDx: 380 };
 /** Approximate footprints, used only to avoid dropping new nodes on top of old ones. */
 export const FOOTPRINT: Record<string, { w: number; h: number }> = {
   "image-input": { w: 240, h: 300 },
-  fusion: { w: 300, h: 440 },
-  result: { w: 500, h: 660 },
-  "field-card": { w: 340, h: 620 },
+  fusion: { w: 320, h: 460 },
+  version: { w: 340, h: 470 },
+  edit: { w: 320, h: 380 },
+  card: { w: 300, h: 460 },
 };
 const DEFAULT_FOOTPRINT = { w: 280, h: 300 };
 
@@ -44,6 +44,16 @@ export function findFreeSpot(at: Position, w: number, h: number): Position {
   return at;
 }
 
+/** SHA-256 of the prepared copy (hex), so the same photo in both slots can be refused locally. */
+export async function digest(blob: Blob): Promise<string | undefined> {
+  try {
+    const buf = await crypto.subtle.digest("SHA-256", await blob.arrayBuffer());
+    return Array.from(new Uint8Array(buf), (b) => b.toString(16).padStart(2, "0")).join("");
+  } catch {
+    return undefined;
+  }
+}
+
 function sanitizeName(name: string): string {
   return name.replace(/[^\w.\- ]+/g, "").slice(0, 60) || "image";
 }
@@ -65,8 +75,8 @@ function fusionWithFreeSlots(): { node: GraphNode; free: string[] } | null {
 
 /**
  * Entry point for drop, paste and the file picker (TASKSHEET 7.1).
- * Validates and prepares each file client-side, creates one node per good file,
- * stores the local copy, and starts the upload. On a canvas with no Fusion node,
+ * Validates and prepares each file client-side, creates one node per good file and
+ * stores the local copy (R1: nothing is uploaded until a run starts). On a canvas with no Fusion node,
  * it also adds one and connects the new images to it; with a Fusion node that has
  * free inputs, the new images are wired into it (DECISIONS D-012, D-024).
  */
@@ -107,9 +117,11 @@ export async function addImageFiles(files: File[], at: Position): Promise<string
     const data: ImageInputData = {
       fileName: sanitizeName(p.file.name),
       blobKey,
+      sha256: await digest(p.blob),
       width: p.width ?? undefined,
       height: p.height ?? undefined,
-      upload: { status: "queued", progress: 0, error: null },
+      status: "ready",
+      error: null,
     };
     nodes.push(createNode("image-input", { x: at.x, y: at.y + i * LAYOUT.imageGapY }, data));
   }
@@ -130,9 +142,7 @@ export async function addImageFiles(files: File[], at: Position): Promise<string
     toast.info(edges.length === 2 ? copy.graph.autoConnectedBoth : copy.graph.autoConnected);
   }
   useGraph.getState().addNodes(nodes, edges);
-  const ids = nodes.filter((n) => n.type === "image-input").map((n) => n.id);
-  ids.forEach((id) => void startUpload(id));
-  return ids;
+  return nodes.filter((n) => n.type === "image-input").map((n) => n.id);
 }
 
 /** Replace the image on an existing node: keeps id and edges, marks results downstream stale. */
@@ -148,14 +158,17 @@ export async function replaceImage(nodeId: string, file: File): Promise<void> {
   rememberBlobUrl(blobKey, res.image.blob);
   const g = useGraph.getState();
   g.checkpoint();
+  const sha256 = await digest(res.image.blob);
   g.updateNodeData<ImageInputData>(nodeId, () => ({
     fileName: sanitizeName(file.name),
     blobKey,
+    sha256,
     width: res.image.width ?? undefined,
     height: res.image.height ?? undefined,
-    upload: { status: "queued", progress: 0, error: null },
+    status: "ready",
+    error: null,
+    species: null,
     flagged: null,
   }));
   g.markDownstreamStale(nodeId);
-  await startUpload(nodeId);
 }

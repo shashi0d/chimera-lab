@@ -1,0 +1,109 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Silhouette: Four-legged domestic goat frame. Host frame: the domestic goat sets the outline, body size, and overall frame. A single creature combining a tortoise and a domestic goat. The head is that of the domestic goat, fully visible and uncluttered, with clear, discernible eyes. Details: domestic goat body and legs covered entirely in its own dense fur, colored as below; from the tortoise, as parts and materials on the domestic goat's own body, the dense fur remains everywhere and over the back takes on the tortoise's colors, gloss, surface texture, and pattern; the domestic goat's body outline is unchanged. The donor's colors and sheen follow the host's own coat and body shape. Bilaterally symmetrical, with recognizable limbs and visible sense organs. Habitat cue (grassland): dark back and light belly (strong countershading). Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws, and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "id": "resp_6ae7b148f0190c849507470d",
+  "access_programs": null,
+  "created_at": 1793569096.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae7b148ebd51740b81243a8",
+    "summary": [
+     {
+      "text": "**Designing goat-tortoise hybrid**\nI'm planning a single creature with a domestic goat silhouette and head, keeping the goat's body outline and dense fur, while layering tortoise colors, gloss, texture, and pattern across the back.\n**Designing goat-tortoise hybrid**\nI'm planning a natural history illustration of a single goat with a tortoise-shell patterned back, keeping fur over a glossy, scaled surface, dark countershaded back, light belly, and firm ground contact in side three-quarter view.\n**Refining hybrid shell design**\nI'm adjusting the concept so the back adopts tortoise coloring and texture while keeping the fur integrated, rather than a separate shell, and preparing another version.\n**Refining integrated shell design**\nI'm working on another integrated version of the shell, using media_k1 to blend the elements more cohesively than the previous separate approach.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae7b148ac2cd3de49474e5e",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0ZJVHBUUUZrNVkwb0FZRkFQS2NyVGlRRnZRWmJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczpmMmQxNWM4OC1hNjFkLTQ0M2MtOWM0Mi05ZGY2MjBkMTExNTg6R0l3ZnBqVHFEYjB0SWxBR0FFUThHRmN4TEpad2JnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM1NjkwOTZ9.Q8WLFwHoUli45lUJENbWkhcCBxbJ",
+    "result": "<elided> (817340 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 30176,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 25088
+   },
+   "output_tokens": 2952,
+   "output_tokens_details": {
+    "reasoning_tokens": 473
+   },
+   "total_tokens": 33128
+  },
+  "user": null
+ }
+}

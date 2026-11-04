@@ -1,0 +1,109 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Silhouette: Four-legged lion frame, four legs plus a separate pair of golden eagle wings. Host frame: the lion sets the outline, body size and overall frame. A single creature that combines a lion and a golden eagle. Head fully visible and uncluttered, with clear, discernible eyes. Details: lion body and legs, with its own dense fur on the face, back, flanks, belly, hips, legs and tail; plain coat, no stripes or spots. From the golden eagle, as parts and materials on the lion's own body: its head, fully visible, with clear, discernible eyes; a separate pair of broad wings of layered flight feathers rooted in heavy shoulders, four legs kept; wings held for display or gliding, not powered flight. Layered contour feathers in its own colors, grown from the skin as the lion's own covering over the shoulders and neck, it replaces the lion's dense fur there and conforms to the lion's body, sized to the lion's body and following its contours. Every covered part keeps the lion's own length and shape; the dense fur stops at the covering's edge, and the face, back, flanks, belly, hips, legs and tail keep the lion's own dense fur. The covering follows the body's own shape. Declared fiction: six limbs (four legs plus wings), shown with wings rooted in a heavy shoulder structure that can carry them, not floating. Bilaterally symmetrical, recognizable limbs, visible sense organs. Habitat cue (forest): dark back and light belly (mild countershading). Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "id": "resp_6ae7a30a99ecc870b1254807",
+  "access_programs": null,
+  "created_at": 1793565450.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae7a30a1d4942e6e90c4a49",
+    "summary": [
+     {
+      "text": "**Composing lion-eagle silhouette**\nI'm shaping a single creature with a lion's four-legged frame and dense, plain fur, then adding a separate pair of broad golden eagle wings rooted at heavy shoulders, keeping the head fully visible with clear, discernible eyes.\n**Drafting natural history illustration**\nI'm composing a side three-quarter view of the six-limbed creature with a golden eagle head, lion body and legs, and display wings rooted in the shoulders, set against a plain light background in natural lighting.\n**Finalizing eagle head illustration**\nI'm preparing the image with the golden eagle head fully visible, clear eyes, and a lion mane, and adding a bit more feather coverage around the neck before delivering it.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae7a30a1832bffe70134c90",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR01oT3VqUzhPZ0stdndzR0FNSTV4SXg1ODFzaWJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczo0NWUzM2ExMS04NjQ5LTQxMmUtOWIzNy04NzQ4YmUyMzg2MGQ6R0RpMXVqU3lPV21IUEtzRkFHS0NranRYUjVBN2JnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM1NjU0NTB9.Q8WLFwGszaPlG08a9USv19HQc1Ak",
+    "result": "<elided> (883224 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 20949,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 16512
+   },
+   "output_tokens": 2883,
+   "output_tokens_details": {
+    "reasoning_tokens": 686
+   },
+   "total_tokens": 23832
+  },
+  "user": null
+ }
+}

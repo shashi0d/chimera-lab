@@ -1,0 +1,133 @@
+{
+ "scores": {
+  "critic": 1.0,
+  "silhouette": 1.0,
+  "thumbnail": 1.0,
+  "soft_penalty": 0.0,
+  "quality": 1.0
+ },
+ "checklist": [
+  "a chinese pangolin body shape",
+  "a chinese pangolin head with visible eyes",
+  "axolotl skin patches on the back and flanks",
+  "feet resting on the ground"
+ ],
+ "checklist_source": "generated from the plan",
+ "critic": {
+  "answers": [
+   {
+    "item": "a chinese pangolin body shape",
+    "answer": "yes"
+   },
+   {
+    "item": "a chinese pangolin head with visible eyes",
+    "answer": "yes"
+   },
+   {
+    "item": "axolotl skin patches on the back and flanks",
+    "answer": "yes"
+   },
+   {
+    "item": "feet resting on the ground",
+    "answer": "yes"
+   }
+  ],
+  "choice": "a mix of both",
+  "creatures": 1,
+  "animals": [
+   "chinese pangolin",
+   "axolotl"
+  ],
+  "notes": "A pangolin-like animal with axolotl gills and pale patches walks on all fours."
+ },
+ "critic_thumbnail": {
+  "answers": [
+   {
+    "item": "a chinese pangolin body shape",
+    "answer": "yes"
+   },
+   {
+    "item": "a chinese pangolin head with visible eyes",
+    "answer": "yes"
+   },
+   {
+    "item": "axolotl skin patches on the back and flanks",
+    "answer": "yes"
+   },
+   {
+    "item": "feet resting on the ground",
+    "answer": "yes"
+   }
+  ],
+  "choice": "a mix of both",
+  "creatures": 1,
+  "animals": [
+   "chinese pangolin",
+   "axolotl"
+  ],
+  "notes": "The model combines pangolin scales with pink axolotl gills and patches."
+ },
+ "forced_choice": {
+  "full": "a mix of both",
+  "thumbnail": "a mix of both"
+ },
+ "open_critic": {
+  "animals": [
+   "pangolin",
+   "axolotl"
+  ],
+  "creatures": 1,
+  "notes": "A scaly pangolin-like creature with pink feathery axolotl gills walks in profile."
+ },
+ "mask": {
+  "fill": 0.431,
+  "aspect": 1.455,
+  "components": 1
+ },
+ "third_animal": [],
+ "soft_cards": [],
+ "sam_prompt": "animal",
+ "render_attempts": [
+  {
+   "prompt": "polished",
+   "critic": {
+    "answers": [
+     {
+      "item": "a chinese pangolin body shape",
+      "answer": "yes"
+     },
+     {
+      "item": "a chinese pangolin head with visible eyes",
+      "answer": "yes"
+     },
+     {
+      "item": "axolotl skin patches on the back and flanks",
+      "answer": "yes"
+     },
+     {
+      "item": "feet resting on the ground",
+      "answer": "yes"
+     }
+    ],
+    "choice": "a mix of both",
+    "creatures": 1,
+    "animals": [
+     "chinese pangolin",
+     "axolotl"
+    ],
+    "notes": "A pangolin-like animal with axolotl gills and pale patches walks on all fours."
+   },
+   "third_animal": [],
+   "scores": {
+    "critic": 1.0,
+    "silhouette": 1.0,
+    "thumbnail": 1.0,
+    "soft_penalty": 0.0,
+    "quality": 1.0
+   }
+  }
+ ],
+ "warnings": [],
+ "polish": "accepted",
+ "model_plan": "not kept in the cached document"
+}

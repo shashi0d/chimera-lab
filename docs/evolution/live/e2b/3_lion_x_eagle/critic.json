@@ -1,0 +1,56 @@
+{
+ "critic": {
+  "animals": [
+   "lion",
+   "eagle"
+  ],
+  "creatures": 1,
+  "notes": "A winged lion-like creature stands with outstretched feathered wings."
+ },
+ "critic_thumbnail": {
+  "animals": [
+   "lion",
+   "eagle"
+  ],
+  "creatures": 1,
+  "notes": "A winged lion-like creature standing on its hind legs."
+ },
+ "mask": {
+  "fill": 0.354,
+  "aspect": 1.0,
+  "components": 2
+ },
+ "sam_prompt": "animal",
+ "soft_cards": [],
+ "scores": {
+  "critic": 1.0,
+  "silhouette": 0.8,
+  "thumbnail": 1.0,
+  "soft_penalty": 0.0,
+  "quality": 0.94
+ },
+ "third_animal": [],
+ "render_attempts": [
+  {
+   "prompt": "polished",
+   "critic": {
+    "animals": [
+     "lion",
+     "eagle"
+    ],
+    "creatures": 1,
+    "notes": "A winged lion-like creature stands with outstretched feathered wings."
+   },
+   "third_animal": [],
+   "scores": {
+    "critic": 1.0,
+    "silhouette": 0.8,
+    "thumbnail": 1.0,
+    "soft_penalty": 0.0,
+    "quality": 0.94
+   }
+  }
+ ],
+ "warnings": [],
+ "polish": "accepted"
+}

@@ -1,0 +1,113 @@
+{
+ "purpose": "generate",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Silhouette: Four-legged axolotl frame. Host frame: the axolotl sets the outline, body size and overall frame. A single creature that combines a axolotl and a chinese pangolin. Head of the axolotl, fully visible and uncluttered, with clear, discernible eyes. Details: axolotl body and legs, with its own smooth, moist skin everywhere else, plain coat, no stripes or spots; from the chinese pangolin, as parts and materials on the axolotl's own body: a covering of large overlapping keratin scales in its own colors that replaces the axolotl's smooth skin over the back and flanks: it grows in the skin as the axolotl's own covering there, not as pieces added on top; the smooth skin stops at the covering's edge, and the belly and legs keep the axolotl's own smooth skin; the scales are a pangolin's scale layer grown in the skin: overlapping keratin scales rooted in the skin like a pangolin's, in rows that overlap from head to tail like roof tiles, one continuous layer over the back and flanks. The covering follows the body outline. Bilaterally symmetrical, recognizable limbs, visible sense organs. Habitat cue (river forest): dark back and light belly (mild countershading). Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration. Material reference: use @Image1 only for the material of the keratin scales: their color, surface texture and seams. Do not copy its body, head, legs or shape; the creature is the axolotl described above.\nAspect ratio: 1:1."
+     },
+     {
+      "type": "input_image",
+      "image_url": "<elided> (670943 chars)"
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "id": "resp_6ae6c2279df54ce4d6e34e3f",
+  "access_programs": null,
+  "created_at": 1793507879.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae6c227f9e28b95d5a5425b",
+    "summary": [
+     {
+      "text": "**Designing axolotl-pangolin silhouette**\nI'm planning a single creature with an axolotl head and body, smooth moist skin on the limbs, and large overlapping keratin scales covering the back and flanks, keeping the outline clear and the eyes visible.\n**Rendering hybrid illustration**\nI'm creating a natural history illustration of an axolotl with pangolin-style scales on the back and flanks, keeping smooth skin on the belly and legs, with external gills, countershading, and soft natural lighting.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae6c2272972d91491f14012",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0pHX0F6VENEcWd1OWEwRkFOQnlqdWtBVXI4eWJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczowZDBlNTBiNS00NmUzLTQ4YjctYWE1ZS1iODlhMTZjMWRjNjQ6R0x1eHJ6U29EajNIeG1NREFMN2diM05lYXg1X2JnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM1MDc4Nzl9.Q8WLFwFgriayKcXyavwiTpLEok-a",
+    "result": "<elided> (565572 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 13576,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 9408
+   },
+   "output_tokens": 1611,
+   "output_tokens_details": {
+    "reasoning_tokens": 505
+   },
+   "total_tokens": 15187
+  },
+  "user": null
+ }
+}

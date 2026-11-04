@@ -1,0 +1,12 @@
+{ "answers": [
+  {"item": "a lion body shape", "answer": "yes"},
+  {"item": "a golden eagle head with visible eyes", "answer": "yes"},
+  {"item": "wings rooted in a heavy shoulder structure that can carry them, not floating", "answer": "yes"},
+  {"item": "four legs plus a separate pair of golden eagle wings", "answer": "yes"},
+  {"item": "golden eagle feathers patches on the forequarters and neck", "answer": "yes"}
+],
+"choice": "a mix of both",
+"creatures": 1,
+"animals": ["lion", "golden eagle"],
+"notes": "The image shows a griffin illustration combining a lion's body and legs with a golden eagle's head, wings, and feathered chest."
+}

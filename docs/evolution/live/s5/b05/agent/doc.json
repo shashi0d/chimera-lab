@@ -1,0 +1,619 @@
+{
+ "prompt": "A mule (donkey sire x horse mare), a real hybrid animal. Horse-sized body with deep chest, long back, long neck and horse proportions, with the donkey's long ears, short thick head, short upright mane, thin legs, small hooves and tufted tail; plain coat, no stripes or spots. Head fully visible and uncluttered, with clear, discernible eyes. Bilaterally symmetrical, with recognizable limbs and visible sense organs. Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration.",
+ "prompt_compiled": "A mule (donkey sire x horse mare), a real hybrid animal. Horse-sized body, deep chest, long back, long neck, horse proportions, with the donkey's long ears, short thick head, short upright mane, thin legs, small hooves and tufted tail; plain coat, no stripes or spots. Head fully visible and uncluttered, with clear, discernible eyes. Bilaterally symmetrical, recognizable limbs, visible sense organs. Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration.",
+ "image_key": "evo/crt_21e0b6d5287f.agent.img1.webp",
+ "image_id": "img1",
+ "image_kind": "render",
+ "judge": {
+  "scores": {
+   "critic": 1.0,
+   "silhouette": 0.783,
+   "thumbnail": 1.0,
+   "soft_penalty": 0.0,
+   "quality": 0.935
+  },
+  "critic": {
+   "answers": [
+    {
+     "item": "horse-sized body and long legs relative to the head",
+     "answer": "yes"
+    },
+    {
+     "item": "long donkey ears",
+     "answer": "yes"
+    },
+    {
+     "item": "short upright mane",
+     "answer": "yes"
+    },
+    {
+     "item": "tufted, short-haired tail base",
+     "answer": "yes"
+    },
+    {
+     "item": "plain coat with no stripes",
+     "answer": "yes"
+    }
+   ],
+   "creatures": 1,
+   "animals": [
+    "mule"
+   ],
+   "notes": "Single mule-like equid shown in full side profile against a plain background."
+  },
+  "critic_thumbnail": {
+   "answers": [
+    {
+     "item": "horse-sized body and long legs relative to the head",
+     "answer": "yes"
+    },
+    {
+     "item": "long donkey ears",
+     "answer": "yes"
+    },
+    {
+     "item": "short upright mane",
+     "answer": "yes"
+    },
+    {
+     "item": "tufted, short-haired tail base",
+     "answer": "yes"
+    },
+    {
+     "item": "plain coat with no stripes",
+     "answer": "yes"
+    }
+   ],
+   "creatures": 1,
+   "animals": [
+    "mule"
+   ],
+   "notes": "Single mule-like equine in profile showing a mix of horse and donkey traits."
+  },
+  "mask": {
+   "fill": 0.297,
+   "aspect": 0.983,
+   "components": 1
+  },
+  "soft_cards": [],
+  "third_animal": [],
+  "sam_prompt": "animal",
+  "critic_mode": "checklist",
+  "checklist": [
+   "horse-sized body and long legs relative to the head",
+   "long donkey ears",
+   "short upright mane",
+   "tufted, short-haired tail base",
+   "plain coat with no stripes"
+  ],
+  "checklist_source": "known pair (hand-written)",
+  "open_critic": {
+   "animals": [
+    "donkey"
+   ],
+   "creatures": 1,
+   "notes": "A single brown donkey-like equine stands in profile against a plain light background."
+  }
+ },
+ "card": {
+  "kind": "hybrid",
+  "design_mode": "realistic",
+  "label": "real hybrid precedent",
+  "check_labels": [],
+  "processes": [
+   "region mosaic as in mules"
+  ],
+  "resemblances": [],
+  "why": [
+   {
+    "card": "RC-R2-01",
+    "rule": "Parent order is biological. Store fusions as (sire, dam) and never treat A x B as identical to B x A, because reciprocal crosses can differ in size and appearance",
+    "strength": "hard",
+    "status": "VERIFIED",
+    "source": "https://lsi.princeton.edu/research/faculty-publications/genomic-imprinting-disrupted-interspecific-peromyscus-hybrids"
+   },
+   {
+    "card": "RC-R2-16",
+    "rule": "Use the real-hybrid path only for pairs with a documented hybrid or a close relationship (same genus); all other pairs go to the chimera path and are labeled speculative",
+    "strength": "hard",
+    "status": "VERIFIED",
+    "source": "https://www.ucl.ac.uk/taxome/jim/pap/mallet07_hybspn_Nature.pdf"
+   },
+   {
+    "card": "RC-R2-03",
+    "rule": "Donkey sire x horse dam must render as the documented mule: horse height, neck shape and body; donkey short thick head, long ears, short mane, coarse coat, thin limbs and small hooves; tail short-haired at the base and longer below",
+    "strength": "hard",
+    "status": "VERIFIED",
+    "source": "https://en.engormix.com/equines/horse-genetics/what-mule-made_n11953/"
+   },
+   {
+    "card": "RC-R2-06",
+    "rule": "Region mosaics are allowed and realistic: one parent can supply the frame while the other supplies head, ears and limbs, but the donor choice should cover a coherent group of regions rather than random single parts",
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://en.engormix.com/equines/horse-genetics/what-mule-made_n11953/"
+   },
+   {
+    "card": "RC-R1-01",
+    "rule": "Decide inheritance per trait, never per animal; the engine must not assign one parent as dominant for the whole creature, because dominance is defined between alleles of a single gene",
+    "strength": "hard",
+    "status": "VERIFIED",
+    "source": "https://slcc.pressbooks.pub/collegebiology1/chapter/incomplete-dominance-and-codominance/"
+   },
+   {
+    "card": "RC-R1-02",
+    "rule": "Measurement traits (size, limb, neck, tail, ear and snout length) use BLEND: start near the midpoint of the parents and add modest random spread, since many-gene traits vary continuously and cluster around the middle",
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://www.jove.com/science-education/10778/polygenic-traits"
+   },
+   {
+    "card": "RC-R1-04",
+    "rule": "Clearly present-or-absent features (horns, crest, tail tuft, mane presence) use PICK: the feature comes fully from one parent or is absent, not half-formed",
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://bio.libretexts.org/Bookshelves/Genetics/Classical_Genetics_(Khan_Academy)/02%3A_Non-Mendelian_inheritance/2.02%3A_Multiple_alleles_incomplete_dominance_and_codominance"
+   },
+   {
+    "card": "RC-R1-05",
+    "rule": "Shade-like traits (base coat color, contrast) may use BLEND, matching incomplete dominance where the in-between form appears",
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://slcc.pressbooks.pub/collegebiology1/chapter/incomplete-dominance-and-codominance/"
+   },
+   {
+    "card": "RC-R1-06",
+    "rule": "Patterns may use OVERLAY, where both parents' features are visible at once (a pattern over a base color), matching codominance; per R2 the pattern is shown diluted when its donor does not own the body",
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://slcc.pressbooks.pub/collegebiology1/chapter/incomplete-dominance-and-codominance/"
+   },
+   {
+    "card": "RC-R1-11",
+    "rule": "Face shape, ear form and pigment pattern share a developmental origin (neural crest); prefer taking them from the same parent or shifting them in the same direction",
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4096361/"
+   },
+   {
+    "card": "RC-R2-02",
+    "rule": "For a first-generation fusion, place most measurable traits (size, limb length, skull proportions) between the two parents; allow only a minority of traits to exceed both parents, and flag any that do as unusual",
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://www.nature.com/articles/6886170"
+   },
+   {
+    "card": "RC-R2-07",
+    "rule": "When the pattern donor is not the body donor, render its pattern partial and reduced (zebroid: base body and color from the non-zebra parent, stripes on parts of legs, neck and body)",
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://darwinmuseum.ru/pages/a-zebroid-a-horse-or-a-zebra"
+   },
+   {
+    "card": "RC-R2-15",
+    "rule": "Behavior can follow one parent even when the body is mixed, and a behavior can be present without the physical performance behind it (hybrid bears with seal-hunting style behavior but weaker swimming)",
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://www.nature.com/articles/468891a"
+   },
+   {
+    "card": "RC-R4-09",
+    "rule": "A fusion may live in a habitat neither parent uses (a bridging niche), because niche separation is what lets hybrid lineages establish; its visible traits must then match that habitat",
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://www.nature.com/articles/6886170"
+   },
+   {
+    "card": "RC-R3-12",
+    "rule": "Physical checks run after trait selection in a fixed order (body-plan class, limb budget, size ceiling, posture, part rendering); a failed check either changes the design or adds a visible speculative label, never a silent pass",
+    "strength": "soft",
+    "status": "UNVERIFIED",
+    "source": "https://biewenerlab.oeb.harvard.edu/publications/biomechanical-consequences-scaling"
+   },
+   {
+    "card": "RC-R9-02",
+    "rule": "Run a function audit after the physical checks and before rendering, covering breathing, feeding, support, movement, heat and senses; each function ends as pass, repaired or labeled, never silently failed",
+    "strength": "hard",
+    "status": "VERIFIED",
+    "source": "https://www.cs.utexas.edu/~witchel/S25-380L/papers/right-size.html"
+   },
+   {
+    "card": "RC-R9-04",
+    "rule": "Diet follows the head donor's mouthparts; for a mammal head, grinding molars go with plant diets and bladed, shearing cheek teeth go with meat, and a mismatch is repaired or flagged",
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://fds.duke.edu/db/aas/BAA/faculty%20all/krs75/publications/371619"
+   },
+   {
+    "card": "RC-R9-06",
+    "rule": "A creature scaled well above its leg donor must change shape to carry its weight, with short thick legs or splayed legs; the same shape at much larger size is not allowed",
+    "strength": "hard",
+    "status": "VERIFIED",
+    "source": "https://www.cs.utexas.edu/~witchel/S25-380L/papers/right-size.html"
+   },
+   {
+    "card": "RC-R6-03",
+    "rule": "Keep the head fully visible and uncluttered; the head and eyes draw the earliest and most looks, so the head donor dominates the first impression",
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://eprints.lancs.ac.uk/id/eprint/50885/"
+   },
+   {
+    "card": "RC-R6-04",
+    "rule": "Every creature must have clearly discernible eyes; viewers search for eyes wherever they are, so extra or displaced eyes are used only on purpose",
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://repository.essex.ac.uk/9355/"
+   },
+   {
+    "card": "RC-R9-10",
+    "rule": "Fiction budget: a realistic design takes no licenses; a speculative design bends at most one rule on purpose and obeys every other rule strictly; every bent rule is declared on the card with its compensation",
+    "strength": "hard",
+    "status": "VERIFIED",
+    "source": "https://www.sf-encyclopedia.com/entry/wellss_law"
+   },
+   {
+    "card": "RC-R6-01",
+    "rule": "The body silhouette donor sets the creature's identity for human viewers; choose it deliberately (or expose it as a user control), never as a side effect of input order",
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://arxiv.org/abs/1811.12231v3"
+   },
+   {
+    "card": "RC-R7-06",
+    "rule": "State the intended silhouette in the plan and validate the render with a silhouette-only check; the creature must read with no interior detail",
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://www.cs.princeton.edu/courses/archive/fall07/cos597B/papers/mitchell-team-fortress.pdf"
+   },
+   {
+    "card": "RC-R6-02",
+    "rule": "Carry the second parent mainly through surface texture, pattern and selected signature parts, which tell viewers which other animal is involved without changing what the creature is",
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://arxiv.org/abs/1811.12231v3"
+   },
+   {
+    "card": "RC-R6-05",
+    "rule": "Signature parts that draw looks on the real animal (a tail tuft, a trunk, an udder-like feature) are the best carriers of the second parent's identity",
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://eprints.lancs.ac.uk/id/eprint/50885/"
+   },
+   {
+    "card": "RC-R7-07",
+    "rule": "Interior detail (pattern lines, texture flow) should echo the silhouette's shapes rather than cut across them",
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://www.cs.princeton.edu/courses/archive/fall07/cos597B/papers/mitchell-team-fortress.pdf"
+   },
+   {
+    "card": "RC-R6-07",
+    "rule": "Keep bilateral symmetry, visible sense organs and recognizable limbs unless the user explicitly asks for an alien design, because these are what make an invented creature read as an animal",
+    "strength": "soft",
+    "status": "VERIFIED",
+    "source": "https://link.springer.com/content/pdf/10.3758%2FBF03195281.pdf"
+   },
+   {
+    "card": "RC-R7-10",
+    "rule": "Show myth and fiction resemblances as \"resembles X (culture or work)\", tagged unverified; never render or name-match a franchise character as an output",
+    "strength": "soft",
+    "status": "UNVERIFIED",
+    "source": "https://classics.stanford.edu/publications/first-fossil-hunters-dinosaurs-mammoths-and-myth-greek-and-roman-times"
+   }
+  ],
+  "lineage": {
+   "sire": "donkey",
+   "dam": "horse",
+   "parent_ids": [],
+   "generation": 0
+  },
+  "caveats": [],
+  "can_it_live": [
+   {
+    "function": "breathing",
+    "result": "pass",
+    "detail": "lungs suit a land habitat",
+    "cards": [],
+    "decided_by": "code (rule cards)"
+   },
+   {
+    "function": "feeding",
+    "result": "pass",
+    "detail": "grinding teeth fit a herbivore diet",
+    "cards": [
+     "RC-R9-04"
+    ],
+    "decided_by": "code (rule cards)"
+   },
+   {
+    "function": "support",
+    "result": "pass",
+    "detail": "limbs fixed by a documented known-pair override; posture left as documented",
+    "cards": [
+     "RC-R9-06"
+    ],
+    "decided_by": "code (rule cards)"
+   },
+   {
+    "function": "movement",
+    "result": "pass",
+    "detail": "walks on four legs",
+    "cards": [],
+    "decided_by": "code (rule cards)"
+   },
+   {
+    "function": "heat",
+    "result": "pass",
+    "detail": "a documented animal: no habitat step (D-056)",
+    "cards": [],
+    "decided_by": "code (rule cards)"
+   },
+   {
+    "function": "senses",
+    "result": "pass",
+    "detail": "donkey head and eyes kept fully visible",
+    "cards": [
+     "RC-R6-03",
+     "RC-R6-04"
+    ],
+    "decided_by": "code (rule cards)"
+   }
+  ],
+  "licenses": [],
+  "identity_parts": [],
+  "provenance": {
+   "sire": {
+    "animal": "donkey",
+    "scientific_name": "Equus asinus",
+    "kind": "species",
+    "source": "database",
+    "facts": {
+     "common_name": "chimera_data.json",
+     "scientific_name": "chimera_data.json",
+     "class": "chimera_data.json",
+     "order": "chimera_data.json",
+     "family": "chimera_data.json",
+     "gbif_key": "chimera_data.json",
+     "body_plan": "chimera_data.json",
+     "primary_locomotor_part": "chimera_data.json",
+     "covering": "chimera_data.json",
+     "movement": "chimera_data.json",
+     "active_time": "chimera_data.json",
+     "habitat": "chimera_data.json",
+     "climate": "chimera_data.json",
+     "diet": "chimera_data.json",
+     "body_mass_kg": "chimera_data.json",
+     "body_length_m": "chimera_data.json",
+     "breathing": "project default (evo_config.json function_defaults)",
+     "mouthparts": "project default (evo_config.json function_defaults)"
+    },
+    "citations": {},
+    "unverified_claims": []
+   },
+   "dam": {
+    "animal": "horse",
+    "scientific_name": "Equus caballus",
+    "kind": "species",
+    "source": "database",
+    "facts": {
+     "common_name": "chimera_data.json",
+     "scientific_name": "chimera_data.json",
+     "class": "chimera_data.json",
+     "order": "chimera_data.json",
+     "family": "chimera_data.json",
+     "gbif_key": "chimera_data.json",
+     "body_plan": "chimera_data.json",
+     "primary_locomotor_part": "chimera_data.json",
+     "covering": "chimera_data.json",
+     "movement": "chimera_data.json",
+     "active_time": "chimera_data.json",
+     "habitat": "chimera_data.json",
+     "climate": "chimera_data.json",
+     "diet": "chimera_data.json",
+     "body_mass_kg": "chimera_data.json",
+     "body_length_m": "chimera_data.json",
+     "breathing": "project default (evo_config.json function_defaults)",
+     "mouthparts": "project default (evo_config.json function_defaults)"
+    },
+    "citations": {},
+    "unverified_claims": []
+   }
+  },
+  "remaining_failures": [],
+  "agent": {
+   "brain": "meta-models/muse-spark-open-1026",
+   "renders": 1,
+   "edits": 0,
+   "tool_calls": 8,
+   "stop": "finalized by the agent",
+   "candidate": "C1"
+  },
+  "final_choice": {
+   "shown_first": "agent",
+   "agree": true,
+   "agent_pick": {
+    "image_id": "img1",
+    "image_key": "evo/crt_21e0b6d5287f.agent.img1.webp",
+    "rank": 1,
+    "of": 1,
+    "structural": 0,
+    "failures": 0,
+    "reason": "Inspection passed with 1 body, 1 head, 4 walking legs, no extra parts; realistic equid hybrid successfully rendered."
+   },
+   "code_pick": {
+    "image_id": "img1",
+    "image_key": "evo/crt_21e0b6d5287f.agent.img1.webp",
+    "rank": 1,
+    "of": 1,
+    "structural": 0,
+    "failures": 0,
+    "reason": "code ranks inspected images by fewest structural failures, then fewest failures, then the latest"
+   }
+  },
+  "anatomy_map": {
+   "parts": [
+    {
+     "part": "head",
+     "sam_label": "head",
+     "parent": "donkey",
+     "parent_role": "donor",
+     "parent_name": "donkey",
+     "mask_area": 0.0361,
+     "found": true,
+     "status": "found",
+     "color": "#e66e28"
+    },
+    {
+     "part": "ears",
+     "sam_label": "ears",
+     "parent": "donkey",
+     "parent_role": "donor",
+     "parent_name": "donkey",
+     "mask_area": 0.0087,
+     "found": true,
+     "status": "found",
+     "color": "#e66e28"
+    },
+    {
+     "part": "mane",
+     "sam_label": "mane",
+     "parent": "donkey",
+     "parent_role": "donor",
+     "parent_name": "donkey",
+     "mask_area": 0.0062,
+     "found": true,
+     "status": "found",
+     "color": "#e66e28"
+    },
+    {
+     "part": "body",
+     "sam_label": "torso",
+     "parent": "horse",
+     "parent_role": "host",
+     "parent_name": "horse",
+     "mask_area": 0.0,
+     "found": false,
+     "status": "not located",
+     "color": null
+    },
+    {
+     "part": "legs",
+     "sam_label": "legs",
+     "parent": "donkey",
+     "parent_role": "donor",
+     "parent_name": "donkey",
+     "mask_area": 0.0651,
+     "found": true,
+     "status": "found",
+     "color": "#e66e28"
+    },
+    {
+     "part": "tail",
+     "sam_label": "tail",
+     "parent": "blend",
+     "parent_role": "blend",
+     "parent_name": "both parents",
+     "mask_area": 0.0106,
+     "found": true,
+     "status": "found",
+     "color": "#825ac8"
+    }
+   ],
+   "colors": {
+    "host": "#268bd2",
+    "donor": "#e66e28",
+    "blend": "#825ac8"
+   },
+   "present_fill": 0.002,
+   "found": 5,
+   "not_located": 1,
+   "image_size": [
+    1600,
+    1600
+   ],
+   "overlay_key": "evo/crt_21e0b6d5287f.agent.img1.anatomy.png"
+  },
+  "providers": {
+   "by_call": {
+    "polish": [
+     "baseten:meta-models/muse-spark-open-1026"
+    ],
+    "checklist": [
+     "baseten:meta-models/muse-spark-open-1026"
+    ],
+    "critic": [
+     "baseten:meta-models/muse-spark-open-1026"
+    ]
+   },
+   "fallbacks": [],
+   "render": "meta:muse-image-1.0",
+   "segment": "meta:sam-3.1"
+  }
+ },
+ "route": {
+  "sire": "donkey",
+  "dam": "horse",
+  "mode": "hybrid",
+  "reason": "known pair: mule",
+  "known_pair": "mule",
+  "labels": [
+   "real hybrid precedent"
+  ],
+  "cards": [
+   "RC-R2-01",
+   "RC-R2-16",
+   "RC-R2-03"
+  ],
+  "kind": "hybrid",
+  "distance": {
+   "shared_rank": "genus",
+   "steps": 1
+  }
+ },
+ "agent_inspect": {
+  "image_id": "img1",
+  "verdict": "pass",
+  "failures": [],
+  "counts": {
+   "separate_bodies": 1,
+   "heads": 1,
+   "walking_legs": 4,
+   "wings": 0,
+   "extra_limb_pieces": 0
+  },
+  "third_animals": {
+   "spark_open": [],
+   "meta_spark": []
+  },
+  "drift": null,
+  "decision": "Meta Spark decides; Spark Open answers kept as information (D-084)"
+ },
+ "response_id": "resp_6ae7a6b152a26a2c995e4d36",
+ "warnings": [],
+ "agent": {
+  "brain": "meta-models/muse-spark-open-1026",
+  "renders": 1,
+  "edits": 0,
+  "tool_calls": 8,
+  "stop": "finalized by the agent",
+  "candidate": "C1",
+  "trace_steps": 7
+ },
+ "providers": {
+  "by_call": {
+   "polish": [
+    "baseten:meta-models/muse-spark-open-1026"
+   ],
+   "checklist": [
+    "baseten:meta-models/muse-spark-open-1026"
+   ],
+   "critic": [
+    "baseten:meta-models/muse-spark-open-1026"
+   ]
+  },
+  "fallbacks": [],
+  "render": "meta:muse-image-1.0",
+  "segment": "meta:sam-3.1"
+ }
+}

@@ -1,5 +1,6 @@
 import { create } from "zustand";
-import { api, onNetworkResult } from "../api/client";
+import { onNetworkResult } from "../api/client";
+import { evo } from "../evo/index";
 
 export type ConnectivityStatus = "online" | "offline" | "unreachable";
 
@@ -9,7 +10,6 @@ interface ConnectivityState {
   /** Test hook: pin a status regardless of reality. */
   forced: ConnectivityStatus | null;
   status: ConnectivityStatus;
-  mode: "mock" | "real" | null;
   lastCheckedAt: number | null;
   setBrowserOnline(v: boolean): void;
   setServerReachable(v: boolean): void;
@@ -30,7 +30,6 @@ export const useConnectivity = create<ConnectivityState>()((set, get) => ({
   serverReachable: true,
   forced: null,
   status: "online",
-  mode: null,
   lastCheckedAt: null,
   setBrowserOnline(v) {
     set((s) => ({ browserOnline: v, status: derive({ ...s, browserOnline: v }) }));
@@ -45,8 +44,7 @@ export const useConnectivity = create<ConnectivityState>()((set, get) => ({
     if (inflight) return inflight;
     inflight = (async () => {
       try {
-        const h = await api.health();
-        set({ mode: h.mode });
+        await evo().health();
         get().setServerReachable(true);
       } catch {
         get().setServerReachable(false);

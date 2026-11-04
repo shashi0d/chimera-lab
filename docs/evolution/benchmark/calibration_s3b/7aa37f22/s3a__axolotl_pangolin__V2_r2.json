@@ -1,0 +1,317 @@
+{
+ "id": "s3a/axolotl_pangolin/V2_r2",
+ "questions": [
+  {
+   "id": "frame",
+   "text": "Is the overall body shape that of a axolotl?",
+   "expect": "yes",
+   "group": "structure",
+   "fix": "Show the planned axolotl body shape and outline; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "head",
+   "text": "Does it have a axolotl head with visible eyes?",
+   "expect": "yes",
+   "group": "structure",
+   "fix": "Show the planned axolotl head, fully visible with clear eyes; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "no_wings",
+   "text": "Are there wings anywhere on the body?",
+   "expect": "no",
+   "group": "structure",
+   "fix": "The plan has no wings: show the axolotl's own body there instead; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "whole_animal",
+   "text": "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?",
+   "expect": "no",
+   "group": "structure",
+   "fix": "Show the planned chinese pangolin contribution only as large overlapping keratin scales on the axolotl's own body over the back and flanks, not as separate animals; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "second_head",
+   "text": "Is there a second head anywhere?",
+   "expect": "no",
+   "group": "structure",
+   "fix": "Show one single head, as planned; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "extra_legs",
+   "text": "Does it have more than 4 walking legs?",
+   "expect": "no",
+   "group": "structure",
+   "fix": "Show exactly 4 walking legs, as planned; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "no_mane",
+   "text": "Does it have a full mane of long hair around the head and neck?",
+   "expect": "no",
+   "group": "structure",
+   "fix": "The plan has no mane: show the planned neck with no mane; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "cover_present",
+   "text": "Are there large overlapping keratin scales on the back and flanks?",
+   "expect": "yes",
+   "group": "integration",
+   "fix": "Show the planned large overlapping keratin scales over the back and flanks; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "grows_out",
+   "text": "Do the large overlapping keratin scales grow out of the body with a natural transition (for example skin stopping at a shield's edge, or skin blending into scales), rather than looking attached on top?",
+   "expect": "yes",
+   "group": "integration",
+   "fix": "Show the large overlapping keratin scales grown in the skin over the back and flanks, as one covering that replaces the axolotl's skin there; the skin stops at its edge; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "on_top",
+   "text": "Do the large overlapping keratin scales look like separate pieces laid on top of the skin, with a raised rim or a gap at the edge?",
+   "expect": "no",
+   "group": "integration",
+   "fix": "Show the large overlapping keratin scales grown in the skin over the back and flanks, as one covering that replaces the axolotl's skin there; the skin stops at its edge; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "continuous",
+   "text": "Do the large overlapping keratin scales form one continuous structure over the back and flanks, rather than scattered pieces?",
+   "expect": "yes",
+   "group": "integration",
+   "fix": "Show the large overlapping keratin scales as one continuous covering over the back and flanks, not scattered pieces; the axolotl's skin stays on the belly and legs; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "scattered",
+   "text": "Are the large overlapping keratin scales scattered as separate pieces over different parts of the body?",
+   "expect": "no",
+   "group": "integration",
+   "fix": "Show the large overlapping keratin scales as one continuous covering over the back and flanks, not scattered pieces; the axolotl's skin stays on the belly and legs; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "cover_on_legs",
+   "text": "Are there large overlapping keratin scales on the legs?",
+   "expect": "no",
+   "group": "surface",
+   "fix": "Keep the axolotl's own skin on the legs and shoulders; the large overlapping keratin scales only over the back and flanks; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "cover_on_shoulders",
+   "text": "Are there large overlapping keratin scales on the shoulders?",
+   "expect": "no",
+   "group": "surface",
+   "fix": "Keep the axolotl's own skin on the legs and shoulders; the large overlapping keratin scales only over the back and flanks; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "follows_body",
+   "text": "Do the large overlapping keratin scales follow this body's own shape and contours, the way its own skin would?",
+   "expect": "yes",
+   "group": "integration",
+   "fix": "Show the large overlapping keratin scales conforming to the axolotl's own body shape, grown from its skin over the back and flanks; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "separate_outline",
+   "text": "Do the large overlapping keratin scales keep the outline of a separate object, such as another animal's shell or back, instead of the body's own shape?",
+   "expect": "no",
+   "group": "integration",
+   "fix": "Show the large overlapping keratin scales conforming to the axolotl's own body shape, grown from its skin over the back and flanks; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "sized_to_body",
+   "text": "Are the scales sized to this animal's body, about as large as its own muscles and body segments?",
+   "expect": "yes",
+   "group": "integration",
+   "fix": "Show each scale sized to the axolotl's own body segments and muscle masses; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "wrong_scale",
+   "text": "Do the scales look made for a much smaller or much larger animal?",
+   "expect": "no",
+   "group": "integration",
+   "fix": "Show each scale sized to the axolotl's own body segments and muscle masses; keep everything else the same.",
+   "sam": null
+  }
+ ],
+ "parts": [],
+ "raw": {
+  "spark_open": {
+   "describe": {
+    "description": "The creature is shown in right-facing lateral view standing on a flat light surface. It has a low, stout, quadrupedal body with a broad flat head at the front and a thick tapering tail at the rear. The dorsal surface from the back of the neck to the base of the tail is covered in overlapping large brown keratinous scales, while the ventral surface, sides of the head, limbs, and tail are pale pink with wrinkled, fleshy skin. The head is wide and blunt-snouted with small golden eyes, small nostrils, and a wide mouth, and bears prominent pink feathery external gills on both sides of the neck. The four limbs are thick and splayed slightly outward, each ending in a five-toed foot with small claws.",
+    "parts": [
+     {
+      "part": "head",
+      "looks_like": "broad, flattened and blunt-snouted with a mottled brown and pink skin, small golden eyes with dark pupils on the sides, small round nostrils at the tip of the snout, and a wide slightly upturned mouth",
+      "where": "at the anterior end of the body, facing to the right"
+     },
+     {
+      "part": "gills",
+      "looks_like": "six pink fleshy stalks with fine feathery filaments, three branching stalks on each side of the head/neck, darker pink at the base and lighter at the fringed edges",
+      "where": "projecting outward from the sides of the head and neck, behind the eyes"
+     },
+     {
+      "part": "scales",
+      "looks_like": "large overlapping keratinous scales in shades of dark and light brown with a slightly ridged texture, arranged in diagonal rows",
+      "where": "covering the entire dorsal surface from the neck over the back and sides down to the upper limbs and base of the tail"
+     },
+     {
+      "part": "legs",
+      "looks_like": "thick, muscular, pale pink limbs with deeply wrinkled and folded skin",
+      "where": "four limbs positioned under the body, two forelegs under the chest and two hindlegs under the mid-body"
+     },
+     {
+      "part": "feet",
+      "looks_like": "broad fleshy paws with five slender toes on each foot, each toe tipped with a small pale claw",
+      "where": "at the distal end of each leg, in contact with the ground"
+     },
+     {
+      "part": "tail",
+      "looks_like": "thick, fleshy, pale pink tapering structure with wrinkled skin and a slightly flattened underside",
+      "where": "extending posteriorly from the body to the left, partially visible behind the scaled back and hindlegs"
+     },
+     {
+      "part": "markings",
+      "looks_like": "irregular dark brown mottled spots on the top of the head and snout, and transverse wrinkled folds on the pale ventral skin and limbs",
+      "where": "on the dorsal surface of the head and on the ventral body and limbs"
+     }
+    ],
+    "attached_objects": [],
+    "animals": [
+     "axolotl",
+     "pangolin"
+    ],
+    "separate_bodies": 1,
+    "heads": 1,
+    "walking_legs": 4,
+    "wings": 0,
+    "extra_limb_pieces": 0,
+    "tails": 1
+   },
+   "answers": {
+    "Is the overall body shape that of a axolotl?": "yes",
+    "Does it have a axolotl head with visible eyes?": "yes",
+    "Are there wings anywhere on the body?": "no",
+    "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?": "no",
+    "Is there a second head anywhere?": "no",
+    "Does it have more than 4 walking legs?": "no",
+    "Does it have a full mane of long hair around the head and neck?": "no",
+    "Are there large overlapping keratin scales on the back and flanks?": "yes",
+    "Do the large overlapping keratin scales grow out of the body with a natural transition (for example skin stopping at a shield's edge, or skin blending into scales), rather than looking attached on top?": "no",
+    "Do the large overlapping keratin scales look like separate pieces laid on top of the skin, with a raised rim or a gap at the edge?": "yes",
+    "Do the large overlapping keratin scales form one continuous structure over the back and flanks, rather than scattered pieces?": "yes",
+    "Are the large overlapping keratin scales scattered as separate pieces over different parts of the body?": "no",
+    "Are there large overlapping keratin scales on the legs?": "no",
+    "Are there large overlapping keratin scales on the shoulders?": "no",
+    "Do the large overlapping keratin scales follow this body's own shape and contours, the way its own skin would?": "no",
+    "Do the large overlapping keratin scales keep the outline of a separate object, such as another animal's shell or back, instead of the body's own shape?": "yes",
+    "Are the scales sized to this animal's body, about as large as its own muscles and body segments?": "yes",
+    "Do the scales look made for a much smaller or much larger animal?": "no"
+   },
+   "origins": {},
+   "error": null
+  },
+  "meta_spark": {
+   "describe": {
+    "description": "A stout, low-slung four-legged creature shown in side three-quarter view facing to the right. It has a broad, flat, rounded-snout amphibian-like head that is mottled brown-pink with large golden eyes, small nostrils, and a wide mouth line, with multiple pink feathery external gill stalks protruding from the neck just behind the head on both sides. The underbody, neck, and short thick limbs are pale pink with wrinkled, moist-looking skin. The entire back from behind the gills to the base of the tail is covered in overlapping large brown keratin-like scales. The animal stands on four short sturdy legs ending in broad clawed toes, and a long smooth pale pink tapering tail extends to the left from the rear of the body.",
+    "parts": [
+     {
+      "part": "head",
+      "looks_like": "broad flat rounded-snout amphibian-like, mottled brown-pink with dark speckles, smooth moist texture",
+      "where": "at the front of the body, facing right and slightly toward the viewer"
+     },
+     {
+      "part": "eyes",
+      "looks_like": "large round golden irises with black pupils",
+      "where": "on the sides of the head"
+     },
+     {
+      "part": "mouth and nose",
+      "looks_like": "wide straight slightly upturned line with small round nostrils above it on the snout tip",
+      "where": "across the front of the head"
+     },
+     {
+      "part": "gills",
+      "looks_like": "pink fleshy stalks with fine pink feathery filaments, four stalks visible on each side",
+      "where": "protruding outward from the sides of the neck just behind the head"
+     },
+     {
+      "part": "torso",
+      "looks_like": "stout elongated low barrel shape with pale pink deeply wrinkled skin on the sides and belly",
+      "where": "between the neck and the tail, below the scale covering"
+     },
+     {
+      "part": "legs",
+      "looks_like": "short thick pale pink wrinkled limbs",
+      "where": "under the body, two in front behind the head and two at the rear"
+     },
+     {
+      "part": "feet",
+      "looks_like": "broad splayed feet with five short claw-tipped toes each",
+      "where": "at the ends of the four legs on the ground"
+     },
+     {
+      "part": "scales",
+      "looks_like": "overlapping rounded brown plates with darker edges and fine radial texture",
+      "where": "covering the entire back from the neck to the tail base"
+     },
+     {
+      "part": "tail",
+      "looks_like": "long smooth pale pink tapering extension, partially cropped",
+      "where": "extending left from the rear of the body"
+     },
+     {
+      "part": "markings",
+      "looks_like": "dark brown-black speckles on a tan-pink background",
+      "where": "on the top and sides of the head"
+     }
+    ],
+    "attached_objects": [],
+    "animals": [
+     "axolotl",
+     "pangolin"
+    ],
+    "separate_bodies": 1,
+    "heads": 1,
+    "walking_legs": 4,
+    "wings": 0,
+    "extra_limb_pieces": 0,
+    "tails": 1
+   },
+   "answers": {
+    "Is the overall body shape that of a axolotl?": "yes",
+    "Does it have a axolotl head with visible eyes?": "yes",
+    "Are there wings anywhere on the body?": "no",
+    "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?": "no",
+    "Is there a second head anywhere?": "no",
+    "Does it have more than 4 walking legs?": "no",
+    "Does it have a full mane of long hair around the head and neck?": "no",
+    "Are there large overlapping keratin scales on the back and flanks?": "yes",
+    "Do the large overlapping keratin scales grow out of the body with a natural transition (for example skin stopping at a shield's edge, or skin blending into scales), rather than looking attached on top?": "no",
+    "Do the large overlapping keratin scales look like separate pieces laid on top of the skin, with a raised rim or a gap at the edge?": "yes",
+    "Do the large overlapping keratin scales form one continuous structure over the back and flanks, rather than scattered pieces?": "yes",
+    "Are the large overlapping keratin scales scattered as separate pieces over different parts of the body?": "no",
+    "Are there large overlapping keratin scales on the legs?": "no",
+    "Are there large overlapping keratin scales on the shoulders?": "no",
+    "Do the large overlapping keratin scales follow this body's own shape and contours, the way its own skin would?": "yes",
+    "Do the large overlapping keratin scales keep the outline of a separate object, such as another animal's shell or back, instead of the body's own shape?": "no",
+    "Are the scales sized to this animal's body, about as large as its own muscles and body segments?": "yes",
+    "Do the scales look made for a much smaller or much larger animal?": "no"
+   },
+   "origins": {},
+   "error": null
+  }
+ }
+}

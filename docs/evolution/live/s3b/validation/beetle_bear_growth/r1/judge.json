@@ -1,0 +1,112 @@
+{
+ "scores": {
+  "critic": 0.714,
+  "silhouette": 0.954,
+  "thumbnail": 0.714,
+  "soft_penalty": 0.0,
+  "quality": 0.843
+ },
+ "critic": {
+  "answers": [
+   {
+    "item": "a brown bear body shape",
+    "answer": "yes"
+   },
+   {
+    "item": "a brown bear head with visible eyes",
+    "answer": "yes"
+   },
+   {
+    "item": "thick supporting legs and visible breathing openings along the flanks",
+    "answer": "yes"
+   },
+   {
+    "item": "no wings",
+    "answer": "yes"
+   },
+   {
+    "item": "a single curved horn of hard, glossy chitin rising from the brow",
+    "answer": "no"
+   },
+   {
+    "item": "only parts and materials of the european rhinoceros beetle, no whole european rhinoceros beetle animals on the body",
+    "answer": "no"
+   },
+   {
+    "item": "hard, glossy chitin plates with fine seams patches on the head, neck, forequarters, back, flanks, belly, hindquarters, legs and tail",
+    "answer": "yes"
+   }
+  ],
+  "creatures": 1,
+  "animals": [
+   "brown bear",
+   "European rhinoceros beetle"
+  ],
+  "notes": "A bear-beetle chimera with glossy armored plates and a double-horned beetle headpiece stands in profile."
+ },
+ "critic_thumbnail": {
+  "answers": [
+   {
+    "item": "a brown bear body shape",
+    "answer": "yes"
+   },
+   {
+    "item": "a brown bear head with visible eyes",
+    "answer": "yes"
+   },
+   {
+    "item": "thick supporting legs and visible breathing openings along the flanks",
+    "answer": "no"
+   },
+   {
+    "item": "no wings",
+    "answer": "yes"
+   },
+   {
+    "item": "a single curved horn of hard, glossy chitin rising from the brow",
+    "answer": "yes"
+   },
+   {
+    "item": "only parts and materials of the european rhinoceros beetle, no whole european rhinoceros beetle animals on the body",
+    "answer": "yes"
+   },
+   {
+    "item": "hard, glossy chitin plates with fine seams patches on the head, neck, forequarters, back, flanks, belly, hindquarters, legs and tail",
+    "answer": "no"
+   }
+  ],
+  "creatures": 1,
+  "animals": [
+   "brown bear",
+   "European rhinoceros beetle"
+  ],
+  "notes": "A single composite creature shows a brown bear body and head armored with glossy beetle chitin plates and a single brow horn."
+ },
+ "mask": {
+  "fill": 0.38,
+  "aspect": 1.154,
+  "components": 1
+ },
+ "soft_cards": [],
+ "third_animal": [],
+ "sam_prompt": "animal",
+ "critic_mode": "checklist",
+ "checklist": [
+  "a brown bear body shape",
+  "a brown bear head with visible eyes",
+  "thick supporting legs and visible breathing openings along the flanks",
+  "no wings",
+  "a single curved horn of hard, glossy chitin rising from the brow",
+  "only parts and materials of the european rhinoceros beetle, no whole european rhinoceros beetle animals on the body",
+  "hard, glossy chitin plates with fine seams patches on the head, neck, forequarters, back, flanks, belly, hindquarters, legs and tail"
+ ],
+ "checklist_source": "generated from the plan",
+ "open_critic": {
+  "animals": [
+   "bear",
+   "beetle"
+  ],
+  "creatures": 1,
+  "notes": "A single fantastical hybrid creature with a bear's head, fur and paws covered in glossy, segmented beetle armor and large curved horns."
+ }
+}

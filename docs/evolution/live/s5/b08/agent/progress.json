@@ -1,0 +1,11 @@
+{
+ "calls": 10,
+ "renders": 2,
+ "edits": 0,
+ "images": [
+  "img1",
+  "img2"
+ ],
+ "finalized": true,
+ "saved_at": "2026-11-01T16:24:05"
+}

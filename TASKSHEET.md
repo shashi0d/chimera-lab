@@ -310,6 +310,17 @@ ZD (`docs/design-system/ZD.md`, `zd-tokens.css`) replaces the "Field paper" iden
 
 **Acceptance:** backend, frontend and browser suites pass; check-css passes; axe 0 serious/critical in both themes; no ZD value edited; u1 screenshots use real images.
 
+### R1 Parallel build toward submission (evo; engine frozen; mock mode only)
+
+Contract `docs/api_contract.md` (1.1) and fixtures `docs/api_fixtures/`. Report `docs/R1_REPORT.md`.
+
+- [x] R1-00 Contract, SSE schema and fixtures from real S5 runs (lead, step 0)
+- [x] R1-A Backend: agent runs API, resumable SSE, identify and refusals, uploads never stored, caps, queue, rate limit, creature store, showcase gallery, one-origin serving, migration, deploy checklist and host comparison
+- [x] R1-B Frontend: gallery first, live trace, run id in the URL with resume, creature card (anatomy overlay, both picks, hidden checks), choice/refusal/cap/error states, v1 path removed, Playwright per fixture, reviewed screenshots at desktop and mobile
+- [x] R1-C Submission docs: built-during-the-hackathon log, README, architecture diagrams, video script (pending ratings), form text, X post
+- [x] R1-L Merge, full suites, end-to-end from the UI through the real backend on every fixture, report; Chimera palette (D-098)
+- [ ] R2 Host choice and deploy, secrets, Supabase migration, one live run from the deployed UI (see `docs/R1_REPORT.md`)
+
 ### P7 Shashi (needs keys)
 
 - [ ] P7-01 Modal secret `chimera-lab` with the Meta key, Supabase URL and service key.

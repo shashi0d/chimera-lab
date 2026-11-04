@@ -1,0 +1,105 @@
+{
+ "purpose": "evo_critic",
+ "request": {
+  "model": "meta-models/muse-spark-open-1026",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture with no other context. animals: the real animal species whose features you can clearly see in it, as everyday English common names, most prominent first, at most three. If it looks like one ordinary animal, list only that animal. creatures: how many separate creatures are in the picture. notes: one short sentence on what you see."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "What animals do you see, and how many creatures?"
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (696663 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "readability_critic",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "animals",
+      "creatures",
+      "notes"
+     ],
+     "properties": {
+      "animals": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "creatures": {
+       "type": "integer"
+      },
+      "notes": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0,
+  "max_tokens": 4000
+ },
+ "response": {
+  "id": "chatcmpl-e929499fd27441018a7deff08d2285b4",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\n  \"animals\": [\"bear\", \"beetle\"],\n  \"creatures\": 1,\n  \"notes\": \"A single hybrid creature with a brown bear's head and paws covered in glossy dark beetle-like exoskeleton armor and a large curved horn on its head.\"\n}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null,
+     "reasoning_content": "We need to answer: What animals do you see, and how many creatures?\n\nWe look at one picture with no other context. animals: the real animal species whose features you can clearly see in it, as everyday English common names, most prominent first, at most three. If it looks like one ordinary animal, list only that animal. creatures: how many separate creatures are in the picture. notes: one short sentence on what you see.\n\nWe have a hybrid creature: bear + beetle? The image shows a bear with beetle armor? Actually it's a bear with exoskeleton like a rhinoceros beetle? Or stag beetle? The horn is like a rhinoceros beetle / Hercules beetle. The body armor is like a beetle / isopod? But we need to list real animal species whose features you can clearly see.\n\nWe see bear features: head, fur, paws, ears. And beetle features: shiny exoskeleton, horn. So animals: bear, beetle. Possibly also? The armor looks like maybe a woodlouse? But beetle is closest.\n\nWe need to list at most three, most prominent first. So bear first, then beetle.\n\nCreatures: how many separate creatures are in the picture. There's one hybrid creature. So count = 1.\n\nNotes: one short sentence on what you see.\n\nWe must follow format? The user asks: What animals do you see, and how many creatures? Probably expects JSON? The system says: animals: ... creatures: ... notes: ...\n\nWe should output in that structure. Probably JSON.\n\nWe need to be careful: \"If it looks like one ordinary animal, list only that animal.\" This does NOT look like one ordinary animal; it's a hybrid fantasy.\n\nSo animals: [\"bear\", \"beetle\"] or [\"bear\", \"rhinoceros beetle\"]? Everyday English common names. \"beetle\" is good. Could be \"stag beetle\" or \"rhinoceros beetle\". But \"beetle\" is safe.\n\nMost prominent first: bear is prominent? Or beetle armor covers most body. But bear head is prominent. I'd say bear first.\n\nCreatures: 1\n\nNotes: A bear-like creature wearing glossy beetle-like exoskeleton armor with a large curved horn.\n\nWe should provide answer in requested format. Probably JSON with keys animals, creatures, notes.\n\nMake sure to follow instruction: at most three.\n\nWe should not hallucinate.\n\nProvide final answer.\n\nPotential nuance: The creature count is 1. Some might argue it's one creature.\n\nWe should answer succinctly.\n\nProbably output:\n\nanimals: [\"bear\", \"beetle\"]\ncreatures: 1\nnotes: \"A single hybrid creature with a bear's head and paws covered in shiny dark beetle exoskeleton and a large horn.\"\n\nMake sure to use everyday English common names.\n\nWe should ensure we comply with policy: It's a fantasy hybrid, no issue.\n\nWe should not add extra fluff.\n\nWe need to consider if the armor could be considered isopod or pill bug? But beetle is more recognizable due to horn. The horn is characteristic of rhinoceros beetle / Hercules beetle. So beetle is correct.\n\nCould also list \"bear\" and \"rhinoceros beetle\". That is more specific. The instruction says everyday English common names. \"rhinoceros beetle\" is a common name. Could use that. But \"beetle\" is safer and more general.\n\nWe should list most prominent first: bear, then beetle.\n\nWe should ensure we answer the question: What animals do you see, and how many creatures?\n\nProvide final answer in clear format.\n\nProbably use bullet list? But spec says animals: ... creatures: ... notes: ...\n\nWe should output JSON.\n\nLet's do:\n\n{\n  \"animals\": [\"bear\", \"beetle\"],\n  \"creatures\": 1,\n  \"notes\": \"A single fantastical hybrid with a brown bear's head and feet encased in glossy black beetle-like armor topped with a long curved horn.\"\n}\n\nThat satisfies.\n\nWe must not claim it's a real animal.\n\nWe should ensure we don't violate any policy about describing images. It's fine.\n\nWe should provide final answer."
+    }
+   }
+  ],
+  "created": 1793554670,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 953,
+   "prompt_tokens": 3595,
+   "total_tokens": 4548,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 682,
+    "audio_tokens": 0,
+    "reasoning_tokens": 883,
+    "rejected_prediction_tokens": 1215,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 128,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

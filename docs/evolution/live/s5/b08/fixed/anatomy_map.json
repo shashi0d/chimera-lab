@@ -1,0 +1,82 @@
+{
+ "parts": [
+  {
+   "part": "head",
+   "sam_label": "head",
+   "parent": "red_fox",
+   "parent_role": "host",
+   "parent_name": "red fox",
+   "mask_area": 0.0322,
+   "found": true,
+   "status": "found",
+   "color": "#268bd2"
+  },
+  {
+   "part": "body",
+   "sam_label": "torso",
+   "parent": "red_fox",
+   "parent_role": "host",
+   "parent_name": "red fox",
+   "mask_area": 0.0,
+   "found": false,
+   "status": "not located",
+   "color": null
+  },
+  {
+   "part": "wings (in place of the forelegs)",
+   "sam_label": "wings",
+   "parent": "barn_owl",
+   "parent_role": "donor",
+   "parent_name": "barn owl",
+   "mask_area": 0.0798,
+   "found": true,
+   "status": "found",
+   "color": "#e66e28"
+  },
+  {
+   "part": "hind legs",
+   "sam_label": "legs",
+   "parent": "red_fox",
+   "parent_role": "host",
+   "parent_name": "red fox",
+   "mask_area": 0.0515,
+   "found": true,
+   "status": "found",
+   "color": "#268bd2"
+  },
+  {
+   "part": "tail",
+   "sam_label": "tail",
+   "parent": "red_fox",
+   "parent_role": "host",
+   "parent_name": "red fox",
+   "mask_area": 0.0521,
+   "found": true,
+   "status": "found",
+   "color": "#268bd2"
+  },
+  {
+   "part": "barn owl covering",
+   "sam_label": "layered contour feathers",
+   "parent": "barn_owl",
+   "parent_role": "donor",
+   "parent_name": "barn owl",
+   "mask_area": 0.0,
+   "found": false,
+   "status": "not located",
+   "color": null
+  }
+ ],
+ "colors": {
+  "host": "#268bd2",
+  "donor": "#e66e28",
+  "blend": "#825ac8"
+ },
+ "present_fill": 0.002,
+ "found": 4,
+ "not_located": 2,
+ "image_size": [
+  1600,
+  1600
+ ]
+}

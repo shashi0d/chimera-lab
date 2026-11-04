@@ -9,7 +9,7 @@ import threading
 from pathlib import Path
 from typing import Any
 
-COLLECTIONS = ("assets", "runs", "graphs", "creatures", "idempotency", "counters")
+COLLECTIONS = ("assets", "runs", "graphs", "creatures", "idempotency", "counters", "agent_runs")
 
 
 class SqliteDb:
@@ -45,6 +45,11 @@ class SqliteDb:
             rows = self._conn.execute(f"SELECT doc FROM {collection}").fetchall()
         return [json.loads(r[0]) for r in rows]
 
+    def _delete(self, collection: str, key: str) -> None:
+        with self._lock:
+            self._conn.execute(f"DELETE FROM {collection} WHERE key=?", (key,))
+            self._conn.commit()
+
     def _incr(self, counter: str, by: int) -> int:
         with self._lock:
             row = self._conn.execute("SELECT doc FROM counters WHERE key=?", (counter,)).fetchone()
@@ -73,3 +78,7 @@ class SqliteDb:
 
     async def incr(self, counter: str, by: int = 1) -> int:
         return await asyncio.to_thread(self._incr, counter, by)
+
+    async def delete(self, collection: str, key: str) -> None:
+        self._check(collection)
+        await asyncio.to_thread(self._delete, collection, key)

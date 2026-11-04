@@ -1,0 +1,154 @@
+{
+ "purpose": "evo_describe",
+ "request": {
+  "model": "muse-spark-1.3",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture with no other context and describe exactly what is drawn, like a careful field naturalist. Do not guess what was intended; describe only what is visible. description: a free paragraph describing the whole creature first. parts: every body part you see, one entry each (head, horns, ears, mane, legs, feet, tail, wings, gills, tentacles, shell, plates, scales, feathers, markings), with what it looks like and where it is. attached_objects: anything that looks attached to or sitting on the body rather than part of it, such as an object, an armor piece or a whole small animal; empty if none. animals: every real animal whose features you can see, as everyday English common names, at most four; include any animal that only one part resembles. Then count, looking carefully: separate_bodies: separate animal bodies or body-shaped objects in the picture, including any whole animal or animal-shaped object attached to or sitting on the main creature. heads: heads of any kind. walking_legs: legs the creature stands or walks on, including hidden ones you can infer. wings: wings of any kind. extra_limb_pieces: jointed leg-like, claw-like or tentacle-like pieces other than the walking legs and the tail. tails: tails of any kind (0 if none)."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "Describe this creature, then count."
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (863759 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "plan_blind_describe",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "description",
+      "parts",
+      "attached_objects",
+      "animals",
+      "separate_bodies",
+      "heads",
+      "walking_legs",
+      "wings",
+      "extra_limb_pieces",
+      "tails"
+     ],
+     "properties": {
+      "description": {
+       "type": "string"
+      },
+      "parts": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "part",
+         "looks_like",
+         "where"
+        ],
+        "properties": {
+         "part": {
+          "type": "string"
+         },
+         "looks_like": {
+          "type": "string"
+         },
+         "where": {
+          "type": "string"
+         }
+        }
+       }
+      },
+      "attached_objects": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "animals": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "separate_bodies": {
+       "type": "integer"
+      },
+      "heads": {
+       "type": "integer"
+      },
+      "walking_legs": {
+       "type": "integer"
+      },
+      "wings": {
+       "type": "integer"
+      },
+      "extra_limb_pieces": {
+       "type": "integer"
+      },
+      "tails": {
+       "type": "integer"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0
+ },
+ "response": {
+  "id": "chatcmpl-01a198f6-78d9-71e3-a1f2-f47eb98fcf34",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\"animals\": [\"cheetah\", \"penguin\"], \"attached_objects\": [], \"description\": \"A large four-legged feline standing in three-quarter side view facing to the right on a small patch of grassy ground. It has a cheetah-like head with tan fur, black spots and black tear-marks, small rounded ears and amber eyes. The neck and upper chest are fluffy golden-yellow fading to white on the lower chest. The back, shoulders and hips are covered in dense very dark charcoal-black fur with black spots, contrasting sharply with the pale chest and with the tan, heavily black-spotted lower legs. All four legs are long, slender and spotted with large paws bearing visible claws. The belly is pale white and tan with sparse spots. The rear ends in a very short, stubby, fluffy bobtail that is black with tan patches, not a long feline tail.\", \"extra_limb_pieces\": 0, \"heads\": 1, \"parts\": [{\"looks_like\": \"tan feline head with black spots on forehead and cheeks, black tear-lines from inner eyes to mouth, white around muzzle and lower cheeks, black nose, amber eyes\", \"part\": \"head\", \"where\": \"at the front top of the body, held high and turned to face right\"}, {\"looks_like\": \"small rounded furry ears with tan backs and pale inner fur\", \"part\": \"ears\", \"where\": \"on top sides of the head\"}, {\"looks_like\": \"amber-brown eyes with dark pupils and white eye-rings below\", \"part\": \"eyes\", \"where\": \"on the front sides of the face\"}, {\"looks_like\": \"short spiky dark fur forming a ruff\", \"part\": \"mane\", \"where\": \"along the top back of the neck continuing onto the shoulders\"}, {\"looks_like\": \"fluffy golden-yellow to creamy-white fur, longer on the chest\", \"part\": \"neck and chest\", \"where\": \"below the head on the front of the body from throat to forelimbs\"}, {\"looks_like\": \"dense short charcoal-black to dark gray fur with black round spots, paler speckled texture on the shoulder\", \"part\": \"torso\", \"where\": \"in the middle of the body covering the back, sides, shoulders and hips from neck to rear\"}, {\"looks_like\": \"pale white to light tan shaggy fur with sparse dark spots\", \"part\": \"belly\", \"where\": \"on the underside of the torso between the front and hind legs\"}, {\"looks_like\": \"four long slender muscular legs covered in tan fur with large solid black spots and horizontal black bars near the ankles\", \"part\": \"legs\", \"where\": \"below the torso, two front legs vertical under the chest and two hind legs bent under the hips\"}, {\"looks_like\": \"large broad tan paws with thick toes and short pale non-retracted claws\", \"part\": \"feet\", \"where\": \"at the bottom ends of the four legs on the ground\"}, {\"looks_like\": \"very short stubby fluffy bob with black fur and tan patches\", \"part\": \"tail\", \"where\": \"at the extreme rear of the hips\"}, {\"looks_like\": \"round to oval solid black spots of varying size\", \"part\": \"markings\", \"where\": \"scattered over the head, legs, pale belly and over the dark back\"}], \"separate_bodies\": 1, \"tails\": 1, \"walking_legs\": 4, \"wings\": 0}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null
+    }
+   }
+  ],
+  "created": 1793567652,
+  "model": "muse-spark-1.3",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 2772,
+   "prompt_tokens": 3852,
+   "total_tokens": 6624,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": null,
+    "audio_tokens": null,
+    "reasoning_tokens": 2014,
+    "rejected_prediction_tokens": null,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": null,
+    "cache_write_tokens": null,
+    "cached_tokens": 369,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

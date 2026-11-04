@@ -1,0 +1,240 @@
+[
+ {
+  "at": "2026-11-01T14:26:56",
+  "budget": {
+   "before": {
+    "image": 154,
+    "spark": 617,
+    "sam": 147,
+    "spark_baseten": 1017
+   },
+   "after": {
+    "image": 158,
+    "spark": 627,
+    "sam": 153,
+    "spark_baseten": 1039
+   }
+  },
+  "calls": {
+   "meta:spark:evo_plan": {
+    "ok": 2,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_polish": {
+    "ok": 2,
+    "failed": 0
+   },
+   "meta:image:text_to_image": {
+    "ok": 4,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_checklist": {
+    "ok": 8,
+    "failed": 0
+   },
+   "meta:sam:sam": {
+    "ok": 6,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_critic": {
+    "ok": 4,
+    "failed": 0
+   },
+   "meta:spark:evo_describe": {
+    "ok": 4,
+    "failed": 0
+   },
+   "meta:spark:evo_ask": {
+    "ok": 4,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_describe": {
+    "ok": 4,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_ask": {
+    "ok": 4,
+    "failed": 0
+   }
+  },
+  "summary": [
+   {
+    "run": "tortoise_goat",
+    "kept": "edited",
+    "signals": [
+     [
+      "no_mane",
+      "fail"
+     ],
+     [
+      "extra_mane",
+      "fail"
+     ],
+     [
+      "third_animal",
+      "fail"
+     ]
+    ],
+    "tie_note": "needs_choice on a structural tie (D-085); fused with host=sire (the old rule) to compare",
+    "host": "tortoise"
+   },
+   {
+    "run": "fox_owl",
+    "kept": "first",
+    "signals": [
+     [
+      "frame",
+      "fail"
+     ],
+     [
+      "extra_spots",
+      "fail"
+     ]
+    ],
+    "tie_note": "needs_choice on a structural tie (D-085); fused with host=sire (the old rule) to compare",
+    "host": "red_fox"
+   }
+  ]
+ },
+ {
+  "at": "2026-11-01T14:36:05",
+  "budget": {
+   "before": {
+    "image": 158,
+    "spark": 627,
+    "sam": 153,
+    "spark_baseten": 1039
+   },
+   "after": {
+    "image": 162,
+    "spark": 637,
+    "sam": 161,
+    "spark_baseten": 1061
+   }
+  },
+  "calls": {
+   "meta:spark:evo_plan": {
+    "ok": 2,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_polish": {
+    "ok": 2,
+    "failed": 0
+   },
+   "meta:image:text_to_image": {
+    "ok": 4,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_checklist": {
+    "ok": 8,
+    "failed": 0
+   },
+   "meta:sam:sam": {
+    "ok": 8,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_critic": {
+    "ok": 4,
+    "failed": 0
+   },
+   "meta:spark:evo_describe": {
+    "ok": 4,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_describe": {
+    "ok": 4,
+    "failed": 0
+   },
+   "meta:spark:evo_ask": {
+    "ok": 4,
+    "failed": 0
+   },
+   "baseten:spark_baseten:evo_ask": {
+    "ok": 4,
+    "failed": 0
+   }
+  },
+  "summary": [
+   {
+    "run": "crab_wolf",
+    "kept": "first",
+    "signals": [
+     [
+      "cover_present",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "continuous",
+      "fail"
+     ],
+     [
+      "scattered",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ]
+    ],
+    "tie_note": null,
+    "host": "gray_wolf"
+   },
+   {
+    "run": "beetle_bear",
+    "kept": "edited",
+    "signals": [
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "continuous",
+      "fail"
+     ],
+     [
+      "scattered",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ],
+     [
+      "third_animal",
+      "fail"
+     ]
+    ],
+    "tie_note": null,
+    "host": "brown_bear"
+   }
+  ]
+ }
+]

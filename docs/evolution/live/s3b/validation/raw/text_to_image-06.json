@@ -1,0 +1,110 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Now grow the covering: hard, glossy chitin plates with fine seams in its own colors, grown from the skin as the brown bear's own covering over the crown of the head, neck, shoulders, back, flanks, belly, hips, legs and tail: it replaces the brown bear's dense fur there and conforms to the brown bear's body, each plate sized to the brown bear's own body segments and muscle masses, one plate per segment or muscle mass, joined by flexible cuticle at every joint; the dense fur stops at the covering's edge, and the face keeps the brown bear's own dense fur. Let the covering run up to the base of the head horn, so they connect. Keep the pose, the head and face, the number of legs, the tail, the head horn exactly where and as they are, the background and everything else the same.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ],
+  "previous_response_id": "resp_6ae75565414eeb6d7fc74bcd"
+ },
+ "response": {
+  "id": "resp_6ae75579882f7f109e474bcd",
+  "access_programs": null,
+  "created_at": 1793545593.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae75579639be4db99924963",
+    "summary": [
+     {
+      "text": "**Growing chitin plate covering**\nI'm planning the image-to-image edit to grow hard glossy chitin plates from the brown bear's skin, sized to each body segment with flexible cuticle joints, while keeping the face fur and stopping the dense fur at the plate edges.\n**Applying chitin plate armor**\nI'm transforming the body fur into segmented brown/dark chitin plates across the crown, neck, shoulders, back, flanks, belly, hips, legs, and tail, while keeping the face fur, horn, pose, and background exactly as in the input.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae75579001a3033dc174606",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0FnU0JEVDFvUEJIaVQ0R0FLbWNFT1ljLTUwOWJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczozOWY3Y2VhOC1lYzFhLTQ3NmEtYjU3OC04YzI5NzJjYjZjMjE6R0V5dEJ6VFVRQkRKb0RFRUFDQ0FNYnFIWDZRcWJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM1NDU1OTN9.Q8WLFwGFAR_KhT93hR4yz7dh-1wK",
+    "result": "<elided> (792312 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": "resp_6ae75565414eeb6d7fc74bcd",
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 23492,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 15424
+   },
+   "output_tokens": 1462,
+   "output_tokens_details": {
+    "reasoning_tokens": 309
+   },
+   "total_tokens": 24954
+  },
+  "user": null
+ }
+}

@@ -1,134 +1,111 @@
-import { useState } from "react";
+import { useId } from "react";
 import { presentError } from "../../api/errorMessages";
 import { NodeCard, type NodeStatus } from "../../canvas/NodeCard";
-import { ErrorBlock, StepList, totalMs, useCountdown } from "../../canvas/RunParts";
-import { formatElapsed, formatSeconds, useNow } from "../../canvas/useNow";
+import { ErrorBlock, useCountdown } from "../../canvas/RunParts";
+import { formatElapsed, useNow } from "../../canvas/useNow";
 import { useConnectivity } from "../../connectivity/store";
 import { copy } from "../../copy";
+import { useCapped } from "../../evo/data";
+import { isTerminal, useRun, type DerivedRun } from "../../evo/runs";
+import { evo } from "../../evo/index";
+import { STYLES, type Style } from "../../evo/types";
 import { upstreamNode } from "../../graph/queries";
 import { useGraph } from "../../graph/store";
-import { useRuns } from "../../runs/store";
-import { TERMINAL } from "../../runs/transport";
-import type { Run } from "../../types/api";
 import { Button, IconButton } from "../../ui/Button";
 import { Icon } from "../../ui/Icon";
+import { SegmentedTabs } from "../../ui/SegmentedTabs";
+import { displaySpecies } from "../image-input/species";
 import type { ImageInputData } from "../image-input/types";
-import { speciesFor, useSpecies } from "../image-input/species";
+import type { VersionData } from "../version/types";
 import { usePreview } from "../image-input/usePreview";
 import type { NodeViewProps } from "../types";
-import { BodyDiagram, resetDonors } from "./BodyDiagram";
 import { FUSION_INPUTS, FUSION_OUTPUTS } from "./ports";
-import { PARTS, readDonors, type FusionConfig, type FusionData } from "./types";
+import { startFusion, useFusionStart } from "./start";
+import { readStyle, type FusionConfig, type FusionData } from "./types";
 
 const t = copy.nodes.fusion;
-const LONG_WAIT_MS = 20_000;
-const VERY_LONG_WAIT_MS = 120_000;
 
-function fusionStatus(run: Run | undefined, starting: boolean, stale: boolean, blocked: boolean): NodeStatus {
-  if (starting) return { tone: "running", label: copy.status.queued };
-  if (!run) return blocked ? { tone: "idle", label: copy.status.idle } : { tone: "idle", label: copy.status.ready };
+export function runStatus(run: DerivedRun | null, starting: boolean): NodeStatus | null {
+  if (starting) return { tone: "running", label: copy.status.starting };
+  if (!run) return null;
   switch (run.status) {
+    case "loading":
+      return { tone: "running", label: copy.status.connecting };
     case "queued":
-      return { tone: "running", label: copy.status.queued };
+      return { tone: "warn", label: run.position ? copy.trace.queuedShort(run.position) : copy.status.queued };
     case "running":
       return { tone: "running", label: copy.status.running };
+    case "needs_choice":
+      return { tone: "warn", label: copy.status.needsChoice };
     case "succeeded":
-      return stale ? { tone: "stale", label: copy.status.stale } : { tone: "ok", label: copy.status.succeeded };
+      return { tone: "ok", label: copy.status.succeeded };
     case "failed":
       return { tone: "error", label: copy.status.failed };
-    case "cancelled":
-      return { tone: "idle", label: copy.status.cancelled };
     case "interrupted":
       return { tone: "error", label: copy.status.interrupted };
   }
 }
 
-/** Upstream image for one slot: node, preview URL and identified species. */
+/** Upstream input for one slot: a photo (preview, identified species) or an earlier creature (its image and title). */
 function useSlot(fusionId: string, port: "a" | "b") {
-  const nodes = useGraph((s) => s.nodes);
-  const edges = useGraph((s) => s.edges);
-  const up = upstreamNode({ nodes, edges }, fusionId, port);
-  const data = up?.data as ImageInputData | undefined;
-  const preview = usePreview(data ?? {});
-  const species = useSpecies(data?.assetId);
-  return { up, preview, species };
+  // Select only the upstream node's type and data (stable while nodes are dragged), never the whole graph.
+  const upType = useGraph((s) => upstreamNode(s, fusionId, port)?.type ?? null);
+  const upData = useGraph((s) => upstreamNode(s, fusionId, port)?.data ?? null);
+  const isVersion = upType === "version";
+  const data = !isVersion ? (upData as ImageInputData | null) ?? undefined : undefined;
+  const photoPreview = usePreview(data ?? {});
+  const version = isVersion ? (upData as VersionData | null)?.version ?? null : null;
+  const up = upType !== null;
+  if (isVersion) return { up, isVersion, preview: version ? evo().imageUrl(version.imageUrl) : null, species: version?.title ?? null };
+  return { up, isVersion, preview: photoPreview, species: displaySpecies(data?.species) };
 }
 
-/** Small portrait + species name for one parent (no form controls on the card). */
-function DonorPortrait({ slot, preview, species, connected }: { slot: "A" | "B"; preview?: string; species: string | null; connected: boolean }) {
+/** One parent: the connected photo with its identified name, or a name field (the contract's fallback). */
+function ParentSlot({ nodeId, port, name, disabled }: { nodeId: string; port: "a" | "b"; name: string; disabled: boolean }) {
+  const slot = port.toUpperCase() as "A" | "B";
+  const { up, isVersion, preview, species } = useSlot(nodeId, port);
+  const inputId = useId();
+  const setName = (v: string) =>
+    useGraph.getState().updateNodeData<FusionData>(nodeId, (d) => ({ ...d, names: { ...(d.names ?? { a: "", b: "" }), [port]: v } }));
+  if (up) {
+    return (
+      <div className={`donor-chip donor-chip--${port}`}>
+        <span className="donor-chip__portrait" aria-hidden="true">
+          {preview ? <img src={preview} alt="" draggable={false} /> : <Icon name="image" size={16} />}
+          <span className="donor-chip__letter">{slot}</span>
+        </span>
+        <span className="donor-chip__text">
+          <span className="sr-only">{t.slot(slot)}: </span>
+          <span className="donor-chip__name">{species ?? t.photo}</span>
+          <span className="donor-chip__meta">{isVersion ? t.earlierCreature : species ? t.identified : t.identifiedOnRun}</span>
+        </span>
+      </div>
+    );
+  }
   return (
-    <div className={`donor-chip donor-chip--${slot.toLowerCase()}${connected ? "" : " is-empty"}`}>
+    <div className={`donor-chip donor-chip--${port} donor-chip--typed`}>
       <span className="donor-chip__portrait" aria-hidden="true">
-        {preview ? <img src={preview} alt="" draggable={false} /> : <Icon name="image" size={16} />}
+        <Icon name="leaf" size={16} />
         <span className="donor-chip__letter">{slot}</span>
       </span>
-      <span className="donor-chip__text">
-        <span className="sr-only">{t.slot(slot)}: </span>
-        <span className="donor-chip__name">{connected ? (species ?? copy.nodes.imageInput.title(slot)) : t.empty}</span>
+      <span className="donor-chip__field">
+        <label className="donor-chip__label" htmlFor={inputId}>
+          {t.nameLabel(slot)}
+        </label>
+        <input
+          id={inputId}
+          className="text-input nodrag"
+          value={name}
+          maxLength={60}
+          placeholder={t.namePlaceholder(slot)}
+          autoComplete="off"
+          spellCheck={false}
+          disabled={disabled}
+          onChange={(e) => setName(e.target.value)}
+          onKeyDown={(e) => e.stopPropagation()}
+        />
       </span>
     </div>
-  );
-}
-
-/** Toolbar slot selector: the keyboard path for wiring A and B. */
-function SlotSelect({ fusionId, port, disabled }: { fusionId: string; port: "a" | "b"; disabled: boolean }) {
-  const nodes = useGraph((s) => s.nodes);
-  const edges = useGraph((s) => s.edges);
-  const runs = useRuns((s) => s.runs);
-  const up = upstreamNode({ nodes, edges }, fusionId, port);
-  const images = nodes.filter((n) => n.type === "image-input");
-  const slot = port.toUpperCase();
-  const selectId = `${fusionId}-slot-${port}`;
-
-  const connect = (sourceId: string) => {
-    const g = useGraph.getState();
-    const existing = g.edges.find((e) => e.target === fusionId && e.targetPort === port);
-    g.checkpoint();
-    useGraph.setState((s) => ({
-      edges: [
-        ...s.edges.filter((e) => e !== existing),
-        ...(sourceId
-          ? [
-              {
-                id: `e-${port}-${fusionId}-${Date.now().toString(36)}`,
-                source: sourceId,
-                sourcePort: "out",
-                target: fusionId,
-                targetPort: port,
-              },
-            ]
-          : []),
-      ],
-      revision: s.revision + 1,
-    }));
-    if (existing?.source !== sourceId) g.markDownstreamStale(fusionId);
-  };
-
-  return (
-    <span className="slot-select">
-      <span className="slot-select__letter" aria-hidden="true">
-        {slot}
-      </span>
-      <select
-        id={selectId}
-        aria-label={t.connectVia(slot)}
-        className="slot-select__select"
-        value={up?.id ?? ""}
-        disabled={disabled}
-        onChange={(e) => connect(e.target.value)}
-      >
-        <option value="">{up ? t.empty : t.chooseImage}</option>
-        {images.map((img, i) => {
-          const d = img.data as ImageInputData;
-          const name = speciesFor(d.assetId, runs, nodes) ?? copy.nodes.imageInput.unknownSpecies;
-          return (
-            <option key={img.id} value={img.id}>
-              {`${i + 1}. ${name}`}
-            </option>
-          );
-        })}
-      </select>
-    </span>
   );
 }
 
@@ -139,6 +116,11 @@ function swapSlots(fusionId: string): void {
     edges: s.edges.map((e) =>
       e.target === fusionId && (e.targetPort === "a" || e.targetPort === "b") ? { ...e, targetPort: e.targetPort === "a" ? "b" : "a" } : e,
     ),
+    nodes: s.nodes.map((n) => {
+      if (n.id !== fusionId) return n;
+      const names = (n.data as FusionData).names ?? { a: "", b: "" };
+      return { ...n, data: { ...n.data, names: { a: names.b, b: names.a } } };
+    }),
     revision: s.revision + 1,
   }));
   g.markDownstreamStale(fusionId);
@@ -146,43 +128,32 @@ function swapSlots(fusionId: string): void {
 
 export function FusionView({ node, selected, issues }: NodeViewProps<FusionConfig, FusionData>) {
   const runId = node.data.activeRunId ?? null;
-  const run = useRuns((s) => (runId ? s.runs[runId] : undefined));
-  const starting = useRuns((s) => Boolean(s.starting[node.id]));
-  const startError = useRuns((s) => s.startErrors[node.id]);
-  const start = useRuns((s) => s.start);
-  const cancel = useRuns((s) => s.cancel);
+  const run = useRun(runId);
+  const starting = useFusionStart((s) => Boolean(s.starting[node.id]));
+  const startError = useFusionStart((s) => s.errors[node.id]);
   const readOnly = useGraph((s) => s.readOnly);
   const connectivity = useConnectivity((s) => s.status);
-  const [cancelling, setCancelling] = useState(false);
-  const slotA = useSlot(node.id, "a");
-  const slotB = useSlot(node.id, "b");
-  const donors = readDonors(node.config);
-  const pinned = PARTS.some((p) => donors[p] !== "auto");
+  const { capped } = useCapped();
+  const names = node.data.names ?? { a: "", b: "" };
+  const style = readStyle(node.config);
 
-  const active = starting || (run !== undefined && !TERMINAL.has(run.status));
-  const now = useNow(active, 500);
-  const elapsed = run ? now - Date.parse(run.createdAt) : 0;
+  const active = starting || Boolean(run && !isTerminal(run.status));
+  const now = useNow(Boolean(run && !isTerminal(run.status)), 1000);
+  const since = run?.startedAt ? Date.parse(run.startedAt) : null;
+  const elapsed = since ? (run?.endedAt ? Date.parse(run.endedAt) : now) - since : 0;
   const blocking = issues.filter((i) => i.severity === "block");
-  const advisory = issues.filter((i) => i.severity === "warn");
-  const stale = Boolean(node.data.stale);
-  const status = fusionStatus(run, starting, stale, blocking.length > 0);
-  const runError = run && (run.status === "failed" || run.status === "interrupted") ? run.error : null;
-  const shownError = startError ?? runError ?? null;
+  const status = runStatus(run, starting) ?? (blocking.length ? { tone: "idle" as const, label: copy.status.idle } : { tone: "idle" as const, label: copy.status.ready });
+  const shownError = startError ?? null;
+  const countdown = useCountdown(shownError, () => void startFusion(node.id));
+  const disabledReason = blocking[0]?.message ?? (capped ? t.capped : null);
+  // The CAP_REACHED error already says it; don't repeat it as a hint.
+  const showHint = Boolean(disabledReason) && !(shownError?.code === "CAP_REACHED" && !blocking.length);
 
-  const fuse = () => {
-    setCancelling(false);
-    void start(node.id);
+  const make = () => {
+    useFusionStart.getState().clearError(node.id);
+    void startFusion(node.id);
   };
-  const countdown = useCountdown(shownError, fuse);
-
-  const doCancel = async () => {
-    setCancelling(true);
-    await cancel(node.id);
-    setCancelling(false);
-  };
-
-  const fuseLabel = shownError && presentError(shownError).retry ? t.retry : run?.status === "succeeded" ? t.fuseAgain : t.fuse;
-  const paused = active && connectivity !== "online";
+  const label = shownError && presentError(shownError).retry ? t.retry : run?.status === "succeeded" ? t.makeAgain : t.make;
 
   return (
     <NodeCard
@@ -194,44 +165,31 @@ export function FusionView({ node, selected, issues }: NodeViewProps<FusionConfi
       inputs={FUSION_INPUTS}
       outputs={FUSION_OUTPUTS}
       selected={selected}
-      className={[active ? "is-running" : "", shownError ? "node--error" : "", stale ? "is-stale" : ""].filter(Boolean).join(" ")}
+      className={[active ? "is-running" : "", shownError ? "node--error" : ""].filter(Boolean).join(" ")}
       toolbar={
         readOnly ? null : (
-          <>
-            <SlotSelect fusionId={node.id} port="a" disabled={active} />
-            <SlotSelect fusionId={node.id} port="b" disabled={active} />
-            <IconButton icon="replace" label={t.swap} disabled={active || !(slotA.up || slotB.up)} onClick={() => swapSlots(node.id)} />
-            <IconButton icon="refresh" label={t.resetAnatomy} disabled={active || !pinned} onClick={() => resetDonors(node.id)} />
-          </>
+          <IconButton icon="replace" label={t.swap} disabled={active} onClick={() => swapSlots(node.id)} />
         )
       }
       footer={
         <>
           {active ? (
-            <Button
-              variant={elapsed > VERY_LONG_WAIT_MS ? "danger" : "ghost"}
-              size="sm"
-              icon="stop"
-              className="nodrag"
-              busy={cancelling}
-              disabled={cancelling || !runId}
-              onClick={doCancel}
-            >
-              {cancelling ? t.cancelling : t.cancel}
+            <Button variant="primary" icon="fusion" className="nodrag fusion-node__make" busy disabled>
+              {runId ? t.generating : t.starting}
             </Button>
           ) : (
             <Button
               variant="primary"
               icon="fusion"
-              className="nodrag fusion-node__fuse"
-              disabled={blocking.length > 0 || starting || countdown !== null}
-              aria-describedby={blocking.length ? `${node.id}-hint` : undefined}
-              onClick={fuse}
+              className="nodrag fusion-node__make"
+              disabled={Boolean(disabledReason) || countdown !== null}
+              aria-describedby={showHint ? `${node.id}-hint` : undefined}
+              onClick={make}
             >
-              {fuseLabel}
+              {label}
             </Button>
           )}
-          {active ? (
+          {since && run && !isTerminal(run.status) ? (
             <span className="node__timer" aria-label={`${t.elapsed} ${formatElapsed(elapsed)}`}>
               {formatElapsed(elapsed)}
             </span>
@@ -240,60 +198,44 @@ export function FusionView({ node, selected, issues }: NodeViewProps<FusionConfi
       }
     >
       <div className="fusion-node__parents">
-        <DonorPortrait slot="A" preview={slotA.preview} species={slotA.species} connected={Boolean(slotA.up)} />
+        <ParentSlot nodeId={node.id} port="a" name={names.a} disabled={readOnly || active} />
         <span className="fusion-node__times" aria-hidden="true">
           ×
         </span>
-        <DonorPortrait slot="B" preview={slotB.preview} species={slotB.species} connected={Boolean(slotB.up)} />
+        <ParentSlot nodeId={node.id} port="b" name={names.b} disabled={readOnly || active} />
       </div>
-      {active ? null : (
-        <BodyDiagram
-          nodeId={node.id}
-          config={node.config}
-          disabled={readOnly || active}
-          faces={{
-            A: { preview: slotA.preview, name: slotA.species ?? "A" },
-            B: { preview: slotB.preview, name: slotB.species ?? "B" },
-          }}
+      <div className="fusion-node__mode">
+        <p className="fusion-node__mode-kicker" id={`${node.id}-style`}>
+          {t.style}
+        </p>
+        <SegmentedTabs
+          label={t.style}
+          value={style}
+          onChange={(v) => useGraph.getState().updateNodeConfig<FusionConfig>(node.id, (c) => ({ ...c, style: v as Style }))}
+          items={STYLES.map((s) => ({ value: s, label: copy.styles[s].label }))}
+          disabled={active || readOnly}
         />
-      )}
-      {run && active ? <StepList steps={run.steps} now={now} /> : null}
+        <p className="fusion-node__mode-hint">{copy.styles[style].hint}</p>
+      </div>
       <div className="fusion-node__messages" aria-live="polite">
-        {!active && blocking[0] ? (
+        {active ? (
+          <p className="node__note">
+            <Icon name="info" size={14} /> {run?.status === "queued" && run.position ? copy.trace.queuedLine(run.position) : copy.trace.duration}
+          </p>
+        ) : showHint ? (
           <p id={`${node.id}-hint`} className="node__hint">
-            <Icon name="info" size={14} /> {blocking[0].message}
+            <Icon name="info" size={14} /> {disabledReason}
           </p>
-        ) : !active && advisory[0] ? (
-          <p className="node__hint node__hint--warn">
-            <Icon name="alert" size={14} /> {advisory[0].message}
-          </p>
-        ) : null}
-        {stale && !active && run?.status === "succeeded" ? (
-          <p className="node__note node__note--warn">
-            <Icon name="refresh" size={14} /> {t.stale}
-          </p>
-        ) : null}
-        {paused ? (
+        ) : disabledReason ? null : (
+          <p className="node__hint node__hint--quiet">{copy.trace.duration}</p>
+        )}
+        {connectivity !== "online" && active ? (
           <p className="node__note node__note--warn">
             <Icon name="offline" size={14} /> {t.pausedOffline}
           </p>
-        ) : active && elapsed > VERY_LONG_WAIT_MS ? (
-          <p className="node__note node__note--warn">{t.veryLongWait}</p>
-        ) : active && elapsed > LONG_WAIT_MS ? (
-          <p className="node__note node__note--warn">{t.longWait}</p>
         ) : null}
         {!active && shownError ? <ErrorBlock err={shownError} countdown={countdown} /> : null}
       </div>
-      {run && !active ? (
-        // Finished (any outcome): the step log folds away so the outcome and the next action lead.
-        <details className="steps-details">
-          <summary className="steps-details__summary nodrag">
-            {t.showSteps}
-            <span className="steps-details__meta">{t.summary(run.steps.length, formatSeconds(totalMs(run.steps)))}</span>
-          </summary>
-          <StepList steps={run.steps} now={now} allDetails />
-        </details>
-      ) : null}
     </NodeCard>
   );
 }

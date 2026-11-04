@@ -1,0 +1,227 @@
+{
+ "id": "e4/b_axolotl_x_pangolin",
+ "questions": [
+  {
+   "id": "frame",
+   "text": "Is the overall body shape that of a chinese pangolin?",
+   "expect": "yes",
+   "group": "structure",
+   "fix": "Show the planned chinese pangolin body shape and outline; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "head",
+   "text": "Does it have a chinese pangolin head with visible eyes?",
+   "expect": "yes",
+   "group": "structure",
+   "fix": "Show the planned chinese pangolin head, fully visible with clear eyes; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "no_wings",
+   "text": "Are there wings anywhere on the body?",
+   "expect": "no",
+   "group": "structure",
+   "fix": "The plan has no wings: show the chinese pangolin's own body there instead; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "whole_animal",
+   "text": "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?",
+   "expect": "no",
+   "group": "structure",
+   "fix": "Show the planned axolotl contribution only as smooth, moist skin on the chinese pangolin's own body over the back and flanks, not as separate animals; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "second_head",
+   "text": "Is there a second head anywhere?",
+   "expect": "no",
+   "group": "structure",
+   "fix": "Show one single head, as planned; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "extra_legs",
+   "text": "Does it have more than 4 walking legs?",
+   "expect": "no",
+   "group": "structure",
+   "fix": "Show exactly 4 walking legs, as planned; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "unplanned_three_pairs_of_feathery_extern",
+   "text": "Are there feathery external gills anywhere on the creature?",
+   "expect": "no",
+   "group": "structure",
+   "fix": "The plan has no feathery external gills: show the chinese pangolin's own body there instead; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "no_mane",
+   "text": "Does it have a full mane of long hair around the head and neck?",
+   "expect": "no",
+   "group": "structure",
+   "fix": "The plan has no mane: show the planned neck with no mane; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "cover_present",
+   "text": "Is there smooth, moist skin on the back and flanks?",
+   "expect": "yes",
+   "group": "surface",
+   "fix": "Show the planned smooth, moist skin over the back and flanks; keep everything else the same.",
+   "sam": null
+  }
+ ],
+ "parts": [],
+ "raw": {
+  "spark_open": {
+   "describe": {
+    "description": "The creature is a quadrupedal, low-slung animal shown in right-facing profile walking on a flat light surface against a plain off-white background. Its body is robust and arched, almost entirely covered in large overlapping rounded scales that are brown with darker centers and tan edges, with irregular patches of larger pale pink speckled scales on the mid-flank, lower side and shoulder. It has an elongated pointed snout with a dark nostril at the tip, a small glossy black eye, and four thick limbs ending in clawed feet. A long, thick, tapering scaly tail extends to the left rear, and six pink fleshy stalks bearing dense feathery red-pink filaments protrude from the sides and top of the head and neck just behind the ear openings.",
+    "parts": [
+     {
+      "part": "head",
+      "looks_like": "elongated and tapering to a rounded snout with a dark nostril at the tip, textured light tan-brown skin on the sides with fine whiskers near the nose, a small round glossy black eye with a pale lower eyelid, and small overlapping brown scales covering the top of the head and nape",
+      "where": "at the far right end of the body, facing right"
+     },
+     {
+      "part": "ears",
+      "looks_like": "small dark circular openings with a slightly raised rim and a shallow depression behind the gill bases",
+      "where": "on the side of the head just behind and slightly below the pink gill stalks, one clearly visible on the near side"
+     },
+     {
+      "part": "gills",
+      "looks_like": "six pink fleshy stalks with dense feathery red-pink filaments along their sides, three large stalks projecting outward from the near side of the neck and three smaller stalks projecting upward from the top and far side of the head and neck",
+      "where": "clustered on the neck immediately behind the head, on both the near side and the top/far side"
+     },
+     {
+      "part": "legs",
+      "looks_like": "four short thick muscular legs with wrinkled textured skin, the upper portions partially covered with overlapping brown scales and the lower portions bare with pebbly skin",
+      "where": "under the body, two front legs supporting the chest and two hind legs supporting the rear, all in a walking stance"
+     },
+     {
+      "part": "feet",
+      "looks_like": "broad feet with thick toes bearing curved light brown claws, the front feet showing three prominent claws each and the hind feet showing multiple blunt claws with scaly textured skin",
+      "where": "at the distal ends of each leg resting on the ground surface"
+     },
+     {
+      "part": "tail",
+      "looks_like": "long thick at the base and tapering toward the tip, densely covered with overlapping brown scales matching the back",
+      "where": "extending to the left from the rear of the body, partially visible at the left edge of the image"
+     },
+     {
+      "part": "scales",
+      "looks_like": "large overlapping rounded keratinous scales with dark brown centers and lighter tan-brown edges, giving a pangolin-like armor appearance",
+      "where": "covering the dorsal surface, sides, tail, upper portions of all four limbs, and the top of the head and neck"
+     },
+     {
+      "part": "markings",
+      "looks_like": "irregular patches of larger pale pink scales with fine darker speckling, contrasting with the surrounding brown scales",
+      "where": "on the upper mid-back, on the lower flank behind the front legs, and on the shoulder and lower neck around the gill bases"
+     }
+    ],
+    "attached_objects": [],
+    "animals": [
+     "pangolin",
+     "axolotl"
+    ],
+    "separate_bodies": 1,
+    "heads": 1,
+    "walking_legs": 4,
+    "wings": 0,
+    "extra_limb_pieces": 0,
+    "tails": 1
+   },
+   "answers": {
+    "Is the overall body shape that of a chinese pangolin?": "yes",
+    "Does it have a chinese pangolin head with visible eyes?": "yes",
+    "Are there wings anywhere on the body?": "no",
+    "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?": "no",
+    "Is there a second head anywhere?": "no",
+    "Does it have more than 4 walking legs?": "no",
+    "Are there feathery external gills anywhere on the creature?": "yes",
+    "Does it have a full mane of long hair around the head and neck?": "no",
+    "Is there smooth, moist skin on the back and flanks?": "no"
+   },
+   "origins": {},
+   "error": null
+  },
+  "meta_spark": {
+   "describe": {
+    "description": "A quadrupedal animal shown in right profile walking to the right with an arched back. The back, sides, top of the head, tail and upper legs are covered in overlapping rounded brown scales interspersed with patches of larger pale pink speckled scales. It has an elongated tapered head ending in a pointed snout with a dark nostril, a small round black eye, fine whiskers, and a small dark ear opening. Four short thick wrinkled legs with broad clawed feet support the body. A long tapering scaly tail extends to the left rear and is partially cropped. Six pink branched stalks fringed with fine red feathery filaments protrude from the neck just behind the head, three visible on the near side and three peeking over the top of the head from the far side.",
+    "parts": [
+     {
+      "part": "head",
+      "looks_like": "elongated and tapered to a pointed snout with brown wrinkled skin and a dark nostril at the tip",
+      "where": "at the front right of the body"
+     },
+     {
+      "part": "eyes",
+      "looks_like": "small round black with pale lower lids",
+      "where": "on the side of the head behind the snout"
+     },
+     {
+      "part": "ears",
+      "looks_like": "small dark round openings",
+      "where": "on the side of the head behind and below the gill bases"
+     },
+     {
+      "part": "legs",
+      "looks_like": "short thick wrinkled limbs with upper portions covered in small overlapping scales",
+      "where": "underneath the body, two in front and two in rear"
+     },
+     {
+      "part": "feet",
+      "looks_like": "broad rough feet with short curved tan claws",
+      "where": "at the ends of the legs touching the ground"
+     },
+     {
+      "part": "tail",
+      "looks_like": "long tapering and covered in overlapping scales",
+      "where": "extending to the left rear from the body, partially out of frame"
+     },
+     {
+      "part": "gills",
+      "looks_like": "pink branched stalks fringed with fine red feathery filaments, three stalks per side",
+      "where": "protruding from the neck just behind the head, three on the near side and three visible over the top of the head from the far side"
+     },
+     {
+      "part": "scales",
+      "looks_like": "overlapping rounded brown keratin plates with lighter edges, interspersed with patches of larger pale pink speckled plates",
+      "where": "covering the back, sides, top of head, tail and upper legs"
+     },
+     {
+      "part": "whiskers",
+      "looks_like": "fine pale hairs",
+      "where": "on the snout around the nose and mouth"
+     }
+    ],
+    "attached_objects": [],
+    "animals": [
+     "pangolin",
+     "axolotl"
+    ],
+    "separate_bodies": 1,
+    "heads": 1,
+    "walking_legs": 4,
+    "wings": 0,
+    "extra_limb_pieces": 0,
+    "tails": 1
+   },
+   "answers": {
+    "Is the overall body shape that of a chinese pangolin?": "yes",
+    "Does it have a chinese pangolin head with visible eyes?": "yes",
+    "Are there wings anywhere on the body?": "no",
+    "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?": "no",
+    "Is there a second head anywhere?": "no",
+    "Does it have more than 4 walking legs?": "no",
+    "Are there feathery external gills anywhere on the creature?": "yes",
+    "Does it have a full mane of long hair around the head and neck?": "no",
+    "Is there smooth, moist skin on the back and flanks?": "no"
+   },
+   "origins": {},
+   "error": null
+  }
+ }
+}

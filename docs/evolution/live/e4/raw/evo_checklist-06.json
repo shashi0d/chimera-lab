@@ -1,0 +1,138 @@
+{
+ "purpose": "evo_checklist",
+ "request": {
+  "model": "muse-spark-1.3",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture of an animal and check it against a list of visible features. For each item, answer yes if the feature is clearly visible, no if the picture clearly shows otherwise, or unclear if you cannot tell. Copy each item's text exactly, in the given order. Judge only what is visible. choice: which one of the listed options the animal in the picture looks most like; pick exactly one. creatures: how many separate creatures are in the picture. animals: the real animal species whose features you can clearly see, as everyday English common names, at most three. notes: one short sentence."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "Features to check:\n1. a brown bear body shape\n2. a brown bear head with visible eyes\n3. thick supporting legs and visible breathing openings along the flanks\n4. european rhinoceros beetle wings in place of the front legs\n5. european rhinoceros beetle jointed tail segments in place of the tail\n6. european rhinoceros beetle exoskeleton patches on the forequarters and neck\n\nForced choice, the animal looks most like: european rhinoceros beetle, brown bear, a mix of both, other."
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (84126 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "feature_checklist",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "answers",
+      "choice",
+      "creatures",
+      "animals",
+      "notes"
+     ],
+     "properties": {
+      "answers": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "item",
+         "answer"
+        ],
+        "properties": {
+         "item": {
+          "type": "string"
+         },
+         "answer": {
+          "type": "string",
+          "enum": [
+           "yes",
+           "no",
+           "unclear"
+          ]
+         }
+        }
+       }
+      },
+      "choice": {
+       "type": "string",
+       "enum": [
+        "european rhinoceros beetle",
+        "brown bear",
+        "a mix of both",
+        "other"
+       ]
+      },
+      "creatures": {
+       "type": "integer"
+      },
+      "animals": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "notes": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0
+ },
+ "response": {
+  "id": "chatcmpl-01a1939d-2d75-7448-b6d0-4d7668b28466",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\"animals\": [\"brown bear\", \"european rhinoceros beetle\"], \"answers\": [{\"answer\": \"yes\", \"item\": \"a brown bear body shape\"}, {\"answer\": \"yes\", \"item\": \"a brown bear head with visible eyes\"}, {\"answer\": \"no\", \"item\": \"thick supporting legs and visible breathing openings along the flanks\"}, {\"answer\": \"no\", \"item\": \"european rhinoceros beetle wings in place of the front legs\"}, {\"answer\": \"yes\", \"item\": \"european rhinoceros beetle jointed tail segments in place of the tail\"}, {\"answer\": \"yes\", \"item\": \"european rhinoceros beetle exoskeleton patches on the forequarters and neck\"}], \"choice\": \"a mix of both\", \"creatures\": 1, \"notes\": \"The creature combines a bear body with beetle wings, armor, and tail.\"}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null
+    }
+   }
+  ],
+  "created": 1793477913,
+  "model": "muse-spark-1.3",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 2034,
+   "prompt_tokens": 437,
+   "total_tokens": 2471,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": null,
+    "audio_tokens": null,
+    "reasoning_tokens": 1829,
+    "rejected_prediction_tokens": null,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": null,
+    "cache_write_tokens": null,
+    "cached_tokens": 0,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

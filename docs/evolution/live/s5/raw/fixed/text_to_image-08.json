@@ -1,0 +1,109 @@
+{
+ "purpose": "text_to_image",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "A mule (donkey sire x horse mare), a real hybrid animal. Horse-sized body with deep chest, long back, long neck and horse proportions, with the donkey's long ears, short thick head, short upright mane, thin legs, small hooves and tufted tail; plain coat, no stripes or spots. Head fully visible and uncluttered, with clear, discernible eyes. Bilaterally symmetrical, recognizable limbs and visible sense organs. Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration.\nAspect ratio: 1:1."
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "id": "resp_6ae7a74faf73c5b97bc843a4",
+  "access_programs": null,
+  "created_at": 1793566543.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae7a74f898787e60c924754",
+    "summary": [
+     {
+      "text": "**Drafting mule illustration prompt**\nI'm organizing the natural history illustration details for a single mule, horse-sized body with donkey head and ears, side three-quarter view, natural lighting, clear eyes, and firm ground contact with soft shadow.\n**Drafting natural history illustration**\nI'm preparing a realistic natural history illustration of a single mule in side three-quarter view, with a brown coat, long donkey ears, short upright mane, tufted tail, and small worn hooves, set on a plain light background with a soft shadow.\n**Refining illustration style**\nI'm adjusting the prompt to push the image further toward a natural history illustration, adding clearer illustrative linework and removing the photoreal look while keeping the coat lighter and adding stripes.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae7a74f6e2f8ac7955745b5",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR1B4amRUUnNKdWNHSVpNR0FIdUg5NkZDVXNjVGJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczpmZDA2ZGZlMy04YmQ5LTQ0ZTgtODAxMS1lMDVkNTBlZTJjOTY6R0dLTWREUlJyTHVHbUhFSUFHSFZldjBYcVR4MmJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM1NjY1NDN9.Q8WLFwEWzskex88Lj1zT7FqY7UPI",
+    "result": "<elided> (464496 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 19244,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 15424
+   },
+   "output_tokens": 2374,
+   "output_tokens_details": {
+    "reasoning_tokens": 502
+   },
+   "total_tokens": 21618
+  },
+  "user": null
+ }
+}

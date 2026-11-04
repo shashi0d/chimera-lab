@@ -1,0 +1,366 @@
+{
+ "protocol": "plan-blind (S3a)",
+ "critics": [
+  "spark_open",
+  "meta_spark"
+ ],
+ "items": [
+  {
+   "source": "checklist",
+   "key": "frame",
+   "text": "Does the body look like one animal mixing a donkey and a horse?",
+   "group": "structure",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "fix": "Show the planned in-between body of the donkey and the horse; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "head",
+   "text": "Does it have a donkey head with visible eyes?",
+   "group": "structure",
+   "expect": "yes",
+   "answers": {
+    "spark_open": "yes",
+    "meta_spark": "yes"
+   },
+   "status": "pass",
+   "fix": "Show the planned donkey head, fully visible with clear eyes; keep everything else the same.",
+   "sam": "donkey head",
+   "pair_status": "pass",
+   "sam_found": true,
+   "sam_fill": 0.0361
+  },
+  {
+   "source": "checklist",
+   "key": "no_wings",
+   "text": "Are there wings anywhere on the body?",
+   "group": "structure",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "The plan has no wings: show the horse's own body there instead; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "whole_animal",
+   "text": "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?",
+   "group": "structure",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "Show one single creature with only its planned parts, no separate animals on it; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "second_head",
+   "text": "Is there a second head anywhere?",
+   "group": "structure",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "Show one single head, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "extra_legs",
+   "text": "Does it have more than 4 walking legs?",
+   "group": "structure",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "Show exactly 4 walking legs, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "checklist",
+   "key": "plain_fur",
+   "text": "Does the fur show stripes or spots?",
+   "group": "pattern",
+   "expect": "no",
+   "answers": {
+    "spark_open": "no",
+    "meta_spark": "no"
+   },
+   "status": "pass",
+   "fix": "Show a plain coat with no stripes or spots, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "separate_bodies",
+   "text": "separate bodies: 1",
+   "group": "structure",
+   "expect": 1,
+   "answers": {
+    "spark_open": 1,
+    "meta_spark": 1
+   },
+   "status": "pass",
+   "fix": "Show one single creature with only its planned parts, no separate animals on it; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "heads",
+   "text": "heads: 1",
+   "group": "structure",
+   "expect": 1,
+   "answers": {
+    "spark_open": 1,
+    "meta_spark": 1
+   },
+   "status": "pass",
+   "fix": "Show one single head, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "walking_legs",
+   "text": "walking legs: 4",
+   "group": "structure",
+   "expect": 4,
+   "answers": {
+    "spark_open": 4,
+    "meta_spark": 4
+   },
+   "status": "pass",
+   "fix": "Show exactly 4 walking legs, as planned; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "wings",
+   "text": "wings: 0",
+   "group": "structure",
+   "expect": 0,
+   "answers": {
+    "spark_open": 0,
+    "meta_spark": 0
+   },
+   "status": "pass",
+   "fix": "The plan has no wings: show the horse's own body there instead; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  },
+  {
+   "source": "count",
+   "key": "extra_limb_pieces",
+   "text": "extra limb pieces: 0",
+   "group": "structure",
+   "expect": 0,
+   "answers": {
+    "spark_open": 0,
+    "meta_spark": 0
+   },
+   "status": "pass",
+   "fix": "Show the horse's own limbs only, with no extra limb-like pieces; keep everything else the same.",
+   "sam": null,
+   "pair_status": "pass",
+   "sam_found": null,
+   "sam_fill": null
+  }
+ ],
+ "failures": [],
+ "structural_failures": 0,
+ "uncertain": 0,
+ "sam_calls": 1,
+ "descriptions": {
+  "spark_open": {
+   "description": "The creature is a slender, four-legged equine animal shown in strict right-facing profile against a plain off-white background. Its coat is a uniform light to medium brown with a paler cream-white underbelly, inner legs, and muzzle, and darker brown shading along the back, lower legs, and joints. It has a long, narrow head with a white nose and mouth area, a dark eye, and two large upright ears, a short stiff dark brown mane along the top of the neck, a lean torso with visible musculature and skin folds at the neck and chest, four straight slender legs ending in single hooves standing on a flat surface with faint shadows, and a thin hanging tail with a dark hair tuft at the tip.",
+   "parts": [
+    {
+     "part": "head",
+     "looks_like": "elongated equine head with a brown face, white to light gray around the nostrils, mouth and lower lip, a dark eye with a light ring, and a slightly downturned muzzle with visible nostril and whiskers",
+     "where": "at the front/right end of the body, attached to the neck, facing right in profile"
+    },
+    {
+     "part": "ears",
+     "looks_like": "two large, upright, pointed ears with brown outer fur, lighter cream inner fur, and dark rims and tips, the near ear fully visible and the far ear slightly behind it",
+     "where": "on top of the head, one on each side of the crown, pointing upward"
+    },
+    {
+     "part": "mane",
+     "looks_like": "short, stiff, upright brush of dark brown to black hair, evenly cut and dense",
+     "where": "along the dorsal midline of the neck, running from just behind the ears to the top of the shoulders"
+    },
+    {
+     "part": "legs",
+     "looks_like": "four slender, straight legs with visible joints, tendons and slight wrinkling at the knees and hocks, brown with lighter inner surfaces, the near fore and hind legs in front and the far fore and hind legs offset slightly behind them",
+     "where": "beneath the torso, two forelegs under the chest and two hindlegs under the hips, extending vertically to the ground"
+    },
+    {
+     "part": "feet",
+     "looks_like": "four single, rounded hooves, light gray-brown with darker worn edges and a slightly flared base, each at the tip of a leg",
+     "where": "at the bottom of each leg, in contact with the ground"
+    },
+    {
+     "part": "tail",
+     "looks_like": "thin tail with short brown hair along its length and a longer, darker brown to black tuft of coarse hair at the end, hanging straight down with a slight curve",
+     "where": "extending from the rear/left end of the rump, hanging vertically downward"
+    },
+    {
+     "part": "markings",
+     "looks_like": "pale cream-white patch covering the nostrils, muzzle and lower lip, and lighter cream shading on the underbelly, chest, and inner thighs, contrasting with the medium brown body and dark brown mane and tail tuft",
+     "where": "on the face around the nose and mouth, and on the ventral side of the torso and inner legs"
+    }
+   ],
+   "attached_objects": [],
+   "animals": [
+    "donkey"
+   ],
+   "separate_bodies": 1,
+   "heads": 1,
+   "walking_legs": 4,
+   "wings": 0,
+   "extra_limb_pieces": 0,
+   "tails": 1
+  },
+  "meta_spark": {
+   "description": "A slender brown equine shown in full side profile standing facing right, with a smooth tan-brown coat, paler underbelly and white around the muzzle, a long narrow head, two tall upright ears, a short dark upright mane along the neck, four long thin legs ending in single hooves, and a thin hanging tail tipped with a dark tuft of hair.",
+   "parts": [
+    {
+     "part": "head",
+     "looks_like": "long narrow equine head with brown fur and white around the nose and mouth",
+     "where": "at the front end of the neck, facing to the right"
+    },
+    {
+     "part": "ears",
+     "looks_like": "two tall upright pointed ears with brown outer fur and pale inner fur",
+     "where": "on top of the head"
+    },
+    {
+     "part": "eyes",
+     "looks_like": "dark eyes with a pale ring around",
+     "where": "on the side of the head"
+    },
+    {
+     "part": "muzzle",
+     "looks_like": "pale whitish-grey muzzle with dark nostrils and mouth",
+     "where": "at the tip of the head"
+    },
+    {
+     "part": "mane",
+     "looks_like": "short dark brown stiff brush of hair",
+     "where": "along the top of the neck behind the ears"
+    },
+    {
+     "part": "torso",
+     "looks_like": "lean barrel-shaped brown body with lighter pale underbelly",
+     "where": "in the middle between the front and rear legs"
+    },
+    {
+     "part": "legs",
+     "looks_like": "four long slender brown legs with muscular upper parts and thin lower parts",
+     "where": "two under the front chest and two under the rear hips, extending to the ground"
+    },
+    {
+     "part": "feet",
+     "looks_like": "single rounded grey hooves",
+     "where": "at the bottom of each leg"
+    },
+    {
+     "part": "tail",
+     "looks_like": "thin brown tail ending in a long dark tuft of hair",
+     "where": "hanging down from the rear of the body"
+    }
+   ],
+   "attached_objects": [],
+   "animals": [
+    "donkey"
+   ],
+   "separate_bodies": 1,
+   "heads": 1,
+   "walking_legs": 4,
+   "wings": 0,
+   "extra_limb_pieces": 0,
+   "tails": 1
+  }
+ },
+ "matches": {
+  "spark_open": {
+   "seen": [
+    "mane"
+   ],
+   "expected": [
+    "mane"
+   ],
+   "extras": [],
+   "omissions": []
+  },
+  "meta_spark": {
+   "seen": [
+    "mane"
+   ],
+   "expected": [
+    "mane"
+   ],
+   "extras": [],
+   "omissions": []
+  }
+ },
+ "third_animals": {
+  "spark_open": [],
+  "meta_spark": []
+ },
+ "balance": {
+  "yes": 2,
+  "no": 5
+ },
+ "expected_counts": {
+  "separate_bodies": 1,
+  "heads": 1,
+  "walking_legs": 4,
+  "wings": 0,
+  "extra_limb_pieces": 0
+ }
+}

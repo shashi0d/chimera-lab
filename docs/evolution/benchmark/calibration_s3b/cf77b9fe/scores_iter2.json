@@ -1,0 +1,2898 @@
+{
+ "version": "cf77b9fe",
+ "metrics": {
+  "s3a_pair": {
+   "caught": 18,
+   "of_failures": 18,
+   "false_alarms": 8,
+   "of_goods": 15
+  },
+  "s3b_spark_open": {
+   "caught": 18,
+   "of_failures": 18,
+   "false_alarms": 8,
+   "of_goods": 15
+  },
+  "s3b_meta_spark": {
+   "caught": 18,
+   "of_failures": 18,
+   "false_alarms": 5,
+   "of_goods": 15
+  },
+  "s3b_pair": {
+   "caught": 18,
+   "of_failures": 18,
+   "false_alarms": 9,
+   "of_goods": 15
+  }
+ },
+ "rows": [
+  {
+   "id": "e2/1_donkey_x_horse",
+   "label": "fail",
+   "note": "",
+   "s3a_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "frame",
+      "fail"
+     ],
+     [
+      "third_animal",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_spark_open": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "frame",
+      "fail"
+     ],
+     [
+      "third_animal",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_meta_spark": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "frame",
+      "fail"
+     ],
+     [
+      "third_animal",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "frame",
+      "fail"
+     ],
+     [
+      "third_animal",
+      "fail"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "e2/3_lion_x_eagle",
+   "label": "fail",
+   "note": "",
+   "s3a_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "frame",
+      "fail"
+     ],
+     [
+      "no_mane",
+      "fail"
+     ],
+     [
+      "plain_fur",
+      "fail"
+     ],
+     [
+      "extra_mane",
+      "fail"
+     ],
+     [
+      "extra_spots",
+      "fail"
+     ],
+     [
+      "third_animal",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_spark_open": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "frame",
+      "fail"
+     ],
+     [
+      "no_mane",
+      "fail"
+     ],
+     [
+      "plain_fur",
+      "fail"
+     ],
+     [
+      "extra_mane",
+      "fail"
+     ],
+     [
+      "extra_spots",
+      "fail"
+     ],
+     [
+      "third_animal",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_meta_spark": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "frame",
+      "fail"
+     ],
+     [
+      "no_mane",
+      "fail"
+     ],
+     [
+      "plain_fur",
+      "fail"
+     ],
+     [
+      "extra_mane",
+      "fail"
+     ],
+     [
+      "extra_spots",
+      "fail"
+     ],
+     [
+      "third_animal",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "frame",
+      "fail"
+     ],
+     [
+      "no_mane",
+      "fail"
+     ],
+     [
+      "plain_fur",
+      "fail"
+     ],
+     [
+      "extra_mane",
+      "fail"
+     ],
+     [
+      "extra_spots",
+      "fail"
+     ],
+     [
+      "third_animal",
+      "fail"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "e4/b_axolotl_x_pangolin",
+   "label": "fail",
+   "note": "",
+   "s3a_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "unplanned_three_pairs_of_feathery_extern",
+      "fail"
+     ],
+     [
+      "extra_gills",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_spark_open": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "unplanned_three_pairs_of_feathery_extern",
+      "fail"
+     ],
+     [
+      "extra_gills",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_meta_spark": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "unplanned_three_pairs_of_feathery_extern",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "extra_gills",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "unplanned_three_pairs_of_feathery_extern",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "uncertain"
+     ],
+     [
+      "extra_gills",
+      "fail"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "e4/d_rhinoceros_beetle_x_brown_bear",
+   "label": "fail",
+   "note": "",
+   "s3a_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "wings_front",
+      "fail"
+     ],
+     [
+      "legs_and_wings",
+      "fail"
+     ],
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "extra_legs",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "continuous",
+      "fail"
+     ],
+     [
+      "scattered",
+      "fail"
+     ],
+     [
+      "walking_legs",
+      "fail"
+     ],
+     [
+      "extra_gills",
+      "uncertain"
+     ]
+    ]
+   },
+   "s3b_spark_open": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "wings_front",
+      "fail"
+     ],
+     [
+      "legs_and_wings",
+      "fail"
+     ],
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "extra_legs",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "continuous",
+      "fail"
+     ],
+     [
+      "scattered",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "sized_to_body",
+      "fail"
+     ],
+     [
+      "wrong_scale",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ],
+     [
+      "walking_legs",
+      "fail"
+     ],
+     [
+      "extra_gills",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_meta_spark": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "wings_front",
+      "fail"
+     ],
+     [
+      "legs_and_wings",
+      "fail"
+     ],
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "extra_legs",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "continuous",
+      "fail"
+     ],
+     [
+      "scattered",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "sized_to_body",
+      "fail"
+     ],
+     [
+      "wrong_scale",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ],
+     [
+      "walking_legs",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "wings_front",
+      "fail"
+     ],
+     [
+      "legs_and_wings",
+      "fail"
+     ],
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "extra_legs",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "continuous",
+      "fail"
+     ],
+     [
+      "scattered",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "sized_to_body",
+      "fail"
+     ],
+     [
+      "wrong_scale",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ],
+     [
+      "walking_legs",
+      "fail"
+     ],
+     [
+      "extra_gills",
+      "uncertain"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "s2/beetlebear_run1",
+   "label": "fail",
+   "note": "",
+   "s3a_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "insect_legs",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "continuous",
+      "fail"
+     ],
+     [
+      "scattered",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_spark_open": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "insect_legs",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "continuous",
+      "fail"
+     ],
+     [
+      "scattered",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "sized_to_body",
+      "fail"
+     ],
+     [
+      "wrong_scale",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_meta_spark": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "insect_legs",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "continuous",
+      "fail"
+     ],
+     [
+      "scattered",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "insect_legs",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "continuous",
+      "fail"
+     ],
+     [
+      "scattered",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "sized_to_body",
+      "uncertain"
+     ],
+     [
+      "wrong_scale",
+      "uncertain"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "s2/beetlebear",
+   "label": "fail",
+   "note": "",
+   "s3a_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "continuous",
+      "fail"
+     ],
+     [
+      "scattered",
+      "fail"
+     ],
+     [
+      "extra_spots",
+      "uncertain"
+     ]
+    ]
+   },
+   "s3b_spark_open": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "continuous",
+      "fail"
+     ],
+     [
+      "scattered",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_meta_spark": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "continuous",
+      "fail"
+     ],
+     [
+      "scattered",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ],
+     [
+      "extra_spots",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "continuous",
+      "fail"
+     ],
+     [
+      "scattered",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ],
+     [
+      "extra_spots",
+      "uncertain"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "e2/2_lion_x_tiger",
+   "label": "good",
+   "note": "",
+   "s3a_pair": {
+    "verdict": "pass",
+    "signals": []
+   },
+   "s3b_spark_open": {
+    "verdict": "pass",
+    "signals": []
+   },
+   "s3b_meta_spark": {
+    "verdict": "pass",
+    "signals": []
+   },
+   "s3b_pair": {
+    "verdict": "pass",
+    "signals": []
+   }
+  },
+  {
+   "id": "e4/c_lion_x_eagle",
+   "label": "good",
+   "note": "mythic",
+   "s3a_pair": {
+    "verdict": "pass",
+    "signals": []
+   },
+   "s3b_spark_open": {
+    "verdict": "pass",
+    "signals": []
+   },
+   "s3b_meta_spark": {
+    "verdict": "pass",
+    "signals": []
+   },
+   "s3b_pair": {
+    "verdict": "pass",
+    "signals": []
+   }
+  },
+  {
+   "id": "e2/4_eagle_x_octopus",
+   "label": "good",
+   "note": "",
+   "s3a_pair": {
+    "verdict": "pass",
+    "signals": []
+   },
+   "s3b_spark_open": {
+    "verdict": "pass",
+    "signals": []
+   },
+   "s3b_meta_spark": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "follows_body",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "follows_body",
+      "uncertain"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "e2c/1_donkey_x_horse",
+   "label": "good",
+   "note": "",
+   "s3a_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "frame",
+      "uncertain"
+     ]
+    ]
+   },
+   "s3b_spark_open": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "frame",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_meta_spark": {
+    "verdict": "pass",
+    "signals": []
+   },
+   "s3b_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "frame",
+      "uncertain"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "e4/b_axolotl_x_pangolin_rerender",
+   "label": "good",
+   "note": "except: axolotl barely visible",
+   "s3a_pair": {
+    "verdict": "pass",
+    "signals": []
+   },
+   "s3b_spark_open": {
+    "verdict": "pass",
+    "signals": []
+   },
+   "s3b_meta_spark": {
+    "verdict": "pass",
+    "signals": []
+   },
+   "s3b_pair": {
+    "verdict": "pass",
+    "signals": []
+   }
+  },
+  {
+   "id": "s3a/beetle_bear/V0_r1",
+   "label": "fail",
+   "note": "shell pasted on, not an extension; hind legs disregarded; insect scale ignored",
+   "s3a_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "whole_animal",
+      "uncertain"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "continuous",
+      "fail"
+     ],
+     [
+      "scattered",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_spark_open": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "continuous",
+      "fail"
+     ],
+     [
+      "scattered",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_meta_spark": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "continuous",
+      "fail"
+     ],
+     [
+      "scattered",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "whole_animal",
+      "uncertain"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "continuous",
+      "fail"
+     ],
+     [
+      "scattered",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "s3a/beetle_bear/V0_r2",
+   "label": "fail",
+   "note": "shell pasted on, not an extension; hind legs disregarded; insect scale ignored",
+   "s3a_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "insect_legs",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "continuous",
+      "fail"
+     ],
+     [
+      "scattered",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_spark_open": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "insect_legs",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "continuous",
+      "fail"
+     ],
+     [
+      "scattered",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "sized_to_body",
+      "fail"
+     ],
+     [
+      "wrong_scale",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_meta_spark": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "insect_legs",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "continuous",
+      "fail"
+     ],
+     [
+      "scattered",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "insect_legs",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "continuous",
+      "fail"
+     ],
+     [
+      "scattered",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "sized_to_body",
+      "uncertain"
+     ],
+     [
+      "wrong_scale",
+      "uncertain"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "s3a/beetle_bear/V1_r1",
+   "label": "fail",
+   "note": "the first does not look like a beetle; the second is good in terms of body; armor should cover the legs too",
+   "s3a_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "third_animal",
+      "uncertain"
+     ]
+    ]
+   },
+   "s3b_spark_open": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_meta_spark": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ],
+     [
+      "third_animal",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "uncertain"
+     ],
+     [
+      "third_animal",
+      "uncertain"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "s3a/beetle_bear/V1_r2",
+   "label": "fail",
+   "note": "the first does not look like a beetle; the second is good in terms of body; armor should cover the legs too",
+   "s3a_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "whole_animal",
+      "uncertain"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_spark_open": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_meta_spark": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "whole_animal",
+      "uncertain"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "s3a/beetle_bear/V2_r1",
+   "label": "fail",
+   "note": "same problem as V1 (pasted shell, legs bare)",
+   "s3a_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "extra_mane",
+      "uncertain"
+     ]
+    ]
+   },
+   "s3b_spark_open": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ],
+     [
+      "extra_mane",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_meta_spark": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ],
+     [
+      "extra_mane",
+      "uncertain"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "s3a/beetle_bear/V2_r2",
+   "label": "fail",
+   "note": "same problem as V1 (pasted shell, legs bare)",
+   "s3a_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_spark_open": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_meta_spark": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "s3a/beetle_bear/V3_r1",
+   "label": "fail",
+   "note": "same as V1 and V2",
+   "s3a_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_spark_open": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_meta_spark": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "s3a/beetle_bear/V3_r2",
+   "label": "fail",
+   "note": "same as V1 and V2",
+   "s3a_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_spark_open": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_meta_spark": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "s3a/beetle_bear/V4_r1",
+   "label": "fail",
+   "note": "same; worst variant",
+   "s3a_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_spark_open": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_meta_spark": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "s3a/beetle_bear/V4_r2",
+   "label": "fail",
+   "note": "same; worst variant",
+   "s3a_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_spark_open": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_meta_spark": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "uncertain"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "s3a/beetle_bear/V5_r1",
+   "label": "fail",
+   "note": "the horn moved to the nose and it reads as a rhinoceros x bear, not a beetle",
+   "s3a_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "part_european_rhinoceros_beetle_head_horn",
+      "fail"
+     ],
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_spark_open": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "part_european_rhinoceros_beetle_head_horn",
+      "fail"
+     ],
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "origin_head_horn",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_meta_spark": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "part_european_rhinoceros_beetle_head_horn",
+      "fail"
+     ],
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ],
+     [
+      "origin_head_horn",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "part_european_rhinoceros_beetle_head_horn",
+      "fail"
+     ],
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "uncertain"
+     ],
+     [
+      "origin_head_horn",
+      "fail"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "s3a/beetle_bear/V5_r2",
+   "label": "fail",
+   "note": "the horn moved to the nose and it reads as a rhinoceros x bear, not a beetle",
+   "s3a_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "part_european_rhinoceros_beetle_head_horn",
+      "fail"
+     ],
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_spark_open": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "part_european_rhinoceros_beetle_head_horn",
+      "fail"
+     ],
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ],
+     [
+      "origin_head_horn",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_meta_spark": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "part_european_rhinoceros_beetle_head_horn",
+      "fail"
+     ],
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "part_european_rhinoceros_beetle_head_horn",
+      "fail"
+     ],
+     [
+      "whole_animal",
+      "fail"
+     ],
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "abrupt_stop",
+      "fail"
+     ],
+     [
+      "origin_head_horn",
+      "uncertain"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "s3a/axolotl_pangolin/V1_r1",
+   "label": "good",
+   "note": "can potentially be an animal (second image especially)",
+   "s3a_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_spark_open": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_meta_spark": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "s3a/axolotl_pangolin/V1_r2",
+   "label": "good",
+   "note": "can potentially be an animal (second image especially)",
+   "s3a_pair": {
+    "verdict": "pass",
+    "signals": []
+   },
+   "s3b_spark_open": {
+    "verdict": "pass",
+    "signals": []
+   },
+   "s3b_meta_spark": {
+    "verdict": "pass",
+    "signals": []
+   },
+   "s3b_pair": {
+    "verdict": "pass",
+    "signals": []
+   }
+  },
+  {
+   "id": "s3a/axolotl_pangolin/V2_r1",
+   "label": "good",
+   "note": "good conceptual rendering; best variant",
+   "s3a_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "extra_spots",
+      "uncertain"
+     ]
+    ]
+   },
+   "s3b_spark_open": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "extra_spots",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_meta_spark": {
+    "verdict": "pass",
+    "signals": []
+   },
+   "s3b_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "extra_spots",
+      "uncertain"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "s3a/axolotl_pangolin/V2_r2",
+   "label": "good",
+   "note": "good conceptual rendering; best variant",
+   "s3a_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "grows_out",
+      "uncertain"
+     ],
+     [
+      "on_top",
+      "uncertain"
+     ],
+     [
+      "extra_spots",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_spark_open": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ],
+     [
+      "extra_spots",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_meta_spark": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "extra_spots",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "grows_out",
+      "uncertain"
+     ],
+     [
+      "on_top",
+      "uncertain"
+     ],
+     [
+      "follows_body",
+      "uncertain"
+     ],
+     [
+      "separate_outline",
+      "uncertain"
+     ],
+     [
+      "extra_spots",
+      "fail"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "s3a/axolotl_pangolin/V3_r1",
+   "label": "good",
+   "note": "good",
+   "s3a_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "grows_out",
+      "uncertain"
+     ],
+     [
+      "on_top",
+      "uncertain"
+     ],
+     [
+      "extra_limb_pieces",
+      "uncertain"
+     ]
+    ]
+   },
+   "s3b_spark_open": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "follows_body",
+      "fail"
+     ],
+     [
+      "separate_outline",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_meta_spark": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "extra_limb_pieces",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "grows_out",
+      "uncertain"
+     ],
+     [
+      "on_top",
+      "uncertain"
+     ],
+     [
+      "follows_body",
+      "uncertain"
+     ],
+     [
+      "separate_outline",
+      "uncertain"
+     ],
+     [
+      "extra_limb_pieces",
+      "uncertain"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "s3a/axolotl_pangolin/V3_r2",
+   "label": "good",
+   "note": "good",
+   "s3a_pair": {
+    "verdict": "pass",
+    "signals": []
+   },
+   "s3b_spark_open": {
+    "verdict": "pass",
+    "signals": []
+   },
+   "s3b_meta_spark": {
+    "verdict": "pass",
+    "signals": []
+   },
+   "s3b_pair": {
+    "verdict": "pass",
+    "signals": []
+   }
+  },
+  {
+   "id": "s3a/axolotl_pangolin/V4_r1",
+   "label": "good",
+   "note": "tail looks odd; rest of the concept is great",
+   "s3a_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "grows_out",
+      "uncertain"
+     ],
+     [
+      "on_top",
+      "uncertain"
+     ],
+     [
+      "extra_spots",
+      "uncertain"
+     ]
+    ]
+   },
+   "s3b_spark_open": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ],
+     [
+      "extra_spots",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_meta_spark": {
+    "verdict": "pass",
+    "signals": []
+   },
+   "s3b_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "grows_out",
+      "uncertain"
+     ],
+     [
+      "on_top",
+      "uncertain"
+     ],
+     [
+      "extra_spots",
+      "uncertain"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "s3a/axolotl_pangolin/V4_r2",
+   "label": "good",
+   "note": "tail looks odd; rest of the concept is great",
+   "s3a_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "grows_out",
+      "uncertain"
+     ],
+     [
+      "on_top",
+      "uncertain"
+     ]
+    ]
+   },
+   "s3b_spark_open": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "grows_out",
+      "fail"
+     ],
+     [
+      "on_top",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_meta_spark": {
+    "verdict": "pass",
+    "signals": []
+   },
+   "s3b_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "grows_out",
+      "uncertain"
+     ],
+     [
+      "on_top",
+      "uncertain"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "s3a/axolotl_pangolin/V5_r1",
+   "label": "good",
+   "note": "tail a little bigger; closer to a real hybrid",
+   "s3a_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "extra_stripes",
+      "uncertain"
+     ],
+     [
+      "third_animal",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_spark_open": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "extra_stripes",
+      "fail"
+     ],
+     [
+      "third_animal",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_meta_spark": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "third_animal",
+      "fail"
+     ]
+    ]
+   },
+   "s3b_pair": {
+    "verdict": "fail",
+    "signals": [
+     [
+      "extra_stripes",
+      "uncertain"
+     ],
+     [
+      "third_animal",
+      "fail"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "s3a/axolotl_pangolin/V5_r2",
+   "label": "good",
+   "note": "tail a little bigger; closer to a real hybrid",
+   "s3a_pair": {
+    "verdict": "pass",
+    "signals": []
+   },
+   "s3b_spark_open": {
+    "verdict": "pass",
+    "signals": []
+   },
+   "s3b_meta_spark": {
+    "verdict": "pass",
+    "signals": []
+   },
+   "s3b_pair": {
+    "verdict": "pass",
+    "signals": []
+   }
+  }
+ ]
+}

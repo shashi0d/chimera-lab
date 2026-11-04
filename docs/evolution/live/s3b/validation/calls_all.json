@@ -1,0 +1,453 @@
+{
+ "budget": {
+  "before": {
+   "image": 58,
+   "spark": 416,
+   "sam": 45,
+   "spark_baseten": 377
+  },
+  "after": {
+   "image": 80,
+   "spark": 473,
+   "sam": 74,
+   "spark_baseten": 489
+  }
+ },
+ "calls": {
+  "meta:spark:evo_plan": {
+   "ok": 12,
+   "failed": 0
+  },
+  "baseten:spark_baseten:evo_polish": {
+   "ok": 10,
+   "failed": 0
+  },
+  "meta:image:text_to_image": {
+   "ok": 22,
+   "failed": 0
+  },
+  "baseten:spark_baseten:evo_checklist": {
+   "ok": 38,
+   "failed": 0
+  },
+  "meta:sam:sam": {
+   "ok": 29,
+   "failed": 0
+  },
+  "baseten:spark_baseten:evo_critic": {
+   "ok": 19,
+   "failed": 0
+  },
+  "meta:spark:evo_describe": {
+   "ok": 23,
+   "failed": 0
+  },
+  "baseten:spark_baseten:evo_describe": {
+   "ok": 23,
+   "failed": 0
+  },
+  "baseten:spark_baseten:evo_ask": {
+   "ok": 19,
+   "failed": 0
+  },
+  "meta:spark:evo_ask": {
+   "ok": 19,
+   "failed": 0
+  },
+  "baseten:spark_baseten:evo_identify": {
+   "ok": 3,
+   "failed": 0
+  },
+  "meta:spark:evo_cite_traits": {
+   "ok": 3,
+   "failed": 0
+  }
+ },
+ "summary": [
+  {
+   "run": "beetle_bear_default",
+   "repeat": 1,
+   "tuned": true,
+   "signals": [
+    [
+     "part_european_rhinoceros_beetle_head_horn",
+     "fail"
+    ],
+    [
+     "cover_present",
+     "fail"
+    ],
+    [
+     "grows_out",
+     "fail"
+    ],
+    [
+     "on_top",
+     "fail"
+    ],
+    [
+     "continuous",
+     "fail"
+    ],
+    [
+     "scattered",
+     "fail"
+    ],
+    [
+     "follows_body",
+     "fail"
+    ],
+    [
+     "separate_outline",
+     "fail"
+    ],
+    [
+     "abrupt_stop",
+     "fail"
+    ],
+    [
+     "omitted_horn",
+     "fail"
+    ],
+    [
+     "third_animal",
+     "fail"
+    ]
+   ],
+   "warnings": [
+    "structural miss after one edit turn: Do the hard, glossy chitin plates with fine seams grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending into scales), rather than looking attached on top?; Do the hard, glossy chitin plates with fine seams look like separate pieces laid on top of the fur, with a raised rim or a gap at the edge?; Do the hard, glossy chitin plates with fine seams form one continuous structure over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, rather than scattered pieces?; Are the hard, glossy chitin plates with fine seams scattered as separate pieces over different parts of the body?; Do the hard, glossy chitin plates with fine seams follow this body's own shape and contours, the way its own skin would?; Do the hard, glossy chitin plates with fine seams keep the outline of a separate object, such as another animal's shell or back, instead of the body's own shape?"
+   ],
+   "growth": null
+  },
+  {
+   "run": "beetle_bear_default",
+   "repeat": 2,
+   "tuned": true,
+   "signals": [
+    [
+     "cover_present",
+     "fail"
+    ],
+    [
+     "continuous",
+     "fail"
+    ],
+    [
+     "connects_head_horn",
+     "fail"
+    ],
+    [
+     "third_animal",
+     "fail"
+    ]
+   ],
+   "warnings": [
+    "structural miss after one edit turn: an animal other than the two parents"
+   ],
+   "growth": null
+  },
+  {
+   "run": "beetle_bear_growth",
+   "repeat": 1,
+   "tuned": true,
+   "signals": [
+    [
+     "whole_animal",
+     "fail"
+    ],
+    [
+     "second_head",
+     "fail"
+    ],
+    [
+     "grows_out",
+     "fail"
+    ],
+    [
+     "on_top",
+     "fail"
+    ],
+    [
+     "continuous",
+     "fail"
+    ],
+    [
+     "scattered",
+     "fail"
+    ],
+    [
+     "follows_body",
+     "fail"
+    ],
+    [
+     "separate_outline",
+     "fail"
+    ],
+    [
+     "separate_bodies",
+     "fail"
+    ],
+    [
+     "heads",
+     "fail"
+    ],
+    [
+     "extra_limb_pieces",
+     "fail"
+    ],
+    [
+     "extra_insect_legs",
+     "fail"
+    ],
+    [
+     "extra_whole_body",
+     "fail"
+    ],
+    [
+     "third_animal",
+     "fail"
+    ]
+   ],
+   "warnings": [
+    "growth edit drifted the host (tails): first-pass render of the full plan used instead",
+    "structural miss (growth mode makes no repair edit): Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?; Is there a second head anywhere?; Do the hard, glossy chitin plates with fine seams grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending into scales), rather than looking attached on top?; Do the hard, glossy chitin plates with fine seams look like separate pieces laid on top of the fur, with a raised rim or a gap at the edge?; Do the hard, glossy chitin plates with fine seams form one continuous structure over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, rather than scattered pieces?; Are the hard, glossy chitin plates with fine seams scattered as separate pieces over different parts of the body?; Do the hard, glossy chitin plates with fine seams follow this body's own shape and contours, the way its own skin would?; Do the hard, glossy chitin plates with fine seams keep the outline of a separate object, such as another animal's shell or back, instead of the body's own shape?; separate bodies: 1; heads: 1; extra limb pieces: 0; described but not planned: insect_legs; described but not planned: whole_body; an animal other than the two parents"
+   ],
+   "growth": {
+    "drifted": true,
+    "changed": [
+     "tails"
+    ],
+    "by_critic": {
+     "spark_open": {
+      "before": {
+       "heads": 1,
+       "walking_legs": 4,
+       "tails": 0
+      },
+      "after": {
+       "heads": 1,
+       "walking_legs": 4,
+       "tails": 1
+      }
+     },
+     "meta_spark": {
+      "before": {
+       "heads": 1,
+       "walking_legs": 4,
+       "tails": 0
+      },
+      "after": {
+       "heads": 1,
+       "walking_legs": 4,
+       "tails": 1
+      }
+     }
+    },
+    "any_change": [
+     "tails"
+    ]
+   }
+  },
+  {
+   "run": "beetle_bear_growth",
+   "repeat": 2,
+   "tuned": true,
+   "signals": [
+    [
+     "insect_legs",
+     "fail"
+    ]
+   ],
+   "warnings": [
+    "structural miss (growth mode makes no repair edit): Are there jointed, insect-like leg pieces on or along the legs?"
+   ],
+   "growth": {
+    "drifted": false,
+    "changed": [],
+    "by_critic": {
+     "spark_open": {
+      "before": {
+       "heads": 1,
+       "walking_legs": 4,
+       "tails": 1
+      },
+      "after": {
+       "heads": 1,
+       "walking_legs": 4,
+       "tails": 1
+      }
+     },
+     "meta_spark": {
+      "before": {
+       "heads": 1,
+       "walking_legs": 4,
+       "tails": 1
+      },
+      "after": {
+       "heads": 1,
+       "walking_legs": 4,
+       "tails": 1
+      }
+     }
+    },
+    "any_change": []
+   }
+  },
+  {
+   "run": "axolotl_pangolin_default",
+   "repeat": 1,
+   "tuned": true,
+   "signals": [],
+   "warnings": [],
+   "growth": null
+  },
+  {
+   "run": "axolotl_pangolin_default",
+   "repeat": 2,
+   "tuned": true,
+   "signals": [
+    [
+     "cover_present",
+     "fail"
+    ],
+    [
+     "continuous",
+     "fail"
+    ]
+   ],
+   "warnings": [],
+   "growth": null
+  },
+  {
+   "run": "crab_wolf_default",
+   "repeat": 1,
+   "tuned": false,
+   "signals": [
+    [
+     "whole_animal",
+     "fail"
+    ],
+    [
+     "cover_present",
+     "fail"
+    ],
+    [
+     "grows_out",
+     "fail"
+    ],
+    [
+     "on_top",
+     "fail"
+    ],
+    [
+     "follows_body",
+     "fail"
+    ],
+    [
+     "separate_outline",
+     "fail"
+    ],
+    [
+     "abrupt_stop",
+     "fail"
+    ],
+    [
+     "extra_insect_legs",
+     "fail"
+    ],
+    [
+     "origin_segmented_tail",
+     "fail"
+    ],
+    [
+     "third_animal",
+     "fail"
+    ]
+   ],
+   "warnings": [
+    "structural miss after one edit turn: Do the hard, glossy chitin plates with fine seams grow out of the body with a natural transition (for example fur stopping at a shield's edge, or skin blending into scales), rather than looking attached on top?; Do the hard, glossy chitin plates with fine seams look like separate pieces laid on top of the fur, with a raised rim or a gap at the edge?; Do the hard, glossy chitin plates with fine seams stop abruptly partway across the body or legs, with no visible reason?; which animal the segmented tail came from; an animal other than the two parents"
+   ],
+   "growth": null
+  },
+  {
+   "run": "crab_wolf_default",
+   "repeat": 2,
+   "tuned": false,
+   "signals": [
+    [
+     "extra_limb_pieces",
+     "fail"
+    ],
+    [
+     "extra_antennae",
+     "fail"
+    ],
+    [
+     "origin_segmented_tail",
+     "fail"
+    ],
+    [
+     "third_animal",
+     "fail"
+    ]
+   ],
+   "warnings": [
+    "the edit left more structural misses than the first render: first render kept",
+    "structural miss after one edit turn: Are there hard, glossy chitin plates with fine seams on the head, neck, shoulders, back, flanks, belly, hips, legs and tail?; Do the hard, glossy chitin plates with fine seams form one continuous structure over the head, neck, shoulders, back, flanks, belly, hips, legs and tail, rather than scattered pieces?; described but not planned: insect_legs; which animal the segmented tail came from; an animal other than the two parents"
+   ],
+   "growth": null
+  },
+  {
+   "run": "indian_pangolin_horse_default",
+   "repeat": 1,
+   "tuned": false,
+   "signals": [],
+   "warnings": [],
+   "growth": null
+  },
+  {
+   "run": "indian_pangolin_horse_default",
+   "repeat": 2,
+   "tuned": false,
+   "signals": [],
+   "warnings": [],
+   "growth": null
+  },
+  {
+   "run": "tortoise_goat_default",
+   "repeat": 1,
+   "tuned": false,
+   "signals": [
+    [
+     "extra_beak",
+     "fail"
+    ]
+   ],
+   "warnings": [],
+   "growth": null
+  },
+  {
+   "run": "tortoise_goat_default",
+   "repeat": 2,
+   "tuned": false,
+   "signals": [
+    [
+     "extra_beak",
+     "fail"
+    ],
+    [
+     "extra_stripes",
+     "fail"
+    ],
+    [
+     "third_animal",
+     "fail"
+    ]
+   ],
+   "warnings": [
+    "structural miss after one edit turn: described but not planned: beak; described but not planned: stripes; an animal other than the two parents"
+   ],
+   "growth": null
+  }
+ ]
+}

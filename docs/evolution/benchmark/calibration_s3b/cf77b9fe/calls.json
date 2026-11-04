@@ -1,0 +1,34 @@
+{
+ "budget": {
+  "before": {
+   "image": 58,
+   "spark": 218,
+   "sam": 45,
+   "spark_baseten": 178
+  },
+  "after": {
+   "image": 58,
+   "spark": 284,
+   "sam": 45,
+   "spark_baseten": 244
+  }
+ },
+ "calls": {
+  "meta:spark:evo_describe": {
+   "ok": 33,
+   "failed": 0
+  },
+  "meta:spark:evo_ask": {
+   "ok": 33,
+   "failed": 0
+  },
+  "baseten:spark_baseten:evo_describe": {
+   "ok": 33,
+   "failed": 0
+  },
+  "baseten:spark_baseten:evo_ask": {
+   "ok": 33,
+   "failed": 0
+  }
+ }
+}

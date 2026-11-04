@@ -1,0 +1,117 @@
+{
+ "purpose": "generate",
+ "request": {
+  "model": "muse-image-1.0",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Silhouette: Four-legged Chinese pangolin frame. Host frame: the chinese pangolin sets the outline, body size and overall frame. A single creature that combines a axolotl and a chinese pangolin. Head of the chinese pangolin, fully visible and uncluttered, with clear, discernible eyes. Details: behavior: follows head/brain donor per RC-R5-07: solitary nocturnal pangolin foraging; body: host pangolin frame and scale armor throughout; axolotl tissue only as separate surface patches, blend only at patch edges; axolotl skin in a few large patches over the back and flanks, at full strength with clean edges, color and surface unchanged inside each patch; chinese pangolin coat everywhere else; ears: small pangolin ears; no axolotl ear tissue; face: pangolin narrow snout and small mouth for ant/termite feeding; feet: pangolin clawed digging feet; head: pangolin head tissue including brain; limbs: short powerful pangolin legs with digging claws; support unchanged at host size; skull: pangolin skull; tail: muscular scaled pangolin tail for balance; host tissue throughout; plain coat, no stripes or spots. Coat texture flows along the body outline. Bilaterally symmetrical, recognizable limbs, visible sense organs. Habitat cue (river forest): dark back and light belly (mild countershading). Prosaic detail: natural lighting, feet in firm contact with the ground with a soft shadow, normal wear on hooves, claws and skin. One creature, full body, side three-quarter view, plain light background, natural history illustration.\nAspect ratio: 1:1."
+     },
+     {
+      "type": "input_image",
+      "image_url": "<elided> (448651 chars)"
+     },
+     {
+      "type": "input_image",
+      "image_url": "<elided> (622279 chars)"
+     }
+    ]
+   }
+  ]
+ },
+ "response": {
+  "id": "resp_6ae69ac437bff8cc623c4bfb",
+  "access_programs": null,
+  "created_at": 1793497796.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": null,
+  "model": "muse-image-1.0",
+  "object": "response",
+  "output": [
+   {
+    "id": "rs_6ae69ac4946d3b6b5abf4c9a",
+    "summary": [
+     {
+      "text": "**Composing hybrid creature illustration**\nI'm planning a natural history illustration that merges a pangolin's scaled body, snout, ears, claws, and tail with smooth pink axolotl patches on the back and flanks, keeping the head fully pangolin.\n**Drafting axolotl-pangolin image**\nI'm preparing a detailed side three-quarter view with countershading, smooth axolotl skin texture, four legs with pangolin claws, and two patches on the upper back and flank against a plain light background.\n**Refining texture smoothness**\nI'm adjusting the illustration so the patches read as smooth skin instead of scales, keeping the axolotl-pangolin hybrid look while softening the surface detail.",
+      "type": "summary_text"
+     }
+    ],
+    "type": "reasoning",
+    "content": null,
+    "encrypted_content": null,
+    "status": "completed"
+   },
+   {
+    "id": "msg_6ae69ac4f5cb7c24203d4061",
+    "content": [
+     {
+      "annotations": [],
+      "text": "",
+      "type": "output_text",
+      "logprobs": []
+     }
+    ],
+    "role": "assistant",
+    "status": "completed",
+    "type": "message",
+    "phase": null
+   },
+   {
+    "id": "ig_eyJwZXJtYW5lbnRfdXJsIjoiR0I0VHBUUW5XbXNXVENZRUFCNjFKTHhpYmJnOWJnMWlBUUJlIiwicmVzdW1lX2lkIjoiczo3MzI4ZjM2MS1iY2Q1LTQ0MmUtYjJkOC0wMGI1MzQ3NDIyYTI6R05MVXR6UWIyVmZsNmZFUEFGenl0UVd3Zlc4SmJnMWlBUUJqIiwiYmluZGluZyI6eyJhcHBfaWQiOjI5NDE1MjY2NDE4MTYxMjI0LCJtb2RlbCI6Im11c2UtaW1hZ2UtMS4wIn0sInZlcnNpb24iOjEsImNyZWF0ZWRfYXQiOjE3OTM0OTc3OTZ9.Q8WLFwHP1JCQn7ejAekdvGTHGlin",
+    "result": "<elided> (780992 chars)",
+    "status": "completed",
+    "type": "image_generation_call",
+    "action": null,
+    "background": null,
+    "error": null,
+    "output_format": null,
+    "quality": null,
+    "revised_prompt": null,
+    "size": null
+   }
+  ],
+  "parallel_tool_calls": false,
+  "temperature": null,
+  "tool_choice": null,
+  "tools": null,
+  "top_p": null,
+  "background": null,
+  "completed_at": null,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": null,
+  "reasoning": null,
+  "safety_identifier": null,
+  "service_tier": null,
+  "status": "completed",
+  "text": null,
+  "tool_usage": null,
+  "top_logprobs": null,
+  "truncation": null,
+  "usage": {
+   "input_tokens": 26645,
+   "input_tokens_details": {
+    "cache_write_tokens": null,
+    "cached_tokens": 20416
+   },
+   "output_tokens": 2550,
+   "output_tokens_details": {
+    "reasoning_tokens": 264
+   },
+   "total_tokens": 29195
+  },
+  "user": null
+ }
+}

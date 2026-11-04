@@ -1,0 +1,156 @@
+{
+ "purpose": "evo_describe",
+ "request": {
+  "model": "meta-models/muse-spark-open-1026",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You look at one picture with no other context and describe exactly what is drawn, like a careful field naturalist. Do not guess what was intended; describe only what is visible. description: a free paragraph describing the whole creature first. parts: every body part you see, one entry each (head, horns, ears, mane, legs, feet, tail, wings, gills, tentacles, shell, plates, scales, feathers, markings), with what it looks like and where it is. attached_objects: anything that looks attached to or sitting on the body rather than part of it, such as an object, an armor piece or a whole small animal; empty if none. animals: every real animal whose features you can see, as everyday English common names, at most four; include any animal that only one part resembles. Then count, looking carefully: separate_bodies: separate animal bodies or body-shaped objects in the picture, including any whole animal or animal-shaped object attached to or sitting on the main creature. heads: heads of any kind. walking_legs: legs the creature stands or walks on, including hidden ones you can infer. wings: wings of any kind. extra_limb_pieces: jointed leg-like, claw-like or tentacle-like pieces other than the walking legs and the tail. tails: tails of any kind (0 if none)."
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "Describe this creature, then count."
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "<elided> (884387 chars)"
+      }
+     }
+    ]
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "plan_blind_describe",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "description",
+      "parts",
+      "attached_objects",
+      "animals",
+      "separate_bodies",
+      "heads",
+      "walking_legs",
+      "wings",
+      "extra_limb_pieces",
+      "tails"
+     ],
+     "properties": {
+      "description": {
+       "type": "string"
+      },
+      "parts": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "part",
+         "looks_like",
+         "where"
+        ],
+        "properties": {
+         "part": {
+          "type": "string"
+         },
+         "looks_like": {
+          "type": "string"
+         },
+         "where": {
+          "type": "string"
+         }
+        }
+       }
+      },
+      "attached_objects": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "animals": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "separate_bodies": {
+       "type": "integer"
+      },
+      "heads": {
+       "type": "integer"
+      },
+      "walking_legs": {
+       "type": "integer"
+      },
+      "wings": {
+       "type": "integer"
+      },
+      "extra_limb_pieces": {
+       "type": "integer"
+      },
+      "tails": {
+       "type": "integer"
+      }
+     }
+    }
+   }
+  },
+  "temperature": 0,
+  "max_tokens": 8000
+ },
+ "response": {
+  "id": "chatcmpl-bf4a0f32e61e43f083110fa22aff9de2",
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "content": "{\r\n  \"description\": \"The creature is a quadrupedal, dome-bodied reptile shown in right-facing side view standing on sparse dry ground. Its main body is a large domed shell whose dorsal surface is completely covered by a thick coat of long, shaggy brown fur, with only the lower side margins of the shell exposed. It has a thick, scaly neck extending forward to a blunt-beaked, scaly head, four stout columnar scaly legs with clawed feet supporting the body, and a short, pointed scaly tail protruding at the rear beneath the fur and shell margin. The exposed skin on the head, neck, legs and tail is covered in small polygonal scales, with larger pointed tubercles on the forelimbs.\",\r\n  \"parts\": [\r\n    {\r\n      \"part\": \"head\",\r\n      \"looks_like\": \"scaly and domed with a blunt beak at the snout tip, small nostril openings, a dark eye on the side of the head, and small polygonal scales covering the surface\",\r\n      \"where\": \"at the front end of the body on a thick extended neck, facing to the right\"\r\n    },\r\n    {\r\n      \"part\": \"mane\",\r\n      \"looks_like\": \"dense, long, shaggy hair in mixed brown tones, hanging down over the sides and rear\",\r\n      \"where\": \"covering the entire dorsal surface of the shell from behind the neck to above the tail\"\r\n    },\r\n    {\r\n      \"part\": \"legs\",\r\n      \"looks_like\": \"four thick, columnar, heavily scaled limbs with wrinkled skin at the joints and larger pointed scales on the forelimbs\",\r\n      \"where\": \"two forelegs under the front of the shell and two hindlegs under the rear of the shell, supporting the body above the ground\"\r\n    },\r\n    {\r\n      \"part\": \"feet\",\r\n      \"looks_like\": \"broad, scaly feet with short blunt claws/nails on the toes\",\r\n      \"where\": \"at the distal end of each leg in contact with the ground\"\r\n    },\r\n    {\r\n      \"part\": \"tail\",\r\n      \"looks_like\": \"short, conical and tapering to a point, covered in small rounded scales\",\r\n      \"where\": \"protruding from the rear of the body beneath the shell margin and fur, on the left side of the image\"\r\n    },\r\n    {\r\n      \"part\": \"shell\",\r\n      \"looks_like\": \"large domed carapace, mostly obscured dorsally by fur but with lower sides visible as a light tan structure\",\r\n      \"where\": \"forming the central bulk of the body between the neck and tail, above the legs\"\r\n    },\r\n    {\r\n      \"part\": \"plates\",\r\n      \"looks_like\": \"large polygonal scutes with light tan centers and darker brown concentric growth bands and raised edges\",\r\n      \"where\": \"forming the exposed lower margin of the shell along the side, around the neck opening at the front, and as a flared row at the rear above the hindlegs\"\r\n    },\r\n    {\r\n      \"part\": \"scales\",\r\n      \"looks_like\": \"small polygonal to rounded scales in tan and brown, with larger keeled tubercles on the forelimbs\",\r\n      \"where\": \"covering the head, neck, legs, feet and tail, and the skin between the shell and limbs\"\r\n    }\r\n  ],\r\n  \"attached_objects\": [],\r\n  \"animals\": [\"tortoise\"],\r\n  \"separate_bodies\": 1,\r\n  \"heads\": 1,\r\n  \"walking_legs\": 4,\r\n  \"wings\": 0,\r\n  \"extra_limb_pieces\": 0,\r\n  \"tails\": 1\r\n}",
+     "refusal": null,
+     "role": "assistant",
+     "annotations": null,
+     "audio": null,
+     "function_call": null,
+     "tool_calls": null,
+     "reasoning_content": "<elided> (12090 chars)"
+    }
+   }
+  ],
+  "created": 1793548267,
+  "model": "meta-models/muse-spark-open-1026",
+  "object": "chat.completion",
+  "metadata": null,
+  "moderation": null,
+  "service_tier": null,
+  "system_fingerprint": null,
+  "usage": {
+   "completion_tokens": 3653,
+   "prompt_tokens": 3795,
+   "total_tokens": 7448,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 2604,
+    "audio_tokens": 0,
+    "reasoning_tokens": 2819,
+    "rejected_prediction_tokens": 4739,
+    "text_tokens": null
+   },
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cache_write_tokens": null,
+    "cached_tokens": 384,
+    "image_tokens": null,
+    "text_tokens": null
+   }
+  }
+ }
+}

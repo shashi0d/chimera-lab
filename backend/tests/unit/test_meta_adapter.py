@@ -35,10 +35,10 @@ def test_parse_describe_response():
 
 
 def test_parse_handles_content_parts_and_garbage():
-    r = meta.parse_plan_response(chat([{"type": "text", "text": json.dumps({
-        "body_plan": "avian", "part_donors": {"head": "A", "body": "B", "limbs": "B", "covering": "A", "tail": "B"},
-        "rationale": "x", "name_suggestion": None})}]))
-    assert r.part_donors.tail == "B"
+    r = meta.parse_describe_response(chat([{"type": "text", "text": json.dumps({
+        "is_animal": True, "contains_human": False, "common_name": "lion", "scientific_name": "Panthera leo",
+        "confidence": 0.9, "body_plan": "quadruped", "visible_parts": ["head"]})}]))
+    assert r.common_name == "lion"
     with pytest.raises(ChimeraError) as e:
         meta.parse_describe_response(chat("not json"))
     assert e.value.code == ErrorCode.UPSTREAM_ERROR

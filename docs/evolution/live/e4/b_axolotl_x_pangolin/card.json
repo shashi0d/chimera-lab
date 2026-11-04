@@ -1,0 +1,398 @@
+{
+ "kind": "chimera",
+ "design_mode": "realistic",
+ "label": "speculative chimera, no real-world precedent",
+ "check_labels": [],
+ "processes": [
+  "chimera patchwork: each region is one parent's tissue",
+  "coat and extremities shaped by a river forest habitat"
+ ],
+ "resemblances": [],
+ "why": [
+  {
+   "card": "RC-R2-01",
+   "rule": "Parent order is biological. Store fusions as (sire, dam) and never treat A x B as identical to B x A, because reciprocal crosses can differ in size and appearance",
+   "strength": "hard",
+   "status": "VERIFIED",
+   "source": "https://lsi.princeton.edu/research/faculty-publications/genomic-imprinting-disrupted-interspecific-peromyscus-hybrids"
+  },
+  {
+   "card": "RC-R1-14",
+   "rule": "Genetics-based operators only predict real outcomes for parents that can interbreed; for any other pair the fusion must be labeled speculative design, not a predicted animal",
+   "strength": "hard",
+   "status": "VERIFIED",
+   "source": "https://www.ucl.ac.uk/taxome/jim/pap/mallet07_hybspn_Nature.pdf"
+  },
+  {
+   "card": "RC-R2-16",
+   "rule": "Use the real-hybrid path only for pairs with a documented hybrid or a close relationship (same genus); all other pairs go to the chimera path and are labeled speculative",
+   "strength": "hard",
+   "status": "VERIFIED",
+   "source": "https://www.ucl.ac.uk/taxome/jim/pap/mallet07_hybspn_Nature.pdf"
+  },
+  {
+   "card": "RC-R5-10",
+   "rule": "Documented interspecies chimeras pair close relatives only; any chimera between distant groups must be labeled a speculative design with no real-world precedent",
+   "strength": "hard",
+   "status": "VERIFIED",
+   "source": "https://www.nature.com/articles/nmeth1110-872.pdf"
+  },
+  {
+   "card": "RC-R6-08",
+   "rule": "When building a hybrid, take the overall shape from the parent with the more structured body schema; a schema higher in the human-like, four-legged, object, shapeless hierarchy is preferred",
+   "strength": "soft",
+   "status": "VERIFIED",
+   "source": "https://cris.tau.ac.il/en/publications/how-to-build-a-hybrid-the-structure-of-imagination/"
+  },
+  {
+   "card": "RC-R6-09",
+   "rule": "Specific mapping for our animals: four-legged mammals and birds count as structured frames; octopus, jellyfish and similar soft-bodied animals count as low-structure donors that contribute surface, tentacles or signature parts",
+   "strength": "soft",
+   "status": "UNVERIFIED",
+   "source": "https://cris.tau.ac.il/en/publications/how-to-build-a-hybrid-the-structure-of-imagination/"
+  },
+  {
+   "card": "RC-R5-02",
+   "rule": "The host parent sets silhouette, body size and overall frame; the donor contributes regions, organs or patches",
+   "strength": "soft",
+   "status": "VERIFIED",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/20813264/"
+  },
+  {
+   "card": "RC-R1-01",
+   "rule": "Decide inheritance per trait, never per animal; the engine must not assign one parent as dominant for the whole creature, because dominance is defined between alleles of a single gene",
+   "strength": "hard",
+   "status": "VERIFIED",
+   "source": "https://slcc.pressbooks.pub/collegebiology1/chapter/incomplete-dominance-and-codominance/"
+  },
+  {
+   "card": "RC-R1-09",
+   "rule": "PATCH is a valid coat mode: distinct blocks with clear edges, each block fully one version, no blending inside a block, as in tortoiseshell and calico cats",
+   "strength": "soft",
+   "status": "VERIFIED",
+   "source": "https://catalog.lib.kyushu-u.ac.jp/opac_download_md/7390840/7390840.pdf"
+  },
+  {
+   "card": "RC-R1-10",
+   "rule": "Each mosaic patch grows from a single cell lineage, so patches should be few and large rather than fine speckles",
+   "strength": "soft",
+   "status": "VERIFIED",
+   "source": "https://digitalcommons.usm.maine.edu/thinking_matters/173"
+  },
+  {
+   "card": "RC-R5-01",
+   "rule": "On the chimera path, each region is fully one parent's tissue; blend between regions only at the edges, never within a patch",
+   "strength": "hard",
+   "status": "VERIFIED",
+   "source": "https://sdbonline.org/archive/dbcinema/ledouarin/ledouarin.html"
+  },
+  {
+   "card": "RC-R5-03",
+   "rule": "Chimeras are not 50:50; allow the donor share to vary between runs, and never present a fixed even split as the biological norm",
+   "strength": "soft",
+   "status": "VERIFIED",
+   "source": "https://www.nature.com/articles/nmeth1110-872.pdf"
+  },
+  {
+   "card": "RC-R5-04",
+   "rule": "Donor regions keep the donor's own color and surface (feathers, hair, skin), shown at full strength inside the region",
+   "strength": "soft",
+   "status": "VERIFIED",
+   "source": "https://sdbonline.org/archive/dbcinema/ledouarin/ledouarin.html"
+  },
+  {
+   "card": "RC-R5-05",
+   "rule": "Where donor pattern appears follows the host's body layout (its skin and feather regions), not the donor's own pattern layout",
+   "strength": "soft",
+   "status": "VERIFIED",
+   "source": "https://discovery-pp.ucl.ac.uk/id/eprint/10108322"
+  },
+  {
+   "card": "RC-R5-06",
+   "rule": "Donor regions align with body segments or regions (the level of a graft), not random scattered fragments",
+   "strength": "soft",
+   "status": "VERIFIED",
+   "source": "https://sdbonline.org/archive/dbcinema/ledouarin/ledouarin.html"
+  },
+  {
+   "card": "RC-R5-07",
+   "rule": "Behavior can follow the parent that supplied the brain or head tissue",
+   "strength": "soft",
+   "status": "VERIFIED",
+   "source": "https://agris.fao.org/search/en/records/65dfe6754c5aef494fe67490"
+  },
+  {
+   "card": "RC-R6-02",
+   "rule": "Carry the second parent mainly through surface texture, pattern and selected signature parts, which tell viewers which other animal is involved without changing what the creature is",
+   "strength": "soft",
+   "status": "VERIFIED",
+   "source": "https://arxiv.org/abs/1811.12231v3"
+  },
+  {
+   "card": "RC-R1-07",
+   "rule": "Some traits can be inherited yet hidden because another trait controls whether they show (GATE); evaluate gating traits before the traits they control",
+   "strength": "soft",
+   "status": "VERIFIED",
+   "source": "https://openoregon.pressbooks.pub/mhccmajorsbio/chapter/epistasis/"
+  },
+  {
+   "card": "RC-R1-08",
+   "rule": "Gate examples for fusions: a fur pattern only shows on regions that carry fur; a mane only shows where the body carries hair",
+   "strength": "soft",
+   "status": "UNVERIFIED",
+   "source": "https://bio.libretexts.org/Bookshelves/Genetics/Online_Open_Genetics_(Nickle_and_Barrette-Ng)/06%3A_Genetic_Analysis_of_Multiple_Genes/6.02%3A_Epistasis_and_Other_Gene_Interactions"
+  },
+  {
+   "card": "RC-R4-09",
+   "rule": "A fusion may live in a habitat neither parent uses (a bridging niche), because niche separation is what lets hybrid lineages establish; its visible traits must then match that habitat",
+   "strength": "soft",
+   "status": "VERIFIED",
+   "source": "https://www.nature.com/articles/6886170"
+  },
+  {
+   "card": "RC-R4-01",
+   "rule": "Fit coat pattern to the fusion's habitat: closed, forested or tree-climbing lifestyles lean patterned and irregular; open habitats lean plain",
+   "strength": "soft",
+   "status": "VERIFIED",
+   "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3061134"
+  },
+  {
+   "card": "RC-R4-02",
+   "rule": "Habitat may adjust pattern strength and complexity beyond what either parent shows, because coat pattern tracks ecology more than ancestry",
+   "strength": "soft",
+   "status": "VERIFIED",
+   "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3061134"
+  },
+  {
+   "card": "RC-R4-05",
+   "rule": "Default to a dark-back, light-belly gradient, stronger in open, sunny habitats and smaller bodies; describe it as a common pattern, not proven camouflage",
+   "strength": "soft",
+   "status": "VERIFIED",
+   "source": "https://datadryad.org/dataset/doi:10.5061/dryad.4291n"
+  },
+  {
+   "card": "RC-R4-11",
+   "rule": "At least one habitat-linked trait must be visible in the image, so the ecology appears in the creature and not only in the text",
+   "strength": "soft",
+   "status": "UNVERIFIED",
+   "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3061134"
+  },
+  {
+   "card": "RC-R4-10",
+   "rule": "Habitat adjusts plastic traits (pattern, shading, extremity size, eye size) but never the body-plan class or limb count; those stay with R3",
+   "strength": "soft",
+   "status": "UNVERIFIED",
+   "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3061134"
+  },
+  {
+   "card": "RC-R3-12",
+   "rule": "Physical checks run after trait selection in a fixed order (body-plan class, limb budget, size ceiling, posture, part rendering); a failed check either changes the design or adds a visible speculative label, never a silent pass",
+   "strength": "soft",
+   "status": "UNVERIFIED",
+   "source": "https://biewenerlab.oeb.harvard.edu/publications/biomechanical-consequences-scaling"
+  },
+  {
+   "card": "RC-R9-02",
+   "rule": "Run a function audit after the physical checks and before rendering, covering breathing, feeding, support, movement, heat and senses; each function ends as pass, repaired or labeled, never silently failed",
+   "strength": "hard",
+   "status": "VERIFIED",
+   "source": "https://www.cs.utexas.edu/~witchel/S25-380L/papers/right-size.html"
+  },
+  {
+   "card": "RC-R9-03",
+   "rule": "Gills alone cannot serve a land or flying creature, because gills collapse in air; such a creature must also have an air-breathing system or live in water or a very wet habitat, otherwise repair or label it",
+   "strength": "hard",
+   "status": "VERIFIED",
+   "source": "https://experts.illinois.edu/en/publications/dynamic-elastocapillary-coalescence-of-fish-gill-lamellae/"
+  },
+  {
+   "card": "RC-R9-12",
+   "rule": "Every donor part must have a job (fly, swim, grip, dig, display, defend); a part with no job is dropped in realistic mode, because purposeless extras such as extra limbs or spikes make a design look fake",
+   "strength": "soft",
+   "status": "VERIFIED",
+   "source": "https://www.creativebloq.com/art/digital-art/pro-artists-reveal-how-they-design-imaginary-creatures-that-feel-believable"
+  },
+  {
+   "card": "RC-R6-03",
+   "rule": "Keep the head fully visible and uncluttered; the head and eyes draw the earliest and most looks, so the head donor dominates the first impression",
+   "strength": "soft",
+   "status": "VERIFIED",
+   "source": "https://eprints.lancs.ac.uk/id/eprint/50885/"
+  },
+  {
+   "card": "RC-R6-04",
+   "rule": "Every creature must have clearly discernible eyes; viewers search for eyes wherever they are, so extra or displaced eyes are used only on purpose",
+   "strength": "soft",
+   "status": "VERIFIED",
+   "source": "https://repository.essex.ac.uk/9355/"
+  },
+  {
+   "card": "RC-R9-10",
+   "rule": "Fiction budget: a realistic design takes no licenses; a speculative design bends at most one rule on purpose and obeys every other rule strictly; every bent rule is declared on the card with its compensation",
+   "strength": "hard",
+   "status": "VERIFIED",
+   "source": "https://www.sf-encyclopedia.com/entry/wellss_law"
+  },
+  {
+   "card": "RC-R6-01",
+   "rule": "The body silhouette donor sets the creature's identity for human viewers; choose it deliberately (or expose it as a user control), never as a side effect of input order",
+   "strength": "soft",
+   "status": "VERIFIED",
+   "source": "https://arxiv.org/abs/1811.12231v3"
+  },
+  {
+   "card": "RC-R7-06",
+   "rule": "State the intended silhouette in the plan and validate the render with a silhouette-only check; the creature must read with no interior detail",
+   "strength": "soft",
+   "status": "VERIFIED",
+   "source": "https://www.cs.princeton.edu/courses/archive/fall07/cos597B/papers/mitchell-team-fortress.pdf"
+  },
+  {
+   "card": "RC-R6-05",
+   "rule": "Signature parts that draw looks on the real animal (a tail tuft, a trunk, an udder-like feature) are the best carriers of the second parent's identity",
+   "strength": "soft",
+   "status": "VERIFIED",
+   "source": "https://eprints.lancs.ac.uk/id/eprint/50885/"
+  },
+  {
+   "card": "RC-R7-07",
+   "rule": "Interior detail (pattern lines, texture flow) should echo the silhouette's shapes rather than cut across them",
+   "strength": "soft",
+   "status": "VERIFIED",
+   "source": "https://www.cs.princeton.edu/courses/archive/fall07/cos597B/papers/mitchell-team-fortress.pdf"
+  },
+  {
+   "card": "RC-R6-07",
+   "rule": "Keep bilateral symmetry, visible sense organs and recognizable limbs unless the user explicitly asks for an alien design, because these are what make an invented creature read as an animal",
+   "strength": "soft",
+   "status": "VERIFIED",
+   "source": "https://link.springer.com/content/pdf/10.3758%2FBF03195281.pdf"
+  },
+  {
+   "card": "RC-R7-10",
+   "rule": "Show myth and fiction resemblances as \"resembles X (culture or work)\", tagged unverified; never render or name-match a franchise character as an output",
+   "strength": "soft",
+   "status": "UNVERIFIED",
+   "source": "https://classics.stanford.edu/publications/first-fossil-hunters-dinosaurs-mammoths-and-myth-greek-and-roman-times"
+  }
+ ],
+ "lineage": {
+  "sire": "axolotl",
+  "dam": "Chinese pangolin",
+  "parent_ids": [],
+  "generation": 0
+ },
+ "caveats": [
+  "This is a design, not a prediction: no claim is made that such a creature would be not claimed to be healthy or viable."
+ ],
+ "can_it_live": [
+  {
+   "function": "breathing",
+   "result": "repaired",
+   "detail": "external gills would collapse in air and have no job in a river forest habitat, so they are dropped; the creature breathes with the Chinese pangolin's lungs",
+   "cards": [
+    "RC-R9-03",
+    "RC-R9-12"
+   ],
+   "decided_by": "code (rule cards)"
+  },
+  {
+   "function": "feeding",
+   "result": "pass",
+   "detail": "Head is Chinese pangolin with toothless tongue specialized for insectivore diet, allowing capture of ants/termites by protrusible sticky tongue and swallowing without chewing. Body is Chinese pangolin at 4.5 kg, providing matching oral cavity, esophagus, and insect-adapted stomach and gut from same species. Four-legged pangolin frame with legs supports terrestrial foraging in river forest where insect prey occurs. No anatomical mismatch prevents capture, ingestion, or digestion.",
+   "cards": [],
+   "decided_by": "model-judged"
+  },
+  {
+   "function": "support",
+   "result": "pass",
+   "detail": "legs match the body size",
+   "cards": [],
+   "decided_by": "code (rule cards)"
+  },
+  {
+   "function": "movement",
+   "result": "pass",
+   "detail": "walks on four legs",
+   "cards": [],
+   "decided_by": "code (rule cards)"
+  },
+  {
+   "function": "heat",
+   "result": "pass",
+   "detail": "temperate river forest habitat: no heat adjustment needed",
+   "cards": [
+    "RC-R4-11"
+   ],
+   "decided_by": "code (rule cards)"
+  },
+  {
+   "function": "senses",
+   "result": "pass",
+   "detail": "Chinese pangolin head and eyes kept fully visible",
+   "cards": [
+    "RC-R6-03",
+    "RC-R6-04"
+   ],
+   "decided_by": "code (rule cards)"
+  }
+ ],
+ "licenses": [],
+ "provenance": {
+  "sire": {
+   "animal": "axolotl",
+   "scientific_name": "Ambystoma mexicanum",
+   "kind": "species",
+   "source": "database",
+   "facts": {
+    "common_name": "chimera_data.json",
+    "scientific_name": "chimera_data.json",
+    "class": "chimera_data.json",
+    "order": "chimera_data.json",
+    "family": "chimera_data.json",
+    "gbif_key": "chimera_data.json",
+    "body_plan": "chimera_data.json",
+    "primary_locomotor_part": "chimera_data.json",
+    "covering": "chimera_data.json",
+    "movement": "chimera_data.json",
+    "active_time": "chimera_data.json",
+    "habitat": "chimera_data.json",
+    "diet": "chimera_data.json",
+    "body_mass_kg": "chimera_data.json",
+    "breathing": "project default (evo_config.json function_defaults)",
+    "mouthparts": "project default (evo_config.json function_defaults)",
+    "features": "project data (evo_config.json function_defaults overrides)"
+   },
+   "unverified_claims": []
+  },
+  "dam": {
+   "animal": "Chinese pangolin",
+   "scientific_name": "Manis pentadactyla",
+   "kind": "species",
+   "source": "learned",
+   "facts": {
+    "active_time": "model-estimated",
+    "body_length_m": "model-estimated",
+    "body_mass_kg": "model-estimated",
+    "body_plan": "model-estimated",
+    "breathing": "model-estimated",
+    "class": "chimera_data.json tier2 (gbif)",
+    "climate": "model-estimated",
+    "common_name": "model-estimated",
+    "covering": "model-estimated",
+    "diet": "model-estimated",
+    "family": "chimera_data.json tier2 (gbif)",
+    "gbif_key": "chimera_data.json tier2 (gbif)",
+    "genus": "chimera_data.json tier2 (gbif)",
+    "habitat": "model-estimated",
+    "mouthparts": "model-estimated",
+    "movement": "model-estimated",
+    "order": "chimera_data.json tier2 (gbif)",
+    "primary_locomotor_part": "model-estimated",
+    "scientific_name": "chimera_data.json tier2 (gbif)",
+    "visible_features": "model-estimated"
+   },
+   "unverified_claims": []
+  }
+ }
+}

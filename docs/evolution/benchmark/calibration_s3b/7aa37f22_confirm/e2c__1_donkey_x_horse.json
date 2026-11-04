@@ -1,0 +1,195 @@
+{
+ "id": "e2c/1_donkey_x_horse",
+ "questions": [
+  {
+   "id": "frame",
+   "text": "Does the body look like one animal mixing a donkey and a horse?",
+   "expect": "yes",
+   "group": "structure",
+   "fix": "Show the planned in-between body of the donkey and the horse; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "head",
+   "text": "Does it have a donkey head with visible eyes?",
+   "expect": "yes",
+   "group": "structure",
+   "fix": "Show the planned donkey head, fully visible with clear eyes; keep everything else the same.",
+   "sam": "donkey head"
+  },
+  {
+   "id": "no_wings",
+   "text": "Are there wings anywhere on the body?",
+   "expect": "no",
+   "group": "structure",
+   "fix": "The plan has no wings: show the horse's own body there instead; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "whole_animal",
+   "text": "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?",
+   "expect": "no",
+   "group": "structure",
+   "fix": "Show one single creature with only its planned parts, no separate animals on it; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "second_head",
+   "text": "Is there a second head anywhere?",
+   "expect": "no",
+   "group": "structure",
+   "fix": "Show one single head, as planned; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "extra_legs",
+   "text": "Does it have more than 4 walking legs?",
+   "expect": "no",
+   "group": "structure",
+   "fix": "Show exactly 4 walking legs, as planned; keep everything else the same.",
+   "sam": null
+  },
+  {
+   "id": "plain_fur",
+   "text": "Does the fur show stripes or spots?",
+   "expect": "no",
+   "group": "pattern",
+   "fix": "Show a plain coat with no stripes or spots, as planned; keep everything else the same.",
+   "sam": null
+  }
+ ],
+ "parts": [],
+ "raw": {
+  "spark_open": {
+   "describe": {
+    "description": "The creature is a slender, donkey-like equine shown in strict right-facing profile against a plain off-white background. Its body is elongated with a slightly arched back and a pale, lightly haired underbelly, covered in short brown to gray-brown fur that is darker along the back, neck and outer legs and lighter on the muzzle and inner thighs. The head is held forward on a moderately long neck, the ears are large and upright, the mane is short and bristly, and the tail is thin with a tufted tip hanging behind the hindquarters. All four slender legs end in hooves and support the animal in a standing pose, with no other bodies, wings, or appendages visible.",
+    "parts": [
+     {
+      "part": "head",
+      "looks_like": "elongated equine head with a brown face, a white patch around the muzzle and nostrils, a dark eye with a light ring, a dark nostril and a closed mouth with visible lips and chin whiskers",
+      "where": "at the anterior right end of the body, attached to the neck and facing right"
+     },
+     {
+      "part": "ears",
+      "looks_like": "two large, upright, pointed ears with dark brown outer edges, lighter tan inner surfaces, dark interior markings and small tufts of hair at the tips",
+      "where": "on top of the head, set close together and angled slightly outward"
+     },
+     {
+      "part": "mane",
+      "looks_like": "short, stiff, upright bristly hair, dark brown to black with lighter tips, forming a crest",
+      "where": "along the dorsal midline of the neck from just behind the ears to the shoulders"
+     },
+     {
+      "part": "legs",
+      "looks_like": "four slender, straight legs with visible knee and hock joints, brown on the outer surfaces and paler gray-white on the inner thighs and lower forelegs, with subtle musculature and wrinkled skin at the joints",
+      "where": "two forelegs under the chest and two hindlegs under the rump, extending vertically to the ground"
+     },
+     {
+      "part": "feet",
+      "looks_like": "four rounded, solid hooves, light gray-brown with a darker edge at the coronet and a flat sole, slightly worn",
+      "where": "one at the distal tip of each leg, in contact with the ground"
+     },
+     {
+      "part": "tail",
+      "looks_like": "a thin tail with short hair along its length and a longer, darker brown tuft of coarse hair at the tip",
+      "where": "extending from the posterior left end of the rump, hanging vertically behind the hindlegs"
+     },
+     {
+      "part": "markings",
+      "looks_like": "a thin dark dorsal stripe along the spine from behind the mane to the tail base, slightly darker shading on the shoulders, flanks and lower neck, and a white muzzle and pale underbelly contrasting with the brown coat",
+      "where": "along the mid-back, on the torso and on the face and ventral surface"
+     }
+    ],
+    "attached_objects": [],
+    "animals": [
+     "donkey"
+    ],
+    "separate_bodies": 1,
+    "heads": 1,
+    "walking_legs": 4,
+    "wings": 0,
+    "extra_limb_pieces": 0,
+    "tails": 1
+   },
+   "answers": {
+    "Does the body look like one animal mixing a donkey and a horse?": "no",
+    "Does it have a donkey head with visible eyes?": "yes",
+    "Are there wings anywhere on the body?": "no",
+    "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?": "no",
+    "Is there a second head anywhere?": "no",
+    "Does it have more than 4 walking legs?": "no",
+    "Does the fur show stripes or spots?": "no"
+   },
+   "origins": {},
+   "error": null
+  },
+  "meta_spark": {
+   "describe": {
+    "description": "The image shows a single donkey-like animal in strict side profile facing right against a plain light background. It has a slender brown body with a lighter belly, four long thin legs ending in small hooves, a long neck topped by a short dark upright mane, a long narrow head with a white muzzle and very long upright ears, and a thin tail ending in a dark tuft. The rendering is detailed and naturalistic with short smooth brown fur.",
+    "parts": [
+     {
+      "part": "head",
+      "looks_like": "long narrow brown head with white muzzle and dark nostrils",
+      "where": "at the front of the neck facing to the right"
+     },
+     {
+      "part": "ears",
+      "looks_like": "two very long upright pointed ears with brown outsides and white and black insides with dark tufts at tips",
+      "where": "on top of the head"
+     },
+     {
+      "part": "eyes",
+      "looks_like": "single dark round eye with a pale ring around it",
+      "where": "on the side of the head"
+     },
+     {
+      "part": "mane",
+      "looks_like": "short stiff upright dark brown mane",
+      "where": "along the top of the neck"
+     },
+     {
+      "part": "legs",
+      "looks_like": "four long slender brown legs with paler inner sides",
+      "where": "under the body, two in front and two in back"
+     },
+     {
+      "part": "feet",
+      "looks_like": "small rounded gray single hooves",
+      "where": "at the bottom ends of the legs"
+     },
+     {
+      "part": "tail",
+      "looks_like": "thin brown tail ending in a long dark hairy tuft",
+      "where": "hanging down from the rear of the body"
+     },
+     {
+      "part": "body coat",
+      "looks_like": "short smooth brown fur with lighter tan on belly and inner legs",
+      "where": "covering the torso, neck and upper legs"
+     }
+    ],
+    "attached_objects": [],
+    "animals": [
+     "donkey"
+    ],
+    "separate_bodies": 1,
+    "heads": 1,
+    "walking_legs": 4,
+    "wings": 0,
+    "extra_limb_pieces": 0,
+    "tails": 1
+   },
+   "answers": {
+    "Does the body look like one animal mixing a donkey and a horse?": "no",
+    "Does it have a donkey head with visible eyes?": "yes",
+    "Are there wings anywhere on the body?": "no",
+    "Is there a whole separate animal, or an animal-shaped object with its own head, legs or wing cases, attached to or sitting on the body?": "no",
+    "Is there a second head anywhere?": "no",
+    "Does it have more than 4 walking legs?": "no",
+    "Does the fur show stripes or spots?": "no"
+   },
+   "origins": {},
+   "error": null
+  }
+ }
+}

@@ -1,0 +1,341 @@
+{
+ "id": "crt_fa0bb76c2647",
+ "parents": {
+  "sire": "axolotl",
+  "dam": "chinese_pangolin"
+ },
+ "lineage": {
+  "parent_ids": [],
+  "generation": 0
+ },
+ "mode": "chimera",
+ "known_pair": null,
+ "host": "chinese_pangolin",
+ "identity_balance": 0.952,
+ "habitat": {
+  "name": "river forest",
+  "source": "bridging",
+  "adjustments": [
+   "dark back and light belly (mild countershading)"
+  ],
+  "visible_trait": "dark back and light belly (mild countershading)"
+ },
+ "size": {
+  "mass_kg": 4.5,
+  "flags": []
+ },
+ "silhouette": "four-legged Chinese pangolin frame",
+ "limb_plan": {
+  "forelimbs": {
+   "kind": "legs",
+   "donor": "chinese_pangolin"
+  },
+  "hindlimbs": {
+   "kind": "legs",
+   "donor": "chinese_pangolin"
+  },
+  "extra_wings": null,
+  "appendages": [],
+  "wing_use": "none",
+  "requested_wings": null
+ },
+ "traits": {
+  "behavior": {
+   "op": "PICK",
+   "donor": "chinese_pangolin",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "follows pangolin head/brain donor: nocturnal solitary foraging, stays near water to keep gills moist",
+   "flags": []
+  },
+  "body": {
+   "op": "PICK",
+   "donor": "chinese_pangolin",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "pangolin torso and scaled frame sets shape as structured host; retains pangolin lungs for air breathing with axolotl gills supplemental",
+   "flags": []
+  },
+  "coat_color": {
+   "op": "PATCH",
+   "donor": "axolotl",
+   "value": null,
+   "strength": 1.0,
+   "region": [
+    "back",
+    "flanks"
+   ],
+   "part": null,
+   "note": "axolotl mottled color at full strength inside patches; pangolin scale color elsewhere",
+   "flags": []
+  },
+  "coat_pattern": {
+   "op": "PATCH",
+   "donor": "axolotl",
+   "value": null,
+   "strength": 1.0,
+   "region": [
+    "back",
+    "flanks"
+   ],
+   "part": null,
+   "note": "few large axolotl-type patches with clear edges on host back and flanks layout, no blending inside blocks",
+   "flags": []
+  },
+  "coat_texture": {
+   "op": "PATCH",
+   "donor": "axolotl",
+   "value": null,
+   "strength": 1.0,
+   "region": [
+    "back",
+    "flanks"
+   ],
+   "part": null,
+   "note": "soft moist axolotl skin at full strength inside patches; pangolin scales elsewhere, aligned to body segments",
+   "flags": []
+  },
+  "ears": {
+   "op": "PICK",
+   "donor": "chinese_pangolin",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "pangolin small reduced ears",
+   "flags": []
+  },
+  "face": {
+   "op": "PICK",
+   "donor": "chinese_pangolin",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "pangolin narrow snout and mouth for ant and termite feeding",
+   "flags": []
+  },
+  "feet": {
+   "op": "PICK",
+   "donor": "chinese_pangolin",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "pangolin clawed feet for digging",
+   "flags": []
+  },
+  "head": {
+   "op": "PICK",
+   "donor": "chinese_pangolin",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "pangolin head shape; axolotl gills attached externally, not blended into skull",
+   "flags": []
+  },
+  "limbs": {
+   "op": "PICK",
+   "donor": "chinese_pangolin",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "four pangolin legs, no extra limbs",
+   "flags": []
+  },
+  "mane": {
+   "op": "PICK",
+   "donor": null,
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "absent: no hair on the neck",
+   "flags": [
+    "gated"
+   ]
+  },
+  "size": {
+   "op": "PICK",
+   "donor": "chinese_pangolin",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "host size; axolotl parts scaled to host size",
+   "flags": []
+  },
+  "skull": {
+   "op": "PICK",
+   "donor": "chinese_pangolin",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "pangolin skull supports feeding",
+   "flags": []
+  },
+  "tail": {
+   "op": "PICK",
+   "donor": "chinese_pangolin",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "long scaled pangolin tail",
+   "flags": []
+  }
+ },
+ "labels": [
+  "speculative chimera, no real-world precedent"
+ ],
+ "processes": [
+  "chimera patchwork: each region is one parent's tissue"
+ ],
+ "card_trace": [
+  "RC-R2-01",
+  "RC-R1-14",
+  "RC-R2-16",
+  "RC-R5-10",
+  "RC-R6-08",
+  "RC-R6-09",
+  "RC-R5-02",
+  "RC-R1-01",
+  "RC-R1-09",
+  "RC-R1-10",
+  "RC-R5-01",
+  "RC-R5-03",
+  "RC-R5-04",
+  "RC-R5-05",
+  "RC-R5-06",
+  "RC-R5-07",
+  "RC-R6-02",
+  "RC-R1-07",
+  "RC-R1-08",
+  "RC-R4-09",
+  "RC-R4-01",
+  "RC-R4-02",
+  "RC-R4-05",
+  "RC-R4-11",
+  "RC-R4-10",
+  "RC-R3-12",
+  "RC-R9-02",
+  "RC-R9-03",
+  "RC-R9-12",
+  "RC-R6-03",
+  "RC-R6-04",
+  "RC-R9-10",
+  "RC-R6-01",
+  "RC-R7-06",
+  "RC-R6-05",
+  "RC-R7-07",
+  "RC-R6-07",
+  "RC-R7-10"
+ ],
+ "checks": [
+  {
+   "step": "body_plan_class",
+   "result": "pass",
+   "detail": "host class: vertebrate (quadruped)",
+   "cards": []
+  },
+  {
+   "step": "limb_budget",
+   "result": "pass",
+   "detail": "4 limbs",
+   "cards": []
+  },
+  {
+   "step": "size_ceiling",
+   "result": "pass",
+   "detail": "within ceilings",
+   "cards": []
+  },
+  {
+   "step": "flight_anatomy",
+   "result": "pass",
+   "detail": "no wings",
+   "cards": []
+  },
+  {
+   "step": "posture",
+   "result": "pass",
+   "detail": "legs match the body size",
+   "cards": []
+  },
+  {
+   "step": "part_rendering",
+   "result": "pass",
+   "detail": "no soft parts",
+   "cards": []
+  }
+ ],
+ "scores": {
+  "critic": 1.0,
+  "silhouette": 1.0,
+  "thumbnail": 1.0,
+  "soft_penalty": 0.0,
+  "quality": 1.0
+ },
+ "seed": 0,
+ "design_mode": "realistic",
+ "audit": [
+  {
+   "function": "breathing",
+   "result": "repaired",
+   "detail": "external gills would collapse in air and have no job in a river forest habitat, so they are dropped; the creature breathes with the Chinese pangolin's lungs",
+   "cards": [
+    "RC-R9-03",
+    "RC-R9-12"
+   ],
+   "source": "code"
+  },
+  {
+   "function": "feeding",
+   "result": "pass",
+   "detail": "Head is Chinese pangolin with toothless tongue specialized for insectivore diet, allowing capture of ants/termites by protrusible sticky tongue and swallowing without chewing. Body is Chinese pangolin at 4.5 kg, providing matching oral cavity, esophagus, and insect-adapted stomach and gut from same species. Four-legged pangolin frame with legs supports terrestrial foraging in river forest where insect prey occurs. No anatomical mismatch prevents capture, ingestion, or digestion.",
+   "cards": [],
+   "source": "model-judged"
+  },
+  {
+   "function": "support",
+   "result": "pass",
+   "detail": "legs match the body size",
+   "cards": [],
+   "source": "code"
+  },
+  {
+   "function": "movement",
+   "result": "pass",
+   "detail": "walks on four legs",
+   "cards": [],
+   "source": "code"
+  },
+  {
+   "function": "heat",
+   "result": "pass",
+   "detail": "temperate river forest habitat: no heat adjustment needed",
+   "cards": [
+    "RC-R4-11"
+   ],
+   "source": "code"
+  },
+  {
+   "function": "senses",
+   "result": "pass",
+   "detail": "Chinese pangolin head and eyes kept fully visible",
+   "cards": [
+    "RC-R6-03",
+    "RC-R6-04"
+   ],
+   "source": "code"
+  }
+ ],
+ "licenses": []
+}

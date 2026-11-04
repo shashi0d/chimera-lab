@@ -1,0 +1,26 @@
+{
+ "name": "Chimera Lab evolution benchmark",
+ "version": 1,
+ "frozen": "2026-11-01",
+ "note": "S5. The 11 fixed cases the agent and the fixed pipeline are scored on. This file never changes; a test checks its hash. Scores are computed in code (app/evolution/benchmark.py) from the saved results.",
+ "caps": {"max_renders": 4, "max_tool_calls": 30, "max_edits": 6},
+ "cases": [
+  {"id": "b01", "sire": "axolotl", "dam": "Chinese pangolin", "mode": "realistic"},
+  {"id": "b02", "sire": "rhinoceros beetle", "dam": "brown bear", "mode": "speculative"},
+  {"id": "b03", "sire": "lion", "dam": "golden eagle", "mode": "mythic"},
+  {"id": "b04", "sire": "lion", "dam": "golden eagle", "mode": "realistic"},
+  {"id": "b05", "sire": "donkey", "dam": "horse", "mode": "realistic", "route": "real hybrid"},
+  {"id": "b06", "sire": "common octopus", "dam": "horse", "mode": "realistic"},
+  {"id": "b07", "sire": "emperor penguin", "dam": "cheetah", "mode": "realistic"},
+  {"id": "b08", "sire": "red fox", "dam": "barn owl", "mode": "speculative"},
+  {"id": "b09", "sire": "Indian pangolin", "dam": "horse", "mode": "realistic"},
+  {"id": "b10", "sire": "tortoise", "dam": "domestic goat", "mode": "realistic"},
+  {"id": "b11", "sire": "crab", "dam": "gray wolf", "mode": "speculative"}
+ ],
+ "scores": {
+  "full_match": "every critic item passes (no failure or uncertain row in the final image's inspect)",
+  "critic_failures": "count of failing rows, split into structure (structure group), identity (identity group) and integration (integration, coverage, placement, pattern, connection groups)",
+  "identity": "for each parent: does the deciding critic's (Meta Spark, D-084) 'which animals' answer name that parent (its full common name or its last word); Spark Open's answer is kept as information",
+  "cost": "renders, edits, tool calls (agent only), calls per provider and wall time per creature"
+ }
+}

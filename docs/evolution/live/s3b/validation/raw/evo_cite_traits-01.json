@@ -1,0 +1,1334 @@
+{
+ "purpose": "evo_cite_traits",
+ "request": {
+  "model": "muse-spark-1.3",
+  "instructions": "You describe a real animal for a natural-history engine, from sources. Use web search and open the pages you rely on: encyclopedias, museums, universities, zoos, government agencies or peer-reviewed papers. For each field give the value, source_url (the exact URL of a page you opened that supports the value) and evidence (a short quote from that page). If no source you opened supports a field, give your best estimate and leave source_url and evidence empty; never invent a URL. Use typical adult values. body_plan: the overall layout (winged means wings are the main limbs; insects are multi_legged). visible_features: three to six short visible features someone would draw. mouthparts: what the head eats with. breathing: the main breathing organ. claimed_crosses: scientific names of species it is documented to hybridize with, or an empty list.",
+  "tools": [
+   {
+    "type": "web_search"
+   }
+  ],
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "Describe, with sources: crab (Cancer pagurus)"
+     }
+    ]
+   }
+  ],
+  "text": {
+   "format": {
+    "type": "json_schema",
+    "name": "cited_traits",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "body_plan",
+      "primary_locomotor_part",
+      "covering",
+      "movement",
+      "habitat",
+      "climate",
+      "diet",
+      "active_time",
+      "body_mass_kg",
+      "body_length_m",
+      "visible_features",
+      "mouthparts",
+      "breathing",
+      "mouthparts_detail",
+      "breathing_detail",
+      "claimed_crosses"
+     ],
+     "properties": {
+      "body_plan": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "properties": {
+        "value": {
+         "type": "array",
+         "items": {
+          "type": "string",
+          "enum": [
+           "quadruped",
+           "biped",
+           "winged",
+           "finned",
+           "multi_legged",
+           "serpentine",
+           "radial"
+          ]
+         }
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "evidence": {
+         "type": "string"
+        }
+       }
+      },
+      "primary_locomotor_part": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "properties": {
+        "value": {
+         "type": "string",
+         "enum": [
+          "four legs",
+          "two legs",
+          "multiple legs",
+          "wings",
+          "fins",
+          "flippers",
+          "bell"
+         ]
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "evidence": {
+         "type": "string"
+        }
+       }
+      },
+      "covering": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "properties": {
+        "value": {
+         "type": "string",
+         "enum": [
+          "fur",
+          "feathers",
+          "scales",
+          "skin",
+          "exoskeleton",
+          "shell"
+         ]
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "evidence": {
+         "type": "string"
+        }
+       }
+      },
+      "movement": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "properties": {
+        "value": {
+         "type": "array",
+         "items": {
+          "type": "string",
+          "enum": [
+           "walk",
+           "run",
+           "swim",
+           "fly",
+           "climb",
+           "burrow",
+           "glide"
+          ]
+         }
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "evidence": {
+         "type": "string"
+        }
+       }
+      },
+      "habitat": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "properties": {
+        "value": {
+         "type": "array",
+         "items": {
+          "type": "string",
+          "enum": [
+           "grassland",
+           "forest",
+           "mountain",
+           "tundra",
+           "wetland",
+           "freshwater",
+           "marine",
+           "desert"
+          ]
+         }
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "evidence": {
+         "type": "string"
+        }
+       }
+      },
+      "climate": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "properties": {
+        "value": {
+         "type": "array",
+         "items": {
+          "type": "string",
+          "enum": [
+           "temperate",
+           "tropical",
+           "polar",
+           "arid"
+          ]
+         }
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "evidence": {
+         "type": "string"
+        }
+       }
+      },
+      "diet": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "properties": {
+        "value": {
+         "type": "string",
+         "enum": [
+          "carnivore",
+          "herbivore",
+          "omnivore",
+          "insectivore",
+          "piscivore"
+         ]
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "evidence": {
+         "type": "string"
+        }
+       }
+      },
+      "active_time": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "properties": {
+        "value": {
+         "type": "array",
+         "items": {
+          "type": "string",
+          "enum": [
+           "diurnal",
+           "nocturnal",
+           "crepuscular",
+           "unrecorded"
+          ]
+         }
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "evidence": {
+         "type": "string"
+        }
+       }
+      },
+      "body_mass_kg": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "properties": {
+        "value": {
+         "type": "object",
+         "additionalProperties": false,
+         "required": [
+          "min",
+          "max"
+         ],
+         "properties": {
+          "min": {
+           "type": "number"
+          },
+          "max": {
+           "type": "number"
+          }
+         }
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "evidence": {
+         "type": "string"
+        }
+       }
+      },
+      "body_length_m": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "properties": {
+        "value": {
+         "type": "object",
+         "additionalProperties": false,
+         "required": [
+          "min",
+          "max"
+         ],
+         "properties": {
+          "min": {
+           "type": "number"
+          },
+          "max": {
+           "type": "number"
+          }
+         }
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "evidence": {
+         "type": "string"
+        }
+       }
+      },
+      "visible_features": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "properties": {
+        "value": {
+         "type": "array",
+         "items": {
+          "type": "string"
+         }
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "evidence": {
+         "type": "string"
+        }
+       }
+      },
+      "mouthparts": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "properties": {
+        "value": {
+         "type": "string",
+         "enum": [
+          "grinding teeth",
+          "bladed teeth",
+          "mixed teeth",
+          "pointed teeth",
+          "beak",
+          "mandibles",
+          "toothless tongue",
+          "other"
+         ]
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "evidence": {
+         "type": "string"
+        }
+       }
+      },
+      "breathing": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "properties": {
+        "value": {
+         "type": "string",
+         "enum": [
+          "lungs",
+          "gills",
+          "external gills and lungs",
+          "skin and lungs",
+          "tracheae",
+          "book lungs",
+          "other"
+         ]
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "evidence": {
+         "type": "string"
+        }
+       }
+      },
+      "mouthparts_detail": {
+       "type": "string"
+      },
+      "breathing_detail": {
+       "type": "string"
+      },
+      "claimed_crosses": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      }
+     }
+    }
+   }
+  }
+ },
+ "response": {
+  "top_logprobs": 0,
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "service_tier": "auto",
+  "model": "muse-spark-1.3",
+  "reasoning": {
+   "effort": "high"
+  },
+  "background": false,
+  "text": {
+   "format": {
+    "type": "json_schema",
+    "name": "cited_traits",
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "body_plan",
+      "primary_locomotor_part",
+      "covering",
+      "movement",
+      "habitat",
+      "climate",
+      "diet",
+      "active_time",
+      "body_mass_kg",
+      "body_length_m",
+      "visible_features",
+      "mouthparts",
+      "breathing",
+      "mouthparts_detail",
+      "breathing_detail",
+      "claimed_crosses"
+     ],
+     "properties": {
+      "active_time": {
+       "additionalProperties": false,
+       "properties": {
+        "evidence": {
+         "type": "string"
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "value": {
+         "items": {
+          "enum": [
+           "diurnal",
+           "nocturnal",
+           "crepuscular",
+           "unrecorded"
+          ],
+          "type": "string"
+         },
+         "type": "array"
+        }
+       },
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "type": "object"
+      },
+      "body_length_m": {
+       "additionalProperties": false,
+       "properties": {
+        "evidence": {
+         "type": "string"
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "value": {
+         "additionalProperties": false,
+         "properties": {
+          "max": {
+           "type": "number"
+          },
+          "min": {
+           "type": "number"
+          }
+         },
+         "required": [
+          "min",
+          "max"
+         ],
+         "type": "object"
+        }
+       },
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "type": "object"
+      },
+      "body_mass_kg": {
+       "additionalProperties": false,
+       "properties": {
+        "evidence": {
+         "type": "string"
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "value": {
+         "additionalProperties": false,
+         "properties": {
+          "max": {
+           "type": "number"
+          },
+          "min": {
+           "type": "number"
+          }
+         },
+         "required": [
+          "min",
+          "max"
+         ],
+         "type": "object"
+        }
+       },
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "type": "object"
+      },
+      "body_plan": {
+       "additionalProperties": false,
+       "properties": {
+        "evidence": {
+         "type": "string"
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "value": {
+         "items": {
+          "enum": [
+           "quadruped",
+           "biped",
+           "winged",
+           "finned",
+           "multi_legged",
+           "serpentine",
+           "radial"
+          ],
+          "type": "string"
+         },
+         "type": "array"
+        }
+       },
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "type": "object"
+      },
+      "breathing": {
+       "additionalProperties": false,
+       "properties": {
+        "evidence": {
+         "type": "string"
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "value": {
+         "enum": [
+          "lungs",
+          "gills",
+          "external gills and lungs",
+          "skin and lungs",
+          "tracheae",
+          "book lungs",
+          "other"
+         ],
+         "type": "string"
+        }
+       },
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "type": "object"
+      },
+      "breathing_detail": {
+       "type": "string"
+      },
+      "claimed_crosses": {
+       "items": {
+        "type": "string"
+       },
+       "type": "array"
+      },
+      "climate": {
+       "additionalProperties": false,
+       "properties": {
+        "evidence": {
+         "type": "string"
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "value": {
+         "items": {
+          "enum": [
+           "temperate",
+           "tropical",
+           "polar",
+           "arid"
+          ],
+          "type": "string"
+         },
+         "type": "array"
+        }
+       },
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "type": "object"
+      },
+      "covering": {
+       "additionalProperties": false,
+       "properties": {
+        "evidence": {
+         "type": "string"
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "value": {
+         "enum": [
+          "fur",
+          "feathers",
+          "scales",
+          "skin",
+          "exoskeleton",
+          "shell"
+         ],
+         "type": "string"
+        }
+       },
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "type": "object"
+      },
+      "diet": {
+       "additionalProperties": false,
+       "properties": {
+        "evidence": {
+         "type": "string"
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "value": {
+         "enum": [
+          "carnivore",
+          "herbivore",
+          "omnivore",
+          "insectivore",
+          "piscivore"
+         ],
+         "type": "string"
+        }
+       },
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "type": "object"
+      },
+      "habitat": {
+       "additionalProperties": false,
+       "properties": {
+        "evidence": {
+         "type": "string"
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "value": {
+         "items": {
+          "enum": [
+           "grassland",
+           "forest",
+           "mountain",
+           "tundra",
+           "wetland",
+           "freshwater",
+           "marine",
+           "desert"
+          ],
+          "type": "string"
+         },
+         "type": "array"
+        }
+       },
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "type": "object"
+      },
+      "mouthparts": {
+       "additionalProperties": false,
+       "properties": {
+        "evidence": {
+         "type": "string"
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "value": {
+         "enum": [
+          "grinding teeth",
+          "bladed teeth",
+          "mixed teeth",
+          "pointed teeth",
+          "beak",
+          "mandibles",
+          "toothless tongue",
+          "other"
+         ],
+         "type": "string"
+        }
+       },
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "type": "object"
+      },
+      "mouthparts_detail": {
+       "type": "string"
+      },
+      "movement": {
+       "additionalProperties": false,
+       "properties": {
+        "evidence": {
+         "type": "string"
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "value": {
+         "items": {
+          "enum": [
+           "walk",
+           "run",
+           "swim",
+           "fly",
+           "climb",
+           "burrow",
+           "glide"
+          ],
+          "type": "string"
+         },
+         "type": "array"
+        }
+       },
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "type": "object"
+      },
+      "primary_locomotor_part": {
+       "additionalProperties": false,
+       "properties": {
+        "evidence": {
+         "type": "string"
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "value": {
+         "enum": [
+          "four legs",
+          "two legs",
+          "multiple legs",
+          "wings",
+          "fins",
+          "flippers",
+          "bell"
+         ],
+         "type": "string"
+        }
+       },
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "type": "object"
+      },
+      "visible_features": {
+       "additionalProperties": false,
+       "properties": {
+        "evidence": {
+         "type": "string"
+        },
+        "source_url": {
+         "type": "string"
+        },
+        "value": {
+         "items": {
+          "type": "string"
+         },
+         "type": "array"
+        }
+       },
+       "required": [
+        "value",
+        "source_url",
+        "evidence"
+       ],
+       "type": "object"
+      }
+     }
+    },
+    "strict": true
+   }
+  },
+  "tools": [
+   {
+    "type": "web_search"
+   }
+  ],
+  "tool_choice": "auto",
+  "truncation": "disabled",
+  "id": "resp_6ae75a9eaedef1fadacb43be",
+  "object": "response",
+  "status": "completed",
+  "created_at": 1793546910.0,
+  "completed_at": 1793546970.0,
+  "error": null,
+  "incomplete_details": null,
+  "output": [
+   {
+    "type": "reasoning",
+    "id": "rs_6ae75a9eaedef1fadacb43be:rs_d3837bc2-7e39-42f7-affc-50cd13641d6b",
+    "summary": [],
+    "status": "completed"
+   },
+   {
+    "type": "message",
+    "id": "rs_215338b6-0092-48be-af50-ebc6b3d644cc",
+    "role": "assistant",
+    "content": [
+     {
+      "type": "output_text",
+      "text": "I'll research the edible crab's traits across museum and agency sources to build your description.",
+      "annotations": [],
+      "logprobs": []
+     }
+    ],
+    "phase": "commentary",
+    "status": "completed"
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_01191363-f5ac-416e-aa44-f596e33c5fb8",
+    "status": "completed",
+    "action": {
+     "type": "search",
+     "query": "Cancer pagurus edible crab size carapace width weight"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_aad2eb70-02a4-43eb-b78e-6ec23e573174",
+    "status": "completed",
+    "action": {
+     "type": "search",
+     "query": "Cancer pagurus habitat diet nocturnal"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_89a793af-2cbc-425a-ace8-0a382664ef42",
+    "status": "completed",
+    "action": {
+     "type": "search",
+     "query": "Cancer pagurus breathing gills mandibles anatomy"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_fbbabb23-73e2-49c5-84eb-d006e366599a",
+    "status": "completed",
+    "action": {
+     "type": "search",
+     "query": "Cancer pagurus description carapace reddish brown claws black tips"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_0232954a-3a1a-4aeb-a3e0-f0c8fa90ad00",
+    "status": "completed",
+    "action": {
+     "type": "search",
+     "query": "Cancer pagurus exoskeleton chitin covering"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_acd6b371-68eb-41be-be0b-8e0d78f4af54",
+    "status": "completed",
+    "action": {
+     "type": "search",
+     "query": "edible crab Cancer pagurus omnivore carnivore diet MarLIN"
+    }
+   },
+   {
+    "type": "reasoning",
+    "id": "rs_6ae75a9eaedef1fadacb43be:rs_dced7474-b8a7-44da-98f0-66941e599c6c",
+    "summary": [],
+    "status": "completed"
+   },
+   {
+    "type": "message",
+    "id": "rs_5f026871-ac1b-4460-b4c2-ca50b797a150",
+    "role": "assistant",
+    "content": [
+     {
+      "type": "output_text",
+      "text": "I've identified candidate sources for diet, habitat, and size. Now I'll open those pages to verify the evidence.",
+      "annotations": [],
+      "logprobs": []
+     }
+    ],
+    "phase": "commentary",
+    "status": "completed"
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_1784ce7f-3f8b-440e-90c7-624fc9e74338",
+    "status": "completed",
+    "action": {
+     "type": "open_page",
+     "url": "https://www.marlin.ac.uk/species/detail/1179"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_267c2479-738b-4793-92e8-67fc5086cbf5",
+    "status": "failed",
+    "action": {
+     "type": "open_page",
+     "url": "https://scarboroughmuseumsandgalleries.org.uk/brown-crab/"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_f38e2117-db03-4ea5-935b-876b4ed66ff9",
+    "status": "failed",
+    "action": {
+     "type": "open_page",
+     "url": "https://www.habitas.org.uk/marinelife/species.asp?item=C5810"
+    }
+   },
+   {
+    "type": "reasoning",
+    "id": "rs_6ae75a9eaedef1fadacb43be:rs_f73b732d-e9be-4f50-81e7-e3a7aebcedfe",
+    "summary": [],
+    "status": "completed"
+   },
+   {
+    "type": "message",
+    "id": "rs_9afda307-7ed2-4155-ba43-91ae1f55ff6d",
+    "role": "assistant",
+    "content": [
+     {
+      "type": "output_text",
+      "text": "Those direct links failed, so I'll try opening the pages through alternative routes.",
+      "annotations": [],
+      "logprobs": []
+     }
+    ],
+    "phase": "commentary",
+    "status": "completed"
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_2a908438-41df-4ad9-8c38-d756edb84597",
+    "status": "completed",
+    "action": {
+     "type": "open_page",
+     "url": "http://scarboroughmuseumsandgalleries.org.uk/object/brown-crab/"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_71c67bb7-29f4-4b3b-befc-df5c45a30db0",
+    "status": "completed",
+    "action": {
+     "type": "open_page",
+     "url": "https://www2.habitas.org.uk/marbiop-ni/species.php?item=S26460"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_ce325cea-acae-433a-9180-a096c613cea5",
+    "status": "completed",
+    "action": {
+     "type": "open_page",
+     "url": "https://species.biodiversitydata.se/species/12164411"
+    }
+   },
+   {
+    "type": "reasoning",
+    "id": "rs_6ae75a9eaedef1fadacb43be:rs_f6df3405-ce60-442b-9aa1-403e08f074ed",
+    "summary": [],
+    "status": "completed"
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_e07d7bd4-7f64-4678-9414-0f98ca6aaf33",
+    "status": "completed",
+    "action": {
+     "type": "search",
+     "query": "Cancer pagurus MarLIN habitat depth distribution feeding"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_44c45a79-0040-4bb3-9bc0-aa2580fdc6fc",
+    "status": "completed",
+    "action": {
+     "type": "search",
+     "query": "site:nhm.ac.uk Cancer pagurus edible crab"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_50683895-f077-459e-a629-073987aa1cd1",
+    "status": "completed",
+    "action": {
+     "type": "search",
+     "query": "Cancer pagurus walk legs decapod five pairs"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_4a71ee0a-729d-410d-a2a1-b6fe46c09ff2",
+    "status": "completed",
+    "action": {
+     "type": "search",
+     "query": "Cornwall Wildlife Trust edible crab Cancer pagurus description"
+    }
+   },
+   {
+    "type": "reasoning",
+    "id": "rs_6ae75a9eaedef1fadacb43be:rs_2448120d-4caa-453c-9f6d-efe2acd91927",
+    "summary": [],
+    "status": "completed"
+   },
+   {
+    "type": "message",
+    "id": "rs_4f3c5a7d-8c86-4a44-8129-b95cebc9c9a5",
+    "role": "assistant",
+    "content": [
+     {
+      "type": "output_text",
+      "text": "I've gathered size, habitat, and nocturnal behavior evidence. Next I'll collect sources for anatomy and related details.",
+      "annotations": [],
+      "logprobs": []
+     }
+    ],
+    "phase": "commentary",
+    "status": "completed"
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_fe1847bd-9919-4fe3-a079-0ddedd40766c",
+    "status": "completed",
+    "action": {
+     "type": "open_page",
+     "url": "https://www.fao.org/figis/pdf/fishery/species/2627/en?title=FAO%20Fisheries%20%26%20Aquaculture%20-%20Species%20Fact%20Sheets%20-%20Cancer%20pagurus%20(Linnaeus%2C%201758)"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_43f01772-ae61-43c8-9481-c24359907221",
+    "status": "completed",
+    "action": {
+     "type": "open_page",
+     "url": "https://artsandculture.google.com/asset/brown-crab-cancer-pagurus/DwEDntscVBAWfg"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_280fec6f-e812-422b-b886-a033189e33bc",
+    "status": "completed",
+    "action": {
+     "type": "open_page",
+     "url": "https://marlin.ac.uk/biotic/browse.php?sp=4129&show=all"
+    }
+   },
+   {
+    "type": "reasoning",
+    "id": "rs_6ae75a9eaedef1fadacb43be:rs_30c01dca-668d-4524-baca-a2ded40f7b9a",
+    "summary": [],
+    "status": "completed"
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_8cb9f3cb-2fd4-4472-93fa-42f856c69c50",
+    "status": "completed",
+    "action": {
+     "type": "search",
+     "query": "edible crab gills breathe branchial chamber university"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_0e83de10-d256-4312-a3ef-633e42624908",
+    "status": "completed",
+    "action": {
+     "type": "search",
+     "query": "crab exoskeleton chitin Natural History Museum"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_353d6a87-aad8-4f65-8174-f7f79188f229",
+    "status": "completed",
+    "action": {
+     "type": "search",
+     "query": "Cancer pagurus weight 3 kg adult government"
+    }
+   },
+   {
+    "type": "reasoning",
+    "id": "rs_6ae75a9eaedef1fadacb43be:rs_ee71e649-624c-46ea-9a03-5b5ce16bebff",
+    "summary": [],
+    "status": "completed"
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_57e6e6fc-17ee-45d6-bd9e-f3b615177515",
+    "status": "completed",
+    "action": {
+     "type": "search",
+     "query": "Britannica crab gills breathe"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_c178e0c4-5fa5-4e6c-bdec-1264f45ed6d2",
+    "status": "completed",
+    "action": {
+     "type": "search",
+     "query": "Britannica decapod crustacean mandibles mouthparts exoskeleton chitin"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_efc21f74-5ced-4b1a-bf0e-4e7106651929",
+    "status": "completed",
+    "action": {
+     "type": "open_page",
+     "url": "https://www.britannica.com/animal/crab/Behaviour-and-ecology"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_072d092a-5b0d-4265-9417-74ecf9f9629c",
+    "status": "completed",
+    "action": {
+     "type": "search",
+     "query": "Smithsonian crab exoskeleton chitin"
+    }
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_fbd36dec-cc85-4901-b6b6-b1c715f26160",
+    "status": "completed",
+    "action": {
+     "type": "open_page",
+     "url": "https://serc.si.edu/blue-crabs-and-fishery/identifying-blue-crab-nursery-hot-spots"
+    }
+   },
+   {
+    "type": "reasoning",
+    "id": "rs_6ae75a9eaedef1fadacb43be:rs_ed3a29d5-1893-426b-9b1e-496dbedbcf2f",
+    "summary": [],
+    "status": "completed"
+   },
+   {
+    "type": "message",
+    "id": "rs_08a92da5-de3f-4680-871c-87771517009c",
+    "role": "assistant",
+    "content": [
+     {
+      "type": "output_text",
+      "text": "I've assembled the main evidence. Now I'll open a species-specific source for the exoskeleton.",
+      "annotations": [],
+      "logprobs": []
+     }
+    ],
+    "phase": "commentary",
+    "status": "completed"
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_a951d8d8-4e22-4e47-9dab-f6cbe04aa882",
+    "status": "completed",
+    "action": {
+     "type": "open_page",
+     "url": "https://d.docksci.com/download/characterization-and-anti-settlement-aspects-of-surface-micro-structures-from-ca_5a8b329fd64ab2ee92dab3af.html"
+    }
+   },
+   {
+    "type": "reasoning",
+    "id": "rs_6ae75a9eaedef1fadacb43be:rs_3e501bf3-fccc-48b0-af50-a1fa6b430379",
+    "summary": [],
+    "status": "completed"
+   },
+   {
+    "type": "web_search_call",
+    "id": "ws_call_6cfda494-a792-4f49-b338-f7e2f3c14abd",
+    "status": "completed",
+    "action": {
+     "type": "open_page",
+     "url": "https://www.sealifebase.ca/FieldGuide/FieldGuideSummary.php?GenusName=Cancer&SpeciesName=pagurus&sps=&print="
+    }
+   },
+   {
+    "type": "reasoning",
+    "id": "rs_6ae75a9eaedef1fadacb43be:rs_3d6af7c5-36ee-47f5-911e-8d8e19752af7",
+    "summary": [],
+    "status": "completed"
+   },
+   {
+    "type": "message",
+    "id": "msg_07a5192c-6b58-45cf-8eb0-451ffb9c47ea",
+    "role": "assistant",
+    "content": [
+     {
+      "type": "output_text",
+      "text": "<elided> (4007 chars)",
+      "annotations": [],
+      "logprobs": []
+     }
+    ],
+    "status": "completed"
+   }
+  ],
+  "instructions": "You describe a real animal for a natural-history engine, from sources. Use web search and open the pages you rely on: encyclopedias, museums, universities, zoos, government agencies or peer-reviewed papers. For each field give the value, source_url (the exact URL of a page you opened that supports the value) and evidence (a short quote from that page). If no source you opened supports a field, give your best estimate and leave source_url and evidence empty; never invent a URL. Use typical adult values. body_plan: the overall layout (winged means wings are the main limbs; insects are multi_legged). visible_features: three to six short visible features someone would draw. mouthparts: what the head eats with. breathing: the main breathing organ. claimed_crosses: scientific names of species it is documented to hybridize with, or an empty list.",
+  "usage": {
+   "input_tokens": 611774,
+   "input_tokens_details": {
+    "cached_tokens": 498034
+   },
+   "output_tokens": 11003,
+   "output_tokens_details": {
+    "reasoning_tokens": 7870
+   },
+   "total_tokens": 622777
+  },
+  "parallel_tool_calls": true,
+  "store": true
+ }
+}

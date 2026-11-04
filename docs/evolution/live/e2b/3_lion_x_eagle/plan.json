@@ -1,0 +1,307 @@
+{
+ "id": "crt_3604be6ad45d",
+ "parents": {
+  "sire": "lion",
+  "dam": "golden_eagle"
+ },
+ "lineage": {
+  "parent_ids": [],
+  "generation": 0
+ },
+ "mode": "chimera",
+ "known_pair": null,
+ "host": "lion",
+ "identity_balance": 0.881,
+ "habitat": {
+  "name": "forest",
+  "source": "shared",
+  "adjustments": [
+   "dark back and light belly (mild countershading)"
+  ],
+  "visible_trait": "dark back and light belly (mild countershading)"
+ },
+ "size": {
+  "mass_kg": 199.0,
+  "flags": []
+ },
+ "silhouette": "horizontal lion frame carried on two hind legs, golden eagle wings in place of the forelegs",
+ "limb_plan": {
+  "forelimbs": {
+   "kind": "wings",
+   "donor": "golden_eagle"
+  },
+  "hindlimbs": {
+   "kind": "legs",
+   "donor": "lion"
+  },
+  "extra_wings": null,
+  "appendages": [],
+  "wing_use": "gliding_or_display",
+  "requested_wings": null
+ },
+ "traits": {
+  "behavior": {
+   "op": "PICK",
+   "donor": "lion",
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "Lion-typical behavior following the lion head/brain tissue",
+   "flags": []
+  },
+  "body": {
+   "op": "PICK",
+   "donor": "lion",
+   "value": null,
+   "strength": 1.0,
+   "region": null,
+   "part": null,
+   "note": "Four-legged lion body plan from host; eagle contributes only surface patches, blend only at patch edges",
+   "flags": []
+  },
+  "coat_color": {
+   "op": "PATCH",
+   "donor": "golden_eagle",
+   "value": null,
+   "strength": 1.0,
+   "region": [
+    "forequarters",
+    "neck"
+   ],
+   "part": null,
+   "note": "Golden-eagle browns and golden nape color at full strength inside patches",
+   "flags": []
+  },
+  "coat_pattern": {
+   "op": "PATCH",
+   "donor": "golden_eagle",
+   "value": null,
+   "strength": 1.0,
+   "region": [
+    "forequarters",
+    "neck"
+   ],
+   "part": null,
+   "note": "Few large eagle-pattern blocks with clear edges on lion forequarters and neck layout; no blending inside blocks",
+   "flags": []
+  },
+  "coat_texture": {
+   "op": "PATCH",
+   "donor": "golden_eagle",
+   "value": null,
+   "strength": 1.0,
+   "region": [
+    "forequarters",
+    "neck"
+   ],
+   "part": null,
+   "note": "Eagle feathers at full strength inside patches; surrounding lion hair unchanged",
+   "flags": []
+  },
+  "ears": {
+   "op": "PICK",
+   "donor": "lion",
+   "value": null,
+   "strength": 1.0,
+   "region": [
+    "ears"
+   ],
+   "part": null,
+   "note": "Rounded lion ears, fully lion tissue",
+   "flags": []
+  },
+  "face": {
+   "op": "PICK",
+   "donor": "lion",
+   "value": null,
+   "strength": 1.0,
+   "region": [
+    "face"
+   ],
+   "part": null,
+   "note": "Lion muzzle and facial features, no beak",
+   "flags": []
+  },
+  "feet": {
+   "op": "PICK",
+   "donor": "lion",
+   "value": null,
+   "strength": 1.0,
+   "region": [
+    "feet"
+   ],
+   "part": null,
+   "note": "Lion paws with claws, fully lion tissue",
+   "flags": []
+  },
+  "head": {
+   "op": "PICK",
+   "donor": "lion",
+   "value": null,
+   "strength": 1.0,
+   "region": [
+    "head"
+   ],
+   "part": null,
+   "note": "Head capsule lion, supplying brain; behavior follows head donor",
+   "flags": []
+  },
+  "limbs": {
+   "op": "PICK",
+   "donor": "lion",
+   "value": null,
+   "strength": 1.0,
+   "region": null,
+   "part": null,
+   "note": "All four legs lion; forelimbs remain legs so no separate six-limb wing pair is added",
+   "flags": []
+  },
+  "mane": {
+   "op": "PICK",
+   "donor": null,
+   "value": null,
+   "strength": null,
+   "region": null,
+   "part": null,
+   "note": "absent: no hair on the neck",
+   "flags": [
+    "gated"
+   ]
+  },
+  "size": {
+   "op": "PICK",
+   "donor": "lion",
+   "value": null,
+   "strength": 1.0,
+   "region": null,
+   "part": null,
+   "note": "Host lion size retained; any eagle tissue scaled to lion frame, no blending within regions",
+   "flags": []
+  },
+  "skull": {
+   "op": "PICK",
+   "donor": "lion",
+   "value": null,
+   "strength": 1.0,
+   "region": [
+    "head"
+   ],
+   "part": "skull",
+   "note": "Lion skull and jaw structure",
+   "flags": []
+  },
+  "tail": {
+   "op": "PICK",
+   "donor": "lion",
+   "value": null,
+   "strength": 1.0,
+   "region": [
+    "tail"
+   ],
+   "part": null,
+   "note": "Lion tail fully lion tissue",
+   "flags": []
+  }
+ },
+ "labels": [
+  "speculative chimera, no real-world precedent",
+  "non-flying wings: display or gliding only"
+ ],
+ "processes": [
+  "chimera patchwork: each region is one parent's tissue"
+ ],
+ "card_trace": [
+  "RC-R2-01",
+  "RC-R1-14",
+  "RC-R2-16",
+  "RC-R5-10",
+  "RC-R6-08",
+  "RC-R6-09",
+  "RC-R5-02",
+  "RC-R1-01",
+  "RC-R1-09",
+  "RC-R1-10",
+  "RC-R5-01",
+  "RC-R5-03",
+  "RC-R5-04",
+  "RC-R5-05",
+  "RC-R5-06",
+  "RC-R5-07",
+  "RC-R6-02",
+  "RC-R1-07",
+  "RC-R1-08",
+  "RC-R3-01",
+  "RC-R3-02",
+  "RC-R4-01",
+  "RC-R4-02",
+  "RC-R4-05",
+  "RC-R4-11",
+  "RC-R4-10",
+  "RC-R3-12",
+  "RC-R3-05",
+  "RC-R3-03",
+  "RC-R3-04",
+  "RC-R6-01",
+  "RC-R7-06",
+  "RC-R6-03",
+  "RC-R6-04",
+  "RC-R6-05",
+  "RC-R7-07",
+  "RC-R6-07",
+  "RC-R7-10"
+ ],
+ "checks": [
+  {
+   "step": "body_plan_class",
+   "result": "pass",
+   "detail": "host class: vertebrate (quadruped)",
+   "cards": []
+  },
+  {
+   "step": "limb_budget",
+   "result": "repaired",
+   "detail": "golden eagle wings take the forelimb slot",
+   "cards": [
+    "RC-R3-01"
+   ]
+  },
+  {
+   "step": "size_ceiling",
+   "result": "labeled",
+   "detail": "199.0 kg is above about 40 kg: wings for display or gliding",
+   "cards": [
+    "RC-R3-05"
+   ]
+  },
+  {
+   "step": "flight_anatomy",
+   "result": "labeled",
+   "detail": "too heavy for its flight muscles: wings labeled non-flying",
+   "cards": [
+    "RC-R3-03",
+    "RC-R3-04"
+   ]
+  },
+  {
+   "step": "posture",
+   "result": "pass",
+   "detail": "legs match the body size",
+   "cards": []
+  },
+  {
+   "step": "part_rendering",
+   "result": "pass",
+   "detail": "no soft parts",
+   "cards": []
+  }
+ ],
+ "scores": {
+  "critic": 1.0,
+  "silhouette": 0.8,
+  "thumbnail": 1.0,
+  "soft_penalty": 0.0,
+  "quality": 0.94
+ },
+ "seed": 0
+}
