@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../auth/auth";
 import { copy } from "../copy";
 import { derived, isTerminal, useEvoRuns } from "../evo/runs";
-import { isExampleWorkspace } from "../example/example";
+import { TUTORIAL_WS } from "../tutorial/sandbox";
 import { saveNow, useSaveState } from "../persistence/autosave";
 import { useWorkspaces } from "../persistence/workspaces";
 import { BrandMark } from "../ui/BrandMark";
@@ -12,9 +12,9 @@ import { toast } from "../ui/toastStore";
 import { useUi } from "../ui/uiStore";
 import { hrefFor, linkHandler, useRoute, type Route } from "./route";
 
-function NavLink({ to, label, current }: { to: Route; label: string; current: boolean }) {
+function NavLink({ to, label, current, tour }: { to: Route; label: string; current: boolean; tour?: string }) {
   return (
-    <a className={`topnav__link${current ? " is-current" : ""}`} href={hrefFor(to)} onClick={linkHandler(to)} aria-current={current ? "page" : undefined}>
+    <a className={`topnav__link${current ? " is-current" : ""}`} href={hrefFor(to)} onClick={linkHandler(to)} aria-current={current ? "page" : undefined} data-tour={tour}>
       {label}
     </a>
   );
@@ -94,12 +94,13 @@ export function TopBar() {
         <BrandMark />
       </a>
       <nav className="topnav" aria-label={copy.nav.label}>
-        <NavLink to={{ view: "home" }} label={copy.nav.workspaces} current={route.view === "home"} />
-        <NavLink to={{ view: "chimeras" }} label={copy.nav.chimeras} current={route.view === "chimeras"} />
+        <NavLink to={{ view: "home" }} label={copy.nav.workspaces} current={route.view === "home"} tour="nav-workspaces" />
+        <NavLink to={{ view: "chimeras" }} label={copy.nav.chimeras} current={route.view === "chimeras"} tour="nav-chimeras" />
+        <NavLink to={{ view: "garden" }} label={copy.nav.garden} current={route.view === "garden"} />
       </nav>
       <div className="topbar__doc">
-        {inLab && isExampleWorkspace(currentWs) ? (
-          <span className="topbar__title">{copy.tour.exampleName}</span>
+        {inLab && currentWs === TUTORIAL_WS ? (
+          <span className="topbar__title">{copy.tour.workspaceName}</span>
         ) : inLab && signedIn ? (
           <>
             <WorkspaceName />

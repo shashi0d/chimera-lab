@@ -6,8 +6,7 @@ import { navigate } from "../app/route";
 import { useAuth } from "../auth/auth";
 import { copy } from "../copy";
 import { evo } from "../evo/index";
-import { exampleVersion } from "../example/example";
-import { useTour } from "../example/tourStore";
+import { useTour } from "../tutorial/tourStore";
 import { labApi, type LabVersion, type WorkspaceInfo } from "../lab/api";
 import { useWorkspaces } from "../persistence/workspaces";
 import { Button, IconButton } from "../ui/Button";
@@ -182,6 +181,8 @@ export function HomePage() {
     setBusy(true);
     try {
       const ws = await useWorkspaces.getState().create(`Untitled workspace ${list.length + 1}`);
+      // Creating a workspace is the tutorial's last step.
+      if (useTour.getState().active) useTour.getState().end();
       openWorkspace(ws.id);
     } catch (e) {
       toast.error(errorText(e));
@@ -194,14 +195,14 @@ export function HomePage() {
     <section className="home" aria-labelledby="home-title">
       <header className="home__head">
         <h1 id="home-title">Workspaces</h1>
-        <Button variant="primary" icon="plus" busy={busy} disabled={busy} onClick={() => void create()}>
+        <Button variant="primary" icon="plus" busy={busy} disabled={busy} onClick={() => void create()} data-tour="new-workspace">
           New workspace
         </Button>
       </header>
       {!loaded ? <span className="spinner" aria-label="Loading workspaces" /> : null}
       <ul className="home__grid">
         <li className="ws-tile ws-tile--new">
-          <button type="button" className="ws-tile__open" onClick={() => void create()} disabled={busy}>
+          <button type="button" className="ws-tile__open" onClick={() => void create()} disabled={busy} data-tour="new-workspace">
             <span className="ws-tile__thumbs">
               <Icon name="plus" size={32} />
             </span>
@@ -211,15 +212,15 @@ export function HomePage() {
             <p className="ws-tile__meta">An empty canvas</p>
           </div>
         </li>
-        <li className="ws-tile ws-tile--example">
-          <button type="button" className="ws-tile__open" onClick={() => useTour.getState().start()} aria-label={copy.tour.replay}>
-            <span className="ws-tile__thumbs ws-tile__thumbs--1">
-              <img src={evo().imageUrl(exampleVersion.imageUrl)} alt="" loading="lazy" decoding="async" />
+        <li className="ws-tile ws-tile--tutorial">
+          <button type="button" className="ws-tile__open" onClick={() => void useTour.getState().start()} aria-label={copy.tour.take}>
+            <span className="ws-tile__thumbs">
+              <Icon name="help" size={32} />
             </span>
           </button>
           <div className="ws-tile__info">
-            <p className="ws-tile__name">{copy.tour.exampleName}</p>
-            <p className="ws-tile__meta">{copy.tour.exampleMeta}</p>
+            <p className="ws-tile__name">{copy.tour.take}</p>
+            <p className="ws-tile__meta">{copy.tour.takeMeta}</p>
           </div>
         </li>
         {list.map((ws) => (

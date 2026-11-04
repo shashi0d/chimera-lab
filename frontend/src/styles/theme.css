@@ -1554,8 +1554,8 @@ p.image-node__banner { display: flex; align-items: flex-start; gap: var(--space-
 .fusion-node__mode { display: grid; gap: var(--space-3); padding-top: var(--space-4); border-top: 1px solid var(--line-input); }
 .fusion-node__mode-kicker { font: var(--type-kicker); letter-spacing: var(--tracking-kicker); text-transform: uppercase; color: var(--text-muted); }
 /* Five styles fit the card: an even grid of short tabs (they never push past the card's edge). */
-.fusion-node__mode .segmented { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); width: 100%; min-width: 0; }
-.fusion-node__mode .segmented__item { min-width: 0; padding: 0 2px; font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fusion-node__mode .segmented { display: flex; flex-wrap: wrap; width: 100%; min-width: 0; border-radius: var(--radius-lg); }
+.fusion-node__mode .segmented__item { flex: 1 0 auto; min-width: 0; padding: 0 var(--space-3); font-size: 12px; white-space: nowrap; }
 .fusion-node__mode-hint { font: var(--type-caption); color: var(--text-body); }
 .segmented__item:disabled { color: var(--text-muted); cursor: not-allowed; }
 .node__hint--quiet { background: transparent; padding: 0; color: var(--text-muted); }
@@ -2039,7 +2039,8 @@ p.image-node__banner { display: flex; align-items: flex-start; gap: var(--space-
   animation: chTourIn var(--dur-slow) var(--ease-spring);
 }
 @keyframes chTourIn { from { opacity: 0; } to { opacity: 1; } }
-.tour--tools { left: var(--space-8); transform: none; }
+.tour--lab { left: 76px; bottom: 72px; transform: none; } /* bottom-left, past the tool rail: clear of the nodes and the tools panel */
+.tour__hint { display: flex; align-items: center; gap: var(--space-2); font: var(--type-label); color: var(--accent); }
 .tour__top { display: flex; align-items: center; justify-content: space-between; }
 .tour__dots { display: flex; gap: var(--space-2); list-style: none; margin: 0; padding: 0; }
 .tour__dots li { width: 8px; height: 8px; border-radius: 999px; background: var(--line-input-strong); transition: width var(--dur-slow) ease, background var(--dur-slow) ease; }
@@ -2054,9 +2055,24 @@ p.image-node__banner { display: flex; align-items: flex-start; gap: var(--space-
 .tour__points { display: grid; gap: var(--space-2); margin: 0; padding-left: var(--space-6); font: var(--type-body-sm); color: var(--text-body); }
 .tour__points strong { color: var(--text-strong); }
 .tour__actions { display: flex; justify-content: flex-end; gap: var(--space-3); }
-.ws-tile--example .ws-tile__thumbs { outline: 2px solid var(--accent); outline-offset: -2px; }
-.chimeras__example { font: var(--type-kicker); letter-spacing: var(--tracking-kicker); text-transform: uppercase; color: var(--accent); }
+.ws-tile--tutorial .ws-tile__thumbs { border: 2px solid var(--accent); color: var(--accent); }
+.garden__mine { font: var(--type-kicker); letter-spacing: var(--tracking-kicker); text-transform: uppercase; color: var(--accent); }
 @media (max-width: 720px) {
-  .tour, .tour--tools { left: var(--space-4); right: var(--space-4); bottom: var(--space-4); width: auto; transform: none; }
+  .tour, .tour--lab { left: var(--space-4); right: var(--space-4); bottom: var(--space-4); width: auto; transform: none; }
 }
 @media (prefers-reduced-motion: reduce) { .tour { animation: none; } .tour__dots li { transition: none; } }
+
+/* Tutorial: the element to click glows (Tour.tsx sets data-tour-target on <html>) */
+@keyframes tourGlow { 0%, 100% { box-shadow: 0 0 0 3px var(--accent), 0 0 0 0 var(--accent); } 50% { box-shadow: 0 0 0 3px var(--accent), 0 0 18px 6px var(--accent); } }
+[data-tour-target="add-fusion"] [data-tour="add-fusion"],
+[data-tour-target="make"] [data-tour="make"],
+[data-tour-target="save"] [data-tour="save"],
+[data-tour-target="nav-chimeras"] [data-tour="nav-chimeras"],
+[data-tour-target="nav-workspaces"] [data-tour="nav-workspaces"],
+[data-tour-target="new-workspace"] [data-tour="new-workspace"],
+[data-tour-target="chimera-tutorial"] [data-tour="chimera-tutorial"] .card-tile {
+  position: relative; z-index: 1; border-radius: var(--radius-md); animation: tourGlow 1.4s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  @keyframes tourGlow { 0%, 100% { box-shadow: 0 0 0 3px var(--accent); } }
+}

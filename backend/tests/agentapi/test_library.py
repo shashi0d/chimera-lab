@@ -10,7 +10,7 @@ from PIL import Image
 
 from tests.agentapi.test_agent_api import make_client, named_run, post_run  # noqa: F401  (make_client: fixture)
 from tests.agentapi.test_prompt_mode import finished_version, prompt_client, wait_card, wait_job
-from tests.conftest import auth, visitor_id
+from tests.conftest import SIGNED_OUT, auth, visitor_id
 
 USER = visitor_id()
 
@@ -149,6 +149,29 @@ async def test_saving_is_immediate_and_the_card_follows_in_the_background(make_c
     assert len(rec.calls) == calls
     await c.put(f"/evo/lab/versions/{v1['id']}/saved", json={"saved": False})
     assert (await c.get("/evo/lab/chimeras")).json()["chimeras"] == []
+
+
+async def test_sharing_puts_a_creature_in_the_garden_for_everyone(make_client):  # noqa: F811
+    c, _ = await prompt_client(make_client)
+    v1 = await v1_in(c)
+    r = await c.put(f"/evo/lab/versions/{v1['id']}/garden", json={"shared": True})
+    assert r.status_code == 200 and r.json()["shared"] is True and r.json()["saved"] is True  # sharing also saves
+    await wait_card(c, v1["id"])
+    [mine] = (await c.get("/evo/garden")).json()["garden"]
+    assert mine["id"] == v1["id"] and mine["mine"] is True and mine["card"]["status"] == "ready"
+    assert "owner" not in mine and "workspaceId" not in mine
+    # Another visitor, and someone with no visitor id at all, see it too, but not as theirs.
+    [theirs] = (await c.get("/evo/garden", headers=auth("user-2"))).json()["garden"]
+    assert theirs["id"] == v1["id"] and theirs["mine"] is False
+    assert len((await c.get("/evo/garden", headers=SIGNED_OUT)).json()["garden"]) == 1
+    # Only the owner can take it back.
+    other = await c.put(f"/evo/lab/versions/{v1['id']}/garden", json={"shared": False}, headers=auth("user-2"))
+    assert other.status_code == 404
+    off = await c.put(f"/evo/lab/versions/{v1['id']}/garden", json={"shared": False})
+    assert off.json()["shared"] is False and off.json()["saved"] is True
+    assert (await c.get("/evo/garden")).json()["garden"] == []
+    bad = await c.put(f"/evo/lab/versions/{v1['id']}/garden", json={"shared": "yes"})
+    assert bad.status_code == 422
 
 
 async def test_editing_the_card_text_updates_the_profile_and_title(make_client):  # noqa: F811

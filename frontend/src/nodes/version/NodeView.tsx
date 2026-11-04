@@ -71,7 +71,7 @@ export function VersionView({ node, selected }: NodeViewProps<VersionConfig, Ver
             <IconButton icon="replace" label="Revise this image" onClick={() => addEditNode(node.id, "revise")} />
             <IconButton icon="brush" label="Paint an area to edit" onClick={() => addEditNode(node.id, "paint")} />
             <IconButton icon="pencil" label="Draw on it" onClick={() => addEditNode(node.id, "sketch")} />
-            <IconButton icon="star" label={version.saved ? "Saved to chimeras (click to unsave)" : "Save to chimeras"} pressed={Boolean(version.saved)} onClick={() => void saveCreature(version, !version.saved)} />
+            <IconButton icon="star" label={version.saved ? "Saved to chimeras (click to unsave)" : "Save to chimeras"} pressed={Boolean(version.saved)} onClick={() => void saveCreature(version, !version.saved)} data-tour="save" />
             <IconButton icon="card" label="Animal card" onClick={() => addCardNode(node.id)} />
             <IconButton icon="fusion" label="Fuse with another animal" onClick={() => addFusionFrom(node.id)} />
             <IconButton icon="download" label="Download image" onClick={() => void downloadVersion(version, label)} />

@@ -91,9 +91,11 @@ def create_app(settings: Settings | None = None, services: Services | None = Non
     from app.agentapi.lab import router as lab_router
 
     app.include_router(lab_router)
+    from app.agentapi.library import garden_router
     from app.agentapi.library import router as library_router
 
     app.include_router(library_router)
+    app.include_router(garden_router)
     mount_frontend(app, settings.repo_path(settings.frontend_dist))  # last: the SPA fallback
     return app
 

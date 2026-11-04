@@ -1,7 +1,6 @@
 import { useReactFlow } from "@xyflow/react";
 import { useEffect, useId, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
-import { copy } from "../copy";
 import { evo } from "../evo/index";
 import { useGraph } from "../graph/store";
 import type { GraphNode } from "../graph/types";
@@ -100,7 +99,7 @@ export function ToolsPanel({ nodeId }: { nodeId: string }) {
   const [finalBusy, setFinalBusy] = useState(false);
   const version = (node?.data as VersionData | undefined)?.version ?? null;
   const n = useGraph(() => versionNumber(nodeId));
-  // The tutorial's example: the tools are shown, not used (the image is not on the server).
+  // A read-only canvas (saved by a newer version of the app): the tools are shown, not used.
   const readOnly = useGraph((s) => s.readOnly);
   useEffect(() => {
     void useLab.getState().refreshLimits();
@@ -133,7 +132,6 @@ export function ToolsPanel({ nodeId }: { nodeId: string }) {
           <img src={evo().imageUrl(version.imageUrl)} alt={`${label}`} />
           {version.operation !== "fusion" ? <figcaption>{version.instruction}</figcaption> : null}
         </figure>
-        {readOnly ? <p className="tools__note">{copy.tour.readOnlyTools}</p> : null}
         <div className="tools__row tools__row--wrap">
           <Button disabled={readOnly} size="sm" variant="primary" icon="replace" onClick={() => addEditNode(nodeId, "revise")}>
             Revise
@@ -147,7 +145,7 @@ export function ToolsPanel({ nodeId }: { nodeId: string }) {
           <Button disabled={readOnly} size="sm" icon="brush" onClick={() => addEditNode(nodeId, "sketch")}>
             Draw on it
           </Button>
-          <Button disabled={readOnly} size="sm" variant={version.saved ? "secondary" : "primary"} icon="card" aria-pressed={Boolean(version.saved)} onClick={() => void saveCreature(version, !version.saved)}>
+          <Button disabled={readOnly} size="sm" variant={version.saved ? "secondary" : "primary"} icon="card" aria-pressed={Boolean(version.saved)} onClick={() => void saveCreature(version, !version.saved)} data-tour="save">
             {version.saved ? "Saved ✓" : "Save"}
           </Button>
           <Button disabled={readOnly} size="sm" variant="ghost" icon="download" onClick={() => void downloadVersion(version, label)}>

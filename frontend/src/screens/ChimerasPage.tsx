@@ -3,9 +3,7 @@ import { toAppError } from "../api/errors";
 import { presentError } from "../api/errorMessages";
 import { linkHandler, hrefFor } from "../app/route";
 import { useAuth } from "../auth/auth";
-import { copy } from "../copy";
-import { exampleVersion } from "../example/example";
-import { useTour } from "../example/tourStore";
+import { isTutorialId } from "../tutorial/sandbox";
 import { CardTile } from "../lab/CardTile";
 import { labApi, type LabVersion } from "../lab/api";
 import { Button } from "../ui/Button";
@@ -16,7 +14,6 @@ const POLL_MS = 4000;
 /** Every saved creature with its animal card (tap a card to open it). Cards still being drawn fill in by themselves. */
 export function ChimerasPage() {
   const status = useAuth((s) => s.status);
-  const touring = useTour((s) => s.active);
   const [items, setItems] = useState<LabVersion[] | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -49,6 +46,15 @@ export function ChimerasPage() {
       toast.error(presentError(toAppError(e)).title);
     }
   };
+  const share = async (v: LabVersion) => {
+    try {
+      const next = await labApi.setShared(v.id, !v.shared);
+      replace(next);
+      toast.success(next.shared ? `${next.title ?? "Your creature"} is in the Garden now.` : "Taken out of the Garden.");
+    } catch (e) {
+      toast.error(presentError(toAppError(e)).title);
+    }
+  };
   const retry = async (v: LabVersion) => {
     try {
       const card = await labApi.card(v.id);
@@ -66,7 +72,7 @@ export function ChimerasPage() {
       </header>
       {error ? <p className="node__note node__note--warn">{error}</p> : null}
       {items === null && !error ? <span className="spinner" aria-label="Loading your chimeras" /> : null}
-      {items && !items.length && !touring ? (
+      {items && !items.length ? (
         <div className="chimeras__empty">
           <p>No saved creatures yet. In the Lab, use Save on any image card: its animal card is made in the background.</p>
           <a className="btn btn--primary" href={hrefFor({ view: "home" })} onClick={linkHandler({ view: "home" })}>
@@ -76,9 +82,12 @@ export function ChimerasPage() {
       ) : null}
       <ul className="chimeras__grid">
         {items?.map((v) => (
-          <li key={v.id} className="chimeras__item">
-            <CardTile version={v} onChange={replace} />
+          <li key={v.id} className="chimeras__item" data-tour={isTutorialId(v.id) ? "chimera-tutorial" : undefined}>
+            <CardTile version={v} onChange={replace} editable={!isTutorialId(v.id)} />
             <div className="chimeras__actions">
+              <Button size="sm" variant={v.shared ? "secondary" : "primary"} icon="globe" aria-pressed={Boolean(v.shared)} onClick={() => void share(v)}>
+                {v.shared ? "In the Garden ✓" : "Share to Garden"}
+              </Button>
               {v.card?.status === "failed" || !v.card ? (
                 <Button size="sm" variant="secondary" icon="refresh" onClick={() => void retry(v)}>
                   Make the card again
@@ -90,12 +99,6 @@ export function ChimerasPage() {
             </div>
           </li>
         ))}
-        {touring || (items && !items.length) ? (
-          <li className="chimeras__item chimeras__item--example">
-            <CardTile version={exampleVersion} editable={false} />
-            <p className="chimeras__example">{copy.tour.exampleLabel}</p>
-          </li>
-        ) : null}
       </ul>
     </section>
   );

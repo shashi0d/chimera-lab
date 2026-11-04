@@ -20,6 +20,7 @@ from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse
 
 from app.agentapi.lab import (
+    GARDEN_PUBLIC,
     VERSION_KIND,
     _err,
     _user,
@@ -29,11 +30,13 @@ from app.agentapi.lab import (
     start_card,
 )
 from app.agentapi.routes import AgentApi, api
-from app.auth import User
+from app.auth import User, current_user
 from app.models.schemas import ErrorCode
 from app.util import new_id, now_iso
 
 router = APIRouter(prefix="/evo/lab", tags=["library"])
+garden_router = APIRouter(prefix="/evo", tags=["garden"])
+GARDEN_MAX = 120
 log = logging.getLogger(__name__)
 
 MAIN = "main"
@@ -261,6 +264,50 @@ async def set_saved(version_id: str, request: Request) -> JSONResponse:
     if body["saved"]:
         doc["card"] = await start_card(request, user, doc)
     return JSONResponse(public_version(doc), headers={"Cache-Control": "no-store"})
+
+
+@router.put("/versions/{version_id}/garden")
+async def set_shared(version_id: str, request: Request) -> JSONResponse:
+    """Share a creature to the Garden (or take it back). Sharing saves it and makes its animal card if it has none."""
+    a = api(request)
+    user, _ = await _user(request)
+    doc = await get_version(a, version_id, user)
+    try:
+        body = await request.json()
+    except ValueError as exc:
+        raise _err(ErrorCode.VALIDATION_FAILED, "Choose whether to share this creature.", 422) from exc
+    if not isinstance(body, dict) or not isinstance(body.get("shared"), bool):
+        raise _err(ErrorCode.VALIDATION_FAILED, "Choose whether to share this creature.", 422)
+    if body["shared"]:
+        doc["garden"] = GARDEN_PUBLIC
+        doc["sharedAt"] = now_iso()
+        if not doc.get("saved"):
+            doc["saved"], doc["savedAt"] = True, now_iso()
+    else:
+        doc.pop("garden", None)
+        doc["sharedAt"] = None
+    await a.services.db.put("assets", version_id, doc)
+    if body["shared"]:
+        doc["card"] = await start_card(request, user, doc)
+    return JSONResponse(public_version(doc), headers={"Cache-Control": "no-store"})
+
+
+@garden_router.get("/garden")
+async def garden(request: Request) -> JSONResponse:
+    """Every creature shared to the Garden, by anyone, newest first. No visitor id needed; nothing private is sent
+    (no owner, no workspace). `mine` marks the asking visitor's own."""
+    a = api(request)
+    user = await current_user(request)
+    rows = []
+    for v in await a.services.db.list("assets", "garden", GARDEN_PUBLIC):
+        if v.get("kind") != VERSION_KIND or (v.get("card") or {}).get("status") != "ready":
+            continue
+        view = public_version(v)
+        view.pop("workspaceId", None)
+        view["mine"] = bool(user and v.get("owner") == user.id)
+        rows.append(view)
+    rows.sort(key=lambda d: d.get("sharedAt") or "", reverse=True)
+    return JSONResponse({"garden": rows[:GARDEN_MAX]}, headers={"Cache-Control": "no-cache"})
 
 
 @router.get("/chimeras")

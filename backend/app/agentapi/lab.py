@@ -38,6 +38,7 @@ router = APIRouter(prefix="/evo/lab", tags=["lab"])
 log = logging.getLogger(__name__)
 
 VERSION_KIND = "lab_version"
+GARDEN_PUBLIC = "public"  # doc["garden"] of a version shared to the Garden (a string, so the database can match it)
 JOB_KIND = "lab_job"
 CAP_MESSAGE = "Today's lab action limit is reached. More actions are available at 00:00 UTC."
 INTERRUPTED = "The server stopped while this was running. Please try again."
@@ -223,9 +224,11 @@ async def limits(request: Request) -> JSONResponse:
 
 
 def public_version(doc: dict[str, Any]) -> dict[str, Any]:
-    return {k: doc.get(k) for k in ("id", "parentId", "runId", "creatureId", "operation", "instruction", "imageUrl",
+    view = {k: doc.get(k) for k in ("id", "parentId", "runId", "creatureId", "operation", "instruction", "imageUrl",
                                     "createdAt", "isFinal", "title", "style", "card", "profile",
-                                    "saved", "savedAt", "workspaceId")}
+                                    "saved", "savedAt", "workspaceId", "sharedAt")}
+    view["shared"] = doc.get("garden") == GARDEN_PUBLIC
+    return view
 
 
 async def get_version(a: AgentApi, version_id: str, user: User) -> dict[str, Any]:
