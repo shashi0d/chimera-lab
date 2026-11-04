@@ -57,10 +57,11 @@ def live_settings(tmp: Path) -> Settings:
 
 
 async def test_identify_all_six_fixtures():
-    from app.adapters.meta.client import MetaVision
-    from app.adapters.usage import current_step
     from app.data.loader import load_data
     from app.pipeline.steps.match import match_reading
+
+    from app.adapters.meta.client import MetaVision
+    from app.adapters.usage import current_step
 
     s = live_settings(Path("/tmp"))
     vision = MetaVision(s.meta_api_base_url, s.meta_api_key or "", s.meta_vision_model, timeout=s.identify_timeout_seconds)
