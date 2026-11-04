@@ -4,6 +4,9 @@ import { initAuth, useAuth } from "../auth/auth";
 import { startConnectivity } from "../connectivity/store";
 import { copy } from "../copy";
 import { useLimits } from "../evo/data";
+import { exampleGraph, isExampleWorkspace } from "../example/example";
+import { hasToured, useTour } from "../example/tourStore";
+import { Tour } from "../example/Tour";
 import { stopAllStreams, useEvoRuns } from "../evo/runs";
 import { useGraph } from "../graph/store";
 import { followJobs, stopFollowingJobs } from "../lab/store";
@@ -55,6 +58,13 @@ function useWorkspace(): boolean {
 
   useEffect(() => {
     if (status !== "signed-in" || !userId || !workspaceId) return;
+    if (isExampleWorkspace(workspaceId)) {
+      // The tutorial's example: built in the browser, read-only, never saved.
+      stopFollowingJobs();
+      useGraph.getState().load(exampleGraph(), { readOnly: true });
+      setReadyFor(`${userId}:${workspaceId}`);
+      return;
+    }
     let alive = true;
     let stop: (() => void) | null = null;
     setReadyFor(null);
@@ -88,6 +98,8 @@ export function App() {
     stops.push(registerRunHandlers());
     stops.push(startConnectivity());
     void initAuth();
+    // First visit: the guided tour through the example workspace (not when a link opens a page directly).
+    if (!hasToured() && parseRoute(window.location.search).view === "home") useTour.getState().start();
     void useLimits.getState().refresh();
     return () => {
       stops.forEach((s) => s());
@@ -106,6 +118,7 @@ export function App() {
         <main id="main" className="main" tabIndex={-1}>
           {route.view === "chimeras" ? <ChimerasPage /> : route.view === "home" ? <HomePage /> : <LabView ready={ready} runId={route.runId} />}
         </main>
+        <Tour />
         <Toasts />
         <ShortcutsDialog />
         <ConfirmDialog />

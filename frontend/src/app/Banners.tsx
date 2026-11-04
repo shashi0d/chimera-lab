@@ -1,13 +1,17 @@
 import { useConnectivity } from "../connectivity/store";
 import { copy } from "../copy";
+import { isExampleWorkspace } from "../example/example";
 import { useGraph } from "../graph/store";
+import { useWorkspaces } from "../persistence/workspaces";
 import { Button } from "../ui/Button";
 import { Icon } from "../ui/Icon";
 
 export function Banners() {
   const status = useConnectivity((s) => s.status);
   const check = useConnectivity((s) => s.check);
-  const readOnly = useGraph((s) => s.readOnly);
+  // The tutorial's example is read-only on purpose: the tour explains it, so no banner.
+  const example = useWorkspaces((s) => isExampleWorkspace(s.currentId));
+  const readOnly = useGraph((s) => s.readOnly) && !example;
   return (
     <div className="banners" aria-live="polite">
       {status === "offline" ? (

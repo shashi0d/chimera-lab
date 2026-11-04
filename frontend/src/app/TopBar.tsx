@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../auth/auth";
 import { copy } from "../copy";
 import { derived, isTerminal, useEvoRuns } from "../evo/runs";
+import { isExampleWorkspace } from "../example/example";
 import { saveNow, useSaveState } from "../persistence/autosave";
 import { useWorkspaces } from "../persistence/workspaces";
 import { BrandMark } from "../ui/BrandMark";
@@ -97,7 +98,9 @@ export function TopBar() {
         <NavLink to={{ view: "chimeras" }} label={copy.nav.chimeras} current={route.view === "chimeras"} />
       </nav>
       <div className="topbar__doc">
-        {inLab && signedIn ? (
+        {inLab && isExampleWorkspace(currentWs) ? (
+          <span className="topbar__title">{copy.tour.exampleName}</span>
+        ) : inLab && signedIn ? (
           <>
             <WorkspaceName />
             <Button size="sm" variant="ghost" icon="check" busy={saving} disabled={saving} onClick={() => void saveClick()}>

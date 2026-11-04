@@ -4,7 +4,10 @@ import { toAppError } from "../api/errors";
 import { presentError } from "../api/errorMessages";
 import { navigate } from "../app/route";
 import { useAuth } from "../auth/auth";
+import { copy } from "../copy";
 import { evo } from "../evo/index";
+import { exampleVersion } from "../example/example";
+import { useTour } from "../example/tourStore";
 import { labApi, type LabVersion, type WorkspaceInfo } from "../lab/api";
 import { useWorkspaces } from "../persistence/workspaces";
 import { Button, IconButton } from "../ui/Button";
@@ -206,6 +209,17 @@ export function HomePage() {
           <div className="ws-tile__info">
             <p className="ws-tile__name">New workspace</p>
             <p className="ws-tile__meta">An empty canvas</p>
+          </div>
+        </li>
+        <li className="ws-tile ws-tile--example">
+          <button type="button" className="ws-tile__open" onClick={() => useTour.getState().start()} aria-label={copy.tour.replay}>
+            <span className="ws-tile__thumbs ws-tile__thumbs--1">
+              <img src={evo().imageUrl(exampleVersion.imageUrl)} alt="" loading="lazy" decoding="async" />
+            </span>
+          </button>
+          <div className="ws-tile__info">
+            <p className="ws-tile__name">{copy.tour.exampleName}</p>
+            <p className="ws-tile__meta">{copy.tour.exampleMeta}</p>
           </div>
         </li>
         {list.map((ws) => (

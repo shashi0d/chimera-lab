@@ -3,6 +3,9 @@ import { toAppError } from "../api/errors";
 import { presentError } from "../api/errorMessages";
 import { linkHandler, hrefFor } from "../app/route";
 import { useAuth } from "../auth/auth";
+import { copy } from "../copy";
+import { exampleVersion } from "../example/example";
+import { useTour } from "../example/tourStore";
 import { CardTile } from "../lab/CardTile";
 import { labApi, type LabVersion } from "../lab/api";
 import { Button } from "../ui/Button";
@@ -13,6 +16,7 @@ const POLL_MS = 4000;
 /** Every saved creature with its animal card (tap a card to open it). Cards still being drawn fill in by themselves. */
 export function ChimerasPage() {
   const status = useAuth((s) => s.status);
+  const touring = useTour((s) => s.active);
   const [items, setItems] = useState<LabVersion[] | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -62,7 +66,7 @@ export function ChimerasPage() {
       </header>
       {error ? <p className="node__note node__note--warn">{error}</p> : null}
       {items === null && !error ? <span className="spinner" aria-label="Loading your chimeras" /> : null}
-      {items && !items.length ? (
+      {items && !items.length && !touring ? (
         <div className="chimeras__empty">
           <p>No saved creatures yet. In the Lab, use Save on any image card: its animal card is made in the background.</p>
           <a className="btn btn--primary" href={hrefFor({ view: "home" })} onClick={linkHandler({ view: "home" })}>
@@ -86,6 +90,12 @@ export function ChimerasPage() {
             </div>
           </li>
         ))}
+        {touring || (items && !items.length) ? (
+          <li className="chimeras__item chimeras__item--example">
+            <CardTile version={exampleVersion} editable={false} />
+            <p className="chimeras__example">{copy.tour.exampleLabel}</p>
+          </li>
+        ) : null}
       </ul>
     </section>
   );

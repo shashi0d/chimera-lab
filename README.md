@@ -56,6 +56,13 @@ origin, as in production (where the backend serves the built frontend at `/`).
 There is no sign-in: each browser makes a random visitor id on its first visit, keeps it in localStorage and sends it
 as `X-Visitor-Id`. Workspaces, creatures and the per-visitor caps belong to that id; clearing site data starts over.
 
+### The tutorial
+
+A first visit opens a guided tour through an example workspace (Tiger × Bat, anime): the Fusion, its image, the
+edit tools, the animal card and Chimeras, ending with "Start your own workspace". The example is static
+(`frontend/public/example/`, `frontend/src/example/example.json`), so the tour makes no model calls. To make a new
+example, run the backend and `python scripts/make_example.py --base http://127.0.0.1:8000` (one Fusion and one card).
+
 ## Tests
 
 | Command | What |
