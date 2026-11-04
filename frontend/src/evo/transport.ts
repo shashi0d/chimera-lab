@@ -1,5 +1,5 @@
 import type { AppError } from "../api/errors";
-import type { AgentEvent, Creature, GalleryPage, Health, Limits, Publication, RunSnapshot, StartInput, StartResult } from "./types";
+import type { AgentEvent, Health, Limits, RunSnapshot, StartInput, StartResult } from "./types";
 
 export type StreamState = "connecting" | "open" | "reconnecting" | "closed";
 
@@ -15,7 +15,7 @@ export interface EventStream {
   stop(): void;
 }
 
-/** Everything the UI needs from the agent API (docs/api_contract.md). The app uses http.ts; tests pass a fake. */
+/** Everything the UI needs from the Fusion API. The app uses http.ts; tests pass a fake. */
 export interface EvoTransport {
   readonly kind: "http" | "fake";
   health(): Promise<Health>;
@@ -23,11 +23,7 @@ export interface EvoTransport {
   getRun(runId: string): Promise<RunSnapshot>;
   /** Replays every stored event with an id larger than `after`, then streams live until a terminal event. */
   streamEvents(runId: string, after: number, handlers: StreamHandlers): EventStream;
-  postChoice(runId: string, choiceId: string, answer: string): Promise<void>;
   getLimits(): Promise<Limits>;
-  getCreature(creatureId: string): Promise<Creature>;
-  getGallery(cursor?: string | null, limit?: number): Promise<GalleryPage>;
-  getPublication(publicationId: string): Promise<Publication>;
   /** An image URL from the API, as the browser should load it. */
   imageUrl(url: string): string;
 }

@@ -7,7 +7,7 @@ import { copy } from "../../copy";
 import { useLimits } from "../../evo/data";
 import { evo } from "../../evo/index";
 import { useEvoRuns } from "../../evo/runs";
-import type { IdentifyChoice, Mode, Parent, RunAccepted, Slot, StartInput } from "../../evo/types";
+import type { IdentifyChoice, Parent, RunAccepted, Slot, StartInput } from "../../evo/types";
 import { upstreamNode } from "../../graph/queries";
 import { useGraph } from "../../graph/store";
 import { getBlob } from "../../persistence/blobStore";
@@ -15,12 +15,11 @@ import type { ImageInputData } from "../image-input/types";
 import { ensureRunVersion } from "../../lab/store";
 import type { VersionData } from "../version/types";
 import { useWorkspaces } from "../../persistence/workspaces";
-import { cleanName, readMode, readStyle, type FusionData } from "./types";
+import { cleanName, readStyle, type FusionData } from "./types";
 
 /** An identify question from the POST response, waiting for the user (no run exists yet). */
 export interface PendingIdentify {
   nodeId: string;
-  mode: Mode;
   choice: IdentifyChoice["choice"];
   identified: IdentifyChoice["identified"];
   /** Names typed for slots that had no photo, re-sent with the confirmed names. */
@@ -118,7 +117,7 @@ async function post(nodeId: string, input: StartInput, typed: PendingIdentify["t
     const res = await evo().startRun(input);
     if (res.kind === "identify") {
       recordIdentified(nodeId, res.identified);
-      useFusionStart.setState({ identify: { nodeId, mode: input.mode, choice: res.choice, identified: res.identified, typed } });
+      useFusionStart.setState({ identify: { nodeId, choice: res.choice, identified: res.identified, typed } });
     } else accepted(nodeId, res);
   } catch (e) {
     handleError(nodeId, e);
@@ -137,7 +136,7 @@ async function collectInput(nodeId: string): Promise<{ input: StartInput; typed:
   const node = g.nodes.find((n) => n.id === nodeId);
   if (!node) return null;
   const names = (node.data as FusionData).names ?? { a: "", b: "" };
-  const input: StartInput = { mode: readMode(node.config), style: readStyle(node.config) };
+  const input: StartInput = { style: readStyle(node.config) };
   const workspaceId = useWorkspaces.getState().currentId;
   if (workspaceId) input.workspaceId = workspaceId;
   const typed: PendingIdentify["typed"] = { sire: null, dam: null };
@@ -182,10 +181,10 @@ export async function confirmIdentify(answer: string): Promise<void> {
   const other: Slot = pending.choice.slot === "sire" ? "dam" : "sire";
   const otherName = pending.identified[other]?.commonName ?? pending.typed[other];
   const collected = await collectInput(pending.nodeId);
-  const base: StartInput = collected?.input ?? { mode: pending.mode };
+  const base: StartInput = collected?.input ?? {};
   const names = pending.choice.slot === "sire" ? { sireName: name, damName: otherName ?? null } : { sireName: otherName ?? null, damName: name };
   // A slot fed by an earlier creature keeps its version id; its name comes from that image.
-  const input: StartInput = { ...base, mode: pending.mode, ...names };
+  const input: StartInput = { ...base, ...names };
   if (input.sireVersionId) input.sireName = null;
   if (input.damVersionId) input.damName = null;
   await post(pending.nodeId, input, pending.typed);

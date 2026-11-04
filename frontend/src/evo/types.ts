@@ -1,10 +1,6 @@
-// Client side of docs/api_contract.md (R1 agent API). Field names follow the contract exactly.
-// The UI reads only these derived camelCase fields; it never parses the engine's `card` or `plan`.
+// Client side of the Fusion API (POST /evo/agent/runs, its snapshot and its SSE events, limits, health).
 
-export type Mode = "realistic" | "speculative" | "mythic";
-export const MODES: readonly Mode[] = ["realistic", "speculative", "mythic"];
-
-/** The art style a Fusion renders in (prompt mode). */
+/** The art style a Fusion renders in. */
 export type Style = "real" | "drawing" | "anime" | "comic" | "cartoon";
 export const STYLES: readonly Style[] = ["real", "drawing", "anime", "comic", "cartoon"];
 
@@ -19,7 +15,7 @@ export interface Parent {
 
 export type Slot = "sire" | "dam";
 
-export type RunStatus = "queued" | "running" | "needs_choice" | "succeeded" | "failed" | "interrupted";
+export type RunStatus = "queued" | "running" | "succeeded" | "failed" | "interrupted";
 
 /** 202 from POST /evo/agent/runs. */
 export interface RunAccepted {
@@ -30,7 +26,7 @@ export interface RunAccepted {
   runUrl: string;
   sire: Parent;
   dam: Parent;
-  mode: Mode;
+  style?: Style;
 }
 
 export interface IdentifyOption {
@@ -39,7 +35,7 @@ export interface IdentifyOption {
   confidence: number | null;
 }
 
-/** 200 from POST /evo/agent/runs: identification was not confident; no run was created. */
+/** 200 from POST /evo/agent/runs: a photo was not identified confidently; no run was created. */
 export interface IdentifyChoice {
   status: "needs_choice";
   choice: { kind: "identify"; slot: Slot; question: string; options: IdentifyOption[]; allowOther: boolean };
@@ -49,7 +45,6 @@ export interface IdentifyChoice {
 export type StartResult = ({ kind: "accepted" } & RunAccepted) | ({ kind: "identify" } & IdentifyChoice);
 
 export interface StartInput {
-  mode: Mode;
   style?: Style;
   /** An earlier generated creature as the parent: its image goes to the image model. */
   sireVersionId?: string | null;
@@ -62,14 +57,6 @@ export interface StartInput {
   damName?: string | null;
 }
 
-export interface PendingChoice {
-  choiceId: string;
-  kind: "host_tie";
-  question: string;
-  options: string[];
-  expiresAt: string;
-}
-
 /** GET /evo/agent/runs/{runId}. */
 export interface RunSnapshot {
   runId: string;
@@ -77,19 +64,12 @@ export interface RunSnapshot {
   position: number | null;
   sire: Parent;
   dam: Parent;
-  mode: Mode;
+  style?: Style;
   createdAt: string;
   updatedAt: string;
   lastEventId: number;
   creatureId: string | null;
   error: { code: string; message: string; retryable: boolean } | null;
-  pendingChoice: PendingChoice | null;
-}
-
-export interface Failure {
-  key: string;
-  kind: "structural" | "covering" | string;
-  text: string;
 }
 
 interface EventBase {
@@ -107,71 +87,27 @@ export interface StartedEvent extends EventBase {
   type: "started";
   sire: Parent;
   dam: Parent;
-  mode: Mode;
-  caps: { renders: number; toolCalls: number; seconds: number };
+  style?: Style;
 }
 export interface StepEvent extends EventBase {
   type: "step";
   n: number;
   tool: string;
-  args: Record<string, unknown>;
   summary: string;
-  reason: string;
-  cards: string[];
   ok: boolean;
-  error: string | null;
 }
 export interface RenderEvent extends EventBase {
   type: "render";
   n: number;
   imageId: string;
   url: string;
-  kind: "render" | "edit" | "growth_host" | "growth" | string;
-  parent: string | null;
-  method: string;
-  rendersUsed: number | null;
-  rendersLeft: number | null;
-}
-export interface InspectEvent extends EventBase {
-  type: "inspect";
-  n: number;
-  imageId: string;
-  verdict: "pass" | "fail" | string;
-  failures: Failure[];
-  hiddenChecks: number;
-  bestSoFar: string | null;
-  rule: string | null;
-}
-export interface NeedsChoiceEvent extends EventBase {
-  type: "needs_choice";
-  n: number;
-  choiceId: string;
-  kind: "host_tie";
-  question: string;
-  options: string[];
-  expiresAt: string;
-}
-export interface ChoiceResolvedEvent extends EventBase {
-  type: "choice_resolved";
-  choiceId: string;
-  answer: string | null;
-  by: "user" | "timeout";
-}
-export interface CapReachedEvent extends EventBase {
-  type: "cap_reached";
-  scope: "renders" | "tool_calls" | "time";
-  limit: number;
-  message: string;
 }
 export interface FinalizeEvent extends EventBase {
   type: "finalize";
   creatureId: string;
   imageId: string;
   imageUrl: string;
-  remainingFailures: Failure[];
-  hiddenChecks: number;
-  agree: boolean;
-  stop: string;
+  title?: string;
 }
 export interface ErrorEvent extends EventBase {
   type: "error";
@@ -180,30 +116,9 @@ export interface ErrorEvent extends EventBase {
   retryable: boolean;
 }
 
-export type AgentEvent =
-  | QueuedEvent
-  | StartedEvent
-  | StepEvent
-  | RenderEvent
-  | InspectEvent
-  | NeedsChoiceEvent
-  | ChoiceResolvedEvent
-  | CapReachedEvent
-  | FinalizeEvent
-  | ErrorEvent;
+export type AgentEvent = QueuedEvent | StartedEvent | StepEvent | RenderEvent | FinalizeEvent | ErrorEvent;
 
-export const EVENT_TYPES: ReadonlySet<AgentEvent["type"]> = new Set([
-  "queued",
-  "started",
-  "step",
-  "render",
-  "inspect",
-  "needs_choice",
-  "choice_resolved",
-  "cap_reached",
-  "finalize",
-  "error",
-]);
+export const EVENT_TYPES: ReadonlySet<AgentEvent["type"]> = new Set(["queued", "started", "step", "render", "finalize", "error"]);
 
 export function isTerminalEvent(e: AgentEvent): boolean {
   return e.type === "finalize" || e.type === "error";
@@ -216,92 +131,6 @@ export interface Limits {
   dailyTotal: { used: number; limit: number; resetsAt: string };
   visitor: { used: number; limit: number };
   concurrent: { running: number; limit: number; queued: number };
-}
-
-export interface Pick {
-  imageId: string;
-  imageUrl: string;
-  rank: number;
-  of: number;
-  structural: number;
-  failures: number;
-  reason: string;
-}
-
-export interface AnatomyPart {
-  part: string;
-  parent: string;
-  parentRole: "host" | "donor" | "blend";
-  status: "found" | "not located" | string;
-  color: string | null;
-  maskArea: number;
-}
-
-export interface Creature {
-  creatureId: string;
-  createdAt: string;
-  title: string;
-  sire: Parent;
-  dam: Parent;
-  mode: Mode;
-  generatedLabel: string;
-  realHybrid: boolean;
-  showcase: boolean;
-  imageUrl: string;
-  host: { commonName: string; reason: string; tie: boolean; chosenBy: "agent" | "user" | "code" };
-  canItLive: {
-    summary: string;
-    functions: Array<{ function: string; result: "pass" | "fail" | string; detail: string }>;
-    licenses: Array<{ rule: string; compensation: string }>;
-  };
-  remainingFailures: Failure[];
-  hiddenChecks: number;
-  finalChoice: { shownFirst: "agent"; agree: boolean; agentPick: Pick; codePick: Pick };
-  anatomyMap: { overlayUrl: string; colors: { host: string; donor: string; blend: string }; parts: AnatomyPart[] } | null;
-  images: Array<{ imageId: string; url: string; kind: string; verdict: "pass" | "fail" | null }>;
-  runId: string | null;
-  stats: { renders: number; edits: number; toolCalls: number; seconds: number };
-}
-
-export interface GalleryItem {
-  /** "showcase": a featured agent run (opens its creature card); "creation": published from someone's Lab. */
-  kind: "showcase" | "creation";
-  creatureId: string;
-  title: string;
-  sire: Parent;
-  dam: Parent;
-  mode: Mode;
-  imageUrl: string;
-  showcase: boolean;
-  createdAt: string;
-  /** Creations: images on the path (the Fusion image plus each edit). */
-  steps?: number;
-}
-
-/** One image on a published creation's path. */
-export interface PublicationStep {
-  versionId: string;
-  operation: "fusion" | "revise" | "paint";
-  instruction: string;
-  imageUrl: string;
-  createdAt: string;
-}
-
-export interface Publication {
-  publicationId: string;
-  title: string;
-  createdAt: string;
-  sire: Parent | null;
-  dam: Parent | null;
-  mode: Mode | null;
-  imageUrl: string;
-  sourceCreatureId: string | null;
-  steps: PublicationStep[];
-}
-
-export interface GalleryPage {
-  items: GalleryItem[];
-  nextCursor: string | null;
 }
 
 export interface Health {

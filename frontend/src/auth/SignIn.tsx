@@ -3,7 +3,7 @@ import { Button } from "../ui/Button";
 import { Icon } from "../ui/Icon";
 import { sendMagicLink, useAuth } from "./auth";
 
-/** The Lab needs an account: your canvas, runs and edits are saved to it. The gallery stays open to everyone. */
+/** The Lab needs an account: your workspaces, creatures and edits are saved to it. */
 export function SignIn() {
   const status = useAuth((s) => s.status);
   const error = useAuth((s) => s.error);

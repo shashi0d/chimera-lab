@@ -1,7 +1,7 @@
 import { absoluteUrl, baseHeaders, parseError, request } from "../api/client";
 import type { GraphDoc } from "../graph/types";
 
-/** The Lab API (/evo/lab): versions of a creature, edit jobs, review, collaborator, workspace, publishing. */
+/** The Lab API (/evo/lab): versions of a creature, edit jobs, cards, workspaces, saved chimeras. */
 
 export type Operation = "fusion" | "revise" | "paint" | "sketch";
 
@@ -15,7 +15,6 @@ export interface LabVersion {
   imageUrl: string;
   createdAt: string;
   isFinal: boolean;
-  publicationId: string | null;
   title: string | null;
   style?: string | null;
   /** The creature's basic info, written when the image was generated (its title is the profile's name). */
@@ -78,23 +77,6 @@ export interface LabJob {
   error: string | null;
 }
 
-export interface Review {
-  observation: string;
-  suggestions: string;
-}
-
-export interface ChatMessage {
-  role: "user" | "assistant";
-  content: string;
-}
-
-export interface CollaboratorAnswer {
-  message: string;
-  action: { type: "revise"; instruction: string; reason: string } | null;
-  review: Review | null;
-  steps: { tool: string; reason: string }[];
-}
-
 export interface LabLimits {
   used: number;
   /** Null when the server has no limits. */
@@ -102,12 +84,6 @@ export interface LabLimits {
   totalUsed: number;
   totalLimit: number | null;
   resetsAt: string;
-}
-
-export interface Workspace {
-  graph: GraphDoc | null;
-  revision: number;
-  updatedAt: string | null;
 }
 
 const enc = encodeURIComponent;
@@ -174,9 +150,6 @@ export const labApi = {
   async setFinal(versionId: string, isFinal: boolean): Promise<LabVersion> {
     return (await request<LabVersion>(`/evo/lab/versions/${enc(versionId)}/final`, { method: "PUT", ...json({ isFinal }) })).data;
   },
-  async review(versionId: string): Promise<Review> {
-    return (await request<Review>(`/evo/lab/versions/${enc(versionId)}/review`, { method: "POST", headers: baseHeaders() })).data;
-  },
   /** Make the image's card (or get the one it already has: one card per image). */
   async card(versionId: string): Promise<AnimalCard> {
     return (await request<AnimalCard>(`/evo/lab/versions/${enc(versionId)}/card`, { method: "POST", headers: baseHeaders(), timeoutMs: 30000 })).data;
@@ -184,27 +157,9 @@ export const labApi = {
   async savedCard(versionId: string): Promise<AnimalCard | null> {
     return (await request<{ card: AnimalCard | null }>(`/evo/lab/versions/${enc(versionId)}/card`, { headers: baseHeaders() })).data.card;
   },
-  async savedReview(versionId: string): Promise<Review | null> {
-    return (await request<{ review: Review | null }>(`/evo/lab/versions/${enc(versionId)}/review`, { headers: baseHeaders() })).data.review;
-  },
-  async collaborate(versionId: string, messages: ChatMessage[]): Promise<CollaboratorAnswer> {
-    return (await request<CollaboratorAnswer>(`/evo/lab/versions/${enc(versionId)}/collaborate`, { method: "POST", ...json({ messages }) })).data;
-  },
-  async publish(versionId: string, title: string): Promise<LabVersion> {
-    return (await request<LabVersion>(`/evo/lab/versions/${enc(versionId)}/publish`, { method: "POST", ...json({ title }) })).data;
-  },
-  async unpublish(versionId: string): Promise<LabVersion> {
-    return (await request<LabVersion>(`/evo/lab/versions/${enc(versionId)}/publish`, { method: "DELETE", headers: baseHeaders() })).data;
-  },
   async download(versionId: string): Promise<Blob> {
     const res = await fetch(absoluteUrl(`/evo/lab/versions/${enc(versionId)}/download`), { headers: baseHeaders() });
     if (!res.ok) throw await parseError(res);
     return res.blob();
-  },
-  async getWorkspace(): Promise<Workspace> {
-    return (await request<Workspace>("/evo/lab/workspace", { headers: baseHeaders(), timeoutMs: 15000 })).data;
-  },
-  async putWorkspace(graph: GraphDoc): Promise<{ revision: number; updatedAt: string }> {
-    return (await request<{ revision: number; updatedAt: string }>("/evo/lab/workspace", { method: "PUT", ...json({ graph }), timeoutMs: 15000 })).data;
   },
 };
