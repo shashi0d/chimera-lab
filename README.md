@@ -56,9 +56,10 @@ origin, as in production (where the backend serves the built frontend at `/`).
 There is no sign-in: each browser makes a random visitor id on its first visit, keeps it in localStorage and sends it
 as `X-Visitor-Id`. Workspaces, creatures and the per-visitor caps belong to that id; clearing site data starts over.
 
-### The tutorial
+### The intro and the tutorial
 
-A first visit opens a hands-on tutorial in the real Lab: add a Fusion node (prefilled Tiger + Bat, anime), press Make
+A first visit opens with an animated intro (`frontend/src/intro/Intro.tsx`: a tiger and a bat glitch into one
+creature, then the title drops) that leads to the tutorial or straight to the workspaces. The tutorial is hands-on in the real Lab: add a Fusion node (prefilled Tiger + Bat, anime), press Make
 creature, save the result, open Chimeras, then create a workspace. The glowing element is the next thing to click;
 Skip goes to the workspace list. Its calls are answered in the browser (`frontend/src/tutorial/sandbox.ts`): the run
 is a replay of a creature made once with the live models (`frontend/public/example/`), so the tutorial costs no

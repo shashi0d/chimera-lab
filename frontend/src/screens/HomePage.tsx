@@ -180,9 +180,12 @@ export function HomePage() {
   const create = async () => {
     setBusy(true);
     try {
-      const ws = await useWorkspaces.getState().create(`Untitled workspace ${list.length + 1}`);
-      // Creating a workspace is the tutorial's last step.
-      if (useTour.getState().active) useTour.getState().end();
+      // The tutorial's last step: open the visitor's empty workspace ("My workspace" is made on the first visit)
+      // instead of adding a second, empty one.
+      const touring = useTour.getState().active;
+      const empty = touring ? list.find((w) => !w.imageCount) : undefined;
+      const ws = empty ?? (await useWorkspaces.getState().create(`Untitled workspace ${list.length + 1}`));
+      if (touring) useTour.getState().end();
       openWorkspace(ws.id);
     } catch (e) {
       toast.error(errorText(e));

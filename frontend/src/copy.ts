@@ -64,6 +64,15 @@ export const copy = {
     accepted: "JPEG, PNG or WebP photos of one animal each. Photos stay on this device until you make the creature, and are not stored after.",
     dropHere: "Drop to add to the canvas",
   },
+  intro: {
+    welcome: "Welcome to",
+    animalA: "Tiger",
+    animalB: "Bat",
+    tagline: "Two animals in. One chimera out.",
+    tutorial: "Take the tutorial",
+    workspaces: "Skip to workspaces",
+    skipHint: "Click or press any key to skip the intro",
+  },
   garden: {
     title: "Garden",
     lead: "Creatures everyone shared. Tap a card to open its field-guide page. Share yours from Chimeras.",
