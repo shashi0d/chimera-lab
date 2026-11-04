@@ -1,4 +1,4 @@
-"""Public-safety caps for agent runs (docs/api_contract.md "Caps"; per-run caps are the engine's own, S3c).
+"""Public-safety caps for Fusion runs.
 
 - daily total and per-user daily runs: counters in the document store, keyed by the UTC day (they reset at 00:00
   UTC); refused at POST with 429 CAP_REACHED, never as an event

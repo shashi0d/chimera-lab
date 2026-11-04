@@ -2,7 +2,7 @@ import type { AppError } from "../../api/errors";
 import { errorMessages } from "../../api/errorMessages";
 
 export const MAX_BYTES = 20 * 1024 * 1024;
-/** The agent API takes at most 8 MB per image (docs/api_contract.md); prepared copies are far smaller. */
+/** The API takes at most 8 MB per image; prepared copies are far smaller. */
 export const MAX_UPLOAD_BYTES = 8 * 1024 * 1024;
 export const MIN_SHORT_SIDE = 256;
 export const MAX_EDGE = 2048;

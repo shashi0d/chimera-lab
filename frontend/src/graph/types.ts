@@ -1,4 +1,4 @@
-/** Versioned graph document (TASKSHEET 4.2). This is what autosave and the backend store. */
+/** Versioned graph document. This is what autosave and the backend store. */
 
 export const CURRENT_SCHEMA_VERSION = 1;
 

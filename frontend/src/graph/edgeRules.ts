@@ -14,7 +14,7 @@ export type ConnectionCheck = { ok: true } | { ok: false; reason: RefusalReason 
 export type PortLookup = (nodeType: string) => { inputs: PortSpec[]; outputs: PortSpec[] } | undefined;
 
 /**
- * Edge rule (TASKSHEET 4.1): allowed only if the source port's `emits` is in the
+ * Edge rule: allowed only if the source port's `emits` is in the
  * target port's `accepts`, the target port is free (unless it allows many), and
  * the edge would not create a cycle.
  */

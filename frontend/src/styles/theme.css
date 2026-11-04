@@ -1,11 +1,11 @@
 /* ==========================================================================
-   Chimera Lab: the only stylesheet (TASKSHEET Section 6).
-   Identity: ZD design system (U1, docs/DESIGN_U1.md, docs/design-system/ZD.md).
+   Chimera Lab: the only stylesheet.
+   Identity: ZD design system (docs/design-system/ZD.md).
    Order: 0 fonts · 1 ZD backbone with the Chimera palette (D-098) · 1b Chimera tokens ·
           2 base · 3 layout · 3b React Flow structure · 4 components · 5 nodes ·
           6 drawer · 7 states and motion · 8 utilities.
    A retheme touches only sections 1 and 1b. Deviations from ZD values are
-   tokens ending in -aa, each logged in docs/DECISIONS.md.
+   tokens ending in -aa.
    ========================================================================== */
 
 /* 0. Fonts: self-hosted (scripts/copy-fonts.mjs), never loaded from the network. */

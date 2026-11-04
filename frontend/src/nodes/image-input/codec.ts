@@ -39,7 +39,7 @@ export function setImageCodec(c: ImageCodec): void {
 }
 
 /**
- * Client-side pipeline (TASKSHEET 7.1): size, real type, decode, min size,
+ * Client-side pipeline: size, real type, decode, min size,
  * EXIF orientation, downscale to 2048px, metadata stripped by re-encoding.
  * R1: the agent API takes JPEG, PNG or WebP only, so HEIC is converted here when the browser can
  * decode it (Safari) and refused as UNSUPPORTED_FILE when it can't. A PNG that would exceed the

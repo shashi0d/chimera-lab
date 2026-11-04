@@ -1,1 +1,0 @@
-first parity attempt: 1 plan call (b), 47,994 chars, finish length, loop in card_trace; script crashed before saving results

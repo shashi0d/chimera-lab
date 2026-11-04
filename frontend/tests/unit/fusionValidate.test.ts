@@ -8,7 +8,7 @@ const f = fusion("f") as GraphNode<FusionConfig, FusionData>;
 const codes = (nodes: GraphNode[], edges = [edge("a", "f", "a"), edge("b", "f", "b")], connectivity: "online" | "offline" | "unreachable" = "online") =>
   validateFusion(f, { graph: { nodes: [...nodes, f], edges }, connectivity, readOnly: false }).map((i) => i.code);
 
-describe("Fusion pre-run validation (TASKSHEET 7.2)", () => {
+describe("Fusion pre-run validation", () => {
   it("is runnable with two prepared, distinct images", () => {
     expect(codes([img("a"), img("b")])).toEqual([]);
   });

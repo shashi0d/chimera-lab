@@ -74,7 +74,7 @@ function fusionWithFreeSlots(): { node: GraphNode; free: string[] } | null {
 }
 
 /**
- * Entry point for drop, paste and the file picker (TASKSHEET 7.1).
+ * Entry point for drop, paste and the file picker.
  * Validates and prepares each file client-side, creates one node per good file and
  * stores the local copy (R1: nothing is uploaded until a run starts). On a canvas with no Fusion node,
  * it also adds one and connects the new images to it; with a Fusion node that has

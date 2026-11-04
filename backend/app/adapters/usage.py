@@ -3,7 +3,7 @@
 Adapters call ``guard(kind)`` before every HTTP attempt and ``record(...)``
 after it. Records go to the current run (``current_calls``) so the runner can
 put tokens per step in the run detail and charge the token spend guard, and,
-when ``CHIMERA_LIVE_LOG`` is set, to a markdown log (docs/LIVE_LOG.md).
+when ``CHIMERA_LIVE_LOG`` is set, to a markdown log.
 
 ``CHIMERA_LIVE_BUDGET_FILE`` enables a hard, cross-process cap on live calls
 (``CHIMERA_LIVE_MAX_IMAGES`` / ``CHIMERA_LIVE_MAX_SPARK``). Every attempt counts, failed ones included; past the cap the adapter

@@ -7,7 +7,7 @@ const migrators = (type: string) => {
   return def ? { version: def.version, migrate: def.migrate } : undefined;
 };
 
-describe("graph load + migration (TASKSHEET 4.2, 7.6)", () => {
+describe("graph load + migration", () => {
   it("migrates schema v0 (links + pos) to v1", () => {
     vi.spyOn(console, "info").mockImplementation(() => undefined);
     const r = loadGraph(

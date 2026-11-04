@@ -32,7 +32,7 @@ export interface NodePanelProps<C = NodeConfig, D = NodeData> {
   onClose: () => void;
 }
 
-/** One node type, defined once (TASKSHEET 4.1). */
+/** One node type, defined once. */
 export interface NodeDefinition<C = NodeConfig, D = NodeData> {
   type: string;
   /** Bump when the config/data shape changes, and add `migrate`. */

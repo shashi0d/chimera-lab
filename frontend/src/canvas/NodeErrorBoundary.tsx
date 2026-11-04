@@ -13,7 +13,7 @@ interface State {
   attempt: number;
 }
 
-/** One node crashing renders a card in its place; the canvas stays usable (TASKSHEET 7.6). */
+/** One node crashing renders a card in its place; the canvas stays usable. */
 export class NodeErrorBoundary extends Component<Props, State> {
   override state: State = { error: null, attempt: 0 };
 

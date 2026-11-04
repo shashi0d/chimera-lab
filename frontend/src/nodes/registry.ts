@@ -1,4 +1,4 @@
-// Node registry (TASKSHEET 4.1). Adding a node type = a folder under nodes/ plus one line here.
+// Node registry. Adding a node type = a folder under nodes/ plus one line here.
 import { uuid } from "../api/session";
 import type { GraphNode, NodeData, Position } from "../graph/types";
 import { fusionNode } from "./fusion/definition";

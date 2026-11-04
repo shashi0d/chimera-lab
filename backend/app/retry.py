@@ -1,4 +1,4 @@
-"""Retry + timeout policy for adapter calls (TASKSHEET Section 5)."""
+"""Retry + timeout policy for adapter calls."""
 
 from __future__ import annotations
 

@@ -4,7 +4,7 @@ import { useConnectivity } from "../../src/connectivity/store";
 
 beforeEach(() => useConnectivity.setState({ browserOnline: true, serverReachable: true, forced: null, status: "online" }));
 
-describe("connectivity (TASKSHEET 7.7)", () => {
+describe("connectivity", () => {
   it("offline when the browser says so", () => {
     useConnectivity.getState().setBrowserOnline(false);
     expect(useConnectivity.getState().status).toBe("offline");

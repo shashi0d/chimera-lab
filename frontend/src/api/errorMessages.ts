@@ -10,7 +10,7 @@ export interface ErrorPresentation {
 
 /**
  * One user-facing message per error code. Raw server/upstream text is never shown: the R1 refusal and cap
- * wording follows docs/api_contract.md, written here so it can be edited in one place.
+ * wording follows written here so it can be edited in one place.
  */
 export const errorMessages: Record<ErrorCode, ErrorPresentation> = {
   VALIDATION_FAILED: { title: "Something in the request wasn't valid.", fix: "Check both animals and try again.", retry: false },

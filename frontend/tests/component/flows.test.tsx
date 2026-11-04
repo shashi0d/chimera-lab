@@ -50,7 +50,7 @@ const imgs = () => useGraph.getState().nodes.filter((x) => x.type === "image-inp
 const fusionId = () => useGraph.getState().nodes.find((x) => x.type === "fusion")?.id as string;
 const fusionData = () => useGraph.getState().nodes.find((x) => x.type === "fusion")?.data as FusionData;
 
-describe("adding images (TASKSHEET 7.1, R1: kept on this device until a run starts)", () => {
+describe("adding images", () => {
   it("drop of 2 on an empty canvas: two ready nodes and a fusion node, both connected; nothing uploaded", async () => {
     const fetchSpy = vi.spyOn(globalThis, "fetch");
     await addImageFiles([file("lion.jpg"), file("tiger.jpg")], { x: 0, y: 0 });
