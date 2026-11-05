@@ -36,3 +36,16 @@ describe("error message map", () => {
     expect(toAppError(e)).toMatchObject({ code: "RATE_LIMITED", retryAfterMs: 4000 });
   });
 });
+
+describe("the lifetime image limit", () => {
+  it("says the images are used up, not today's runs", () => {
+    const p = presentError({ code: "CAP_REACHED", message: "", retryable: false, details: { scope: "visitor_images", limit: 30, left: 0, need: 1 } });
+    expect(p.title).toBe("You've used all 30 of your images.");
+    expect(p.retry).toBe(false);
+  });
+  it("says how many a card needs when a few are left", () => {
+    const p = presentError({ code: "CAP_REACHED", message: "", retryable: false, details: { scope: "visitor_images", limit: 30, left: 2, need: 4 } });
+    expect(p.title).toBe("An animal card needs 4 images.");
+    expect(p.fix).toBe("You have 2 left.");
+  });
+});

@@ -115,3 +115,65 @@ class Caps:
                 "dailyTotal": {"used": total, "limit": s.evo_daily_runs, "resetsAt": resets_at()},
                 "visitor": {"used": mine, "limit": s.evo_visitor_daily_runs},
                 "concurrent": {"running": running, "limit": s.evo_max_concurrent_runs, "queued": queued}}
+
+
+# ====================================================================== the lifetime image quota
+
+IMAGES_SCOPE = "visitor_images"
+FUSION_IMAGES, EDIT_IMAGES, CARD_IMAGES = 1, 1, 4  # what one action costs: a card draws four more angles
+
+
+def images_error(limit: int, need: int, left: int) -> ChimeraError:
+    message = (f"You've used all {limit} of your images." if left <= 0 else
+               f"An animal card needs {need} images and you have {left} left.")
+    return ChimeraError(ErrorCode.CAP_REACHED, message, retryable=False,
+                        details={"scope": IMAGES_SCOPE, "limit": limit, "left": max(0, left), "need": need})
+
+
+class ImageQuota:
+    """A per-visitor lifetime budget of generated images (EVO_VISITOR_IMAGE_LIMIT, 0 = none). It never resets and is
+    enforced even when the daily limits are off. A Fusion or an edit costs 1, an animal card 4. Images are taken
+    before the model is called and given back if the action fails, so only delivered images count."""
+
+    def __init__(self, db: DbAdapter, settings: Settings) -> None:
+        self.db, self.settings = db, settings
+
+    @property
+    def limit(self) -> int:
+        return int(getattr(self.settings, "evo_visitor_image_limit", 0) or 0)
+
+    @staticmethod
+    def _key(visitor: str) -> str:
+        return f"images:v:{visitor}"
+
+    async def used(self, visitor: str) -> int:
+        return max(0, await self.db.incr(self._key(visitor), 0))
+
+    async def view(self, visitor: str | None) -> dict[str, Any]:
+        used = await self.used(visitor) if visitor else 0
+        limit = self.limit or None
+        return {"used": used, "limit": limit, "left": None if limit is None else max(0, limit - used),
+                "costs": {"fusion": FUSION_IMAGES, "edit": EDIT_IMAGES, "card": CARD_IMAGES}}
+
+    async def check(self, visitor: str, need: int) -> None:
+        """Refuse before any work when fewer than `need` images are left."""
+        if not self.limit:
+            return
+        left = self.limit - await self.used(visitor)
+        if left < need:
+            raise images_error(self.limit, need, left)
+
+    async def take(self, visitor: str, need: int) -> None:
+        """Count `need` images; increment first, then roll back if a racing request took the last ones."""
+        after = await self.db.incr(self._key(visitor), need)
+        if self.limit and after > self.limit:
+            await self.db.incr(self._key(visitor), -need)
+            raise images_error(self.limit, need, self.limit - (after - need))
+
+    async def refund(self, visitor: str, count: int) -> None:
+        """Give back images that were taken but not delivered."""
+        if count <= 0:
+            return
+        give = min(count, await self.used(visitor))
+        if give:
+            await self.db.incr(self._key(visitor), -give)

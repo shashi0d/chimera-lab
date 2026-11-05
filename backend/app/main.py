@@ -51,7 +51,8 @@ def create_app(settings: Settings | None = None, services: Services | None = Non
     app.state.agent = AgentApi(svc, build_public_files(settings))  # the Fusion API under /evo
     from app.agentapi.lab import LabCaps, LabState
 
-    app.state.lab = LabState(LabCaps(svc.db, settings), asyncio.Semaphore(settings.lab_max_concurrent_actions))
+    app.state.lab = LabState(LabCaps(svc.db, settings), asyncio.Semaphore(settings.lab_max_concurrent_actions),
+                             quota=app.state.agent.quota)
 
     app.add_middleware(
         CORSMiddleware,

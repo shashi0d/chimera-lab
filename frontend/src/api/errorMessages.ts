@@ -48,7 +48,12 @@ function utc(iso: unknown): string | null {
 export function presentError(err: AppError): ErrorPresentation & { errorId?: string } {
   let p = errorMessages[err.code] ?? errorMessages.UNKNOWN;
   const at = err.code === "CAP_REACHED" ? utc((err.details as { resetsAt?: unknown } | undefined)?.resetsAt) : null;
-  if (at) p = { ...p, fix: `New runs open again at ${at}.` };
+  const d = err.details as { scope?: unknown; limit?: unknown; need?: unknown; left?: unknown } | undefined;
+  if (err.code === "CAP_REACHED" && d?.scope === "visitor_images") {
+    p = typeof d.left === "number" && d.left > 0
+      ? { title: `An animal card needs ${String(d.need)} images.`, fix: `You have ${d.left} left.`, retry: false }
+      : { title: `You've used all ${String(d.limit)} of your images.`, fix: "Generating is now off for you. Everything you made stays here.", retry: false };
+  } else if (at) p = { ...p, fix: `New runs open again at ${at}.` };
   const errorId = err.code === "INTERNAL" || err.code === "UNKNOWN" ? err.errorId ?? undefined : undefined;
   return { ...p, retry: p.retry && err.retryable !== false, errorId };
 }

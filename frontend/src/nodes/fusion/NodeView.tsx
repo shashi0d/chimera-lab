@@ -5,7 +5,7 @@ import { ErrorBlock, useCountdown } from "../../canvas/RunParts";
 import { formatElapsed, useNow } from "../../canvas/useNow";
 import { useConnectivity } from "../../connectivity/store";
 import { copy } from "../../copy";
-import { useCapped } from "../../evo/data";
+import { isImagesCap, useCapped, useImages } from "../../evo/data";
 import { isTerminal, useRun, type DerivedRun } from "../../evo/runs";
 import { evo } from "../../evo/index";
 import { STYLES, type Style } from "../../evo/types";
@@ -134,6 +134,7 @@ export function FusionView({ node, selected, issues }: NodeViewProps<FusionConfi
   const readOnly = useGraph((s) => s.readOnly);
   const connectivity = useConnectivity((s) => s.status);
   const { capped } = useCapped();
+  const { out: outOfImages } = useImages();
   const names = node.data.names ?? { a: "", b: "" };
   const style = readStyle(node.config);
 
@@ -147,9 +148,9 @@ export function FusionView({ node, selected, issues }: NodeViewProps<FusionConfi
   const countdown = useCountdown(shownError, () => void startFusion(node.id));
   // The tutorial's run is a replay (tutorial/sandbox.ts): today's cap doesn't apply to it.
   const tutorial = useWorkspaces((s) => s.currentId === TUTORIAL_WS);
-  const disabledReason = blocking[0]?.message ?? (capped && !tutorial ? t.capped : null);
+  const disabledReason = blocking[0]?.message ?? (tutorial ? null : outOfImages ? t.outOfImages : capped ? t.capped : null);
   // The CAP_REACHED error already says it; don't repeat it as a hint.
-  const showHint = Boolean(disabledReason) && !(shownError?.code === "CAP_REACHED" && !blocking.length);
+  const showHint = Boolean(disabledReason) && !((shownError?.code === "CAP_REACHED" || isImagesCap(shownError)) && !blocking.length);
 
   const make = () => {
     useFusionStart.getState().clearError(node.id);

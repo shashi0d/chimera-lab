@@ -292,7 +292,7 @@ async def test_daily_and_per_user_caps(make_client):
 
 async def test_limits_signed_in_and_out(client):
     body = (await client.get("/evo/agent/limits")).json()
-    assert body["liveRuns"] == "open" and set(body) == {"liveRuns", "unlimited", "dailyTotal", "visitor", "concurrent"}
+    assert body["liveRuns"] == "open" and set(body) == {"liveRuns", "unlimited", "dailyTotal", "visitor", "concurrent", "images"}
     assert body["concurrent"] == {"running": 0, "limit": 3, "queued": 0}
     assert body["visitor"] == {"used": 0, "limit": 1000}
     out = await client.get("/evo/agent/limits", headers=SIGNED_OUT)

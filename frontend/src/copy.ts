@@ -16,6 +16,8 @@ export const copy = {
     themeToDark: "Switch to dark theme",
     themeToLight: "Switch to light theme",
     shortcuts: "Keyboard shortcuts",
+    imagesLeft: (left: number, limit: number) => `${left} of ${limit} images left`,
+    imagesHint: "Each visitor can make a set number of images: a creature or an edit uses 1, an animal card 4.",
     openRun: "A creature is being made. Open its live trace",
   },
   nav: {
@@ -184,6 +186,7 @@ export const copy = {
       earlierCreature: "earlier creature",
       imagePending: "Wait for the connected image to finish.",
       capped: "Today's Fusion runs are used up. New runs open again at 00:00 UTC.",
+      outOfImages: "You've used all your images, so you can't make new creatures.",
       pausedOffline: "Connection lost. The run keeps going on the server; the trace catches up when you're back.",
       retryIn: (s: number) => `Trying again in ${s}s`,
       waitingInputs: "Add a photo or type a name for both animals.",

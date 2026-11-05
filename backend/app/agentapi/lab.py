@@ -26,7 +26,7 @@ from starlette.datastructures import UploadFile
 
 from app.adapters.base import GeneratedImage
 from app.agentapi import edit_pipeline
-from app.agentapi.caps import Caps, client_ip, day_key, resets_at
+from app.agentapi.caps import CARD_IMAGES, EDIT_IMAGES, Caps, ImageQuota, client_ip, day_key, resets_at
 from app.agentapi.creature_ai import check_topic
 from app.agentapi.files import EXT, content_type_for
 from app.agentapi.routes import AgentApi, api
@@ -100,6 +100,7 @@ class LabState:
     caps: LabCaps
     slots: asyncio.Semaphore
     tasks: dict[str, asyncio.Task[None]] = field(default_factory=dict)
+    quota: ImageQuota | None = None  # lifetime images per visitor (shared with the Fusion API)
 
     async def shutdown(self) -> None:
         tasks = list(self.tasks.values())
@@ -118,12 +119,14 @@ async def _user(request: Request) -> tuple[User, str]:
     return user, client_ip(request, api(request).settings.evo_proxy_hops)
 
 
-async def _charge(request: Request) -> tuple[User, str]:
-    """Sign-in, the per-IP rate limit and the daily budget, before any work. Returns the user and the charge day."""
+async def _charge(request: Request, images: int = EDIT_IMAGES) -> tuple[User, str]:
+    """Sign-in, the per-IP rate limit, the daily budget and the images left, before any work."""
     user, ip = await _user(request)
     state = lab(request)
     state.caps.rate_limit(ip)
     await state.caps.check(user.id)
+    if state.quota is not None:
+        await state.quota.check(user.id, images)
     return user, ip
 
 
@@ -161,11 +164,21 @@ async def start_job(request: Request, user: User, day: str, operation: str, pare
     async def stage(message: str) -> None:
         await save(status="running", stage=message)
 
+    if state.quota is not None:
+        try:
+            await state.quota.take(user.id, EDIT_IMAGES)
+        except ChimeraError:
+            await state.caps.refund(user.id, day)
+            raise
+    delivered = False
+
     async def run() -> None:
+        nonlocal delivered
         try:
             async with charged_slot(request, user.id, day):
                 await stage("Starting")
                 result = await work(stage)
+                delivered = True
                 await save(status="succeeded", stage="Ready", result=result)
         except asyncio.CancelledError:
             await save(status="interrupted", stage="Interrupted", error=INTERRUPTED)
@@ -177,6 +190,8 @@ async def start_job(request: Request, user: User, day: str, operation: str, pare
             await save(status="failed", stage="Failed", error="The edit failed. Please try again.")
         finally:
             state.tasks.pop(job_id, None)
+            if not delivered and state.quota is not None:  # a failed edit gives its image back
+                await state.quota.refund(user.id, EDIT_IMAGES)
 
     await save()
     state.tasks[job_id] = asyncio.create_task(run(), name=job_id)
@@ -210,6 +225,11 @@ async def jobs(request: Request) -> JSONResponse:
     return JSONResponse({"jobs": [public_job(d) for d in docs[:30]]}, headers={"Cache-Control": "no-store"})
 
 
+async def caps_images(request: Request, user_id: str) -> dict[str, Any] | None:
+    quota = lab(request).quota
+    return await quota.view(user_id) if quota is not None else None
+
+
 @router.get("/limits")
 async def limits(request: Request) -> JSONResponse:
     user, _ = await _user(request)
@@ -218,7 +238,9 @@ async def limits(request: Request) -> JSONResponse:
     unlimited = not caps.enabled  # no limits: the counts are shown, the limits are null
     return JSONResponse({"used": mine, "limit": None if unlimited else caps.settings.evo_visitor_daily_runs,
                          "totalUsed": total, "totalLimit": None if unlimited else caps.settings.evo_daily_runs,
-                         "resetsAt": resets_at()}, headers={"Cache-Control": "no-store"})
+                         "resetsAt": resets_at(),
+                         "images": await caps_images(request, user.id)},
+                        headers={"Cache-Control": "no-store"})
 
 
 # ====================================================================== versions
@@ -585,7 +607,20 @@ async def start_card(request: Request, user: User, doc: dict[str, Any]) -> dict[
     version_id = doc["id"]
     if card_is_live(request, doc.get("card"), version_id):
         return doc["card"]
-    day = await state.caps.charge(user.id)
+    if state.quota is not None:
+        try:
+            await state.quota.take(user.id, CARD_IMAGES)
+        except ChimeraError as exc:  # saving still works; the card says why it was not drawn
+            doc["card"] = {"status": "failed", "error": exc.message, "profile": None, "angles": [],
+                           "finishedAt": now_iso()}
+            await a.services.db.put("assets", version_id, doc)
+            return doc["card"]
+    try:
+        day = await state.caps.charge(user.id)
+    except ChimeraError:
+        if state.quota is not None:
+            await state.quota.refund(user.id, CARD_IMAGES)
+        raise
     doc["card"] = new_card()
     await a.services.db.put("assets", version_id, doc)
 
@@ -610,6 +645,9 @@ async def start_card(request: Request, user: User, doc: dict[str, Any]) -> dict[
                     fresh["profile"] = result["profile"]
                 await a.services.db.put("assets", version_id, fresh)
             state.tasks.pop(card_task_key(version_id), None)
+            if state.quota is not None:  # only the angles actually drawn count
+                drawn = len(result.get("angles") or []) if result.get("status") == "ready" else 0
+                await state.quota.refund(user.id, CARD_IMAGES - min(drawn, CARD_IMAGES))
 
     state.tasks[card_task_key(version_id)] = asyncio.create_task(run(), name=f"card-{version_id}")
     return doc["card"]
@@ -624,7 +662,7 @@ async def animal_card(version_id: str, request: Request) -> JSONResponse:
     doc = await get_version(a, version_id, user)
     if card_is_live(request, doc.get("card"), version_id):
         return JSONResponse(doc["card"], status_code=200, headers={"Cache-Control": "no-store"})
-    await _charge(request)
+    await _charge(request, CARD_IMAGES)
     card = await start_card(request, user, doc)
     return JSONResponse(card, status_code=202, headers={"Cache-Control": "no-store"})
 
