@@ -63,6 +63,9 @@ class Settings(BaseSettings):
     evo_daily_runs: int = 50  # Fusion runs per day, all users
     evo_visitor_daily_runs: int = 3  # Fusion runs per user per day
     evo_runs_per_minute_per_ip: int = 5
+    # Lifetime images per visitor (never resets; on even when the daily limits are off): a Fusion or an edit is 1,
+    # an animal card is 4. 0 = no limit.
+    evo_visitor_image_limit: int = Field(default=30, ge=0)
     lab_daily_actions: int = Field(default=100, ge=1)  # edits and cards per day, all users
     lab_user_daily_actions: int = Field(default=20, ge=1)
     lab_actions_per_minute_per_ip: int = Field(default=10, ge=1)

@@ -15,7 +15,7 @@ from fastapi.responses import JSONResponse, RedirectResponse, Response, Streamin
 from starlette.datastructures import UploadFile
 
 from app.agentapi import uploads as U
-from app.agentapi.caps import Caps, client_ip
+from app.agentapi.caps import FUSION_IMAGES, Caps, ImageQuota, client_ip
 from app.agentapi.creatures import Creatures, parent_view
 from app.agentapi.files import PublicFiles, content_type_for
 from app.agentapi.fusion_prompt import DEFAULT_STYLE, STYLES
@@ -41,6 +41,7 @@ class AgentApi:
         self.creatures = Creatures(services.db)
         self.runner = JobRunner(services, self.store, files, self.creatures)
         self.caps = Caps(services.db, services.settings)
+        self.quota = ImageQuota(services.db, services.settings)  # lifetime images per visitor
         # Builds the driver for one run. Tests replace it.
         self.driver_factory: Any = lambda: PromptDriver(services)
 
@@ -80,6 +81,7 @@ async def start_run(request: Request) -> Response:
     user, ip = await _owner(request, a)
     a.caps.rate_limit(ip)
     await a.caps.check(user.id)
+    await a.quota.check(user.id, FUSION_IMAGES)
 
     length = request.headers.get("content-length")
     if length and length.isdigit() and int(length) > 2 * st.evo_max_upload_bytes + 2 * 1024 * 1024:
@@ -132,7 +134,12 @@ async def start_run(request: Request) -> Response:
             parent.update(source="version", **versions[s])
     driver = a.driver_factory()
 
-    await a.caps.take(user.id)
+    await a.quota.take(user.id, FUSION_IMAGES)
+    try:
+        await a.caps.take(user.id)
+    except ChimeraError:
+        await a.quota.refund(user.id, FUSION_IMAGES)
+        raise
     run_id = new_id("run")
     ts = now_iso()
     doc = {"runId": run_id, "status": "queued", "position": None, "sire": sire, "dam": dam,
@@ -141,6 +148,7 @@ async def start_run(request: Request) -> Response:
            "workspaceId": _workspace_id(form.get("workspaceId"))}
     job = Job(doc=doc, driver=driver, runner=a.runner)
     job.extra["refs"] = refs  # in memory only: photos are never stored
+    job.extra["refund"] = lambda: a.quota.refund(user.id, FUSION_IMAGES)  # a failed run gives its image back
     await a.runner.submit(job)
     body = {"runId": run_id, "status": doc["status"], "position": doc["position"],
             "eventsUrl": f"/evo/agent/runs/{run_id}/events", "runUrl": f"/evo/agent/runs/{run_id}",
@@ -253,6 +261,7 @@ async def limits(request: Request) -> Response:
     a = api(request)
     user = await current_user(request)
     body = await a.caps.limits(user.id if user else None, len(a.runner.running), len(a.runner.queued_jobs))
+    body["images"] = await a.quota.view(user.id if user else None)
     return JSONResponse(body, headers={"Cache-Control": "no-cache"})
 
 

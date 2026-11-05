@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../auth/auth";
 import { copy } from "../copy";
+import { useImages, useLimits } from "../evo/data";
 import { derived, isTerminal, useEvoRuns } from "../evo/runs";
 import { TUTORIAL_WS } from "../tutorial/sandbox";
 import { saveNow, useSaveState } from "../persistence/autosave";
@@ -65,6 +66,22 @@ function WorkspaceName() {
   );
 }
 
+/** How many of the visitor's lifetime images are left. Refreshed when a run ends (a failed run gives its image back). */
+function ImagesLeft({ liveRunId }: { liveRunId: string | null }) {
+  const { quota, out } = useImages();
+  useEffect(() => {
+    if (!liveRunId) void useLimits.getState().refresh();
+  }, [liveRunId]);
+  if (!quota || quota.limit === null || quota.left === null) return null;
+  const left = out ? 0 : quota.left;
+  const tone = left <= 0 ? "pill--danger" : left <= 5 ? "pill--warning" : "pill--neutral";
+  return (
+    <span className={`pill ${tone}`} title={copy.app.imagesHint} aria-live="polite">
+      {copy.app.imagesLeft(left, quota.limit)}
+    </span>
+  );
+}
+
 export function TopBar() {
   const auth = useAuth((s) => s.status);
   const theme = useUi((s) => s.theme);
@@ -116,6 +133,7 @@ export function TopBar() {
         ) : null}
       </div>
       <div className="topbar__actions">
+        {signedIn && currentWs !== TUTORIAL_WS ? <ImagesLeft liveRunId={liveRunId} /> : null}
         {liveRunId && !(inLab && route.runId === liveRunId) ? (
           <a className="topbar__run" href={hrefFor({ view: "lab", runId: liveRunId, workspaceId: currentWs })} onClick={linkHandler({ view: "lab", runId: liveRunId, workspaceId: currentWs })} aria-label={copy.app.openRun}>
             <LiveIndicator tone="running" label={copy.status.running} />

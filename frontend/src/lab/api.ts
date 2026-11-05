@@ -1,5 +1,6 @@
 import { absoluteUrl, baseHeaders, parseError, request } from "../api/client";
 import type { GraphDoc } from "../graph/types";
+import type { ImageQuota } from "../evo/types";
 import { isTutorialId, tutorialLab } from "../tutorial/sandbox";
 
 /** The Lab API (/evo/lab): versions of a creature, edit jobs, cards, workspaces, saved chimeras. */
@@ -90,6 +91,7 @@ export interface LabLimits {
   totalUsed: number;
   totalLimit: number | null;
   resetsAt: string;
+  images?: ImageQuota | null;
 }
 
 const enc = encodeURIComponent;

@@ -1,6 +1,7 @@
 import { useEffect, useId, useState } from "react";
 import { createPortal } from "react-dom";
 import { NodeCard, type NodeStatus } from "../../canvas/NodeCard";
+import { useImages } from "../../evo/data";
 import { evo } from "../../evo/index";
 import { useGraph } from "../../graph/store";
 import { parentVersionOf } from "../../lab/graph";
@@ -72,6 +73,8 @@ export function EditView({ node, selected, issues }: NodeViewProps<EditConfig, E
   const fieldId = useId();
   const running = starting || Boolean(activeJobId);
   const blocking = issues.filter((i) => i.severity === "block");
+  const { out: outOfImages } = useImages();
+  const hint = blocking[0]?.message ?? (outOfImages ? "You've used all your images, so you can't make new edits." : null);
 
   const setConfig = (patch: Partial<EditConfig>) => useGraph.getState().updateNodeConfig<EditConfig>(node.id, (c) => ({ ...c, ...patch }));
   const saveMask = async (mask: Blob) => {
@@ -108,12 +111,12 @@ export function EditView({ node, selected, issues }: NodeViewProps<EditConfig, E
             icon={made ? "refresh" : "fusion"}
             busy={running}
             className="nodrag"
-            disabled={readOnly || running || blocking.length > 0 || !parent}
+            disabled={readOnly || running || blocking.length > 0 || !parent || outOfImages}
             onClick={() => void generateEdit(node.id)}
           >
             {running ? job?.stage ?? "Starting…" : made ? "Generate another" : "Generate"}
           </Button>
-          {blocking[0] && !running ? <p className="edit-node__hint">{blocking[0].message}</p> : null}
+          {hint && !running ? <p className="edit-node__hint">{hint}</p> : null}
         </div>
       }
     >

@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { toAppError, type AppError } from "../api/errors";
 import { evo } from "./index";
-import type { Limits } from "./types";
+import type { ImageQuota, Limits } from "./types";
 
 // The Fusion limits: one small store so every screen shares one fetch.
 
@@ -34,11 +34,24 @@ export const useLimits = create<LimitsState>()((set) => ({
   },
 }));
 
+/** True when a refusal is the lifetime image limit (not a daily cap). */
+export function isImagesCap(err: AppError | null | undefined): boolean {
+  return err?.code === "CAP_REACHED" && (err.details as { scope?: unknown } | undefined)?.scope === "visitor_images";
+}
+
+/** The visitor's lifetime images; `out` once none are left (from the limits, or a refusal seen since). */
+export function useImages(): { quota: ImageQuota | null; out: boolean } {
+  const quota = useLimits((s) => s.data?.images ?? null);
+  const capError = useLimits((s) => s.capError);
+  const out = (quota?.left !== null && quota?.left !== undefined && quota.left <= 0) || isImagesCap(capError);
+  return { quota, out };
+}
+
 /** Capped: either the limits say so, or the last POST was refused by a daily cap. */
 export function useCapped(): { capped: boolean; resetsAt: string | null } {
   const data = useLimits((s) => s.data);
   const capError = useLimits((s) => s.capError);
-  const capped = data?.liveRuns === "capped" || Boolean(capError);
+  const capped = data?.liveRuns === "capped" || (Boolean(capError) && !isImagesCap(capError));
   const fromErr = (capError?.details as { resetsAt?: string } | undefined)?.resetsAt ?? null;
   return { capped, resetsAt: fromErr ?? data?.dailyTotal.resetsAt ?? null };
 }

@@ -172,6 +172,7 @@ class JobRunner:
             await self.store.update(doc, status="succeeded", creatureId=fin["creatureId"], pendingChoice=None)
         except asyncio.CancelledError:
             await self.store.interrupt(doc)
+            await self._refund(job)
             raise
         except RunFailed as e:
             await self._fail(job, e.code, e.message, e.retryable)
@@ -186,7 +187,18 @@ class JobRunner:
             if not self._closing:
                 self._later(0, self.dispatch)
 
+    async def _refund(self, job: Job) -> None:
+        """Give back the image a run was charged for when it delivers none."""
+        refund = job.extra.pop("refund", None)
+        if refund is None:
+            return
+        try:
+            await refund()
+        except Exception:
+            log.exception("run %s: image refund failed", job.run_id)
+
     async def _fail(self, job: Job, code: str, message: str, retryable: bool) -> None:
+        await self._refund(job)
         await job.emit("error", code=code, message=message, retryable=retryable)
         await self.store.update(job.doc, status="failed", pendingChoice=None,
                                 error={"code": code, "message": message, "retryable": retryable})

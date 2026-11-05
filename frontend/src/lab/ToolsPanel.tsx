@@ -155,6 +155,11 @@ export function ToolsPanel({ nodeId }: { nodeId: string }) {
             Delete
           </Button>
         </div>
+        {limits?.images && limits.images.limit !== null && limits.images.left !== null ? (
+          <p className="tools__note">
+            {limits.images.left} of {limits.images.limit} images left. A Fusion or an edit uses 1, an animal card 4.
+          </p>
+        ) : null}
         {limits && limits.limit !== null ? (
           <p className="tools__note">
             {Math.max(0, limits.limit - limits.used)} of {limits.limit} lab actions left today (edits and cards). Resets at 00:00 UTC.

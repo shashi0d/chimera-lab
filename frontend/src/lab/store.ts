@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { toAppError } from "../api/errors";
+import { useLimits } from "../evo/data";
 import { presentError } from "../api/errorMessages";
 import { useGraph } from "../graph/store";
 import { maskKey, sketchKey, type EditConfig, type EditData } from "../nodes/edit/types";
@@ -32,6 +33,7 @@ export const useLab = create<LabState>()((set) => ({
   starting: {},
   async refreshLimits() {
     try {
+      void useLimits.getState().refresh(); // the images left (shared with Fusion)
       set({ limits: await labApi.limits() });
     } catch {
       /* shown when available */
@@ -167,8 +169,11 @@ export function ensureRunVersion(fusionNodeId: string, runId: string, finished: 
 /** Save a creature to the chimeras page (at once); its animal card is made in the background. */
 export async function saveCreature(version: LabVersion, saved = true): Promise<void> {
   try {
-    updateVersion(await labApi.setSaved(version.id, saved));
-    if (saved) toast.success(`Saved ${version.title ?? "the creature"}. Its card is being drawn.`);
+    const next = await labApi.setSaved(version.id, saved);
+    updateVersion(next);
+    if (saved && next.card?.status === "failed") toast.info(`Saved ${version.title ?? "the creature"}. ${next.card.error ?? ""}`.trim());
+    else if (saved) toast.success(`Saved ${version.title ?? "the creature"}. Its card is being drawn.`);
+    if (saved) void useLimits.getState().refresh();
   } catch (e) {
     toast.error(message(e));
   }

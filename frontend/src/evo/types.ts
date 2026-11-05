@@ -124,6 +124,14 @@ export function isTerminalEvent(e: AgentEvent): boolean {
   return e.type === "finalize" || e.type === "error";
 }
 
+/** The visitor's lifetime images (a Fusion or an edit is 1, an animal card 4). `limit` and `left` are null with no limit. */
+export interface ImageQuota {
+  used: number;
+  limit: number | null;
+  left: number | null;
+  costs?: { fusion: number; edit: number; card: number };
+}
+
 export interface Limits {
   liveRuns: "open" | "capped";
   /** Set when the server has no limits (EVO_LIMITS_ENABLED off): the numbers are counts only. */
@@ -131,6 +139,7 @@ export interface Limits {
   dailyTotal: { used: number; limit: number; resetsAt: string };
   visitor: { used: number; limit: number };
   concurrent: { running: number; limit: number; queued: number };
+  images?: ImageQuota;
 }
 
 export interface Health {
